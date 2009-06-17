@@ -1,0 +1,198 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{835fd726-9d9a-43d3-aea3-35cd9e8ee1b3}</ProjectGuid>
+    <MainSource>Subsidy.dpr</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>..\Subsidy.exe</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_Optimize>False</DCC_Optimize>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_ExeOutput>D:\.subsidy\bin</DCC_ExeOutput>
+    <DCC_DcuOutput>dcu</DCC_DcuOutput>
+    <DCC_ObjOutput>dcu</DCC_ObjOutput>
+    <DCC_HppOutput>dcu</DCC_HppOutput>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_Optimize>False</DCC_Optimize>
+    <DCC_ExeOutput>C:\subsidy</DCC_ExeOutput>
+    <DCC_DcuOutput>dcu</DCC_DcuOutput>
+    <DCC_ObjOutput>dcu</DCC_ObjOutput>
+    <DCC_HppOutput>dcu</DCC_HppOutput>
+    <DCC_Define>DEBUG</DCC_Define>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>VCLApplication</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">1</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">72</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">True</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">ГЦСЖС</VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.1.0.72</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName">Subsidy</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments">Учет предоставления субсидий на оплату ЖКУ населению г.Омска</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">Subsidy.dpr</Source></Source></Delphi.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="Subsidy.dpr">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="about.pas">
+      <Form>AboutBox</Form>
+    </DCCReference>
+    <DCCReference Include="bank.pas">
+      <Form>Form31</Form>
+    </DCCReference>
+    <DCCReference Include="browse.pas">
+      <Form>Form36</Form>
+    </DCCReference>
+    <DCCReference Include="certification.pas">
+      <Form>Form28</Form>
+    </DCCReference>
+    <DCCReference Include="chhouse.pas">
+      <Form>Form30</Form>
+    </DCCReference>
+    <DCCReference Include="chinsp.pas">
+      <Form>Form17</Form>
+    </DCCReference>
+    <DCCReference Include="chpriv.pas">
+      <Form>Form11</Form>
+    </DCCReference>
+    <DCCReference Include="chserv.pas">
+      <Form>Form29</Form>
+    </DCCReference>
+    <DCCReference Include="chtarifs.pas">
+      <Form>Form42</Form>
+    </DCCReference>
+    <DCCReference Include="Client.pas" />
+    <DCCReference Include="codedbf.pas">
+      <Form>Form41</Form>
+    </DCCReference>
+    <DCCReference Include="config.pas">
+      <Form>Form25</Form>
+    </DCCReference>
+    <DCCReference Include="control.pas">
+      <Form>Form10</Form>
+    </DCCReference>
+    <DCCReference Include="core\subtypes.pas" />
+    <DCCReference Include="crdelphi.pas" />
+    <DCCReference Include="curhist.pas">
+      <Form>Form18</Form>
+    </DCCReference>
+    <DCCReference Include="datamodule.pas">
+      <Form>DataModule1</Form>
+      <DesignClass>TDataModule</DesignClass>
+    </DCCReference>
+    <DCCReference Include="data\min.pas" />
+    <DCCReference Include="district.pas">
+      <Form>Form4</Form>
+    </DCCReference>
+    <DCCReference Include="elpower.pas">
+      <Form>Form23</Form>
+    </DCCReference>
+    <DCCReference Include="fond.pas">
+      <Form>Form6</Form>
+    </DCCReference>
+    <DCCReference Include="fstruct.pas" />
+    <DCCReference Include="houses.pas">
+      <Form>Form24</Form>
+    </DCCReference>
+    <DCCReference Include="imexp.pas">
+      <Form>Form35</Form>
+    </DCCReference>
+    <DCCReference Include="inspector.pas">
+      <Form>Form3</Form>
+    </DCCReference>
+    <DCCReference Include="loop.pas">
+      <Form>Form16</Form>
+    </DCCReference>
+    <DCCReference Include="main.pas">
+      <Form>Form1</Form>
+    </DCCReference>
+    <DCCReference Include="manager.pas">
+      <Form>Form7</Form>
+    </DCCReference>
+    <DCCReference Include="mdd.pas">
+      <Form>Form20</Form>
+    </DCCReference>
+    <DCCReference Include="merge.pas">
+      <Form>Form21</Form>
+    </DCCReference>
+    <DCCReference Include="minimum.pas">
+      <Form>Form13</Form>
+    </DCCReference>
+    <DCCReference Include="norm.pas">
+      <Form>Form27</Form>
+    </DCCReference>
+    <DCCReference Include="opend.pas">
+      <Form>Form26</Form>
+    </DCCReference>
+    <DCCReference Include="ownertype.pas">
+      <Form>Form8</Form>
+    </DCCReference>
+    <DCCReference Include="Plugins.pas">
+      <Form>Plugins</Form>
+    </DCCReference>
+    <DCCReference Include="privilege.pas">
+      <Form>Form12</Form>
+    </DCCReference>
+    <DCCReference Include="progress.pas">
+      <Form>AboutBox1</Form>
+    </DCCReference>
+    <DCCReference Include="relation.pas">
+      <Form>Form32</Form>
+    </DCCReference>
+    <DCCReference Include="rrecalc.pas">
+      <Form>Form43</Form>
+    </DCCReference>
+    <DCCReference Include="rstnd.pas">
+      <Form>Form38</Form>
+    </DCCReference>
+    <DCCReference Include="sclient.pas">
+      <Form>Form2</Form>
+    </DCCReference>
+    <DCCReference Include="search.pas">
+      <Form>Form33</Form>
+    </DCCReference>
+    <DCCReference Include="service.pas" />
+    <DCCReference Include="settlingtype.pas">
+      <Form>Form9</Form>
+    </DCCReference>
+    <DCCReference Include="shtarif.pas">
+      <Form>Form37</Form>
+    </DCCReference>
+    <DCCReference Include="shtarifb.pas">
+      <Form>Form39</Form>
+    </DCCReference>
+    <DCCReference Include="SlujUnit.pas">
+      <Form>Form44</Form>
+    </DCCReference>
+    <DCCReference Include="sql.pas">
+      <Form>Form34</Form>
+    </DCCReference>
+    <DCCReference Include="stat.pas">
+      <Form>Stats</Form>
+    </DCCReference>
+    <DCCReference Include="statage.pas">
+      <Form>Form22</Form>
+    </DCCReference>
+    <DCCReference Include="statlm.pas">
+      <Form>Form40</Form>
+    </DCCReference>
+    <DCCReference Include="status.pas">
+      <Form>Form14</Form>
+    </DCCReference>
+    <DCCReference Include="Street.pas">
+      <Form>Form5</Form>
+    </DCCReference>
+    <DCCReference Include="tarif.pas">
+      <Form>Form15</Form>
+    </DCCReference>
+    <DCCReference Include="tarifb.pas">
+      <Form>Form19</Form>
+    </DCCReference>
+    <DCCReference Include="version.pas" />
+  </ItemGroup>
+</Project>
