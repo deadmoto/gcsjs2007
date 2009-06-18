@@ -1,11 +1,12 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{835fd726-9d9a-43d3-aea3-35cd9e8ee1b3}</ProjectGuid>
     <MainSource>Subsidy.dpr</MainSource>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
-    <DCC_DependencyCheckOutputName>..\Subsidy.exe</DCC_DependencyCheckOutputName>
+    <DCC_DependencyCheckOutputName>..\bin\Subsidy.exe</DCC_DependencyCheckOutputName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Version>7.0</Version>
@@ -22,7 +23,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Version>7.0</Version>
     <DCC_Optimize>False</DCC_Optimize>
-    <DCC_ExeOutput>C:\subsidy</DCC_ExeOutput>
+    <DCC_ExeOutput>C:\.dev\subsidy2007\bin</DCC_ExeOutput>
     <DCC_DcuOutput>dcu</DCC_DcuOutput>
     <DCC_ObjOutput>dcu</DCC_ObjOutput>
     <DCC_HppOutput>dcu</DCC_HppOutput>
