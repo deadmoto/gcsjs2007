@@ -7,5 +7,6 @@ ECHO implementation >> version.pas
 ECHO end. >> version.pas
 @ECHO ON
 MD %CD%\release\%SVNREV%
-dcc32 Subsidy.dpr -U"%CD%\dcu" -E"%CD%\release\%SVNREV%"
+call rsvars.bat
+msbuild Subsidy.dproj
 pause
