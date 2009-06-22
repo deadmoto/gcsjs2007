@@ -192,6 +192,8 @@ type
     frxData: TfrxDBDataset;
     frxData2: TfrxDBDataset;
     frxData1: TfrxDBDataset;
+    N103: TMenuItem;
+    ToolButton14: TToolButton;
     procedure N15Click(Sender: TObject);
     procedure N25Click(Sender: TObject);
     procedure N24Click(Sender: TObject);
@@ -282,6 +284,7 @@ type
     procedure N52Click(Sender: TObject);
     procedure N99Click(Sender: TObject);
     procedure N102Click(Sender: TObject);
+    procedure N103Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -363,11 +366,11 @@ uses sclient, inspector, district, street, fond, manager,
       Contnrs,DateUtils,{crdelphi,} rstnd, loop, math,tarifb,
       chinsp, curhist, chserv, Client, merge, mdd, statage,
       statlm, codedbf, chtarifs, rrecalc, Plugins, stat, mod_Types, padegFIO, StrUtils,
-      version, SlujUnit;
+      version, SlujUnit, ConnectUnit;
 
 {$R *.dfm}
 
-  const section_str: string = 'Subsidy';
+//  const section_str: string = 'Subsidy';
   Const CountBtns         = 21;
   Type  TListPlugin       = Array[1..CountBtns] of TPlugin;
 
@@ -2318,7 +2321,7 @@ var
 //  ini: File of integer;
   y,m,d: word;
 //  ex,ef: boolean;
-  reg_file: TRegIniFile;
+//  reg_file: TRegIniFile;
 
 begin
   IDate := EncodeDate(2006,6,1);//дата запуска программы в использование
@@ -2327,14 +2330,24 @@ begin
   normsc := 23; normsw := 24;
 
   //загрузка из реестра
-  reg_file:= TRegIniFile.Create('Software');
-  dist:= reg_file.ReadInteger(section_str,'dist',2);
-  insp:= reg_file.ReadInteger(section_str,'insp',1);
-  by:= reg_file.ReadInteger(section_str,'by',2006);
-  bm:= reg_file.ReadInteger(section_str,'bm',6);
-  ey:= reg_file.ReadInteger(section_str,'ey',YearOf(Date));
-  em:= reg_file.ReadInteger(section_str,'em',MonthOf(Date));
-  reg_file.Free;
+  with TRegistry.Create do
+  try
+    RootKey:= HKEY_CURRENT_USER;
+    if OpenKey('Software\Subsidy',TRUE) then
+      begin
+        if ValueExists('dist') then dist:= ReadInteger('dist'{,2}) else dist:=2;
+        if ValueExists('insp') then insp:= ReadInteger('insp'{,1}) else insp:=1;
+        if ValueExists('by') then by:= ReadInteger('by'{,2006}) else by:= 2006;
+        if ValueExists('bm') then bm:= ReadInteger('bm'{,6}) else bm:=6;
+        if ValueExists('ey') then ey:= ReadInteger('ey'{,YearOf(Date)}) else ey:=YearOf(Date);
+        if ValueExists('em') then em:= ReadInteger('em'{,MonthOf(Date)}) else em:=MonthOf(Date);
+      end;
+  finally
+    CloseKey;
+    Free;
+  end;
+//  reg_file:= TRegIniFile.Create('Software');
+//  reg_file.Free;
 
   reports_path:= (ExtractFilePath(Application.ExeName)+'reports\');
 
@@ -2423,7 +2436,7 @@ begin
   12:Form1.Caption := s + 'Декабрь '+Copy(rdt,7,4)+'г.';
   end;
   s:= s+ ReturnMountStr;
-  form1.caption:=form1.caption+' ['+version.svnrev+']';
+  form1.caption:=form1.caption+' | d2007['+version.svnrev+']';
   //русская расладка
   c := GetKeyboardLayoutList(High(Layouts)+1, Layouts);
   for i:=0 to c-1 do begin
@@ -2525,7 +2538,7 @@ var
   y,m,d: word;
   pdt: string;
   cy,cm{,code}: integer;
-  reg_file: TRegIniFile;
+//  reg_file: TRegIniFile;
 //  section_str: string;
 begin
   DecodeDate(Date,y,m,d);
@@ -2581,14 +2594,24 @@ begin
   end;
 
   //Сохранение в реестр
-  reg_file:= TRegIniFile.Create('Software');
-  reg_file.WriteInteger(section_str,'dist',dist);
-  reg_file.WriteInteger(section_str,'insp',insp);
-  reg_file.WriteInteger(section_str,'by',by);
-  reg_file.WriteInteger(section_str,'bm',bm);
-  reg_file.WriteInteger(section_str,'ey',ey);
-  reg_file.WriteInteger(section_str,'em',em);
-  reg_file.Free;
+//  reg_file:= TRegIniFile.Create('Software');
+  with TRegistry.Create do
+  try
+    RootKey:= HKEY_CURRENT_USER;
+    if OpenKey('Software\Subsidy',TRUE) then
+      begin
+        WriteInteger('dist',dist);
+        WriteInteger('insp',insp);
+        WriteInteger('by',by);
+        WriteInteger('bm',bm);
+        WriteInteger('ey',ey);
+        WriteInteger('em',em);
+      end;
+  finally
+    CloseKey;
+    Free;
+  end;
+//  reg_file.Free;
 
 {Старая процедура сохранения настроек в файле**********************************}
   {AssignFile(ini, 'dist.ini');
@@ -4308,6 +4331,11 @@ begin
   form44.FillSlujGrid;
   if DataModule1.sluj_q.RecordCount > 0 then
     Form44.Show;
+end;
+
+procedure TForm1.N103Click(Sender: TObject);
+begin
+  Form45.show;
 end;
 
 end.

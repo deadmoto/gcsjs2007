@@ -3,8 +3,8 @@ object Form25: TForm25
   Top = 212
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsToolWindow
-  ClientHeight = 129
-  ClientWidth = 240
+  ClientHeight = 150
+  ClientWidth = 247
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,13 +17,15 @@ object Form25: TForm25
   PixelsPerInch = 96
   TextHeight = 13
   object GroupBox1: TGroupBox
-    Left = 0
-    Top = 0
-    Width = 240
-    Height = 129
-    Align = alClient
-    Caption = #1050#1086#1085#1092#1080#1088#1091#1075#1072#1094#1080#1103':'
+    AlignWithMargins = True
+    Left = 3
+    Top = 3
+    Width = 241
+    Height = 97
+    Align = alTop
+    Caption = #1042#1099#1073#1086#1088' '#1086#1082#1088#1091#1075#1072':'
     TabOrder = 0
+    ExplicitWidth = 234
     object Label1: TLabel
       Left = 8
       Top = 64
@@ -40,7 +42,7 @@ object Form25: TForm25
     end
     object ComboBox2: TComboBox
       Left = 72
-      Top = 24
+      Top = 21
       Width = 161
       Height = 21
       ItemHeight = 13
@@ -50,7 +52,7 @@ object Form25: TForm25
     end
     object ComboBox1: TComboBox
       Left = 72
-      Top = 64
+      Top = 61
       Width = 161
       Height = 21
       ItemHeight = 13
@@ -58,23 +60,36 @@ object Form25: TForm25
       OnChange = ComboBox1Change
       OnExit = ComboBox1Change
     end
-    object Button2: TButton
-      Left = 152
-      Top = 96
-      Width = 75
-      Height = 25
-      Caption = #1054#1090#1084#1077#1085#1072
-      TabOrder = 2
-      OnClick = Button2Click
-    end
-    object Button1: TButton
-      Left = 8
-      Top = 96
-      Width = 75
-      Height = 25
-      Caption = #1054#1082
-      TabOrder = 3
-      OnClick = Button1Click
-    end
+  end
+  object Panel1: TPanel
+    AlignWithMargins = True
+    Left = 3
+    Top = 106
+    Width = 241
+    Height = 41
+    Align = alTop
+    BevelInner = bvLowered
+    TabOrder = 1
+    ExplicitLeft = 8
+    ExplicitTop = 91
+    ExplicitWidth = 234
+  end
+  object Button1: TButton
+    Left = 11
+    Top = 115
+    Width = 75
+    Height = 25
+    Caption = #1054#1082
+    TabOrder = 2
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 161
+    Top = 115
+    Width = 75
+    Height = 25
+    Caption = #1054#1090#1084#1077#1085#1072
+    TabOrder = 3
+    OnClick = Button2Click
   end
 end

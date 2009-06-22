@@ -6,7 +6,9 @@ ECHO var svnrev:string='%SVNREV%'; >> version.pas
 ECHO implementation >> version.pas
 ECHO end. >> version.pas
 @ECHO ON
+pause
 MD %CD%\release\%SVNREV%
 call rsvars.bat
-msbuild Subsidy.dproj
+msbuild Subsidy.dproj /p:Configuration=Release
 pause
+

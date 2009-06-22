@@ -35,7 +35,7 @@ uses
   imexp in 'imexp.pas' {Form35},
   progress in 'progress.pas' {AboutBox1},
   browse in 'browse.pas' {Form36},
-  CRDelphi in 'crdelphi.pas',
+  crdelphi in 'crdelphi.pas',
   chserv in 'chserv.pas' {Form29},
   rstnd in 'rstnd.pas' {Form38},
   tarif in 'tarif.pas' {Form15},
@@ -56,9 +56,13 @@ uses
   Plugins in 'Plugins.pas' {Plugins},
   stat in 'stat.pas' {Stats},
   subtypes in 'core\subtypes.pas',
+  ODBC_DSN in 'data\ODBC_DSN.pas',
+  srvinfo in 'data\srvinfo.pas',
+//  dbinfo in 'data\dbinfo.pas',
   min in 'data\min.pas',
   version in 'version.pas',
-  SlujUnit in 'SlujUnit.pas' {Form44};
+  SlujUnit in 'SlujUnit.pas' {Form44},
+  ConnectUnit in 'ConnectUnit.pas' {Form45};
 
 {$R *.res}
 
@@ -122,6 +126,7 @@ begin
         Application.CreateForm(TForm42, Form42);
         Application.CreateForm(TForm43, Form43);
         Application.CreateForm(TForm44, Form44);
+        Application.CreateForm(TForm45, Form45);//  creating in DataModule1.OnCreate
         Application.Run;
       except
         ShowMessage('Произошел сбой при создании одной из форм!');
