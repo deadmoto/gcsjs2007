@@ -13,7 +13,7 @@ Default Delphi units:
 {*******************************************************************************
 External components:
 *******************************************************************************}
-  dbf,dialogs, ADODB;
+  dbf,dialogs, ADODB, ODBC_DSN, Registry;
 
 type
   TDataModule1 = class(TDataModule)
@@ -42,10 +42,34 @@ var
 
 implementation
 
+uses ConnectUnit;
+
+
 {$R *.dfm}
 
 procedure TDataModule1.FormCreate(Sender: TObject);
 begin
+  with TRegistry.Create do
+  try
+    RootKey:= System.Cardinal($80000001);
+    if OpenKey('\Software\Subsidy\Connection', TRUE) then
+      if not ValueExists('Server') then
+        begin
+          Form45:= TForm45.Create(nil);
+          Form45.mode:= 'bug';
+          Form45.ShowModal;
+          Form45.Free;
+        end
+      else
+      begin
+        if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ReadString('Server'), 'Clients',  '') then
+        ShowMessage('Ошибка при создании DSN записи!')
+      end;
+  finally
+  CloseKey;
+  Free;
+  end;
+
   dbf1:=tdbf.create(self);//создание парсера dbf-файлов
 //   tc := TQuery.Create(Self);
   t1 := TQuery.Create(Self);

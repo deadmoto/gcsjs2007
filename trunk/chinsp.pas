@@ -4,14 +4,15 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls;
+  Dialogs, StdCtrls, ExtCtrls;
 
 type
   TForm17 = class(TForm)
     GroupBox1: TGroupBox;
-    Button2: TButton;
-    Button1: TButton;
     ListBox1: TListBox;
+    Panel1: TPanel;
+    Button1: TButton;
+    Button2: TButton;
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button1Click(Sender: TObject);

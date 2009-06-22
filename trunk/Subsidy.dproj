@@ -74,6 +74,9 @@
     <DCCReference Include="config.pas">
       <Form>Form25</Form>
     </DCCReference>
+    <DCCReference Include="ConnectUnit.pas">
+      <Form>Form45</Form>
+    </DCCReference>
     <DCCReference Include="control.pas">
       <Form>Form10</Form>
     </DCCReference>
@@ -87,6 +90,8 @@
       <DesignClass>TDataModule</DesignClass>
     </DCCReference>
     <DCCReference Include="data\min.pas" />
+    <DCCReference Include="data\ODBC_DSN.pas" />
+    <DCCReference Include="data\srvinfo.pas" />
     <DCCReference Include="district.pas">
       <Form>Form4</Form>
     </DCCReference>

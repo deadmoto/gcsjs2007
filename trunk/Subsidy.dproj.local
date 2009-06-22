@@ -1,2 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<BorlandProject/>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2009.06.19 12:24:53.804.pas,C:\.dev\subsidy2007\gcsjs2007\Unit45.pas=C:\.dev\subsidy2007\gcsjs2007\ConnectUnit.pas</Transaction>
+    <Transaction>2009.06.19 12:24:53.804.dfm,C:\.dev\subsidy2007\gcsjs2007\Unit45.dfm=C:\.dev\subsidy2007\gcsjs2007\ConnectUnit.dfm</Transaction>
+  </Transactions>
+</BorlandProject>

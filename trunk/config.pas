@@ -4,17 +4,18 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Mask, DBCtrls;
+  Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls;
 
 type
   TForm25 = class(TForm)
-    Button1: TButton;
-    Button2: TButton;
     Label3: TLabel;
     ComboBox2: TComboBox;
     Label1: TLabel;
     ComboBox1: TComboBox;
     GroupBox1: TGroupBox;
+    Panel1: TPanel;
+    Button1: TButton;
+    Button2: TButton;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);

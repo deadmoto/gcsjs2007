@@ -1,5 +1,5 @@
 unit version; 
 interface 
-var svnrev:string=''''; 
+var svnrev:string='5M'; 
 implementation 
 end. 
