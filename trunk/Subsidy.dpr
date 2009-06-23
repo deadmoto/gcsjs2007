@@ -58,7 +58,6 @@ uses
   subtypes in 'core\subtypes.pas',
   ODBC_DSN in 'data\ODBC_DSN.pas',
   srvinfo in 'data\srvinfo.pas',
-//  dbinfo in 'data\dbinfo.pas',
   min in 'data\min.pas',
   version in 'version.pas',
   SlujUnit in 'SlujUnit.pas' {Form44},

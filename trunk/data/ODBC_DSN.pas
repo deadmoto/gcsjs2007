@@ -19,7 +19,7 @@ http://www.bbd.net.ru/modules.php?op=modload&name=News&file=article&sid=16
 http://www.firststeps.ru/mfc/odbc/r.php?14
 
 Зависимости: Windows, Registry
-Автор:       KSergey, 
+Автор:       KSergey,
  s_wr@mail.ruЭтот e-mail защищен от спам-ботов. Для его просмотра в вашем браузере должна быть включена поддержка Java-script
  , ICQ:93229204, Новосибирск
 Copyright:   В качестве справки по работе с ф-цией
@@ -34,8 +34,10 @@ interface
 uses
   Windows, Registry;
 
+function AddDSNdBaseSource(const ADSNName, DefaultDir, ADataBase: string;
+                          ADescription: string = ''): Boolean;
 function AddDSNMSSQLSource(const ADSNName, AServer, ADataBase: string;
-  ADescription: string = ''): Boolean;
+                          ADescription: string = ''): Boolean;
 function SQLConfigDataSource(
   hwndParent: HWND; // Указатель на окно вызвавшее функцию
   fRequest: WORD; // Тип запроса
@@ -65,12 +67,9 @@ implementation
  ******************************************************************************}
 
 function AddDSNMSSQLSource(const ADSNName, AServer, ADataBase: string;
-  ADescription: string = ''): Boolean;
-const
-  driver = 'SQL Server';
-var
-  params: string;
-
+                          ADescription: string = ''): Boolean;
+const driver = 'SQL Server';
+var params: string;
   // эта ф-ция прописывает необходимые настройки для доступа к MS SQL по TCP/IP
   // и на порт 1433
   function SetNetLibParam: Boolean;
@@ -96,8 +95,24 @@ var
 begin
   params := 'DSN=' + ADSNName + #0'Server=' + AServer + #0'DataBase= ' +
     ADataBase + #0'Description=' + ADescription + #0#0;
-Result := SQLConfigDataSource(0, ODBC_ADD_DSN, PChar(driver), PChar(params));
+  Result := SQLConfigDataSource(0, ODBC_ADD_DSN, PChar(driver), PChar(params));
   Result := Result and SetNetLibParam;
+end;
+
+function AddDSNdBaseSource(const ADSNName, DefaultDir, ADataBase: string;
+                           ADescription: string = ''): Boolean;
+const driver = 'Microsoft dBase Driver (*.dbf)';
+var params: string;
+
+begin
+  params := 'Description='+ADescription +#0;
+  params:= params + 'DSN='+ADSNName +#0;
+  params:= params + 'DataBase='+ADataBase +#0+'LANGDRIVER=dBASE RUS cp866'+#0;
+  params:= params + 'DefaultDir='+DefaultDir +#0;
+  params:= params + 'DataSourse='+DefaultDir +#0;
+//  params := 'DSN=' + ADSNName + #0'DataBase= ' + ADataBase + #0'Description=' + ADescription + #0#0;
+  Result := SQLConfigDataSource(0, ODBC_ADD_DSN, PChar(driver), PChar(params));
+//  Result := Result and SetNetLibParam;
 end;
 
 end.
