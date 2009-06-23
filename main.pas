@@ -313,7 +313,7 @@ type
     procedure Load(q: CQuery;rsel: boolean);
     function CheckP1: bool;
     function SetSumSub: real;
-    procedure CreateListPlugin;
+//    procedure CreateListPlugin;
   public
     { Public declarations }
     normc,normw: real;//нормативы расхода угля и дров в год
@@ -2325,7 +2325,7 @@ var
 
 begin
   IDate := EncodeDate(2006,6,1);//дата запуска программы в использование
-  bpath := ExtractFilePath(Application.ExeName)+'Database\';
+  bpath := ExtractFilePath(Application.ExeName)+'database\';
   normc := 0.065; normw := 0.087;
   normsc := 23; normsw := 24;
 
@@ -2346,8 +2346,6 @@ begin
     CloseKey;
     Free;
   end;
-//  reg_file:= TRegIniFile.Create('Software');
-//  reg_file.Free;
 
   reports_path:= (ExtractFilePath(Application.ExeName)+'reports\');
 
@@ -2460,7 +2458,7 @@ begin
   fdate := Date;
   lDate := Date;
   SetTarifs;
-  CreateListPlugin;
+//  CreateListPlugin;
 end;
 
 function TForm1.NewPlace(id: integer;s1,s2: string): integer;
@@ -4096,7 +4094,7 @@ end;
 
 
 
-procedure TForm1.CreateListPlugin;
+{procedure TForm1.CreateListPlugin;
 Var  SearchRec        : TSearchRec;
      hLib             : THandle;
      ExtConf          : TExternalConf;
@@ -4128,7 +4126,7 @@ Repeat
     end;
 Until FindNext(SearchRec) <> 0;
 end;
-
+ }
 procedure TForm1.ModuleMenuClick(Sender: TObject);
 Var vTag                : Integer;
     ExternalStart       : TExternalStart;
