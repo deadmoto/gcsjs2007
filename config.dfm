@@ -3,7 +3,7 @@ object Form25: TForm25
   Top = 212
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsToolWindow
-  ClientHeight = 150
+  ClientHeight = 141
   ClientWidth = 247
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -21,11 +21,11 @@ object Form25: TForm25
     Left = 3
     Top = 3
     Width = 241
-    Height = 97
-    Align = alTop
+    Height = 94
+    Align = alClient
     Caption = #1042#1099#1073#1086#1088' '#1086#1082#1088#1091#1075#1072':'
     TabOrder = 0
-    ExplicitWidth = 234
+    ExplicitHeight = 97
     object Label1: TLabel
       Left = 8
       Top = 64
@@ -61,35 +61,37 @@ object Form25: TForm25
       OnExit = ComboBox1Change
     end
   end
-  object Panel1: TPanel
+  object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 106
+    Top = 103
     Width = 241
-    Height = 41
-    Align = alTop
+    Height = 35
+    Align = alBottom
+    AutoSize = True
     BevelInner = bvLowered
+    FlowStyle = fsRightLeftBottomTop
     TabOrder = 1
-    ExplicitLeft = 8
-    ExplicitTop = 91
-    ExplicitWidth = 234
-  end
-  object Button1: TButton
-    Left = 11
-    Top = 115
-    Width = 75
-    Height = 25
-    Caption = #1054#1082
-    TabOrder = 2
-    OnClick = Button1Click
-  end
-  object Button2: TButton
-    Left = 161
-    Top = 115
-    Width = 75
-    Height = 25
-    Caption = #1054#1090#1084#1077#1085#1072
-    TabOrder = 3
-    OnClick = Button2Click
+    ExplicitTop = 169
+    object Button2: TButton
+      AlignWithMargins = True
+      Left = 161
+      Top = 5
+      Width = 75
+      Height = 25
+      Caption = #1054#1090#1084#1077#1085#1072
+      TabOrder = 0
+      OnClick = Button2Click
+    end
+    object Button1: TButton
+      AlignWithMargins = True
+      Left = 80
+      Top = 5
+      Width = 75
+      Height = 25
+      Caption = #1054#1082
+      TabOrder = 1
+      OnClick = Button1Click
+    end
   end
 end

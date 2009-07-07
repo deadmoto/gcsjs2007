@@ -1,10 +1,10 @@
 object Form43: TForm43
   Left = 181
   Top = 188
-  Width = 298
-  Height = 228
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = #1042#1099#1073#1086#1088' '#1087#1088#1080#1095#1080#1085#1099' '#1087#1077#1088#1077#1088#1072#1089#1095#1077#1090#1072
+  ClientHeight = 194
+  ClientWidth = 290
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -33,7 +33,7 @@ object Form43: TForm43
     end
     object CheckBox2: TCheckBox
       Left = 32
-      Top = 48
+      Top = 47
       Width = 97
       Height = 17
       Caption = #1052#1044#1044

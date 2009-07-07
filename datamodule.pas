@@ -27,13 +27,12 @@ type
     DataSource2: TDataSource;
     qtarif: TQuery;
     procedure FormCreate(Sender: TObject);
-    procedure FormClose(Sender: TObject);
   private
     { Private declarations }
   public
     DBF1: TDBF;
     { Public declarations }
-    t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, pv, tc, norm1, sluj_q: TQuery;
+    t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, pv, tc, norm1: TQuery;
     procedure ChAttrTable(d: integer);
   end;
 
@@ -87,13 +86,7 @@ begin
   pv := TQuery.Create(Self);
   norm1 := TQuery.Create(Self);
   tc := TQuery.Create(Self);
-  sluj_q := TQuery.Create(Self);
   DataBase2.Params.Add('PATH='+ExtractFilePath(paramstr(0))+'database');
-end;
-
-procedure TDataModule1.FormClose(Sender: TObject);
-begin
-//   tc.Free;
 end;
 
 procedure TDataModule1.ChAttrTable(d: integer);

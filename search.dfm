@@ -4,8 +4,8 @@ object Form33: TForm33
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = #1060#1080#1083#1100#1090#1088
-  ClientHeight = 350
-  ClientWidth = 649
+  ClientHeight = 391
+  ClientWidth = 633
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,10 +19,11 @@ object Form33: TForm33
   PixelsPerInch = 96
   TextHeight = 13
   object GroupBox1: TGroupBox
-    Left = 8
-    Top = 168
+    AlignWithMargins = True
+    Left = 3
+    Top = 171
     Width = 313
-    Height = 177
+    Height = 180
     TabOrder = 1
     object Label4: TLabel
       Left = 224
@@ -221,8 +222,9 @@ object Form33: TForm33
     end
   end
   object GroupBox2: TGroupBox
-    Left = 8
-    Top = 0
+    AlignWithMargins = True
+    Left = 3
+    Top = 3
     Width = 313
     Height = 169
     TabOrder = 0
@@ -367,9 +369,10 @@ object Form33: TForm33
     end
   end
   object GroupBox3: TGroupBox
-    Left = 328
-    Top = 0
-    Width = 313
+    AlignWithMargins = True
+    Left = 320
+    Top = 3
+    Width = 311
     Height = 169
     TabOrder = 2
     object Label9: TLabel
@@ -549,30 +552,13 @@ object Form33: TForm33
       OnExit = ComboBox11Change
     end
   end
-  object Button1: TButton
-    Left = 400
-    Top = 320
-    Width = 75
-    Height = 25
-    Caption = #1042#1099#1073#1088#1072#1090#1100
-    TabOrder = 4
-    OnClick = Button1Click
-  end
-  object Button2: TButton
-    Left = 488
-    Top = 320
-    Width = 75
-    Height = 25
-    Caption = #1054#1090#1084#1077#1085#1072
-    TabOrder = 3
-    OnClick = Button2Click
-  end
   object GroupBox4: TGroupBox
-    Left = 328
-    Top = 168
-    Width = 313
-    Height = 137
-    TabOrder = 5
+    AlignWithMargins = True
+    Left = 320
+    Top = 171
+    Width = 311
+    Height = 180
+    TabOrder = 3
     object CheckBox16: TCheckBox
       Left = 8
       Top = 16
@@ -633,6 +619,38 @@ object Form33: TForm33
       Enabled = False
       TabOrder = 4
       OnClick = CheckBox18Click
+    end
+  end
+  object FlowPanel1: TFlowPanel
+    AlignWithMargins = True
+    Left = 3
+    Top = 353
+    Width = 627
+    Height = 35
+    Align = alBottom
+    BevelInner = bvLowered
+    FlowStyle = fsRightLeftBottomTop
+    TabOrder = 4
+    ExplicitWidth = 633
+    object Button2: TButton
+      AlignWithMargins = True
+      Left = 547
+      Top = 5
+      Width = 75
+      Height = 25
+      Caption = #1054#1090#1084#1077#1085#1072
+      TabOrder = 0
+      OnClick = Button2Click
+    end
+    object Button1: TButton
+      AlignWithMargins = True
+      Left = 466
+      Top = 5
+      Width = 75
+      Height = 25
+      Caption = #1042#1099#1073#1088#1072#1090#1100
+      TabOrder = 1
+      OnClick = Button1Click
     end
   end
 end

@@ -4,17 +4,18 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls;
+  Dialogs, StdCtrls, ExtCtrls;
 
 type
   TForm26 = class(TForm)
     Label1: TLabel;
     Label2: TLabel;
     ComboBox2: TComboBox;
-    Button1: TButton;
-    Button2: TButton;
     Edit1: TEdit;
     GroupBox1: TGroupBox;
+    FlowPanel1: TFlowPanel;
+    Button2: TButton;
+    Button1: TButton;
     procedure ComboBox2Change(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -56,9 +57,8 @@ end;
 
 procedure TForm26.Button1Click(Sender: TObject);
 begin
-  if (StrToInt(Edit1.Text)=Form1.by) and
-     (m[Combobox2.ItemIndex]>=Form1.bm) or
-     (StrToInt(Edit1.Text)>Form1.by) {and
+  if (StrToInt(Edit1.Text)=Form1.by) and (m[Combobox2.ItemIndex]>=Form1.bm) or
+    (StrToInt(Edit1.Text)>Form1.by) {and
      (StrToInt(Edit1.Text)<=Form1.ey+1) and
      (m[Combobox2.ItemIndex]<=Form1.em+1)} then begin
     if m[Combobox2.ItemIndex]>=10 then

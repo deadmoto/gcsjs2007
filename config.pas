@@ -13,9 +13,9 @@ type
     Label1: TLabel;
     ComboBox1: TComboBox;
     GroupBox1: TGroupBox;
-    Panel1: TPanel;
-    Button1: TButton;
+    FlowPanel1: TFlowPanel;
     Button2: TButton;
+    Button1: TButton;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);

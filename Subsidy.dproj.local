@@ -3,5 +3,7 @@
 	<Transactions>
     <Transaction>2009.06.19 12:24:53.804.pas,C:\.dev\subsidy2007\gcsjs2007\Unit45.pas=C:\.dev\subsidy2007\gcsjs2007\ConnectUnit.pas</Transaction>
     <Transaction>2009.06.19 12:24:53.804.dfm,C:\.dev\subsidy2007\gcsjs2007\Unit45.dfm=C:\.dev\subsidy2007\gcsjs2007\ConnectUnit.dfm</Transaction>
+    <Transaction>2009.06.25 14:46:19.685.pas,C:\.dev\subsidy2007\gcsjs2007\Unit46.pas=C:\.dev\subsidy2007\gcsjs2007\FactSumUnit.pas</Transaction>
+    <Transaction>2009.06.25 14:46:19.685.dfm,C:\.dev\subsidy2007\gcsjs2007\Unit46.dfm=C:\.dev\subsidy2007\gcsjs2007\FactSumUnit.dfm</Transaction>
   </Transactions>
 </BorlandProject>

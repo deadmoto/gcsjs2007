@@ -61,7 +61,8 @@ uses
   min in 'data\min.pas',
   version in 'version.pas',
   SlujUnit in 'SlujUnit.pas' {Form44},
-  ConnectUnit in 'ConnectUnit.pas' {Form45};
+  ConnectUnit in 'ConnectUnit.pas' {Form45},
+  FactSumUnit in 'FactSumUnit.pas' {FactSumFrm};
 
 {$R *.res}
 
@@ -125,7 +126,8 @@ begin
         Application.CreateForm(TForm42, Form42);
         Application.CreateForm(TForm43, Form43);
         Application.CreateForm(TForm44, Form44);
-        Application.CreateForm(TForm45, Form45);//  creating in DataModule1.OnCreate
+        Application.CreateForm(TForm45, Form45);
+        Application.CreateForm(TFactSumFrm, FactSumFrm);
         Application.Run;
       except
         ShowMessage('Произошел сбой при создании одной из форм!');

@@ -3,8 +3,8 @@ object Form26: TForm26
   Top = 195
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsToolWindow
-  ClientHeight = 97
-  ClientWidth = 216
+  ClientHeight = 117
+  ClientWidth = 221
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,10 +18,12 @@ object Form26: TForm26
   PixelsPerInch = 96
   TextHeight = 13
   object GroupBox1: TGroupBox
-    Left = 0
-    Top = 0
-    Width = 216
-    Height = 97
+    AlignWithMargins = True
+    Left = 3
+    Top = 3
+    Width = 215
+    Height = 70
+    Align = alClient
     Caption = #1054#1090#1082#1088#1099#1090#1100' '#1086#1090#1095#1077#1090#1085#1099#1081' '#1087#1077#1088#1080#1086#1076':'
     TabOrder = 0
     object Label1: TLabel
@@ -38,24 +40,6 @@ object Form26: TForm26
       Height = 13
       Caption = #1043#1086#1076':'
     end
-    object Button1: TButton
-      Left = 8
-      Top = 64
-      Width = 75
-      Height = 25
-      Caption = #1054#1090#1082#1088#1099#1090#1100
-      TabOrder = 0
-      OnClick = Button1Click
-    end
-    object Button2: TButton
-      Left = 132
-      Top = 64
-      Width = 75
-      Height = 25
-      Caption = #1042#1099#1081#1090#1080
-      TabOrder = 1
-      OnClick = Button2Click
-    end
     object ComboBox2: TComboBox
       Left = 64
       Top = 36
@@ -63,8 +47,7 @@ object Form26: TForm26
       Height = 21
       DropDownCount = 12
       ItemHeight = 13
-      TabOrder = 2
-      Text = 'ComboBox2'
+      TabOrder = 0
       OnChange = ComboBox2Change
       OnExit = ComboBox2Change
     end
@@ -73,10 +56,42 @@ object Form26: TForm26
       Top = 36
       Width = 41
       Height = 21
-      TabOrder = 3
+      TabOrder = 1
       Text = '2006'
       OnExit = Edit1Exit
       OnKeyDown = Edit1KeyDown
+    end
+  end
+  object FlowPanel1: TFlowPanel
+    AlignWithMargins = True
+    Left = 3
+    Top = 79
+    Width = 215
+    Height = 35
+    Align = alBottom
+    AutoSize = True
+    BevelInner = bvLowered
+    FlowStyle = fsRightLeftBottomTop
+    TabOrder = 1
+    object Button2: TButton
+      AlignWithMargins = True
+      Left = 135
+      Top = 5
+      Width = 75
+      Height = 25
+      Caption = #1042#1099#1081#1090#1080
+      TabOrder = 0
+      OnClick = Button2Click
+    end
+    object Button1: TButton
+      AlignWithMargins = True
+      Left = 54
+      Top = 5
+      Width = 75
+      Height = 25
+      Caption = #1054#1090#1082#1088#1099#1090#1100
+      TabOrder = 1
+      OnClick = Button1Click
     end
   end
 end

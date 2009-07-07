@@ -12,6 +12,8 @@ uses Controls, Dialogs, StdCtrls, dbf, db, Mask;
 const
   numbtarif = 14;
 
+//type TMyMode = (addM, editM);
+
 procedure SetPoint(edt: TEdit);//установить запятую с учетом копеек
 
 function CheckNumb(edt: TEdit): boolean;
@@ -45,6 +47,8 @@ function GetSize(fld: TField): byte;
 function GetPrec(fld: TField): byte;
 procedure FillTable(path,nam: string;code: TCodePage);
 procedure EditField(f: string;code: TCodePage;n: integer);
+
+function GetMonthsCount(BeginDate, EndDate: TDateTime; var DaysCount: Byte):Integer;
 
 implementation
 
@@ -572,6 +576,58 @@ begin
     Open;
     FillTable(path,'currstnd',code);
   end;
+end;
+
+function GetMonthsCount(BeginDate, EndDate: TDateTime; var DaysCount: Byte):Integer;
+{*******************************************************************************
+ Функция, которая возвращает разницу между двумя датами в месяцах.
+ Исходные данные: BeginDate, EndDate - начальная и конечная даты;
+                  DaysCount - остаток разницы в днях (хотя скорее она исходная
+                              данная, а выходная).
+ Выходные данные: возвращает разницу между датами в месяцах.
+*******************************************************************************}
+
+var
+  Days1, Days2,             // количество дней начальной и конечной дат
+  Months1, Months2,         // количество месяцев начальной и конечной дат
+  Years1, Years2: Integer;  // количество лет начальной и конечной дат
+  BufferDate: TDateTime;    // буфер для обмена значениями
+begin
+  if BeginDate > EndDate then  // сравниваем даты, если начальная позднее
+  begin                        // конечной, то меняем даты между собой
+    BufferDate := BeginDate;
+    BeginDate := EndDate;
+    EndDate := BufferDate;
+  end;
+  Days1 := StrToInt(FormatDateTime('dd', BeginDate));     // считываем количе-
+  Days2 := StrToInt(FormatDateTime('dd', EndDate));       // ство дней, месяцев
+  Months1 := StrToInt(FormatDateTime('mm', BeginDate));   // и лет каждой из дат
+  Months2 := StrToInt(FormatDateTime('mm', EndDate));     // и заносим в соот-
+  Years1 := StrToInt(FormatDateTime('yyyy', BeginDate));  // ветствующие пере-
+  Years2 := StrToInt(FormatDateTime('yyyy', EndDate));    // менные
+  // Вычисляем суммарную разницу между датами по разницам в годах*12 и месяцах
+  Result := (Years2 - Years1) * 12 + (Months2 - Months1);
+  // Учитываем влияние разницы в днях на количество месяцев + остаток в днях в
+  // переменной DaysCount
+  if (Days2 - Days1) < 0 then
+  begin  // если разница отрицательна, то
+    Result := Result - 1;  // производим заем месяца из имеющихся
+    // В зависимости от месяца в "меньшей" дате, вычисляем остаток в днях
+    case Months1 of
+      1, 3, 5, 7, 8, 10, 12: DaysCount := 31 - Days1 + Days2;
+      4, 6, 9, 11: DaysCount := 30 - Days1 + Days2;
+      // В случае февраля учитываем также високосность года
+      2: if (Years2 mod 4 = 0) and (Years2 mod 100 <> 0) then
+           DaysCount := 29 - Days1 + Days2
+         else
+           if (Years2 mod 100 = 0) and (Years2 mod 400 = 0) then
+             DaysCount := 29 - Days1 + Days2
+           else
+             DaysCount := 28 - Days1 + Days2;
+    end;
+  end  // конец действий при отрицательной разнице дней
+  else  // при положительной или нулевой разнице дней
+    DaysCount := Days2 - Days1;  // банальная разность
 end;
 
 end.

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Grids, StdCtrls,Client;
+  Dialogs, Grids, StdCtrls,Client, ComCtrls, ExtCtrls;
 
 type
   TCl=record
@@ -13,11 +13,9 @@ type
     fio: array of string;
   end;
   TForm18 = class(TForm)
+    GroupBox1: TGroupBox;
     SGH: TStringGrid;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
+    StatusBar1: TStatusBar;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -68,7 +66,7 @@ begin
   SGH.Cells[2,SGH.Row] := FlToStr(s);
   for i:=0 to Length(cl.reg)-1 do
     sum := sum + cl.sub[i];
-  Label2.Caption := FlToStr(sum);
+  StatusBar1.Panels[1].Text:= 'Сумма субсидий: ' + FlToStr(sum);
 end;
 
 procedure TForm18.Clear;
@@ -87,8 +85,8 @@ begin
       Cells[2,i] := '';
     end;
   end;
-  Label2.Caption := '0.00';
-  Label4.Caption := '0';
+  StatusBar1.Panels[1].Text:= 'Сумма субсидий: ' + '0.00';
+  StatusBar1.Panels[0].Text:= 'Клиентов: '+'0';
 end;
 
 procedure TForm18.FormShow(Sender: TObject);
@@ -149,17 +147,17 @@ begin
     SGH.Cells[2,i+1] := FlToStr(cl.sub[i]);
     sum := sum + cl.sub[i];
   end;
-  Label2.Caption := FlToStr(sum);
-  Label4.Caption := IntToStr(Length(cl.reg));
+  StatusBar1.Panels[1].Text:= 'Сумма субсидий: '+FlToStr(sum);
+  StatusBar1.Panels[0].Text:= 'Клиентов: '+IntToStr(Length(cl.reg));
 end;
 
 procedure TForm18.FormCreate(Sender: TObject);
 begin
   with SGH do begin
     ColCount := 3;
-    ColWidths[0] := 220;
-    ColWidths[1] := 60;
-    ColWidths[2] := 60;
+    ColWidths[0] := 240;
+    ColWidths[1] := 70;
+    ColWidths[2] := 70;
     SGH.Cells[0,0] := 'ФИО';
     SGH.Cells[1,0] := 'Рег.номер';
     SGH.Cells[2,0] := 'Субсидия';
