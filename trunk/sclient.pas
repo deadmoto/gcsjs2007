@@ -2293,9 +2293,8 @@ end;
 
 function TForm2.ModifyClient: integer;
 { изменить клиента }
-var
-  n, i, mem, maxid: integer;
-  dt: string;
+var n, i, mem, maxid: integer;
+    dt: string;
 begin
   result:=0;
 if IsAPeriod then begin
@@ -3558,7 +3557,6 @@ begin
   Edit57.SetFocus;
   Cl := TClient.Create(Empty,EmptyC);
   Button2.Enabled := false;
-//  Button2.Enabled:= TRUE;
   case status of
   0://добавить клиента
     begin

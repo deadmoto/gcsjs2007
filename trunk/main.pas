@@ -5,8 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, ToolWin, Menus, Grids, DBGrids, DB, dbf,
-  ExtCtrls, ImgList, StdCtrls,{ FR_Class, FR_DSet, FR_DBSet, FR_Desgn,}
-  OleServer, ExcelXP, DBTables, Buttons,{$IFDEF VER120}OleCtrls,{$ENDIF}{Excel_TLB,}
+  ExtCtrls, ImgList, StdCtrls, OleServer, ExcelXP, DBTables, Buttons,
+  {$IFDEF VER120}OleCtrls,{$ENDIF}{Excel_TLB,}
   activex,comobj, WordXP, ActnList, Registry, frxClass, frxDBSet;
 
 type
@@ -119,7 +119,6 @@ type
     N22: TMenuItem;
     N79: TMenuItem;
     N90: TMenuItem;
-    ToolButton5: TToolButton;
     ToolButton9: TToolButton;
     N91: TMenuItem;
     N92: TMenuItem;
@@ -133,41 +132,7 @@ type
     C1: TMenuItem;
     N101: TMenuItem;
     Panel1: TPanel;
-    Image1: TImage;
-    Image2: TImage;
-    Image3: TImage;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
     SGCl: TStringGrid;
-    Edit1: TEdit;
-    Edit2: TEdit;
-    Edit3: TEdit;
-    Memo1: TMemo;
-    Memo2: TMemo;
-    Memo3: TMemo;
-    Edit4: TEdit;
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    Button4: TButton;
-    Button5: TButton;
-    Button6: TButton;
-    Button7: TButton;
-    Button8: TButton;
-    Edit5: TEdit;
-    Edit6: TEdit;
-    Edit7: TEdit;
-    Edit8: TEdit;
-    Edit9: TEdit;
-    Edit10: TEdit;
-    Edit11: TEdit;
-    Edit12: TEdit;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    Label8: TLabel;
     N83: TMenuItem;
     N89: TMenuItem;
     dbf2: TMenuItem;
@@ -177,7 +142,6 @@ type
     N108: TMenuItem;
     N12: TMenuItem;
     N36: TMenuItem;
-    N37: TMenuItem;
     N35: TMenuItem;
     ActionList1: TActionList;
     N38: TMenuItem;
@@ -194,6 +158,53 @@ type
     frxData1: TfrxDBDataset;
     N103: TMenuItem;
     ToolButton14: TToolButton;
+    Panel2: TPanel;
+    GridPanel1: TGridPanel;
+    Image1: TImage;
+    Memo1: TMemo;
+    Image2: TImage;
+    Memo2: TMemo;
+    Image3: TImage;
+    Memo3: TMemo;
+    Panel4: TPanel;
+    Label1: TLabel;
+    Edit1: TEdit;
+    Label2: TLabel;
+    Edit2: TEdit;
+    GridPanel2: TGridPanel;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Button8: TButton;
+    Panel3: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Label3: TLabel;
+    Edit3: TEdit;
+    Button4: TButton;
+    Button5: TButton;
+    Button6: TButton;
+    Button9: TButton;
+    Button7: TButton;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    Label4: TLabel;
+    Edit4: TEdit;
+    GroupBox1: TGroupBox;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Edit5: TEdit;
+    Edit9: TEdit;
+    Edit10: TEdit;
+    Edit6: TEdit;
+    Edit7: TEdit;
+    Edit11: TEdit;
+    Edit12: TEdit;
+    Edit8: TEdit;
+    ToolButton17: TToolButton;
+    ToolButton19: TToolButton;
     procedure N15Click(Sender: TObject);
     procedure N25Click(Sender: TObject);
     procedure N24Click(Sender: TObject);
@@ -277,7 +288,7 @@ type
     procedure ExcelApplication1WorkbookBeforeClose(ASender: TObject;
       const Wb: _Workbook; var Cancel: WordBool);
     procedure N36Click(Sender: TObject);
-    procedure ModuleMenuClick(Sender: TObject);
+//    procedure ModuleMenuClick(Sender: TObject);
     procedure N38Click(Sender: TObject);
     procedure N39Click(Sender: TObject);
     procedure N51Click(Sender: TObject);
@@ -285,6 +296,8 @@ type
     procedure N99Click(Sender: TObject);
     procedure N102Click(Sender: TObject);
     procedure N103Click(Sender: TObject);
+    procedure Button9Click(Sender: TObject);
+    procedure ToolButton17Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -339,10 +352,10 @@ type
     function GetStatus(b, e: TDate): integer;
     function CheckP2: bool;
     function SG_FindCl(SG: TStringGrid;s: string): integer;
-    Procedure _FreeAllLibrary;
+//    Procedure _FreeAllLibrary;
     procedure RecalcSelectedRows;
     procedure SetTarifs;
-    function ReturnMountStr:string;
+//    function ReturnMountStr:string;
 
 //    procedure FillTarifDS;
   end;
@@ -365,17 +378,17 @@ uses sclient, inspector, district, street, fond, manager,
       datamodule, search, service, fstruct, imexp, sql, progress,
       Contnrs,DateUtils,{crdelphi,} rstnd, loop, math,tarifb,
       chinsp, curhist, chserv, Client, merge, mdd, statage,
-      statlm, codedbf, chtarifs, rrecalc, Plugins, stat, mod_Types, padegFIO, StrUtils,
-      version, SlujUnit, ConnectUnit;
+      statlm, codedbf, chtarifs, rrecalc, Plugins, stat, {mod_Types,} padegFIO, StrUtils,
+      version, SlujUnit, ConnectUnit, FactSumUnit;
 
 {$R *.dfm}
 
 //  const section_str: string = 'Subsidy';
-  Const CountBtns         = 21;
+{  Const CountBtns         = 21;
   Type  TListPlugin       = Array[1..CountBtns] of TPlugin;
 
   Var   ListPlugin        : TListPlugin;
-
+}
 procedure TForm1.SetTarifs;
 begin
  with DataModule1 do begin
@@ -436,7 +449,7 @@ begin
 end;
 
 
-function TForm1.ReturnMountStr: string;
+{function TForm1.ReturnMountStr: string;
 var m: word;
 begin
   m := StrToInt(Copy(rdt,4,2));
@@ -455,7 +468,7 @@ begin
     12:result := 'Декабрь';
   end;
 end;
-
+}
 
 function TForm1.CheckP1: bool;
 {*******************************************************************************
@@ -549,6 +562,13 @@ begin
     end;
     Close;
   end;
+end;
+
+procedure TForm1.Button9Click(Sender: TObject);
+ { фактические расходы }
+var c: Tclient;
+begin
+  FactSumFrm.ShowModal;
 end;
 
 function TForm1.GetStatus(b, e: TDate): integer;
@@ -819,14 +839,13 @@ begin
   old := rdt;
   Form26.ShowModal;
   if old<>rdt then begin
-    if CheckP2 then
-      sec1 := 1
-    else
-      sec1 := 0;
+    if CheckP2 then sec1 := 1
+      else sec1 := 0;
     FillCurr(Form1.bpath,rdt,Form1.dist,Form1.codedbf);
     LastTime := Time;
     Reload;
-    s := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ';
+
+    {s := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ';
     case StrToInt(Copy(rdt,4,2)) of
     1:Form1.Caption := s+'Январь '+Copy(rdt,7,4)+'г.';
     2:Form1.Caption := s+'Февраль '+Copy(rdt,7,4)+'г.';
@@ -841,7 +860,11 @@ begin
     11:Form1.Caption := s+'Ноябрь '+Copy(rdt,7,4)+'г.';
     12:Form1.Caption := s+'Декабрь '+Copy(rdt,7,4)+'г.';
     end;
-    form1.caption:=form1.caption+' ['+version.svnrev+']';
+    form1.caption:=form1.caption+' ['+version.svnrev+']';}
+
+    form1.caption:= 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за '+
+                    LongMonthNames[StrToInt(FormatDateTime('m',StrToDate(rdt)))] +' '+
+                    IntToStr(YearOf(StrToDate(rdt)))+'г.'+' | d2007['+version.svnrev+']';
   end;
 end;
 
@@ -2313,16 +2336,11 @@ procedure TForm1.FormCreate(Sender: TObject);
   Включается русская раскладка. Устанавливаются настройки для побуквенного поиска
   клиентов, для печати отчетов.
 }
-var
-  s, dt: string;
-  c, i{, code}: integer;
-  rl, el: THandle;
-  Layouts: array[0..7] of THandle;
-//  ini: File of integer;
-  y,m,d: word;
-//  ex,ef: boolean;
-//  reg_file: TRegIniFile;
-
+var s, dt: string;
+    c, i: integer;
+    rl, el: THandle;
+    Layouts: array[0..7] of THandle;
+    y,m,d: word;
 begin
   IDate := EncodeDate(2006,6,1);//дата запуска программы в использование
   bpath := ExtractFilePath(Application.ExeName)+'database\';
@@ -2349,35 +2367,6 @@ begin
 
   reports_path:= (ExtractFilePath(Application.ExeName)+'reports\');
 
-  {//загрузка из файла
-  AssignFile(ini, 'dist.ini');
-  ex := FileExists('dist.ini');
-  if ex then begin
-    Reset(ini);
-    ef := eof(ini);
-    if not ef then
-      Read(ini, dist, insp, by, bm, ey, em, code);
-    if code=0 then
-      codedbf := OEM
-    else
-      codedbf := ANSI;
-  end;
-  if not ex or ex and ef then begin
-    dist := 2;
-    insp := 1;
-    by := 2006;
-    bm := 6;
-    ey := YearOf(Date);
-    em := MonthOf(Date);
-    codedbf := OEM;
-    code := 0;
-    rewrite(ini);
-    write(ini, dist, insp, by, bm, ey, em,code);
-  end;
-  closefile(ini);}
-
-  DataModule1.sluj_q.DatabaseName:= 'Subsidy';
-
   DecodeDate(Date,y,m,d);
   y := y-2000;
   if y<10 then
@@ -2389,6 +2378,7 @@ begin
   else
     dt := dt + IntToStr(m);
   SetPer(dt,rdt);
+
   with DataModule1.Query1 do begin
     Close;
     SQL.Clear;
@@ -2403,21 +2393,24 @@ begin
     Statusbar1.Panels[2].Text := 'Округ: ' + FieldByName('namedist').AsString;
     Close;
   end;
+
   with SGCl do begin
     ColCount := 5;
-    ColWidths[0] := 190;
-    ColWidths[1] := 150;
-    ColWidths[2] := 121;
+    ColWidths[0] := 200;
+    ColWidths[1] := 170;
+    ColWidths[2] := 128;
     ColWidths[3] := 39;
-    ColWidths[4] := 51;
+    ColWidths[4] := 55;
     Cells[0,0] := 'ФИО';
     Cells[1,0] := 'Адрес';
     Cells[2,0] := 'Срок субсидии';
     Cells[3,0] := 'Расчет';
     Cells[4,0] := 'Субсидия';
   end;
-  s:= s+ ReturnMountStr;
-  m := StrToInt(Copy(rdt,4,2));
+
+
+//  s:= s+ ReturnMountStr;
+{  m := StrToInt(Copy(rdt,4,2));
   s := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ';
   case m of
   1:Form1.Caption := s + 'Январь '+Copy(rdt,7,4)+'г.';
@@ -2433,8 +2426,14 @@ begin
   11:Form1.Caption := s + 'Ноябрь '+Copy(rdt,7,4)+'г.';
   12:Form1.Caption := s + 'Декабрь '+Copy(rdt,7,4)+'г.';
   end;
-  s:= s+ ReturnMountStr;
+//  s:= s+ ReturnMountStr;
   form1.caption:=form1.caption+' | d2007['+version.svnrev+']';
+}
+
+  form1.caption:= 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за '+
+                  LongMonthNames[StrToInt(FormatDateTime('m',StrToDate(rdt)))] +' '+
+                  IntToStr(YearOf(StrToDate(rdt)))+'г.'+' | d2007['+version.svnrev+']';
+
   //русская расладка
   c := GetKeyboardLayoutList(High(Layouts)+1, Layouts);
   for i:=0 to c-1 do begin
@@ -2444,12 +2443,14 @@ begin
       el := Layouts[i];
   end;
   if rl <> 0 then ActivateKeyboardLayout(rl, 0);
+
   if CheckP2 then
     sec1 := 1
   else
     sec1 := 0;
+
   FillCurr(bpath,rdt,dist,Form1.codedbf);
-//  PEOpenEngine;{Open the Crystal Print Engine}
+
   //для быстрого поиска по фамилии
   itemindex := -1;
   LastTime := Time;
@@ -2465,8 +2466,7 @@ function TForm1.NewPlace(id: integer;s1,s2: string): integer;
 {
   Новое место для записи S в StringGrid.
 }
-var
-  i, c1,c2: integer;
+var i, c1,c2: integer;
 begin
   if Length(cl)>1 then begin
     for i:=0 to Length(cl)-2 do begin
@@ -2491,10 +2491,9 @@ procedure TForm1.InsertCl(i1, i2: integer);
   поместить элемент с номером i1 на место i2, остальные
   элементы сдвинуть
 }
-var
-  i, c, s, k, sp: integer;
-  sb: real;
-  cs: array of string;
+var i, c, s, k, sp: integer;
+    sb: real;
+    cs: array of string;
 begin
   c := cl[i1];
   s := st[i1];
@@ -2530,14 +2529,10 @@ procedure TForm1.FormClose;
   Если они различаются, то текущие таблицы тарифов, стандартов и минимумов заполняются
   в соответствии с большей датой.
 }
-var
-//  ini: File of integer;
-  ed: TDate;
-  y,m,d: word;
-  pdt: string;
-  cy,cm{,code}: integer;
-//  reg_file: TRegIniFile;
-//  section_str: string;
+var ed: TDate;
+    y,m,d: word;
+    pdt: string;
+    cy,cm: integer;
 begin
   DecodeDate(Date,y,m,d);
   if d>19 then begin
@@ -2549,7 +2544,7 @@ begin
   end;
   ed := EncodeDate(y,m,1);
   pdt := DateToStr(ed);
-//  PECloseEngine;  {Close the Crystal Print Engine}
+
   try
     Datamodule1.Database1.Connected := true;
     with Datamodule1.Query1 do begin
@@ -2592,7 +2587,6 @@ begin
   end;
 
   //Сохранение в реестр
-//  reg_file:= TRegIniFile.Create('Software');
   with TRegistry.Create do
   try
     RootKey:= HKEY_CURRENT_USER;
@@ -2609,17 +2603,6 @@ begin
     CloseKey;
     Free;
   end;
-//  reg_file.Free;
-
-{Старая процедура сохранения настроек в файле**********************************}
-  {AssignFile(ini, 'dist.ini');
-  rewrite(ini);
-  if codedbf=OEM then
-    code := 0
-  else
-    code := 1;
-  write(ini, dist, insp, by, bm, ey, em, code);
-  closefile(ini);}
 
   try
     Datamodule1.Database1.Connected := true;
@@ -2634,19 +2617,20 @@ begin
   end;
   with DataModule1 do begin
     t1.Close;
-  t2.Close;
-  t3.Close;
-  t4.Close;
-  t5.Close;
-  t6.Close;
-  t7.Close;
-  t8.Close;
-  t9.Close;
-  t10.Close;
-  tc.Close;
-  norm1.Close;
-  pv.Close;end;
-  _FreeAllLibrary;
+    t2.Close;
+    t3.Close;
+    t4.Close;
+    t5.Close;
+    t6.Close;
+    t7.Close;
+    t8.Close;
+    t9.Close;
+    t10.Close;
+    tc.Close;
+    norm1.Close;
+    pv.Close;
+  end;
+//  _FreeAllLibrary;
 end;
 
 function TForm1.SetSumSub: real;
@@ -2956,7 +2940,7 @@ begin
   for j:=i to SGCl.RowCount-2 do
     for k:=0 to 4 do
       SGCl.Cells[k,j] := SGCl.Cells[k,j+1];
-  if SGCl.RowCount>2 then 
+  if SGCl.RowCount>2 then
     SGCl.RowCount := SGCl.RowCount - 1
   else
     for k:=0 to 4 do
@@ -3031,13 +3015,6 @@ begin
 end;
 
 procedure TForm1.PrintNachCr;
-{var
-  m1,y1,dt: string; }
-//  filenme: PAnsiChar;
-begin
-{if MessageBox(Form1.Handle,PChar('Новый отчет?'),
-                  PChar('Предварительный просмотр'),
-                  MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL)=IDYES	then}
 begin
   DataModule1.Query1.SQL.Clear;
   DataModule1.Query1.SQL.Add('EXEC nach '+quotedstr(rdt)+','+IntToStr(dist));
@@ -3051,15 +3028,14 @@ begin
 
   frxData.DataSource:= Datamodule1.DataSource1;
   frxReport1.LoadFromFile(PChar(reports_path+'nach.fr3'));
-
   frxReport1.Script.Variables['id_dist']:= (dist);
-  frxReport1.Variables.Variables['mont']:= quotedstr(ReturnMountStr);
+  frxReport1.Variables.Variables['mont']:= quotedstr(LongMonthNames[StrToInt(FormatDateTime('m',StrToDate(rdt)))]);
   frxReport1.Variables.Variables['year']:= IntToStr(yearof(strtodate(rdt)));
   frxReport1.Variables.Variables['boss']:= quotedstr(DataModule1.Query2.FieldValues['boss']);
 
   frxReport1.PrepareReport;
   frxReport1.ShowPreparedReport;
-  end
+end;
 
   {***старая процедура**** сформировать отчет о начислении в CristalReport }
 
@@ -3084,7 +3060,6 @@ begin
       ShowMessage('Ошибка вывода на печать!');
   PEClosePrintJob(jobnumber1);
   end;}
-end;
 
 procedure TForm1.PrintVedCr(f,ad,rd,mng: string);
 { сформировать ведомость субсидий клиента за год }
@@ -3155,7 +3130,7 @@ begin
 
   y1 := IntToStr(YearOf(StrToDate(rdt)));
 
-  frxReport1.Variables.Variables['month']:= quotedstr(ReturnMountStr);
+  frxReport1.Variables.Variables['month']:= quotedstr(LongMonthNames[StrToInt(FormatDateTime('m',StrToDate(rdt)))]);//quotedstr(ReturnMountStr);
   frxReport1.Variables.Variables['year']:= quotedstr(y1);
 
   frxReport1.PrepareReport;
@@ -3211,10 +3186,9 @@ procedure TForm1.Excel1Click(Sender: TObject);
 { Согласно шаблону MSExcel заполняются данные и открывается MSExcel }
 var
   i,cnt: integer;
-  n{,p}: string;
+  n: string;
   pr: TAboutBox1;
 begin
-//  p := ExtractFilePath(Application.ExeName);
   pr := TAboutBox1.Create(Application);
   pr.Label1.Caption := 'Формирование списка клиентов и их субсидий';
   pr.Label2.Caption := 'Обработано записей:';
@@ -3350,13 +3324,19 @@ begin
   end;
 end;
 
+procedure TForm1.ToolButton17Click(Sender: TObject);
+begin
+  if GroupBox1.Visible=TRUE then GroupBox1.Visible:= FALSE
+    else GroupBox1.Visible:= TRUE;
+  GridPanel1.Realign;
+end;
+
 procedure TForm1.SGClKeyPress(Sender: TObject; var Key: Char);
 {
   Процедура обработки нажатия клавиш на клавиатуре. Используется для быстрого
   поиска ФИО клиента в stringgrid.
 }
-var
-  s: word;
+var s: word;
 begin
   //поиск клиента по набору символов
   if (Key in ['а'..'я'])or(Key in ['А'..'Я'])  then begin
@@ -3380,8 +3360,7 @@ end;
 
 procedure TForm1.dbf1Click(Sender: TObject);
 { общий сброс в dbf }
-var
-  dt: string;
+var dt: string;
 begin
   try
     with Datamodule1.Query1 do begin
@@ -3409,39 +3388,27 @@ procedure TForm1.FormResize(Sender: TObject);
   Процедура совершает смещение компонентов на форме в соответствии с изменением
   размеров формы
 }
-var
-  w1,w2: integer;
+var w1: integer;
 begin
-  w1 := Memo1.Left - SGCl.Left - SGCl.Width;
-  w2 := Panel1.Width - Memo1.Left - Memo1.Width - w1;
-  StatusBar1.Panels[0].Width :=  StatusBar1.Panels[0].Width + w2;
-  Image1.Left := Image1.Left + w2; Memo1.Left := Memo1.Left + w2;
-  Image2.Left := Image2.Left + w2; Memo2.Left := Memo2.Left + w2;
-  Image3.Left := Image3.Left + w2; Memo3.Left := Memo3.Left + w2;
-  Label1.Left := Label1.Left + w2; Edit1.Left := Edit1.Left + w2;
-  Label2.Left := Label2.Left + w2; Edit2.Left := Edit2.Left + w2;
-  Label3.Left := Label3.Left + w2; Edit3.Left := Edit3.Left + w2;
-  Label4.Left := Label4.Left + w2; Edit4.Left := Edit4.Left + w2;
-  SGCl.Width := SGCl.Width + w2;
-  SGCl.ColWidths[0] := SGCl.ColWidths[0] + (w2 div 2);
-  SGCl.ColWidths[1] := SGCl.ColWidths[1] + (w2 div 2);
-  w1 := Button1.Top - SGCl.Top - SGCl.Height;
-  w2 := Panel1.Height - Button4.Top - Button4.Height - w1;
-  Button1.Top := Button1.Top + w2; Button2.Top := Button2.Top + w2;
-  Button3.Top := Button3.Top + w2; Button4.Top := Button4.Top + w2;
-  Button5.Top := Button5.Top + w2; Button6.Top := Button6.Top + w2;
-  Button7.Top := Button7.Top + w2; Button8.Top := Button8.Top + w2;
-  Label1.Top := Label1.Top + w2; Edit1.Top := Edit1.Top + w2;
-  Label2.Top := Label2.Top + w2; Edit2.Top := Edit2.Top + w2;
-  Label3.Top := Label3.Top + w2; Edit3.Top := Edit3.Top + w2;
-  Label4.Top := Label4.Top + w2; Edit4.Top := Edit4.Top + w2;
-  Edit5.Top := Edit5.Top + w2; Edit6.Top := Edit6.Top + w2;
-  Edit7.Top := Edit7.Top + w2; Edit8.Top := Edit8.Top + w2;
-  Edit9.Top := Edit9.Top + w2; Edit10.Top := Edit10.Top + w2;
-  Edit11.Top := Edit11.Top + w2; Edit12.Top := Edit12.Top + w2;
-  Label5.Top := Label5.Top + w2;Label6.Top := Label6.Top + w2;
-  Label7.Top := Label7.Top + w2;Label8.Top := Label8.Top + w2;
-  SGCl.Height := SGCl.Height + w2;
+case Form1.WindowState of
+  wsMaximized:
+    begin
+      w1:= Panel1.Width - SGCl.ColWidths[2] - SGCl.ColWidths[3] - SGCl.ColWidths[4];
+      SGCl.ColWidths[0] := (w1 div 2)-55;
+      SGCl.ColWidths[1] := (w1 div 2)-60;
+    end;
+  wsNormal:
+    begin
+      with SGCl do begin
+        ColWidths[0] := 200;
+        ColWidths[1] := 170;
+        ColWidths[2] := 128;
+        ColWidths[3] := 39;
+        ColWidths[4] := 55;
+      end;
+    end;
+end;
+GridPanel1.Realign;
 end;
 
 procedure TForm1.N79Click(Sender: TObject);
@@ -4045,6 +4012,7 @@ end;
 procedure TForm1.FormShow(Sender: TObject);
 begin
   SGCl.SetFocus;
+  GridPanel1.Realign;
 end;
 
 procedure TForm1.N34Click(Sender: TObject);
@@ -4075,7 +4043,6 @@ begin
     ParamByName('d').AsDateTime := StrToDateTime(rdt);
     ExecSQL;
     Close;
-
    end;
    end;
 end;
@@ -4127,7 +4094,7 @@ Repeat
 Until FindNext(SearchRec) <> 0;
 end;
  }
-procedure TForm1.ModuleMenuClick(Sender: TObject);
+{procedure TForm1.ModuleMenuClick(Sender: TObject);
 Var vTag                : Integer;
     ExternalStart       : TExternalStart;
 begin
@@ -4146,7 +4113,7 @@ For i:=1 to CountBtns do
     Except ; end;
 FillChar(ListPlugin, SizeOf(TListPlugin), #0);
 end;
-
+ }
 procedure TForm1.N38Click(Sender: TObject);
 var
   i: integer;
@@ -4271,14 +4238,12 @@ begin
                   MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL)=IDYES	then
         frxReport1.ShowPreparedReport
       else
-        frxReport1.Print;//PreparedReportDlg;
+        frxReport1.Print;
 end;
 
 procedure TForm1.N52Click(Sender: TObject);
-var
-  s1, s2{, s3, s4}: string;
-//  cd: TDateTime;
-//  i : integer;
+var s1, s2: string;
+
 begin
       frxReport1.LoadFromFile(reports_path+'solutb.fr3');
       s1 := Copy(SGCl.Cells[2,SGCl.row],1,10);//begindate
@@ -4301,7 +4266,6 @@ begin
 
       frxReport1.Variables.Variables['fio_n'] := quotedstr(SGCl.Cells[0,SGCl.row]);
       frxReport1.Variables.Variables['address'] := quotedstr(SGCl.Cells[1,SGCl.row]);
-//      frxReport1.Variables.Variables['pdate'] := (Date);
       frxReport1.Variables.Variables['sub'] := quotedstr(SGCl.Cells[4,SGCl.row]);
       frxReport1.Variables.Variables['boss'] := quotedstr(Datamodule1.Query1.FieldValues['boss']);
       frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldByName('nameinsp').AsString);
@@ -4312,28 +4276,31 @@ begin
                   MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL)=IDYES	then
         frxReport1.ShowPreparedReport
       else
-        frxReport1.Print;//PreparedReportDlg;
+        frxReport1.Print;
 end;
 
 procedure TForm1.N99Click(Sender: TObject);
+ { Список служебных по каждому тарифу }
 begin
   Form44.mode:= 0;
   form44.FillSlujGrid;
-  if DataModule1.sluj_q.RecordCount > 0 then
+  if DataModule1.Query1.RecordCount > 0 then
     Form44.Show;
 end;
 
 procedure TForm1.N102Click(Sender: TObject);
+ { Список служебных, общая сумма за месяц по клиенту }
 begin
   Form44.mode:= 1;
   form44.FillSlujGrid;
-  if DataModule1.sluj_q.RecordCount > 0 then
+  if DataModule1.Query1.RecordCount > 0 then
     Form44.Show;
 end;
 
 procedure TForm1.N103Click(Sender: TObject);
+ { выбор сервера для подключения}
 begin
-  Form45.show;
+  Form45.Show;
 end;
 
 end.

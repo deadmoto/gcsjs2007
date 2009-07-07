@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Mask;
+  Dialogs, StdCtrls, Mask, ExtCtrls;
 
 type
   TForm33 = class(TForm)
@@ -37,8 +37,6 @@ type
     Label9: TLabel;
     Label10: TLabel;
     CheckBox12: TCheckBox;
-    Button1: TButton;
-    Button2: TButton;
     CheckBox13: TCheckBox;
     ComboBox5: TComboBox;
     ComboBox6: TComboBox;
@@ -56,6 +54,9 @@ type
     CheckBox17: TCheckBox;
     MaskEdit5: TMaskEdit;
     CheckBox18: TCheckBox;
+    FlowPanel1: TFlowPanel;
+    Button2: TButton;
+    Button1: TButton;
     procedure CheckBox1Click(Sender: TObject);
     procedure CheckBox2Click(Sender: TObject);
     procedure CheckBox3Click(Sender: TObject);

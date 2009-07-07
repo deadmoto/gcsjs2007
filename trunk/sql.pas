@@ -4,13 +4,14 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Grids, DBGrids, DB, DBTables,FileCtrl;
+  Dialogs, StdCtrls, Grids, DBGrids, DB, DBTables,FileCtrl, ComCtrls;
 
 type
   TForm34 = class(TForm)
     DBGrid1: TDBGrid;
     SaveDialog1: TSaveDialog;
     OpenDialog1: TOpenDialog;
+    TabControl1: TTabControl;
     GroupBox1: TGroupBox;
     Memo1: TMemo;
     Button1: TButton;
@@ -25,6 +26,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
+    procedure TabControl1Change(Sender: TObject);
   private
     { Private declarations }
     path: string;//путь по умолчанию
@@ -56,7 +58,17 @@ begin
         SQL.Clear;
         for i:=0 to Memo1.Lines.Count-1 do
           SQL.Add(Memo1.Lines[i]);
-        Open;
+
+        case TabControl1.TabIndex of
+          0: begin
+            Open;
+          end;
+          1: begin
+            Close;
+            ExecSQL;
+            showmessage('Запрос выполнен');
+          end;
+        end;
       end;
     except
       Datamodule1.Query1.Close;
@@ -159,6 +171,18 @@ begin
   OpenDialog1.InitialDir := path;
   SaveDialog1.InitialDir := path;
   path := ExtractFilePath(Application.ExeName)+'out\';
+end;
+
+procedure TForm34.TabControl1Change(Sender: TObject);
+begin
+  case TabControl1.TabIndex of
+    0: begin
+      Button4.Visible:= TRUE;
+    end;
+    1: begin
+      Button4.Visible:= FALSE;
+    end;
+  end;
 end;
 
 procedure TForm34.Button3Click(Sender: TObject);

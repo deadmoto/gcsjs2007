@@ -5,8 +5,8 @@ object Form1: TForm1
   Caption = 
     #1059#1095#1077#1090' '#1087#1088#1077#1076#1086#1089#1090#1072#1074#1083#1077#1085#1080#1103' '#1089#1091#1073#1089#1080#1076#1080#1081' '#1085#1072' '#1086#1087#1083#1072#1090#1091' '#1046#1050#1059' '#1085#1072#1089#1077#1083#1077#1085#1080#1102' '#1075'.'#1054#1084#1089#1082#1072' '#1079#1072' ' +
     #1057#1077#1085#1090#1103#1073#1088#1100' 2006 '#1075'.'
-  ClientHeight = 416
-  ClientWidth = 657
+  ClientHeight = 523
+  ClientWidth = 706
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -25,8 +25,8 @@ object Form1: TForm1
   TextHeight = 13
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 395
-    Width = 657
+    Top = 502
+    Width = 706
     Height = 21
     Panels = <
       item
@@ -44,8 +44,9 @@ object Form1: TForm1
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 657
+    Width = 706
     Height = 27
+    ButtonWidth = 25
     Caption = 'ToolBar1'
     EdgeBorders = [ebTop, ebBottom]
     Images = ImageList2
@@ -62,7 +63,7 @@ object Form1: TForm1
       OnClick = N2Click
     end
     object ToolButton2: TToolButton
-      Left = 23
+      Left = 25
       Top = 0
       Hint = #1060#1080#1083#1100#1090#1088
       Caption = #1060#1080#1083#1100#1090#1088
@@ -70,7 +71,7 @@ object Form1: TForm1
       OnClick = N87Click
     end
     object ToolButton6: TToolButton
-      Left = 46
+      Left = 50
       Top = 0
       Width = 8
       Caption = 'ToolButton6'
@@ -78,7 +79,7 @@ object Form1: TForm1
       Style = tbsSeparator
     end
     object ToolButton7: TToolButton
-      Left = 54
+      Left = 58
       Top = 0
       Hint = #1044#1086#1073#1072#1074#1080#1090#1100' '#1082#1083#1080#1077#1085#1090#1072
       Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1082#1083#1080#1077#1085#1090#1072
@@ -86,7 +87,7 @@ object Form1: TForm1
       OnClick = N15Click
     end
     object ToolButton8: TToolButton
-      Left = 77
+      Left = 83
       Top = 0
       Hint = #1048#1079#1084#1077#1085#1080#1090#1100'/'#1055#1088#1086#1089#1084#1086#1090#1088' '#1082#1083#1080#1077#1085#1090#1072
       Caption = #1048#1079#1084#1077#1085#1080#1090#1100'/'#1055#1088#1086#1089#1084#1086#1090#1088' '#1082#1083#1080#1077#1085#1090#1072
@@ -94,7 +95,7 @@ object Form1: TForm1
       OnClick = N16Click
     end
     object ToolButton10: TToolButton
-      Left = 100
+      Left = 108
       Top = 0
       Hint = #1059#1076#1072#1083#1080#1090#1100' '#1082#1083#1080#1077#1085#1090#1072
       Caption = #1059#1076#1072#1083#1080#1090#1100' '#1082#1083#1080#1077#1085#1090#1072
@@ -102,7 +103,7 @@ object Form1: TForm1
       OnClick = N17Click
     end
     object ToolButton11: TToolButton
-      Left = 123
+      Left = 133
       Top = 0
       Width = 8
       Caption = 'ToolButton11'
@@ -110,7 +111,7 @@ object Form1: TForm1
       Style = tbsSeparator
     end
     object ToolButton12: TToolButton
-      Left = 131
+      Left = 141
       Top = 0
       Hint = #1059#1074#1077#1076#1086#1084#1083#1077#1085#1080#1077
       Caption = #1059#1074#1077#1076#1086#1084#1083#1077#1085#1080#1077
@@ -118,7 +119,7 @@ object Form1: TForm1
       OnClick = N19Click
     end
     object ToolButton13: TToolButton
-      Left = 154
+      Left = 166
       Top = 0
       Hint = #1059#1095#1077#1090#1085#1072#1103' '#1082#1072#1088#1090#1072
       Caption = #1059#1095#1077#1090#1085#1072#1103' '#1082#1072#1088#1090#1072
@@ -126,7 +127,7 @@ object Form1: TForm1
       OnClick = N20Click
     end
     object ToolButton15: TToolButton
-      Left = 177
+      Left = 191
       Top = 0
       Width = 8
       Caption = 'ToolButton15'
@@ -134,14 +135,14 @@ object Form1: TForm1
       Style = tbsDivider
     end
     object ToolButton14: TToolButton
-      Left = 185
+      Left = 199
       Top = 0
       Caption = 'ToolButton14'
       ImageIndex = 13
       OnClick = N103Click
     end
     object ToolButton18: TToolButton
-      Left = 208
+      Left = 224
       Top = 0
       Hint = #1042#1099#1073#1086#1088' '#1086#1082#1088#1091#1075#1072
       Caption = #1057#1087#1088#1072#1074#1082#1072
@@ -149,7 +150,7 @@ object Form1: TForm1
       OnClick = N10Click
     end
     object ToolButton16: TToolButton
-      Left = 231
+      Left = 249
       Top = 0
       Hint = #1042#1099#1073#1088#1072#1090#1100' '#1080#1085#1089#1087#1077#1082#1090#1086#1088#1072
       Caption = #1054#1087#1094#1080#1080
@@ -157,32 +158,38 @@ object Form1: TForm1
       OnClick = ToolButton16Click
     end
     object ToolButton3: TToolButton
-      Left = 254
+      Left = 274
       Top = 0
       Width = 8
       Caption = 'ToolButton3'
       ImageIndex = 11
       Style = tbsSeparator
     end
+    object ToolButton17: TToolButton
+      Left = 282
+      Top = 0
+      Caption = 'ToolButton17'
+      ImageIndex = 14
+      OnClick = ToolButton17Click
+    end
     object ToolButton4: TToolButton
-      Left = 262
+      Left = 307
       Top = 0
       Hint = #1057#1087#1088#1072#1074#1082#1072
       Caption = 'ToolButton4'
       ImageIndex = 11
       Visible = False
     end
-    object ToolButton5: TToolButton
-      Left = 285
+    object ToolButton19: TToolButton
+      Left = 332
       Top = 0
       Width = 8
-      Caption = 'ToolButton5'
-      ImageIndex = 12
+      Caption = 'ToolButton19'
+      ImageIndex = 13
       Style = tbsSeparator
-      Visible = False
     end
     object ToolButton9: TToolButton
-      Left = 293
+      Left = 340
       Top = 0
       Hint = #1050#1072#1083#1100#1082#1091#1083#1103#1090#1086#1088
       Caption = 'ToolButton9'
@@ -191,178 +198,23 @@ object Form1: TForm1
     end
   end
   object Panel1: TPanel
-    Left = 0
-    Top = 27
-    Width = 657
-    Height = 368
+    AlignWithMargins = True
+    Left = 3
+    Top = 116
+    Width = 700
+    Height = 332
     Align = alClient
+    BevelInner = bvLowered
     Caption = 'Panel1'
     TabOrder = 2
-    object Image1: TImage
-      Left = 607
-      Top = 8
-      Width = 32
-      Height = 32
-      AutoSize = True
-      Center = True
-      Picture.Data = {
-        055449636F6E0000010001002020100000000000E80200001600000028000000
-        2000000040000000010004000000000080020000000000000000000000000000
-        0000000000000000000080000080000000808000800000008000800080800000
-        80808000C0C0C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000
-        FFFFFF0000000000000000000000000000000000000000000004444444444000
-        0000000000000000044444444444444000000000000000044444444444444444
-        4000000000000044444000000000044444000000000004444000000000000004
-        4440000000004444000000000000000044440000000444400000000000000000
-        0444400000044400000004444440000000444000004440000000044444400000
-        0004440000444000000000444400000000044400004400000000004444000000
-        0000440004440000000000444400000000004440044400000000004444000000
-        0000444004440000000000444400000000004440044400000000004444000000
-        0000444004440000000000444400000000004440044400000000004444000000
-        0000444004440000000000444400000000004440044400000000444444000000
-        0000444000440000000044444400000000004400004440000000044444000000
-        0004440000444000000000444400000000044400000444000000000444000000
-        0044400000044440000000000000000004444000000044440000000000000000
-        4444000000000444400000000000000444400000000000444440000000000444
-        4400000000000004444444444444444440000000000000004444444444444444
-        0000000000000000004444444444440000000000000000000000000000000000
-        00000000FFFFFFFFFFE007FFFF8001FFFE00007FFC1FF83FF87FFE1FF0FFFF0F
-        E1FFFF87E3F81FC7C7F81FE3C7FC3FE3CFFC3FF38FFC3FF18FFC3FF18FFC3FF1
-        8FFC3FF18FFC3FF18FFC3FF18FFC3FF18FF03FF1CFF03FF3C7F83FE3C7FC3FE3
-        E3FE3FC7E1FFFF87F0FFFF0FF87FFE1FFC1FF83FFE00007FFF0000FFFFC003FF
-        FFFFFFFF}
-    end
-    object Image2: TImage
-      Left = 607
-      Top = 75
-      Width = 32
-      Height = 32
-      AutoSize = True
-      Center = True
-      IncrementalDisplay = True
-      Picture.Data = {
-        055449636F6E0000010001002020100000000000E80200001600000028000000
-        2000000040000000010004000000000080020000000000000000000000000000
-        0000000000000000000080000080000000808000800000008000800080800000
-        80808000C0C0C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000
-        FFFFFF0000000000000000000000000000000000000000000011111111111000
-        0000000000000000011111111111111000000000000000011110000000000111
-        1000000000000011110000000000001111000000000001110000000000000000
-        1110000000001110000000111100000001110000000111000000001111000000
-        0011100000011000000000111100000000011000001100000000001111000000
-        0000110000110000000000000000000000001100011000000000000000000000
-        0000011001100000000000111100000000000110011000000000001111000000
-        0000011001100000000000111100000000000110011000000000001111000000
-        0000011001100000000000111100000000000110011000000000001111000000
-        0000011001100000000000111100000000000110011000000000001111000000
-        0000011001100000000000111100000000000110001100000000001111000000
-        0000110000110000000000111100000000001100000110000000001111000000
-        0001100000011100000000111100000000111000000011100000001111000000
-        0111000000000111000000111100000011100000000000111100000000000011
-        1100000000000001111000000000011110000000000000000111111111111110
-        0000000000000000001111111111100000000000000000000000000000000000
-        00000000FFFFFFFFFFC007FFFF8001FFFE1FF87FFC3FFC3FF8FFFF1FF1FC3F8F
-        E3FC3FC7E7FC3FE7CFFC3FF3CFFFFFF39FFFFFF99FFC3FF99FFC3FF99FFC3FF9
-        9FFC3FF99FFC3FF99FFC3FF99FFC3FF99FFC3FF99FFC3FF9CFFC3FF3CFFC3FF3
-        E7FC3FE7E3FC3FC7F1FC3F8FF8FC3F1FFC3FFC3FFE1FF87FFF8001FFFFC007FF
-        FFFFFFFF}
-    end
-    object Image3: TImage
-      Left = 607
-      Top = 141
-      Width = 32
-      Height = 32
-      AutoSize = True
-      Center = True
-      Picture.Data = {
-        055449636F6E0000010001002020100000000000E80200001600000028000000
-        2000000040000000010004000000000080020000000000000000000000000000
-        0000000000000000000080000080000000808000800000008000800080800000
-        80808000C0C0C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000
-        FFFFFF0000000000000000000000000000000000000000000011111111111000
-        0000000000000000011111111111111000000000000000011110000000000111
-        1000000000000011110000000000001111000000000001110000000000000000
-        1110000000001110000000000000000011110000000111000000000000000001
-        1111100000011000000000000000001110011000001100000000000000000111
-        0000110000110000000000000000111000001100011000000000000000011100
-        0000011001100000000000000011100000000110011000000000000001110000
-        0000011001100000000000001110000000000110011000000000000111000000
-        0000011001100000000000111000000000000110011000000000011100000000
-        0000011001100000000011100000000000000110011000000001110000000000
-        0000011001100000001110000000000000000110001100000111000000000000
-        0000110000110000111000000000000000001100000110011100000000000000
-        0001100000011111100000000000000000111000000011110000000000000000
-        0111000000000111000000000000000011100000000000111100000000000011
-        1100000000000001111000000000011110000000000000000111111111111110
-        0000000000000000001111111111100000000000000000000000000000000000
-        00000000FFFFFFFFFFC007FFFF8001FFFE1FF87FFC3FFC3FF8FFFF1FF1FFFF0F
-        E3FFFE07E7FFFC67CFFFF8F3CFFFF1F39FFFE3F99FFFC7F99FFF8FF99FFF1FF9
-        9FFE3FF99FFC7FF99FF8FFF99FF1FFF99FE3FFF99FC7FFF9CF8FFFF3CF1FFFF3
-        E63FFFE7E07FFFC7F0FFFF8FF8FFFF1FFC3FFC3FFE1FF87FFF8001FFFFC007FF
-        FFFFFFFF}
-    end
-    object Label1: TLabel
-      Left = 594
-      Top = 216
-      Width = 33
-      Height = 13
-      Caption = #1042#1089#1077#1075#1086':'
-    end
-    object Label2: TLabel
-      Left = 594
-      Top = 256
-      Width = 53
-      Height = 13
-      Caption = #1040#1082#1090#1080#1074#1085#1099#1077':'
-    end
-    object Label3: TLabel
-      Left = 522
-      Top = 304
-      Width = 56
-      Height = 13
-      Caption = #1042' '#1092#1080#1083#1100#1090#1088#1077':'
-    end
-    object Label4: TLabel
-      Left = 522
-      Top = 328
-      Width = 52
-      Height = 13
-      Caption = #1053#1072' '#1089#1091#1084#1084#1091':'
-    end
-    object Label5: TLabel
-      Left = 408
-      Top = 302
-      Width = 57
-      Height = 13
-      Caption = #1053#1077#1090' '#1076#1086#1083#1075#1086#1074
-    end
-    object Label6: TLabel
-      Left = 408
-      Top = 316
-      Width = 79
-      Height = 13
-      Caption = #1042#1086#1079#1086#1073#1085#1086#1074#1083#1077#1085#1080#1077
-    end
-    object Label7: TLabel
-      Left = 408
-      Top = 330
-      Width = 73
-      Height = 13
-      Caption = #1055#1088#1080#1086#1089#1090#1072#1085#1086#1074#1082#1072
-    end
-    object Label8: TLabel
-      Left = 408
-      Top = 344
-      Width = 71
-      Height = 13
-      Caption = #1055#1088#1077#1082#1088#1072#1097#1077#1085#1080#1077
-    end
     object SGCl: TStringGrid
-      Left = 1
-      Top = 1
-      Width = 586
-      Height = 293
+      Left = 2
+      Top = 2
+      Width = 618
+      Height = 328
       Hint = #1057#1087#1080#1089#1086#1082' '#1074#1089#1077#1093' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1074' '#1073#1072#1079#1077
+      Align = alClient
+      BorderStyle = bsNone
       DefaultColWidth = 130
       DefaultRowHeight = 20
       DefaultDrawing = False
@@ -379,287 +231,836 @@ object Form1: TForm1
       OnKeyPress = SGClKeyPress
       OnSelectCell = SGClSelectCell
     end
-    object Edit1: TEdit
-      Left = 594
-      Top = 232
-      Width = 57
-      Height = 21
-      Hint = #1054#1073#1097#1077#1077' '#1082#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1095#1077#1083#1086#1074#1077#1082' '#1074' '#1073#1072#1079#1077
-      TabStop = False
-      BiDiMode = bdLeftToRight
-      ParentBiDiMode = False
-      ParentShowHint = False
-      ReadOnly = True
-      ShowHint = True
+    object GridPanel1: TGridPanel
+      Left = 620
+      Top = 2
+      Width = 78
+      Height = 328
+      Align = alRight
+      BevelOuter = bvNone
+      ColumnCollection = <
+        item
+          Value = 100.000000000000000000
+        end>
+      ControlCollection = <
+        item
+          Column = 0
+          Control = Image1
+          Row = 0
+        end
+        item
+          Column = 0
+          Control = Memo1
+          Row = 1
+        end
+        item
+          Column = 0
+          Control = Image2
+          Row = 2
+        end
+        item
+          Column = 0
+          Control = Memo2
+          Row = 3
+        end
+        item
+          Column = 0
+          Control = Image3
+          Row = 4
+        end
+        item
+          Column = 0
+          Control = Memo3
+          Row = 5
+        end
+        item
+          Column = 0
+          Control = Panel4
+          Row = 6
+        end
+        item
+          Column = 0
+          Control = Label1
+          Row = 7
+        end
+        item
+          Column = 0
+          Control = Edit1
+          Row = 8
+        end
+        item
+          Column = 0
+          Control = Label2
+          Row = 9
+        end
+        item
+          Column = 0
+          Control = Edit2
+          Row = 10
+        end>
+      RowCollection = <
+        item
+          SizeStyle = ssAbsolute
+          Value = 32.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 30.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 32.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 30.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 32.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 30.000000000000000000
+        end
+        item
+          Value = 100.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 20.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 23.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 20.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 23.000000000000000000
+        end>
       TabOrder = 1
+      DesignSize = (
+        78
+        328)
+      object Image1: TImage
+        Left = 23
+        Top = 0
+        Width = 32
+        Height = 32
+        Anchors = []
+        AutoSize = True
+        Center = True
+        Picture.Data = {
+          055449636F6E0000010001002020100000000000E80200001600000028000000
+          2000000040000000010004000000000080020000000000000000000000000000
+          0000000000000000000080000080000000808000800000008000800080800000
+          80808000C0C0C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000
+          FFFFFF0000000000000000000000000000000000000000000004444444444000
+          0000000000000000044444444444444000000000000000044444444444444444
+          4000000000000044444000000000044444000000000004444000000000000004
+          4440000000004444000000000000000044440000000444400000000000000000
+          0444400000044400000004444440000000444000004440000000044444400000
+          0004440000444000000000444400000000044400004400000000004444000000
+          0000440004440000000000444400000000004440044400000000004444000000
+          0000444004440000000000444400000000004440044400000000004444000000
+          0000444004440000000000444400000000004440044400000000004444000000
+          0000444004440000000000444400000000004440044400000000444444000000
+          0000444000440000000044444400000000004400004440000000044444000000
+          0004440000444000000000444400000000044400000444000000000444000000
+          0044400000044440000000000000000004444000000044440000000000000000
+          4444000000000444400000000000000444400000000000444440000000000444
+          4400000000000004444444444444444440000000000000004444444444444444
+          0000000000000000004444444444440000000000000000000000000000000000
+          00000000FFFFFFFFFFE007FFFF8001FFFE00007FFC1FF83FF87FFE1FF0FFFF0F
+          E1FFFF87E3F81FC7C7F81FE3C7FC3FE3CFFC3FF38FFC3FF18FFC3FF18FFC3FF1
+          8FFC3FF18FFC3FF18FFC3FF18FFC3FF18FF03FF1CFF03FF3C7F83FE3C7FC3FE3
+          E3FE3FC7E1FFFF87F0FFFF0FF87FFE1FFC1FF83FFE00007FFF0000FFFFC003FF
+          FFFFFFFF}
+        ExplicitLeft = 40
+        ExplicitTop = 1
+      end
+      object Memo1: TMemo
+        Left = 0
+        Top = 32
+        Width = 78
+        Height = 30
+        Align = alClient
+        Alignment = taCenter
+        BorderStyle = bsNone
+        Color = clBtnFace
+        Lines.Strings = (
+          #1055#1077#1088#1074#1099#1081
+          #1084#1077#1089#1103#1094)
+        ReadOnly = True
+        TabOrder = 0
+      end
+      object Image2: TImage
+        Left = 23
+        Top = 62
+        Width = 32
+        Height = 32
+        Anchors = []
+        AutoSize = True
+        Center = True
+        IncrementalDisplay = True
+        Picture.Data = {
+          055449636F6E0000010001002020100000000000E80200001600000028000000
+          2000000040000000010004000000000080020000000000000000000000000000
+          0000000000000000000080000080000000808000800000008000800080800000
+          80808000C0C0C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000
+          FFFFFF0000000000000000000000000000000000000000000011111111111000
+          0000000000000000011111111111111000000000000000011110000000000111
+          1000000000000011110000000000001111000000000001110000000000000000
+          1110000000001110000000111100000001110000000111000000001111000000
+          0011100000011000000000111100000000011000001100000000001111000000
+          0000110000110000000000000000000000001100011000000000000000000000
+          0000011001100000000000111100000000000110011000000000001111000000
+          0000011001100000000000111100000000000110011000000000001111000000
+          0000011001100000000000111100000000000110011000000000001111000000
+          0000011001100000000000111100000000000110011000000000001111000000
+          0000011001100000000000111100000000000110001100000000001111000000
+          0000110000110000000000111100000000001100000110000000001111000000
+          0001100000011100000000111100000000111000000011100000001111000000
+          0111000000000111000000111100000011100000000000111100000000000011
+          1100000000000001111000000000011110000000000000000111111111111110
+          0000000000000000001111111111100000000000000000000000000000000000
+          00000000FFFFFFFFFFC007FFFF8001FFFE1FF87FFC3FFC3FF8FFFF1FF1FC3F8F
+          E3FC3FC7E7FC3FE7CFFC3FF3CFFFFFF39FFFFFF99FFC3FF99FFC3FF99FFC3FF9
+          9FFC3FF99FFC3FF99FFC3FF99FFC3FF99FFC3FF99FFC3FF9CFFC3FF3CFFC3FF3
+          E7FC3FE7E3FC3FC7F1FC3F8FF8FC3F1FFC3FFC3FFE1FF87FFF8001FFFFC007FF
+          FFFFFFFF}
+        ExplicitLeft = 40
+        ExplicitTop = 97
+      end
+      object Memo2: TMemo
+        Left = 0
+        Top = 94
+        Width = 78
+        Height = 30
+        Align = alClient
+        Alignment = taCenter
+        BorderStyle = bsNone
+        Color = clBtnFace
+        Lines.Strings = (
+          #1055#1086#1089#1083#1077#1076#1085#1080#1081
+          #1084#1077#1089#1103#1094)
+        ReadOnly = True
+        TabOrder = 1
+      end
+      object Image3: TImage
+        Left = 23
+        Top = 124
+        Width = 32
+        Height = 32
+        Anchors = []
+        AutoSize = True
+        Center = True
+        Picture.Data = {
+          055449636F6E0000010001002020100000000000E80200001600000028000000
+          2000000040000000010004000000000080020000000000000000000000000000
+          0000000000000000000080000080000000808000800000008000800080800000
+          80808000C0C0C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000
+          FFFFFF0000000000000000000000000000000000000000000011111111111000
+          0000000000000000011111111111111000000000000000011110000000000111
+          1000000000000011110000000000001111000000000001110000000000000000
+          1110000000001110000000000000000011110000000111000000000000000001
+          1111100000011000000000000000001110011000001100000000000000000111
+          0000110000110000000000000000111000001100011000000000000000011100
+          0000011001100000000000000011100000000110011000000000000001110000
+          0000011001100000000000001110000000000110011000000000000111000000
+          0000011001100000000000111000000000000110011000000000011100000000
+          0000011001100000000011100000000000000110011000000001110000000000
+          0000011001100000001110000000000000000110001100000111000000000000
+          0000110000110000111000000000000000001100000110011100000000000000
+          0001100000011111100000000000000000111000000011110000000000000000
+          0111000000000111000000000000000011100000000000111100000000000011
+          1100000000000001111000000000011110000000000000000111111111111110
+          0000000000000000001111111111100000000000000000000000000000000000
+          00000000FFFFFFFFFFC007FFFF8001FFFE1FF87FFC3FFC3FF8FFFF1FF1FFFF0F
+          E3FFFE07E7FFFC67CFFFF8F3CFFFF1F39FFFE3F99FFFC7F99FFF8FF99FFF1FF9
+          9FFE3FF99FFC7FF99FF8FFF99FF1FFF99FE3FFF99FC7FFF9CF8FFFF3CF1FFFF3
+          E63FFFE7E07FFFC7F0FFFF8FF8FFFF1FFC3FFC3FFE1FF87FFF8001FFFFC007FF
+          FFFFFFFF}
+        ExplicitLeft = 40
+        ExplicitTop = 123
+      end
+      object Memo3: TMemo
+        Left = 0
+        Top = 156
+        Width = 78
+        Height = 30
+        Align = alClient
+        Alignment = taCenter
+        BorderStyle = bsNone
+        Color = clBtnFace
+        Lines.Strings = (
+          #1053#1077#1090
+          #1089#1091#1073#1089#1080#1076#1080#1080)
+        ReadOnly = True
+        TabOrder = 2
+      end
+      object Panel4: TPanel
+        Left = 0
+        Top = 186
+        Width = 78
+        Height = 56
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 3
+      end
+      object Label1: TLabel
+        Left = 22
+        Top = 245
+        Width = 33
+        Height = 13
+        Anchors = []
+        Caption = #1042#1089#1077#1075#1086':'
+        ExplicitLeft = 11
+        ExplicitTop = 232
+      end
+      object Edit1: TEdit
+        Left = 12
+        Top = 263
+        Width = 54
+        Height = 21
+        Hint = #1054#1073#1097#1077#1077' '#1082#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1095#1077#1083#1086#1074#1077#1082' '#1074' '#1073#1072#1079#1077
+        TabStop = False
+        Anchors = []
+        BiDiMode = bdLeftToRight
+        Ctl3D = True
+        ParentBiDiMode = False
+        ParentCtl3D = False
+        ParentShowHint = False
+        ReadOnly = True
+        ShowHint = True
+        TabOrder = 4
+      end
+      object Label2: TLabel
+        Left = 12
+        Top = 288
+        Width = 53
+        Height = 13
+        Anchors = []
+        Caption = #1040#1082#1090#1080#1074#1085#1099#1077':'
+        ExplicitLeft = 1
+        ExplicitTop = 278
+      end
+      object Edit2: TEdit
+        Left = 12
+        Top = 306
+        Width = 54
+        Height = 21
+        Hint = #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1072#1082#1090#1080#1074#1085#1099#1093' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1074' '#1073#1072#1079#1077
+        TabStop = False
+        Anchors = []
+        Ctl3D = True
+        ParentCtl3D = False
+        ParentShowHint = False
+        ReadOnly = True
+        ShowHint = True
+        TabOrder = 5
+      end
     end
-    object Edit2: TEdit
-      Left = 594
-      Top = 272
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 451
+    Width = 706
+    Height = 51
+    Align = alBottom
+    AutoSize = True
+    BevelInner = bvLowered
+    TabOrder = 3
+    object GridPanel2: TGridPanel
+      AlignWithMargins = True
+      Left = 5
+      Top = 5
+      Width = 696
+      Height = 41
+      Align = alTop
+      BevelOuter = bvNone
+      ColumnCollection = <
+        item
+          SizeStyle = ssAbsolute
+          Value = 80.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 80.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 80.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 85.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 80.000000000000000000
+        end
+        item
+          Value = 100.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 80.000000000000000000
+        end
+        item
+          SizeStyle = ssAbsolute
+          Value = 77.000000000000000000
+        end>
+      ControlCollection = <
+        item
+          Column = 0
+          Control = Button1
+          Row = 0
+        end
+        item
+          Column = 1
+          Control = Button2
+          Row = 0
+        end
+        item
+          Column = 2
+          Control = Button3
+          Row = 0
+        end
+        item
+          Column = 3
+          Control = Button8
+          Row = 0
+        end
+        item
+          Column = 4
+          Control = Panel3
+          Row = 0
+        end
+        item
+          Column = 5
+          Control = Panel5
+          Row = 0
+        end
+        item
+          Column = 6
+          Control = Panel6
+          Row = 0
+        end
+        item
+          Column = 7
+          Control = Edit3
+          Row = 0
+        end
+        item
+          Column = 0
+          Control = Button4
+          Row = 1
+        end
+        item
+          Column = 1
+          Control = Button5
+          Row = 1
+        end
+        item
+          Column = 2
+          Control = Button6
+          Row = 1
+        end
+        item
+          Column = 3
+          Control = Button9
+          Row = 1
+        end
+        item
+          Column = 4
+          Control = Button7
+          Row = 1
+        end
+        item
+          Column = 5
+          Control = Panel7
+          Row = 1
+        end
+        item
+          Column = 6
+          Control = Panel8
+          Row = 1
+        end
+        item
+          Column = 7
+          Control = Edit4
+          Row = 1
+        end>
+      RowCollection = <
+        item
+          Value = 50.000000000000000000
+        end
+        item
+          Value = 50.000000000000000000
+        end>
+      TabOrder = 0
+      DesignSize = (
+        696
+        41)
+      object Button1: TButton
+        Left = 2
+        Top = 0
+        Width = 75
+        Height = 19
+        Hint = #1044#1086#1073#1072#1074#1080#1090#1100' '#1082#1083#1080#1077#1085#1090#1072
+        Anchors = []
+        Caption = #1044#1086#1073#1072#1074#1080#1090#1100
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+        OnClick = N15Click
+      end
+      object Button2: TButton
+        Left = 82
+        Top = 0
+        Width = 75
+        Height = 19
+        Hint = #1048#1079#1084#1077#1085#1080#1090#1100' '#1082#1083#1080#1077#1085#1090#1072
+        Anchors = []
+        Caption = #1048#1079#1084#1077#1085#1080#1090#1100
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 1
+        OnClick = N16Click
+      end
+      object Button3: TButton
+        Left = 162
+        Top = 0
+        Width = 75
+        Height = 19
+        Hint = #1059#1076#1072#1083#1080#1090#1100' '#1082#1083#1080#1077#1085#1090#1072
+        Anchors = []
+        Caption = #1059#1076#1072#1083#1080#1090#1100
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 2
+        OnClick = N17Click
+      end
+      object Button8: TButton
+        Left = 245
+        Top = 0
+        Width = 75
+        Height = 19
+        Hint = #1054#1090#1082#1088#1099#1090#1100' '#1092#1072#1081#1083' '#1089' '#1082#1083#1080#1077#1085#1090#1072#1084#1080' '#1074' MSExcel'
+        Anchors = []
+        Caption = #1042' '#1092#1072#1081#1083' Excel'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 3
+        OnClick = Excel1Click
+      end
+      object Panel3: TPanel
+        Left = 325
+        Top = 0
+        Width = 80
+        Height = 20
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 4
+      end
+      object Panel5: TPanel
+        Left = 405
+        Top = 0
+        Width = 134
+        Height = 20
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 5
+      end
+      object Panel6: TPanel
+        Left = 539
+        Top = 0
+        Width = 80
+        Height = 20
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 6
+        object Label3: TLabel
+          Left = 15
+          Top = 3
+          Width = 59
+          Height = 13
+          Caption = #1042' '#1092#1080#1083#1100#1090#1088#1077': '
+          Transparent = True
+        end
+      end
+      object Edit3: TEdit
+        Left = 619
+        Top = 0
+        Width = 77
+        Height = 20
+        Hint = #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1095#1077#1083#1086#1074#1077#1082', '#1091#1076#1086#1074#1083#1077#1090#1074#1086#1088#1103#1102#1097#1080#1093' '#1091#1089#1083#1086#1074#1080#1103#1084' '#1087#1086#1080#1089#1082#1072
+        Margins.Top = 8
+        TabStop = False
+        Anchors = []
+        Ctl3D = True
+        ParentCtl3D = False
+        ParentShowHint = False
+        ReadOnly = True
+        ShowHint = True
+        TabOrder = 7
+      end
+      object Button4: TButton
+        Left = 2
+        Top = 20
+        Width = 75
+        Height = 20
+        Hint = #1059#1074#1077#1076#1086#1084#1083#1077#1085#1080#1077
+        Anchors = []
+        Caption = #1059#1074#1077#1076#1086#1084#1083'.'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 8
+        OnClick = N19Click
+      end
+      object Button5: TButton
+        Left = 82
+        Top = 20
+        Width = 75
+        Height = 20
+        Hint = #1059#1095#1077#1090#1085#1072#1103' '#1082#1072#1088#1090#1072
+        Anchors = []
+        Caption = #1050#1072#1088#1090#1072
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 9
+        OnClick = N20Click
+      end
+      object Button6: TButton
+        Left = 162
+        Top = 20
+        Width = 75
+        Height = 20
+        Hint = #1042#1077#1076#1086#1084#1086#1089#1090#1100' '#1089#1091#1073#1089#1080#1076#1080#1081' '#1082#1083#1080#1077#1085#1090#1072' '#1079#1072' '#1075#1086#1076
+        Anchors = []
+        Caption = #1057#1091#1073#1089#1080#1076#1080#1080
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 10
+        OnClick = N82Click
+      end
+      object Button9: TButton
+        Left = 245
+        Top = 20
+        Width = 75
+        Height = 20
+        Anchors = []
+        Caption = #1060#1072#1082#1090'. '#1088#1072#1089#1093#1086#1076
+        TabOrder = 11
+        OnClick = Button9Click
+      end
+      object Button7: TButton
+        Left = 327
+        Top = 20
+        Width = 75
+        Height = 20
+        Hint = #1055#1086#1080#1089#1082' '#1082#1083#1080#1077#1085#1090#1086#1074
+        Anchors = []
+        Caption = #1060#1080#1083#1100#1090#1088
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 12
+        OnClick = N87Click
+      end
+      object Panel7: TPanel
+        Left = 405
+        Top = 20
+        Width = 134
+        Height = 21
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 13
+      end
+      object Panel8: TPanel
+        Left = 539
+        Top = 20
+        Width = 80
+        Height = 21
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 14
+        object Label4: TLabel
+          Left = 16
+          Top = 3
+          Width = 55
+          Height = 13
+          Caption = #1053#1072' '#1089#1091#1084#1084#1091': '
+          Transparent = False
+        end
+      end
+      object Edit4: TEdit
+        Left = 619
+        Top = 20
+        Width = 77
+        Height = 21
+        Hint = #1057#1091#1084#1084#1072' '#1089#1091#1073#1089#1080#1076#1080#1081' '#1082#1083#1080#1077#1085#1090#1086#1074', '#1091#1076#1086#1074#1083#1077#1090#1074#1086#1088#1103#1102#1097#1080#1093' '#1091#1089#1083#1086#1074#1080#1103#1084' '#1087#1086#1080#1089#1082#1072
+        Margins.Top = 8
+        TabStop = False
+        Anchors = []
+        Ctl3D = True
+        ParentCtl3D = False
+        ParentShowHint = False
+        ReadOnly = True
+        ShowHint = True
+        TabOrder = 15
+      end
+    end
+  end
+  object GroupBox1: TGroupBox
+    AlignWithMargins = True
+    Left = 3
+    Top = 30
+    Width = 700
+    Height = 80
+    Align = alTop
+    Caption = #1051#1077#1075#1077#1085#1076#1072':'
+    TabOrder = 4
+    Visible = False
+    object Label5: TLabel
+      Left = 55
+      Top = 17
       Width = 57
-      Height = 21
-      Hint = #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1072#1082#1090#1080#1074#1085#1099#1093' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1074' '#1073#1072#1079#1077
-      TabStop = False
-      ParentShowHint = False
-      ReadOnly = True
-      ShowHint = True
-      TabOrder = 2
+      Height = 13
+      Caption = #1053#1077#1090' '#1076#1086#1083#1075#1086#1074
     end
-    object Edit3: TEdit
-      Left = 582
-      Top = 304
-      Width = 70
-      Height = 21
-      Hint = #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1095#1077#1083#1086#1074#1077#1082', '#1091#1076#1086#1074#1083#1077#1090#1074#1086#1088#1103#1102#1097#1080#1093' '#1091#1089#1083#1086#1074#1080#1103#1084' '#1087#1086#1080#1089#1082#1072
-      TabStop = False
-      ParentShowHint = False
-      ReadOnly = True
-      ShowHint = True
-      TabOrder = 3
+    object Label6: TLabel
+      Left = 55
+      Top = 30
+      Width = 79
+      Height = 13
+      Caption = #1042#1086#1079#1086#1073#1085#1086#1074#1083#1077#1085#1080#1077
     end
-    object Memo1: TMemo
-      Left = 594
-      Top = 40
-      Width = 57
-      Height = 28
-      Alignment = taCenter
-      BorderStyle = bsNone
-      Color = clBtnFace
-      Lines.Strings = (
-        #1055#1077#1088#1074#1099#1081
-        #1084#1077#1089#1103#1094)
-      ReadOnly = True
-      TabOrder = 4
-    end
-    object Memo2: TMemo
-      Left = 594
-      Top = 106
-      Width = 57
-      Height = 28
-      Alignment = taCenter
-      BorderStyle = bsNone
-      Color = clBtnFace
-      Lines.Strings = (
-        #1055#1086#1089#1083#1077#1076#1085#1080#1081
-        #1084#1077#1089#1103#1094)
-      ReadOnly = True
-      TabOrder = 5
-    end
-    object Memo3: TMemo
-      Left = 594
-      Top = 173
-      Width = 57
-      Height = 28
-      Alignment = taCenter
-      BorderStyle = bsNone
-      Color = clBtnFace
-      Lines.Strings = (
-        #1053#1077#1090
-        #1089#1091#1073#1089#1080#1076#1080#1080)
-      ReadOnly = True
-      TabOrder = 6
-    end
-    object Edit4: TEdit
-      Left = 582
-      Top = 328
-      Width = 70
-      Height = 21
-      Hint = #1057#1091#1084#1084#1072' '#1089#1091#1073#1089#1080#1076#1080#1081' '#1082#1083#1080#1077#1085#1090#1086#1074', '#1091#1076#1086#1074#1083#1077#1090#1074#1086#1088#1103#1102#1097#1080#1093' '#1091#1089#1083#1086#1074#1080#1103#1084' '#1087#1086#1080#1089#1082#1072
-      TabStop = False
-      ParentShowHint = False
-      ReadOnly = True
-      ShowHint = True
-      TabOrder = 7
-    end
-    object Button1: TButton
-      Left = 8
-      Top = 302
-      Width = 62
-      Height = 23
-      Hint = #1044#1086#1073#1072#1074#1080#1090#1100' '#1082#1083#1080#1077#1085#1090#1072
-      Caption = #1044#1086#1073#1072#1074#1080#1090#1100
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 8
-      OnClick = N15Click
-    end
-    object Button2: TButton
-      Left = 80
-      Top = 302
-      Width = 62
-      Height = 23
-      Hint = #1048#1079#1084#1077#1085#1080#1090#1100' '#1082#1083#1080#1077#1085#1090#1072
-      Caption = #1048#1079#1084#1077#1085#1080#1090#1100
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 9
-      OnClick = N16Click
-    end
-    object Button3: TButton
-      Left = 152
-      Top = 302
-      Width = 62
-      Height = 23
-      Hint = #1059#1076#1072#1083#1080#1090#1100' '#1082#1083#1080#1077#1085#1090#1072
-      Caption = #1059#1076#1072#1083#1080#1090#1100
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 10
-      OnClick = N17Click
-    end
-    object Button4: TButton
-      Left = 8
-      Top = 331
-      Width = 62
-      Height = 23
-      Hint = #1059#1074#1077#1076#1086#1084#1083#1077#1085#1080#1077
-      Caption = #1059#1074#1077#1076#1086#1084#1083'.'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 11
-      OnClick = N19Click
-    end
-    object Button5: TButton
-      Left = 80
-      Top = 330
-      Width = 62
-      Height = 23
-      Hint = #1059#1095#1077#1090#1085#1072#1103' '#1082#1072#1088#1090#1072
-      Caption = #1050#1072#1088#1090#1072
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 12
-      OnClick = N20Click
-    end
-    object Button6: TButton
-      Left = 152
-      Top = 330
-      Width = 62
-      Height = 23
-      Hint = #1042#1077#1076#1086#1084#1086#1089#1090#1100' '#1089#1091#1073#1089#1080#1076#1080#1081' '#1082#1083#1080#1077#1085#1090#1072' '#1079#1072' '#1075#1086#1076
-      Caption = #1057#1091#1073#1089#1080#1076#1080#1080
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 13
-      OnClick = N82Click
-    end
-    object Button7: TButton
-      Left = 248
-      Top = 302
+    object Label7: TLabel
+      Left = 55
+      Top = 43
       Width = 73
-      Height = 23
-      Hint = #1055#1086#1080#1089#1082' '#1082#1083#1080#1077#1085#1090#1086#1074
-      Caption = #1060#1080#1083#1100#1090#1088
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 14
-      OnClick = N87Click
+      Height = 13
+      Caption = #1055#1088#1080#1086#1089#1090#1072#1085#1086#1074#1082#1072
     end
-    object Button8: TButton
-      Left = 248
-      Top = 330
-      Width = 73
-      Height = 23
-      Hint = #1054#1090#1082#1088#1099#1090#1100' '#1092#1072#1081#1083' '#1089' '#1082#1083#1080#1077#1085#1090#1072#1084#1080' '#1074' MSExcel'
-      Caption = #1042' '#1092#1072#1081#1083' Excel'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 15
-      OnClick = Excel1Click
+    object Label8: TLabel
+      Left = 55
+      Top = 56
+      Width = 71
+      Height = 13
+      Caption = #1055#1088#1077#1082#1088#1072#1097#1077#1085#1080#1077
     end
     object Edit5: TEdit
-      Left = 360
-      Top = 302
+      Left = 10
+      Top = 15
       Width = 20
       Height = 14
       TabStop = False
       AutoSize = False
-      Ctl3D = True
+      Ctl3D = False
       ParentCtl3D = False
       ReadOnly = True
-      TabOrder = 16
-    end
-    object Edit6: TEdit
-      Left = 360
-      Top = 316
-      Width = 20
-      Height = 14
-      TabStop = False
-      AutoSize = False
-      Color = clMoneyGreen
-      ReadOnly = True
-      TabOrder = 17
-    end
-    object Edit7: TEdit
-      Left = 360
-      Top = 330
-      Width = 20
-      Height = 14
-      TabStop = False
-      AutoSize = False
-      Color = clInfoBk
-      ReadOnly = True
-      TabOrder = 18
-    end
-    object Edit8: TEdit
-      Left = 360
-      Top = 344
-      Width = 20
-      Height = 14
-      TabStop = False
-      AutoSize = False
-      Color = clSilver
-      ReadOnly = True
-      TabOrder = 19
+      TabOrder = 0
     end
     object Edit9: TEdit
-      Left = 384
-      Top = 302
+      Left = 29
+      Top = 15
       Width = 20
       Height = 14
       TabStop = False
       AutoSize = False
       Color = clSkyBlue
+      Ctl3D = False
+      ParentCtl3D = False
       ReadOnly = True
-      TabOrder = 20
+      TabOrder = 1
     end
     object Edit10: TEdit
-      Left = 384
-      Top = 316
+      Left = 29
+      Top = 28
       Width = 20
       Height = 14
       TabStop = False
       AutoSize = False
       Color = clTeal
+      Ctl3D = False
+      ParentCtl3D = False
       ReadOnly = True
-      TabOrder = 21
+      TabOrder = 2
+    end
+    object Edit6: TEdit
+      Left = 10
+      Top = 28
+      Width = 20
+      Height = 14
+      TabStop = False
+      AutoSize = False
+      Color = clMoneyGreen
+      Ctl3D = False
+      ParentCtl3D = False
+      ReadOnly = True
+      TabOrder = 3
+    end
+    object Edit7: TEdit
+      Left = 10
+      Top = 41
+      Width = 20
+      Height = 14
+      TabStop = False
+      AutoSize = False
+      Color = clInfoBk
+      Ctl3D = False
+      ParentCtl3D = False
+      ReadOnly = True
+      TabOrder = 4
     end
     object Edit11: TEdit
-      Left = 384
-      Top = 330
+      Left = 29
+      Top = 41
       Width = 20
       Height = 14
       TabStop = False
       AutoSize = False
       Color = clOlive
+      Ctl3D = False
+      ParentCtl3D = False
       ReadOnly = True
-      TabOrder = 22
+      TabOrder = 5
     end
     object Edit12: TEdit
-      Left = 384
-      Top = 344
+      Left = 29
+      Top = 54
       Width = 20
       Height = 14
       TabStop = False
       AutoSize = False
       Color = clGray
+      Ctl3D = False
+      ParentCtl3D = False
       ReadOnly = True
-      TabOrder = 23
+      TabOrder = 6
+    end
+    object Edit8: TEdit
+      Left = 10
+      Top = 54
+      Width = 20
+      Height = 14
+      TabStop = False
+      AutoSize = False
+      Color = clSilver
+      Ctl3D = False
+      ParentCtl3D = False
+      ReadOnly = True
+      TabOrder = 7
     end
   end
   object MainMenu1: TMainMenu
-    Left = 264
-    Top = 88
+    Left = 136
+    Top = 328
     object N1: TMenuItem
       Caption = #1060#1072#1081#1083
       object N2: TMenuItem
@@ -750,7 +1151,7 @@ object Form1: TForm1
         Caption = '-'
       end
       object dbf2: TMenuItem
-        Caption = #1050#1086#1076#1080#1088#1086#1074#1082#1072' dbf-'#1092#1072#1081#1083#1086#1074
+        Caption = #1050#1086#1076#1080#1088#1086#1074#1082#1072' DBF-'#1092#1072#1081#1083#1086#1074
         OnClick = dbf2Click
       end
       object N76: TMenuItem
@@ -790,7 +1191,7 @@ object Form1: TForm1
         OnClick = Excel1Click
       end
       object dbf1: TMenuItem
-        Caption = #1054#1073#1097#1080#1081' '#1089#1073#1088#1086#1089' '#1074' dbf'
+        Caption = #1054#1073#1097#1080#1081' '#1089#1073#1088#1086#1089' '#1074' DBF'
         OnClick = dbf1Click
       end
       object N21: TMenuItem
@@ -1329,14 +1730,10 @@ object Form1: TForm1
         OnClick = N50Click
       end
     end
-    object N37: TMenuItem
-      Caption = #1052#1086#1076#1091#1083#1080
-      Visible = False
-    end
   end
   object ImageList1: TImageList
-    Left = 336
-    Top = 93
+    Left = 184
+    Top = 397
     Bitmap = {
       494C010104000900040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
@@ -1610,10 +2007,10 @@ object Form1: TForm1
       000000000000}
   end
   object ImageList2: TImageList
-    Left = 368
-    Top = 93
+    Left = 216
+    Top = 397
     Bitmap = {
-      494C01010E001300040010001000FFFFFFFFFF00FFFFFFFFFFFFFFFF424D3600
+      494C01010F001300040010001000FFFFFFFFFF00FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1627,32 +2024,32 @@ object Form1: TForm1
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000000000000000000000000000EAEA
       EAFFDFDFDFFFD6D6D6FFD3D2D2FFC7BDBDFFC5B4B4FFCEBCBCFFDBC9C9FFE9D7
-      D7FFF8E6E6FF0000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      000000000000000000000000000000000000000000000000000000000000E6E6
-      E6FFD0D0D0FFBDBDBDFFBAB9B9FFADA3A3FFAC9B9BFFB9A7A7FFCBB9B9FFDECC
-      CCFFF3E2E2FF0000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      D7FFF8E6E6FF0000000000000000000000000000000000000000323232FF1414
+      14FF000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000000000000000000000000000E6E6
       E6FFD0D0D0FFBDBDBDFFBAB9B9FFADA3A3FFAC9B9BFFB9A7A7FFCBB9B9FFDECC
-      CCFFF3E2E2FF0000000000000000000000000000000000000000000000000000
+      CCFFF3E2E2FF000000000000000000000000000000001F1F1FFF575757FF3232
+      32FF141414FF0000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000E6E6
+      E6FFD0D0D0FFBDBDBDFFBAB9B9FFADA3A3FFAC9B9BFFB9A7A7FFCBB9B9FFDECC
+      CCFFF3E2E2FF00000000000000000000000000000000000000001F1F1FFF5A5A
+      5AFF323232FF141414FF00000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000000000000000000000000000EAEA
       EAFFDFDFDFFFD6D6D6FFD3D2D2FFC7BDBDFFC5B4B4FFCEBCBCFFDBC9C9FFE9D7
-      D7FFF8E6E6FF0000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      D7FFF8E6E6FF0000000000000000000000000000000000000000000000001F1F
+      1FFF5E5E5EFF323232FF141414FF000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1660,15 +2057,7 @@ object Form1: TForm1
       0000000000000000000000000000000000000000000000000000000000009797
       97FF9B9B9BFF999999FF8F8F8FFF7C7C7CFF787878FF808080FF8C8C8CFF9B9B
       9BFF9B9B9BFF0000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      000000000000000000000000000000000000000000000000000000000000E6E6
-      E6FFD0D0D0FFBDBDBDFFBAB9B9FFADA3A3FFAC9B9BFFB9A7A7FFCBB9B9FFDECC
-      CCFFF3E2E2FF0000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      00001F1F1FFF626262FF323232FF141414FF0000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1676,7 +2065,7 @@ object Form1: TForm1
       000000000000000000000000000000000000000000000000000000000000E6E6
       E6FFD0D0D0FFBDBDBDFFBAB9B9FFADA3A3FFAC9B9BFFB9A7A7FFCBB9B9FFDECC
       CCFFF3E2E2FF0000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000001F1F1FFF676767FF323232FF141414FF00000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1684,7 +2073,15 @@ object Form1: TForm1
       000000000000000000000000000000000000000000000000000000000000E6E6
       E6FFD0D0D0FFBDBDBDFFBAB9B9FFADA3A3FFAC9B9BFFB9A7A7FFCBB9B9FFDECC
       CCFFF3E2E2FF0000000000000000000000000000000000000000000000000000
+      000000000000000000001F1F1FFF6C6C6CFF323232FF141414FF000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000E6E6
+      E6FFD0D0D0FFBDBDBDFFBAB9B9FFADA3A3FFAC9B9BFFB9A7A7FFCBB9B9FFDECC
+      CCFFF3E2E2FF0000000000000000000000000000000000000000000000000000
+      00000000000000000000000000001F1F1FFF707070FF323232FF141414FF0000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1692,46 +2089,47 @@ object Form1: TForm1
       000000000000000000000000000000000000000000000000000000000000EAEA
       EAFFDFDFDFFFD6D6D6FFD3D2D2FFC7BDBDFFC5B4B4FFCEBCBCFFDBC9C9FFE9D7
       D7FFF8E6E6FF0000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000001F1F1FFF747474FF323232FF1414
+      14FF000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000009797
       97FF9B9B9BFF999999FF8F8F8FFF7C7C7CFF787878FF808080FF8C8C8CFF9B9B
       9BFF9B9B9BFF0000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000047B9CAFF0000000000000000000000001F1F1FFF767676FF3232
+      32FF0000000000000000000000004CC0D1FF0000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000000000000000000000000000E6E6
       E6FFD0D0D0FFBDBDBDFFBAB9B9FFADA3A3FFAC9B9BFFB9A7A7FFCBB9B9FFDECC
       CCFFF3E2E2FF0000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000001F1F1FFFF4F4
+      F4FFBFBFBFFF0000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000008400000084000000840000008400000084000000840000008400000084
       000000000000000000000000000000000000000000000000000000000000E6E6
       E6FFD0D0D0FFBDBDBDFFBAB9B9FFADA3A3FFAC9B9BFFB9A7A7FFCBB9B9FFDECC
       CCFFF3E2E2FF0000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000003DAABCFF0000000000000000000000000000
+      0000F4F4F4FFBFBFBFFF00000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000000000000000000000000000E6E6
       E6FFD0D0D0FFBDBDBDFFBAB9B9FFADA3A3FFAC9B9BFFB9A7A7FFCBB9B9FFDECC
       CCFFF3E2E2FF0000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000046B7C8FF66DDEEFF46B7C8FF00000000000000000000
+      000000000000F4F4F4FFBFBFBFFF000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000000000000000000000000000EAEA
       EAFFDFDFDFFFD6D6D6FFD3D2D2FFC7BDBDFFC5B4B4FFCEBCBCFFDBC9C9FFE9D7
       D7FFF8E6E6FF0000000000000000000000000000000000000000000000000000
+      00000000000000000000000000004DC2D3FF0000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1739,9 +2137,8 @@ object Form1: TForm1
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000004CC0
+      D1FF000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -2129,11 +2526,11 @@ object Form1: TForm1
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000424D3E000000000000003E000000
       2800000040000000400000000100010000000000000200000000000000000000
-      000000000000000000000000FFFFFF008001E00700000000BFFDE00700000000
-      B24DE00700000000B24DE00700000000BFFDE00700000000B24DE00700000000
-      B24DE00700000000BFFDE00700000000B24DE00700000000B24DE00700000000
-      BFFDE00700000000A005E00700000000A005E00700000000A005E00700000000
-      BFFDE007000000008001FFFF00000000FFFFE0FFFFFFFFFF83E0807F8001FE3F
+      000000000000000000000000FFFFFF008001E007FFFF0000BFFDE007CFFF0000
+      B24DE00787FF0000B24DE007C3FF0000BFFDE007E1FF0000B24DE007F0FF0000
+      B24DE007F87F0000BFFDE007FC3F0000B24DE007FE1F0000B24DE007FF0F0000
+      BFFDE007FB8E0000A005E007FFC70000A005E007FEF30000A005E007FC790000
+      BFFDE007FEFF00008001FFFFFFEF0000FFFFE0FFFFFFFFFF83E0807F8001FE3F
       83E080078001F81F83E0C0078001E00F8080C00F800180078000800F80010003
       80000003800100018000000380010000C001000180010001E083000180018001
       E08300038001C001F1C780038001E000F1C780018001F000F1C7C0018001F803
@@ -2152,12 +2549,12 @@ object Form1: TForm1
     ConnectKind = ckRunningOrNew
     AutoQuit = True
     OnWorkbookBeforeClose = ExcelApplication1WorkbookBeforeClose
-    Left = 152
-    Top = 91
+    Left = 184
+    Top = 363
   end
   object PopupMenu1: TPopupMenu
-    Left = 264
-    Top = 123
+    Left = 136
+    Top = 363
     object N73: TMenuItem
       Caption = #1055#1088#1080#1086#1089#1090#1072#1085#1086#1074#1080#1090#1100' '#1089#1091#1073#1089#1080#1076#1080#1102
       OnClick = N73Click
@@ -2182,8 +2579,8 @@ object Form1: TForm1
     end
   end
   object ActionList1: TActionList
-    Left = 264
-    Top = 155
+    Left = 136
+    Top = 395
   end
   object frxReport1: TfrxReport
     Version = '4.7.61'
@@ -2201,7 +2598,7 @@ object Form1: TForm1
       ''
       'end.')
     Left = 24
-    Top = 240
+    Top = 360
     Datasets = <>
     Variables = <>
     Style = <>
@@ -2792,20 +3189,20 @@ object Form1: TForm1
     CloseDataSource = False
     BCDToCurrency = False
     Left = 24
-    Top = 272
+    Top = 392
   end
   object frxData2: TfrxDBDataset
     UserName = 'frxData2'
     CloseDataSource = False
     BCDToCurrency = False
     Left = 88
-    Top = 272
+    Top = 392
   end
   object frxData1: TfrxDBDataset
     UserName = 'frxData1'
     CloseDataSource = False
     BCDToCurrency = False
     Left = 56
-    Top = 272
+    Top = 392
   end
 end

@@ -69,8 +69,7 @@ end;
 
 function TForm3.SetRegn(d,ins,n: integer): integer;
 { создает регистрационный номер из входных параметров }
-var
-  s: string;
+var s: string;
 begin
   s := IntToStr(d);
   if ins<10 then
