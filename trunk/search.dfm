@@ -631,7 +631,6 @@ object Form33: TForm33
     BevelInner = bvLowered
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 4
-    ExplicitWidth = 633
     object Button2: TButton
       AlignWithMargins = True
       Left = 547
