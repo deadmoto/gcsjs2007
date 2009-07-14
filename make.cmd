@@ -9,7 +9,8 @@ ECHO end. >> version.pas
 pause
 MD %CD%\release\%SVNREV%
 call rsvars.bat
-msbuild Subsidy.dproj
+msbuild Subsidy.dproj /t:rebuild /p:configuration=Release
+upx -9 "%CD%\release\%SVNREV%\Subsidy.exe"
 copy "C:\.dev\subsidy2007\bin\Subsidy.exe" "%CD%\release\%SVNREV%"
 pause
 

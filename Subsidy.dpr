@@ -3,6 +3,7 @@ program Subsidy;
 uses
   forms,
   dialogs,
+  windows,
   main in 'main.pas' {Form1},
   datamodule in 'datamodule.pas' {DataModule1: TDataModule},
   sclient in 'sclient.pas' {Form2},
@@ -65,6 +66,8 @@ uses
   FactSumUnit in 'FactSumUnit.pas' {FactSumFrm};
 
 {$R *.res}
+
+{$SETPEFLAGS IMAGE_FILE_RELOCS_STRIPPED}
 
 begin
   application.initialize;

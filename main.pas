@@ -205,6 +205,7 @@ type
     Edit8: TEdit;
     ToolButton17: TToolButton;
     ToolButton19: TToolButton;
+    N37: TMenuItem;
     procedure N15Click(Sender: TObject);
     procedure N25Click(Sender: TObject);
     procedure N24Click(Sender: TObject);
@@ -295,9 +296,10 @@ type
     procedure N52Click(Sender: TObject);
     procedure N99Click(Sender: TObject);
     procedure N102Click(Sender: TObject);
-    procedure N103Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
     procedure ToolButton17Click(Sender: TObject);
+    procedure N37Click(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -566,7 +568,6 @@ end;
 
 procedure TForm1.Button9Click(Sender: TObject);
  { фактические расходы }
-var c: Tclient;
 begin
   FactSumFrm.ShowModal;
 end;
@@ -3293,6 +3294,12 @@ begin
   end;
 end;
 
+procedure TForm1.ToolButton14Click(Sender: TObject);
+ { выбор сервера для подключения}
+begin
+  Form45.Show;
+end;
+
 procedure TForm1.ToolButton16Click(Sender: TObject);
 {
   Вызов формы выбора текущего инспектора. Если произошла смена инспектора, то на
@@ -4056,10 +4063,20 @@ end;
 procedure TForm1.N36Click(Sender: TObject);
 begin
   Stats := TStats.Create(Form1);
+  Stats.mode:= mStat;
   Stats.ShowModal;
+  Stats.Free;
 end;
 
 
+
+procedure TForm1.N37Click(Sender: TObject);
+begin
+  Stats := TStats.Create(Form1);
+  Stats.mode:= mPriv;
+  Stats.ShowModal;
+  Stats.Free;
+end;
 
 {procedure TForm1.CreateListPlugin;
 Var  SearchRec        : TSearchRec;
@@ -4295,12 +4312,6 @@ begin
   form44.FillSlujGrid;
   if DataModule1.Query1.RecordCount > 0 then
     Form44.Show;
-end;
-
-procedure TForm1.N103Click(Sender: TObject);
- { выбор сервера для подключения}
-begin
-  Form45.Show;
 end;
 
 end.

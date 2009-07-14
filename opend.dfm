@@ -51,15 +51,16 @@ object Form26: TForm26
       OnChange = ComboBox2Change
       OnExit = ComboBox2Change
     end
-    object Edit1: TEdit
-      Left = 8
+    object ComboBox1: TComboBox
+      Left = 5
       Top = 36
-      Width = 41
+      Width = 55
       Height = 21
+      ItemHeight = 13
       TabOrder = 1
-      Text = '2006'
-      OnExit = Edit1Exit
-      OnKeyDown = Edit1KeyDown
+      Text = '2009'
+      OnExit = ComboBox1Exit
+      OnKeyDown = ComboBox1KeyDown
     end
   end
   object FlowPanel1: TFlowPanel
@@ -69,7 +70,7 @@ object Form26: TForm26
     Width = 215
     Height = 35
     Align = alBottom
-    AutoSize = True
+    AutoWrap = False
     BevelInner = bvLowered
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 1

@@ -428,7 +428,7 @@ var
 implementation
 
 uses main, math, service, datamodule, dateutils, shtarif, shtarifb, chpriv,
-  chinsp;
+  chinsp, FactSumUnit;
 
 {$R *.dfm}
 
@@ -2495,6 +2495,7 @@ if IsAPeriod then begin
       end;
       Datamodule1.Database1.Commit;
       Result := 0;
+      if cl.data.cert<>1 then FactSumFrm.ShowModal; //Фактический расход
       except
         //транзакция не выполнена
         Datamodule1.Database1.Rollback;
