@@ -25,7 +25,6 @@ object Form45: TForm45
     Align = alClient
     Caption = #1042#1099#1073#1086#1088' '#1089#1077#1088#1074#1077#1088#1072':'
     TabOrder = 0
-    ExplicitHeight = 54
     object ComboBox1: TComboBox
       Left = 8
       Top = 22
@@ -46,7 +45,6 @@ object Form45: TForm45
     BevelInner = bvLowered
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 1
-    ExplicitTop = 123
     object Button2: TButton
       AlignWithMargins = True
       Left = 199

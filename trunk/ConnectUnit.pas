@@ -6,6 +6,8 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, Registry;
 
+type TConMode = (nNone, mBug);
+
 type
   TForm45 = class(TForm)
     GroupBox1: TGroupBox;
@@ -21,7 +23,7 @@ type
     procedure WriteConnSettings(Server: string);
   public
     { Public declarations }
-    mode: string;
+    mode: TConMode;//string;
   end;
   TMyThread = class(TThread)
     protected
@@ -62,7 +64,7 @@ end;
 procedure TForm45.Button1Click(Sender: TObject);
 var tt: TMyThread;
 begin
-if mode='bug' then
+if mode=mBug then
 begin
   WriteConnSettings(ComboBox1.Text);
 
@@ -80,7 +82,7 @@ begin
   datamodule1.database1.connected:=FALSE;
   datamodule1.database2.connected:=FALSE;
 
-  if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Clients',  '') then
+  if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy',  '') then
     ShowMessage('Ошибка при создании DSN записи!');
 
   datamodule1.database1.connected:=true;
@@ -98,7 +100,7 @@ end;
 
 procedure TForm45.Button2Click(Sender: TObject);
 begin
-if mode='bug' then
+if mode=mBug then
   halt
 else
   close;
@@ -107,7 +109,6 @@ end;
 procedure TForm45.FormShow(Sender: TObject);
 var i: integer;
 begin
-
   with TRegistry.Create do
     try
       RootKey := HKEY_CURRENT_USER;
