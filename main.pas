@@ -206,6 +206,7 @@ type
     ToolButton17: TToolButton;
     ToolButton19: TToolButton;
     N37: TMenuItem;
+    N105: TMenuItem;
     procedure N15Click(Sender: TObject);
     procedure N25Click(Sender: TObject);
     procedure N24Click(Sender: TObject);
@@ -834,7 +835,7 @@ procedure TForm1.N2Click(Sender: TObject);
   название главной форме - в нем отражается текущий отчетный период.
 *******************************************************************************}
 var
-  old,s: string;
+  old{,s}: string;
 begin
   //форма с выбором периода
   old := rdt;
@@ -2337,7 +2338,7 @@ procedure TForm1.FormCreate(Sender: TObject);
   Включается русская раскладка. Устанавливаются настройки для побуквенного поиска
   клиентов, для печати отчетов.
 }
-var s, dt: string;
+var {s,} dt: string;
     c, i: integer;
     rl, el: THandle;
     Layouts: array[0..7] of THandle;
@@ -2441,7 +2442,7 @@ begin
     if LoWord(Layouts[i]) and $FF = Lang_Russian then
       rl := Layouts[i];
     if LoWord(Layouts[i]) and $FF = Lang_English then
-      el := Layouts[i];
+      el:= Layouts[i];
   end;
   if rl <> 0 then ActivateKeyboardLayout(rl, 0);
 

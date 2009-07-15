@@ -55,13 +55,13 @@ begin
       if not ValueExists('Server') then
         begin
           Form45:= TForm45.Create(nil);
-          Form45.mode:= 'bug';
+          Form45.mode:= mBug;
           Form45.ShowModal;
           Form45.Free;
         end
       else
       begin
-        if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ReadString('Server'), 'Clients',  '') then
+        if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ReadString('Server'), 'Subsidy', '') then
         ShowMessage('Ошибка при создании DSN записи!');
 {        if not ODBC_DSN.AddDSNdBaseSource('DBFSub', ExtractFilePath(paramstr(0))+'database' , 'Clients',  '') then
         ShowMessage('Ошибка при создании DSN записи!');}
