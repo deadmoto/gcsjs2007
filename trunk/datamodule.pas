@@ -62,9 +62,9 @@ begin
       else
       begin
         if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ReadString('Server'), 'Subsidy', '') then
-        ShowMessage('Ошибка при создании DSN записи!');
-{        if not ODBC_DSN.AddDSNdBaseSource('DBFSub', ExtractFilePath(paramstr(0))+'database' , 'Clients',  '') then
-        ShowMessage('Ошибка при создании DSN записи!');}
+        ShowMessage('Ошибка при создании DSN записи SQLSub!');
+//        if not ODBC_DSN.AddDSNdBaseSource('DBFSub', ExtractFilePath(paramstr(0))+'database' , '') then
+//        ShowMessage('Ошибка при создании DSN записи DBFSub!');
       end;
   finally
   CloseKey;

@@ -6,9 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, ToolWin, Menus, Grids, DBGrids, DB, dbf,
   ExtCtrls, ImgList, StdCtrls, OleServer, ExcelXP, DBTables, Buttons,
-  {$IFDEF VER120}OleCtrls,{$ENDIF}{Excel_TLB,}
   activex,comobj, WordXP, ActnList, Registry, frxClass, frxDBSet;
-
 type
 { тип CQuery используется для формирования запроса по фильтру Search }
   CQuery=record
@@ -361,6 +359,7 @@ type
 //    function ReturnMountStr:string;
 
 //    procedure FillTarifDS;
+    procedure ReportsFillDistInfo;
   end;
 
 var
@@ -1091,12 +1090,12 @@ procedure TForm1.N19Click(Sender: TObject);
 *******************************************************************************}
 var
   p1, p2: TDate;
-  y, m, d, i, j, c{, Year, Month, Day}: word;
+  y, m, d, i, j, c: word;
   priv: TStringList;
   s1,s2,priv_str: string;
   pl,mdd,stnd,mc: integer;
   pmin,income: real;
-  cd{, date_obr}: TDateTime;
+  cd: TDateTime;
 begin
 if (Length(cl)>0) then begin
   //if (status=0)or(status=3) then begin//только первый месяц
@@ -1163,19 +1162,6 @@ if (Length(cl)>0) then begin
         pl := FieldByName('id_service').AsInteger;
         close;
 
-        //этот кусок используется в старом уведомлении olduvedom.frf
- {       SQL.Clear;
-        SQL.Add('select (snpm-sub)*12 as pm');
-        SQL.Add('from sub');
-        SQL.Add('where (regn=:id)and(service>=12)and(sdate=convert(smalldatetime,:d,104))');
-        ParamByName('id').AsInteger := client;
-        ParamByName('d').AsString := s1;
-        Open;
-        frVariables['wood'] := FlToStr(Rnd(FieldByName('pm').AsFloat));
-        Next;
-        frVariables['coal'] := FlToStr(Rnd(FieldByName('pm').AsFloat));
-        Close; }
-
       end;
       with Datamodule1.Query4 do begin
         Close;
@@ -1211,6 +1197,8 @@ if (Length(cl)>0) then begin
         cd := IncMonth(cd);
         inc(i);
       end;
+
+      ReportsFillDistInfo();
 
       frxReport1.Variables.Variables['cd'] := Quotedstr(rdt);
       frxReport1.Variables.Variables['sd'] := IncMonth(StrToDateTime(rdt));
@@ -1301,6 +1289,9 @@ if (Length(cl)>0) then begin
         frxReport1.Variables.Variables['level'] := quotedstr(FlToStr((mdd*income)/100))
       else
         frxReport1.Variables.Variables['level'] := quotedstr(FlToStr((mdd*income*Rnd((income/mc)/pmin))/100));
+
+      ReportsFillDistInfo();
+
       frxReport1.PrepareReport;
       if MessageBox(Form1.Handle,PChar('Нужен предварительный просмотр уведомления '+SGCL.Cells[0,SGCl.Row]+'?'),
                   PChar('Предварительный просмотр'),
@@ -2754,6 +2745,25 @@ begin
     Statusbar1.Panels[0].Text := 'Клиент: ' + f  + '/?';
 end;
 
+procedure TForm1.ReportsFillDistInfo;
+var tmp_query: TQuery;
+begin
+  tmp_query:= TQuery.Create(DataModule1);
+  tmp_query.DatabaseName:= 'Subsidy';
+      with tmp_query do begin
+        Close;
+        SQL.Clear;
+        SQL.Text:= 'SELECT * FROM Dist'+#13+
+                   'WHERE id_dist=:dist';
+        ParamByName('dist').AsInteger := dist;
+        Open;
+        frxReport1.Variables.Variables['distName'] := Quotedstr(GetFIOPadeg(FieldByName('namedist').AsString,'','',TRUE,2));
+        frxReport1.Variables.Variables['distAdr'] := Quotedstr(FieldByName('adr').AsString);
+        frxReport1.Variables.Variables['distTel'] := Quotedstr(FieldByName('tel').AsString);
+        free;
+      end;
+end;
+
 procedure TForm1.Load(q: CQuery;rsel: boolean);
 {
   функция перезагрузки базы данных в соответствии с запросом q, который был сформирован
@@ -4169,7 +4179,6 @@ end;
 procedure TForm1.N39Click(Sender: TObject);
 var
   s1, s2, s3, s4: string;
-//  cd: TDateTime;
   i : integer;
 begin
       frxReport1.LoadFromFile(reports_path+'solut.fr3');
@@ -4183,7 +4192,6 @@ begin
         ParamByName('d').AsString := s1;
         Open;
       end;
-//      cd := DataModule1.Query1.FieldByName('bdate').AsDateTime;
       frxReport1.Variables.Variables['cd'] := quotedstr(rdt);
       frxReport1.Variables.Variables['sd'] := (IncMonth(StrToDateTime(rdt)));
       frxReport1.Variables.Variables['regn'] := quotedstr('0'+IntToStr(client));
@@ -4203,13 +4211,16 @@ begin
       frxReport1.Variables.Variables['boss'] := quotedstr(Datamodule1.Query1.FieldByName('boss').AsString);
       frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldByName('nameinsp').AsString);
       frxReport1.Script.Variables['id_dist'] := (Datamodule1.Query1.FieldByName('id_dist').AsInteger);
+
+      ReportsFillDistInfo();
+
       frxReport1.PrepareReport;
       if MessageBox(Form1.Handle,PChar('Нужен предварительный просмотр уведомления '+SGCL.Cells[0,SGCl.Row]+'?'),
                   PChar('Предварительный просмотр'),
                   MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL)=IDYES	then
         frxReport1.ShowPreparedReport
       else
-        frxReport1.Print;//PreparedReportDlg;
+        frxReport1.Print;
 end;
 
 procedure TForm1.N51Click(Sender: TObject);
@@ -4250,6 +4261,8 @@ begin
       s2 :=  copy( s4, i + 1 , 1);
       frxReport1.Variables.Variables['fio_r'] :=  quotedstr(s3 +  ' ' + s1 + '. '+  s2 + '.');
 
+      ReportsFillDistInfo();
+
       frxReport1.PrepareReport;
       if MessageBox(Form1.Handle,PChar('Нужен предварительный просмотр уведомления '+SGCL.Cells[0,SGCl.Row]+'?'),
                   PChar('Предварительный просмотр'),
@@ -4288,6 +4301,9 @@ begin
       frxReport1.Variables.Variables['boss'] := quotedstr(Datamodule1.Query1.FieldValues['boss']);
       frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldByName('nameinsp').AsString);
       frxReport1.Variables.Variables['id_dist'] := Datamodule1.Query1.FieldByName('id_dist').AsInteger;
+
+      ReportsFillDistInfo();
+
       frxReport1.PrepareReport;
       if MessageBox(Form1.Handle,PChar('Нужен предварительный просмотр уведомления '+SGCL.Cells[0,SGCl.Row]+'?'),
                   PChar('Предварительный просмотр'),
@@ -4300,7 +4316,7 @@ end;
 procedure TForm1.N99Click(Sender: TObject);
  { Список служебных по каждому тарифу }
 begin
-  Form44.mode:= 0;
+  Form44.mode:= mDetail;
   form44.FillSlujGrid;
   if DataModule1.Query1.RecordCount > 0 then
     Form44.Show;
@@ -4309,7 +4325,7 @@ end;
 procedure TForm1.N102Click(Sender: TObject);
  { Список служебных, общая сумма за месяц по клиенту }
 begin
-  Form44.mode:= 1;
+  Form44.mode:= mSum;
   form44.FillSlujGrid;
   if DataModule1.Query1.RecordCount > 0 then
     Form44.Show;

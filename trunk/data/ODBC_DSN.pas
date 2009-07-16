@@ -27,8 +27,7 @@ interface
 uses
   Windows, Registry;
 
-{function AddDSNdBaseSource(const ADSNName, DefaultDir, ADataBase: string;
-                          ADescription: string = ''): Boolean;}
+function AddDSNdBaseSource(const ADSNName, DefaultDir, ADescription: string): Boolean;
 function AddDSNMSSQLSource(const ADSNName, AServer, ADataBase: string;
                           ADescription: string = ''): Boolean;
 
@@ -94,24 +93,36 @@ begin
   params := 'DSN=' + ADSNName + #0'Server=' + AServer + #0'DataBase= ' +
     ADataBase + #0'Description=' + ADescription + #0#0;
   Result := SQLConfigDataSource(0, ODBC_ADD_SYS_DSN, PChar(driver), PChar(params));
-  Result := Result and AddODBCiniRecord;//SetNetLibParam;
+  Result := Result and AddODBCiniRecord;
 end;
 
-{function AddDSNdBaseSource(const ADSNName, DefaultDir, ADataBase: string;
-                           ADescription: string = ''): Boolean;
+function AddDSNdBaseSource(const ADSNName, DefaultDir, ADescription: string): Boolean;
 const driver = 'Microsoft dBase Driver (*.dbf)';
 var params: string;
-
+  function SetDefaultDir: boolean;
+  begin
+    with TRegistry.Create do
+    try
+      RootKey := HKEY_LOCAL_MACHINE;
+      if OpenKey('\Software\ODBC\ODBC.INI\', TRUE) then
+        if not KeyExists('DBFSub') then
+          CreateKey('DBFSub');
+      if OpenKey('DBFSub', TRUE) then
+      begin
+        WriteString('DefaultDir',DefaultDir);
+        Result := TRUE;
+      end;
+    finally
+      CloseKey;
+      Free;
+    end;
+  end;
 begin
-  params := 'Description='+ADescription +#0;
-  params:= params + 'DSN='+ADSNName +#0;
-  params:= params + 'DataBase='+ADataBase +#0+'LANGDRIVER=dBASE RUS cp866'+#0;
-  params:= params + 'DefaultDir='+DefaultDir +#0;
-  params:= params + 'DataSourse='+DefaultDir +#0;
-//  params := 'DSN=' + ADSNName + #0'DataBase= ' + ADataBase + #0'Description=' + ADescription + #0#0;
-  Result := SQLConfigDataSource(0, ODBC_ADD_DSN, PChar(driver), PChar(params));
-//  Result := Result and SetNetLibParam;
+  params:= 'DSN='+ADSNName + #0'Description=' + ADescription + #0#0;
+
+  Result := SQLConfigDataSource(0, ODBC_ADD_SYS_DSN, PChar(driver), PChar(params));
+  Result := Result and SetDefaultDir;
 end;
-}
+
 
 end.
