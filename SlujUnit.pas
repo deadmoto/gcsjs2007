@@ -6,6 +6,8 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Grids, StdCtrls,DateUtils, ExtCtrls;
 
+type TSlujMode = (mSum, mDetail);
+
 type
   TForm44 = class(TForm)
     sluj_grid: TStringGrid;
@@ -22,7 +24,7 @@ type
   public
     { Public declarations }
     cl_regn: string;
-    mode: integer;
+    mode: TSlujMode;
     procedure FillSlujGrid;
   end;
 
@@ -43,7 +45,7 @@ begin
     begin
       Query1.Close;
       case mode of
-      0: begin
+      mDetail: begin
           Query1.SQL.Text:=('SELECT Sluj.sdate, Sluj.regn, Cl.fio, Sluj.sub AS sluj_sum, Sub.sub AS Expr1, Sub.service, Serv.nameserv AS nameserv'+#13+
                             'FROM Sluj INNER JOIN'+#13+
                             'Cl ON Sluj.regn = Cl.regn INNER JOIN'+#13+
@@ -53,7 +55,7 @@ begin
                             'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio, Sub.sub, Sub.service, Serv.nameserv, Sluj.sub'+#13+
                             'ORDER BY Cl.fio');
          end;
-      1: begin
+      mSum: begin
           Query1.SQL.Text:=('SELECT Sluj.sdate, Sluj.regn, Cl.fio, SUM(Sluj.sub) AS sluj_sum, SUM(Sub.sub) AS Expr1'+#13+
                             'FROM Sluj INNER JOIN'+#13+
                             'Cl ON Sluj.regn = Cl.regn INNER JOIN'+#13+
@@ -71,7 +73,7 @@ begin
   if DataModule1.Query1.recordcount>0 then
     begin
       case mode of
-        0: begin
+        mDetail: begin
             Form44.Width:= 670;
             with sluj_grid do
               begin
@@ -103,7 +105,7 @@ begin
               end;
            GroupBox1.Caption:= 'Подробно по тарифам:';
            end;
-      1: begin
+      mSum: begin
           Form44.Width:= 580;
           with sluj_grid do
             begin

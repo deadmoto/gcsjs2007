@@ -24,7 +24,7 @@ object Form2: TForm2
     Top = 3
     Width = 587
     Height = 379
-    ActivePage = TabSheet3
+    ActivePage = TabSheet5
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change

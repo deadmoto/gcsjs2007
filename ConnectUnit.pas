@@ -83,7 +83,7 @@ begin
   datamodule1.database2.connected:=FALSE;
 
   if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy',  '') then
-    ShowMessage('Ошибка при создании DSN записи!');
+    ShowMessage('Ошибка при создании DSN записи SQLSub!');
 
   datamodule1.database1.connected:=true;
   datamodule1.database2.connected:=true;
