@@ -1,10 +1,9 @@
 object AboutBox: TAboutBox
   Left = 263
   Top = 226
-  BorderStyle = bsToolWindow
-  Caption = 'About'
-  ClientHeight = 157
-  ClientWidth = 256
+  BorderStyle = bsNone
+  ClientHeight = 134
+  ClientWidth = 262
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,20 +13,21 @@ object AboutBox: TAboutBox
   OldCreateOrder = True
   Position = poScreenCenter
   OnCreate = FormCreate
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 250
-    Height = 120
+    Width = 256
+    Height = 128
     Align = alClient
     BevelInner = bvRaised
     BevelOuter = bvLowered
     ParentColor = True
-    TabOrder = 1
+    TabOrder = 0
+    OnClick = Panel1Click
+    ExplicitHeight = 175
     object ProgramIcon: TImage
       Left = 24
       Top = 16
@@ -38,6 +38,7 @@ object AboutBox: TAboutBox
       Proportional = True
       Stretch = True
       Transparent = True
+      OnClick = Panel1Click
       IsControl = True
     end
     object ProductName: TLabel
@@ -73,17 +74,5 @@ object AboutBox: TAboutBox
       WordWrap = True
       IsControl = True
     end
-  end
-  object OKButton: TButton
-    AlignWithMargins = True
-    Left = 3
-    Top = 129
-    Width = 250
-    Height = 25
-    Align = alBottom
-    Caption = 'OK'
-    Default = True
-    ModalResult = 1
-    TabOrder = 0
   end
 end

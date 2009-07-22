@@ -30,8 +30,9 @@ object Form45: TForm45
       Top = 22
       Width = 265
       Height = 21
-      ItemHeight = 0
+      ItemHeight = 13
       TabOrder = 0
+      OnKeyPress = ComboBox1KeyPress
     end
   end
   object FlowPanel1: TFlowPanel

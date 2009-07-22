@@ -36,7 +36,7 @@ uses
   imexp in 'imexp.pas' {Form35},
   progress in 'progress.pas' {AboutBox1},
   browse in 'browse.pas' {Form36},
-  crdelphi in 'crdelphi.pas',
+//  crdelphi in 'crdelphi.pas',
   chserv in 'chserv.pas' {Form29},
   rstnd in 'rstnd.pas' {Form38},
   tarif in 'tarif.pas' {Form15},

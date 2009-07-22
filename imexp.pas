@@ -6,6 +6,8 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, FileCtrl, DB, DBTables, Mask;
 
+type TStatusMode = (mImport, mExport);
+
 type
   TForm35 = class(TForm)
     CheckBox7: TCheckBox;
@@ -60,7 +62,7 @@ type
     function CountCh: integer;
   public
     { Public declarations }
-    status: integer;//1 - export, 2 - import
+    status: TStatusMode;//integer;//1 - export, 2 - import
     path: string;//путь к файлам
   end;
 
@@ -93,7 +95,7 @@ begin
   pr.ProgressBar1.Step := 1;
   i:=0;
   case status of
-  1://export
+  mExport://export
     begin
       pr.Label1.Caption := 'Экспорт данных';
       pr.Show;
@@ -369,7 +371,7 @@ begin
         ShowMessage('Ошибка экспорта!');
       end;
     end;
-  2: //import
+  mImport: //import
     begin
       pr.Label1.Caption := 'Импорт данных';
       pr.Show;
@@ -664,12 +666,12 @@ begin
   CheckBox29.Checked := false;
   MaskEdit1.Text := Form1.rdt;
   case status of
-  1:
+  mExport:
     begin
       Form35.Caption := 'Экспорт файлов';
       Button1.Caption := 'Экспорт';
     end;
-  2:
+  mImport:
     begin
       Form35.Caption := 'Импорт файлов';
       Button1.Caption := 'Импорт';

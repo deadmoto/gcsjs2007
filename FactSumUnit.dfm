@@ -39,9 +39,6 @@ object FactSumFrm: TFactSumFrm
       Align = alTop
       Caption = #1044#1086#1089#1090#1091#1087#1085#1099#1077' '#1087#1077#1088#1080#1086#1076#1099':'
       TabOrder = 0
-      ExplicitLeft = 3
-      ExplicitTop = 3
-      ExplicitWidth = 498
       object ComboBox1: TComboBox
         Left = 16
         Top = 23
@@ -88,9 +85,6 @@ object FactSumFrm: TFactSumFrm
       Align = alTop
       Caption = #1044#1072#1085#1085#1099#1077' '#1079#1072' '#1087#1077#1088#1080#1086#1076':'
       TabOrder = 1
-      ExplicitLeft = 0
-      ExplicitTop = 84
-      ExplicitWidth = 279
       object StringGrid1: TStringGrid
         Left = 2
         Top = 15

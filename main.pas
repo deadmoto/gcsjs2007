@@ -364,7 +364,7 @@ type
 
 var
   Form1: TForm1;
-  jobnumber1,jobnumber2,jobnumber3: integer;//for CristalReport
+//  jobnumber1,jobnumber2,jobnumber3: integer;//for CristalReport
   searchbuf: string;//содержит набор букв, который используется для поиска фио клиента
   LastTime: TTime;//время последнего нажатия клавиши
   itemindex: integer;//используются для поиска фио клиента
@@ -378,7 +378,7 @@ uses sclient, inspector, district, street, fond, manager,
       status, tarif, elpower, config, opend, houses,  norm,
       certification,chpriv, chhouse, bank, relation,  about,
       datamodule, search, service, fstruct, imexp, sql, progress,
-      Contnrs,DateUtils,{crdelphi,} rstnd, loop, math,tarifb,
+      Contnrs,DateUtils, rstnd, loop, math,tarifb,
       chinsp, curhist, chserv, Client, merge, mdd, statage,
       statlm, codedbf, chtarifs, rrecalc, Plugins, stat, {mod_Types,} padegFIO, StrUtils,
       version, SlujUnit, ConnectUnit, FactSumUnit;
@@ -865,7 +865,7 @@ begin
 
     form1.caption:= 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за '+
                     LongMonthNames[StrToInt(FormatDateTime('m',StrToDate(rdt)))] +' '+
-                    IntToStr(YearOf(StrToDate(rdt)))+'г.'+' | d2007['+version.svnrev+']';
+                    IntToStr(YearOf(StrToDate(rdt)))+'г.'+' ['+version.svnrev+']';
   end;
 end;
 
@@ -883,7 +883,7 @@ procedure TForm1.N7Click(Sender: TObject);
   Процедура N7Click вызывает форму экспорта из программы данных.
 *******************************************************************************}
 begin
-  Form35.status := 1;//экспорт
+  Form35.status := mExport;//экспорт
   Form35.ShowModal;
 end;
 
@@ -892,7 +892,7 @@ procedure TForm1.N8Click(Sender: TObject);
   Процедура N8Click вызывает форму импорта в программу данных.
 *******************************************************************************}
 begin
-  Form35.status := 2;//импорт
+  Form35.status := mImport;//импорт
   Form35.ShowModal;
 end;
 
@@ -2329,7 +2329,7 @@ procedure TForm1.FormCreate(Sender: TObject);
   Включается русская раскладка. Устанавливаются настройки для побуквенного поиска
   клиентов, для печати отчетов.
 }
-var {s,} dt: string;
+var dt: string;
     c, i: integer;
     rl, el: THandle;
     Layouts: array[0..7] of THandle;
@@ -2358,6 +2358,7 @@ begin
     Free;
   end;
 
+  //в переменной хранится путь папки с отчетами
   reports_path:= (ExtractFilePath(Application.ExeName)+'reports\');
 
   DecodeDate(Date,y,m,d);
@@ -2402,30 +2403,9 @@ begin
   end;
 
 
-//  s:= s+ ReturnMountStr;
-{  m := StrToInt(Copy(rdt,4,2));
-  s := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ';
-  case m of
-  1:Form1.Caption := s + 'Январь '+Copy(rdt,7,4)+'г.';
-  2:Form1.Caption := s + 'Февраль '+Copy(rdt,7,4)+'г.';
-  3:Form1.Caption := s + 'Март '+Copy(rdt,7,4)+'г.';
-  4:Form1.Caption := s + 'Апрель '+Copy(rdt,7,4)+'г.';
-  5:Form1.Caption := s + 'Май '+Copy(rdt,7,4)+'г.';
-  6:Form1.Caption := s + 'Июнь '+Copy(rdt,7,4)+'г.';
-  7:Form1.Caption := s + 'Июль '+Copy(rdt,7,4)+'г.';
-  8:Form1.Caption := s + 'Август '+Copy(rdt,7,4)+'г.';
-  9:Form1.Caption := s + 'Сентябрь '+Copy(rdt,7,4)+'г.';
-  10:Form1.Caption := s + 'Октябрь '+Copy(rdt,7,4)+'г.';
-  11:Form1.Caption := s + 'Ноябрь '+Copy(rdt,7,4)+'г.';
-  12:Form1.Caption := s + 'Декабрь '+Copy(rdt,7,4)+'г.';
-  end;
-//  s:= s+ ReturnMountStr;
-  form1.caption:=form1.caption+' | d2007['+version.svnrev+']';
-}
-
   form1.caption:= 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за '+
                   LongMonthNames[StrToInt(FormatDateTime('m',StrToDate(rdt)))] +' '+
-                  IntToStr(YearOf(StrToDate(rdt)))+'г.'+' | d2007['+version.svnrev+']';
+                  IntToStr(YearOf(StrToDate(rdt)))+'г.'+' ['+version.svnrev+']';
 
   //русская расладка
   c := GetKeyboardLayoutList(High(Layouts)+1, Layouts);
@@ -2704,6 +2684,7 @@ begin
                           FieldByName('edate').AsDateTime);
       subs := FieldByName('summa').AsFloat;
       while not Eof do begin
+        Application.ProcessMessages;
         cl[i] := FieldByName('regn').AsInteger;
         st[i] := GetStatus(FieldByName('bdate').AsDateTime,
                           FieldByName('edate').AsDateTime);
@@ -2818,6 +2799,7 @@ begin
       subs := FieldByName('summa').AsFloat;
       i:=0;
       while not Eof do begin
+        Application.ProcessMessages;
         cl[i] := FieldByName('regn').AsInteger;
         st[i] := GetStatus(FieldByName('bdate').AsDateTime,
                           FieldByName('edate').AsDateTime);
@@ -3210,6 +3192,7 @@ begin
   SendMessage(pr.Handle, wm_paint, 0, 0);
   pr.ProgressBar1.Step := 1;
   cnt := 0;
+
   with ExcelApplication1 do begin
     Visible[0] := false;
     Workbooks.Add((reports_path+'filter.xlt'), 1);
@@ -3282,7 +3265,7 @@ procedure TForm1.SGClKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 { обработка нажатия клавиш на клавиатуре }
 begin
-  if Key = Ord(vk_insert) then begin
+  if Key = 45 {Ord(vk_insert)} then begin
     if CheckP2 then begin
       Form2.status := 0;
       Form2.ShowModal;
@@ -3290,7 +3273,7 @@ begin
     else
       ShowMessage('Добавить клиента можно только в текущий отчетный период!');
   end;
-  if Key = Ord(vk_return) then begin
+  if Key = 13 {Ord(vk_return)} then begin
     if (Length(cl)>0) then begin
       if (stop[SGCl.Row-1]<2)or(stop[SGCl.Row-1]>1)and(status=3) then begin
         Form2.status := 1;
@@ -4078,8 +4061,6 @@ begin
   Stats.ShowModal;
   Stats.Free;
 end;
-
-
 
 procedure TForm1.N37Click(Sender: TObject);
 begin

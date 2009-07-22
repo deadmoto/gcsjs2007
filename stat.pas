@@ -79,17 +79,18 @@ begin
       GroupBox1.Align:= alClient;
     end;
   end;
+  DataModule1.Query1.Close;
 end;
 
 procedure TStats.PrivReport(Sender: TObject);
 var List: TStringList;
-    i, ListIndex: Integer;
+    i{, ListIndex}: integer;
 begin
   List := TStringList.Create;
-  ListIndex := 0;
+//  ListIndex := 0;
   with datamodule1 do
   begin
-    Query1.SQL.Clear;
+    Query1.Close;// SQL.Clear;
     if CheckBox1.Checked then begin
       Query1.SQL.Text:= 'SELECT Priv.namepriv ''Льгота'', COUNT(Fam.id_priv) ''Кол-во'''+#13+
                         'FROM Fam INNER JOIN'+#13+
@@ -109,6 +110,7 @@ begin
                         'GROUP BY Priv.namepriv';
     end;
     Query1.Open;
+
     List.Add('Льгота =  ');
     Query1.First;
     while not Query1.Eof do begin
@@ -117,8 +119,7 @@ begin
     end;
   end;
     with Form1.ExcelApplication1 do begin
-      Visible[0] := true;
-
+      Visible[0]:= true;
       Workbooks.Add(Form1.reports_path + 'stats.xlt', 0);
       for i := 0 to List.Count - 1 do
       begin
@@ -130,13 +131,14 @@ end;
 
 procedure TStats.StatReport(Sender: TObject);
 var s: string;
-    i, ListIndex: integer;
+    i{, ListIndex}: integer;
     List: TStringList;
 begin
   List := TStringList.Create;
-  ListIndex := 0;
+//  ListIndex := 0;
   with datamodule1 do
   begin
+    Query1.Close;
     Query1.SQL.Clear;
     if CheckBox1.Checked then begin
       Query1.SQL.Text:= 'SELECT Stat.namestatus ''Статус'', COUNT(Fam.id_status) ''Кол-во'''+#13+

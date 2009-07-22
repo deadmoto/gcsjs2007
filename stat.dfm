@@ -5,7 +5,7 @@ object Stats: TStats
   BorderStyle = bsSingle
   Caption = #1057#1090#1072#1090#1080#1089#1090#1080#1082#1072
   ClientHeight = 560
-  ClientWidth = 300
+  ClientWidth = 303
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -21,15 +21,18 @@ object Stats: TStats
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 294
+    Width = 297
     Height = 234
     Align = alTop
     Caption = #1057#1086#1094'. '#1089#1090#1072#1090#1091#1089':'
     TabOrder = 0
+    ExplicitLeft = -2
+    ExplicitTop = -6
+    ExplicitWidth = 567
     object DBGrid1: TDBGrid
       Left = 2
       Top = 32
-      Width = 290
+      Width = 293
       Height = 200
       Align = alClient
       BorderStyle = bsNone
@@ -44,22 +47,24 @@ object Stats: TStats
     object CheckBox1: TCheckBox
       Left = 2
       Top = 15
-      Width = 290
+      Width = 293
       Height = 17
       Align = alTop
       Caption = #1040#1082#1090#1080#1074#1085#1099#1077
       TabOrder = 1
+      ExplicitWidth = 290
     end
   end
   object GroupBox2: TGroupBox
     AlignWithMargins = True
     Left = 3
     Top = 243
-    Width = 294
+    Width = 297
     Height = 78
     Align = alTop
     Caption = #1044#1086#1093#1086#1076':'
     TabOrder = 1
+    ExplicitWidth = 294
     object Label4: TLabel
       Left = 16
       Top = 24
@@ -133,11 +138,12 @@ object Stats: TStats
     AlignWithMargins = True
     Left = 3
     Top = 327
-    Width = 294
+    Width = 297
     Height = 50
     Align = alTop
     Caption = #1044#1086#1093#1086#1076#1086#1084' '#1085#1080#1078#1077' '#1087#1088'. '#1084#1080#1085#1080#1084':'
     TabOrder = 2
+    ExplicitWidth = 294
     object Label1: TLabel
       Left = 16
       Top = 24
@@ -163,11 +169,12 @@ object Stats: TStats
     AlignWithMargins = True
     Left = 3
     Top = 383
-    Width = 294
+    Width = 297
     Height = 74
     Align = alTop
     Caption = #1057#1091#1073#1089#1080#1076#1080#1103':'
     TabOrder = 3
+    ExplicitWidth = 294
     object Label9: TLabel
       Left = 16
       Top = 24
@@ -241,11 +248,12 @@ object Stats: TStats
     AlignWithMargins = True
     Left = 3
     Top = 463
-    Width = 294
+    Width = 297
     Height = 53
     Align = alTop
     Caption = #1057#1088#1077#1076#1085#1103#1103' '#1089#1091#1073#1089#1080#1076#1080#1103': '
     TabOrder = 4
+    ExplicitWidth = 294
     object Label3: TLabel
       Left = 19
       Top = 24
@@ -271,16 +279,17 @@ object Stats: TStats
     AlignWithMargins = True
     Left = 3
     Top = 522
-    Width = 294
+    Width = 297
     Height = 35
     Align = alBottom
     AutoWrap = False
     BevelInner = bvLowered
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 5
+    ExplicitWidth = 294
     object Button2: TButton
       AlignWithMargins = True
-      Left = 214
+      Left = 217
       Top = 5
       Width = 75
       Height = 25
@@ -290,7 +299,7 @@ object Stats: TStats
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 133
+      Left = 136
       Top = 5
       Width = 75
       Height = 25

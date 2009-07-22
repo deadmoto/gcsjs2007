@@ -9,10 +9,10 @@ uses
 type
   TForm17 = class(TForm)
     GroupBox1: TGroupBox;
-    ListBox1: TListBox;
-    Panel1: TPanel;
-    Button1: TButton;
+    ComboBox1: TComboBox;
+    FlowPanel1: TFlowPanel;
     Button2: TButton;
+    Button1: TButton;
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button1Click(Sender: TObject);
@@ -39,7 +39,8 @@ procedure TForm17.FormShow(Sender: TObject);
 var
   l: integer;
 begin
-  ListBox1.Clear;
+  ComboBox1.Clear;
+//  ListBox1.Clear;
   l:=0;
   With Datamodule1.Query1 do begin
     Close;
@@ -54,19 +55,20 @@ begin
     First;
     while not EOF do begin
       SetLength(insp, Length(insp)+1);
-      ListBox1.Items.Add(FieldByName('nameinsp').AsString);
+//      ListBox1.Items.Add(FieldByName('nameinsp').AsString);
+      ComboBox1.Items.Add(FieldByName('nameinsp').AsString);
       insp[l] := FieldByName('id_insp').AsInteger;
       if insp[l]=Form1.insp then
-        Listbox1.ItemIndex := l
+        ComboBox1.ItemIndex := l// Listbox1.ItemIndex := l
       else
-        Listbox1.ItemIndex := 0;
+        ComboBox1.ItemIndex := 0;//Listbox1.ItemIndex := 0;
       Next;
       inc(l);
     end;
     Close;
   end;
   ac := false;
-  nameinsp := ListBox1.Items[Listbox1.ItemIndex];
+  nameinsp := ComboBox1.Items[ComboBox1.ItemIndex];//ListBox1.Items[Listbox1.ItemIndex];
 end;
 
 procedure TForm17.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -76,10 +78,10 @@ end;
 
 procedure TForm17.Button1Click(Sender: TObject);
 begin
-  Form1.insp := insp[ListBox1.ItemIndex];
+  Form1.insp := insp[ComboBox1.ItemIndex]; //insp[ListBox1.ItemIndex];
   ac := true;
-  nameinsp := ListBox1.Items[Listbox1.ItemIndex];
-  Form1.Statusbar1.Panels[1].Text := 'Инспектор: '+ ListBox1.Items[Listbox1.ItemIndex];
+  nameinsp := ComboBox1.Items[ComboBox1.ItemIndex]; //ListBox1.Items[Listbox1.ItemIndex];
+  Form1.Statusbar1.Panels[1].Text := 'Инспектор: '+ ComboBox1.Items[ComboBox1.ItemIndex];//ListBox1.Items[Listbox1.ItemIndex];
   Close;
 end;
 

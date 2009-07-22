@@ -194,21 +194,23 @@ procedure TFactSumFrm.Button2Click(Sender: TObject);
 begin
   if ComboBox1.Text='' then showmessage('Не выбран период для удаления')
   else
-  try
-    with datamodule1 do begin
-      Query1.Close;
-      Query1.SQL.Text:= 'DELETE FROM FactSale'+#13+
-                        'WHERE (regn=:regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104))';
-      Query1.ParamByName('regn').Value:= c.data.regn;
-      Query1.ParamByName('bdate').Value:= DateToStr(begindate);
-      Query1.ExecSQL;
+  if MessageDlg('Удалить выбранный период?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+    try
+      with datamodule1 do begin
+        Query1.Close;
+        Query1.SQL.Text:= 'DELETE FROM FactSale'+#13+
+                          'WHERE (regn=:regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104))';
+        Query1.ParamByName('regn').Value:= c.data.regn;
+        Query1.ParamByName('bdate').Value:= DateToStr(begindate);
+        Query1.ExecSQL;
+      end;
+    except
+      showmessage('Ошибка при удалении');
     end;
-  except
-    showmessage('Ошибка при удалении');
-  end;
 
-  ClearGrids();
-  TabControl1.OnChange(self);
+    ClearGrids();
+    TabControl1.OnChange(self);
+  end;
 end;
 
 procedure TFactSumFrm.CheckBox1Click(Sender: TObject);
