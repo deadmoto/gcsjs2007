@@ -4,7 +4,7 @@ object Form25: TForm25
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsToolWindow
   ClientHeight = 141
-  ClientWidth = 247
+  ClientWidth = 256
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,12 +20,12 @@ object Form25: TForm25
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 241
+    Width = 250
     Height = 94
     Align = alClient
     Caption = #1042#1099#1073#1086#1088' '#1086#1082#1088#1091#1075#1072':'
     TabOrder = 0
-    ExplicitHeight = 97
+    ExplicitWidth = 241
     object Label1: TLabel
       Left = 8
       Top = 64
@@ -43,7 +43,7 @@ object Form25: TForm25
     object ComboBox2: TComboBox
       Left = 72
       Top = 21
-      Width = 161
+      Width = 173
       Height = 21
       ItemHeight = 13
       TabOrder = 0
@@ -53,7 +53,7 @@ object Form25: TForm25
     object ComboBox1: TComboBox
       Left = 72
       Top = 61
-      Width = 161
+      Width = 173
       Height = 21
       ItemHeight = 13
       TabOrder = 1
@@ -65,17 +65,17 @@ object Form25: TForm25
     AlignWithMargins = True
     Left = 3
     Top = 103
-    Width = 241
+    Width = 250
     Height = 35
     Align = alBottom
-    AutoSize = True
+    AutoWrap = False
     BevelInner = bvLowered
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 1
-    ExplicitTop = 169
+    ExplicitWidth = 241
     object Button2: TButton
       AlignWithMargins = True
-      Left = 161
+      Left = 170
       Top = 5
       Width = 75
       Height = 25
@@ -85,7 +85,7 @@ object Form25: TForm25
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 80
+      Left = 89
       Top = 5
       Width = 75
       Height = 25

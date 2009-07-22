@@ -18,6 +18,7 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure ComboBox1KeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     procedure WriteConnSettings(Server: string);
@@ -64,46 +65,47 @@ end;
 procedure TForm45.Button1Click(Sender: TObject);
 var tt: TMyThread;
 begin
-if mode=mBug then
-begin
-  WriteConnSettings(ComboBox1.Text);
+  if mode=mBug then begin
+    WriteConnSettings(ComboBox1.Text);
 
-  tt:= TMyThread.Create(TRUE);
-  tt.FreeOnTerminate:= TRUE;
-  tt.Resume;
+    tt:= TMyThread.Create(TRUE);
+    tt.FreeOnTerminate:= TRUE;
+    tt.Resume;
 
-  sleep(100);
-  halt;
-end
-else
-begin
-  WriteConnSettings(ComboBox1.Text);
+    sleep(100);
+    halt;
+  end
+  else begin
+    WriteConnSettings(ComboBox1.Text);
 
-  datamodule1.database1.connected:=FALSE;
-  datamodule1.database2.connected:=FALSE;
+    datamodule1.database1.connected:=FALSE;
+    datamodule1.database2.connected:=FALSE;
 
-  if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy',  '') then
-    ShowMessage('Ошибка при создании DSN записи SQLSub!');
+    if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy',  '') then
+      ShowMessage('Ошибка при создании DSN записи SQLSub!');
 
-  datamodule1.database1.connected:=true;
-  datamodule1.database2.connected:=true;
+    datamodule1.database1.connected:=true;
+    datamodule1.database2.connected:=true;
 
-  Form1.OnCreate(self);
-  Form1.Show;
-  Form1.Update;
-  Form1.Reload;
+    Form1.OnCreate(self);
+    Form1.Show;
+    Form1.Update;
+    Form1.Reload;
 
-  close;
-end;
+    close;
+  end;
 end;
 
 
 procedure TForm45.Button2Click(Sender: TObject);
 begin
-if mode=mBug then
-  halt
-else
-  close;
+  if mode=mBug then halt
+    else close;
+end;
+
+procedure TForm45.ComboBox1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key=#13 then Button1.Click;
 end;
 
 procedure TForm45.FormShow(Sender: TObject);

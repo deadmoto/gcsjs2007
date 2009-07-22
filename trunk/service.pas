@@ -2,17 +2,15 @@ unit service;
 {**************************************************************************
 
   Служебный модуль
-  
+
 ***************************************************************************}
 
 interface
 
-uses Controls, Dialogs, StdCtrls, dbf, db, Mask;
+uses SysUtils, Windows, Controls, Dialogs, StdCtrls, Variants, dbf, db, Mask, Grids, ExcelXP;
 
 const
   numbtarif = 14;
-
-//type TMyMode = (addM, editM);
 
 procedure SetPoint(edt: TEdit);//установить запятую с учетом копеек
 
@@ -50,9 +48,15 @@ procedure EditField(f: string;code: TCodePage;n: integer);
 
 function GetMonthsCount(BeginDate, EndDate: TDateTime; var DaysCount: Byte):Integer;
 
+{******************************************************************************}
+function RefToCell(ARow, ACol: Integer): string;
+function ExportGridToExcel(AGrid: TStringGrid; ASheetName, AFileName: string): Boolean;
+{******************************************************************************}
+function FileVersion(AFileName: string): string;
+
 implementation
 
-uses datamodule, sysutils, dateutils, math, graphics, main;
+uses datamodule, dateutils, math, graphics, main;
 
 procedure SetPoint(edt: TEdit);
 {*******************************************************************************
@@ -628,6 +632,101 @@ begin
   end  // конец действий при отрицательной разнице дней
   else  // при положительной или нулевой разнице дней
     DaysCount := Days2 - Days1;  // банальная разность
+end;
+
+{StringGrid->ExcelExport*******************************************************}
+function RefToCell(ARow, ACol: Integer): string;
+begin
+  Result := Chr(Ord('A') + ACol - 1) + IntToStr(ARow);
+end;
+
+function ExportGridToExcel(AGrid: TStringGrid; ASheetName, AFileName: string): Boolean;
+var Row, Col: Integer;
+    Sheet, Data: OLEVariant;
+    i, j: Integer;
+    ExcelApp: TExcelApplication;
+begin
+   // Prepare Data
+  Data := VarArrayCreate([1, AGrid.RowCount, 1, AGrid.ColCount], varVariant);
+    for i := 0 to AGrid.ColCount - 1 do
+      for j := 0 to AGrid.RowCount - 1 do
+        Data[j + 1, i + 1] := AGrid.Cells[i, j];
+
+  ExcelApp:= TExcelApplication.Create(nil);
+  Result := False;
+
+  try
+  with ExcelApp do begin
+    Visible[0] := FALSE;
+    try
+       Workbooks.Add(AFileName,1);
+       Result := True;
+     except
+       // Error ?
+    end;
+
+    Sheet := Form1.ExcelApplication1.WorkSheets[1];
+    Sheet.Name := ASheetName;
+     // Fill up the sheet
+    Sheet.Range[RefToCell(1, 1), RefToCell(AGrid.RowCount,AGrid.ColCount)].Value := Data;
+    Visible[0] := TRUE;
+  end;
+  finally
+
+  end;
+ end;
+
+function FileVersion(AFileName: string): string;
+var
+  szName: array[0..255] of Char;
+  P: Pointer;
+  Value: Pointer;
+  Len: UINT;
+  GetTranslationString: string;
+  FFileName: PChar;
+  FValid: boolean;
+  FSize: DWORD;
+  FHandle: DWORD;
+  FBuffer: PChar;
+begin
+  try
+    FFileName := StrPCopy(StrAlloc(Length(AFileName) + 1), AFileName);
+    FValid := False;
+    FSize := GetFileVersionInfoSize(FFileName, FHandle);
+    if FSize > 0 then
+    try
+      GetMem(FBuffer, FSize);
+      FValid := GetFileVersionInfo(FFileName, FHandle, FSize, FBuffer);
+    except
+      FValid := False;
+      raise;
+    end;
+    Result := '';
+    if FValid then
+      VerQueryValue(FBuffer, '\VarFileInfo\Translation', p, Len)
+    else
+      p := nil;
+    if P <> nil then
+      GetTranslationString := IntToHex(MakeLong(HiWord(Longint(P^)),
+        LoWord(Longint(P^))), 8);
+    if FValid then
+    begin
+      StrPCopy(szName, '\StringFileInfo\' + GetTranslationString +
+        '\FileVersion');
+      if VerQueryValue(FBuffer, szName, Value, Len) then
+        Result := StrPas(PChar(Value));
+    end;
+  finally
+    try
+      if FBuffer <> nil then
+        FreeMem(FBuffer, FSize);
+    except
+    end;
+    try
+      StrDispose(FFileName);
+    except
+    end;
+  end;
 end;
 
 end.

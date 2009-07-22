@@ -10,15 +10,17 @@ type TSlujMode = (mSum, mDetail);
 
 type
   TForm44 = class(TForm)
-    sluj_grid: TStringGrid;
-    GroupBox1: TGroupBox;
     FlowPanel1: TFlowPanel;
     Button2: TButton;
     Button1: TButton;
+    GroupBox1: TGroupBox;
+    SlujGrid: TStringGrid;
+    Button3: TButton;
     procedure Button2Click(Sender: TObject);
-    procedure sluj_gridSelectCell(Sender: TObject; ACol, ARow: Integer;
+    procedure SlujGridSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -33,7 +35,7 @@ var
 
 implementation
 
-uses datamodule, main;
+uses datamodule, main, service;
 
 {$R *.dfm}
 
@@ -75,43 +77,43 @@ begin
       case mode of
         mDetail: begin
             Form44.Width:= 670;
-            with sluj_grid do
+            with SlujGrid do
               begin
                 RowCount:= DataModule1.Query1.RecordCount+1;
                 colcount:= DataModule1.Query1.FieldCount-1;
-                cells[0,0]:='sdate';
+                cells[0,0]:='Месяц';
                 cells[1,0]:='Рег. №';
                 cells[2,0]:='ФИО';
                 cells[3,0]:='Сумм. служ.';
                 cells[4,0]:='Субсидия';
                 cells[5,0]:='Услуга';
                 colwidths[1]:=75;
-                colwidths[2]:=255;
-                colwidths[3]:=75;
-                colwidths[4]:=75;
-                colwidths[5]:=100;
+                colwidths[2]:=240;
+                colwidths[3]:=65;
+                colwidths[4]:=65;
+                colwidths[5]:=115;
               end;
               DataModule1.Query1.first;
               with DataModule1.Query1 do
               for i:=0 to recordcount do
               begin
-                sluj_grid.Cells[0,i+1]:= fieldbyname('sdate').Value;
-                sluj_grid.cells[1,i+1]:= fieldbyname('regn').Value;
-                sluj_grid.cells[2,i+1]:= fieldbyname('fio').Value;
-                sluj_grid.cells[3,i+1]:= fieldbyname('sluj_sum').Value;
-                sluj_grid.cells[4,i+1]:= fieldbyname('Expr1').Value;
-                sluj_grid.Cells[5,i+1]:= fieldbyname('nameserv').Value;
+                SlujGrid.Cells[0,i+1]:= fieldbyname('sdate').Value;
+                SlujGrid.cells[1,i+1]:= fieldbyname('regn').Value;
+                SlujGrid.cells[2,i+1]:= fieldbyname('fio').Value;
+                SlujGrid.cells[3,i+1]:= fieldbyname('sluj_sum').Value;
+                SlujGrid.cells[4,i+1]:= fieldbyname('Expr1').Value;
+                SlujGrid.Cells[5,i+1]:= fieldbyname('nameserv').Value;
                 DataModule1.Query1.next;
               end;
            GroupBox1.Caption:= 'Подробно по тарифам:';
            end;
       mSum: begin
           Form44.Width:= 580;
-          with sluj_grid do
+          with SlujGrid do
             begin
               RowCount:= DataModule1.Query1.RecordCount+1;
               colcount:= DataModule1.Query1.FieldCount;
-              cells[0,0]:='sdate';
+              cells[0,0]:='Месяц';
               cells[1,0]:='Рег. №';
               cells[2,0]:='ФИО';
               cells[3,0]:='Сумм. служ.';
@@ -125,11 +127,11 @@ begin
             with DataModule1.Query1 do
             for i:=0 to recordcount do
               begin
-                sluj_grid.Cells[0,i+1]:= fieldbyname('sdate').Value;
-                sluj_grid.cells[1,i+1]:= fieldbyname('regn').Value;
-                sluj_grid.cells[2,i+1]:= fieldbyname('fio').Value;
-                sluj_grid.cells[3,i+1]:= fieldbyname('sluj_sum').Value;
-                sluj_grid.cells[4,i+1]:= fieldbyname('Expr1').Value;
+                SlujGrid.Cells[0,i+1]:= fieldbyname('sdate').Value;
+                SlujGrid.cells[1,i+1]:= fieldbyname('regn').Value;
+                SlujGrid.cells[2,i+1]:= fieldbyname('fio').Value;
+                SlujGrid.cells[3,i+1]:= fieldbyname('sluj_sum').Value;
+                SlujGrid.cells[4,i+1]:= fieldbyname('Expr1').Value;
                 DataModule1.Query1.next;
               end;
           GroupBox1.Caption:= 'Общая сумма за месяц:';
@@ -144,23 +146,30 @@ end;
 
 procedure TForm44.Button2Click(Sender: TObject);
 begin
-  Form44.Close;
+  Close;
 end;
 
-procedure TForm44.sluj_gridSelectCell(Sender: TObject; ACol, ARow: Integer;
+procedure TForm44.Button3Click(Sender: TObject);
+begin
+  ExportGridToExcel(SlujGrid,'1',Form1.reports_path+'tmp.xls');
+end;
+
+procedure TForm44.SlujGridSelectCell(Sender: TObject; ACol, ARow: Integer;
   var CanSelect: Boolean);
 begin
-  cl_regn:= sluj_grid.cells[1,arow];
+  cl_regn:= SlujGrid.cells[1,arow];
 end;
 
 procedure TForm44.Button1Click(Sender: TObject);
 begin
-  DataModule1.Query1.Close;
-  DataModule1.Query1.sql.Text:= 'DELETE FROM Sluj'+#13+
-                                'WHERE (sdate = CONVERT(smalldatetime, :rdt, 104)) AND (regn = '+cl_regn+')';
-  DataModule1.Query1.ParamByName('rdt').Value:= form1.rdt;
-  DataModule1.Query1.execsql;
-  FillSlujGrid;
+  if MessageDlg('Удалить выбранный период?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+    DataModule1.Query1.Close;
+    DataModule1.Query1.sql.Text:= 'DELETE FROM Sluj'+#13+
+                                  'WHERE (sdate = CONVERT(smalldatetime, :rdt, 104)) AND (regn = '+cl_regn+')';
+    DataModule1.Query1.ParamByName('rdt').Value:= form1.rdt;
+    DataModule1.Query1.execsql;
+    FillSlujGrid;
+  end;
 end;
 
 end.
