@@ -36,7 +36,6 @@ uses
   imexp in 'imexp.pas' {Form35},
   progress in 'progress.pas' {AboutBox1},
   browse in 'browse.pas' {Form36},
-//  crdelphi in 'crdelphi.pas',
   chserv in 'chserv.pas' {Form29},
   rstnd in 'rstnd.pas' {Form38},
   tarif in 'tarif.pas' {Form15},
@@ -63,7 +62,9 @@ uses
   version in 'version.pas',
   SlujUnit in 'SlujUnit.pas' {Form44},
   ConnectUnit in 'ConnectUnit.pas' {Form45},
-  FactSumUnit in 'FactSumUnit.pas' {FactSumFrm};
+  FactSumUnit in 'FactSumUnit.pas' {FactSumFrm},
+  ConfigPropertiesUnit in 'ConfigPropertiesUnit.pas' {ConfigFrm},
+  fAppPropUnit in 'frames\fAppPropUnit.pas' {fAppProp: TFrame};
 
 {$R *.res}
 
@@ -131,6 +132,7 @@ begin
         Application.CreateForm(TForm44, Form44);
         Application.CreateForm(TForm45, Form45);
         Application.CreateForm(TFactSumFrm, FactSumFrm);
+        Application.CreateForm(TConfigFrm, ConfigFrm);
         Application.Run;
       except
         ShowMessage('Произошел сбой при создании одной из форм!');
