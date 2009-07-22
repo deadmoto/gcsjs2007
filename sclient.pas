@@ -2495,7 +2495,8 @@ if IsAPeriod then begin
       end;
       Datamodule1.Database1.Commit;
       Result := 0;
-      if cl.data.cert<>1 then FactSumFrm.ShowModal; //Фактический расход
+      if Form1.getConfValue('0.ShowFactSumFrm') then
+        if cl.data.cert<>1 then FactSumFrm.ShowModal; //Фактический расход
       except
         //транзакция не выполнена
         Datamodule1.Database1.Rollback;

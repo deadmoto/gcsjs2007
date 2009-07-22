@@ -205,6 +205,8 @@ type
     ToolButton19: TToolButton;
     N37: TMenuItem;
     N105: TMenuItem;
+    N106: TMenuItem;
+    N109: TMenuItem;
     procedure N15Click(Sender: TObject);
     procedure N25Click(Sender: TObject);
     procedure N24Click(Sender: TObject);
@@ -299,6 +301,7 @@ type
     procedure ToolButton17Click(Sender: TObject);
     procedure N37Click(Sender: TObject);
     procedure ToolButton14Click(Sender: TObject);
+    procedure N109Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -328,6 +331,7 @@ type
     function CheckP1: bool;
     function SetSumSub: real;
 //    procedure CreateListPlugin;
+    procedure ReloadConfig;
   public
     { Public declarations }
     normc,normw: real;//нормативы расхода угля и дров в год
@@ -360,6 +364,7 @@ type
 
 //    procedure FillTarifDS;
     procedure ReportsFillDistInfo;
+    function getConfValue(str: string): Variant;
   end;
 
 var
@@ -381,7 +386,7 @@ uses sclient, inspector, district, street, fond, manager,
       Contnrs,DateUtils, rstnd, loop, math,tarifb,
       chinsp, curhist, chserv, Client, merge, mdd, statage,
       statlm, codedbf, chtarifs, rrecalc, Plugins, stat, {mod_Types,} padegFIO, StrUtils,
-      version, SlujUnit, ConnectUnit, FactSumUnit;
+      version, SlujUnit, ConnectUnit, FactSumUnit, ConfigPropertiesUnit;
 
 {$R *.dfm}
 
@@ -625,6 +630,20 @@ function TForm1.GenPer(b,e: TDate): string;
 *******************************************************************************}
 begin
   Result := DateToStr(b) + ' - ' + DateToStr(e);
+end;
+
+function TForm1.getConfValue(str: string): Variant;
+{*******************************************************************************
+    Функция getConfValue возвращает значение переменной в реестре, которое
+    соответсвует определенному свойству компонента.
+*******************************************************************************}
+begin
+  with TRegistry.Create do begin
+    RootKey:= HKEY_CURRENT_USER;
+    if OpenKey('Software\Subsidy\Config',TRUE) then
+      if ValueExists(str) then Result:= ReadString(str)
+        else WriteString(str,'0');
+  end;
 end;
 
 function TForm1.GenCalc(c: integer): string;
@@ -2358,9 +2377,6 @@ begin
     Free;
   end;
 
-  //в переменной хранится путь папки с отчетами
-  reports_path:= (ExtractFilePath(Application.ExeName)+'reports\');
-
   DecodeDate(Date,y,m,d);
   y := y-2000;
   if y<10 then
@@ -2724,6 +2740,15 @@ begin
     Statusbar1.Panels[0].Text := 'Клиент: ' + f  + '/' + FlToStr(subs)
   else
     Statusbar1.Panels[0].Text := 'Клиент: ' + f  + '/?';
+end;
+
+procedure TForm1.ReloadConfig;
+begin
+  GroupBox1.Visible:=getConfValue('0.ShowLegend');
+
+  //в переменной хранится путь папки с отчетами
+  if getConfValue('0.OtherRepPath') then reports_path:= getConfValue('0.RepPath')
+    else reports_path:= (ExtractFilePath(Application.ExeName)+'reports\');
 end;
 
 procedure TForm1.ReportsFillDistInfo;
@@ -3994,6 +4019,12 @@ begin
   end;
 end;
 
+procedure TForm1.N109Click(Sender: TObject);
+begin
+  ConfigFrm.ShowModal;
+  ReloadConfig;
+end;
+
 procedure TForm1.N104Click(Sender: TObject);
 {*******************************************************************************
     Процедура вызывает запрос, выполняющий смену аттестации у клиентов, дело
@@ -4014,6 +4045,7 @@ procedure TForm1.FormShow(Sender: TObject);
 begin
   SGCl.SetFocus;
   GridPanel1.Realign;
+  ReloadConfig;
 end;
 
 procedure TForm1.N34Click(Sender: TObject);
@@ -4300,7 +4332,7 @@ begin
   Form44.mode:= mDetail;
   form44.FillSlujGrid;
   if DataModule1.Query1.RecordCount > 0 then
-    Form44.Show;
+    Form44.ShowModal;
 end;
 
 procedure TForm1.N102Click(Sender: TObject);
@@ -4309,7 +4341,7 @@ begin
   Form44.mode:= mSum;
   form44.FillSlujGrid;
   if DataModule1.Query1.RecordCount > 0 then
-    Form44.Show;
+    Form44.ShowModal;
 end;
 
 end.
