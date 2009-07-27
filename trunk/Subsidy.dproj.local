@@ -9,5 +9,7 @@
     <Transaction>2009.07.22 13:36:01.218.dfm,C:\.dev\subsidy2007\gcsjs2007\Unit46.dfm=C:\.dev\subsidy2007\gcsjs2007\ConfigPropertiesUnit.dfm</Transaction>
     <Transaction>2009.07.22 13:37:43.856.pas,C:\.dev\subsidy2007\gcsjs2007\Unit1.pas=C:\.dev\subsidy2007\gcsjs2007\frames\fAppPropUnit.pas</Transaction>
     <Transaction>2009.07.22 13:37:43.856.dfm,C:\.dev\subsidy2007\gcsjs2007\Unit1.dfm=C:\.dev\subsidy2007\gcsjs2007\frames\fAppPropUnit.dfm</Transaction>
+    <Transaction>2009.07.23 10:11:22.256.pas,C:\.dev\subsidy2007\gcsjs2007\Unit1.pas=C:\.dev\subsidy2007\gcsjs2007\frames\fAppUpdateUnit.pas</Transaction>
+    <Transaction>2009.07.23 10:11:22.256.dfm,C:\.dev\subsidy2007\gcsjs2007\Unit1.dfm=C:\.dev\subsidy2007\gcsjs2007\frames\fAppUpdateUnit.dfm</Transaction>
   </Transactions>
 </BorlandProject>

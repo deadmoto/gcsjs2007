@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
-  Dialogs, StdCtrls, IniCheckBox, ExtCtrls, IniLabeledEdit, FileCtrl;
+  Dialogs, StdCtrls, IniCheckBox, ExtCtrls, FileCtrl, IniLabeledEdit;
 
 type
   TfAppProp = class(TFrame)
@@ -15,6 +15,7 @@ type
     Panel2: TPanel;
     Button1: TButton;
     IniLabeledEdit1: TIniLabeledEdit;
+    IniCheckBox4: TIniCheckBox;
     procedure IniCheckBox3Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
   private
@@ -42,7 +43,6 @@ procedure TfAppProp.IniCheckBox3Click(Sender: TObject);
 begin
   if IniCheckBox3.Checked then Panel2.Enabled:= TRUE
     else Panel2.Enabled:= FALSE;
-
 end;
 
 end.

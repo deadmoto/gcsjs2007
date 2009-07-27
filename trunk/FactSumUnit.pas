@@ -17,12 +17,21 @@ type
     StringGrid1: TStringGrid;
     StringGrid2: TStringGrid;
     Button2: TButton;
+    Panel1: TPanel;
+    Label1: TLabel;
     procedure FormShow(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
     procedure TabControl1Change(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure StringGrid2SelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure ComboBox1KeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -31,6 +40,8 @@ type
     function AddAnyMonth(BD,ED: TDateTime):TStringList;
     procedure ChangePeriod(BD,ED:TDateTime);
     procedure ClearGrids();
+    function GetColSum(StrGrid: TStringGrid; Col:integer):double;
+    procedure CheckDifferenceSum;
   end;
 
 var
@@ -61,19 +72,27 @@ begin
 end;
 
 procedure TFactSumFrm.ClearGrids;
+var
+  i: integer;
 begin
   with StringGrid1 do begin
+    for i := 0 to RowCount-1 do
+      Rows[i].Clear;
     cells[0,0]:='Месяц';
     cells[1,0]:='Субсидия';
     cells[0,1]:='';
     cells[1,1]:='';
     RowCount:=2;
   end;
+
   with StringGrid2 do begin
+    for i := 0 to RowCount-1 do
+      Rows[i].Clear;
     cells[0,0]:='Факт. расход';
     cells[0,1]:='';
     RowCount:=2;
   end;
+
   ComboBox1.Text:='';
   CheckBox1.Checked:= FALSE;
 end;
@@ -129,7 +148,22 @@ begin
     StringGrid2.Cells[0,i+1]:= datamodule1.Query1.FieldValues['factsum'];
     datamodule1.Query1.Next;
   end;
+
+    StringGrid1.RowCount:= StringGrid1.RowCount+1;
+    StringGrid2.RowCount:= StringGrid2.RowCount+1;
+    StringGrid1.Cells[0,StringGrid1.RowCount-1]:= 'Сумма:';
+    StringGrid1.Cells[1,StringGrid1.RowCount-1]:= FloatToStr(GetColSum(StringGrid1,1));
+    StringGrid2.Cells[0,StringGrid2.RowCount-1]:= FloatToStr(GetColSum(StringGrid2,0));
   end;
+end;
+
+function TFactSumFrm.GetColSum(StrGrid: TStringGrid; Col:integer):double;
+var
+  i:integer;
+begin
+  Result:=0;
+  for i:=0 to StrGrid.RowCount-3 do
+    Result:= Result + StrToFloat(StrGrid.Cells[Col,i+1]);
 end;
 
 procedure TFactSumFrm.Button1Click(Sender: TObject);
@@ -166,7 +200,7 @@ begin
       with datamodule1 do begin
         if ComboBox1.Text='' then showmessage('Не выбран период для изменения')
         else
-        for i:=0 to StringGrid1.RowCount-2 do begin
+        for i:=0 to StringGrid1.RowCount-3 do begin
           try
             Query1.Close;
             Query1.SQL.Text:= 'UPDATE FactSale'+#13+
@@ -187,6 +221,7 @@ begin
     end;
   end;
   ClearGrids();
+  ComboBox1.SetFocus;
   TabControl1.OnChange(self);
 end;
 
@@ -227,6 +262,17 @@ begin
   end;
 end;
 
+procedure TFactSumFrm.CheckDifferenceSum;
+begin
+  if TabControl1.TabIndex=1 then begin
+    if StrToFloat(StringGrid1.Cells[1,StringGrid1.RowCount-1]) <= StrToFloat(StringGrid2.Cells[0,StringGrid1.RowCount-1]) then
+      label1.Caption:= 'Размер субсидии не привешает фактических расходов'
+    else
+      label1.Caption:= 'Размер субсидии привешает фактические расходы на +'+
+                        FloatToStr(StrToFloat(StringGrid1.Cells[1,StringGrid1.RowCount-1])-StrToFloat(StringGrid2.Cells[0,StringGrid1.RowCount-1]));
+  end;
+end;
+
 procedure TFactSumFrm.ComboBox1Change(Sender: TObject);
 begin
   if CheckBox1.Checked then begin
@@ -238,6 +284,12 @@ begin
     enddate:= StrToDate(copy(ComboBox1.Items[ComboBox1.ItemIndex],14,23));
   end;
   ChangePeriod(begindate, enddate);
+  CheckDifferenceSum;
+end;
+
+procedure TFactSumFrm.ComboBox1KeyPress(Sender: TObject; var Key: Char);
+begin
+  key:= #0;
 end;
 
 procedure TFactSumFrm.FormShow(Sender: TObject);
@@ -251,9 +303,79 @@ begin
   TabControl1.OnChange(self);
 end;
 
-procedure TFactSumFrm.TabControl1Change(Sender: TObject);
-var i: integer;
+procedure TFactSumFrm.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
+  Rect: TRect; State: TGridDrawState);
+var
+  Buf: array[byte] of char;
 begin
+  if State = [gdFixed] then Exit;
+
+  with StringGrid1 do
+  begin
+    Canvas.Font := Font;
+    Canvas.Font.Color := clWindowText;
+    Canvas.Brush.Color := clWindow;
+    Canvas.FillRect(Rect);
+
+    StrPCopy(Buf, Cells[ACol, ARow]);
+    Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, Cells[aCol, aRow]);
+  end;
+
+  if TabControl1.TabIndex=1 then
+    if aRow= StringGrid1.RowCount-1 then
+      with StringGrid1 do begin
+        Canvas.Font := Font;
+        Canvas.Font.Color := clWindowText;
+        Canvas.Brush.Color := clMoneyGreen;
+        Canvas.FillRect(Rect);
+        StrPCopy(Buf, Cells[ACol, ARow]);
+        Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, Cells[aCol, aRow]);
+      end;
+end;
+
+procedure TFactSumFrm.StringGrid2DrawCell(Sender: TObject; ACol, ARow: Integer;
+  Rect: TRect; State: TGridDrawState);
+var
+  Buf: array[byte] of char;
+begin
+  if TabControl1.TabIndex=1 then
+    if aRow= StringGrid2.RowCount-1 then
+      with StringGrid2 do begin
+        Canvas.Font := Font;
+        Canvas.Font.Color := clWindowText;
+        Canvas.Brush.Color := clMoneyGreen;
+        Canvas.FillRect(Rect);
+        StrPCopy(Buf, Cells[ACol, ARow]);
+        Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, Cells[aCol, aRow]);
+      end;
+end;
+
+procedure TFactSumFrm.StringGrid2SelectCell(Sender: TObject; ACol,
+  ARow: Integer; var CanSelect: Boolean);
+begin
+  if TabControl1.TabIndex=1 then begin
+    if ARow=StringGrid2.RowCount-1 then
+      StringGrid2.Options := StringGrid2.Options - [goEditing, goAlwaysShowEditor]
+    else
+      StringGrid2.Options := StringGrid2.Options + [goEditing, goAlwaysShowEditor];
+
+    StringGrid1.Cells[1,StringGrid1.RowCount-1]:= FloatToStr(GetColSum(StringGrid1,1));
+    StringGrid2.Cells[0,StringGrid2.RowCount-1]:= FloatToStr(GetColSum(StringGrid2,0));
+    CheckDifferenceSum;
+  end
+  else begin
+    StringGrid2.Options := StringGrid2.Options + [goEditing, goAlwaysShowEditor];
+  end;
+end;
+
+procedure TFactSumFrm.TabControl1Change(Sender: TObject);
+var
+  i: integer;
+begin
+  ClearGrids();
+  ComboBox1.SetFocus;
+  Label1.Caption:= '';
+
   case TabControl1.TabIndex of
     0: begin
       with datamodule1 do begin
@@ -278,12 +400,30 @@ begin
         else begin
           Query1.Close;
           Query1.SQL.Text:= 'SELECT regn, bdate, edate'+#13+
+                            'FROM Hist'+#13+
+                            'WHERE (regn = :regn) AND (bdate <> CONVERT(smallDATETIME, :bdate, 104)) AND (bdate NOT IN'+#13+
+                              '(SELECT bdate'+#13+
+                              'FROM FactSale'+#13+
+                              'WHERE (regn = :regn) AND (bdate < CONVERT(smallDATETIME, :bdate, 104))'+#13+
+                              'GROUP BY bdate))'+#13+
+                            'GROUP BY regn, bdate, edate';
+{'SELECT Hist.regn, Hist.bdate, Hist.edate'+#13+
+                            'FROM Hist INNER JOIN'+#13+
+                              '(SELECT bdate'+#13+
+                                'FROM FactSale'+#13+
+                                'WHERE (regn = :regn) AND (bdate < CONVERT(smallDATETIME, :bdate, 104))'+#13+
+                                'GROUP BY bdate) tt ON Hist.bdate <> tt.bdate'+#13+
+                            'WHERE (Hist.regn = :regn) AND (Hist.bdate <> CONVERT(smallDATETIME, :bdate, 104))'+#13+
+                            'GROUP BY Hist.regn, Hist.bdate, Hist.edate';}
+
+{           'SELECT regn, bdate, edate'+#13+
               'FROM Hist'+#13+
               'WHERE     (bdate NOT IN'+#13+
               '(SELECT Hist.bdate'+#13+
               'FROM          Hist INNER JOIN'+#13+
               'FactSale ON Hist.regn = FactSale.regn AND Hist.bdate = FactSale.bdate AND Hist.edate = FactSale.edate'+#13+
-              'GROUP BY Hist.bdate)) AND (regn = :regn) AND (bdate <> CONVERT(smallDATETIME, :bdate, 104))';
+              'GROUP BY Hist.bdate)) AND (regn = :regn) AND (bdate <> CONVERT(smallDATETIME, :bdate, 104))';}
+
           Query1.ParamByName('regn').Value:= c.data.regn;
           Query1.ParamByName('bdate').Value:= DateToStr(c.cdata.begindate);
         end;
@@ -324,7 +464,6 @@ begin
       CheckBox1.Visible:= FALSE;
     end;
   end;
-  ClearGrids();
 end;
 
 end.

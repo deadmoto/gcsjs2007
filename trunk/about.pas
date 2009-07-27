@@ -15,6 +15,7 @@ type
     Comments: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure Panel1Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -36,6 +37,11 @@ begin
   StrPCopy(A, ParamStr(0));
   ProgramIcon.Picture.Icon.Handle := ExtractIcon(HInstance, A, 0);
   Version.Caption:= 'Версия: '+FileVersion(paramstr(0))
+end;
+
+procedure TAboutBox.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if key=#27 then close;
 end;
 
 procedure TAboutBox.Panel1Click(Sender: TObject);

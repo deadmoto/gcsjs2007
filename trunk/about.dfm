@@ -13,6 +13,7 @@ object AboutBox: TAboutBox
   OldCreateOrder = True
   Position = poScreenCenter
   OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
@@ -27,7 +28,6 @@ object AboutBox: TAboutBox
     ParentColor = True
     TabOrder = 0
     OnClick = Panel1Click
-    ExplicitHeight = 175
     object ProgramIcon: TImage
       Left = 24
       Top = 16

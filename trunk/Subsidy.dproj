@@ -41,6 +41,95 @@
       
       
       
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       <Excluded_Packages Name="$(BDS)\bin\dcloffice2k100.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
     </Excluded_Packages></Delphi.Personality></BorlandProject></BorlandProject>
   </ProjectExtensions>
@@ -93,7 +182,6 @@
       <Form>Form10</Form>
     </DCCReference>
     <DCCReference Include="core\subtypes.pas" />
-    <DCCReference Include="crdelphi.pas" />
     <DCCReference Include="curhist.pas">
       <Form>Form18</Form>
     </DCCReference>
@@ -117,8 +205,12 @@
       <Form>Form6</Form>
     </DCCReference>
     <DCCReference Include="frames\fAppPropUnit.pas">
-      <Form>fAppProp</Form>
       <DesignClass>TFrame</DesignClass>
+      <Form>fAppProp</Form>
+    </DCCReference>
+    <DCCReference Include="frames\fAppUpdateUnit.pas">
+      <DesignClass>TFrame</DesignClass>
+      <Form>fAppUpdate</Form>
     </DCCReference>
     <DCCReference Include="fstruct.pas" />
     <DCCReference Include="houses.pas">

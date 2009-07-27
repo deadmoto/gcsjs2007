@@ -10,7 +10,7 @@ const
   cConfig:array[0..1] of string=
   (
     'Приложение',
-    'Папки'
+    'Обновление'
   );
 
 type
@@ -42,7 +42,7 @@ var
 
 implementation
 
-uses fAppPropUnit;
+uses fAppPropUnit, fAppUpdateUnit;
 
 {$R *.dfm}
 
@@ -63,6 +63,7 @@ procedure TConfigFrm.Button2Click(Sender: TObject);
 var i : integer;
     ProxyI : IIniOperations;
 begin
+  if Assigned(confFrame) then
   for i := 0 to TfAppProp(confFrame).ComponentCount -1 do
     begin
       if TfAppProp(confFrame).Components[i].GetInterface(IIniOperations, ProxyI) then
@@ -89,7 +90,7 @@ var list,list2: TStringList;
     i: integer;
 begin
   if Assigned(confFrame) then FreeAndNil(confFrame);
-  
+
   regConf:= TRegIniFile.Create('Software\Subsidy');
 
   list:= TStringList.Create;
@@ -132,12 +133,25 @@ begin
           end;
         end;
       end;
-      1: begin
 
+      1: begin
+{        if Assigned(confFrame) then FreeAndNil(confFrame);
+        confFrame := TfAppUpdate.Create(ConfigFrm);
+        confFrame.Parent:= Panel2;
+        confFrame.Align:= alClient;
+        confFrame.Visible:= TRUE;
+        TfAppUpdate(confFrame).Panel1.Caption:= ListBox1.Items[ListBox1.ItemIndex];
+        for i := 0 to TfAppUpdate(confFrame).ComponentCount -1 do begin
+          if TfAppUpdate(confFrame).Components[i].GetInterface(IIniOperations, ProxyI) then begin
+            ProxyI.IniFileObj := regConf;
+            ProxyI.LoadValFromIni();
+          end;
+        end;}
       end;
     end;
   end;
 end;
+
 
 end.
 
