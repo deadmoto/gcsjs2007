@@ -27,7 +27,6 @@ object ConfigFrm: TConfigFrm
     Align = alLeft
     BevelInner = bvLowered
     TabOrder = 0
-    ExplicitHeight = 421
     object ListBox1: TListBox
       Left = 2
       Top = 2
@@ -39,7 +38,6 @@ object ConfigFrm: TConfigFrm
       ItemHeight = 20
       TabOrder = 0
       OnClick = ListBox1Click
-      ExplicitHeight = 417
     end
   end
   object Panel2: TPanel
@@ -51,10 +49,6 @@ object ConfigFrm: TConfigFrm
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = 288
-    ExplicitTop = 152
-    ExplicitWidth = 185
-    ExplicitHeight = 41
   end
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
@@ -67,8 +61,6 @@ object ConfigFrm: TConfigFrm
     BevelInner = bvLowered
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 2
-    ExplicitTop = 411
-    ExplicitWidth = 552
     object Button1: TButton
       AlignWithMargins = True
       Left = 382

@@ -64,7 +64,11 @@ uses
   ConnectUnit in 'ConnectUnit.pas' {Form45},
   FactSumUnit in 'FactSumUnit.pas' {FactSumFrm},
   ConfigPropertiesUnit in 'ConfigPropertiesUnit.pas' {ConfigFrm},
-  fAppPropUnit in 'frames\fAppPropUnit.pas' {fAppProp: TFrame};
+  fAppPropUnit in 'frames\fAppPropUnit.pas' {fAppProp: TFrame},
+  fAppUpdateUnit in 'frames\fAppUpdateUnit.pas' {fAppUpdate: TFrame} ;
+
+
+//  uUpdateApp in 'data\uUpdateApp.pas'; {Update module}
 
 {$R *.res}
 

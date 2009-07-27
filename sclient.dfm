@@ -24,7 +24,7 @@ object Form2: TForm2
     Top = 3
     Width = 587
     Height = 379
-    ActivePage = TabSheet5
+    ActivePage = TabSheet3
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change
@@ -1120,10 +1120,10 @@ object Form2: TForm2
         TabOrder = 18
       end
       object RadioGroup2: TRadioGroup
-        Left = 152
-        Top = 7
-        Width = 369
-        Height = 49
+        Left = 115
+        Top = 8
+        Width = 334
+        Height = 42
         Hint = 
           #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1074#1099#1073#1088#1072#1085#1072' '#1075#1072#1079#1086#1074#1072#1103' '#1087#1083#1080#1090#1072', '#1090#1086' '#1075#1072#1079' '#1076#1086#1083#1078#1077#1085' '#1073#1099#1090#1100' '#1090#1086#1078#1077 +
           ' '#1074#1099#1073#1088#1072#1085
@@ -1131,9 +1131,9 @@ object Form2: TForm2
         Columns = 3
         ItemIndex = 0
         Items.Strings = (
-          #1043#1072#1079#1086#1074#1072#1103'           '
+          #1043#1072#1079#1086#1074#1072#1103
           #1069#1083#1077#1082#1090#1088#1080#1095#1077#1089#1082#1072#1103
-          #1055#1088#1086#1095#1080#1077'             ')
+          #1055#1088#1086#1095#1080#1077)
         ParentShowHint = False
         ShowHint = True
         TabOrder = 19
@@ -1159,8 +1159,8 @@ object Form2: TForm2
         TabOrder = 20
       end
       object CheckBox2: TCheckBox
-        Left = 24
-        Top = 19
+        Left = 13
+        Top = 23
         Width = 57
         Height = 17
         TabStop = False

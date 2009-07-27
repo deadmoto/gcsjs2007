@@ -302,6 +302,7 @@ type
     procedure N37Click(Sender: TObject);
     procedure ToolButton14Click(Sender: TObject);
     procedure N109Click(Sender: TObject);
+    procedure N105Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -2745,6 +2746,7 @@ end;
 procedure TForm1.ReloadConfig;
 begin
   GroupBox1.Visible:=getConfValue('0.ShowLegend');
+  Button3.Visible:=getConfValue('0.ShowDeleteButton');
 
   //в переменной хранится путь папки с отчетами
   if getConfValue('0.OtherRepPath') then reports_path:= getConfValue('0.RepPath')
@@ -4022,7 +4024,7 @@ end;
 procedure TForm1.N109Click(Sender: TObject);
 begin
   ConfigFrm.ShowModal;
-  ReloadConfig;
+  ReloadConfig; //Применить новые настройки
 end;
 
 procedure TForm1.N104Click(Sender: TObject);
@@ -4039,6 +4041,29 @@ begin
     ParamByName('d').AsString := rdt;
     ExecSQL;
   end;
+end;
+
+procedure TForm1.N105Click(Sender: TObject);
+var y1: string;
+begin
+  with DataModule1 do begin
+    Query1.Close;
+    Query1.SQL.Clear;
+    Query1.SQL.Add('EXEC getclfactsum '+quotedstr(rdt));
+    Query1.Open;
+  end;
+
+  frxData.DataSource:= Datamodule1.DataSource1;
+  frxReport1.LoadFromFile(PChar(reports_path+'factsale.fr3'));
+
+  y1 := IntToStr(YearOf(StrToDate(rdt)));
+
+  frxReport1.Variables.Variables['month']:= quotedstr(LongMonthNames[StrToInt(FormatDateTime('m',StrToDate(rdt)))]);//quotedstr(ReturnMountStr);
+  frxReport1.Variables.Variables['year']:= quotedstr(y1);
+  frxReport1.Script.Variables['id_dist']:= (dist);
+
+  frxReport1.PrepareReport;
+  frxReport1.ShowPreparedReport;
 end;
 
 procedure TForm1.FormShow(Sender: TObject);

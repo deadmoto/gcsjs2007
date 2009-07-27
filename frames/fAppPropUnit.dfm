@@ -14,7 +14,6 @@ object fAppProp: TfAppProp
     Ctl3D = True
     ParentCtl3D = False
     TabOrder = 0
-    ExplicitWidth = 339
   end
   object IniCheckBox1: TIniCheckBox
     Left = 16
@@ -70,11 +69,23 @@ object fAppProp: TfAppProp
       Top = 0
       Width = 177
       Height = 21
-      EditLabel.Width = 3
+      EditLabel.Width = 73
       EditLabel.Height = 13
+      EditLabel.Caption = 'IniLabeledEdit1'
       TabOrder = 1
       SectionName = 'Config'
       KeyName = '0.RepPath'
     end
+  end
+  object IniCheckBox4: TIniCheckBox
+    Left = 16
+    Top = 151
+    Width = 233
+    Height = 26
+    Caption = #1055#1086#1082#1072#1079#1099#1074#1072#1090#1100' '#1082#1085#1086#1087#1082#1091' "'#1059#1076#1072#1083#1080#1090#1100'" '#1085#1072' '#1075#1083#1072#1074#1085#1086#1081' '#1092#1086#1088#1084#1077
+    TabOrder = 5
+    WordWrap = True
+    SectionName = 'Config'
+    KeyName = '0.ShowDeleteButton'
   end
 end
