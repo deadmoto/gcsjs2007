@@ -321,7 +321,7 @@ type
     function NewPlace(id: integer;s1,s2: string): integer;
     procedure InsertCl(i1, i2: integer);
     procedure DelRow(i: integer);
-    procedure PrintNachCr;
+//    procedure PrintNachCr;
     procedure PrintSvodCr;
     procedure PrintVedCr(f,ad,rd,mng: string);
 //    procedure SetParam(printJob: integer;ind: integer;v: string);
@@ -575,7 +575,8 @@ end;
 procedure TForm1.Button9Click(Sender: TObject);
  { фактические расходы }
 begin
-  FactSumFrm.ShowModal;
+  if status<>3 then FactSumFrm.ShowModal
+    else ShowMessage('Нельзя вызывать форму редактирования фактических расходов для неактивного клиента')
 end;
 
 function TForm1.GetStatus(b, e: TDate): integer;
@@ -1768,7 +1769,29 @@ end;
 procedure TForm1.N65Click(Sender: TObject);
 { отчет о начислении }
 begin
-  PrintNachCr;
+  with DataModule1 do begin
+    Query1.Close;
+    Query1.SQL.Clear;
+    Query1.SQL.Add('EXEC nach '+quotedstr(rdt)+','+IntToStr(dist));
+    Query1.Open;
+
+    Query2.Close;
+    Query2.SQL.Clear;
+    Query2.SQL.Text:= ('SELECT boss '+#13+
+                       'FROM Dist '+#13+
+                       'WHERE id_dist = '+IntToStr(dist));
+    Query2.Open;
+  end;
+
+  frxData.DataSource:= Datamodule1.DataSource1;
+  frxReport1.LoadFromFile(PChar(reports_path+'nach.fr3'));
+  frxReport1.Script.Variables['id_dist']:= (dist);
+  frxReport1.Variables.Variables['mont']:= quotedstr(LongMonthNames[StrToInt(FormatDateTime('m',StrToDate(rdt)))]);
+  frxReport1.Variables.Variables['year']:= IntToStr(yearof(strtodate(rdt)));
+  frxReport1.Variables.Variables['boss']:= quotedstr(DataModule1.Query2.FieldValues['boss']);
+
+  frxReport1.PrepareReport;
+  frxReport1.ShowPreparedReport;
 end;
 
 procedure TForm1.N66Click(Sender: TObject);
@@ -3035,53 +3058,6 @@ begin
     per2 := per2 + IntToStr(m);
 end;
 
-procedure TForm1.PrintNachCr;
-begin
-  DataModule1.Query1.SQL.Clear;
-  DataModule1.Query1.SQL.Add('EXEC nach '+quotedstr(rdt)+','+IntToStr(dist));
-  DataModule1.Query1.open;
-
-  DataModule1.Query2.SQL.Clear;
-  DataModule1.Query2.SQL.Text:= ('SELECT boss '+#13+
-                                 'FROM Dist '+#13+
-                                 'WHERE id_dist = '+IntToStr(dist));
-  DataModule1.Query2.open;
-
-  frxData.DataSource:= Datamodule1.DataSource1;
-  frxReport1.LoadFromFile(PChar(reports_path+'nach.fr3'));
-  frxReport1.Script.Variables['id_dist']:= (dist);
-  frxReport1.Variables.Variables['mont']:= quotedstr(LongMonthNames[StrToInt(FormatDateTime('m',StrToDate(rdt)))]);
-  frxReport1.Variables.Variables['year']:= IntToStr(yearof(strtodate(rdt)));
-  frxReport1.Variables.Variables['boss']:= quotedstr(DataModule1.Query2.FieldValues['boss']);
-
-  frxReport1.PrepareReport;
-  frxReport1.ShowPreparedReport;
-end;
-
-  {***старая процедура**** сформировать отчет о начислении в CristalReport }
-
-//begin
-//  filenme := StrAlloc(80);
-//  StrPCopy(FileNme, ExtractFilePath(Application.ExeName)+ 'reports\nach.rpt');
-  {Open the Report and assign the Job number}
-//  JobNumber1 := PEOpenPrintJob(PChar(reports_path+'nach.rpt'));
-  //параметры
-  {SetPer2(rdt,dt);
-  m1 := Copy(dt,3,2);
-  y1 := '20'+Copy(dt,1,2);  }
-{  SetParam(jobnumber1,0,rdt);//'01.'+m1+'.'+y1);
-  SetParam(jobnumber1,1,IntToStr(dist));
-  if not PEOutputToWindow(JobNumber1,'Отчет о начислении',0,0,600,400,
-                          WS_VISIBLE OR WS_CAPTION OR WS_BORDER OR
-                          WS_SYSMENU OR WS_MINIMIZEBOX OR
-                          WS_MAXIMIZEBOX OR WS_MAXIMIZE,0) then
-    ShowMessage('Ошибка вывода на экран!')
-  else
-    if PEStartPrintJob(JobNumber1, True) = False then
-      ShowMessage('Ошибка вывода на печать!');
-  PEClosePrintJob(jobnumber1);
-  end;}
-
 procedure TForm1.PrintVedCr(f,ad,rd,mng: string);
 { сформировать ведомость субсидий клиента за год }
 var y1,dt: string;
@@ -4051,6 +4027,13 @@ begin
     Query1.SQL.Clear;
     Query1.SQL.Add('EXEC getclfactsum '+quotedstr(rdt));
     Query1.Open;
+
+    Query2.Close;
+    Query2.SQL.Clear;
+    Query2.SQL.Text:= ('SELECT boss '+#13+
+                       'FROM Dist '+#13+
+                       'WHERE id_dist = '+IntToStr(dist));
+    Query2.Open;
   end;
 
   frxData.DataSource:= Datamodule1.DataSource1;
@@ -4061,6 +4044,7 @@ begin
   frxReport1.Variables.Variables['month']:= quotedstr(LongMonthNames[StrToInt(FormatDateTime('m',StrToDate(rdt)))]);//quotedstr(ReturnMountStr);
   frxReport1.Variables.Variables['year']:= quotedstr(y1);
   frxReport1.Script.Variables['id_dist']:= (dist);
+  frxReport1.Variables.Variables['boss']:= quotedstr(DataModule1.Query2.FieldValues['boss']);
 
   frxReport1.PrepareReport;
   frxReport1.ShowPreparedReport;

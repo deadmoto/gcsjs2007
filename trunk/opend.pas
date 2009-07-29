@@ -130,6 +130,7 @@ var
   i,ii: integer;
   tmp_by: integer;
 begin
+  ComboBox1.Clear;
   tmp_by:= Form1.by;
   ii := StrToInt(Copy(Form1.rdt, 4, 2));
   ComboBox1.Text := Copy(Form1.rdt, 7, 4);

@@ -1380,7 +1380,6 @@ object Form1: TForm1
       end
       object N105: TMenuItem
         Caption = #1060#1072#1082#1090#1080#1095#1077#1089#1082#1080#1077' '#1088#1072#1089#1093#1086#1076#1099
-        Visible = False
         OnClick = N105Click
       end
     end
@@ -2472,7 +2471,7 @@ object Form1: TForm1
     PrintOptions.Printer = #1055#1086' '#1091#1084#1086#1083#1095#1072#1085#1080#1102
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 40018.427242928200000000
-    ReportOptions.LastChange = 40018.503710173610000000
+    ReportOptions.LastChange = 40022.573703888890000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       ''
@@ -2638,8 +2637,7 @@ object Form1: TForm1
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[<frxData."bdate">] - [<frxData."edate">]'
-            '')
+            '[<frxData."bdate">] - [<frxData."edate">]')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -2656,7 +2654,7 @@ object Form1: TForm1
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
+          HAlign = haRight
           Memo.UTF8 = (
             '[<frxData."SumSub">]')
           ParentFont = False
@@ -2675,7 +2673,7 @@ object Form1: TForm1
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
+          HAlign = haRight
           Memo.UTF8 = (
             '[<frxData."SumFact">]')
           ParentFont = False
@@ -2694,7 +2692,7 @@ object Form1: TForm1
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
+          HAlign = haRight
           Memo.UTF8 = (
             '[<frxData."Differencee">]')
           ParentFont = False
@@ -2703,11 +2701,11 @@ object Form1: TForm1
       end
       object PageFooter1: TfrxPageFooter
         Height = 22.677180000000000000
-        Top = 430.866420000000000000
+        Top = 502.677490000000000000
         Width = 1046.929810000000000000
         object Memo1: TfrxMemoView
           Left = 918.425790000000000000
-          Top = 3.779530000000000000
+          Top = 3.779530000000022000
           Width = 128.504020000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -2843,6 +2841,45 @@ object Form1: TForm1
             
               #1056#160#1056#176#1056#183#1056#1112#1056#181#1057#1026' '#1056#1111#1057#1026#1056#181#1056#1030#1057#8249#1057#8364#1056#181#1056#1029#1056#1105#1057#1039' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#1105' '#1056#1029#1056#176#1056#1169' '#1057#8222#1056#176#1056#1108 +
               #1057#8218#1056#1105#1057#8225#1056#181#1057#1027#1056#1108#1056#1105#1056#1112#1056#1105' '#1057#1026#1056#176#1057#1027#1057#8230#1056#1109#1056#1169#1056#176#1056#1112#1056#1105)
+          ParentFont = False
+          VAlign = vaCenter
+        end
+      end
+      object ReportSummary1: TfrxReportSummary
+        Height = 49.133890000000000000
+        Top = 430.866420000000000000
+        Width = 1046.929810000000000000
+        object Memo56: TfrxMemoView
+          Left = 22.677180000000000000
+          Top = 11.338590000000010000
+          Width = 220.000000000000000000
+          Height = 18.000000000000000000
+          ShowHint = False
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            #1056#8212#1056#176#1056#1030#1056#181#1056#1169#1057#1107#1057#1035#1057#8240#1056#1105#1056#8470' '#1057#8222#1056#1105#1056#187#1056#1105#1056#176#1056#187#1056#1109#1056#1112)
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo57: TfrxMemoView
+          Left = 790.677180000000000000
+          Top = 11.338590000000010000
+          Width = 220.000000000000000000
+          Height = 18.000000000000000000
+          ShowHint = False
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[boss]')
           ParentFont = False
           VAlign = vaCenter
         end

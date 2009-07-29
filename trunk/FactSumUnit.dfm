@@ -65,6 +65,7 @@ object FactSumFrm: TFactSumFrm
         Height = 26
         Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1090#1077#1082#1091#1097#1080#1081' '#1087#1077#1088#1080#1086#1076
         TabOrder = 2
+        Visible = False
         WordWrap = True
         OnClick = CheckBox1Click
       end

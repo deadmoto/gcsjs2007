@@ -382,9 +382,9 @@ begin
         Query1.Close;
         Query1.SQL.Text:= 'SELECT bdate'+#13+
                           'FROM FactSale'+#13+
-                          'WHERE regn=:regn and bdate < :bdate'+#13+
+                          'WHERE regn=:regn and bdate < CONVERT(smallDATETIME, :bdate, 104)'+#13+
                           'ORDER BY bdate';
-        Query1.ParamByName('bdate').Value:= DateToStr(c.cdata.begindate);
+        Query1.ParamByName('bdate').Value:= DateToStr(c.cdata.begindate);//StrToDate(form1.rdt);
         Query1.ParamByName('regn').Value:= c.data.regn;
         Query1.Open;
 
@@ -392,16 +392,16 @@ begin
           Query1.Close;
           Query1.SQL.Text:= 'SELECT regn, bdate, edate'+#13+
                             'FROM Hist'+#13+
-                            'WHERE (regn = :regn) AND (bdate <> CONVERT(smallDATETIME, :bdate, 104))'+#13+
+                            'WHERE (regn = :regn) AND (bdate < CONVERT(smallDATETIME, :bdate, 104))'+#13+
                             'ORDER BY bdate';
           Query1.ParamByName('regn').Value:= c.data.regn;
-          Query1.ParamByName('bdate').Value:= DateToStr(c.cdata.begindate);
+          Query1.ParamByName('bdate').Value:= DateToStr(c.cdata.begindate);//StrToDate(form1.rdt);//
         end
         else begin
           Query1.Close;
           Query1.SQL.Text:= 'SELECT regn, bdate, edate'+#13+
                             'FROM Hist'+#13+
-                            'WHERE (regn = :regn) AND (bdate <> CONVERT(smallDATETIME, :bdate, 104)) AND (bdate NOT IN'+#13+
+                            'WHERE (regn = :regn) AND (bdate < CONVERT(smallDATETIME, :bdate, 104)) AND (bdate NOT IN'+#13+
                               '(SELECT bdate'+#13+
                               'FROM FactSale'+#13+
                               'WHERE (regn = :regn) AND (bdate < CONVERT(smallDATETIME, :bdate, 104))'+#13+
@@ -425,7 +425,7 @@ begin
               'GROUP BY Hist.bdate)) AND (regn = :regn) AND (bdate <> CONVERT(smallDATETIME, :bdate, 104))';}
 
           Query1.ParamByName('regn').Value:= c.data.regn;
-          Query1.ParamByName('bdate').Value:= DateToStr(c.cdata.begindate);
+          Query1.ParamByName('bdate').Value:= DateToStr(c.cdata.begindate); //StrToDate(form1.rdt);//
         end;
       Query1.Open;
       Query1.First;
@@ -437,7 +437,7 @@ begin
       end;
       Button1.Caption:= 'Добавить';
       Button2.Visible:= FALSE;
-      CheckBox1.Visible:= TRUE;
+//      CheckBox1.Visible:= TRUE;
     end;
 
     //----------
@@ -461,7 +461,7 @@ begin
       end;
       Button1.Caption:= 'Изменить';
       Button2.Visible:= TRUE;
-      CheckBox1.Visible:= FALSE;
+//      CheckBox1.Visible:= FALSE;
     end;
   end;
 end;
