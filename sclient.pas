@@ -182,7 +182,6 @@ type
     ComboBox10: TComboBox;
     Edit9: TEdit;
     Button6: TButton;
-    RadioGroup2: TRadioGroup;
     Label65: TLabel;
     ComboBox20: TComboBox;
     Edit2: TEdit;
@@ -261,6 +260,11 @@ type
     CheckBox3: TCheckBox;
     Label76: TLabel;
     MaskEdit4: TMaskEdit;
+    GroupBox1: TGroupBox;
+    ComboBox21: TComboBox;
+    GroupBox3: TGroupBox;
+    ComboBox22: TComboBox;
+    Bevel1: TBevel;
     procedure Button2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure ComboBox1Change(Sender: TObject);
@@ -298,7 +302,6 @@ type
     procedure RadioGroup1Click(Sender: TObject);
     procedure Edit74Change(Sender: TObject);
     procedure ComboBox10Change(Sender: TObject);
-    procedure RadioGroup2Click(Sender: TObject);
     procedure ComboBox20Change(Sender: TObject);
     procedure CheckBox2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -331,6 +334,8 @@ type
     procedure Edit83Change(Sender: TObject);
     procedure CheckBox3Click(Sender: TObject);
     procedure Edit111Exit(Sender: TObject);
+    procedure ComboBox21Change(Sender: TObject);
+    procedure ComboBox22Change(Sender: TObject);
   private
     { Private declarations }
     load, fam: boolean;
@@ -489,6 +494,7 @@ begin
     Cl.data.bank := bank[Combobox19.ItemIndex];
     Cl.cdata.boiler := 0;
     Cl.cdata.stop := 0;
+    Cl.cdata.heating:= 0;
     SetRegn;
     SetRegDate;
     SetPeriod;
@@ -500,9 +506,10 @@ begin
     Cl.cdata.tarifs[4] := canal[Combobox20.ItemIndex];
     Cl.cdata.tarifs[5] := heat[Combobox5.ItemIndex];
     Cl.cdata.tarifs[6] := gas[Combobox6.ItemIndex];
-    Cl.cdata.tarifs[7] := RadioGroup2.ItemIndex+1;
+    Cl.cdata.tarifs[7] := ComboBox21.ItemIndex+1; //RadioGroup2.ItemIndex+1;
     Cl.cdata.tarifs[12] := wood[Combobox8.ItemIndex];
     Cl.cdata.tarifs[13] := coal[Combobox9.ItemIndex];
+
     Cl.cdata.cost[0] := GetCostTarif(0,Cl.cdata.tarifs[0],Cl.cdata.begindate,Cl.cdata.boiler,0,Cl.cdata.settl);
     Cl.cdata.cost[1] := GetCostTarif(1,Cl.cdata.tarifs[1],Cl.cdata.begindate,Cl.cdata.boiler,0,Cl.cdata.settl);
     Cl.cdata.cost[2] := GetCostTarif(2,Cl.cdata.tarifs[2],Cl.cdata.begindate,Cl.cdata.boiler,0,Cl.cdata.settl);
@@ -614,7 +621,7 @@ begin
   Combobox5.Clear;Combobox6.Clear;Combobox7.Clear;Combobox8.Clear;
   Combobox9.Clear;Combobox10.Clear;Combobox11.Clear;Combobox12.Clear;
   Combobox13.Clear;Combobox14.Clear;Combobox15.Clear;Combobox16.Clear;
-  Combobox17.Clear;Combobox18.Clear;Combobox19.Clear;Combobox20.Clear;
+  Combobox17.Clear;Combobox18.Clear;Combobox19.Clear;Combobox20.Clear;//Combobox21.Clear;Combobox22.Clear;
   LVFam.Items.Clear; Memo1.Clear;
   curprc := 0; curman := 0;
   RadioGroup1.Items.Clear;RadioGroup3.Items.Clear;
@@ -624,7 +631,7 @@ begin
   SetLength(cont,0);SetLength(rep,0);SetLength(cold,0);
   SetLength(hot,0);SetLength(heat,0);SetLength(gas,0);
   SetLength(wood,0);SetLength(coal,0);SetLength(stnd,0);
-  SetLength(canal,0);
+  SetLength(canal,0);//SetLength(heating,0);
   CheckBox1.Checked := false;CheckBox2.Checked := false; CheckBox3.Checked := false;
 end;
 
@@ -674,6 +681,25 @@ begin
       Next;
       inc(l);
     end;
+{******************************************************************************
+    l := 0;
+    Close;
+    SQL.Clear;
+    SQL.Add('select *');
+    SQL.Add('from Heating');
+    SQL.Add('order by nameheating');
+    Open;
+    First;
+    while not EOF do begin
+      SetLength(heating, Length(heating)+1);
+      Combobox22.Items.Add(FieldByName('nameheating').AsString);
+      heating[l] := FieldByName('id_heating').AsInteger;
+      if heating[l]=1 then
+        Combobox22.ItemIndex := l;
+      Next;
+      inc(l);
+    end;
+******************************************************************************}
     l := 0;
     Close;
     SQL.Clear;
@@ -1119,9 +1145,14 @@ begin
   Combobox10.Text := SelStnd(Cl.cdata.rstnd);
   Combobox19.Text := SelBank(Cl.data.bank);
   if Cl.cdata.tarifs[7]>0 then
+    ComboBox21.ItemIndex := Cl.cdata.tarifs[7]-1
+  else
+    ComboBox21.ItemIndex := 0;
+  {  if Cl.cdata.tarifs[7]>0 then
     RadioGroup2.ItemIndex := Cl.cdata.tarifs[7]-1
   else
-    RadioGroup2.ItemIndex := 0;
+    RadioGroup2.ItemIndex := 0;}
+  ComboBox22.ItemIndex:= Cl.cdata.heating-1;
   Edit74.Text := Cl.cdata.accounts[0];
   Edit75.Text := Cl.cdata.accounts[1];
   Edit76.Text := Cl.cdata.accounts[2];
@@ -2168,7 +2199,7 @@ begin
         SQL.Add('insert into hist');
         SQL.Add('values (:id,CONVERT(smalldatetime,:bdate,104),CONVERT(smalldatetime,:edate,104),');
         SQL.Add(':mcount,:quanpriv,:pmin,:income,:insp,:dist,:control,:reason,');
-        SQL.Add(':own, :manager, :fond, :cert, :bank, :acbank,:calc,:mdd)');
+        SQL.Add(':own, :manager, :fond, :cert, :bank, :acbank,:calc,:mdd,:heating)');
         ParamByName('id').AsInteger := Cl.data.regn;
         ParamByName('mcount').AsInteger := Cl.cdata.mcount;
         ParamByName('quanpriv').AsInteger := Cl.cdata.quanpriv;
@@ -2188,6 +2219,7 @@ begin
         ParamByName('edate').AsString := DateToStr(Cl.cdata.enddate);
         ParamByName('calc').AsInteger := Cl.cdata.calc;
         ParamByName('mdd').AsInteger := Cl.cdata.mdd;
+        ParamByName('heating').AsInteger := Cl.cdata.heating;
         ExecSQL;
         Close;
         SQL.Clear;
@@ -2371,7 +2403,7 @@ if IsAPeriod then begin
           SQL.Add('insert into hist');
           SQL.Add('values (:id,CONVERT(smalldatetime,:bdate,104),');
           SQL.Add('CONVERT(smalldatetime,:edate,104),:mcount,:quanpriv,:pmin,:income,:insp,');
-          SQL.Add(':idd,:control,:reason,:own, :manager, :fond,:cert,:bank,:acbank,:calc,:mdd)');
+          SQL.Add(':idd,:control,:reason,:own, :manager, :fond,:cert,:bank,:acbank,:calc,:mdd,:heating)');
         end
         else begin
           Close;
@@ -2380,7 +2412,7 @@ if IsAPeriod then begin
           SQL.Add('set edate=CONVERT(smalldatetime,:edate,104),mcount=:mcount,');
           SQL.Add('quanpriv=:quanpriv,pmin=:pmin,income=:income,id_insp=:insp,id_dist=:idd,');
           SQL.Add('id_cntrl=:control,reason=:reason,id_own=:own,id_mng=:manager,');
-          SQL.Add('id_fond=:fond,id_cert=:cert,id_bank=:bank,acbank=:acbank,calc=:calc,mdd=:mdd');
+          SQL.Add('id_fond=:fond,id_cert=:cert,id_bank=:bank,acbank=:acbank,calc=:calc,mdd=:mdd, id_heating=:heating');
           SQL.Add('where regn=:id and bdate=CONVERT(smalldatetime,:bdate,104)');
         end;
         ParamByName('id').AsInteger := Cl.data.regn;
@@ -2402,6 +2434,7 @@ if IsAPeriod then begin
         ParamByName('edate').AsString := DateToStr(Cl.cdata.enddate);
         ParamByName('calc').AsInteger := Cl.cdata.calc;
         ParamByName('mdd').AsInteger := Cl.cdata.mdd;
+        ParamByName('heating').AsInteger := Cl.cdata.heating;
         ExecSQL;
         Close;
         SQL.Clear;
@@ -2740,6 +2773,48 @@ begin
   end;
 end;
 
+procedure TForm2.ComboBox21Change(Sender: TObject);
+begin
+  if load then begin
+    Cl.cdata.tarifs[7] := ComboBox21.ItemIndex+1;
+    Cl.cdata.cost[7] := GetCostTarif(7,ComboBox21.ItemIndex+1,Cl.cdata.begindate,0,Cl.cdata.mcount,cl.cdata.settl);
+  end;
+  case ComboBox21.ItemIndex of
+  0://газовая
+    begin
+      if load and not CalcEmpty then begin
+        Cl.CalcServ(7);
+        Cl.CalcSub(Form1.GetStatus(cl.cdata.begindate,cl.cdata.enddate));
+        SetVCalc;
+        SumV;
+      end;
+    end;
+  1://электрическая
+    begin
+      if load and not CalcEmpty then begin
+        Cl.CalcServ(7);
+        Cl.CalcSub(Form1.GetStatus(cl.cdata.begindate,cl.cdata.enddate));
+        SetVCalc;
+        SumV;
+      end;
+    end;
+  2://прочие
+    begin
+      if load and not CalcEmpty then begin
+        Cl.CalcServ(7);
+        Cl.CalcSub(Form1.GetStatus(cl.cdata.begindate,cl.cdata.enddate));
+        SetVCalc;
+        SumV;
+      end;
+    end;
+  end;
+end;
+
+procedure TForm2.ComboBox22Change(Sender: TObject);
+begin
+  if load then cl.cdata.heating:= ComboBox22.ItemIndex+1;
+end;
+
 procedure TForm2.ComboBox5Change(Sender: TObject);
 { выбрали тариф на отопление  }
 var
@@ -2949,7 +3024,8 @@ begin
           Cl.cdata.boiler := b;
           cl.cdata.tarifs[7] := FieldByName('id_el').AsInteger;
         end;
-        RadioGroup2.ItemIndex := FieldByName('id_el').AsInteger-1;
+        ComboBox21.ItemIndex := FieldByName('id_el').AsInteger-1;
+        //RadioGroup2.ItemIndex := FieldByName('id_el').AsInteger-1;
         Close;
         CheckBox2.Checked := (b=1);
         Combobox1.OnChange(combobox1);
@@ -3011,8 +3087,8 @@ begin
   item.SubItems.Add(FlToStr(Cl.cdata.mid[curman]));
   item.SubItems.Add(FlToStr(SelMin(Cl.cdata.min[curman])));
   item.SubItems.Add(SelRel(TMan(Cl.cdata.family.Items[curman]).rel));
-  Cl.cdata.tarifs[7] := RadioGroup2.ItemIndex+1;
-  Cl.cdata.cost[7] := GetCostTarif(7,RadioGroup2.ItemIndex+1,Cl.cdata.begindate,0,Cl.cdata.mcount,cl.cdata.settl);
+  Cl.cdata.tarifs[7] :=ComboBox21.ItemIndex+1; //RadioGroup2.ItemIndex+1;
+  Cl.cdata.cost[7] := GetCostTarif(7,ComboBox21.ItemIndex+1{RadioGroup2.ItemIndex+1},Cl.cdata.begindate,0,Cl.cdata.mcount,cl.cdata.settl);
   if load and not CalcEmpty then begin
     Cl.Calc(Form1.GetStatus(cl.cdata.begindate,cl.cdata.enddate));
     SetVCalc;
@@ -3040,7 +3116,7 @@ begin
   Cl.cdata.mid[curman] := man.mid;
   Cl.cdata.min[curman] := FromSt(man.status);
   Cl.cdata.priv[curman] := man.priv;//новая льгота
-  Cl.cdata.tarifs[7] := RadioGroup2.ItemIndex+1;
+  Cl.cdata.tarifs[7] := ComboBox21.ItemIndex+1;//RadioGroup2.ItemIndex+1;
   if (pr<>0)and(man.priv=0) then
     dec(Cl.cdata.quanpriv);
   if (pr=0)and(man.priv<>0) then
@@ -3211,8 +3287,8 @@ begin
   Edit94.Text := FlToStr(Cl.cdata.pmin);
   SetIncome;
   SetKoef;
-  Cl.cdata.tarifs[7] := RadioGroup2.ItemIndex+1;
-  Cl.cdata.cost[7] := GetCostTarif(7,RadioGroup2.ItemIndex+1,Cl.cdata.begindate,0,Cl.cdata.mcount,cl.cdata.settl);
+  Cl.cdata.tarifs[7] := ComboBox21.ItemIndex+1;//RadioGroup2.ItemIndex+1;
+  Cl.cdata.cost[7] := GetCostTarif(7,ComboBox21.ItemIndex+1{RadioGroup2.ItemIndex+1},Cl.cdata.begindate,0,Cl.cdata.mcount,cl.cdata.settl);
   if load and not CalcEmpty then begin
     Cl.Calc(Form1.GetStatus(cl.cdata.begindate,cl.cdata.enddate));
     SetVCalc;
@@ -3405,7 +3481,7 @@ begin
     Combobox5.Enabled := true; Combobox6.Enabled := true;
     Combobox8.Enabled := true; Combobox9.Enabled := true;
     Combobox20.Enabled := true;
-    RadioGroup2.Enabled := true;RadioGroup3.Enabled := true;
+    ComboBox21.Enabled := true{RadioGroup2.Enabled := true};RadioGroup3.Enabled := true;
   end;
   if CheckBox1.Checked then begin
     if (sts=0) then begin
@@ -3469,7 +3545,7 @@ begin
     Combobox5.Enabled := false; Combobox6.Enabled := false;
     Combobox8.Enabled := false; Combobox9.Enabled := false;
     Combobox20.Enabled := false;
-    RadioGroup2.Enabled := false;RadioGroup3.Enabled := false;
+    Combobox21.Enabled := false {RadioGroup2.Enabled := false};RadioGroup3.Enabled := false;
   end
   else begin
     if (sts=0) then begin
@@ -3533,7 +3609,7 @@ begin
      Combobox5.Enabled := true; Combobox6.Enabled := true;
     Combobox8.Enabled := true; Combobox9.Enabled := true;
     Combobox20.Enabled := true;
-    RadioGroup2.Enabled := true;RadioGroup3.Enabled := true;
+    Combobox21.Enabled := true{RadioGroup2.Enabled := true};RadioGroup3.Enabled := true;
   end;
   if load then begin
     if (Cl.cdata.calc=0) then
@@ -3849,43 +3925,6 @@ end;
 function TForm2.CheckCountMem: boolean;
 begin
   Result := (Cl.cdata.mcount=Cl.cdata.family.Count);
-end;
-
-procedure TForm2.RadioGroup2Click(Sender: TObject);
-begin
-  if load then begin
-    Cl.cdata.tarifs[7] := RadioGroup2.ItemIndex+1;
-    Cl.cdata.cost[7] := GetCostTarif(7,RadioGroup2.ItemIndex+1,Cl.cdata.begindate,0,Cl.cdata.mcount,cl.cdata.settl);
-  end;
-  case RadioGroup2.ItemIndex of
-  0://газовая
-    begin
-      if load and not CalcEmpty then begin
-        Cl.CalcServ(7);
-        Cl.CalcSub(Form1.GetStatus(cl.cdata.begindate,cl.cdata.enddate));
-        SetVCalc;
-        SumV;
-      end;
-    end;
-  1://электрическая
-    begin
-      if load and not CalcEmpty then begin
-        Cl.CalcServ(7);
-        Cl.CalcSub(Form1.GetStatus(cl.cdata.begindate,cl.cdata.enddate));
-        SetVCalc;
-        SumV;
-      end;
-    end;
-  2://прочие
-    begin
-      if load and not CalcEmpty then begin
-        Cl.CalcServ(7);
-        Cl.CalcSub(Form1.GetStatus(cl.cdata.begindate,cl.cdata.enddate));
-        SetVCalc;
-        SumV;
-      end;
-    end;
-  end;
 end;
 
 procedure TForm2.CheckBox2Click(Sender: TObject);

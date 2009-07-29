@@ -940,6 +940,13 @@ object Form2: TForm2
         Height = 13
         Caption = #1059#1075#1086#1083#1100':'
       end
+      object Bevel1: TBevel
+        Left = 321
+        Top = 4
+        Width = 16
+        Height = 50
+        Shape = bsLeftLine
+      end
       object ComboBox1: TComboBox
         Left = 115
         Top = 95
@@ -1110,34 +1117,14 @@ object Form2: TForm2
         OnChange = ComboBox10Change
       end
       object Edit9: TEdit
-        Left = 456
+        Left = 458
         Top = 64
-        Width = 49
+        Width = 71
         Height = 21
         TabStop = False
         Color = clBtnFace
         ReadOnly = True
         TabOrder = 18
-      end
-      object RadioGroup2: TRadioGroup
-        Left = 115
-        Top = 8
-        Width = 334
-        Height = 42
-        Hint = 
-          #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1074#1099#1073#1088#1072#1085#1072' '#1075#1072#1079#1086#1074#1072#1103' '#1087#1083#1080#1090#1072', '#1090#1086' '#1075#1072#1079' '#1076#1086#1083#1078#1077#1085' '#1073#1099#1090#1100' '#1090#1086#1078#1077 +
-          ' '#1074#1099#1073#1088#1072#1085
-        Caption = #1058#1080#1087' '#1087#1083#1080#1090#1099
-        Columns = 3
-        ItemIndex = 0
-        Items.Strings = (
-          #1043#1072#1079#1086#1074#1072#1103
-          #1069#1083#1077#1082#1090#1088#1080#1095#1077#1089#1082#1072#1103
-          #1055#1088#1086#1095#1080#1077)
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 19
-        OnClick = RadioGroup2Click
       end
       object ComboBox20: TComboBox
         Left = 115
@@ -1156,16 +1143,16 @@ object Form2: TForm2
         TabStop = False
         Color = clBtnFace
         ReadOnly = True
-        TabOrder = 20
+        TabOrder = 19
       end
       object CheckBox2: TCheckBox
-        Left = 13
-        Top = 23
+        Left = 12
+        Top = 25
         Width = 57
         Height = 17
         TabStop = False
         Caption = #1041#1086#1081#1083#1077#1088
-        TabOrder = 21
+        TabOrder = 20
         OnClick = CheckBox2Click
       end
       object Button10: TButton
@@ -1174,7 +1161,7 @@ object Form2: TForm2
         Width = 25
         Height = 20
         Caption = '...'
-        TabOrder = 22
+        TabOrder = 21
         OnClick = Button10Click
       end
       object Button11: TButton
@@ -1183,7 +1170,7 @@ object Form2: TForm2
         Width = 25
         Height = 20
         Caption = '...'
-        TabOrder = 23
+        TabOrder = 22
         OnClick = Button10Click
       end
       object Button12: TButton
@@ -1192,7 +1179,7 @@ object Form2: TForm2
         Width = 25
         Height = 20
         Caption = '...'
-        TabOrder = 24
+        TabOrder = 23
         OnClick = Button10Click
       end
       object Button13: TButton
@@ -1201,7 +1188,7 @@ object Form2: TForm2
         Width = 25
         Height = 20
         Caption = '...'
-        TabOrder = 25
+        TabOrder = 24
         OnClick = Button10Click
       end
       object Button14: TButton
@@ -1210,7 +1197,7 @@ object Form2: TForm2
         Width = 25
         Height = 20
         Caption = '...'
-        TabOrder = 26
+        TabOrder = 25
         OnClick = Button10Click
       end
       object Button15: TButton
@@ -1219,7 +1206,7 @@ object Form2: TForm2
         Width = 25
         Height = 20
         Caption = '...'
-        TabOrder = 27
+        TabOrder = 26
         OnClick = Button10Click
       end
       object Button16: TButton
@@ -1228,7 +1215,7 @@ object Form2: TForm2
         Width = 25
         Height = 20
         Caption = '...'
-        TabOrder = 28
+        TabOrder = 27
         OnClick = Button10Click
       end
       object Button17: TButton
@@ -1237,7 +1224,7 @@ object Form2: TForm2
         Width = 25
         Height = 20
         Caption = '...'
-        TabOrder = 29
+        TabOrder = 28
         OnClick = Button10Click
       end
       object Button18: TButton
@@ -1246,8 +1233,64 @@ object Form2: TForm2
         Width = 25
         Height = 20
         Caption = '...'
-        TabOrder = 30
+        TabOrder = 29
         OnClick = Button10Click
+      end
+      object GroupBox1: TGroupBox
+        Left = 115
+        Top = 3
+        Width = 185
+        Height = 50
+        Caption = #1058#1080#1087' '#1087#1083#1080#1090#1099
+        TabOrder = 30
+        object ComboBox21: TComboBox
+          AlignWithMargins = True
+          Left = 5
+          Top = 18
+          Width = 175
+          Height = 21
+          Hint = 
+            #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1074#1099#1073#1088#1072#1085#1072' '#1075#1072#1079#1086#1074#1072#1103' '#1087#1083#1080#1090#1072', '#1090#1086' '#1075#1072#1079' '#1076#1086#1083#1078#1077#1085' '#1073#1099#1090#1100' '#1090#1086#1078#1077 +
+            ' '#1074#1099#1073#1088#1072#1085
+          Align = alTop
+          ItemHeight = 13
+          ItemIndex = 0
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+          Text = #1043#1072#1079#1086#1074#1072#1103
+          OnChange = ComboBox21Change
+          Items.Strings = (
+            #1043#1072#1079#1086#1074#1072#1103
+            #1069#1083#1077#1082#1090#1088#1080#1095#1077#1089#1082#1072#1103
+            #1055#1088#1086#1095#1080#1077)
+        end
+      end
+      object GroupBox3: TGroupBox
+        Left = 344
+        Top = 3
+        Width = 185
+        Height = 50
+        Caption = #1058#1080#1087' '#1086#1090#1086#1087#1083#1077#1085#1080#1103
+        TabOrder = 31
+        object ComboBox22: TComboBox
+          AlignWithMargins = True
+          Left = 5
+          Top = 18
+          Width = 175
+          Height = 21
+          Align = alTop
+          ItemHeight = 13
+          ItemIndex = 0
+          TabOrder = 0
+          Text = #1062#1077#1085#1090#1088#1072#1083#1100#1085#1086#1077
+          OnChange = ComboBox22Change
+          Items.Strings = (
+            #1062#1077#1085#1090#1088#1072#1083#1100#1085#1086#1077
+            #1058#1074#1077#1088#1076#1086#1077' '#1090#1086#1087#1083#1080#1074#1086
+            #1043#1072#1079#1086#1074#1086#1077
+            #1069#1083#1077#1082#1090#1080#1088#1080#1095#1077#1089#1082#1086#1077)
+        end
       end
     end
     object TabSheet4: TTabSheet

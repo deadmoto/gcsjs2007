@@ -367,6 +367,29 @@ object Form33: TForm33
       OnExit = MaskEdit4Exit
       OnKeyDown = MaskEdit4KeyDown
     end
+    object CheckBox19: TCheckBox
+      Left = 8
+      Top = 139
+      Width = 97
+      Height = 17
+      Caption = #1058#1080#1087' '#1086#1090#1086#1087#1083#1077#1085#1080#1103
+      TabOrder = 10
+      OnClick = CheckBox19Click
+    end
+    object ComboBox13: TComboBox
+      Left = 128
+      Top = 139
+      Width = 152
+      Height = 21
+      Color = clBtnFace
+      ItemHeight = 13
+      TabOrder = 11
+      Items.Strings = (
+        #1062#1077#1085#1090#1088#1072#1083#1100#1085#1086#1077
+        #1058#1074#1077#1088#1076#1086#1077' '#1090#1086#1087#1083#1080#1074#1086
+        #1043#1072#1079#1086#1074#1086#1077
+        #1069#1083#1077#1082#1090#1080#1088#1080#1095#1077#1089#1082#1086#1077)
+    end
   end
   object GroupBox3: TGroupBox
     AlignWithMargins = True

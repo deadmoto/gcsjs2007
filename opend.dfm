@@ -26,7 +26,6 @@ object Form26: TForm26
     Align = alClient
     Caption = #1054#1090#1082#1088#1099#1090#1100' '#1086#1090#1095#1077#1090#1085#1099#1081' '#1087#1077#1088#1080#1086#1076':'
     TabOrder = 0
-    ExplicitWidth = 215
     object Label1: TLabel
       Left = 89
       Top = 17
@@ -75,7 +74,6 @@ object Form26: TForm26
     BevelInner = bvLowered
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 1
-    ExplicitWidth = 215
     object Button2: TButton
       AlignWithMargins = True
       Left = 170

@@ -57,6 +57,8 @@ type
     FlowPanel1: TFlowPanel;
     Button2: TButton;
     Button1: TButton;
+    CheckBox19: TCheckBox;
+    ComboBox13: TComboBox;
     procedure CheckBox1Click(Sender: TObject);
     procedure CheckBox2Click(Sender: TObject);
     procedure CheckBox3Click(Sender: TObject);
@@ -111,6 +113,7 @@ type
     procedure CheckBox16Click(Sender: TObject);
     procedure CheckBox18Click(Sender: TObject);
     procedure CheckBox17Click(Sender: TObject);
+    procedure CheckBox19Click(Sender: TObject);
   private
     { Private declarations }
     procedure Fill;
@@ -783,7 +786,7 @@ begin
     checkbox7.Checked or checkbox8.Checked or
     checkbox9.Checked or checkbox10.Checked or
     checkbox11.Checked or checkbox12.Checked or
-    checkbox13.Checked or checkbox14.Checked or checkbox15.Checked or Checkbox16.Checked then begin
+    checkbox13.Checked or checkbox14.Checked or checkbox15.Checked or Checkbox16.Checked or Checkbox19.Checked then begin
     q.SQL := 'select cl.regn,hist.bdate,hist.edate,hist.calc from cl ';
     q.SQL := q.SQL + 'inner join hist on cl.regn=hist.regn ';
     q.SQL := q.SQL + 'inner join (select regn,max(bdate) as bdate from hist ';
@@ -916,6 +919,15 @@ begin
       SetLength(q.parval,Length(q.parval)+1);
       q.parname[j] := 'calc';
       q.parval[j] := IntToStr(calc[Combobox11.ItemIndex]);
+    end;
+    //Тип отопления
+    if Checkbox19.Checked then begin
+      inc(j);
+      q.SQL := q.SQl + 'and(hist.id_heating=:heating)';//'and(cl.mail=:mmail)';
+      SetLength(q.parname,Length(q.parname)+1);
+      SetLength(q.parval,Length(q.parval)+1);
+      q.parname[j] := 'heating';
+      q.parval[j] := IntToStr(ComboBox13.ItemIndex+1);//(1);
     end;
     if Checkbox11.Checked then begin
       inc(j);
@@ -1663,6 +1675,20 @@ begin
     MaskEdit5.Font.Color := clWindowText;
     MaskEdit5.ReadOnly := false;
     CheckBox17.Checked:= FALSE;
+  end;
+end;
+
+procedure TForm33.CheckBox19Click(Sender: TObject);
+begin
+  if not Checkbox19.Checked then begin
+    combobox13.Color := clBtnFace;
+    combobox13.Font.Color := clGrayText;
+    combobox13.Text := '';
+  end
+  else begin
+    combobox13.Color := clWindow;
+    combobox13.Font.Color := clWindowText;
+    combobox13.ItemIndex := 0;
   end;
 end;
 

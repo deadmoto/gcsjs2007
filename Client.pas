@@ -50,6 +50,7 @@ type
     fpm: array[0..(numbtarif-1)] of real;//платежи без учета льготы
     //сведения по приостановке
     stop: integer;
+    heating: integer;
   end;
   TData = record
     regn: integer;//рег номер клиента
@@ -262,6 +263,7 @@ begin
       cdata.period := MonthOf(cdata.enddate)-MonthOf(cdata.begindate)
     else
       cdata.period := MonthOf(cdata.enddate)+12-MonthOf(cdata.begindate);
+    cdata.heating:= FieldByName('id_heating').AsInteger;
     Close;
     SQL.Clear;
     SQL.Add('select *');
