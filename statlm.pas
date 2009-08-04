@@ -145,9 +145,9 @@ function TForm40.Recalc: integer;
 var
   c: TClient;
   i,j,cnt,ncl: integer;
-  odt,vals: string;
+  odt{,vals}: string;
   pr: TAboutBox1;
-  val,valf: real;
+  val{,valf}: real;
   t: array of integer;
 begin
   odt := DateToStr(IncMonth(StrToDate(Form1.rdt),-1));
@@ -220,7 +220,7 @@ procedure TForm40.Button3Click(Sender: TObject);
 *******************************************************************************}
 var
   path: string;
-  i,j: integer;
+  i{,j}: integer;
 begin
   if StrToInt(Edit6.Text)<>0 then begin
     path := ExtractFilePath(Application.ExeName)+'out\';

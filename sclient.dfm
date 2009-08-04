@@ -24,7 +24,7 @@ object Form2: TForm2
     Top = 3
     Width = 587
     Height = 379
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change
@@ -574,6 +574,10 @@ object Form2: TForm2
     object TabSheet2: TTabSheet
       Caption = #1057#1077#1084#1100#1103
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Label21: TLabel
         Left = 8
         Top = 320
@@ -783,7 +787,7 @@ object Form2: TForm2
         Hint = 
           #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1089#1086#1094#1080#1072#1083#1100#1085#1099#1081' '#1089#1090#1072#1090#1091#1089' '#1076#1086#1083#1078#1077#1085' '#1089#1086#1086#1090#1074#1077#1090#1089#1090#1074#1086#1074#1072#1090#1100' '#1074#1086#1079#1088#1072#1089#1090#1091' '#1080 +
           ' '#1083#1100#1075#1086#1090#1077
-        ItemHeight = 13
+        ItemHeight = 0
         MaxLength = 30
         ParentShowHint = False
         ShowHint = True
@@ -796,7 +800,7 @@ object Form2: TForm2
         Top = 256
         Width = 266
         Height = 21
-        ItemHeight = 13
+        ItemHeight = 0
         MaxLength = 40
         TabOrder = 7
         OnChange = ComboBox18Change
@@ -808,7 +812,7 @@ object Form2: TForm2
         Width = 194
         Height = 21
         Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1082#1083#1080#1077#1085#1090' '#1074' '#1089#1077#1084#1100#1077' '#1084#1086#1078#1077#1090' '#1073#1099#1090#1100' '#1090#1086#1083#1100#1082#1086' '#1086#1076#1080#1085
-        ItemHeight = 13
+        ItemHeight = 0
         ParentShowHint = False
         ShowHint = True
         TabOrder = 6
@@ -1297,6 +1301,10 @@ object Form2: TForm2
       Caption = #1057#1095#1077#1090#1072
       ImageIndex = 3
       OnExit = TabSheet4Exit
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object GroupBox7: TGroupBox
         Left = 8
         Top = 24
@@ -1556,7 +1564,7 @@ object Form2: TForm2
           Top = 32
           Width = 177
           Height = 21
-          ItemHeight = 13
+          ItemHeight = 0
           TabOrder = 0
           OnChange = ComboBox19Change
           OnExit = ComboBox19Change
@@ -1566,6 +1574,10 @@ object Form2: TForm2
     object TabSheet5: TTabSheet
       Caption = #1057#1091#1073#1089#1080#1076#1080#1103
       ImageIndex = 4
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Label46: TLabel
         Left = 16
         Top = 48

@@ -63,15 +63,28 @@ procedure TConfigFrm.Button2Click(Sender: TObject);
 var i : integer;
     ProxyI : IIniOperations;
 begin
-  if Assigned(confFrame) then
-  for i := 0 to TfAppProp(confFrame).ComponentCount -1 do
-    begin
-      if TfAppProp(confFrame).Components[i].GetInterface(IIniOperations, ProxyI) then
-        begin
-          ProxyI.IniFileObj := regConf;
-          ProxyI.SaveValToIni();
-        end;
+  if ListBox1.ItemIndex<>-1 then begin
+    case returncConfigId(ListBox1.Items[ListBox1.ItemIndex]) of
+      0: begin
+        if Assigned(confFrame) then
+          for i := 0 to TfAppProp(confFrame).ComponentCount -1 do
+            if TfAppProp(confFrame).Components[i].GetInterface(IIniOperations, ProxyI) then begin
+              ProxyI.IniFileObj := regConf;
+              ProxyI.SaveValToIni();
+            end;
+      end;
+
+      1: begin
+        if Assigned(confFrame) then
+          for i := 0 to TfAppUpdate(confFrame).ComponentCount -1 do
+            if TfAppUpdate(confFrame).Components[i].GetInterface(IIniOperations, ProxyI) then begin
+              ProxyI.IniFileObj := regConf;
+              ProxyI.SaveValToIni();
+            end;
+      end;
     end;
+end;
+
 end;
 
 procedure TConfigFrm.Button3Click(Sender: TObject);
@@ -86,30 +99,30 @@ begin
 end;
 
 procedure TConfigFrm.FormShow(Sender: TObject);
-var list,list2: TStringList;
-    i: integer;
+var
+  list{,list2}: TStringList;
+  i: integer;
 begin
   if Assigned(confFrame) then FreeAndNil(confFrame);
 
   regConf:= TRegIniFile.Create('Software\Subsidy');
 
   list:= TStringList.Create;
-  list2:= TStringList.Create;
-
-  list2.Duplicates:=dupIgnore;
-  list2.Sorted:= TRUE;
+//  list2:= TStringList.Create;
+//  list2.Duplicates:=dupIgnore;
+//  list2.Sorted:= TRUE;
   with TRegistry.Create do begin
     RootKey:= HKEY_CURRENT_USER;
     if OpenKey('Software\Subsidy\Config', TRUE) then begin
       GetValueNames(list);//GetKeyNames(list);
-
-      for i:=0 to list.Count-1 do
-        list2.Add(cConfig[StrToInt(copy(list[i],1,pos('.',list[i])-1))]);
       ListBox1.Clear;
-      ListBox1.Items.Assign(list2);
+      for i:=0 to list.Count-1 do
+        if ListBox1.Items.IndexOf(cConfig[StrToInt(copy(list[i],1,pos('.',list[i])-1))]) = -1 then ListBox1.Items.Add(cConfig[StrToInt(copy(list[i],1,pos('.',list[i])-1))]);
+//      ListBox1.Clear;
+//      ListBox1.Items.Assign(list2);
     end;
   end;
-  list2.Free;
+//  list2.Free;
   list.Free;
 end;
 
@@ -135,7 +148,7 @@ begin
       end;
 
       1: begin
-{        if Assigned(confFrame) then FreeAndNil(confFrame);
+        if Assigned(confFrame) then FreeAndNil(confFrame);
         confFrame := TfAppUpdate.Create(ConfigFrm);
         confFrame.Parent:= Panel2;
         confFrame.Align:= alClient;
@@ -146,7 +159,7 @@ begin
             ProxyI.IniFileObj := regConf;
             ProxyI.LoadValFromIni();
           end;
-        end;}
+        end;
       end;
     end;
   end;

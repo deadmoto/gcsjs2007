@@ -321,18 +321,19 @@ type
     function NewPlace(id: integer;s1,s2: string): integer;
     procedure InsertCl(i1, i2: integer);
     procedure DelRow(i: integer);
-//    procedure PrintNachCr;
     procedure PrintSvodCr;
     procedure PrintVedCr(f,ad,rd,mng: string);
-//    procedure SetParam(printJob: integer;ind: integer;v: string);
     function ACount: integer;
     function ASub: real;
     procedure ClearSG;
     procedure Load(q: CQuery;rsel: boolean);
     function CheckP1: bool;
     function SetSumSub: real;
-//    procedure CreateListPlugin;
+
     procedure ReloadConfig;
+//    procedure CreateListPlugin;
+//    procedure SetParam(printJob: integer;ind: integer;v: string);
+//    procedure PrintNachCr;
   public
     { Public declarations }
     normc,normw: real;//нормативы расхода угля и дров в год
@@ -358,14 +359,14 @@ type
     function GetStatus(b, e: TDate): integer;
     function CheckP2: bool;
     function SG_FindCl(SG: TStringGrid;s: string): integer;
-//    Procedure _FreeAllLibrary;
     procedure RecalcSelectedRows;
     procedure SetTarifs;
-//    function ReturnMountStr:string;
 
-//    procedure FillTarifDS;
     procedure ReportsFillDistInfo;
     function getConfValue(str: string): Variant;
+//    function ReturnMountStr:string;
+//    Procedure _FreeAllLibrary;
+//    procedure FillTarifDS;
   end;
 
 var
@@ -386,7 +387,7 @@ uses sclient, inspector, district, street, fond, manager,
       datamodule, search, service, fstruct, imexp, sql, progress,
       Contnrs,DateUtils, rstnd, loop, math,tarifb,
       chinsp, curhist, chserv, Client, merge, mdd, statage,
-      statlm, codedbf, chtarifs, rrecalc, Plugins, stat, {mod_Types,} padegFIO, StrUtils,
+      statlm, codedbf, chtarifs, rrecalc, {Plugins,} stat, {mod_Types,} padegFIO, StrUtils,
       version, SlujUnit, ConnectUnit, FactSumUnit, ConfigPropertiesUnit;
 
 {$R *.dfm}
@@ -2770,13 +2771,14 @@ procedure TForm1.ReloadConfig;
 begin
   GroupBox1.Visible:=getConfValue('0.ShowLegend');
   Button3.Visible:=getConfValue('0.ShowDeleteButton');
-
+//  getConfValue('1.AutoUpdate');
   //в переменной хранится путь папки с отчетами
   if getConfValue('0.OtherRepPath') then reports_path:= getConfValue('0.RepPath')
     else reports_path:= (ExtractFilePath(Application.ExeName)+'reports\');
 end;
 
 procedure TForm1.ReportsFillDistInfo;
+{ процедура назначает значение переменных в отчетах для формирования шапки }
 var tmp_query: TQuery;
 begin
   tmp_query:= TQuery.Create(DataModule1);

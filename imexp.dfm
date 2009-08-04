@@ -105,7 +105,7 @@ object Form35: TForm35
       Top = 40
       Width = 81
       Height = 17
-      Caption = #1054#1082#1088#1091#1075#1080
+      Caption = #1054#1082#1088#1091#1075#1072
       Color = clBtnFace
       ParentColor = False
       TabOrder = 1

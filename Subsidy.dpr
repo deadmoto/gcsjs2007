@@ -53,7 +53,6 @@ uses
   codedbf in 'codedbf.pas' {Form41},
   chtarifs in 'chtarifs.pas' {Form42},
   rrecalc in 'rrecalc.pas' {Form43},
-  Plugins in 'Plugins.pas' {Plugins},
   stat in 'stat.pas' {Stats},
   subtypes in 'core\subtypes.pas',
   ODBC_DSN in 'data\ODBC_DSN.pas',
@@ -66,8 +65,7 @@ uses
   ConfigPropertiesUnit in 'ConfigPropertiesUnit.pas' {ConfigFrm},
   fAppPropUnit in 'frames\fAppPropUnit.pas' {fAppProp: TFrame},
   fAppUpdateUnit in 'frames\fAppUpdateUnit.pas' {fAppUpdate: TFrame} ;
-
-
+//  Plugins in 'Plugins.pas' {Plugins},
 //  uUpdateApp in 'data\uUpdateApp.pas'; {Update module}
 
 {$R *.res}

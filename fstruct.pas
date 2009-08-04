@@ -603,7 +603,7 @@ begin
     SQL.Add('values (:id,CONVERT(smalldatetime,:bdate,104),');
     SQL.Add('CONVERT(smalldatetime,:edate,104),:mcount,:quanpriv,:pmin,:income,');
     SQL.Add(':insp,:dist,:control,:reason,:own,:manager,:fond,:cert,:bank,:acbank,');
-    SQL.Add(':calc,:mdd)');
+    SQL.Add(':calc,:mdd,:heating)');
   end;
   if FileExists(path+'hist'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'hist'+IntToStr(dis)+'.dbf',f);
@@ -636,6 +636,7 @@ begin
         Query1.ParamByName('acbank').AsString := f[i][16];
         Query1.ParamByName('calc').AsString := f[i][17];
         Query1.ParamByName('mdd').AsString := f[i][18];
+        Query1.ParamByName('heating').AsString := f[i][19];
         Query1.ExecSQL;
       end;
       Query1.Close;
@@ -929,7 +930,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('insert into dist');
-    SQL.Add('values (:id, :name, :b)');
+    SQL.Add('values (:id, :name, :b, :adr, :tel)');
   end;
   if FileExists(path+'dist.dbf') then begin
     GetData(path+'dist.dbf',f);
@@ -944,6 +945,8 @@ begin
         Query1.ParamByName('id').AsString := f[i][0];
         Query1.ParamByName('name').AsString := f[i][1];
         Query1.ParamByName('b').AsString := f[i][2];
+        Query1.ParamByName('adr').AsString := f[i][3];
+        Query1.ParamByName('tel').AsString := f[i][4];
         Query1.ExecSQL;
       end;
       Query1.Close;
