@@ -40,8 +40,8 @@ procedure TForm43.Button1Click(Sender: TObject);
   выходит в файл MS Excel.
 }
 var
-  p,n,otdel,c1,c2: string;
-  k,i,cnt,fl: integer;
+  p,n,otdel{,c1,c2}: string;
+  k,{i,}cnt{,fl}: integer;
   pr: TAboutBox1;
 begin
   p := ExtractFilePath(Application.ExeName);
