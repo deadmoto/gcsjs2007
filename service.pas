@@ -641,7 +641,7 @@ begin
 end;
 
 function ExportGridToExcel(AGrid: TStringGrid; ASheetName, AFileName: string): Boolean;
-var Row, Col: Integer;
+var //Row, Col: Integer;
     Sheet, Data: OLEVariant;
     i, j: Integer;
     ExcelApp: TExcelApplication;

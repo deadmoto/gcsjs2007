@@ -353,7 +353,7 @@ type
     procedure SetData;//установить все данные
     function CalcEmpty: bool;
     function CardEmpty: bool;//пусты ключевые поля?
-    function CardEmptyEx: bool;//проверяет поля необходимые для изменения записи
+//    function CardEmptyEx: bool;//проверяет поля необходимые для изменения записи
     function ExistHouse(var n: integer): bool;//существует дом?
     function ExistClient(var n: integer): bool;
     function ExistMem: bool;
@@ -412,7 +412,7 @@ type
     function CheckPers: boolean;
     function CheckLS(s: string): boolean;overload;
     function CheckLS: boolean;overload;
-    function CheckMems: boolean;
+//    function CheckMems: boolean;
     function CheckCountMem: boolean;
     procedure SortFam;
     procedure NewPeriod;
@@ -560,13 +560,13 @@ begin
     Result := false;
 end;
 
-function TForm2.CardEmptyEx: bool;//проверяет поля необходимые для изменения записи
+{function TForm2.CardEmptyEx: bool;//проверяет поля необходимые для изменения записи
 begin
   if (Edit57.Text='') or (Edit60.Text='') or (Edit66.Text='') or (Edit110.Text ='') or
       (Edit73.Text='') or (Edit74.Text='') or (Edit94.Text='') or
       (Edit95.Text='') or
       (Combobox1.Text='') or {(Combobox2.Text='') or}
-      (Combobox3.Text='') or (Combobox4.Text='') or
+{      (Combobox3.Text='') or (Combobox4.Text='') or
       (Combobox5.Text='') or (Combobox6.Text='') or
       (Combobox8.Text='') or (Combobox9.Text='') or
       (Combobox10.Text='') or (Combobox11.Text='') or
@@ -578,7 +578,7 @@ begin
   else
     Result := false;
 end;
-
+ }
 procedure TForm2.Clear;//очистить нужные поля
 begin
   Edit12.Text := '0'; Edit13.Text := '0'; Edit14.Text := '0';
@@ -3879,7 +3879,7 @@ begin
   end;
 end;
 
-function TForm2.CheckMems: boolean;
+{function TForm2.CheckMems: boolean;
 var
   i,mn: integer;
   y, m, d, yc, mc, dc: word;
@@ -3920,7 +3920,7 @@ begin
   end
   else
     Result := true;
-end;
+end;}
 
 function TForm2.CheckCountMem: boolean;
 begin

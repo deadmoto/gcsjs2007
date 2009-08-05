@@ -13,7 +13,7 @@ Default Delphi units:
 {*******************************************************************************
 External components:
 *******************************************************************************}
-  dbf,dialogs, ADODB, ODBC_DSN, Registry;
+  dbf,dialogs, ODBC_DSN, Registry;
 
 type
   TDataModule1 = class(TDataModule)
@@ -29,6 +29,7 @@ type
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
+    function getConfValue(str: string): Variant;
   public
     DBF1: TDBF;
     { Public declarations }
@@ -45,6 +46,22 @@ uses ConnectUnit;
 
 
 {$R *.dfm}
+
+function TDataModule1.getConfValue(str: string): Variant;
+{*******************************************************************************
+    ‘ункци€ getConfValue возвращает значение переменной в реестре, которое
+    соответсвует определенному свойству компонента.
+*******************************************************************************}
+begin
+  with TRegistry.Create do begin
+    RootKey:= System.Cardinal($80000001);
+    if OpenKey('Software\Subsidy\Config',TRUE) then
+      if ValueExists(str) then Result:= ReadString(str)
+        else WriteString(str,'0');
+  end;
+end;
+
+{******************************************************************************}
 
 procedure TDataModule1.FormCreate(Sender: TObject);
 begin
@@ -86,7 +103,11 @@ begin
   pv := TQuery.Create(Self);
   norm1 := TQuery.Create(Self);
   tc := TQuery.Create(Self);
-  DataBase2.Params.Add('PATH='+ExtractFilePath(paramstr(0))+'database');
+
+  //Ќазначение базе DBFSub переменной PATH
+  if getConfValue('0.OtherDatabasePath') then
+    DataBase2.Params.Add('PATH='+getConfValue('0.DatabasePath'))
+  else DataBase2.Params.Add('PATH='+ExtractFilePath(paramstr(0))+'database');
 end;
 
 procedure TDataModule1.ChAttrTable(d: integer);

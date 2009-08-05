@@ -460,7 +460,7 @@ procedure TForm16.Edit23KeyDown(Sender: TObject; var Key: Word;
   суммирует начисления и считает субсидию, в случае нажатия клавиши Enter.
 }
 begin
-  if Key = Ord(vk_return) then begin
+  if Key = (vk_return) then begin
     SetPoint(TEdit(Sender));
     SumV;
   end;

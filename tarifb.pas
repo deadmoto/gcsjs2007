@@ -328,7 +328,7 @@ procedure TForm19.Edit2KeyDown(Sender: TObject; var Key: Word;
   ноль.
 *******************************************************************************}
 begin
-  if Key = Ord(vk_return) then begin
+  if Key = (vk_return) then begin
     SetPoint(TEdit(Sender));
   end;
 end;
@@ -350,7 +350,7 @@ procedure TForm19.Edit3KeyDown(Sender: TObject; var Key: Word;
   является целым числом, то устанавливается ноль.
 *******************************************************************************}
 begin
-  if Key = Ord(vk_return) then
+  if Key = (vk_return) then
     CheckInt(Edit3);
 end;
 

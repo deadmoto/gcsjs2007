@@ -2079,7 +2079,7 @@ begin
   ExportDiff(path,'stat');    flst := flst+path+'stat'+ext1+' ';
   ExportDiff(path,'norm');    flst := flst+path+'norm'+ext1+' ';
   ExportDiff(path,'priv');    flst := flst+path+'priv'+ext1+' ';
-  ExportStr(path,);           flst := flst+path+'strt'+ext1+' ';
+  ExportStr(path);            flst := flst+path+'strt'+ext1+' ';
   ExportHouse(path,dist);     flst := flst+path+'house'+ext2+' ';
   ExportMng(path,dist);       flst := flst+path+'mng'+ext2+' ';
   ExportInsp(path,dist,true); flst := flst+path+'insp'+ext2+' ';
@@ -2380,7 +2380,11 @@ var dt: string;
     y,m,d: word;
 begin
   IDate := EncodeDate(2006,6,1);//дата запуска программы в использование
-  bpath := ExtractFilePath(Application.ExeName)+'database\';
+
+  //путь для папки с базами DBF
+  if getConfValue('0.OtherDatabasePath') then bpath :=getConfValue('0.DatabasePath')
+    else bpath := ExtractFilePath(Application.ExeName)+'database\';
+
   normc := 0.065; normw := 0.087;
   normsc := 23; normsw := 24;
 
