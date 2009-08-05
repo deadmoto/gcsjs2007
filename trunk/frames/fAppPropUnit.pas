@@ -16,8 +16,14 @@ type
     Button1: TButton;
     IniLabeledEdit1: TIniLabeledEdit;
     IniCheckBox4: TIniCheckBox;
+    IniCheckBox5: TIniCheckBox;
+    Panel3: TPanel;
+    IniLabeledEdit2: TIniLabeledEdit;
+    Button2: TButton;
     procedure IniCheckBox3Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure IniCheckBox5Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -39,10 +45,23 @@ begin
     then IniLabeledEdit1.Text:= dir+'\';
 end;
 
+procedure TfAppProp.Button2Click(Sender: TObject);
+var dir: string;
+begin
+  if SelectDirectory('', '', dir, [sdShowShares, sdNewUI, sdShowFiles, sdValidateDir])
+    then IniLabeledEdit2.Text:= dir+'\';
+end;
+
 procedure TfAppProp.IniCheckBox3Click(Sender: TObject);
 begin
   if IniCheckBox3.Checked then Panel2.Enabled:= TRUE
     else Panel2.Enabled:= FALSE;
+end;
+
+procedure TfAppProp.IniCheckBox5Click(Sender: TObject);
+begin
+  if IniCheckBox5.Checked then Panel3.Enabled:= TRUE
+    else Panel3.Enabled:= FALSE;
 end;
 
 end.

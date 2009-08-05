@@ -140,7 +140,7 @@ type
     function SelCntrl(n: integer): string;//выбрать тип контрол€
     function SelPriv(n: integer): string;//выбрать льготу
     function SelCalc(n: integer): string;
-    function FormHouse: string;
+//    function FormHouse: string;
   public
     { Public declarations }
     cntrl, mng, fnd, settl, own, p, str, cert, insp, month,calc: array of integer;
@@ -1455,10 +1455,10 @@ begin
   Combobox11.ItemIndex := curind[17];
 end;
 
-function TForm33.FormHouse: string;
+{function TForm33.FormHouse: string;
 {*******************************************************************************
 *******************************************************************************}
-var
+{var
   s: string;
 begin
   s := Edit3.Text;
@@ -1466,7 +1466,7 @@ begin
     s := s + '/' + Edit5.Text;
   Result := s;
 end;
-
+}
 procedure TForm33.FormClose(Sender: TObject; var Action: TCloseAction);
 {*******************************************************************************
 *******************************************************************************}
@@ -1487,7 +1487,7 @@ end;
 procedure TForm33.Edit2KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if key=ord(vk_return) then begin
+  if key=(vk_return) then begin
     if not IsInt(TEdit(Sender).Text) and(CheckBox1.Checked=true) then begin
       ShowMessage('¬ этом поле может быть только целое число!');
       TEdit(Sender).Text := '';
@@ -1500,7 +1500,7 @@ end;
 procedure TForm33.MaskEdit1KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if key=ord(vk_return) then begin
+  if key=(vk_return) then begin
     CheckDate(MaskEdit1);
     cur[1] := MaskEdit1.Text;
     curind[1] := 0;

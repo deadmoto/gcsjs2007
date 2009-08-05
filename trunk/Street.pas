@@ -298,7 +298,7 @@ procedure TForm5.Edit2KeyDown(Sender: TObject; var Key: Word;
   является целым числом, то устанавливается ноль.
 *******************************************************************************}
 begin
-  if Key = Ord(vk_return) then
+  if Key = (vk_return) then
     CheckInt(Edit2);
 end;
 
@@ -318,7 +318,7 @@ procedure TForm5.Edit1KeyDown(Sender: TObject; var Key: Word;
   некириллические символы, то выдается сообщение, а строка становится пустой.
 *******************************************************************************}
 begin
-  if Key = Ord(vk_return) then
+  if Key = (vk_return) then
     CheckRus(Edit1);
 end;
 

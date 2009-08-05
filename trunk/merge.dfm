@@ -1,7 +1,7 @@
 object Form21: TForm21
   Left = 273
   Top = 192
-  BorderStyle = bsSingle
+  BorderStyle = bsDialog
   Caption = #1055#1077#1088#1077#1076#1072#1095#1072' '#1080' '#1087#1088#1080#1077#1084' '#1076#1072#1085#1085#1099#1093
   ClientHeight = 98
   ClientWidth = 282

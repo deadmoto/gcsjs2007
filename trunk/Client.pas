@@ -360,7 +360,7 @@ end;
 
 procedure TClient.SetNorm;//установить норму
 var
-  i, priv,mparam,st: integer;
+  i, priv,mparam{,st}: integer;
   flag: boolean;
 
 begin

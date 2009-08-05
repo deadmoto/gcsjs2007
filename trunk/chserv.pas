@@ -60,7 +60,7 @@ type
     { Private declarations }
     serv, str, mng, fnd, stnd, curt: array of integer;
     tarifs: array of TTarif;
-    procedure SetHouse(s: integer;n,c: string);//установить дом
+//    procedure SetHouse(s: integer;n,c: string);//установить дом
     procedure Fill;
     procedure FillTarif(n: string;num: integer);
     procedure FillTarifb(n: string;num: integer);
@@ -221,13 +221,13 @@ begin
     Result := -1;
 end;
 
-procedure TForm29.SetHouse(s: integer;n,c: string);
+{procedure TForm29.SetHouse(s: integer;n,c: string);
 begin
   //Combobox1.Text := SelStr(s);
   Combobox1.OnChange(combobox1);
   Edit2.Text := n;
   Edit3.Text := c;
-end;
+end;}
 
 procedure TForm29.FillTarif(n: string;num: integer);
 var

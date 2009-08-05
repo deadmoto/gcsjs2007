@@ -186,7 +186,7 @@ end;
 procedure TForm18.SGHKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if Key = Ord(vk_return) then begin
+  if Key = (vk_return) then begin
     Form16.status := status;
     if Length(cl.reg)>0 then
       Form16.ShowModal;
