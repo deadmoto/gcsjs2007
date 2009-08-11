@@ -56,8 +56,9 @@ begin
       with Datamodule1.Query1 do begin
         Close;
         SQL.Clear;
-        for i:=0 to Memo1.Lines.Count-1 do
-          SQL.Add(Memo1.Lines[i]);
+        {for i:=0 to Memo1.Lines.Count-1 do
+          SQL.Add(Memo1.Lines[i]);}
+        SQL.Text:= Memo1.Text;
 
         case TabControl1.TabIndex of
           0: begin

@@ -13,7 +13,7 @@ Default Delphi units:
 {*******************************************************************************
 External components:
 *******************************************************************************}
-  dbf,dialogs, ODBC_DSN, Registry;
+  dbf,dialogs, ODBC_DSN, Registry, service;
 
 type
   TDataModule1 = class(TDataModule)
@@ -29,7 +29,6 @@ type
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
-    function getConfValue(str: string): Variant;
   public
     DBF1: TDBF;
     { Public declarations }
@@ -46,20 +45,6 @@ uses ConnectUnit;
 
 
 {$R *.dfm}
-
-function TDataModule1.getConfValue(str: string): Variant;
-{*******************************************************************************
-    Функция getConfValue возвращает значение переменной в реестре, которое
-    соответсвует определенному свойству компонента.
-*******************************************************************************}
-begin
-  with TRegistry.Create do begin
-    RootKey:= System.Cardinal($80000001);
-    if OpenKey('Software\Subsidy\Config',TRUE) then
-      if ValueExists(str) then Result:= ReadString(str)
-        else WriteString(str,'0');
-  end;
-end;
 
 {******************************************************************************}
 
@@ -87,6 +72,9 @@ begin
   CloseKey;
   Free;
   end;
+
+  //назначение директории для файлов _QSQL*.dbf
+  if getConfValue('0.UseTempDir') then Session.PrivateDir:= GetTempDir;
 
   dbf1:=tdbf.create(self);//создание парсера dbf-файлов
 //   tc := TQuery.Create(Self);

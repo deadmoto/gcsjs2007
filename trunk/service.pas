@@ -7,7 +7,7 @@ unit service;
 
 interface
 
-uses SysUtils, Windows, Controls, Dialogs, StdCtrls, Variants, dbf, db, Mask, Grids, ExcelXP;
+uses SysUtils, Windows, Controls, Dialogs, StdCtrls, Variants, dbf, db, Mask, Grids, ExcelXP, Registry;
 
 const
   numbtarif = 14;
@@ -53,6 +53,8 @@ function RefToCell(ARow, ACol: Integer): string;
 function ExportGridToExcel(AGrid: TStringGrid; ASheetName, AFileName: string): Boolean;
 {******************************************************************************}
 function FileVersion(AFileName: string): string;
+function GetTempDir: string;
+function getConfValue(str: string): Variant;
 
 implementation
 
@@ -677,6 +679,9 @@ begin
  end;
 
 function FileVersion(AFileName: string): string;
+{*******************************************************************************
+    Функция возвращает версию файла
+*******************************************************************************}
 var
   szName: array[0..255] of Char;
   P: Pointer;
@@ -728,5 +733,29 @@ begin
     end;
   end;
 end;
+
+function GetTempDir: string;
+{*******************************************************************************
+    Функция возвращает путь к папки %TEMP%
+*******************************************************************************}
+var  Buf: array[0..1023] of Char;
+begin
+  SetString(Result, Buf, GetTempPath(Sizeof(Buf)-1, Buf));
+end;
+
+function getConfValue(str: string): Variant;
+{*******************************************************************************
+    Функция getConfValue возвращает значение переменной в реестре, которое
+    соответсвует определенному свойству компонента.
+*******************************************************************************}
+begin
+  with TRegistry.Create do begin
+    RootKey:= HKEY_CURRENT_USER;
+    if OpenKey('Software\Subsidy\Config',TRUE) then
+      if ValueExists(str) then Result:= ReadString(str)
+        else WriteString(str,'0');
+  end;
+end;
+
 
 end.

@@ -35,7 +35,7 @@ var
 
 implementation
 
-  uses srvinfo, ODBC_DSN, main, datamodule;
+uses srvinfo, ODBC_DSN, main, datamodule;
 
 {$R *.dfm}
 
