@@ -78,6 +78,7 @@ object ConfigFrm: TConfigFrm
       Width = 75
       Height = 25
       Caption = #1055#1088#1080#1084#1077#1085#1080#1090#1100
+      Enabled = False
       TabOrder = 1
       OnClick = Button2Click
     end

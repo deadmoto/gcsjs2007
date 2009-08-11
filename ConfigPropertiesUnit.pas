@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ComCtrls, ExtCtrls, Registry, StdCtrls, i_def;
+  Dialogs, ComCtrls, ExtCtrls, Registry, StdCtrls, i_def, IniCheckBox, IniLabeledEdit;
 
 const
   cConfig:array[0..1] of string=
@@ -35,6 +35,7 @@ type
     { Public declarations }
     regConf: TregIniFile;
     function returncConfigId(name: string): integer;
+    function CheckChanges:Boolean;
   end;
 
 var
@@ -42,7 +43,7 @@ var
 
 implementation
 
-uses fAppPropUnit, fAppUpdateUnit;
+uses fAppPropUnit, fAppUpdateUnit, service;
 
 {$R *.dfm}
 
@@ -52,7 +53,6 @@ begin
   for i:=0 to length(cConfig)-1 do
     if cConfig[i]=name then Result:= i;
 end;
-
 
 procedure TConfigFrm.Button1Click(Sender: TObject);
 begin
@@ -83,6 +83,9 @@ begin
             end;
       end;
     end;
+
+  if checkChanges then Button2.Enabled:= TRUE
+    else ConfigFrm.Button2.Enabled:= FALSE;
 end;
 
 end;
@@ -91,6 +94,27 @@ procedure TConfigFrm.Button3Click(Sender: TObject);
 begin
   Button2.Click;
   Button1.Click;
+end;
+
+function TConfigFrm.CheckChanges:Boolean;
+var i: integer;
+begin
+  if ListBox1.ItemIndex<>-1 then begin
+    case returncConfigId(ListBox1.Items[ListBox1.ItemIndex]) of
+      0: begin
+        for i:=0 to TfAppProp(confFrame).ComponentCount-1 do
+          if TfAppProp(confFrame).Components[i] is TIniCheckBox then
+            if getConfValue(TIniCheckBox(TfAppProp(confFrame).Components[i]).KeyName)<>TIniCheckBox(TfAppProp(confFrame).Components[i]).Checked then
+              Result:= TRUE;
+      end;
+      1: begin
+        for i:=0 to TfAppUpdate(confFrame).ComponentCount-1 do
+          if TfAppUpdate(confFrame).Components[i] is TIniLabeledEdit then
+            if getConfValue(TIniLabeledEdit(TfAppUpdate(confFrame).Components[i]).KeyName)<>TIniLabeledEdit(TfAppUpdate(confFrame).Components[i]).Text then
+              Result:= TRUE;
+      end;
+    end;
+  end;
 end;
 
 procedure TConfigFrm.FormClose(Sender: TObject; var Action: TCloseAction);

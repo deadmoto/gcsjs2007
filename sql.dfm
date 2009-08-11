@@ -58,9 +58,6 @@ object Form34: TForm34
       Align = alTop
       Caption = #1058#1077#1082#1091#1097#1080#1081' '#1079#1072#1087#1088#1086#1089':'
       TabOrder = 0
-      ExplicitLeft = 7
-      ExplicitTop = -8
-      ExplicitWidth = 547
       object Memo1: TMemo
         Left = 8
         Top = 16

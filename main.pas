@@ -207,6 +207,7 @@ type
     N105: TMenuItem;
     N106: TMenuItem;
     N109: TMenuItem;
+    N110: TMenuItem;
     procedure N15Click(Sender: TObject);
     procedure N25Click(Sender: TObject);
     procedure N24Click(Sender: TObject);
@@ -303,6 +304,7 @@ type
     procedure ToolButton14Click(Sender: TObject);
     procedure N109Click(Sender: TObject);
     procedure N105Click(Sender: TObject);
+    procedure N110Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -363,7 +365,7 @@ type
     procedure SetTarifs;
 
     procedure ReportsFillDistInfo;
-    function getConfValue(str: string): Variant;
+
 //    function ReturnMountStr:string;
 //    Procedure _FreeAllLibrary;
 //    procedure FillTarifDS;
@@ -633,20 +635,6 @@ function TForm1.GenPer(b,e: TDate): string;
 *******************************************************************************}
 begin
   Result := DateToStr(b) + ' - ' + DateToStr(e);
-end;
-
-function TForm1.getConfValue(str: string): Variant;
-{*******************************************************************************
-    Функция getConfValue возвращает значение переменной в реестре, которое
-    соответсвует определенному свойству компонента.
-*******************************************************************************}
-begin
-  with TRegistry.Create do begin
-    RootKey:= HKEY_CURRENT_USER;
-    if OpenKey('Software\Subsidy\Config',TRUE) then
-      if ValueExists(str) then Result:= ReadString(str)
-        else WriteString(str,'0');
-  end;
 end;
 
 function TForm1.GenCalc(c: integer): string;
@@ -976,6 +964,11 @@ begin
     Statusbar1.Panels[1].Text := 'Инспектор: ' + ins;
     SetTarifs;
   end;
+end;
+
+procedure TForm1.N110Click(Sender: TObject);
+begin
+  winExec('sUpdater.exe',SW_NORMAL);
 end;
 
 procedure TForm1.N13Click(Sender: TObject);
@@ -2378,6 +2371,7 @@ var dt: string;
     rl, el: THandle;
     Layouts: array[0..7] of THandle;
     y,m,d: word;
+//    abbb: TSession;
 begin
   IDate := EncodeDate(2006,6,1);//дата запуска программы в использование
 
@@ -2400,6 +2394,7 @@ begin
         if ValueExists('bm') then bm:= ReadInteger('bm'{,6}) else bm:=6;
         if ValueExists('ey') then ey:= ReadInteger('ey'{,YearOf(Date)}) else ey:=YearOf(Date);
         if ValueExists('em') then em:= ReadInteger('em'{,MonthOf(Date)}) else em:=MonthOf(Date);
+        if not ValueExists('svnRev') then WriteString('svnRev',version.svnrev);
       end;
   finally
     CloseKey;
@@ -2616,6 +2611,7 @@ begin
         WriteInteger('bm',bm);
         WriteInteger('ey',ey);
         WriteInteger('em',em);
+        WriteString('svnRev',version.svnrev);
       end;
   finally
     CloseKey;
@@ -2775,7 +2771,7 @@ procedure TForm1.ReloadConfig;
 begin
   GroupBox1.Visible:=getConfValue('0.ShowLegend');
   Button3.Visible:=getConfValue('0.ShowDeleteButton');
-//  getConfValue('1.AutoUpdate');
+  getConfValue('1.Server');
   //в переменной хранится путь папки с отчетами
   if getConfValue('0.OtherRepPath') then reports_path:= getConfValue('0.RepPath')
     else reports_path:= (ExtractFilePath(Application.ExeName)+'reports\');

@@ -30,7 +30,7 @@ object Form45: TForm45
       Top = 22
       Width = 265
       Height = 21
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 0
       OnKeyPress = ComboBox1KeyPress
     end

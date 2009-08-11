@@ -1092,11 +1092,12 @@ begin
       value2 := cdata.snorm
     else
       value2 := cdata.square;
-    if cdata.quanpriv > 0 then
+{    if cdata.quanpriv > 0 then
     begin
        value1 := value1 - cdata.lsquare / 2;
        value2 := value2 - cdata.lsquare / 2;
-    end;
+    end; изменено в 21М}
+
     value1 := value1*norm;
     value2 := value2*norm;
     if value2 < 0 then ShowMessage('Проверьте льготную площадь');
@@ -1119,6 +1120,12 @@ begin
     end; }
     cdata.pm[s] := Rnd(valtarif * value1)/12;
     cdata.snpm[s] := Rnd(valtarif * value2)/12;
+{******************************************************************************}
+    if cdata.quanpriv>0 then begin
+      cdata.pm[s] := rnd(((valtarif * value1)/12)/2); {! мое}
+      cdata.snpm[s] := rnd(((valtarif * value2)/12)/2); {! мое}
+    end;
+{Довавленно в 21М**************************************************************}
   end
   else begin
     cdata.fpm[s] := 0;

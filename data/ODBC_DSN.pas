@@ -27,7 +27,7 @@ interface
 uses
   Windows, Registry;
 
-function AddDSNdBaseSource(const ADSNName, DefaultDir, ADescription: string): Boolean;
+//function AddDSNdBaseSource(const ADSNName, DefaultDir, ADescription: string): Boolean;
 function AddDSNMSSQLSource(const ADSNName, AServer, ADataBase: string;
                           ADescription: string = ''): Boolean;
 
@@ -70,7 +70,7 @@ var params: string;
     Result := FALSE;
     with TRegistry.Create do
     try
-      RootKey := HKEY_LOCAL_MACHINE;
+      RootKey := HKEY_CURRENT_USER;//HKEY_LOCAL_MACHINE;
       if OpenKey('\Software\ODBC\ODBC.INI\', TRUE) then
         if not KeyExists('SQLSub') then
           CreateKey('SQLSub');
@@ -92,11 +92,11 @@ var params: string;
 begin
   params := 'DSN=' + ADSNName + #0'Server=' + AServer + #0'DataBase= ' +
     ADataBase + #0'Description=' + ADescription + #0#0;
-  Result := SQLConfigDataSource(0, ODBC_ADD_SYS_DSN, PChar(driver), PChar(params));
+  Result := SQLConfigDataSource(0, ODBC_ADD_DSN, PChar(driver), PChar(params));
   Result := Result and AddODBCiniRecord;
 end;
 
-function AddDSNdBaseSource(const ADSNName, DefaultDir, ADescription: string): Boolean;
+{function AddDSNdBaseSource(const ADSNName, DefaultDir, ADescription: string): Boolean;
 const driver = 'Microsoft dBase Driver (*.dbf)';
 var params: string;
   function SetDefaultDir: boolean;
@@ -123,6 +123,6 @@ begin
   Result := SQLConfigDataSource(0, ODBC_ADD_SYS_DSN, PChar(driver), PChar(params));
   Result := Result and SetDefaultDir;
 end;
-
+ }
 
 end.
