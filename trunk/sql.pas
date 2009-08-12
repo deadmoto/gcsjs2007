@@ -1,24 +1,38 @@
-unit sql;
-                                                  
+unit SQL;
+
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Grids, DBGrids, DB, DBTables,FileCtrl, ComCtrls;
+  Windows,
+  Messages,
+  SysUtils,
+  Variants,
+  Classes,
+  Graphics,
+  Controls,
+  Forms,
+  Dialogs,
+  StdCtrls,
+  Grids,
+  DBGrids,
+  DB,
+  DBTables,
+  FileCtrl,
+  ComCtrls;
 
 type
   TForm34 = class(TForm)
-    DBGrid1: TDBGrid;
+    DBGrid1:     TDBGrid;
     SaveDialog1: TSaveDialog;
     OpenDialog1: TOpenDialog;
     TabControl1: TTabControl;
-    GroupBox1: TGroupBox;
-    Memo1: TMemo;
-    Button1: TButton;
-    Button2: TButton;
-    Button4: TButton;
-    Button3: TButton;
-    Button5: TButton;
+    GroupBox1:   TGroupBox;
+    Memo1:       TMemo;
+    Button1:     TButton;
+    Button2:     TButton;
+    Button4:     TButton;
+    Button3:     TButton;
+    Button5:     TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
@@ -39,7 +53,11 @@ var
 
 implementation
 
-uses datamodule, main, service, dbf;
+uses
+  datamodule,
+  main,
+  service,
+  dbf;
 
 {$R *.dfm}
 
@@ -48,26 +66,29 @@ procedure TForm34.Button1Click(Sender: TObject);
   Процедура Button1Click выполняет запрос, который введен пользователем в Memo1.
   Если запрос пуст или содержит некоторую ошибку, то выдается предупреждение.
 *******************************************************************************}
-var
-  i: integer;
+//var
+//  i: integer;
 begin
-  if Memo1.Lines.Count<>0 then
+  if Memo1.Lines.Count <> 0 then
     try
-      with Datamodule1.Query1 do begin
+      with Datamodule1.Query1 do
+      begin
         Close;
         SQL.Clear;
         {for i:=0 to Memo1.Lines.Count-1 do
           SQL.Add(Memo1.Lines[i]);}
-        SQL.Text:= Memo1.Text;
+        SQL.Text := Memo1.Text;
 
         case TabControl1.TabIndex of
-          0: begin
+          0:
+          begin
             Open;
           end;
-          1: begin
+          1:
+          begin
             Close;
             ExecSQL;
-            showmessage('Запрос выполнен');
+            ShowMessage('Запрос выполнен');
           end;
         end;
       end;
@@ -97,26 +118,29 @@ procedure TForm34.Button4Click(Sender: TObject);
 var
   i: integer;
 begin
-  with Datamodule1 do begin
+  with Datamodule1 do
+  begin
     if Dbf1.Active then
       Dbf1.Close;
-    if not Query1.IsEmpty then begin
+    if not Query1.IsEmpty then
+    begin
       //создание таблицы
-      for i:=0 to Query1.FieldCount-1 do
-        Dbf1.AddFieldDefs(GetName(Query1.Fields[i]),GetType(Query1.Fields[i]),
-                          GetSize(Query1.Fields[i]),GetPrec(Query1.Fields[i]));
-      Dbf1.TableName := path+'untitled1.dbf';
+      for i := 0 to Query1.FieldCount - 1 do
+        Dbf1.AddFieldDefs(GetName(Query1.Fields[i]), GetType(Query1.Fields[i]),
+          GetSize(Query1.Fields[i]), GetPrec(Query1.Fields[i]));
+      Dbf1.TableName := path + 'untitled1.dbf';
       Dbf1.CreateTable;
       Dbf1.CodePage := Form1.codedbf;
       //запись в нее данных
-      while not Query1.Eof do begin
+      while not Query1.EOF do
+      begin
         Dbf1.Append;
-        for i:=1 to Query1.FieldCount do
-          EditField(Query1.Fields[i-1].AsString,DBF1.CodePage,i);
+        for i := 1 to Query1.FieldCount do
+          EditField(Query1.Fields[i - 1].AsString, DBF1.CodePage, i);
         Dbf1.Post;
         Query1.Next;
       end;
-      Dbf1.close;
+      Dbf1.Close;
       Query1.Close;
     end
     else
@@ -135,14 +159,16 @@ var
   c, i: integer;
 begin
   //русская расладка
-  c := GetKeyboardLayoutList(High(Layouts)+1, Layouts);
-  for i:=0 to c-1 do begin
+  c := GetKeyboardLayoutList(High(Layouts) + 1, Layouts);
+  for i := 0 to c - 1 do
+  begin
     if LoWord(Layouts[i]) and $FF = Lang_Russian then
       rl := Layouts[i];
     if LoWord(Layouts[i]) and $FF = Lang_English then
       el := Layouts[i];
   end;
-  if rl <> 0 then ActivateKeyboardLayout(rl, 0);
+  if rl <> 0 then
+    ActivateKeyboardLayout(rl, 0);
   Datamodule1.Query1.Close;
 end;
 
@@ -160,28 +186,32 @@ var
 begin
   Datamodule1.Query1.Close;
   //английская раскладка
-  c := GetKeyboardLayoutList(High(Layouts)+1, Layouts);
-  for i:=0 to c-1 do begin
+  c := GetKeyboardLayoutList(High(Layouts) + 1, Layouts);
+  for i := 0 to c - 1 do
+  begin
     if LoWord(Layouts[i]) and $FF = Lang_Russian then
       rl := Layouts[i];
     if LoWord(Layouts[i]) and $FF = Lang_English then
       el := Layouts[i];
   end;
-  if el <> 0 then ActivateKeyboardLayout(el, 0);
-  path := ExtractFilePath(Application.ExeName)+'querys\';
+  if el <> 0 then
+    ActivateKeyboardLayout(el, 0);
+  path := ExtractFilePath(Application.ExeName) + 'querys\';
   OpenDialog1.InitialDir := path;
   SaveDialog1.InitialDir := path;
-  path := ExtractFilePath(Application.ExeName)+'out\';
+  path := ExtractFilePath(Application.ExeName) + 'out\';
 end;
 
 procedure TForm34.TabControl1Change(Sender: TObject);
 begin
   case TabControl1.TabIndex of
-    0: begin
-      Button4.Visible:= TRUE;
+    0:
+    begin
+      Button4.Visible := True;
     end;
-    1: begin
-      Button4.Visible:= FALSE;
+    1:
+    begin
+      Button4.Visible := False;
     end;
   end;
 end;

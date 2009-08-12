@@ -3,27 +3,39 @@ unit imexp;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, FileCtrl, DB, DBTables, Mask;
+  Windows,
+  Messages,
+  SysUtils,
+  Variants,
+  Classes,
+  Graphics,
+  Controls,
+  Forms,
+  Dialogs,
+  StdCtrls,
+  DB,
+  DBTables,
+  Mask;
 
-type TStatusMode = (mImport, mExport);
+type
+  TStatusMode = (mImport, mExport);
 
 type
   TForm35 = class(TForm)
-    CheckBox7: TCheckBox;
-    Button1: TButton;
-    CheckBox8: TCheckBox;
-    CheckBox9: TCheckBox;
+    CheckBox7:  TCheckBox;
+    Button1:    TButton;
+    CheckBox8:  TCheckBox;
+    CheckBox9:  TCheckBox;
     CheckBox10: TCheckBox;
     CheckBox11: TCheckBox;
     CheckBox13: TCheckBox;
-    GroupBox1: TGroupBox;
-    CheckBox3: TCheckBox;
-    CheckBox4: TCheckBox;
-    CheckBox5: TCheckBox;
+    GroupBox1:  TGroupBox;
+    CheckBox3:  TCheckBox;
+    CheckBox4:  TCheckBox;
+    CheckBox5:  TCheckBox;
     CheckBox12: TCheckBox;
-    CheckBox2: TCheckBox;
-    CheckBox6: TCheckBox;
+    CheckBox2:  TCheckBox;
+    CheckBox6:  TCheckBox;
     CheckBox14: TCheckBox;
     CheckBox15: TCheckBox;
     CheckBox17: TCheckBox;
@@ -36,14 +48,14 @@ type
     CheckBox22: TCheckBox;
     CheckBox24: TCheckBox;
     CheckBox23: TCheckBox;
-    Button4: TButton;
+    Button4:    TButton;
     CheckBox16: TCheckBox;
     CheckBox27: TCheckBox;
-    Label1: TLabel;
-    Edit1: TEdit;
-    Button2: TButton;
-    MaskEdit1: TMaskEdit;
-    CheckBox1: TCheckBox;
+    Label1:     TLabel;
+    Edit1:      TEdit;
+    Button2:    TButton;
+    MaskEdit1:  TMaskEdit;
+    CheckBox1:  TCheckBox;
     CheckBox28: TCheckBox;
     CheckBox29: TCheckBox;
     CheckBox30: TCheckBox;
@@ -54,8 +66,7 @@ type
     procedure Button4Click(Sender: TObject);
     procedure CheckBox29Click(Sender: TObject);
     procedure MaskEdit1Exit(Sender: TObject);
-    procedure MaskEdit1KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure MaskEdit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
@@ -63,7 +74,7 @@ type
   public
     { Public declarations }
     status: TStatusMode;//integer;//1 - export, 2 - import
-    path: string;//путь к файлам
+    path:   string;//путь к файлам
   end;
 
 var
@@ -71,21 +82,27 @@ var
 
 implementation
 
-uses fstruct,browse, datamodule, main,DateUtils, service, progress;
+uses
+  fstruct,
+  datamodule,
+  main,
+  DateUtils,
+  service,
+  progress;
 
 {$R *.dfm}
 
 procedure TForm35.Button1Click(Sender: TObject);
 { Экспорт/импорт выбранных файлов }
 var
-  ext1,ext2,dt: string;
+  ext1, ext2, dt: string;
   pr: TAboutBox1;
-  i: integer;
+  i:  integer;
 begin
   ext1 := '.dbf';
   ext2 := IntToStr(Form1.dist) + ext1;
   if CheckBox29.Checked then
-    dt := '01.'+Copy(MaskEdit1.Text,4,2)+'.'+copy(MaskEdit1.Text,7,4)
+    dt := '01.' + Copy(MaskEdit1.Text, 4, 2) + '.' + copy(MaskEdit1.Text, 7, 4)
   else
     dt := '';
   pr := TAboutBox1.Create(Application);
@@ -93,271 +110,300 @@ begin
   pr.Label3.Caption := '';
   pr.ProgressBar1.Max := CountCh;
   pr.ProgressBar1.Step := 1;
-  i:=0;
+  i := 0;
   case status of
-  mExport://export
+    mExport://export
     begin
       pr.Label1.Caption := 'Экспорт данных';
       pr.Show;
       pr.Update;
       SendMessage(pr.Handle, wm_paint, 0, 0);
       try
-        if CheckBox8.Checked then begin
+        if CheckBox8.Checked then
+        begin
           ExportCl(path, dt, Form1.dist);
-          inc(i);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox30.Checked then begin
+        if CheckBox30.Checked then
+        begin
           ExportHist(path, dt, Form1.dist);
-          inc(i);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox9.Checked then begin
+        if CheckBox9.Checked then
+        begin
           ExportFam(path, dt, Form1.dist);
-          inc(i);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox10.Checked then begin
+        if CheckBox10.Checked then
+        begin
           ExportSub(path, dt, Form1.dist);
-          inc(i);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox13.Checked then begin
-          ExportInsp(path, Form1.dist,true);
-          inc(i);
+        if CheckBox13.Checked then
+        begin
+          ExportInsp(path, Form1.dist, True);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox11.Checked then begin
+        if CheckBox11.Checked then
+        begin
           ExportMng(path, Form1.dist);
-          inc(i);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox28.Checked then begin
+        if CheckBox28.Checked then
+        begin
           ExportSluj(path, dt, Form1.dist);
-          inc(i);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox7.Checked then begin
+        if CheckBox7.Checked then
+        begin
           ExportHouse(path, Form1.dist);
-          inc(i);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox24.Checked then begin
-          if CheckBox1.Checked then begin
+        if CheckBox24.Checked then
+        begin
+          if CheckBox1.Checked then
+          begin
             ExportStr(path);
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox5.Checked then begin
-            ExportDiff(path,'bank');
-            inc(i);
+          if CheckBox5.Checked then
+          begin
+            ExportDiff(path, 'bank');
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox3.Checked then begin
-            ExportDiff(path,'dist');
-            inc(i);
+          if CheckBox3.Checked then
+          begin
+            ExportDiff(path, 'dist');
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox12.Checked then begin
-            ExportDiff(path,'fond');
-            inc(i);
+          if CheckBox12.Checked then
+          begin
+            ExportDiff(path, 'fond');
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox4.Checked then begin
+          if CheckBox4.Checked then
+          begin
             ExportMin(path, dt);
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox2.Checked then begin
-            ExportDiff(path,'stat');
-            inc(i);
+          if CheckBox2.Checked then
+          begin
+            ExportDiff(path, 'stat');
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox23.Checked then begin
+          if CheckBox23.Checked then
+          begin
             ExportRStnd(path, dt);
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox25.Checked then begin
-            ExportDiff(path,'norm');
-            inc(i);
+          if CheckBox25.Checked then
+          begin
+            ExportDiff(path, 'norm');
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox26.Checked then begin
-            ExportDiff(path,'priv');
-            inc(i);
+          if CheckBox26.Checked then
+          begin
+            ExportDiff(path, 'priv');
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox22.Checked then begin
+          if CheckBox22.Checked then
+          begin
             ExportDiff(path, 'cert');
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
             ExportDiff(path, 'own');
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
             ExportDiff(path, 'settl');
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
             ExportDiff(path, 'cntrl');
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
             ExportDiff(path, 'rel');
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
             ExportDiff(path, 'serv');
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
-            ExportDiff(path,'charge');
-            inc(i);
-            pr.ProgressBar1.StepIt;
-            pr.Label3.Caption := IntToStr(i);
-            pr.Update;
-            SendMessage(pr.Handle, wm_paint, 0, 0);
-          end;
-          if CheckBox6.Checked then begin
-            ExportTarif(path, dt, 'cont',Form1.dist);
-            inc(i);
+            ExportDiff(path, 'charge');
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox14.Checked then begin
-            ExportTarif(path, dt, 'rep',Form1.dist);
-            inc(i);
+          if CheckBox6.Checked then
+          begin
+            ExportTarif(path, dt, 'cont', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox15.Checked then begin
-            ExportTarif(path, dt, 'cold',Form1.dist);
-            inc(i);
+          if CheckBox14.Checked then
+          begin
+            ExportTarif(path, dt, 'rep', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox16.Checked then begin
-            ExportTarif(path, dt, 'hot',Form1.dist);
-            inc(i);
+          if CheckBox15.Checked then
+          begin
+            ExportTarif(path, dt, 'cold', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox27.Checked then begin
-            ExportTarif(path, dt, 'canal',Form1.dist);
-            inc(i);
+          if CheckBox16.Checked then
+          begin
+            ExportTarif(path, dt, 'hot', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox17.Checked then begin
-            ExportTarif(path, dt, 'heat',Form1.dist);
-            inc(i);
+          if CheckBox27.Checked then
+          begin
+            ExportTarif(path, dt, 'canal', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox18.Checked then begin
-            ExportTarif(path, dt, 'gas',Form1.dist);
-            inc(i);
+          if CheckBox17.Checked then
+          begin
+            ExportTarif(path, dt, 'heat', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox19.Checked then begin
-            ExportTarif(path, dt,'el',Form1.dist);
-            inc(i);
+          if CheckBox18.Checked then
+          begin
+            ExportTarif(path, dt, 'gas', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox20.Checked then begin
-            ExportTarif(path, dt, 'wood',Form1.dist);
-            inc(i);
+          if CheckBox19.Checked then
+          begin
+            ExportTarif(path, dt, 'el', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox21.Checked then begin
-            ExportTarif(path, dt, 'coal',Form1.dist);
-            inc(i);
+          if CheckBox20.Checked then
+          begin
+            ExportTarif(path, dt, 'wood', Form1.dist);
+            Inc(i);
+            pr.ProgressBar1.StepIt;
+            pr.Label3.Caption := IntToStr(i);
+            pr.Update;
+            SendMessage(pr.Handle, wm_paint, 0, 0);
+          end;
+          if CheckBox21.Checked then
+          begin
+            ExportTarif(path, dt, 'coal', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
@@ -371,7 +417,7 @@ begin
         ShowMessage('Ошибка экспорта!');
       end;
     end;
-  mImport: //import
+    mImport: //import
     begin
       pr.Label1.Caption := 'Импорт данных';
       pr.Show;
@@ -379,263 +425,292 @@ begin
       SendMessage(pr.Handle, wm_paint, 0, 0);
       try
         Datamodule1.Database1.StartTransaction;
-        if CheckBox24.Checked then begin
-          if CheckBox1.Checked then begin
+        if CheckBox24.Checked then
+        begin
+          if CheckBox1.Checked then
+          begin
             ImportStr(path);
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox5.Checked then begin
+          if CheckBox5.Checked then
+          begin
             ImportBank(path);
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox3.Checked then begin
+          if CheckBox3.Checked then
+          begin
             ImportDist(path);
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox12.Checked then begin
+          if CheckBox12.Checked then
+          begin
             ImportFond(path);
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox4.Checked then begin
+          if CheckBox4.Checked then
+          begin
             ImportMin(path);
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox2.Checked then begin
+          if CheckBox2.Checked then
+          begin
             ImportStat(path);
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox23.Checked then begin
+          if CheckBox23.Checked then
+          begin
             ImportRStnd(path);
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox25.Checked then begin
+          if CheckBox25.Checked then
+          begin
             ImportNorm(path);
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox26.Checked then begin
+          if CheckBox26.Checked then
+          begin
             ImportPriv(path);
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox22.Checked then begin
+          if CheckBox22.Checked then
+          begin
             ImportDiff(path, 'cert');
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
             ImportDiff(path, 'own');
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
             ImportDiff(path, 'settl');
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
             ImportDiff(path, 'cntrl');
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
             ImportDiff(path, 'rel');
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
             ImportDiff(path, 'serv');
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
             ImportCharge(path);
-            inc(i);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox6.Checked then begin
-            ImportTarif(path, 'cont',Form1.dist);
-            inc(i);
+          if CheckBox6.Checked then
+          begin
+            ImportTarif(path, 'cont', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox14.Checked then begin
-            ImportTarif(path, 'rep',Form1.dist);
-            inc(i);
+          if CheckBox14.Checked then
+          begin
+            ImportTarif(path, 'rep', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox15.Checked then begin
-            ImportTarifb(path, 'cold',Form1.dist);
-            inc(i);
+          if CheckBox15.Checked then
+          begin
+            ImportTarifb(path, 'cold', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox16.Checked then begin
-            ImportTarifb(path, 'hot',Form1.dist);
-            inc(i);
+          if CheckBox16.Checked then
+          begin
+            ImportTarifb(path, 'hot', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox27.Checked then begin
-            ImportTarif(path, 'canal',Form1.dist);
-            inc(i);
+          if CheckBox27.Checked then
+          begin
+            ImportTarif(path, 'canal', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox17.Checked then begin
-            ImportTarif(path, 'heat',Form1.dist);
-            inc(i);
+          if CheckBox17.Checked then
+          begin
+            ImportTarif(path, 'heat', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox18.Checked then begin
-            ImportTarif(path, 'gas',Form1.dist);
-            inc(i);
+          if CheckBox18.Checked then
+          begin
+            ImportTarif(path, 'gas', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox19.Checked then begin
-            ImportEl(path,Form1.dist);
-            inc(i);
+          if CheckBox19.Checked then
+          begin
+            ImportEl(path, Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox20.Checked then begin
-            ImportTarif(path,'wood',Form1.dist);
-            inc(i);
+          if CheckBox20.Checked then
+          begin
+            ImportTarif(path, 'wood', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
-          if CheckBox21.Checked then begin
-            ImportTarif(path, 'coal',Form1.dist);
-            inc(i);
+          if CheckBox21.Checked then
+          begin
+            ImportTarif(path, 'coal', Form1.dist);
+            Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
             pr.Update;
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
         end;
-        if CheckBox13.Checked then begin
-          ImportInsp(path,Form1.dist);
-          inc(i);
+        if CheckBox13.Checked then
+        begin
+          ImportInsp(path, Form1.dist);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox11.Checked then begin
-          ImportMng(path,Form1.dist);
-          inc(i);
+        if CheckBox11.Checked then
+        begin
+          ImportMng(path, Form1.dist);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox7.Checked then begin
-          ImportHouse(path,Form1.dist);
-          inc(i);
+        if CheckBox7.Checked then
+        begin
+          ImportHouse(path, Form1.dist);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox8.Checked then begin
-          ImportCl(path,Form1.dist);
-          inc(i);
+        if CheckBox8.Checked then
+        begin
+          ImportCl(path, Form1.dist);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox9.Checked then begin
-          ImportFam(path,Form1.dist);
-          inc(i);
+        if CheckBox9.Checked then
+        begin
+          ImportFam(path, Form1.dist);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox10.Checked then begin
-          ImportSub(path,Form1.dist);
-          inc(i);
+        if CheckBox10.Checked then
+        begin
+          ImportSub(path, Form1.dist);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox28.Checked then begin
-          ImportSluj(path,Form1.dist);
-          inc(i);
+        if CheckBox28.Checked then
+        begin
+          ImportSluj(path, Form1.dist);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        if CheckBox30.Checked then begin
+        if CheckBox30.Checked then
+        begin
           ImportHist(path, Form1.dist);
-          inc(i);
+          Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
           pr.Update;
@@ -644,7 +719,7 @@ begin
         pr.Close;
         pr.Release;
         Datamodule1.Database1.Commit;
-        FillCurr(Form1.bpath,Form1.rdt,Form1.dist,Form1.codedbf);
+        FillCurr(Form1.bpath, Form1.rdt, Form1.dist, Form1.codedbf);
         ShowMessage('Импорт найденных файлов успешно завершен!');
         Form1.Reload;
       except
@@ -659,61 +734,65 @@ end;
 procedure TForm35.FormShow(Sender: TObject);
 { Установка первоначальных настроек }
 begin
-  Edit1.Text := ExtractFilePath(Application.ExeName)+'out\';//путь по умолчанию
+  Edit1.Text := ExtractFilePath(Application.ExeName) + 'out\';//путь по умолчанию
   path := Edit1.Text;
-  MaskEdit1.Enabled := false;//экспорт/импорт всех данных
+  MaskEdit1.Enabled := False;//экспорт/импорт всех данных
   MaskEdit1.Text := '';
-  CheckBox29.Checked := false;
+  CheckBox29.Checked := False;
   MaskEdit1.Text := Form1.rdt;
   case status of
-  mExport:
+    mExport:
     begin
-      Form35.Caption := 'Экспорт файлов';
+      Form35.Caption  := 'Экспорт файлов';
       Button1.Caption := 'Экспорт';
     end;
-  mImport:
+    mImport:
     begin
-      Form35.Caption := 'Импорт файлов';
+      Form35.Caption  := 'Импорт файлов';
       Button1.Caption := 'Импорт';
     end;
   end;
-  CheckBox8.Checked := true;
-  CheckBox30.Checked := true;
-  CheckBox9.Checked := true;
-  CheckBox10.Checked := true;
-  CheckBox11.Checked := true;
-  CheckBox13.Checked := true;
-  CheckBox28.Checked := true;
-  CheckBox7.Checked := true;
-  CheckBox24.Checked := false;
-  GroupBox1.Enabled := false;
-  CheckBox1.Checked := false;
-  CheckBox5.Checked := false;
-  CheckBox3.Checked := false;
-  CheckBox12.Checked := false;
-  CheckBox4.Checked := false;
-  CheckBox2.Checked := false;
-  CheckBox25.Checked := false;
-  CheckBox23.Checked := false;
-  CheckBox26.Checked := false;
-  CheckBox27.Checked := false;
-  CheckBox22.Checked := false;
-  CheckBox6.Checked := false;
-  CheckBox14.Checked := false;
-  CheckBox15.Checked := false;
-  CheckBox16.Checked := false;
-  CheckBox17.Checked := false;
-  CheckBox18.Checked := false;
-  CheckBox19.Checked := false;
-  CheckBox20.Checked := false;
-  CheckBox21.Checked := false;
+  CheckBox8.Checked  := True;
+  CheckBox30.Checked := True;
+  CheckBox9.Checked  := True;
+  CheckBox10.Checked := True;
+  CheckBox11.Checked := True;
+  CheckBox13.Checked := True;
+  CheckBox28.Checked := True;
+  CheckBox7.Checked  := True;
+  CheckBox24.Checked := False;
+  GroupBox1.Enabled  := False;
+  CheckBox1.Checked  := False;
+  CheckBox5.Checked  := False;
+  CheckBox3.Checked  := False;
+  CheckBox12.Checked := False;
+  CheckBox4.Checked  := False;
+  CheckBox2.Checked  := False;
+  CheckBox25.Checked := False;
+  CheckBox23.Checked := False;
+  CheckBox26.Checked := False;
+  CheckBox27.Checked := False;
+  CheckBox22.Checked := False;
+  CheckBox6.Checked  := False;
+  CheckBox14.Checked := False;
+  CheckBox15.Checked := False;
+  CheckBox16.Checked := False;
+  CheckBox17.Checked := False;
+  CheckBox18.Checked := False;
+  CheckBox19.Checked := False;
+  CheckBox20.Checked := False;
+  CheckBox21.Checked := False;
 end;
 
 procedure TForm35.Button2Click(Sender: TObject);
 { Вызов формы выбора пути }
 begin
-  Form36.ShowModal;
-  path := Form36.path;
+  //  Form36.ShowModal;
+  path := SelectDir;
+  //  path := Form36.path;
+  if path = '' then
+    path := ExtractFilePath(Application.ExeName) + 'out\';
+
   Edit1.Text := path;
 end;
 
@@ -724,34 +803,34 @@ procedure TForm35.CheckBox24Click(Sender: TObject);
 }
 begin
   if CheckBox24.Checked then
-    GroupBox1.Enabled := true
+    GroupBox1.Enabled := True
   else
-    GroupBox1.Enabled := false;
+    GroupBox1.Enabled := False;
 end;
 
 procedure TForm35.Button4Click(Sender: TObject);
 { Обработка нажатия клавиши "Все". Происходит выбор всех справочников в группе. }
 begin
-  CheckBox1.Checked := true;
-  CheckBox2.Checked := true;
-  CheckBox3.Checked := true;
-  CheckBox4.Checked := true;
-  CheckBox5.Checked := true;
-  CheckBox6.Checked := true;
-  CheckBox12.Checked := true;
-  CheckBox14.Checked := true;
-  CheckBox15.Checked := true;
-  CheckBox16.Checked := true;
-  CheckBox17.Checked := true;
-  CheckBox18.Checked := true;
-  CheckBox19.Checked := true;
-  CheckBox20.Checked := true;
-  CheckBox21.Checked := true;
-  CheckBox22.Checked := true;
-  CheckBox23.Checked := true;
-  CheckBox25.Checked := true;
-  CheckBox26.Checked := true;
-  CheckBox27.Checked := true;
+  CheckBox1.Checked  := True;
+  CheckBox2.Checked  := True;
+  CheckBox3.Checked  := True;
+  CheckBox4.Checked  := True;
+  CheckBox5.Checked  := True;
+  CheckBox6.Checked  := True;
+  CheckBox12.Checked := True;
+  CheckBox14.Checked := True;
+  CheckBox15.Checked := True;
+  CheckBox16.Checked := True;
+  CheckBox17.Checked := True;
+  CheckBox18.Checked := True;
+  CheckBox19.Checked := True;
+  CheckBox20.Checked := True;
+  CheckBox21.Checked := True;
+  CheckBox22.Checked := True;
+  CheckBox23.Checked := True;
+  CheckBox25.Checked := True;
+  CheckBox26.Checked := True;
+  CheckBox27.Checked := True;
 end;
 
 procedure TForm35.CheckBox29Click(Sender: TObject);
@@ -760,12 +839,14 @@ procedure TForm35.CheckBox29Click(Sender: TObject);
   при экспорте/импорте, иначе нет и обрабатываеются все данные.
 }
 begin
-  if CheckBox29.Checked then begin
-    MaskEdit1.Enabled := true;//экспорт/импорт по указанной дате
+  if CheckBox29.Checked then
+  begin
+    MaskEdit1.Enabled := True;//экспорт/импорт по указанной дате
     MaskEdit1.Text := Form1.rdt;
   end
-  else begin
-    MaskEdit1.Enabled := false;//экспорт/импорт всех данных
+  else
+  begin
+    MaskEdit1.Enabled := False;//экспорт/импорт всех данных
     MaskEdit1.Text := '';
   end;
 end;
@@ -776,45 +857,72 @@ begin
   CheckDate(MaskEdit1);
 end;
 
-procedure TForm35.MaskEdit1KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm35.MaskEdit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 { Обработка ввода даты }
 begin
-  if key=VK_RETURN then
+  if key = VK_RETURN then
     CheckDate(MaskEdit1);
 end;
 
 function TForm35.CountCh: integer;
 begin
   Result := 0;
-  if CheckBox8.Checked then inc(Result);
-  if CheckBox30.Checked then inc(Result);
-  if CheckBox9.Checked then inc(Result);
-  if CheckBox10.Checked then inc(Result);
-  if CheckBox13.Checked then inc(Result);
-  if CheckBox11.Checked then inc(Result);
-  if CheckBox28.Checked then inc(Result);
-  if CheckBox7.Checked then inc(Result);
-  if CheckBox1.Checked then inc(Result);
-  if CheckBox5.Checked then inc(Result);
-  if CheckBox3.Checked then inc(Result);
-  if CheckBox12.Checked then inc(Result);
-  if CheckBox4.Checked then inc(Result);
-  if CheckBox2.Checked then inc(Result);
-  if CheckBox23.Checked then inc(Result);
-  if CheckBox25.Checked then inc(Result);
-  if CheckBox26.Checked then inc(Result);
-  if CheckBox22.Checked then inc(Result,7);
-  if CheckBox6.Checked then inc(Result);
-  if CheckBox14.Checked then inc(Result);
-  if CheckBox15.Checked then inc(Result);
-  if CheckBox16.Checked then inc(Result);
-  if CheckBox27.Checked then inc(Result);
-  if CheckBox17.Checked then inc(Result);
-  if CheckBox18.Checked then inc(Result);
-  if CheckBox19.Checked then inc(Result);
-  if CheckBox20.Checked then inc(Result);
-  if CheckBox21.Checked then inc(Result);
+  if CheckBox8.Checked then
+    Inc(Result);
+  if CheckBox30.Checked then
+    Inc(Result);
+  if CheckBox9.Checked then
+    Inc(Result);
+  if CheckBox10.Checked then
+    Inc(Result);
+  if CheckBox13.Checked then
+    Inc(Result);
+  if CheckBox11.Checked then
+    Inc(Result);
+  if CheckBox28.Checked then
+    Inc(Result);
+  if CheckBox7.Checked then
+    Inc(Result);
+  if CheckBox1.Checked then
+    Inc(Result);
+  if CheckBox5.Checked then
+    Inc(Result);
+  if CheckBox3.Checked then
+    Inc(Result);
+  if CheckBox12.Checked then
+    Inc(Result);
+  if CheckBox4.Checked then
+    Inc(Result);
+  if CheckBox2.Checked then
+    Inc(Result);
+  if CheckBox23.Checked then
+    Inc(Result);
+  if CheckBox25.Checked then
+    Inc(Result);
+  if CheckBox26.Checked then
+    Inc(Result);
+  if CheckBox22.Checked then
+    Inc(Result, 7);
+  if CheckBox6.Checked then
+    Inc(Result);
+  if CheckBox14.Checked then
+    Inc(Result);
+  if CheckBox15.Checked then
+    Inc(Result);
+  if CheckBox16.Checked then
+    Inc(Result);
+  if CheckBox27.Checked then
+    Inc(Result);
+  if CheckBox17.Checked then
+    Inc(Result);
+  if CheckBox18.Checked then
+    Inc(Result);
+  if CheckBox19.Checked then
+    Inc(Result);
+  if CheckBox20.Checked then
+    Inc(Result);
+  if CheckBox21.Checked then
+    Inc(Result);
 end;
 
 procedure TForm35.FormClose(Sender: TObject; var Action: TCloseAction);

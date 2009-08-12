@@ -1075,33 +1075,66 @@ var
   valtarif, value1, value2, norm: real;
 //  maxpriv: integer;
 //  norms:real;
-//  i:integer;
+  i,j,quan:integer;
 begin
   valtarif := cdata.cost[s];
   if valtarif<>0 then begin
-    if s=12 then begin
-      norm := Form1.normw;
-//      norms := Form1.normsw;
-    end
-    else begin
-      norm := Form1.normc;
-//      norms := Form1.normsc;
-    end;
+
+    if s=12 then norm := Form1.normw
+      else norm := Form1.normc;
+
     value1 := cdata.square;
-    if cdata.square > cdata.snorm then
+    value2:= math.min(cdata.square,cdata.snorm);
+
+{    if cdata.square > cdata.snorm then
       value2 := cdata.snorm
     else
-      value2 := cdata.square;
+      value2 := cdata.square;}
 {    if cdata.quanpriv > 0 then
     begin
        value1 := value1 - cdata.lsquare / 2;
        value2 := value2 - cdata.lsquare / 2;
-    end; изменено в 21М}
+    end;// изменено в 21М}
+      quan:=0;
+//    value1 := value1;//*norm;
+//    value2 := value2;//*norm;
+    cdata.fpm[s] := Rnd((valtarif * norm * value1)/12);
 
-    value1 := value1*norm;
-    value2 := value2*norm;
     if value2 < 0 then ShowMessage('Проверьте льготную площадь');
-{    cdata.fpm[s] := Rnd((valtarif * norm * value1)/12);
+/////////////////////////
+  for i := 0 to cdata.mcount - 1 do
+  begin
+    if cdata.pc[i][s] <> 0 then//если ненулевая льгота
+    begin
+      if cdata.sq[i][s] = 0 then
+      begin//льгота распространяется на всю площадь
+        value1 := value1 - cdata.square / cdata.mcount * (cdata.pc[i][s] / 100);
+        value2 := value2 - Math.min(cdata.square, cdata.snorm) / cdata.mcount * (cdata.pc[i][s] / 100);
+      end
+      else
+      begin//льгота распространяется на соцнорму
+        Inc(quan);
+        for j := 0 to cdata.mcount - 1 do
+          if cdata.f[j][s] = 1 then
+            quan := cdata.mcount;
+        if cdata.square <= cdata.psnorm * quan then
+        begin
+          value1 := value1 - cdata.square / quan * (cdata.pc[i][s] / 100);
+          value2 := value2 - cdata.square / quan * (cdata.pc[i][s] / 100);
+        end
+        else
+        begin
+          value1 := value1 - cdata.psnorm * (cdata.pc[i][s] / 100);
+          value2 := value2 - cdata.psnorm * (cdata.pc[i][s] / 100);
+        end;
+        value1 := Math.max(value1, cdata.snorm / 2);
+        value2 := Math.max(value2, Math.min(cdata.snorm / 2, cdata.square / 2));
+      end;
+    end;
+  end;
+
+///  ////////////////////
+    {    cdata.fpm[s] := Rnd((valtarif * norm * value1)/12);
     maxpriv := cdata.pc[0][s];
     for i:=1 to cdata.mcount-1 do
       if cdata.pc[i][s]>cdata.pc[i-1][s] then
@@ -1118,14 +1151,9 @@ begin
       else
         value2 := value2*(maxpriv/100);
     end; }
-    cdata.pm[s] := Rnd(valtarif * value1)/12;
-    cdata.snpm[s] := Rnd(valtarif * value2)/12;
-{******************************************************************************}
-    if cdata.quanpriv>0 then begin
-      cdata.pm[s] := rnd(((valtarif * value1)/12)/2); {! мое}
-      cdata.snpm[s] := rnd(((valtarif * value2)/12)/2); {! мое}
-    end;
-{Довавленно в 21М**************************************************************}
+
+    cdata.pm[s] := Rnd((valtarif * value1 * norm)/12);
+    cdata.snpm[s] := Rnd((valtarif * value2 * norm))/12;
   end
   else begin
     cdata.fpm[s] := 0;

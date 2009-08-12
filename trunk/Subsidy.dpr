@@ -1,9 +1,9 @@
 program Subsidy;
 
 uses
-  forms,
-  dialogs,
-  windows,
+  Forms,
+  Dialogs,
+  Windows,
   main in 'main.pas' {Form1},
   datamodule in 'datamodule.pas' {DataModule1: TDataModule},
   sclient in 'sclient.pas' {Form2},
@@ -32,10 +32,9 @@ uses
   search in 'search.pas' {Form33},
   opend in 'opend.pas' {Form26},
   fstruct in 'fstruct.pas',
-  sql in 'sql.pas' {Form34},
+  SQL in 'sql.pas' {Form34},
   imexp in 'imexp.pas' {Form35},
   progress in 'progress.pas' {AboutBox1},
-  browse in 'browse.pas' {Form36},
   chserv in 'chserv.pas' {Form29},
   rstnd in 'rstnd.pas' {Form38},
   tarif in 'tarif.pas' {Form15},
@@ -64,26 +63,25 @@ uses
   FactSumUnit in 'FactSumUnit.pas' {FactSumFrm},
   ConfigPropertiesUnit in 'ConfigPropertiesUnit.pas' {ConfigFrm},
   fAppPropUnit in 'frames\fAppPropUnit.pas' {fAppProp: TFrame},
-  fAppUpdateUnit in 'frames\fAppUpdateUnit.pas' {fAppUpdate: TFrame} ;
-//  Plugins in 'Plugins.pas' {Plugins},
-//  uUpdateApp in 'data\uUpdateApp.pas'; {Update module}
+  fAppUpdateUnit in 'frames\fAppUpdateUnit.pas' {fAppUpdate: TFrame};
+ //  Plugins in 'Plugins.pas' {Plugins},
+ //  uUpdateApp in 'data\uUpdateApp.pas'; {Update module}
 
 {$R *.res}
 
 {$SETPEFLAGS IMAGE_FILE_RELOCS_STRIPPED}
 
 begin
-  application.initialize;
+  application.Initialize;
   application.title := 'Субсидии';
   Application.CreateForm(TDataModule1, DataModule1);
   try//Подключение к SQLSub - ODBC alias for Subsidy (MS SQL)
-    datamodule1.database1.connected:=true;
+    datamodule1.database1.connected := True;
     try//Подключение к DBFSub - BDE alias for DBASE driver (BDE)
-      datamodule1.database2.connected:=true;
+      datamodule1.database2.connected := True;
       try
         Application.CreateForm(TForm1, Form1);
         Application.CreateForm(TAboutBox1, AboutBox1);
-        Application.CreateForm(TForm36, Form36);
         Application.CreateForm(TForm29, Form29);
         Application.CreateForm(TForm38, Form38);
         Application.CreateForm(TForm15, Form15);
@@ -143,11 +141,11 @@ begin
       ShowMessage('Произошел сбой при попытке соединения с alias DBFSub: возможно он отстутствует или неверно настроен!');
     end;
   except
-    ShowMessage('Произошел сбой при попытке соединения с сервером!'+#13+
-                  'Проверьте:'+#13+
-                  '1.Состояние сервера баз данных MSSQLServer: возможно он не установлен или не запущен;'+#13+
-                  '2.Состояние ODBC-соединения SQLSub с сервером: возможно оно отстутствует или неверно настроено;'+#13+
-                  '3.Состояние базы данных Subsidy: возможно файлы базы данных отсутствуют;'+#13+
-                  '4.Состояние сети(в случае сетевого соединения): возможно нет сетевого доступа к серверу.');
+    ShowMessage('Произошел сбой при попытке соединения с сервером!' + #13 +
+      'Проверьте:' + #13 +
+      '1.Состояние сервера баз данных MSSQLServer: возможно он не установлен или не запущен;' + #13 +
+      '2.Состояние ODBC-соединения SQLSub с сервером: возможно оно отстутствует или неверно настроено;' + #13 +
+      '3.Состояние базы данных Subsidy: возможно файлы базы данных отсутствуют;' + #13 +
+      '4.Состояние сети(в случае сетевого соединения): возможно нет сетевого доступа к серверу.');
   end;
 end.
