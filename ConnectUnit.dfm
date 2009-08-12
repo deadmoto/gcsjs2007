@@ -21,16 +21,18 @@ object Form45: TForm45
     Left = 3
     Top = 3
     Width = 279
-    Height = 52
+    Height = 55
+    Margins.Bottom = 0
     Align = alClient
     Caption = #1042#1099#1073#1086#1088' '#1089#1077#1088#1074#1077#1088#1072':'
     TabOrder = 0
+    ExplicitHeight = 52
     object ComboBox1: TComboBox
       Left = 8
       Top = 22
       Width = 265
       Height = 21
-      ItemHeight = 0
+      ItemHeight = 13
       TabOrder = 0
       OnKeyPress = ComboBox1KeyPress
     end

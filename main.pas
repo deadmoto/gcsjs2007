@@ -389,7 +389,7 @@ uses sclient, inspector, district, street, fond, manager,
       datamodule, search, service, fstruct, imexp, sql, progress,
       Contnrs,DateUtils, rstnd, loop, math,tarifb,
       chinsp, curhist, chserv, Client, merge, mdd, statage,
-      statlm, codedbf, chtarifs, rrecalc, {Plugins,} stat, {mod_Types,} padegFIO, StrUtils,
+      statlm, codedbf, chtarifs, rrecalc, stat, padegFIO, StrUtils,
       version, SlujUnit, ConnectUnit, FactSumUnit, ConfigPropertiesUnit;
 
 {$R *.dfm}

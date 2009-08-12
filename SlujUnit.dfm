@@ -63,18 +63,16 @@ object Form44: TForm44
     Left = 3
     Top = 3
     Width = 617
-    Height = 449
+    Height = 452
+    Margins.Bottom = 0
     Align = alClient
     TabOrder = 1
-    ExplicitLeft = 152
-    ExplicitTop = 280
-    ExplicitWidth = 185
-    ExplicitHeight = 105
+    ExplicitHeight = 449
     object SlujGrid: TStringGrid
       Left = 2
       Top = 15
       Width = 613
-      Height = 432
+      Height = 435
       Align = alClient
       BorderStyle = bsNone
       Ctl3D = True
@@ -84,8 +82,7 @@ object Form44: TForm44
       ParentCtl3D = False
       TabOrder = 0
       OnSelectCell = SlujGridSelectCell
-      ExplicitTop = 2
-      ExplicitHeight = 445
+      ExplicitHeight = 432
       ColWidths = (
         64
         64
