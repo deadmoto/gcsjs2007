@@ -209,8 +209,6 @@ object Form1: TForm1
     BevelInner = bvLowered
     Caption = 'Panel1'
     TabOrder = 2
-    ExplicitTop = 116
-    ExplicitHeight = 332
     object SGCl: TStringGrid
       Left = 2
       Top = 2
@@ -234,7 +232,6 @@ object Form1: TForm1
       OnKeyDown = SGClKeyDown
       OnKeyPress = SGClKeyPress
       OnSelectCell = SGClSelectCell
-      ExplicitHeight = 328
     end
     object GridPanel1: TGridPanel
       Left = 620
@@ -348,7 +345,6 @@ object Form1: TForm1
           Value = 23.000000000000000000
         end>
       TabOrder = 1
-      ExplicitHeight = 328
       DesignSize = (
         78
         331)
@@ -513,14 +509,14 @@ object Form1: TForm1
         Left = 0
         Top = 186
         Width = 78
-        Height = 56
+        Height = 59
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 3
       end
       object Label1: TLabel
         Left = 22
-        Top = 245
+        Top = 248
         Width = 33
         Height = 13
         Anchors = []
@@ -530,7 +526,7 @@ object Form1: TForm1
       end
       object Edit1: TEdit
         Left = 12
-        Top = 263
+        Top = 266
         Width = 54
         Height = 21
         Hint = #1054#1073#1097#1077#1077' '#1082#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1095#1077#1083#1086#1074#1077#1082' '#1074' '#1073#1072#1079#1077
@@ -547,7 +543,7 @@ object Form1: TForm1
       end
       object Label2: TLabel
         Left = 12
-        Top = 288
+        Top = 291
         Width = 53
         Height = 13
         Anchors = []
@@ -557,7 +553,7 @@ object Form1: TForm1
       end
       object Edit2: TEdit
         Left = 12
-        Top = 306
+        Top = 309
         Width = 54
         Height = 21
         Hint = #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1072#1082#1090#1080#1074#1085#1099#1093' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1074' '#1073#1072#1079#1077
@@ -2468,33 +2464,154 @@ object Form1: TForm1
       OnClick = N93Click
     end
   end
-  object ActionList1: TActionList
-    Left = 136
-    Top = 395
-  end
   object frxReport1: TfrxReport
     Version = '4.7.61'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
     PreviewOptions.Zoom = 1.000000000000000000
-    PrintOptions.Printer = #1055#1086' '#1091#1084#1086#1083#1095#1072#1085#1080#1102
+    PrintOptions.Printer = 'Default'
     PrintOptions.PrintOnSheet = 0
-    ReportOptions.CreateDate = 40018.427242928200000000
-    ReportOptions.LastChange = 40022.573703888890000000
+    ReportOptions.CreateDate = 39975.638255567100000000
+    ReportOptions.LastChange = 40038.685056481500000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
-      ''
-      'procedure Memo2OnBeforePrint(Sender: TfrxComponent);'
+      'procedure Memo1OnBeforePrint(Sender: TfrxComponent);'
       'begin'
-      '  with Memo2, Engine do'
-      '  begin      '
-      '    if id_dist=2 then set('#39'namedist'#39','#39#39#39#1051#1077#1085#1080#1085#1089#1082#1080#1081#39#39#39');'
-      '    if id_dist=3 then set('#39'namedist'#39','#39#39#39#1054#1082#1090#1103#1073#1088#1100#1089#1082#1080#1081#39#39#39');'
-      '    if id_dist=4 then set('#39'namedist'#39','#39#39#39#1057#1086#1074#1077#1090#1089#1082#1080#1081#39#39#39');'
-      '    if id_dist=6 then set('#39'namedist'#39','#39#39#39#1062#1077#1085#1090#1088#1072#1083#1100#1085#1099#1081#39#39#39');'
-      '    if id_dist=7 then set('#39'namedist'#39','#39#39#39#1050#1080#1088#1086#1074#1089#1082#1080#1081#39#39#39');'
+      '  with Memo1, Engine do'
+      '  begin'
+      
+        '       if <frxData1."id_dist"> = 2 then set('#39'otd'#39','#39#39#39#1051#1077#1085#1080#1085#1089#1082#1086#1084#1091#39 +
+        #39#39');'
+      
+        '       if <frxData1."id_dist"> = 3 then set('#39'otd'#39','#39#39#39#1054#1082#1090#1103#1073#1088#1100#1089#1082#1086#1084 +
+        #1091#39#39#39');'
+      
+        '       if <frxData1."id_dist"> = 4 then set('#39'otd'#39','#39#39#39#1057#1086#1074#1077#1090#1089#1082#1086#1084#1091#39 +
+        #39#39');'
+      
+        '       if <frxData1."id_dist"> = 6 then set('#39'otd'#39','#39#39#39#1062#1077#1085#1090#1088#1072#1083#1100#1085#1086#1084 +
+        #1091#39#39#39');'
+      
+        '       if <frxData1."id_dist"> = 7 then set('#39'otd'#39','#39#39#39#1050#1080#1088#1086#1074#1089#1082#1086#1084#1091#39 +
+        #39#39');  '
       '  end  '
+      'end;'
+      '      '
+      'procedure Memo8OnBeforePrint(Sender: TfrxComponent);'
+      
+        'var tmp_adress: string;                                         ' +
+        '         '
+      'begin'
+      '  with Memo8, Engine do'
+      '  begin'
+      
+        '       tmp_adress:=(<frxData1."namestreet"> + '#39','#1076'.'#39' + <frxData1.' +
+        '"nhouse">);   '
+      
+        '       if <frxData1."corp"> <> '#39#39' then tmp_adress:=tmp_adress+'#39'/' +
+        #39'+<frxData1."corp">;'
+      
+        '       if <frxData1."apart"> <> '#39#39' then tmp_adress:=tmp_adress+'#39 +
+        ','#1082#1074'.'#39'+<frxData1."apart">;'
+      
+        '       if <frxData1."tel"> <> '#39#39' then tmp_adress:=tmp_adress+'#39', ' +
+        #1090'.'#39'+<frxData1."tel">;   '
+      '  end;  '
+      
+        '  set('#39'address'#39','#39#39#39#39'+tmp_adress+'#39#39#39#39');                          ' +
+        '            '
+      'end;'
+      '  '
+      'procedure Memo175OnBeforePrint(Sender: TfrxComponent);'
+      'var tmp_income: string;'
+      
+        '    p: integer;                                                 ' +
+        '     '
+      'begin'
+      '  with Memo175, Engine do'
+      '  begin'
+      
+        '       tmp_income := FloatToStr(StrToFloat(<frxData1."income">))' +
+        ';//+round(frac( <frxData1."income">)*10000)/10000);'
+      '       p := Pos('#39','#39',tmp_income);'
+      '       if p<>0 then begin'
+      '          if p=Length(tmp_income)-1 then//125.2'
+      '             tmp_income := tmp_income + '#39'0'#39';'
+      '  end;'
+      '  if p=0 then//125'
+      '   tmp_income := tmp_income + '#39',00'#39';'
+      '  end;'
+      '  set('#39'income'#39','#39#39#39#39'+tmp_income+'#39#39#39#39');      '
+      'end;  '
+      '  '
+      'procedure Memo178OnBeforePrint(Sender: TfrxComponent);'
+      'var tmp_square: string;'
+      '    p: integer;    '
+      'begin'
+      '  with Memo178, Engine do'
+      '  begin'
+      
+        '       tmp_square := FloatToStr(StrToFloat(<frxData1."square">))' +
+        ';//+round(frac(<frxData1."square">)*10000)/10000);'
+      '       p := Pos('#39','#39',tmp_square);'
+      '       if p<>0 then begin'
+      '          if p=Length(tmp_square)-1 then//125.2'
+      '             tmp_square := tmp_square + '#39'0'#39';'
+      '  end;'
+      '  if p=0 then//125'
+      '   tmp_square := tmp_square + '#39',00'#39';'
+      '  end;'
+      '  set('#39'square'#39','#39#39#39#39'+tmp_square+'#39#39#39#39');      '
+      'end;'
+      '  '
+      'procedure Memo187OnBeforePrint(Sender: TfrxComponent);'
+      'begin'
+      '  with Memo187, Engine do'
+      '  begin'
+      '    if <frxData1."calc">=0 then set('#39'calc'#39','#39#39#39#1090#1080#1087#1086#1074#1086#1081#39#39#39')      '
+      '      else set('#39'calc'#39','#39#39#39#1080#1085#1076#1080#1074#1080#1076#1091#1072#1083#1100#1085#1099#1081#39#39#39');'
+      '  end'
+      'end;'
+      ''
+      'procedure Memo127OnBeforePrint(Sender: TfrxComponent);'
+      'var tmp_stnd,tmpvalue: string;'
+      '    p: integer;                         '
+      'begin'
+      '  with Memo127, Engine do'
+      '  begin'
+      
+        '    if <frxData1."mcount"> = 1 then tmpvalue:= FloatToStr(<frxDa' +
+        'ta1."value1">);'
+      
+        '    if <frxData1."mcount"> = 2 then tmpvalue:= FloatToStr(<frxDa' +
+        'ta1."value2">);'
+      
+        '    if <frxData1."mcount"> >= 3 then tmpvalue:= FloatToStr(<frxD' +
+        'ata1."value3">);'
+      
+        '    tmp_stnd:= FloatToStr(StrToFloat(tmpvalue));//+round(frac(St' +
+        'rToFloat(tmpvalue)*10000)/10000));'
+      '    p := Pos('#39','#39',tmp_stnd);'
+      '    if p<>0 then begin'
+      '      if p=Length(tmp_stnd)-1 then//125.2'
+      '        tmp_stnd := tmp_stnd + '#39'0'#39';'
+      '    end;'
+      '   if p=0 then//125'
+      '     tmp_stnd := tmp_stnd + '#39',00'#39';'
+      '  end;'
+      '  set('#39'stnd'#39','#39#39#39#39'+tmp_stnd+'#39#39#39#39');      '
+      'end;'
+      '    '
+      'procedure Memo21OnAfterData(Sender: TfrxComponent);'
+      
+        'var sumsub: string;                                             ' +
+        '   '
+      'begin                                       '
+      
+        '  sumsub:=Memo21.lines[0];                                      ' +
+        '          '
+      '  set('#39'sumsub1'#39','#39#39#39#39'+sumsub+'#39#39#39#39');'
       'end;'
       ''
       'begin'
@@ -2506,364 +2623,1425 @@ object Form1: TForm1
       item
         DataSet = frxData
         DataSetName = 'frxData'
+      end
+      item
+        DataSet = frxData1
+        DataSetName = 'frxData1'
       end>
-    Variables = <>
+    Variables = <
+      item
+        Name = ' Category1'
+        Value = Null
+      end>
     Style = <>
     object Data: TfrxDataPage
       Height = 1000.000000000000000000
       Width = 1000.000000000000000000
     end
     object Page1: TfrxReportPage
-      Orientation = poLandscape
-      PaperWidth = 297.000000000000000000
-      PaperHeight = 210.000000000000000000
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 296.900000000000000000
+      PaperSize = 256
+      LeftMargin = 5.000000000000000000
+      RightMargin = 5.000000000000000000
+      TopMargin = 4.000000000000000000
+      BottomMargin = 6.000000000000000000
+      Bin = 65535
+      BinOtherPages = 65535
+      object Memo1: TfrxMemoView
+        Left = 1.000000000000000000
+        Top = 9.000000000000000000
+        Width = 428.000000000000000000
+        Height = 46.000000000000000000
+        OnBeforePrint = 'Memo1OnBeforePrint'
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        HAlign = haCenter
+        Memo.UTF8 = (
+          
+            #1056#1115#1056#8216#1056#8250#1056#1106#1056#1038#1056#1118#1056#1116#1056#1115#1056#8482' '#1056#166#1056#8226#1056#1116#1056#1118#1056#160' '#1056#8211#1056#152#1056#8250#1056#152#1056#169#1056#1116#1056#171#1056#1168' '#1056#1038#1056#1032#1056#8216#1056#1038#1056#152#1056#8221#1056#152#1056#8482',' +
+            ' '#1056#1038#1056#1115#1056#166#1056#152#1056#1106#1056#8250#1056#172#1056#1116#1056#171#1056#1168' '#1056#8217#1056#171#1056#1119#1056#8250#1056#1106#1056#1118' '#1056#152' '#1056#8250#1056#172#1056#8220#1056#1115#1056#1118
+          #1056#160#1056#1106#1056#1038#1056#167#1056#8226#1056#1118' '#1074#8222#8211' 0[<frxData1."regn">] '#1056#1111#1056#1109' [otd] '#1056#1106#1056#1115)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo2: TfrxMemoView
+        Left = 1.000000000000000000
+        Top = 61.000000000000000000
+        Width = 104.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          #1056#8212#1056#176#1057#1039#1056#1030#1056#1105#1057#8218#1056#181#1056#187#1057#1034)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo3: TfrxMemoView
+        Left = 1.000000000000000000
+        Top = 77.000000000000000000
+        Width = 104.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          #1056#1106#1056#1169#1057#1026#1056#181#1057#1027', '#1057#8218#1056#181#1056#187#1056#181#1057#8222#1056#1109#1056#1029)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo4: TfrxMemoView
+        Left = 1.000000000000000000
+        Top = 93.000000000000000000
+        Width = 104.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          #1056#160#1056#176#1057#1027#1056#1111#1056#1109#1057#1026#1057#1039#1056#1169#1056#1105#1057#8218#1056#181#1056#187#1057#1034)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo5: TfrxMemoView
+        Left = 1.000000000000000000
+        Top = 109.000000000000000000
+        Width = 104.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          #1056#8211#1056#1105#1056#187#1056#1105#1057#8240#1056#1029#1057#8249#1056#8470' '#1057#8222#1056#1109#1056#1029#1056#1169)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo6: TfrxMemoView
+        Left = 1.000000000000000000
+        Top = 125.000000000000000000
+        Width = 104.000000000000000000
+        Height = 30.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          #1056#8250#1057#1034#1056#1110#1056#1109#1057#8218#1057#8249
+          '('#1056#187#1057#1034#1056#1110#1056#1109#1057#8218#1056#1029#1056#1105#1056#1108#1056#1109#1056#1030')')
+        ParentFont = False
+      end
+      object Memo7: TfrxMemoView
+        Left = 109.000000000000000000
+        Top = 61.000000000000000000
+        Width = 324.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          '[<frxData1."fio">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo8: TfrxMemoView
+        Left = 109.000000000000000000
+        Top = 77.000000000000000000
+        Width = 324.000000000000000000
+        Height = 14.000000000000000000
+        OnBeforePrint = 'Memo8OnBeforePrint'
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          '[address]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo9: TfrxMemoView
+        Left = 109.000000000000000000
+        Top = 93.000000000000000000
+        Width = 324.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          '[<frxData1."namemng">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo10: TfrxMemoView
+        Left = 109.000000000000000000
+        Top = 109.000000000000000000
+        Width = 324.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          '[<frxData1."namefond">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo11: TfrxMemoView
+        Left = 1.000000000000000000
+        Top = 157.000000000000000000
+        Width = 96.000000000000000000
+        Height = 28.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+        HAlign = haCenter
+        Memo.UTF8 = (
+          #1056#8217#1056#1105#1056#1169#1057#8249' '#1056#1111#1056#187#1056#176#1057#8218#1056#181#1056#182#1056#181#1056#8470)
+        ParentFont = False
+      end
+      object Memo13: TfrxMemoView
+        Left = 201.000000000000000000
+        Top = 157.000000000000000000
+        Width = 84.000000000000000000
+        Height = 28.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+        HAlign = haCenter
+        Memo.UTF8 = (
+          #1056#1116#1056#176#1057#8225#1056#1105#1057#1027#1056#187#1056#181#1056#1029#1056#1109' '#1056#1111#1056#1109' '#1057#1027#1056#1109#1057#8224'. '#1056#1029#1056#1109#1057#1026#1056#1112#1056#181)
+        ParentFont = False
+      end
+      object Memo14: TfrxMemoView
+        Left = 285.000000000000000000
+        Top = 157.000000000000000000
+        Width = 84.000000000000000000
+        Height = 28.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+        HAlign = haCenter
+        Memo.UTF8 = (
+          #1056#1113' '#1056#1109#1056#1111#1056#187#1056#176#1057#8218#1056#181' '#1056#1111#1056#1109' '#1057#1027#1056#1109#1057#8224'. '#1056#1029#1056#1109#1057#1026#1056#1112#1056#181)
+        ParentFont = False
+      end
+      object Memo15: TfrxMemoView
+        Left = 369.000000000000000000
+        Top = 157.000000000000000000
+        Width = 64.000000000000000000
+        Height = 28.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+        HAlign = haCenter
+        Memo.UTF8 = (
+          #1056#1038#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1057#1039', '#1056#1112#1056#181#1057#1027'.')
+        ParentFont = False
+      end
+      object Memo65: TfrxMemoView
+        Left = 9.000000000000000000
+        Top = 401.000000000000000000
+        Width = 424.000000000000000000
+        Height = 74.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          
+            '    '#1056#1038' '#1057#1026#1056#176#1057#1027#1057#8225#1056#181#1057#8218#1056#1109#1056#1112', '#1057#1027#1057#1026#1056#1109#1056#1108#1056#176#1056#1112#1056#1105' '#1056#1111#1057#1026#1056#181#1056#1169#1056#1109#1057#1027#1057#8218#1056#176#1056#1030#1056#187#1056#181#1056#1029 +
+            #1056#1105#1057#1039' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#8470' '#1056#1105' '#1057#1027#1057#1026#1056#1109#1056#1108#1056#176#1056#1112#1056#1105' '#1057#1027#1056#1030#1056#1109#1056#181#1056#1030#1057#1026#1056#181#1056#1112#1056#181#1056#1029#1056#1029#1056#1109 +
+            #1056#1110#1056#1109' '#1056#1111#1056#1109#1056#1030#1057#8218#1056#1109#1057#1026#1056#1029#1056#1109#1056#1110#1056#1109' '#1056#1109#1056#177#1057#1026#1056#176#1057#8240#1056#181#1056#1029#1056#1105#1057#1039' '#1056#1109#1056#183#1056#1029#1056#176#1056#1108#1056#1109#1056#1112#1056#187#1056#181#1056 +
+            #1029'. '
+          ''
+          
+            '"     " _________________ 20     '#1056#1110'.     ________________ /'#1056#1111#1056#1109#1056 +
+            #1169#1056#1111#1056#1105#1057#1027#1057#1034' '#1056#1108#1056#187#1056#1105#1056#181#1056#1029#1057#8218#1056#176'/')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo66: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 9.000000000000000000
+        Width = 276.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haRight
+        Memo.UTF8 = (
+          #1056#8221#1056#176#1057#8218#1056#176' '#1057#1026#1056#181#1056#1110#1056#1105#1057#1027#1057#8218#1057#1026#1056#176#1057#8224#1056#1105#1056#1105' [<frxData1."rdate">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo67: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 25.000000000000000000
+        Width = 112.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          #1056#1038#1056#1109#1056#1030#1056#1109#1056#1108#1057#1107#1056#1111#1056#1029#1057#8249#1056#8470' '#1056#1169#1056#1109#1057#8230#1056#1109#1056#1169)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo68: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 141.000000000000000000
+        Width = 112.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          #1056#1118#1056#1105#1056#1111' '#1056#1030#1056#187#1056#176#1056#1169#1056#181#1056#1029#1056#1105#1057#1039)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo69: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 89.000000000000000000
+        Width = 112.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          #1056#1119#1056#1038#1056#1038)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo70: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 105.000000000000000000
+        Width = 112.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          #1056#1115#1056#177#1057#8240#1056#176#1057#1039' '#1056#1111#1056#187#1056#1109#1057#8240#1056#176#1056#1169#1057#1034)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo71: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 41.000000000000000000
+        Width = 112.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          #1056#1113#1056#1109#1056#187'-'#1056#1030#1056#1109' '#1057#8225#1056#181#1056#187#1056#1109#1056#1030#1056#181#1056#1108)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo72: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 157.000000000000000000
+        Width = 112.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          #1056#1118#1056#1105#1056#1111' '#1056#1111#1056#187#1056#1105#1057#8218#1057#8249)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo77: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 205.000000000000000000
+        Width = 276.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = [fsBold, fsUnderline]
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          #1056#1038#1057#1026#1056#1109#1056#1108#1056#1105' '#1056#1111#1057#1026#1056#181#1056#1169#1056#1109#1057#1027#1057#8218#1056#176#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1057#1039' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#1105)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo78: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 221.000000000000000000
+        Width = 276.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          'c [<frxData1."bdate">] '#1056#1169#1056#1109' [<frxData1."edate">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo79: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 237.000000000000000000
+        Width = 287.338590000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = [fsBold, fsUnderline]
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          
+            #1056#1038#1057#1026#1056#1109#1056#1108#1056#1105' '#1057#1027#1056#1030#1056#1109#1056#181#1056#1030#1057#1026#1056#181#1056#1112#1056#181#1056#1029#1056#1029#1056#1109#1056#1110#1056#1109' '#1056#1111#1056#1109#1056#1030#1057#8218#1056#1109#1057#1026#1056#1029#1056#1109#1056#1110#1056#1109' '#1056#1109#1056 +
+            #177#1057#1026#1056#176#1057#8240#1056#181#1056#1029#1056#1105#1057#1039)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo80: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 253.000000000000000000
+        Width = 276.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          '[newatt]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo81: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 173.000000000000000000
+        Width = 112.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          #1056#160#1056#176#1057#1027#1057#8225#1056#181#1057#8218' ')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo82: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 189.000000000000000000
+        Width = 112.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          #1056#1106#1057#8218#1057#8218#1056#181#1057#1027#1057#8218#1056#176#1057#8224#1056#1105#1057#1039)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo83: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 269.000000000000000000
+        Width = 280.000000000000000000
+        Height = 62.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          
+            #1056#1115#1056#1111#1056#187#1056#176#1057#8218#1056#176' '#1056#182#1056#1105#1056#187#1056#1109#1056#1110#1056#1109' '#1056#1111#1056#1109#1056#1112#1056#181#1057#8240#1056#181#1056#1029#1056#1105#1057#1039' '#1056#1105' '#1056#1108#1056#1109#1056#1112#1056#1112#1057#1107#1056#1029#1056#176#1056#187 +
+            #1057#1034#1056#1029#1057#8249#1057#8230' '#1057#1107#1057#1027#1056#187#1057#1107#1056#1110' '#1057#1027#1056#1030#1056#181#1057#1026#1057#8230' '#1057#1026#1056#181#1056#1110#1056#1105#1056#1109#1056#1029#1056#176#1056#187#1057#1034#1056#1029#1057#8249#1057#8230' '#1057#1027#1057#8218#1056#176#1056#1029 +
+            #1056#1169#1056#176#1057#1026#1057#8218#1056#1109#1056#1030' '#1056#1105' '#1056#1029#1056#1109#1057#1026#1056#1112#1056#176#1057#8218#1056#1105#1056#1030#1056#1109#1056#1030' '#1056#1169#1056#1109#1056#187#1056#182#1056#1029#1056#176' '#1056#1109#1057#1027#1057#1107#1057#8240#1056#181#1057#1027#1057#8218 +
+            #1056#1030#1056#187#1057#1039#1057#8218#1057#1034#1057#1027#1057#1039' '#1056#1030' '#1057#1027#1056#1109#1056#1109#1057#8218#1056#1030#1056#181#1057#8218#1057#1027#1057#8218#1056#1030#1056#1105#1056#1105' '#1057#1027' '#1057#1107#1057#1027#1057#8218#1056#176#1056#1029#1056#1109#1056#1030#1056#187#1056#181 +
+            #1056#1029#1056#1029#1057#8249#1056#1112#1056#1105' '#1057#8218#1056#176#1057#1026#1056#1105#1057#8222#1056#176#1056#1112#1056#1105'.')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo84: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 401.000000000000000000
+        Width = 140.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          #1056#8212#1056#176#1056#1030#1056#181#1056#1169#1057#1107#1057#1035#1057#8240#1056#1105#1056#8470' '#1057#8222#1056#1105#1056#187#1056#1105#1056#176#1056#187#1056#1109#1056#1112)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo85: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 461.000000000000000000
+        Width = 96.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          #1056#1038#1056#1111#1056#181#1057#8224#1056#1105#1056#176#1056#187#1056#1105#1057#1027#1057#8218)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo86: TfrxMemoView
+        Left = 581.000000000000000000
+        Top = 401.000000000000000000
+        Width = 136.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          '[<frxData1."boss">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo87: TfrxMemoView
+        Left = 561.000000000000000000
+        Top = 461.000000000000000000
+        Width = 156.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          '[<frxData1."nameinsp">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo175: TfrxMemoView
+        Left = 549.000000000000000000
+        Top = 25.000000000000000000
+        Width = 170.000000000000000000
+        Height = 14.000000000000000000
+        OnBeforePrint = 'Memo175OnBeforePrint'
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          '[income]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo176: TfrxMemoView
+        Left = 549.000000000000000000
+        Top = 141.000000000000000000
+        Width = 170.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          '[<frxData1."nameown">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo177: TfrxMemoView
+        Left = 549.000000000000000000
+        Top = 89.000000000000000000
+        Width = 170.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          '[<frxData1."acbank">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo178: TfrxMemoView
+        Left = 549.000000000000000000
+        Top = 105.000000000000000000
+        Width = 170.000000000000000000
+        Height = 14.000000000000000000
+        OnBeforePrint = 'Memo178OnBeforePrint'
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          '[square]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo179: TfrxMemoView
+        Left = 549.000000000000000000
+        Top = 41.000000000000000000
+        Width = 170.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          '[<frxData1."mcount">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo180: TfrxMemoView
+        Left = 549.000000000000000000
+        Top = 157.000000000000000000
+        Width = 170.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          '[plate]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo187: TfrxMemoView
+        Left = 549.000000000000000000
+        Top = 173.000000000000000000
+        Width = 172.000000000000000000
+        Height = 14.000000000000000000
+        OnBeforePrint = 'Memo187OnBeforePrint'
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          '[calc]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo188: TfrxMemoView
+        Left = 549.000000000000000000
+        Top = 189.000000000000000000
+        Width = 172.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          '[<frxData1."namecert">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo193: TfrxMemoView
+        Left = 109.000000000000000000
+        Top = 125.000000000000000000
+        Width = 324.000000000000000000
+        Height = 30.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          '[ppriv]')
+        ParentFont = False
+      end
+      object Memo12: TfrxMemoView
+        Left = 97.000000000000000000
+        Top = 157.000000000000000000
+        Width = 104.000000000000000000
+        Height = 28.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+        HAlign = haCenter
+        Memo.UTF8 = (
+          #1056#8250#1056#1105#1057#8224#1056#181#1056#1030#1057#8249#1056#181' '#1057#1027#1057#8225#1056#181#1057#8218#1056#176)
+        ParentFont = False
+      end
+      object Memo120: TfrxMemoView
+        Left = 549.000000000000000000
+        Top = 73.000000000000000000
+        Width = 170.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          '[<frxData1."namebank">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo121: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 73.000000000000000000
+        Width = 112.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          #1056#164#1056#1105#1056#187#1056#1105#1056#176#1056#187' '#1056#177#1056#176#1056#1029#1056#1108#1056#176)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo126: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 57.000000000000000000
+        Width = 112.000000000000000000
+        Height = 14.000000000000000000
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        Memo.UTF8 = (
+          #1056#160#1056#181#1056#1110#1056#1105#1056#1109#1056#1029'. '#1057#1027#1057#8218#1056#176#1056#1029#1056#1169#1056#176#1057#1026#1057#8218)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo127: TfrxMemoView
+        Left = 549.000000000000000000
+        Top = 57.000000000000000000
+        Width = 170.000000000000000000
+        Height = 14.000000000000000000
+        OnBeforePrint = 'Memo127OnBeforePrint'
+        ShowHint = False
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clSilver
+        HAlign = haBlock
+        Memo.UTF8 = (
+          '[stnd]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo16: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 333.000000000000000000
+        Width = 280.000000000000000000
+        Height = 58.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = [fsBold, fsItalic]
+        Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+        HAlign = haBlock
+        Memo.UTF8 = (
+          
+            #1056#1119#1057#1026#1056#1105' '#1056#1029#1056#181#1056#1109#1056#1111#1056#187#1056#176#1057#8218#1056#181' '#1057#8218#1056#181#1056#1108#1057#1107#1057#8240#1056#1105#1057#8230' '#1056#1111#1056#187#1056#176#1057#8218#1056#181#1056#182#1056#181#1056#8470' '#1057#1027#1057#1107#1056#177#1057#1027 +
+            #1056#1105#1056#1169#1056#1105#1057#1039' '#1056#177#1057#1107#1056#1169#1056#181#1057#8218' '#1056#1111#1057#1026#1056#1105#1056#1109#1057#1027#1057#8218#1056#176#1056#1029#1056#1109#1056#1030#1056#187#1056#181#1056#1029#1056#176' '#1057#1027#1056#1109#1056#1110#1056#187#1056#176#1057#1027#1056#1029#1056 +
+            #1109' '#1056#1111'.56'#1056#1106' '#1056#1111#1056#1109#1057#1027#1057#8218#1056#176#1056#1029#1056#1109#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1057#1039' '#1056#1119#1057#1026#1056#176#1056#1030#1056#1105#1057#8218#1056#181#1056#187#1057#1034#1057#1027#1057#8218#1056#1030#1056#176' ' +
+            #1056#160#1056#164' '#1056#1109#1057#8218' 14 '#1056#1169#1056#181#1056#1108#1056#176#1056#177#1057#1026#1057#1039' 2005'#1056#1110'. '#1074#8222#8211'761')
+        ParentFont = False
+      end
+      object Memo22: TfrxMemoView
+        Left = 437.220470000000000000
+        Top = 433.000000000000000000
+        Width = 96.000000000000000000
+        Height = 18.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Memo23: TfrxMemoView
+        Left = 553.000000000000000000
+        Top = 121.000000000000000000
+        Width = 168.000000000000000000
+        Height = 18.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          '[<frxData1."namesettl">]')
+        ParentFont = False
+      end
+      object Memo24: TfrxMemoView
+        Left = 437.000000000000000000
+        Top = 121.000000000000000000
+        Width = 116.000000000000000000
+        Height = 18.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          #1056#1113#1056#1109#1056#187'-'#1056#1030#1056#1109' '#1056#1108#1056#1109#1056#1112#1056#1029#1056#176#1057#8218)
+        ParentFont = False
+      end
+      object SubReport1: TfrxSubreport
+        Left = 1.000000000000000000
+        Top = 189.000000000000000000
+        Width = 432.000000000000000000
+        Height = 206.000000000000000000
+        ShowHint = False
+        Page = frxReport1.Page2
+      end
+    end
+    object Page2: TfrxReportPage
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 296.900000000000000000
+      PaperSize = 256
+      LeftMargin = 5.000000000000000000
+      RightMargin = 5.000000000000000000
+      TopMargin = 4.000000000000000000
+      BottomMargin = 6.000000000000000000
+      Bin = 65535
+      BinOtherPages = 65535
+      object MasterData2: TfrxMasterData
+        Height = 16.000000000000000000
+        Top = 18.897650000000000000
+        Width = 755.906000000000000000
+        Columns = 1
+        ColumnWidth = 200.000000000000000000
+        ColumnGap = 20.000000000000000000
+        DataSet = frxData
+        DataSetName = 'frxData'
+        RowCount = 0
+        object Memo25: TfrxMemoView
+          Left = 96.000000000000000000
+          Width = 104.000000000000000000
+          Height = 16.000000000000000000
+          ShowHint = False
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[<frxData."acservice">]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo26: TfrxMemoView
+          Left = 200.000000000000000000
+          Width = 84.000000000000000000
+          Height = 16.000000000000000000
+          OnBeforePrint = 'Memo26OnBeforePrint'
+          ShowHint = False
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8 = (
+            '[<frxData."snpm">]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo27: TfrxMemoView
+          Left = 368.000000000000000000
+          Width = 64.000000000000000000
+          Height = 16.000000000000000000
+          OnBeforePrint = 'Memo27OnBeforePrint'
+          ShowHint = False
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8 = (
+            '[<frxData."sub">]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo28: TfrxMemoView
+          Left = 284.000000000000000000
+          Width = 84.000000000000000000
+          Height = 16.000000000000000000
+          OnBeforePrint = 'Memo28OnBeforePrint'
+          ShowHint = False
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8 = (
+            '[<frxData."snpm">-<frxData."sub">]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo130: TfrxMemoView
+          Width = 104.000000000000000000
+          Height = 16.000000000000000000
+          OnBeforePrint = 'Memo130OnBeforePrint'
+          ShowHint = False
+          Color = clWhite
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Color = clSilver
+          Memo.UTF8 = (
+            '[<frxData."nameserv">]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+      end
+      object MasterFooter3: TfrxFooter
+        Height = 25.779530000000000000
+        Top = 56.692950000000000000
+        Width = 755.906000000000000000
+        object Line3: TfrxLineView
+          Top = 4.000000000000000000
+          Width = 432.000000000000000000
+          ShowHint = False
+          Frame.Color = clSilver
+          Frame.Typ = [ftTop]
+          Frame.Width = 2.000000000000000000
+        end
+        object Memo18: TfrxMemoView
+          Top = 8.000000000000000000
+          Width = 96.000000000000000000
+          Height = 16.000000000000000000
+          ShowHint = False
+          Color = clWhite
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Color = clSilver
+          Memo.UTF8 = (
+            #1056#152#1057#8218#1056#1109#1056#1110#1056#1109)
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo19: TfrxMemoView
+          Left = 284.000000000000000000
+          Top = 8.000000000000000000
+          Width = 84.000000000000000000
+          Height = 16.000000000000000000
+          OnBeforePrint = 'Memo19OnBeforePrint'
+          ShowHint = False
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8 = (
+            '[SUM(<frxData."snpm">-<frxData."sub">,MasterData2)]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo20: TfrxMemoView
+          Left = 200.000000000000000000
+          Top = 8.000000000000000000
+          Width = 84.000000000000000000
+          Height = 16.000000000000000000
+          OnBeforePrint = 'Memo20OnBeforePrint'
+          ShowHint = False
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8 = (
+            '[SUM(<frxData."snpm">,MasterData2)]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo21: TfrxMemoView
+          Left = 368.000000000000000000
+          Top = 8.000000000000000000
+          Width = 64.000000000000000000
+          Height = 16.000000000000000000
+          OnAfterData = 'Memo21OnAfterData'
+          ShowHint = False
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8 = (
+            '[SUM(<frxData."sub">,MasterData2)]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+      end
+    end
+    object Page4: TfrxReportPage
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 297.000000000000000000
       PaperSize = 9
       LeftMargin = 10.000000000000000000
       RightMargin = 10.000000000000000000
       TopMargin = 10.000000000000000000
       BottomMargin = 10.000000000000000000
-      object ReportTitle1: TfrxReportTitle
-        Height = 154.960730000000000000
+      object Memo30: TfrxMemoView
+        Top = 272.126160000000000000
+        Width = 716.692950000000000000
+        Height = 42.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Arial'
+        Font.Style = []
+        HAlign = haCenter
+        Memo.UTF8 = (
+          #1056#160#1056#8226#1056#1025#1056#8226#1056#1116#1056#152#1056#8226
+          
+            #1056#1109' '#1056#1111#1057#1026#1056#181#1056#1169#1056#1109#1057#1027#1057#8218#1056#176#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1056#1105' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#1105' '#1056#1029#1056#176' '#1056#1109#1056#1111#1056#187#1056#176#1057#8218 +
+            #1057#1107' '#1056#182#1056#1105#1056#187#1056#1109#1056#1110#1056#1109' '#1056#1111#1056#1109#1056#1112#1056#181#1057#8240#1056#181#1056#1029#1056#1105#1057#1039' '#1056#1105' '#1056#1108#1056#1109#1056#1112#1056#1112#1057#1107#1056#1029#1056#176#1056#187#1057#1034#1056#1029#1057#8249#1057#8230' '#1057 +
+            #1107#1057#1027#1056#187#1057#1107#1056#1110)
+        ParentFont = False
+      end
+      object Memo32: TfrxMemoView
+        Left = 18.897650000000000000
+        Top = 327.905690000000000000
+        Width = 157.133890000000000000
+        Height = 18.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          '[<frxData1."change">] '#1056#1110#1056#1109#1056#1169#1056#176)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo46: TfrxMemoView
+        Left = 535.779530000000000000
+        Top = 327.905690000000000000
+        Width = 143.118120000000000000
+        Height = 18.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          #1074#8222#8211' 0[<frxData1."regn">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo47: TfrxMemoView
+        Left = 7.559060000000000000
+        Top = 359.905690000000000000
+        Width = 697.795300000000000000
+        Height = 246.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Arial'
+        Font.Style = []
+        HAlign = haBlock
+        Memo.UTF8 = (
+          
+            '     '#1056#8217' '#1057#1027#1056#1109#1056#1109#1057#8218#1056#1030#1056#181#1057#8218#1057#1027#1057#8218#1056#1030#1056#1105#1056#1105' '#1057#1027#1056#1109' '#1057#1027#1057#8218#1056#176#1057#8218#1057#1034#1056#181#1056#8470' 159 '#1056#8211#1056#1105#1056#187#1056 +
+            #1105#1057#8240#1056#1029#1056#1109#1056#1110#1056#1109' '#1056#1108#1056#1109#1056#1169#1056#181#1056#1108#1057#1027#1056#176' '#1056#160#1056#1109#1057#1027#1057#1027#1056#1105#1056#8470#1057#1027#1056#1108#1056#1109#1056#8470' '#1056#164#1056#181#1056#1169#1056#181#1057#1026#1056#176#1057#8224#1056#1105 +
+            #1056#1105', '#1056#1111#1057#1107#1056#1029#1056#1108#1057#8218#1056#1109#1056#1112' 42 '
+          
+            #1056#1119#1057#1026#1056#176#1056#1030#1056#1105#1056#187' '#1056#1111#1057#1026#1056#181#1056#1169#1056#1109#1057#1027#1057#8218#1056#176#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1057#1039' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#8470' '#1056#1029#1056#176' ' +
+            #1056#1109#1056#1111#1056#187#1056#176#1057#8218#1057#1107' '#1056#182#1056#1105#1056#187#1056#1109#1056#1110#1056#1109' '#1056#1111#1056#1109#1056#1112#1056#181#1057#8240#1056#181#1056#1029#1056#1105#1057#1039' '#1056#1105' '#1056#1108#1056#1109#1056#1112#1056#1112#1057#1107#1056#1029#1056#176#1056#187 +
+            #1057#1034#1056#1029#1057#8249#1057#8230' '#1057#1107#1057#1027#1056#187#1057#1107#1056#1110', '
+          
+            #1057#1107#1057#8218#1056#1030#1056#181#1057#1026#1056#182#1056#1169#1056#181#1056#1029#1056#1029#1057#8249#1057#8230' '#1056#1111#1056#1109#1057#1027#1057#8218#1056#176#1056#1029#1056#1109#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1056#181#1056#1112' '#1056#1119#1057#1026#1056#176#1056#1030#1056#1105 +
+            #1057#8218#1056#181#1056#187#1057#1034#1057#1027#1057#8218#1056#1030#1056#176' '#1056#160#1056#1109#1057#1027#1057#1027#1056#1105#1056#8470#1057#1027#1056#1108#1056#1109#1056#8470' '#1056#164#1056#181#1056#1169#1056#181#1057#1026#1056#176#1057#8224#1056#1105#1056#1105' '#1056#1109#1057#8218' 14' +
+            ' '#1056#1169#1056#181#1056#1108#1056#176#1056#177#1057#1026#1057#1039' 2005 '#1056#1110#1056#1109#1056#1169#1056#176' '#1074#8222#8211' 761 "'#1056#1115' '#1056#1111#1057#1026#1056#181#1056#1169#1056#1109#1057#1027#1057#8218#1056#176#1056#1030#1056#187#1056#181 +
+            #1056#1029#1056#1105#1056#1105' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#8470' '#1056#1029#1056#176' '#1056#1109#1056#1111#1056#187#1056#176#1057#8218#1057#1107' '#1056#182#1056#1105#1056#187#1056#1109#1056#1110#1056#1109' '#1056#1111#1056#1109#1056#1112#1056#181#1057 +
+            #8240#1056#181#1056#1029#1056#1105#1057#1039' '#1056#1105' '#1056#1108#1056#1109#1056#1112#1056#1112#1057#1107#1056#1029#1056#176#1056#187#1057#1034#1056#1029#1057#8249#1057#8230' '#1057#1107#1057#1027#1056#187#1057#1107#1056#1110'": '
+          ''
+          #1056#1111#1057#1026#1056#181#1056#1169#1056#1109#1057#1027#1057#8218#1056#176#1056#1030#1056#1105#1057#8218#1057#1034' [fio], '
+          ''
+          #1056#1111#1057#1026#1056#1109#1056#182#1056#1105#1056#1030#1056#176#1057#1035#1057#8240#1056#181#1056#1112#1057#1107'('#1056#181#1056#8470') '#1056#1111#1056#1109' '#1056#176#1056#1169#1057#1026#1056#181#1057#1027#1057#1107': [address] '
+          ''
+          #1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1057#1035' '#1056#1030' '#1057#1026#1056#176#1056#183#1056#1112#1056#181#1057#1026#1056#181' [sumsub1] '#1057#1026#1057#1107#1056#177#1056#187#1056#181#1056#8470
+          
+            #1056#1029#1056#176' [cm] '#1056#1112#1056#181#1057#1027#1057#1039#1057#8224#1056#181#1056#1030' '#1057#1027' [<frxData1."bdate">] '#1056#1110#1056#1109#1056#1169#1056#176' '#1056#1169#1056#1109' [' +
+            '<frxData1."edate">] '#1056#1110#1056#1109#1056#1169#1056#176'.')
+        ParentFont = False
+      end
+      object Memo50: TfrxMemoView
+        Left = 30.236240000000000000
+        Top = 960.000620000000000000
+        Width = 136.000000000000000000
+        Height = 18.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          '[<frxData1."change">] '#1056#1110'.')
+        ParentFont = False
+      end
+      object Memo88: TfrxMemoView
+        Left = 30.236240000000000000
+        Top = 987.780150000000000000
+        Width = 660.000000000000000000
+        Height = 50.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        Memo.UTF8 = (
+          
+            #1056#1038#1057#1026#1056#1109#1056#1108#1056#1105' '#1057#1027#1056#1030#1056#1109#1056#181#1056#1030#1057#1026#1056#181#1056#1112#1056#181#1056#1029#1056#1029#1056#1109#1056#1110#1056#1109' '#1056#1111#1056#1109#1056#1030#1057#8218#1056#1109#1057#1026#1056#1029#1056#1109#1056#1110#1056#1109' '#1056#1109#1056 +
+            #177#1057#1026#1056#176#1057#8240#1056#181#1056#1029#1056#1105#1057#1039' [newatt].')
+        ParentFont = False
+      end
+      object Memo49: TfrxMemoView
+        Left = 30.236240000000000000
+        Top = 729.449290000000000000
+        Width = 660.000000000000000000
+        Height = 218.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          
+            #1056#8212#1056#176#1056#1030#1056#181#1056#1169#1057#1107#1057#1035#1057#8240#1056#1105#1056#8470' '#1057#8222#1056#1105#1056#187#1056#1105#1056#176#1056#187#1056#1109#1056#1112'______________________     ' +
+            '                                         [<frxData1."boss">]'
+          '                                             ('#1056#1111#1056#1109#1056#1169#1056#1111#1056#1105#1057#1027#1057#1034')'
+          ''
+          
+            #1056#1038#1056#1111#1056#181#1057#8224#1056#1105#1056#176#1056#187#1056#1105#1057#1027#1057#8218' '#1056#1111#1056#1109' '#1057#1027#1056#1109#1057#8224#1056#1105#1056#176#1056#187#1057#1034#1056#1029#1056#1109#1056#8470' '#1057#1026#1056#176#1056#177#1056#1109#1057#8218#1056#181'_____' +
+            '_________________                              [<frxData1."namei' +
+            'nsp">]'
+          
+            '                                                          ('#1056#1111#1056#1109#1056 +
+            #1169#1056#1111#1056#1105#1057#1027#1057#1034')'
+          ''
+          
+            #1056#160#1056#181#1057#8364#1056#181#1056#1029#1056#1105#1056#181' '#1056#1111#1056#1109#1056#187#1057#1107#1057#8225#1056#1105#1056#187', '#1057#1027' '#1057#1026#1056#176#1057#1027#1057#8225#1056#181#1057#8218#1056#176#1056#1112#1056#1105' '#1056#1109#1056#183#1056#1029#1056#176#1056#1108#1056 +
+            #1109#1056#1112#1056#187#1056#181#1056#1029':'
+          
+            #1056#8212#1056#176#1057#1039#1056#1030#1056#1105#1057#8218#1056#181#1056#187#1057#1034'______________________                        ' +
+            '                                        ______________________'
+          
+            '                      ('#1056#1111#1056#1109#1056#1169#1056#1111#1056#1105#1057#1027#1057#1034')                          ' +
+            '                                                                ' +
+            '    ('#1056#164'.'#1056#152'.'#1056#1115'.)  '
+          '                      '
+          #1056#160#1056#181#1057#8364#1056#181#1056#1029#1056#1105#1056#181' '#1056#1030#1057#1026#1057#1107#1057#8225#1056#1105#1056#187' ('#1056#1029#1056#176#1056#1111#1057#1026#1056#176#1056#1030#1056#1105#1056#187'): '
+          
+            #1056#152#1057#1027#1056#1111#1056#1109#1056#187#1056#1029#1056#1105#1057#8218#1056#181#1056#187#1057#1034'______________________                    ' +
+            '                                        ______________________'
+          
+            '                      ('#1056#1111#1056#1109#1056#1169#1056#1111#1056#1105#1057#1027#1057#1034')                          ' +
+            '                                                                ' +
+            '    ('#1056#164'.'#1056#152'.'#1056#1115'.)  ')
+        ParentFont = False
+      end
+      object Memo48: TfrxMemoView
+        Left = 7.559060000000000000
+        Top = 605.724800000000000000
+        Width = 697.795300000000000000
+        Height = 106.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          '     '#1056#1115#1057#1027#1056#1029#1056#1109#1056#1030#1056#176#1056#1029#1056#1105#1056#181':'
+          ''
+          
+            '     1. '#1056#8212#1056#176#1057#1039#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1056#181' [fio_g] '#1057#1027' '#1056#1111#1057#1026#1056#1105#1056#187#1056#1109#1056#182#1056#181#1056#1029#1056#1105#1056#181#1056#1112' '#1056#1029#1056 +
+            #181#1056#1109#1056#177#1057#8230#1056#1109#1056#1169#1056#1105#1056#1112#1057#8249#1057#8230' '#1056#1169#1056#1109#1056#1108#1057#1107#1056#1112#1056#181#1056#1029#1057#8218#1056#1109#1056#1030
+          ''
+          
+            '     2. '#1056#160#1056#176#1057#1027#1057#8225#1056#181#1057#8218' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#1105' '#1056#1109#1057#8218' [<frxData1."change">]' +
+            ' '#1056#1110#1056#1109#1056#1169#1056#176' '#1074#8222#8211' 0[<frxData1."regn">]')
+        ParentFont = False
+      end
+      object PageHeader1: TfrxPageHeader
+        Height = 241.889920000000000000
         Top = 18.897650000000000000
-        Width = 1046.929810000000000000
-        object Memo2: TfrxMemoView
-          Top = 26.456710000000000000
-          Width = 1046.929810000000000000
-          Height = 30.236240000000000000
-          OnBeforePrint = 'Memo2OnBeforePrint'
+        Width = 718.110700000000000000
+        object Memo89: TfrxMemoView
+          Left = 3.779530000000000000
+          Width = 300.000000000000000000
+          Height = 38.000000000000000000
           ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -24
-          Font.Name = 'Times New Roman'
-          Font.Style = []
-          HAlign = haCenter
-          Memo.UTF8 = (
-            
-              '[namedist] '#1056#1109#1056#1108#1057#1026#1057#1107#1056#1110'. '#1056#160#1056#181#1056#181#1057#1027#1057#8218#1057#1026' '#1056#1111#1056#1109#1056#187#1057#1107#1057#8225#1056#176#1057#8218#1056#181#1056#187#1056#181#1056#8470' '#1057#1027#1057#1107#1056 +
-              #177#1057#1027#1056#1105#1056#1169#1056#1105#1056#1105' '#1056#183#1056#176' [month] [year] '#1056#1110'.')
-          ParentFont = False
-        end
-        object Memo3: TfrxMemoView
-          Left = 122.834725000000000000
-          Top = 86.929190000000000000
-          Width = 801.260360000000000000
-          Height = 49.133890000000000000
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -19
-          Font.Name = 'Times New Roman'
-          Font.Style = []
-          HAlign = haCenter
-          Memo.UTF8 = (
-            
-              #1056#1038#1057#1026#1056#176#1056#1030#1056#1029#1056#181#1056#1029#1056#1105#1056#181' '#1057#1026#1056#176#1056#183#1056#1112#1056#181#1057#1026#1056#176' '#1056#1111#1057#1026#1056#181#1056#1169#1056#1109#1057#1027#1057#8218#1056#176#1056#1030#1056#187#1056#181#1056#1029#1056#1029#1056#1109#1056#8470 +
-              ' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#1105' '#1057#1027' '#1057#1026#1056#176#1056#183#1056#1112#1056#181#1057#1026#1056#1109#1056#1112' '#1057#8222#1056#176#1056#1108#1057#8218#1056#1105#1057#8225#1056#181#1057#1027#1056#1108#1056#1105#1057#8230' '#1057#1026#1056 +
-              #176#1057#1027#1057#8230#1056#1109#1056#1169#1056#1109#1056#1030' '#1057#1027#1056#181#1056#1112#1057#1034#1056#1105' '#1056#1029#1056#176' '#1056#1109#1056#1111#1056#187#1056#176#1057#8218#1057#1107' '#1056#182#1056#1105#1056#187#1056#1109#1056#1110#1056#1109' '#1056#1111#1056#1109#1056#1112#1056#181 +
-              #1057#8240#1056#181#1056#1029#1056#1105#1057#1039' '#1056#1105' '#1056#1108#1056#1109#1056#1112#1056#1112#1057#1107#1056#1029#1056#176#1056#187#1057#1034#1056#1029#1057#8249#1057#8230' '#1057#1107#1057#1027#1056#187#1057#1107#1056#1110'.')
-          ParentFont = False
-        end
-        object Memo11: TfrxMemoView
-          Width = 96.000000000000000000
-          Height = 18.000000000000000000
-          ShowHint = False
+          StretchMode = smMaxHeight
           Font.Charset = RUSSIAN_CHARSET
           Font.Color = clBlack
           Font.Height = -13
-          Font.Name = 'Times New Roman'
-          Font.Style = []
-          Memo.UTF8 = (
-            '[Date]')
-          ParentFont = False
-        end
-      end
-      object MasterData1: TfrxMasterData
-        Height = 22.677180000000000000
-        Top = 302.362400000000000000
-        Width = 1046.929810000000000000
-        DataSet = frxData
-        DataSetName = 'frxData'
-        RowCount = 0
-        object Memo12: TfrxMemoView
-          Left = 11.338590000000000000
-          Width = 22.677180000000000000
-          Height = 22.677180000000000000
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
           Font.Name = 'Arial'
           Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
-            '[LINE#]')
+            #1056#1114#1056#152#1056#1116#1056#152#1056#1038#1056#1118#1056#8226#1056#160#1056#1038#1056#1118#1056#8217#1056#1115' '#1056#1118#1056#160#1056#1032#1056#8221#1056#1106' '#1056#152' '#1056#1038#1056#1115#1056#166#1056#152#1056#1106#1056#8250#1056#172#1056#1116#1056#1115#1056#8220#1056#1115
+            #1056#160#1056#1106#1056#8212#1056#8217#1056#152#1056#1118#1056#152#1056#1031' '#1056#1115#1056#1114#1056#1038#1056#1113#1056#1115#1056#8482' '#1056#1115#1056#8216#1056#8250#1056#1106#1056#1038#1056#1118#1056#152)
           ParentFont = False
-          VAlign = vaCenter
         end
-        object Memo13: TfrxMemoView
-          Left = 34.015770000000000000
-          Width = 226.771800000000000000
-          Height = 22.677180000000000000
+        object Memo133: TfrxMemoView
+          Top = 37.795300000000000000
+          Width = 311.779530000000000000
+          Height = 50.220470000000000000
           ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
+          StretchMode = smMaxHeight
+          Font.Charset = RUSSIAN_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            '[<frxData."fio">]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo14: TfrxMemoView
-          Left = 260.787570000000000000
-          Width = 230.551330000000000000
-          Height = 22.677180000000000000
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            '[<frxData."address">]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo15: TfrxMemoView
-          Left = 491.338900000000000000
-          Width = 173.858380000000000000
-          Height = 22.677180000000000000
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            '[<frxData."bdate">] - [<frxData."edate">]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo16: TfrxMemoView
-          Left = 665.197280000000000000
-          Width = 109.606370000000000000
-          Height = 22.677180000000000000
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[<frxData."SumSub">]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo17: TfrxMemoView
-          Left = 774.803650000000000000
-          Width = 109.606370000000000000
-          Height = 22.677180000000000000
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[<frxData."SumFact">]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo18: TfrxMemoView
-          Left = 884.410020000000000000
-          Width = 151.181200000000000000
-          Height = 22.677180000000000000
-          ShowHint = False
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[<frxData."Differencee">]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-      end
-      object PageFooter1: TfrxPageFooter
-        Height = 22.677180000000000000
-        Top = 502.677490000000000000
-        Width = 1046.929810000000000000
-        object Memo1: TfrxMemoView
-          Left = 918.425790000000000000
-          Top = 3.779530000000022000
-          Width = 128.504020000000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          HAlign = haRight
-          Memo.UTF8 = (
-            #1056#1038#1057#8218#1057#1026#1056#176#1056#1029#1056#1105#1057#8224#1056#176' [Page#]')
-        end
-      end
-      object Footer1: TfrxFooter
-        Height = 22.677180000000000000
-        Top = 347.716760000000000000
-        Width = 1046.929810000000000000
-      end
-      object Header1: TfrxHeader
-        Height = 45.354360000000000000
-        Top = 234.330860000000000000
-        Width = 1046.929810000000000000
-        object Memo4: TfrxMemoView
-          Left = 11.338590000000000000
-          Width = 22.677180000000000000
-          Height = 45.354360000000000000
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            #1074#8222#8211' '#1056#1111'/'#1056#1111)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo5: TfrxMemoView
-          Left = 34.015770000000000000
-          Width = 226.771800000000000000
-          Height = 45.354360000000000000
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            #1056#164#1056#152#1056#1115)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo6: TfrxMemoView
-          Left = 260.787570000000000000
-          Width = 230.551330000000000000
-          Height = 45.354360000000000000
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            ' '#1056#1106#1056#1169#1057#1026#1056#181#1057#1027)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo7: TfrxMemoView
-          Left = 491.338900000000000000
-          Width = 173.858380000000000000
-          Height = 45.354360000000000000
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            #1056#1119#1056#181#1057#1026#1056#1105#1056#1109#1056#1169' '#1056#1111#1057#1026#1056#181#1056#1169#1056#1109#1057#1027#1057#8218#1056#176#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1057#1039' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#1105' ')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo8: TfrxMemoView
-          Left = 665.197280000000000000
-          Width = 109.606370000000000000
-          Height = 45.354360000000000000
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            #1056#160#1056#176#1056#183#1056#1112#1056#181#1057#1026' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#1105)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo9: TfrxMemoView
-          Left = 774.803650000000000000
-          Width = 109.606370000000000000
-          Height = 45.354360000000000000
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haCenter
-          Memo.UTF8 = (
-            #1056#164#1056#176#1056#1108#1057#8218#1056#1105#1057#8225#1056#181#1057#1027#1056#1108#1056#1105#1056#181' '#1057#1026#1056#176#1057#1027#1057#8230#1056#1109#1056#1169#1057#8249' '#1057#1027#1056#181#1056#1112#1057#1034#1056#1105)
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object Memo10: TfrxMemoView
-          Left = 884.410020000000000000
-          Width = 151.181200000000000000
-          Height = 45.354360000000000000
-          ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
             
-              #1056#160#1056#176#1056#183#1056#1112#1056#181#1057#1026' '#1056#1111#1057#1026#1056#181#1056#1030#1057#8249#1057#8364#1056#181#1056#1029#1056#1105#1057#1039' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#1105' '#1056#1029#1056#176#1056#1169' '#1057#8222#1056#176#1056#1108 +
-              #1057#8218#1056#1105#1057#8225#1056#181#1057#1027#1056#1108#1056#1105#1056#1112#1056#1105' '#1057#1026#1056#176#1057#1027#1057#8230#1056#1109#1056#1169#1056#176#1056#1112#1056#1105)
+              #1056#8216#1057#1035#1056#1169#1056#182#1056#181#1057#8218#1056#1029#1056#1109#1056#181' '#1057#1107#1057#8225#1057#1026#1056#181#1056#182#1056#1169#1056#181#1056#1029#1056#1105#1056#181' '#1056#1115#1056#1112#1057#1027#1056#1108#1056#1109#1056#8470' '#1056#1109#1056#177#1056#187#1056#176#1057#1027#1057 +
+              #8218#1056#1105
+            
+              '"'#1056#1115#1056#8216#1056#8250#1056#1106#1056#1038#1056#1118#1056#1116#1056#1115#1056#8482' '#1056#166#1056#8226#1056#1116#1056#1118#1056#160' '#1056#8211#1056#152#1056#8250#1056#152#1056#169#1056#1116#1056#171#1056#1168' '#1056#1038#1056#1032#1056#8216#1056#1038#1056#152#1056#8221#1056#152#1056#8482 +
+              ','
+            #1056#1038#1056#1115#1056#166#1056#152#1056#1106#1056#8250#1056#172#1056#1116#1056#171#1056#1168' '#1056#8217#1056#171#1056#1119#1056#8250#1056#1106#1056#1118' '#1056#152' '#1056#8250#1056#172#1056#8220#1056#1115#1056#1118'" ')
           ParentFont = False
-          VAlign = vaCenter
         end
-      end
-      object ReportSummary1: TfrxReportSummary
-        Height = 49.133890000000000000
-        Top = 430.866420000000000000
-        Width = 1046.929810000000000000
-        object Memo56: TfrxMemoView
-          Left = 22.677180000000000000
-          Top = 11.338590000000010000
-          Width = 220.000000000000000000
-          Height = 18.000000000000000000
+        object Memo110: TfrxMemoView
+          Left = 3.779530000000000000
+          Top = 109.606370000000000000
+          Width = 300.000000000000000000
+          Height = 30.000000000000000000
+          ShowHint = False
+          StretchMode = smMaxHeight
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            
+              '"'#1056#1115#1056#8216#1056#8250#1056#1106#1056#1038#1056#1118#1056#1116#1056#1115#1056#8482' '#1056#166#1056#8226#1056#1116#1056#1118#1056#160' '#1056#8211#1056#152#1056#8250#1056#152#1056#169#1056#1116#1056#171#1056#1168' '#1056#1038#1056#1032#1056#8216#1056#1038#1056#152#1056#8221#1056#152#1056#8482 +
+              ','
+            #1056#1038#1056#1115#1056#166#1056#152#1056#1106#1056#8250#1056#172#1056#1116#1056#171#1056#1168' '#1056#8217#1056#171#1056#1119#1056#8250#1056#1106#1056#1118' '#1056#152' '#1056#8250#1056#172#1056#8220#1056#1115#1056#1118'"')
+          ParentFont = False
+        end
+        object Memo134: TfrxMemoView
+          Top = 139.842610000000000000
+          Width = 315.118120000000000000
+          Height = 62.000000000000000000
           ShowHint = False
           Font.Charset = RUSSIAN_CHARSET
           Font.Color = clBlack
@@ -2872,15 +4050,316 @@ object Form1: TForm1
           Font.Style = []
           HAlign = haCenter
           Memo.UTF8 = (
-            #1056#8212#1056#176#1056#1030#1056#181#1056#1169#1057#1107#1057#1035#1057#8240#1056#1105#1056#8470' '#1057#8222#1056#1105#1056#187#1056#1105#1056#176#1056#187#1056#1109#1056#1112)
+            '"'#1056#166#1056#8226#1056#1116#1056#1118#1056#160' '#1056#8211#1056#152#1056#8250#1056#152#1056#169#1056#1116#1056#171#1056#1168' '#1056#1038#1056#1032#1056#8216#1056#1038#1056#152#1056#8221#1056#152#1056#8482','
+            #1056#1038#1056#1115#1056#166#1056#152#1056#1106#1056#8250#1056#172#1056#1116#1056#171#1056#1168' '#1056#8217#1056#171#1056#1119#1056#8250#1056#1106#1056#1118' '#1056#152' '#1056#8250#1056#172#1056#8220#1056#1115#1056#1118' '
+            '[Uppercase(<distName>)] '#1056#1106#1056#8221#1056#1114#1056#152#1056#1116#1056#152#1056#1038#1056#1118#1056#160#1056#1106#1056#1118#1056#152#1056#8217#1056#1116#1056#1115#1056#8220#1056#1115
+            #1056#1115#1056#1113#1056#160#1056#1032#1056#8220#1056#1106' '#1056#8220#1056#1115#1056#160#1056#1115#1056#8221#1056#1106' '#1056#1115#1056#1114#1056#1038#1056#1113#1056#1106'"')
           ParentFont = False
-          VAlign = vaCenter
         end
-        object Memo57: TfrxMemoView
-          Left = 790.677180000000000000
-          Top = 11.338590000000010000
-          Width = 220.000000000000000000
+        object Memo124: TfrxMemoView
+          Left = 3.779530000000000000
+          Top = 204.094620000000000000
+          Width = 300.000000000000000000
+          Height = 30.000000000000000000
+          ShowHint = False
+          StretchMode = smMaxHeight
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[distAdr]'
+            #1056#1118#1056#181#1056#187'./'#1057#8222#1056#176#1056#1108#1057#1027': [distTel]')
+          ParentFont = False
+        end
+        object Memo109: TfrxMemoView
+          Left = 3.779530000000000000
+          Top = 90.708720000000000000
+          Width = 300.000000000000000000
           Height = 18.000000000000000000
+          ShowHint = False
+          StretchMode = smMaxHeight
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            
+              #1056#164#1056#1105#1056#187#1056#1105#1056#176#1056#187' '#1056#177#1057#1035#1056#1169#1056#182#1056#181#1057#8218#1056#1029#1056#1109#1056#1110#1056#1109' '#1057#1107#1057#8225#1057#1026#1056#181#1056#182#1056#1169#1056#181#1056#1029#1056#1105#1057#1039' '#1056#1115#1056#1112#1057#1027#1056#1108#1056 +
+              #1109#1056#8470' '#1056#1109#1056#177#1056#187#1056#176#1057#1027#1057#8218#1056#1105)
+          ParentFont = False
+        end
+      end
+    end
+    object Page3: TfrxReportPage
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 297.000000000000000000
+      PaperSize = 9
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      object Memo107: TfrxMemoView
+        Top = 272.126160000000000000
+        Width = 716.692950000000000000
+        Height = 42.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Arial'
+        Font.Style = []
+        HAlign = haCenter
+        Memo.UTF8 = (
+          #1056#160#1056#8226#1056#1025#1056#8226#1056#1116#1056#152#1056#8226
+          
+            #1056#1109' '#1056#1111#1057#1026#1056#181#1056#1169#1056#1109#1057#1027#1057#8218#1056#176#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1056#1105' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#1105' '#1056#1029#1056#176' '#1056#1109#1056#1111#1056#187#1056#176#1057#8218 +
+            #1057#1107' '#1056#182#1056#1105#1056#187#1056#1109#1056#1110#1056#1109' '#1056#1111#1056#1109#1056#1112#1056#181#1057#8240#1056#181#1056#1029#1056#1105#1057#1039' '#1056#1105' '#1056#1108#1056#1109#1056#1112#1056#1112#1057#1107#1056#1029#1056#176#1056#187#1057#1034#1056#1029#1057#8249#1057#8230' '#1057 +
+            #1107#1057#1027#1056#187#1057#1107#1056#1110)
+        ParentFont = False
+      end
+      object Memo108: TfrxMemoView
+        Left = 18.897650000000000000
+        Top = 327.905690000000000000
+        Width = 157.133890000000000000
+        Height = 18.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          '[<frxData1."change">] '#1056#1110#1056#1109#1056#1169#1056#176)
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo111: TfrxMemoView
+        Left = 535.779530000000000000
+        Top = 327.905690000000000000
+        Width = 143.118120000000000000
+        Height = 18.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          #1074#8222#8211' 0[<frxData1."regn">]')
+        ParentFont = False
+        VAlign = vaCenter
+      end
+      object Memo112: TfrxMemoView
+        Left = 7.559060000000000000
+        Top = 359.905690000000000000
+        Width = 697.795300000000000000
+        Height = 246.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Arial'
+        Font.Style = []
+        HAlign = haBlock
+        Memo.UTF8 = (
+          
+            '     '#1056#8217' '#1057#1027#1056#1109#1056#1109#1057#8218#1056#1030#1056#181#1057#8218#1057#1027#1057#8218#1056#1030#1056#1105#1056#1105' '#1057#1027#1056#1109' '#1057#1027#1057#8218#1056#176#1057#8218#1057#1034#1056#181#1056#8470' 159 '#1056#8211#1056#1105#1056#187#1056 +
+            #1105#1057#8240#1056#1029#1056#1109#1056#1110#1056#1109' '#1056#1108#1056#1109#1056#1169#1056#181#1056#1108#1057#1027#1056#176' '#1056#160#1056#1109#1057#1027#1057#1027#1056#1105#1056#8470#1057#1027#1056#1108#1056#1109#1056#8470' '#1056#164#1056#181#1056#1169#1056#181#1057#1026#1056#176#1057#8224#1056#1105 +
+            #1056#1105', '#1056#1111#1057#1107#1056#1029#1056#1108#1057#8218#1056#1109#1056#1112' 42 '
+          
+            #1056#1119#1057#1026#1056#176#1056#1030#1056#1105#1056#187' '#1056#1111#1057#1026#1056#181#1056#1169#1056#1109#1057#1027#1057#8218#1056#176#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1057#1039' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#8470' '#1056#1029#1056#176' ' +
+            #1056#1109#1056#1111#1056#187#1056#176#1057#8218#1057#1107' '#1056#182#1056#1105#1056#187#1056#1109#1056#1110#1056#1109' '#1056#1111#1056#1109#1056#1112#1056#181#1057#8240#1056#181#1056#1029#1056#1105#1057#1039' '#1056#1105' '#1056#1108#1056#1109#1056#1112#1056#1112#1057#1107#1056#1029#1056#176#1056#187 +
+            #1057#1034#1056#1029#1057#8249#1057#8230' '#1057#1107#1057#1027#1056#187#1057#1107#1056#1110', '
+          
+            #1057#1107#1057#8218#1056#1030#1056#181#1057#1026#1056#182#1056#1169#1056#181#1056#1029#1056#1029#1057#8249#1057#8230' '#1056#1111#1056#1109#1057#1027#1057#8218#1056#176#1056#1029#1056#1109#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1056#181#1056#1112' '#1056#1119#1057#1026#1056#176#1056#1030#1056#1105 +
+            #1057#8218#1056#181#1056#187#1057#1034#1057#1027#1057#8218#1056#1030#1056#176' '#1056#160#1056#1109#1057#1027#1057#1027#1056#1105#1056#8470#1057#1027#1056#1108#1056#1109#1056#8470' '#1056#164#1056#181#1056#1169#1056#181#1057#1026#1056#176#1057#8224#1056#1105#1056#1105' '#1056#1109#1057#8218' 14' +
+            ' '#1056#1169#1056#181#1056#1108#1056#176#1056#177#1057#1026#1057#1039' 2005 '#1056#1110#1056#1109#1056#1169#1056#176' '#1074#8222#8211' 761 "'#1056#1115' '#1056#1111#1057#1026#1056#181#1056#1169#1056#1109#1057#1027#1057#8218#1056#176#1056#1030#1056#187#1056#181 +
+            #1056#1029#1056#1105#1056#1105' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#8470' '#1056#1029#1056#176' '#1056#1109#1056#1111#1056#187#1056#176#1057#8218#1057#1107' '#1056#182#1056#1105#1056#187#1056#1109#1056#1110#1056#1109' '#1056#1111#1056#1109#1056#1112#1056#181#1057 +
+            #8240#1056#181#1056#1029#1056#1105#1057#1039' '#1056#1105' '#1056#1108#1056#1109#1056#1112#1056#1112#1057#1107#1056#1029#1056#176#1056#187#1057#1034#1056#1029#1057#8249#1057#8230' '#1057#1107#1057#1027#1056#187#1057#1107#1056#1110'": '
+          ''
+          #1056#1111#1057#1026#1056#181#1056#1169#1056#1109#1057#1027#1057#8218#1056#176#1056#1030#1056#1105#1057#8218#1057#1034' [fio], '
+          ''
+          #1056#1111#1057#1026#1056#1109#1056#182#1056#1105#1056#1030#1056#176#1057#1035#1057#8240#1056#181#1056#1112#1057#1107'('#1056#181#1056#8470') '#1056#1111#1056#1109' '#1056#176#1056#1169#1057#1026#1056#181#1057#1027#1057#1107': [address] '
+          ''
+          #1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1057#1035' '#1056#1030' '#1057#1026#1056#176#1056#183#1056#1112#1056#181#1057#1026#1056#181' [sumsub1] '#1057#1026#1057#1107#1056#177#1056#187#1056#181#1056#8470
+          
+            #1056#1029#1056#176' [cm] '#1056#1112#1056#181#1057#1027#1057#1039#1057#8224#1056#181#1056#1030' '#1057#1027' [<frxData1."bdate">] '#1056#1110#1056#1109#1056#1169#1056#176' '#1056#1169#1056#1109' [' +
+            '<frxData1."edate">] '#1056#1110#1056#1109#1056#1169#1056#176'.')
+        ParentFont = False
+      end
+      object Memo113: TfrxMemoView
+        Left = 30.236240000000000000
+        Top = 960.000620000000000000
+        Width = 136.000000000000000000
+        Height = 18.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          '[<frxData1."change">] '#1056#1110'.')
+        ParentFont = False
+      end
+      object Memo114: TfrxMemoView
+        Left = 30.236240000000000000
+        Top = 987.780150000000000000
+        Width = 660.000000000000000000
+        Height = 50.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        Memo.UTF8 = (
+          
+            #1056#1038#1057#1026#1056#1109#1056#1108#1056#1105' '#1057#1027#1056#1030#1056#1109#1056#181#1056#1030#1057#1026#1056#181#1056#1112#1056#181#1056#1029#1056#1029#1056#1109#1056#1110#1056#1109' '#1056#1111#1056#1109#1056#1030#1057#8218#1056#1109#1057#1026#1056#1029#1056#1109#1056#1110#1056#1109' '#1056#1109#1056 +
+            #177#1057#1026#1056#176#1057#8240#1056#181#1056#1029#1056#1105#1057#1039' [newatt].')
+        ParentFont = False
+      end
+      object Memo115: TfrxMemoView
+        Left = 30.236240000000000000
+        Top = 729.449290000000000000
+        Width = 660.000000000000000000
+        Height = 218.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          
+            #1056#8212#1056#176#1056#1030#1056#181#1056#1169#1057#1107#1057#1035#1057#8240#1056#1105#1056#8470' '#1057#8222#1056#1105#1056#187#1056#1105#1056#176#1056#187#1056#1109#1056#1112'______________________     ' +
+            '                                         [<frxData1."boss">]'
+          '                                             ('#1056#1111#1056#1109#1056#1169#1056#1111#1056#1105#1057#1027#1057#1034')'
+          ''
+          
+            #1056#1038#1056#1111#1056#181#1057#8224#1056#1105#1056#176#1056#187#1056#1105#1057#1027#1057#8218' '#1056#1111#1056#1109' '#1057#1027#1056#1109#1057#8224#1056#1105#1056#176#1056#187#1057#1034#1056#1029#1056#1109#1056#8470' '#1057#1026#1056#176#1056#177#1056#1109#1057#8218#1056#181'_____' +
+            '_________________                              [<frxData1."namei' +
+            'nsp">]'
+          
+            '                                                          ('#1056#1111#1056#1109#1056 +
+            #1169#1056#1111#1056#1105#1057#1027#1057#1034')'
+          ''
+          
+            #1056#160#1056#181#1057#8364#1056#181#1056#1029#1056#1105#1056#181' '#1056#1111#1056#1109#1056#187#1057#1107#1057#8225#1056#1105#1056#187', '#1057#1027' '#1057#1026#1056#176#1057#1027#1057#8225#1056#181#1057#8218#1056#176#1056#1112#1056#1105' '#1056#1109#1056#183#1056#1029#1056#176#1056#1108#1056 +
+            #1109#1056#1112#1056#187#1056#181#1056#1029':'
+          
+            #1056#8212#1056#176#1057#1039#1056#1030#1056#1105#1057#8218#1056#181#1056#187#1057#1034'______________________                        ' +
+            '                                        ______________________'
+          
+            '                      ('#1056#1111#1056#1109#1056#1169#1056#1111#1056#1105#1057#1027#1057#1034')                          ' +
+            '                                                                ' +
+            '    ('#1056#164'.'#1056#152'.'#1056#1115'.)  '
+          '                      '
+          #1056#160#1056#181#1057#8364#1056#181#1056#1029#1056#1105#1056#181' '#1056#1030#1057#1026#1057#1107#1057#8225#1056#1105#1056#187' ('#1056#1029#1056#176#1056#1111#1057#1026#1056#176#1056#1030#1056#1105#1056#187'): '
+          
+            #1056#152#1057#1027#1056#1111#1056#1109#1056#187#1056#1029#1056#1105#1057#8218#1056#181#1056#187#1057#1034'______________________                    ' +
+            '                                        ______________________'
+          
+            '                      ('#1056#1111#1056#1109#1056#1169#1056#1111#1056#1105#1057#1027#1057#1034')                          ' +
+            '                                                                ' +
+            '    ('#1056#164'.'#1056#152'.'#1056#1115'.)  ')
+        ParentFont = False
+      end
+      object Memo116: TfrxMemoView
+        Left = 7.559060000000000000
+        Top = 605.724800000000000000
+        Width = 697.795300000000000000
+        Height = 106.000000000000000000
+        ShowHint = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Arial'
+        Font.Style = []
+        Memo.UTF8 = (
+          '     '#1056#1115#1057#1027#1056#1029#1056#1109#1056#1030#1056#176#1056#1029#1056#1105#1056#181':'
+          ''
+          
+            '     1. '#1056#8212#1056#176#1057#1039#1056#1030#1056#187#1056#181#1056#1029#1056#1105#1056#181' [fio_g] '#1057#1027' '#1056#1111#1057#1026#1056#1105#1056#187#1056#1109#1056#182#1056#181#1056#1029#1056#1105#1056#181#1056#1112' '#1056#1029#1056 +
+            #181#1056#1109#1056#177#1057#8230#1056#1109#1056#1169#1056#1105#1056#1112#1057#8249#1057#8230' '#1056#1169#1056#1109#1056#1108#1057#1107#1056#1112#1056#181#1056#1029#1057#8218#1056#1109#1056#1030
+          ''
+          
+            '     2. '#1056#160#1056#176#1057#1027#1057#8225#1056#181#1057#8218' '#1057#1027#1057#1107#1056#177#1057#1027#1056#1105#1056#1169#1056#1105#1056#1105' '#1056#1109#1057#8218' [<frxData1."change">]' +
+            ' '#1056#1110#1056#1109#1056#1169#1056#176' '#1074#8222#8211' 0[<frxData1."regn">]')
+        ParentFont = False
+      end
+      object PageHeader2: TfrxPageHeader
+        Height = 241.889920000000000000
+        Top = 18.897650000000000000
+        Width = 718.110700000000000000
+        object Memo117: TfrxMemoView
+          Left = 3.779530000000000000
+          Width = 300.000000000000000000
+          Height = 38.000000000000000000
+          ShowHint = False
+          StretchMode = smMaxHeight
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            #1056#1114#1056#152#1056#1116#1056#152#1056#1038#1056#1118#1056#8226#1056#160#1056#1038#1056#1118#1056#8217#1056#1115' '#1056#1118#1056#160#1056#1032#1056#8221#1056#1106' '#1056#152' '#1056#1038#1056#1115#1056#166#1056#152#1056#1106#1056#8250#1056#172#1056#1116#1056#1115#1056#8220#1056#1115
+            #1056#160#1056#1106#1056#8212#1056#8217#1056#152#1056#1118#1056#152#1056#1031' '#1056#1115#1056#1114#1056#1038#1056#1113#1056#1115#1056#8482' '#1056#1115#1056#8216#1056#8250#1056#1106#1056#1038#1056#1118#1056#152)
+          ParentFont = False
+        end
+        object Memo118: TfrxMemoView
+          Top = 37.795300000000000000
+          Width = 311.779530000000000000
+          Height = 50.220470000000000000
+          ShowHint = False
+          StretchMode = smMaxHeight
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            
+              #1056#8216#1057#1035#1056#1169#1056#182#1056#181#1057#8218#1056#1029#1056#1109#1056#181' '#1057#1107#1057#8225#1057#1026#1056#181#1056#182#1056#1169#1056#181#1056#1029#1056#1105#1056#181' '#1056#1115#1056#1112#1057#1027#1056#1108#1056#1109#1056#8470' '#1056#1109#1056#177#1056#187#1056#176#1057#1027#1057 +
+              #8218#1056#1105
+            
+              '"'#1056#1115#1056#8216#1056#8250#1056#1106#1056#1038#1056#1118#1056#1116#1056#1115#1056#8482' '#1056#166#1056#8226#1056#1116#1056#1118#1056#160' '#1056#8211#1056#152#1056#8250#1056#152#1056#169#1056#1116#1056#171#1056#1168' '#1056#1038#1056#1032#1056#8216#1056#1038#1056#152#1056#8221#1056#152#1056#8482 +
+              ','
+            #1056#1038#1056#1115#1056#166#1056#152#1056#1106#1056#8250#1056#172#1056#1116#1056#171#1056#1168' '#1056#8217#1056#171#1056#1119#1056#8250#1056#1106#1056#1118' '#1056#152' '#1056#8250#1056#172#1056#8220#1056#1115#1056#1118'" ')
+          ParentFont = False
+        end
+        object Memo119: TfrxMemoView
+          Left = 3.779530000000000000
+          Top = 109.606370000000000000
+          Width = 300.000000000000000000
+          Height = 30.000000000000000000
+          ShowHint = False
+          StretchMode = smMaxHeight
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            
+              '"'#1056#1115#1056#8216#1056#8250#1056#1106#1056#1038#1056#1118#1056#1116#1056#1115#1056#8482' '#1056#166#1056#8226#1056#1116#1056#1118#1056#160' '#1056#8211#1056#152#1056#8250#1056#152#1056#169#1056#1116#1056#171#1056#1168' '#1056#1038#1056#1032#1056#8216#1056#1038#1056#152#1056#8221#1056#152#1056#8482 +
+              ','
+            #1056#1038#1056#1115#1056#166#1056#152#1056#1106#1056#8250#1056#172#1056#1116#1056#171#1056#1168' '#1056#8217#1056#171#1056#1119#1056#8250#1056#1106#1056#1118' '#1056#152' '#1056#8250#1056#172#1056#8220#1056#1115#1056#1118'"')
+          ParentFont = False
+        end
+        object Memo122: TfrxMemoView
+          Top = 139.842610000000000000
+          Width = 315.118120000000000000
+          Height = 62.000000000000000000
           ShowHint = False
           Font.Charset = RUSSIAN_CHARSET
           Font.Color = clBlack
@@ -2889,9 +4368,48 @@ object Form1: TForm1
           Font.Style = []
           HAlign = haCenter
           Memo.UTF8 = (
-            '[boss]')
+            '"'#1056#166#1056#8226#1056#1116#1056#1118#1056#160' '#1056#8211#1056#152#1056#8250#1056#152#1056#169#1056#1116#1056#171#1056#1168' '#1056#1038#1056#1032#1056#8216#1056#1038#1056#152#1056#8221#1056#152#1056#8482','
+            #1056#1038#1056#1115#1056#166#1056#152#1056#1106#1056#8250#1056#172#1056#1116#1056#171#1056#1168' '#1056#8217#1056#171#1056#1119#1056#8250#1056#1106#1056#1118' '#1056#152' '#1056#8250#1056#172#1056#8220#1056#1115#1056#1118' '
+            '[Uppercase(<distName>)] '#1056#1106#1056#8221#1056#1114#1056#152#1056#1116#1056#152#1056#1038#1056#1118#1056#160#1056#1106#1056#1118#1056#152#1056#8217#1056#1116#1056#1115#1056#8220#1056#1115
+            #1056#1115#1056#1113#1056#160#1056#1032#1056#8220#1056#1106' '#1056#8220#1056#1115#1056#160#1056#1115#1056#8221#1056#1106' '#1056#1115#1056#1114#1056#1038#1056#1113#1056#1106'"')
           ParentFont = False
-          VAlign = vaCenter
+        end
+        object Memo123: TfrxMemoView
+          Left = 3.779530000000000000
+          Top = 204.094620000000000000
+          Width = 300.000000000000000000
+          Height = 30.000000000000000000
+          ShowHint = False
+          StretchMode = smMaxHeight
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            '[distAdr]'
+            #1056#1118#1056#181#1056#187'./'#1057#8222#1056#176#1056#1108#1057#1027': [distTel]')
+          ParentFont = False
+        end
+        object Memo125: TfrxMemoView
+          Left = 3.779530000000000000
+          Top = 90.708720000000000000
+          Width = 300.000000000000000000
+          Height = 18.000000000000000000
+          ShowHint = False
+          StretchMode = smMaxHeight
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8 = (
+            
+              #1056#164#1056#1105#1056#187#1056#1105#1056#176#1056#187' '#1056#177#1057#1035#1056#1169#1056#182#1056#181#1057#8218#1056#1029#1056#1109#1056#1110#1056#1109' '#1057#1107#1057#8225#1057#1026#1056#181#1056#182#1056#1169#1056#181#1056#1029#1056#1105#1057#1039' '#1056#1115#1056#1112#1057#1027#1056#1108#1056 +
+              #1109#1056#8470' '#1056#1109#1056#177#1056#187#1056#176#1057#1027#1057#8218#1056#1105)
+          ParentFont = False
         end
       end
     end

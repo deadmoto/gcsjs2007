@@ -6,7 +6,8 @@ uses min,controls, Contnrs, service, Dialogs;
 
 type
   T2DInt = array of array of integer;
-  TCData = record
+
+  TCData = packed record
     dist: integer;//округ
     quanpriv: integer;//количество льготников в карте клиента,указанное инспектором
     calc: integer;//тип расчета
@@ -52,7 +53,8 @@ type
     stop: integer;
     heating: integer;
   end;
-  TData = record
+
+  TData = packed record
     regn: integer;//рег номер клиента
     regdate: TDate;//дата регистрации клиента
     fio: string;//ФИО клиента
@@ -76,6 +78,7 @@ type
     declar: TDate;//дата подачи заявления
     mail: integer;//уведомление отправленно или нет (0/1)
   end;
+
   TClient = class
   public
     data: TData;

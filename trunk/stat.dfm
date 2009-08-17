@@ -26,9 +26,6 @@ object Stats: TStats
     Align = alTop
     Caption = #1057#1086#1094'. '#1089#1090#1072#1090#1091#1089':'
     TabOrder = 0
-    ExplicitLeft = -2
-    ExplicitTop = -6
-    ExplicitWidth = 567
     object DBGrid1: TDBGrid
       Left = 2
       Top = 32
@@ -52,7 +49,6 @@ object Stats: TStats
       Align = alTop
       Caption = #1040#1082#1090#1080#1074#1085#1099#1077
       TabOrder = 1
-      ExplicitWidth = 290
     end
   end
   object GroupBox2: TGroupBox
@@ -64,7 +60,6 @@ object Stats: TStats
     Align = alTop
     Caption = #1044#1086#1093#1086#1076':'
     TabOrder = 1
-    ExplicitWidth = 294
     object Label4: TLabel
       Left = 16
       Top = 24
@@ -143,7 +138,6 @@ object Stats: TStats
     Align = alTop
     Caption = #1044#1086#1093#1086#1076#1086#1084' '#1085#1080#1078#1077' '#1087#1088'. '#1084#1080#1085#1080#1084':'
     TabOrder = 2
-    ExplicitWidth = 294
     object Label1: TLabel
       Left = 16
       Top = 24
@@ -174,7 +168,6 @@ object Stats: TStats
     Align = alTop
     Caption = #1057#1091#1073#1089#1080#1076#1080#1103':'
     TabOrder = 3
-    ExplicitWidth = 294
     object Label9: TLabel
       Left = 16
       Top = 24
@@ -250,10 +243,10 @@ object Stats: TStats
     Top = 463
     Width = 297
     Height = 53
+    Margins.Bottom = 0
     Align = alTop
     Caption = #1057#1088#1077#1076#1085#1103#1103' '#1089#1091#1073#1089#1080#1076#1080#1103': '
     TabOrder = 4
-    ExplicitWidth = 294
     object Label3: TLabel
       Left = 19
       Top = 24
@@ -286,7 +279,6 @@ object Stats: TStats
     BevelInner = bvLowered
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 5
-    ExplicitWidth = 294
     object Button2: TButton
       AlignWithMargins = True
       Left = 217
@@ -294,7 +286,7 @@ object Stats: TStats
       Width = 75
       Height = 25
       Caption = #1054#1090#1084#1077#1085#1072
-      TabOrder = 0
+      TabOrder = 1
       OnClick = Button2Click
     end
     object Button1: TButton
@@ -304,7 +296,7 @@ object Stats: TStats
       Width = 75
       Height = 25
       Caption = #1057#1095#1080#1090#1072#1090#1100
-      TabOrder = 1
+      TabOrder = 0
     end
   end
 end

@@ -15,7 +15,8 @@ uses
   ExtCtrls,
   StdCtrls,
   IniCheckBox,
-  IniLabeledEdit;
+  IniLabeledEdit,
+  FileCtrl;
 
 type
   TfAppUpdate = class(TFrame)
@@ -24,7 +25,9 @@ type
     GroupBox1:       TGroupBox;
     IniLabeledEdit3: TIniLabeledEdit;
     IniLabeledEdit2: TIniLabeledEdit;
+    Button1: TButton;
     procedure IniLabeledEdit1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -37,6 +40,14 @@ uses
   ConfigPropertiesUnit;
 
 {$R *.dfm}
+
+procedure TfAppUpdate.Button1Click(Sender: TObject);
+var
+  dir: string;
+begin
+  if SelectDirectory('Select directory', '', dir, [sdShowShares, sdNewUI, sdValidateDir]) then
+    IniLabeledEdit1.Text:= dir;
+end;
 
 procedure TfAppUpdate.IniLabeledEdit1Click(Sender: TObject);
 begin

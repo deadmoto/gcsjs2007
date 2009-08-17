@@ -23,7 +23,8 @@ object ConfigFrm: TConfigFrm
     Left = 3
     Top = 3
     Width = 142
-    Height = 318
+    Height = 321
+    Margins.Bottom = 0
     Align = alLeft
     BevelInner = bvLowered
     TabOrder = 0
@@ -31,7 +32,7 @@ object ConfigFrm: TConfigFrm
       Left = 2
       Top = 2
       Width = 138
-      Height = 314
+      Height = 317
       Style = lbOwnerDrawFixed
       Align = alClient
       BorderStyle = bsNone
@@ -45,7 +46,8 @@ object ConfigFrm: TConfigFrm
     Left = 151
     Top = 3
     Width = 314
-    Height = 318
+    Height = 321
+    Margins.Bottom = 0
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
@@ -68,7 +70,7 @@ object ConfigFrm: TConfigFrm
       Width = 75
       Height = 25
       Caption = #1054#1090#1084#1077#1085#1072
-      TabOrder = 0
+      TabOrder = 2
       OnClick = Button1Click
     end
     object Button2: TButton
@@ -89,7 +91,7 @@ object ConfigFrm: TConfigFrm
       Width = 75
       Height = 25
       Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
-      TabOrder = 2
+      TabOrder = 0
       OnClick = Button3Click
     end
   end
