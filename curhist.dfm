@@ -26,8 +26,6 @@ object Form18: TForm18
     Align = alClient
     Caption = #1058#1077#1082#1091#1097#1080#1077' '#1089#1091#1073#1089#1080#1076#1080#1080':'
     TabOrder = 0
-    ExplicitWidth = 387
-    ExplicitHeight = 375
     object SGH: TStringGrid
       Left = 2
       Top = 15
@@ -49,8 +47,6 @@ object Form18: TForm18
       OnKeyDown = SGHKeyDown
       OnKeyPress = SGHKeyPress
       OnSelectCell = SGHSelectCell
-      ExplicitWidth = 383
-      ExplicitHeight = 358
     end
   end
   object StatusBar1: TStatusBar
@@ -67,7 +63,5 @@ object Form18: TForm18
         Text = #1057#1091#1084#1084#1072' '#1089#1091#1073#1089#1080#1076#1080#1081':'
         Width = 50
       end>
-    ExplicitTop = 386
-    ExplicitWidth = 39
   end
 end

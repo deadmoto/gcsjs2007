@@ -26,7 +26,7 @@ object Form44: TForm44
     AutoWrap = False
     BevelInner = bvLowered
     FlowStyle = fsRightLeftBottomTop
-    TabOrder = 0
+    TabOrder = 1
     object Button2: TButton
       AlignWithMargins = True
       Left = 537
@@ -34,7 +34,7 @@ object Form44: TForm44
       Width = 75
       Height = 25
       Caption = #1047#1072#1082#1088#1099#1090#1100
-      TabOrder = 0
+      TabOrder = 2
       OnClick = Button2Click
     end
     object Button1: TButton
@@ -54,7 +54,7 @@ object Form44: TForm44
       Width = 90
       Height = 25
       Caption = #1069#1082#1089#1087#1086#1088#1090' '#1074' Excel'
-      TabOrder = 2
+      TabOrder = 0
       OnClick = Button3Click
     end
   end
@@ -66,8 +66,7 @@ object Form44: TForm44
     Height = 452
     Margins.Bottom = 0
     Align = alClient
-    TabOrder = 1
-    ExplicitHeight = 449
+    TabOrder = 0
     object SlujGrid: TStringGrid
       Left = 2
       Top = 15
@@ -82,7 +81,6 @@ object Form44: TForm44
       ParentCtl3D = False
       TabOrder = 0
       OnSelectCell = SlujGridSelectCell
-      ExplicitHeight = 432
       ColWidths = (
         64
         64

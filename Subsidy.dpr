@@ -32,7 +32,7 @@ uses
   search in 'search.pas' {Form33},
   opend in 'opend.pas' {Form26},
   fstruct in 'fstruct.pas',
-  SQL in 'sql.pas' {Form34},
+  sql in 'sql.pas' {Form34},
   imexp in 'imexp.pas' {Form35},
   progress in 'progress.pas' {AboutBox1},
   chserv in 'chserv.pas' {Form29},
@@ -63,9 +63,11 @@ uses
   FactSumUnit in 'FactSumUnit.pas' {FactSumFrm},
   ConfigPropertiesUnit in 'ConfigPropertiesUnit.pas' {ConfigFrm},
   fAppPropUnit in 'frames\fAppPropUnit.pas' {fAppProp: TFrame},
-  fAppUpdateUnit in 'frames\fAppUpdateUnit.pas' {fAppUpdate: TFrame};
- //  Plugins in 'Plugins.pas' {Plugins},
- //  uUpdateApp in 'data\uUpdateApp.pas'; {Update module}
+  fAppUpdateUnit in 'frames\fAppUpdateUnit.pas' {fAppUpdate: TFrame},
+  AddReportDataUnit in 'AddReportDataUnit.pas' {AddReportDataFrm};
+
+//  Plugins in 'Plugins.pas' {Plugins},
+
 
 {$R *.res}
 
@@ -133,6 +135,7 @@ begin
         Application.CreateForm(TForm45, Form45);
         Application.CreateForm(TFactSumFrm, FactSumFrm);
         Application.CreateForm(TConfigFrm, ConfigFrm);
+        Application.CreateForm(TAddReportDataFrm, AddReportDataFrm);
         Application.Run;
       except
         ShowMessage('Произошел сбой при создании одной из форм!');

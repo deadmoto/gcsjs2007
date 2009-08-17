@@ -43,7 +43,7 @@ object fAppUpdate: TfAppUpdate
       EditLabel.Width = 41
       EditLabel.Height = 13
       EditLabel.Caption = #1055#1072#1088#1086#1083#1100':'
-      TabOrder = 0
+      TabOrder = 1
       OnClick = IniLabeledEdit1Click
       SectionName = 'Config'
       KeyName = '1.FtpPasswd'
@@ -56,10 +56,19 @@ object fAppUpdate: TfAppUpdate
       EditLabel.Width = 97
       EditLabel.Height = 13
       EditLabel.Caption = #1048#1084#1103' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1103':'
-      TabOrder = 1
+      TabOrder = 0
       OnClick = IniLabeledEdit1Click
       SectionName = 'Config'
       KeyName = '1.FtpName'
     end
+  end
+  object Button1: TButton
+    Left = 207
+    Top = 50
+    Width = 25
+    Height = 21
+    Caption = '...'
+    TabOrder = 3
+    OnClick = Button1Click
   end
 end
