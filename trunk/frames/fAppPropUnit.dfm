@@ -2,7 +2,7 @@ object fAppProp: TfAppProp
   Left = 0
   Top = 0
   Width = 280
-  Height = 311
+  Height = 336
   TabOrder = 0
   object Panel1: TPanel
     Left = 0
@@ -28,7 +28,7 @@ object fAppProp: TfAppProp
   end
   object IniCheckBox2: TIniCheckBox
     Left = 16
-    Top = 95
+    Top = 127
     Width = 233
     Height = 26
     Caption = #1042#1099#1074#1086#1076#1080#1090#1100' '#1086#1082#1085#1086' "'#1060#1072#1082#1090#1080#1095#1077#1089#1082#1080#1077' '#1088#1072#1089#1093#1086#1076#1099'" '#1087#1088#1080' '#1080#1079#1084#1077#1085#1077#1080#1080' '#1082#1083#1080#1077#1085#1090#1072
@@ -52,7 +52,7 @@ object fAppProp: TfAppProp
   end
   object GroupBox1: TGroupBox
     Left = 16
-    Top = 158
+    Top = 190
     Width = 249
     Height = 131
     Caption = #1044#1080#1088#1077#1082#1090#1086#1088#1080#1080':'
@@ -103,7 +103,7 @@ object fAppProp: TfAppProp
       Top = 73
       Width = 156
       Height = 17
-      Caption = #1060#1072#1081#1083#1099' '#1073#1072#1079' '#1076#1072#1085#1085#1099#1093'(*.dbf):'
+      Caption = #1060#1072#1081#1083#1099' '#1073#1072#1079' '#1076#1072#1085#1085#1099#1093' (*.dbf):'
       TabOrder = 2
       OnClick = IniCheckBox5Click
       SectionName = 'Config'
@@ -142,7 +142,7 @@ object fAppProp: TfAppProp
   end
   object IniCheckBox6: TIniCheckBox
     Left = 16
-    Top = 127
+    Top = 159
     Width = 233
     Height = 25
     Caption = #1057#1080#1089#1090#1077#1084#1085#1072#1103' '#1087#1072#1087#1082#1072' '#1076#1083#1103' '#1093#1088#1072#1085#1077#1085#1080#1103' '#1074#1088#1077#1084#1077#1085#1085#1099#1093' '#1092#1072#1081#1083#1086#1074' (%TEMP%)'
@@ -151,5 +151,21 @@ object fAppProp: TfAppProp
     OnClick = IniCheckBox6Click
     SectionName = 'Config'
     KeyName = '0.UseTempDir'
+  end
+  object IniCheckBox7: TIniCheckBox
+    Left = 16
+    Top = 95
+    Width = 246
+    Height = 26
+    Hint = '('#1056#1077#1096#1077#1085#1080#1077' '#1086' ...)'
+    Caption = 
+      #1055#1086#1082#1072#1079#1099#1074#1072#1090#1100' '#1092#1086#1088#1084#1091' '#1074#1074#1086#1076#1072' '#1076#1086#1087#1086#1083#1085#1080#1090#1077#1083#1100#1085#1099#1093' '#1076#1072#1085#1085#1099#1093' '#1087#1088#1080' '#1092#1086#1088#1084#1080#1088#1086#1074#1072#1085#1080#1080' '#1086#1090 +
+      #1095#1077#1090#1086#1074
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 6
+    WordWrap = True
+    SectionName = 'Config'
+    KeyName = '0.ShowAddReportData'
   end
 end

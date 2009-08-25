@@ -4,21 +4,23 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Mask, DBCtrls, Grids, DBGrids;
+  Dialogs, StdCtrls, Mask, DBCtrls, Grids, DBGrids, ExtCtrls;
 
 type
   TForm6 = class(TForm)
-    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    StringGrid1: TStringGrid;
+    Panel2: TPanel;
     Label1: TLabel;
+    Label3: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    FlowPanel1: TFlowPanel;
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
-    Edit1: TEdit;
-    Label3: TLabel;
-    Edit2: TEdit;
     procedure Button4Click(Sender: TObject);
-    procedure DBGrid1CellClick(Column: TColumn);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -30,6 +32,8 @@ type
     procedure Edit1Exit(Sender: TObject);
     procedure Edit1KeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
   private
     { Private declarations }
     oldid: integer;//текущие значения полей до изменения
@@ -50,6 +54,8 @@ uses datamodule, main, service;
 
 procedure TForm6.SetDefault;
 { выборка по умолчанию из таблицы жилищных фондов }
+var
+  i: integer;
 begin
   with Datamodule1.Query1 do begin
     Close;
@@ -57,6 +63,31 @@ begin
     SQL.Add('select *');
     SQL.Add('from fond');
     SQL.Add('order by id_fond');
+    Open;
+    First;
+  end;
+
+  FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование'),
+    TIntArray.Create(25, 270), Datamodule1.Query1.RecordCount + 1);
+
+  for i := 0 to Datamodule1.Query1.RecordCount - 1 do
+  begin
+    StringGrid1.Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_fond').Value;
+    StringGrid1.Cells[1, i + 1] := Datamodule1.Query1.FieldByName('namefond').Value;
+    Datamodule1.Query1.Next;
+  end; 
+    
+end;
+
+procedure TForm6.StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
+  var CanSelect: Boolean);
+begin
+  if ARow <> 0 then
+  begin
+    Edit1.Text := StringGrid1.Cells[1, ARow];// DBGrid1.Fields[1].AsString;
+    Edit2.Text := StringGrid1.Cells[0, ARow];// DBGrid1.Fields[0].AsString;
+    if Edit2.Text <> '' then
+      oldid := StrToInt(Edit2.Text);
   end;
 end;
 
@@ -64,14 +95,6 @@ procedure TForm6.Button4Click(Sender: TObject);
 { выйти }
 begin
   Form6.Close;
-end;
-
-procedure TForm6.DBGrid1CellClick(Column: TColumn);
-{ выбрали ячейку }
-begin
-  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit2.Text);
 end;
 
 procedure TForm6.Button1Click(Sender: TObject);
@@ -200,22 +223,23 @@ begin
       ExecSQL;
       SetDefault;
       Open;
-      Edit1.Text := DBGrid1.Fields[1].AsString;
+{      Edit1.Text := DBGrid1.Fields[1].AsString;
       Edit2.Text := DBGrid1.Fields[0].AsString;
-      oldid := StrToInt(Edit2.Text);
+      oldid := StrToInt(Edit2.Text);}
     end;
   end;
 end;
 
 procedure TForm6.FormShow(Sender: TObject);
 begin
-  with DataModule1.Query1 do begin
-    SetDefault;
+  SetDefault;
+  {with DataModule1.Query1 do begin
+
     Open;
   end;
   Edit1.Text := DBGrid1.Fields[1].AsString;
   Edit2.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit2.Text);
+  oldid := StrToInt(Edit2.Text);}
   if status=0 then begin
     Button1.Enabled := false;
     Button2.Enabled := false;

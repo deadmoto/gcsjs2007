@@ -2,9 +2,9 @@ object Form33: TForm33
   Left = 296
   Top = 306
   BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
+  BorderStyle = bsDialog
   Caption = #1060#1080#1083#1100#1090#1088
-  ClientHeight = 391
+  ClientHeight = 411
   ClientWidth = 633
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -23,7 +23,7 @@ object Form33: TForm33
     Left = 3
     Top = 171
     Width = 313
-    Height = 180
+    Height = 198
     TabOrder = 1
     object Label4: TLabel
       Left = 224
@@ -43,7 +43,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 0
       OnChange = ComboBox2Change
@@ -113,7 +113,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 3
       OnChange = ComboBox7Change
@@ -130,7 +130,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 4
       OnChange = ComboBox8Change
@@ -147,7 +147,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 5
       OnChange = ComboBox9Change
@@ -164,7 +164,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 6
       OnChange = ComboBox10Change
@@ -220,6 +220,35 @@ object Form33: TForm33
       TabOrder = 12
       OnClick = CheckBox10Click
     end
+    object CheckBox20: TCheckBox
+      Left = 8
+      Top = 168
+      Width = 97
+      Height = 17
+      Caption = #1050#1086#1083'-'#1074#1086' '#1095#1077#1083#1086#1074#1077#1082
+      TabOrder = 13
+      OnClick = CheckBox20Click
+    end
+    object ComboBox14: TComboBox
+      Left = 144
+      Top = 168
+      Width = 161
+      Height = 21
+      Color = clBtnFace
+      ItemHeight = 13
+      TabOrder = 14
+      Items.Strings = (
+        '1'
+        '2'
+        '3'
+        '4'
+        '5'
+        '6'
+        '7'
+        '8'
+        '9'
+        '10')
+    end
   end
   object GroupBox2: TGroupBox
     AlignWithMargins = True
@@ -256,7 +285,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 2
       OnChange = ComboBox1Change
@@ -313,7 +342,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 4
       OnChange = ComboBox6Change
@@ -453,7 +482,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 3
       OnChange = ComboBox3Change
@@ -480,7 +509,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 2
       OnChange = ComboBox5Change
@@ -497,7 +526,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 4
       OnChange = ComboBox4Change
@@ -568,7 +597,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 10
       OnChange = ComboBox11Change
@@ -580,7 +609,7 @@ object Form33: TForm33
     Left = 320
     Top = 171
     Width = 311
-    Height = 180
+    Height = 198
     TabOrder = 3
     object CheckBox16: TCheckBox
       Left = 8
@@ -604,13 +633,13 @@ object Form33: TForm33
         #1053#1077' '#1086#1090#1087#1088#1072#1074#1083#1077#1085#1085#1086)
     end
     object CheckBox17: TCheckBox
-      Left = 24
-      Top = 64
+      Left = 19
+      Top = 63
       Width = 121
       Height = 17
       Caption = '('#1090#1086#1083#1100#1082#1086' '#1079#1072' '#1084#1077#1089#1103#1094')'
       Enabled = False
-      TabOrder = 2
+      TabOrder = 4
       OnClick = CheckBox17Click
     end
     object MaskEdit5: TMaskEdit
@@ -640,20 +669,118 @@ object Form33: TForm33
       Height = 17
       Caption = #1044#1072#1090#1072' '#1079#1072#1103#1074#1083#1077#1085#1080#1103
       Enabled = False
-      TabOrder = 4
+      TabOrder = 2
       OnClick = CheckBox18Click
+    end
+    object CheckBox21: TCheckBox
+      Left = 8
+      Top = 96
+      Width = 73
+      Height = 17
+      Hint = #1060#1080#1083#1100#1090#1088' '#1087#1086' '#1086#1073#1097#1077#1081' '#1087#1083#1086#1097#1072#1076#1080
+      Caption = #1055#1083#1086#1097#1072#1076#1100
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 5
+      OnClick = CheckBox21Click
+    end
+    object Panel1: TPanel
+      Left = 120
+      Top = 96
+      Width = 145
+      Height = 57
+      BevelInner = bvLowered
+      TabOrder = 6
+      Visible = False
+      object Button3: TButton
+        Left = 8
+        Top = 8
+        Width = 25
+        Height = 17
+        Caption = '='
+        TabOrder = 0
+        OnClick = Button3Click
+      end
+      object UpDown1: TUpDown
+        Left = 33
+        Top = 8
+        Width = 17
+        Height = 17
+        Max = 3
+        TabOrder = 1
+        Thousands = False
+        OnClick = UpDown1Click
+      end
+      object CheckBox22: TCheckBox
+        Left = 103
+        Top = 8
+        Width = 26
+        Height = 17
+        Caption = #1080
+        TabOrder = 3
+        OnClick = CheckBox22Click
+      end
+      object Panel2: TPanel
+        Left = 8
+        Top = 31
+        Width = 89
+        Height = 17
+        BevelOuter = bvNone
+        TabOrder = 4
+        Visible = False
+        object Button4: TButton
+          Left = 0
+          Top = 0
+          Width = 25
+          Height = 17
+          Caption = '='
+          TabOrder = 0
+          OnClick = Button4Click
+        end
+        object UpDown2: TUpDown
+          Left = 25
+          Top = 0
+          Width = 17
+          Height = 17
+          Max = 3
+          TabOrder = 1
+          Thousands = False
+          OnClick = UpDown2Click
+        end
+        object MaskEdit7: TMaskEdit
+          Left = 48
+          Top = 0
+          Width = 41
+          Height = 17
+          EditMask = '!999/99;1;_'
+          MaxLength = 6
+          TabOrder = 2
+          Text = '   .  '
+        end
+      end
+      object MaskEdit6: TMaskEdit
+        Left = 56
+        Top = 8
+        Width = 41
+        Height = 17
+        EditMask = '!999/99;1;_'
+        MaxLength = 6
+        TabOrder = 2
+        Text = '   .  '
+      end
     end
   end
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 353
+    Top = 373
     Width = 627
     Height = 35
     Align = alBottom
     BevelInner = bvLowered
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 4
+    ExplicitTop = 353
     object Button2: TButton
       AlignWithMargins = True
       Left = 547

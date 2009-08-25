@@ -34,6 +34,7 @@ type
     IniLabeledEdit2: TIniLabeledEdit;
     Button2:         TButton;
     IniCheckBox6:    TIniCheckBox;
+    IniCheckBox7: TIniCheckBox;
     procedure IniCheckBox3Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure IniCheckBox5Click(Sender: TObject);

@@ -204,16 +204,17 @@ object Form1: TForm1
     Left = 3
     Top = 113
     Width = 700
-    Height = 335
+    Height = 339
     Align = alClient
     BevelInner = bvLowered
     Caption = 'Panel1'
     TabOrder = 2
+    ExplicitHeight = 335
     object SGCl: TStringGrid
       Left = 2
       Top = 2
       Width = 618
-      Height = 331
+      Height = 335
       Hint = #1057#1087#1080#1089#1086#1082' '#1074#1089#1077#1093' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1074' '#1073#1072#1079#1077
       Align = alClient
       BorderStyle = bsNone
@@ -232,12 +233,13 @@ object Form1: TForm1
       OnKeyDown = SGClKeyDown
       OnKeyPress = SGClKeyPress
       OnSelectCell = SGClSelectCell
+      ExplicitHeight = 331
     end
     object GridPanel1: TGridPanel
       Left = 620
       Top = 2
       Width = 78
-      Height = 331
+      Height = 335
       Align = alRight
       BevelOuter = bvNone
       ColumnCollection = <
@@ -345,9 +347,10 @@ object Form1: TForm1
           Value = 23.000000000000000000
         end>
       TabOrder = 1
+      ExplicitHeight = 331
       DesignSize = (
         78
-        331)
+        335)
       object Image1: TImage
         Left = 23
         Top = 0
@@ -509,14 +512,15 @@ object Form1: TForm1
         Left = 0
         Top = 186
         Width = 78
-        Height = 59
+        Height = 63
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 3
+        ExplicitHeight = 59
       end
       object Label1: TLabel
         Left = 22
-        Top = 248
+        Top = 252
         Width = 33
         Height = 13
         Anchors = []
@@ -526,7 +530,7 @@ object Form1: TForm1
       end
       object Edit1: TEdit
         Left = 12
-        Top = 266
+        Top = 270
         Width = 54
         Height = 21
         Hint = #1054#1073#1097#1077#1077' '#1082#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1095#1077#1083#1086#1074#1077#1082' '#1074' '#1073#1072#1079#1077
@@ -540,10 +544,11 @@ object Form1: TForm1
         ReadOnly = True
         ShowHint = True
         TabOrder = 4
+        ExplicitTop = 266
       end
       object Label2: TLabel
         Left = 12
-        Top = 291
+        Top = 295
         Width = 53
         Height = 13
         Anchors = []
@@ -553,7 +558,7 @@ object Form1: TForm1
       end
       object Edit2: TEdit
         Left = 12
-        Top = 309
+        Top = 313
         Width = 54
         Height = 21
         Hint = #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1072#1082#1090#1080#1074#1085#1099#1093' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1074' '#1073#1072#1079#1077
@@ -565,23 +570,25 @@ object Form1: TForm1
         ReadOnly = True
         ShowHint = True
         TabOrder = 5
+        ExplicitTop = 309
       end
     end
   end
   object Panel2: TPanel
     Left = 0
-    Top = 451
+    Top = 455
     Width = 706
-    Height = 51
+    Height = 47
     Align = alBottom
     AutoSize = True
-    BevelInner = bvLowered
+    BevelOuter = bvNone
     TabOrder = 3
+    ExplicitTop = 453
     object GridPanel2: TGridPanel
       AlignWithMargins = True
-      Left = 5
-      Top = 5
-      Width = 696
+      Left = 3
+      Top = 3
+      Width = 700
       Height = 41
       Align = alTop
       BevelOuter = bvNone
@@ -706,8 +713,11 @@ object Form1: TForm1
           Value = 50.000000000000000000
         end>
       TabOrder = 0
+      ExplicitLeft = 5
+      ExplicitTop = 5
+      ExplicitWidth = 696
       DesignSize = (
-        696
+        700
         41)
       object Button1: TButton
         Left = 2
@@ -774,20 +784,22 @@ object Form1: TForm1
       object Panel5: TPanel
         Left = 405
         Top = 0
-        Width = 134
+        Width = 138
         Height = 20
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 5
+        ExplicitWidth = 134
       end
       object Panel6: TPanel
-        Left = 539
+        Left = 543
         Top = 0
         Width = 80
         Height = 20
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 6
+        ExplicitLeft = 539
         object Label3: TLabel
           Left = 15
           Top = 3
@@ -798,7 +810,7 @@ object Form1: TForm1
         end
       end
       object Edit3: TEdit
-        Left = 619
+        Left = 623
         Top = 0
         Width = 77
         Height = 20
@@ -812,6 +824,7 @@ object Form1: TForm1
         ReadOnly = True
         ShowHint = True
         TabOrder = 7
+        ExplicitLeft = 619
       end
       object Button4: TButton
         Left = 2
@@ -878,20 +891,22 @@ object Form1: TForm1
       object Panel7: TPanel
         Left = 405
         Top = 20
-        Width = 134
+        Width = 138
         Height = 21
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 13
+        ExplicitWidth = 134
       end
       object Panel8: TPanel
-        Left = 539
+        Left = 543
         Top = 20
         Width = 80
         Height = 21
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 14
+        ExplicitLeft = 539
         object Label4: TLabel
           Left = 16
           Top = 3
@@ -902,7 +917,7 @@ object Form1: TForm1
         end
       end
       object Edit4: TEdit
-        Left = 619
+        Left = 623
         Top = 20
         Width = 77
         Height = 21
@@ -916,6 +931,7 @@ object Form1: TForm1
         ReadOnly = True
         ShowHint = True
         TabOrder = 15
+        ExplicitLeft = 619
       end
     end
   end
@@ -1065,7 +1081,7 @@ object Form1: TForm1
   object MainMenu1: TMainMenu
     Images = ImageList2
     Left = 136
-    Top = 328
+    Top = 360
     object N1: TMenuItem
       Caption = #1060#1072#1081#1083
       object N2: TMenuItem
@@ -2440,7 +2456,7 @@ object Form1: TForm1
   end
   object PopupMenu1: TPopupMenu
     Left = 136
-    Top = 363
+    Top = 395
     object N73: TMenuItem
       Caption = #1055#1088#1080#1086#1089#1090#1072#1085#1086#1074#1080#1090#1100' '#1089#1091#1073#1089#1080#1076#1080#1102
       OnClick = N73Click

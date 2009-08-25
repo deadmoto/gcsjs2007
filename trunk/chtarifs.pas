@@ -3,20 +3,28 @@ unit chtarifs;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls;
+  Windows,
+  Messages,
+  SysUtils,
+  Variants,
+  Classes,
+  Graphics,
+  Controls,
+  Forms,
+  Dialogs,
+  StdCtrls;
 
 type
   TForm42 = class(TForm)
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    Button4: TButton;
-    Button5: TButton;
-    Button6: TButton;
-    Button7: TButton;
-    Button8: TButton;
-    Button9: TButton;
+    Button1:  TButton;
+    Button2:  TButton;
+    Button3:  TButton;
+    Button4:  TButton;
+    Button5:  TButton;
+    Button6:  TButton;
+    Button7:  TButton;
+    Button8:  TButton;
+    Button9:  TButton;
     Button10: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -28,7 +36,7 @@ type
     procedure Button8Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
     procedure Button10Click(Sender: TObject);
-    procedure FormClose( Sender: TObject;var Action: TCloseAction);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
   public
@@ -41,7 +49,11 @@ var
 
 implementation
 
-uses tarif, tarifb, elpower, main;
+uses
+  tarif,
+  tarifb,
+  elpower,
+  main;
 
 {$R *.dfm}
 
@@ -72,7 +84,7 @@ begin
   Form19.nam := 'cold';
   Form19.num := 2;
   Form19.Caption := 'Тарифы на водопотребление(руб./чел.)';
-  Form19.ShowModal;                                               
+  Form19.ShowModal;
 end;
 
 procedure TForm42.Button4Click(Sender: TObject);
@@ -145,7 +157,7 @@ begin
   Form15.ShowModal;
 end;
 
-procedure TForm42.FormClose(Sender: TObject;var Action: TCloseAction);
+procedure TForm42.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Form1.SetTarifs;
 end;
