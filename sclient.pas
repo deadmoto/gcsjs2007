@@ -2775,7 +2775,7 @@ begin
           end;
           Datamodule1.Database1.Commit;
           Result := 0;
-          if getConfValue('0.ShowFactSumFrm') then
+          if getConfValue('0.ShowFactSumFrm') = True then
             if cl.Data.cert <> 1 then
               FactSumFrm.ShowModal; //Фактический расход
         except

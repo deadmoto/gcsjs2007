@@ -2555,7 +2555,7 @@ begin
   IDate := EncodeDate(2006, 6, 1);//дата запуска программы в использование
 
   //путь для папки с базами DBF
-  if getConfValue('0.OtherDatabasePath') then
+  if getConfValue('0.OtherDatabasePath') = True then
     bpath := getConfValue('0.DatabasePath')
   else
     bpath := ExtractFilePath(Application.ExeName) + 'database\';
@@ -3001,7 +3001,7 @@ begin
   Button3.Visible := getConfValue('0.ShowDeleteButton');
   getConfValue('1.Server');
   //в переменной хранится путь папки с отчетами
-  if getConfValue('0.OtherRepPath') then
+  if getConfValue('0.OtherRepPath') = True then
     reports_path := getConfValue('0.RepPath')
   else
     reports_path := (ExtractFilePath(Application.ExeName) + 'reports\');
@@ -3011,7 +3011,8 @@ procedure TForm1.ReportsFillAdditionData;
 begin
   New(Form1.ARepData);
   ARepData.Clear;
-  AddReportDataFrm.ShowModal;
+  if getConfValue('0.ShowAddReportData') = True then
+    AddReportDataFrm.ShowModal;
   with frxReport1 do
   begin
     Variables['Num1'] := quotedstr(ARepData.Num1);
@@ -3471,7 +3472,7 @@ end;
 procedure TForm1.SGClKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 { обработка нажатия клавиш на клавиатуре }
 begin
-  if Key = 45 {Ord(vk_insert)} then
+  if Key = vk_insert then
   begin
     if CheckP2 then
     begin
@@ -3481,7 +3482,7 @@ begin
     else
       ShowMessage('Добавить клиента можно только в текущий отчетный период!');
   end;
-  if Key = 13 {Ord(vk_return)} then
+  if Key = vk_return then
   begin
     if (Length(cl) > 0) then
     begin

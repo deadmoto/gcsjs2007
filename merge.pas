@@ -119,7 +119,7 @@ begin
   //извлечь файлы из архива
   cmd  := 'rar e -y ' + path + ' *.dbf' + ' arc\';
   StrPCopy(cmdp, cmd);
-  WinExec(cmdP, SW_RESTORE);
+  WinExec(cmdP, SW_SHOW);
   path := 'arc\';
   i := 0;
   while not FileExists(path + 'insp' + IntToStr(Form1.dist) + '.dbf') do

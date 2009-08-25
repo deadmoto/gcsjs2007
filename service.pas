@@ -25,6 +25,16 @@ uses
 
 const
   numbtarif = 14;
+  cDiffOperation: array[0..2] of string = (
+    '=',
+    '>=',
+    '<='
+  );
+
+type
+  TStringArray = array of string;
+
+  TIntArray = array of integer;
 
 procedure SetPoint(edt: TEdit);//установить запятую с учетом копеек
 
@@ -70,6 +80,7 @@ function FileVersion(AFileName: string): string;
 function GetTempDir: string;
 function getConfValue(str: string): variant;
 function SelectDir: string;
+procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidths: TIntArray; RecCount: integer);
 
 implementation
 
@@ -830,6 +841,17 @@ begin
       dir := dir + '\';
     Result := dir;
   end;
+end;
+
+procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidths: TIntArray; RecCount: integer);
+var
+  i: integer;
+begin
+  StrGrid.RowCount := RecCount;
+  for i := 0 to length(SGHead) - 1 do
+    StrGrid.Cells[i, 0] := SGHead[i];
+  for i := 0 to length(SGColWidths) - 1 do
+    StrGrid.ColWidths[i] := SGColWidths[i];
 end;
 
 end.
