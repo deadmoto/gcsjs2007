@@ -3,39 +3,41 @@ unit main;
 interface
 
 uses
-  Windows,
-  Messages,
-  SysUtils,
-  Variants,
+  activex,
+  Buttons,
   Classes,
-  Graphics,
-  Controls,
-  Forms,
-  Dialogs,
   ComCtrls,
-  ToolWin,
-  Menus,
-  Grids,
-  DBGrids,
+  comobj,
+  Controls,
   DB,
   dbf,
-  ExtCtrls,
-  ImgList,
-  StdCtrls,
-  OleServer,
-  ExcelXP,
+  DBGrids,
   DBTables,
-  Buttons,
-  activex,
-  comobj,
-  Registry,
+  Dialogs,
+  ExcelXP,
+  ExtCtrls,
+  Forms,
   frxClass,
-  frxDBSet;
+  frxDBSet,
+  Graphics,
+  Grids,
+  ImgList,
+  Menus,
+  Messages,
+  OleServer,
+  Registry,
+  StdCtrls,
+  SysUtils,
+  ToolWin,
+  Variants,
+  Windows;
 
 type
   PAdditionRepData = ^TAdditionRepData;
+
   TAdditionRepData = packed record
-    Num1, Num2, toNum, soluteNum:string;
+    Num1, Num2, toNum, soluteNum, zipCode, spec2: string;
+    insp: boolean;
     procedure Clear();
   end;
 
@@ -239,6 +241,8 @@ type
     N106:         TMenuItem;
     N109:         TMenuItem;
     N110:         TMenuItem;
+    N111: TMenuItem;
+    N112: TMenuItem;
     procedure N15Click(Sender: TObject);
     procedure N25Click(Sender: TObject);
     procedure N24Click(Sender: TObject);
@@ -331,6 +335,7 @@ type
     procedure N109Click(Sender: TObject);
     procedure N105Click(Sender: TObject);
     procedure N110Click(Sender: TObject);
+    procedure N112Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -351,6 +356,7 @@ type
     procedure ClearSG;
     procedure Load(q: CQuery; rsel: boolean);
     procedure ReloadConfig;
+    procedure SaveBaseCfg;
 
     function GenPer(b, e: TDate): string;
     function GenCalc(c: integer): string;
@@ -373,8 +379,8 @@ type
     Idate:        TDate;//дата запуска программы в использование
     bpath:        string;
     codedbf:      TCodePage;
-    reports_path: string; //путь к папке с отчетами
-    ARepData: PAdditionRepData; //данные для отчета(№ решения, № исходящего)
+    reports_path: string;           //путь к папке с отчетами
+    ARepData:     PAdditionRepData; //данные для отчета(№ решения, № исходящего)
     procedure AddCl(id: integer);
     procedure ModCl(id: integer);
     procedure DelCl(id: integer);
@@ -384,7 +390,7 @@ type
     procedure RecalcSelectedRows;
     procedure SetTarifs;
     procedure ReportsFillDistInfo;
-    procedure ReportsFillAdditionData;
+    procedure ReportsFillAdditionData(nameInsp: string);
 
     function GenAddr(s, n, c, a: string): string;
     function GetStatus(b, e: TDate): integer;
@@ -408,9 +414,9 @@ uses
   street,
   fond,
   manager,
-  ownertype,
-  settlingtype,
-  control,
+//  ownertype,
+//  settlingtype,
+//  control,
   privilege,
   minimum,
   status,
@@ -420,11 +426,11 @@ uses
   opend,
   houses,
   norm,
-  certification,
+//  certification,
   chpriv,
   chhouse,
   bank,
-  relation,
+//  relation,
   about,
   datamodule,
   search,
@@ -457,7 +463,8 @@ uses
   SlujUnit,
   ConnectUnit,
   FactSumUnit,
-  ConfigPropertiesUnit, AddReportDataUnit;
+  ConfigPropertiesUnit,
+  AddReportDataUnit, AnyDirectoryUnit, EditReportUnit;
 
 {$R *.dfm}
 
@@ -1026,11 +1033,20 @@ begin
     Statusbar1.Panels[1].Text := 'Инспектор: ' + ins;
     SetTarifs;
   end;
+
+  SaveBaseCfg;
 end;
 
 procedure TForm1.N110Click(Sender: TObject);
 begin
   winExec('sUpdater.exe', SW_NORMAL);
+end;
+
+procedure TForm1.N112Click(Sender: TObject);
+begin
+  EditReportFrm:= TEditReportFrm.Create(Application);
+  EditReportFrm.ShowModal;
+  EditReportFrm.Free;
 end;
 
 procedure TForm1.N13Click(Sender: TObject);
@@ -1180,58 +1196,93 @@ var
   pl, mdd, stnd, mc: integer;
   pmin, income: real;
   cd: TDateTime;
+
+procedure GetPPriv;
+begin
+  priv := TStringList.Create;
+  with Datamodule1.Query1 do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('select namepriv');
+    SQL.Add('from priv inner join fam');
+    SQL.Add('on priv.id_priv=fam.id_priv');
+    SQL.Add('where (fam.regn=:id)');
+    ParamByName('id').AsInteger := client;
+    Open;
+    while not EOF do
+    begin
+      priv.Add(FieldByName('namepriv').AsString);
+      Next;
+    end;
+    Close;
+  end;
+  priv.Sort;
+  i := 0;
+  while i < priv.Count do
+  begin
+    c := 1;
+    j := i + 1;
+    while j < priv.Count do
+    begin
+      if priv[i] = priv[j] then
+      begin
+        priv.Delete(j);
+        Inc(c);
+      end
+      else
+        Inc(j);
+    end;
+    if i = 0 then
+      priv_str := priv[i] + '(' + IntToStr(c) + ')'
+    else
+      priv_str := priv_str + priv[i] + '(' + IntToStr(c) + ')';
+    Inc(i);
+  end;
+  frxReport1.Variables.Variables['ppriv'] := quotedstr(priv_str);
+end;
+
+procedure GetPlate;
+begin
+  with Datamodule1.Query1 do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('select id_service');
+    SQL.Add('from sub');
+    SQL.Add('where (regn=:id)and(service=7)and(sdate=convert(smalldatetime,:d,104))');
+    ParamByName('id').AsInteger := client;
+    ParamByName('d').AsString := s1;
+    Open;
+    pl := FieldByName('id_service').AsInteger;
+    Close;
+  end;
+  with Datamodule1.Query4 do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('select el.plate');
+    SQL.Add('from "curel.dbf" el');
+    SQL.Add('where el.id_el=:id');
+    ParamByName('id').AsInteger := pl;
+    Open;
+    frxReport1.Variables.Variables['plate'] := quotedstr(FieldByName('plate').AsString);
+    Close;
+  end;
+end;
+
 begin
   if (Length(cl) > 0) then
   begin
-    //if (status=0)or(status=3) then begin//только первый месяц
+    s1 := Copy(SGCl.Cells[2, SGCl.row], 1, 10); //begindate
+    s2 := Copy(SGCl.Cells[2, SGCl.row], 14, 10);//enddate
+
     if subs <> 0.0 then
     begin
       frxReport1.LoadFromFile(PChar(reports_path + 'uvedom.fr3'));
       frxData.DataSet := Datamodule1.Query2;
       frxData1.DataSet := Datamodule1.Query1;
-      priv := TStringList.Create;
-      s1 := Copy(SGCl.Cells[2, SGCl.row], 1, 10); //begindate
-      s2 := Copy(SGCl.Cells[2, SGCl.row], 14, 10);//enddate
-      with Datamodule1.Query1 do
-      begin
-        Close;
-        SQL.Clear;
-        SQL.Add('select namepriv');
-        SQL.Add('from priv inner join fam');
-        SQL.Add('on priv.id_priv=fam.id_priv');
-        SQL.Add('where (fam.regn=:id)');
-        ParamByName('id').AsInteger := client;
-        Open;
-        while not EOF do
-        begin
-          priv.Add(FieldByName('namepriv').AsString);
-          Next;
-        end;
-        Close;
-      end;
-      priv.Sort;
-      i := 0;
-      while i < priv.Count do
-      begin
-        c := 1;
-        j := i + 1;
-        while j < priv.Count do
-        begin
-          if priv[i] = priv[j] then
-          begin
-            priv.Delete(j);
-            Inc(c);
-          end
-          else
-            Inc(j);
-        end;
-        if i = 0 then
-          priv_str := priv[i] + '(' + IntToStr(c) + ')'
-        else
-          priv_str := priv_str + priv[i] + '(' + IntToStr(c) + ')';
-        Inc(i);
-      end;
-      frxReport1.Variables.Variables['ppriv'] := quotedstr(priv_str);
+
       DecodeDate(StrToDate(s2), y, m, d);
       p2 := EncodeDate(y, m, 15);
       m  := m - 1;
@@ -1242,32 +1293,10 @@ begin
       end;
       p1 := EncodeDate(y, m, 16);
       frxReport1.Variables.Variables['newatt'] := quotedstr('с ' + DateToStr(p1) + ' до ' + DateToStr(p2));
-      with Datamodule1.Query1 do
-      begin
-        Close;
-        SQL.Clear;
-        SQL.Add('select id_service');
-        SQL.Add('from sub');
-        SQL.Add('where (regn=:id)and(service=7)and(sdate=convert(smalldatetime,:d,104))');
-        ParamByName('id').AsInteger := client;
-        ParamByName('d').AsString := s1;
-        Open;
-        pl := FieldByName('id_service').AsInteger;
-        Close;
 
-      end;
-      with Datamodule1.Query4 do
-      begin
-        Close;
-        SQL.Clear;
-        SQL.Add('select el.plate');
-        SQL.Add('from "curel.dbf" el');
-        SQL.Add('where el.id_el=:id');
-        ParamByName('id').AsInteger := pl;
-        Open;
-        frxReport1.Variables.Variables['plate'] := quotedstr(FieldByName('plate').AsString);
-        Close;
-      end;
+      GetPPriv();
+      GetPlate();
+
       with Datamodule1.Query1 do
       begin
         Close;
@@ -1294,6 +1323,16 @@ begin
         Inc(i);
       end;
 
+      frxReport1.Variables.Variables['sumsub1'] := 0;
+      DataModule1.Query2.First;
+      for j := 0 to DataModule1.Query2.RecordCount - 1 do
+      begin
+        frxReport1.Variables.Variables['sumsub1'] := frxReport1.Variables.Variables['sumsub1'] + DataModule1.Query2.FieldValues['sub'];
+        DataModule1.Query2.Next;
+      end;
+
+      AddReportDataFrm.RepType := rUvedom;
+      ReportsFillAdditionData(Datamodule1.Query1.FieldValues['nameinsp']);
       ReportsFillDistInfo();
 
       frxReport1.Variables.Variables['cd']  := Quotedstr(rdt);
@@ -1301,23 +1340,27 @@ begin
       frxReport1.Variables.Variables['cm']  := i;
       frxReport1.Variables.Variables['fio'] := Quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 3));
       frxReport1.Variables.Variables['fio_g'] := Quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 2));
+      frxReport1.Variables.Variables['fio_s'] := quotedstr(GetShortName(SGCl.Cells[0, SGCl.row]));
       frxReport1.PrepareReport;
       if MessageBox(Form1.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
-          PChar('Предварительный просмотр'), MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
+        PChar('Предварительный просмотр'), MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
         frxReport1.ShowPreparedReport
       else
         frxReport1.Print;
     end
-
+    //sub = 0 Решение об отказе
     else
     begin
       frxReport1.LoadFromFile(PChar(reports_path + 'uvedomo.fr3'));
-      frxReport1.Variables.Variables['regn'] := quotedstr('0' + IntToStr(client));
+      frxData.DataSet := Datamodule1.Query2;
+      frxData1.DataSet := Datamodule1.Query1;
+
       frxReport1.Variables.Variables['fio']  := quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 3));
       frxReport1.Variables.Variables['fio_n'] := quotedstr(SGCl.Cells[0, SGCl.row]);
       frxReport1.Variables.Variables['fio_g'] := quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 2));
+      frxReport1.Variables.Variables['fio_s'] := quotedstr(GetShortName(SGCl.Cells[0, SGCl.row]));
       frxReport1.Variables.Variables['address'] := quotedstr(SGCl.Cells[1, SGCl.row]);
-      with Datamodule1.Query1 do
+{      with Datamodule1.Query1 do
       begin
         Close;
         SQL.Clear;
@@ -1334,12 +1377,14 @@ begin
           6: frxReport1.Variables.Variables['otdel'] := quotedstr('Центральному');
           7: frxReport1.Variables.Variables['otdel'] := quotedstr('Кировскому');
         end;
+
         Close;
         SQL.Clear;
         SQL.Add('select boss from dist where id_dist=:id');
         ParamByName('id').AsInteger := dist;
         Open;
         frxReport1.Variables.Variables['boss'] := quotedstr(FieldByName('boss').AsString);
+
         Close;
         SQL.Clear;
         SQL.Add('select income,pmin,mdd,mcount');
@@ -1351,7 +1396,8 @@ begin
         mdd := FieldByName('mdd').AsInteger;
         income := FieldByName('income').AsFloat;
         mc := FieldByName('mcount').AsInteger;
-        frxReport1.Variables.Variables['income'] := quotedstr(FlToStr(income));
+//        frxReport1.Variables.Variables['income'] := quotedstr(FlToStr(income));
+
         Close;
         SQL.Clear;
         if stnd <> 0 then//расчет с учетом рег.стандартов
@@ -1363,6 +1409,7 @@ begin
         ParamByName('d').AsString := rdt;
         Open;
         frxReport1.Variables.Variables['nach'] := quotedstr(FlToStr(FieldByName('sumpm').AsFloat));
+
         Close;
         SQL.Clear;
         SQL.Add('select nameinsp from hist, insp where regn = :id and bdate = :d and hist.id_insp = insp.id_insp');
@@ -1387,7 +1434,32 @@ begin
         frxReport1.Variables.Variables['level'] := quotedstr(FlToStr((mdd * income) / 100))
       else
         frxReport1.Variables.Variables['level'] := quotedstr(FlToStr((mdd * income * Rnd((income / mc) / pmin)) / 100));
+    }
+      GetPPriv();
+      GetPlate();
 
+      with Datamodule1.Query1 do
+      begin
+        Close;
+        SQL.Clear;
+        SQL.Add('execute getcl :id,:d');
+        ParamByName('id').AsInteger := client;
+        ParamByName('d').AsString := s1;
+        Open;
+      end;
+
+      with Datamodule1.Query2 do
+      begin
+        Close;
+        SQL.Clear;
+        SQL.Add('execute getsub :id, :s');
+        ParamByName('id').AsInteger := client;
+        ParamByName('s').AsString := s1;
+        Open;
+      end;
+
+      AddReportDataFrm.RepType := rUvedomo;
+      ReportsFillAdditionData(Datamodule1.Query1.FieldByName('nameinsp').AsString);
       ReportsFillDistInfo();
 
       frxReport1.PrepareReport;
@@ -1731,8 +1803,9 @@ end;
 procedure TForm1.N41Click(Sender: TObject);
 { справочник типов аттестации }
 begin
-  Form28.status := sec1;
-  Form28.ShowModal;
+  AnyDirectoryFrm.mode := mCertification;
+  AnyDirectoryFrm.status := sec1;
+  AnyDirectoryFrm.ShowModal;
 end;
 
 procedure TForm1.N42Click(Sender: TObject);
@@ -1800,22 +1873,25 @@ end;
 procedure TForm1.N55Click(Sender: TObject);
 { справочник типов владения }
 begin
-  Form8.status := sec1;
-  Form8.ShowModal;
+  AnyDirectoryFrm.mode := mOwnType;
+  AnyDirectoryFrm.status := sec1;
+  AnyDirectoryFrm.ShowModal;
 end;
 
 procedure TForm1.N56Click(Sender: TObject);
 { справочник типов заселения }
 begin
-  Form9.status := sec1;
-  Form9.ShowModal;
+  AnyDirectoryFrm.mode := mSettlingType;
+  AnyDirectoryFrm.status := sec1;
+  AnyDirectoryFrm.ShowModal;
 end;
 
 procedure TForm1.N57Click(Sender: TObject);
 { справочник типов контроля }
 begin
-  Form10.status := sec1;
-  Form10.ShowModal;
+  AnyDirectoryFrm.mode := mControl;
+  AnyDirectoryFrm.status := sec1;
+  AnyDirectoryFrm.ShowModal;
 end;
 
 procedure TForm1.N58Click(Sender: TObject);
@@ -1856,8 +1932,9 @@ end;
 procedure TForm1.N64Click(Sender: TObject);
 { справочник отношений }
 begin
-  Form32.status := sec1;
-  Form32.ShowModal;
+  AnyDirectoryFrm.mode := mRelation;
+  AnyDirectoryFrm.status := sec1;
+  AnyDirectoryFrm.ShowModal;
 end;
 
 procedure TForm1.N65Click(Sender: TObject);
@@ -2822,7 +2899,7 @@ begin
     end;
   end;
 
-  //Сохранение в реестр
+{  //Сохранение в реестр
   with TRegistry.Create do
     try
       RootKey := HKEY_CURRENT_USER;
@@ -2840,6 +2917,8 @@ begin
       CloseKey;
       Free;
     end;
+}
+  SaveBaseCfg;
 
   try
     Datamodule1.Database1.Connected := True;
@@ -3007,7 +3086,7 @@ begin
     reports_path := (ExtractFilePath(Application.ExeName) + 'reports\');
 end;
 
-procedure TForm1.ReportsFillAdditionData;
+procedure TForm1.ReportsFillAdditionData(nameInsp: string);
 begin
   New(Form1.ARepData);
   ARepData.Clear;
@@ -3015,10 +3094,17 @@ begin
     AddReportDataFrm.ShowModal;
   with frxReport1 do
   begin
-    Variables['Num1'] := quotedstr(ARepData.Num1);
-    Variables['Num2'] := quotedstr(ARepData.Num2);
+    Variables['Num1']  := quotedstr(ARepData.Num1);
+    Variables['Num2']  := quotedstr(ARepData.Num2);
     Variables['toNum'] := quotedstr(ARepData.toNum);
     Variables['soluteNum'] := quotedstr(ARepData.soluteNum);
+    Variables['zipCode'] := quotedstr(ARepData.zipCode);
+//    Variables['spec'] := quotedstr(ARepData.spec);
+    if ARepData.insp then
+      Variables['spec2'] := quotedstr(nameInsp)
+    else
+      Variables['spec2'] := quotedstr(ARepData.spec2);
+//      Variables['spec'] := quotedstr('');
   end;
   Dispose(Form1.ARepData);
 end;
@@ -3264,6 +3350,28 @@ begin
     subs := sub[arow - 1];
     Statusbar1.Panels[0].Text := 'Клиент: ' + SGCl.Cells[0, arow] + '/' + FlToStr(subs);
   end;
+end;
+
+procedure TForm1.SaveBaseCfg;
+begin
+  //Сохранение в реестр
+  with TRegistry.Create do
+    try
+      RootKey := HKEY_CURRENT_USER;
+      if OpenKey('Software\Subsidy', True) then
+      begin
+        WriteInteger('dist', dist);
+        WriteInteger('insp', insp);
+        WriteInteger('by', by);
+        WriteInteger('bm', bm);
+        WriteInteger('ey', ey);
+        WriteInteger('em', em);
+        WriteString('svnRev', version.svnrev);
+      end;
+    finally
+      CloseKey;
+      Free;
+    end;
 end;
 
 procedure TForm1.SetPer(per1: string; var per2: string);
@@ -4476,8 +4584,8 @@ begin
     Open;
   end;
 
-  frxReport1.Variables.Variables['cd'] := quotedstr(rdt);
-  frxReport1.Variables.Variables['sd'] := (IncMonth(StrToDateTime(rdt)));
+  frxReport1.Variables.Variables['cd']  := quotedstr(rdt);
+  frxReport1.Variables.Variables['sd']  := (IncMonth(StrToDateTime(rdt)));
   frxReport1.Variables.Variables['regn'] := quotedstr('0' + IntToStr(client));
   frxReport1.Variables.Variables['fio'] := quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 3));
   frxReport1.Variables.Variables['fio_g'] := quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 2));
@@ -4490,13 +4598,16 @@ begin
   s2 := copy(s4, i + 1, 1);
   frxReport1.Variables.Variables['fio_r'] := quotedstr(s3 + ' ' + s1 + '. ' + s2 + '.');
   frxReport1.Variables.Variables['fio_n'] := quotedstr(SGCl.Cells[0, SGCl.row]);
+  frxReport1.Variables.Variables['fio_s'] := quotedstr(GetShortName(SGCl.Cells[0, SGCl.row]));
+
   frxReport1.Variables.Variables['address'] := quotedstr(SGCl.Cells[1, SGCl.row]);
-  frxReport1.Variables.Variables['sub']  := quotedstr(SGCl.Cells[4, SGCl.row]);
+  frxReport1.Variables.Variables['sub'] := quotedstr(SGCl.Cells[4, SGCl.row]);
   frxReport1.Variables.Variables['boss'] := quotedstr(Datamodule1.Query1.FieldByName('boss').AsString);
-  frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldByName('nameinsp').AsString);
+//  frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldByName('nameinsp').AsString);
   frxReport1.Script.Variables['id_dist'] := (Datamodule1.Query1.FieldByName('id_dist').AsInteger);
 
-  ReportsFillAdditionData();
+  AddReportDataFrm.RepType := rSolut;
+  ReportsFillAdditionData(Datamodule1.Query1.FieldByName('nameinsp').AsString);
   ReportsFillDistInfo();
 
   frxReport1.PrepareReport;
@@ -4535,10 +4646,11 @@ begin
   frxReport1.Variables.Variables['fio'] := quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 3));
   frxReport1.Variables.Variables['fio_g'] := quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 2));
   frxReport1.Variables.Variables['fio_n'] := quotedstr(SGCl.Cells[0, SGCl.row]);
+  frxReport1.Variables.Variables['fio_s'] := quotedstr(GetShortName(SGCl.Cells[0, SGCl.row]));
   frxReport1.Variables.Variables['address'] := quotedstr(SGCl.Cells[1, SGCl.row]);
   frxReport1.Variables.Variables['sub'] := quotedstr(SGCl.Cells[4, SGCl.row]);
   frxReport1.Variables.Variables['boss'] := quotedstr(Datamodule1.Query1.FieldValues['boss']);
-  frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldValues['nameinsp']);
+//  frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldValues['nameinsp']);
   frxReport1.Variables.Variables['edate'] := quotedstr(Datamodule1.Query1.FieldValues['edate']);
 
   s4 := GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 3);
@@ -4549,7 +4661,8 @@ begin
   s2 := copy(s4, i + 1, 1);
   frxReport1.Variables.Variables['fio_r'] := quotedstr(s3 + ' ' + s1 + '. ' + s2 + '.');
 
-  ReportsFillAdditionData();
+  AddReportDataFrm.RepType := rSolute;
+  ReportsFillAdditionData(Datamodule1.Query1.FieldValues['nameinsp']);
   ReportsFillDistInfo();
 
   frxReport1.PrepareReport;
@@ -4590,10 +4703,11 @@ begin
   frxReport1.Variables.Variables['address'] := quotedstr(SGCl.Cells[1, SGCl.row]);
   frxReport1.Variables.Variables['sub']  := quotedstr(SGCl.Cells[4, SGCl.row]);
   frxReport1.Variables.Variables['boss'] := quotedstr(Datamodule1.Query1.FieldValues['boss']);
-  frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldByName('nameinsp').AsString);
   frxReport1.Variables.Variables['id_dist'] := Datamodule1.Query1.FieldByName('id_dist').AsInteger;
 
-  ReportsFillAdditionData();
+  AddReportDataFrm.RepType := rSolutb;
+  ReportsFillAdditionData(Datamodule1.Query1.FieldValues['nameinsp']);
+  frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldByName('nameinsp').AsString);
   ReportsFillDistInfo();
 
   frxReport1.PrepareReport;
@@ -4627,10 +4741,13 @@ end;
 
 procedure TAdditionRepData.Clear;
 begin
-  Num1 := '_____________';
-  Num2 := '_____________';
+  Num1  := '_____________';
+  Num2  := '_____________';
   toNum := '_______________________';
   soluteNum := '_____________';
+  zipCode := '_____________';
+  spec2 := '';
+  insp :=  False;
 end;
 
 end.

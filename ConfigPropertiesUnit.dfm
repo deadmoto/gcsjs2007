@@ -4,7 +4,7 @@ object ConfigFrm: TConfigFrm
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
-  ClientHeight = 365
+  ClientHeight = 364
   ClientWidth = 468
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -23,7 +23,7 @@ object ConfigFrm: TConfigFrm
     Left = 3
     Top = 3
     Width = 142
-    Height = 321
+    Height = 324
     Margins.Bottom = 0
     Align = alLeft
     BevelInner = bvLowered
@@ -32,7 +32,7 @@ object ConfigFrm: TConfigFrm
       Left = 2
       Top = 2
       Width = 138
-      Height = 317
+      Height = 320
       Style = lbOwnerDrawFixed
       Align = alClient
       BorderStyle = bsNone
@@ -46,7 +46,7 @@ object ConfigFrm: TConfigFrm
     Left = 151
     Top = 3
     Width = 314
-    Height = 321
+    Height = 324
     Margins.Bottom = 0
     Align = alClient
     BevelOuter = bvNone
@@ -55,18 +55,18 @@ object ConfigFrm: TConfigFrm
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 327
+    Top = 330
     Width = 462
-    Height = 35
+    Height = 31
     Align = alBottom
     AutoWrap = False
-    BevelInner = bvLowered
+    BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 2
     object Button1: TButton
       AlignWithMargins = True
-      Left = 382
-      Top = 5
+      Left = 384
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1054#1090#1084#1077#1085#1072
@@ -75,8 +75,8 @@ object ConfigFrm: TConfigFrm
     end
     object Button2: TButton
       AlignWithMargins = True
-      Left = 301
-      Top = 5
+      Left = 303
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1055#1088#1080#1084#1077#1085#1080#1090#1100
@@ -86,8 +86,8 @@ object ConfigFrm: TConfigFrm
     end
     object Button3: TButton
       AlignWithMargins = True
-      Left = 220
-      Top = 5
+      Left = 222
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100

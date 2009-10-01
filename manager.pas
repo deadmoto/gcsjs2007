@@ -3,36 +3,33 @@ unit manager;
 interface
 
 uses
-  Windows,
+  Classes,
+  Controls,
+  Dialogs,
+  ExtCtrls,
+  Forms,
+  Graphics,
+  Grids,
   Messages,
+  StdCtrls,
   SysUtils,
   Variants,
-  Classes,
-  Graphics,
-  Controls,
-  Forms,
-  Dialogs,
-  StdCtrls,
-  Mask,
-  DBCtrls,
-  Grids,
-  DBGrids,
-  ExtCtrls;
+  Windows;
 
 type
   TForm7 = class(TForm)
     Panel1:      TPanel;
     StringGrid1: TStringGrid;
-    Panel2: TPanel;
-    Label3: TLabel;
-    Edit2: TEdit;
-    Label1: TLabel;
-    Edit1: TEdit;
-    FlowPanel1: TFlowPanel;
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    Button4: TButton;
+    Panel2:      TPanel;
+    Label3:      TLabel;
+    Edit2:       TEdit;
+    Label1:      TLabel;
+    Edit1:       TEdit;
+    FlowPanel1:  TFlowPanel;
+    Button1:     TButton;
+    Button2:     TButton;
+    Button3:     TButton;
+    Button4:     TButton;
     procedure Button4Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);

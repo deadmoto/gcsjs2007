@@ -3,29 +3,41 @@ unit norm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Grids, DBGrids;
+  Classes,
+  Controls,
+  Dialogs,
+  ExtCtrls,
+  Forms,
+  Graphics,
+  Grids,
+  Messages,
+  StdCtrls,
+  SysUtils,
+  Variants,
+  Windows;
 
 type
   TForm27 = class(TForm)
-    DBGrid1: TDBGrid;
-    Edit1: TEdit;
+    Panel1:      TPanel;
+    StringGrid1: TStringGrid;
+    Panel2: TPanel;
+    Label4: TLabel;
+    Edit4: TEdit;
     Label1: TLabel;
+    Edit1: TEdit;
     Label2: TLabel;
+    Edit2: TEdit;
+    Edit5: TEdit;
+    Label5: TLabel;
+    Edit3: TEdit;
+    Label3: TLabel;
+    Edit6: TEdit;
+    Label6: TLabel;
+    FlowPanel1: TFlowPanel;
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
-    Label3: TLabel;
-    Edit3: TEdit;
-    Edit4: TEdit;
-    Label4: TLabel;
-    Edit2: TEdit;
-    Edit5: TEdit;
-    Label5: TLabel;
-    Edit6: TEdit;
-    Label6: TLabel;
-    procedure DBGrid1CellClick(Column: TColumn);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -34,10 +46,9 @@ type
     procedure FormShow(Sender: TObject);
     procedure Edit1Exit(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure Edit1KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
-    procedure Edit2KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
   private
     { Private declarations }
     oldid: integer;//текущие значения полей до изменения
@@ -52,31 +63,57 @@ var
 
 implementation
 
-uses datamodule, service, main;
+uses
+  datamodule,
+  service,
+  main;
 
 {$R *.dfm}
 
 procedure TForm27.SetDefault;
+var
+  i: integer;
 begin
-  with Datamodule1.Query1 do begin
+  with Datamodule1.Query1 do
+  begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
     SQL.Add('from norm');
     SQL.Add('order by id_norm');
+    Open;
+    First;
+  end;
+
+  FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Человек в семье', 'Норма пл.', 'Норма пл. для п/и', 'Норма тепла', 'Норма пл. для лгтн.'),
+    TIntArray.Create(25, 96, 60, 105, 75, 105), Datamodule1.Query1.RecordCount + 1);
+
+  for i := 0 to Datamodule1.Query1.RecordCount - 1 do
+  begin
+    StringGrid1.Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_norm').Value;
+    StringGrid1.Cells[1, i + 1] := Datamodule1.Query1.FieldByName('countp').Value;
+    StringGrid1.Cells[2, i + 1] := Datamodule1.Query1.FieldByName('snorm').Value;
+    StringGrid1.Cells[3, i + 1] := Datamodule1.Query1.FieldByName('psnorm').Value;
+    StringGrid1.Cells[4, i + 1] := Datamodule1.Query1.FieldByName('hnorm').Value;
+    StringGrid1.Cells[5, i + 1] := Datamodule1.Query1.FieldByName('phnorm').Value;
+    Datamodule1.Query1.Next;
   end;
 end;
 
-procedure TForm27.DBGrid1CellClick(Column: TColumn);
+procedure TForm27.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
 { выбрана ячейка }
 begin
-  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := FlToStr(DBGrid1.Fields[2].AsFloat);
-  Edit5.Text := FlToStr(DBGrid1.Fields[3].AsFloat);
-  Edit3.Text := FlToStr(DBGrid1.Fields[4].AsFloat);
-  Edit6.Text := FlToStr(DBGrid1.Fields[5].AsFloat);
-  Edit4.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit4.Text);
+  if ARow <> 0 then
+  begin
+    Edit1.Text := StringGrid1.Cells[1, ARow];
+    Edit2.Text := StringGrid1.Cells[2, ARow];
+    Edit5.Text := StringGrid1.Cells[3, ARow];
+    Edit3.Text := StringGrid1.Cells[4, ARow];
+    Edit6.Text := StringGrid1.Cells[5, ARow];
+    Edit4.Text := StringGrid1.Cells[0, ARow];
+    if Edit4.Text <> '' then
+      oldid := StrToInt(Edit4.Text);
+  end;
 end;
 
 procedure TForm27.Button1Click(Sender: TObject);
@@ -85,54 +122,57 @@ var
   flag: bool;
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and
-    (Edit3.Text <> '') and (Edit4.Text<>'') and
-    (Edit5.Text <> '') and (Edit6.Text<>'') then begin
-    with DataModule1.Query1 do begin
+    (Edit3.Text <> '') and (Edit4.Text <> '') and
+    (Edit5.Text <> '') and (Edit6.Text <> '') then
+  begin
+    with DataModule1.Query1 do
+    begin
       Close;
       SQL.Clear;
-      SQl.Add('select id_norm');
-      SQl.Add('from norm');
+      SQL.Add('select id_norm');
+      SQL.Add('from norm');
       SQL.Add('where (id_norm=:id)');
       ParamByName('id').AsInteger := StrToInt(Edit4.Text);
       Open;
-      if IsEmpty then begin
+      if IsEmpty then
+      begin
         Close;
         SQL.Clear;
-        SQl.Add('select id_norm');
-        SQl.Add('from norm');
+        SQL.Add('select id_norm');
+        SQL.Add('from norm');
         SQL.Add('where (countp = :count)');
         ParamByName('count').AsString := Edit1.Text;
         Open;
         if IsEmpty then
-          flag := true
+          flag := True
         else
-          flag := false;
+          flag := False;
         Close;
       end
-      else begin
-        flag := false;
+      else
+      begin
+        flag := False;
         Close;
       end;
-      if flag then begin
+      if flag then
+      begin
         Close;
         SQL.Clear;
         SQL.Add('insert into norm');
         SQL.Add('values (:id, :count, :sn, :spn, :hn, :hpn)');
         ParamByName('id').AsInteger := StrToInt(Edit4.Text);
         ParamByName('count').AsString := Edit1.Text;
-        ParamByName('sn').AsFloat := StrToFloat(Edit2.Text);
-        ParamByName('hn').AsFloat := StrToFloat(Edit3.Text);
+        ParamByName('sn').AsFloat  := StrToFloat(Edit2.Text);
+        ParamByName('hn').AsFloat  := StrToFloat(Edit3.Text);
         ParamByName('spn').AsFloat := StrToFloat(Edit5.Text);
         ParamByName('hpn').AsFloat := StrToFloat(Edit6.Text);
         ExecSQL;
         SetDefault;
-        Open;
-        oldid := StrToInt(Edit4.Text);
       end
-      else begin
+      else
+      begin
         ShowMessage('Число человек и код должны быть уникальны!');
         SetDefault;
-        Open;
       end;
     end;
   end
@@ -146,37 +186,42 @@ var
   flag: bool;
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and
-    (Edit3.Text <> '') and (Edit4.Text<>'') and
-    (Edit5.Text <> '') and (Edit6.Text<>'')then begin
-    with DataModule1.Query1 do begin
+    (Edit3.Text <> '') and (Edit4.Text <> '') and
+    (Edit5.Text <> '') and (Edit6.Text <> '') then
+  begin
+    with DataModule1.Query1 do
+    begin
       Close;
       SQL.Clear;
-      SQl.Add('select id_norm');
-      SQl.Add('from norm');
+      SQL.Add('select id_norm');
+      SQL.Add('from norm');
       SQL.Add('where (id_norm=:id)');
       ParamByName('id').AsInteger := StrToInt(Edit4.Text);
       Open;
       if IsEmpty or not IsEmpty and
-          (FieldByName('id_norm').AsInteger = oldid) then begin
+        (FieldByName('id_norm').AsInteger = oldid) then
+      begin
         Close;
         SQL.Clear;
-        SQl.Add('select id_norm');
-        SQl.Add('from norm');
+        SQL.Add('select id_norm');
+        SQL.Add('from norm');
         SQL.Add('where (countp = :count)');
         ParamByName('count').AsString := Edit1.Text;
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_norm').AsInteger = oldid) then
-          flag := true
+          flag := True
         else
-          flag := false;
+          flag := False;
         Close;
       end
-      else begin
-        flag := false;
+      else
+      begin
+        flag := False;
         Close;
       end;
-      if flag then begin
+      if flag then
+      begin
         Close;
         SQL.Clear;
         SQL.Add('update norm');
@@ -184,19 +229,17 @@ begin
         SQL.Add('where (id_norm = :id)');
         ParamByName('id').AsInteger := oldid;
         ParamByName('count').AsString := Edit1.Text;
-        ParamByName('sn').AsFloat := StrToFloat(Edit2.Text);
-        ParamByName('hn').AsFloat := StrToFloat(Edit3.Text);
+        ParamByName('sn').AsFloat  := StrToFloat(Edit2.Text);
+        ParamByName('hn').AsFloat  := StrToFloat(Edit3.Text);
         ParamByName('spn').AsFloat := StrToFloat(Edit5.Text);
         ParamByName('hpn').AsFloat := StrToFloat(Edit6.Text);
         ExecSQL;
         SetDefault;
-        Open;
-        oldid := StrToInt(Edit4.Text);
       end
-      else begin
+      else
+      begin
         ShowMessage('Число человек  и код должны быть уникальны!');
         SetDefault;
-        Open;
       end;
     end;
   end
@@ -207,8 +250,10 @@ end;
 procedure TForm27.Button3Click(Sender: TObject);
 { удалить норму }
 begin
-  with DataModule1.Query1 do begin
-    if not IsEmpty then begin
+  with DataModule1.Query1 do
+  begin
+    if not IsEmpty then
+    begin
       Close;
       SQL.Clear;
       SQL.Add('delete from norm');
@@ -216,14 +261,6 @@ begin
       ParamByName('id').AsInteger := oldid;
       ExecSQL;
       SetDefault;
-      Open;
-      Edit1.Text := DBGrid1.Fields[1].AsString;
-      Edit2.Text := FlToStr(DBGrid1.Fields[2].AsFloat);
-      Edit5.Text := FlToStr(DBGrid1.Fields[3].AsFloat);
-      Edit3.Text := FlToStr(DBGrid1.Fields[4].AsFloat);
-      Edit6.Text := FlToStr(DBGrid1.Fields[5].AsFloat);
-      Edit4.Text := DBGrid1.Fields[0].AsString;
-      oldid := StrToInt(Edit4.Text);
     end;
   end;
 end;
@@ -242,32 +279,24 @@ end;
 
 procedure TForm27.FormShow(Sender: TObject);
 begin
-  with DataModule1.Query1 do begin
-    SetDefault;
-    Open;
-  end;
-  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := FlToStr(DBGrid1.Fields[2].AsFloat);
-  Edit5.Text := FlToStr(DBGrid1.Fields[3].AsFloat);
-  Edit3.Text := FlToStr(DBGrid1.Fields[4].AsFloat);
-  Edit6.Text := FlToStr(DBGrid1.Fields[5].AsFloat);
-  Edit4.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit4.Text);
-  if status=0 then begin
-    Button1.Enabled := false;
-    Button2.Enabled := false;
-    Button3.Enabled := false;
+  SetDefault;
+  if status = 0 then
+  begin
+    Button1.Enabled := False;
+    Button2.Enabled := False;
+    Button3.Enabled := False;
   end
-  else begin
-    Button1.Enabled := true;
-    Button2.Enabled := true;
-    Button3.Enabled := true;
+  else
+  begin
+    Button1.Enabled := True;
+    Button2.Enabled := True;
+    Button3.Enabled := True;
   end;
 end;
 
 procedure TForm27.Edit1Exit(Sender: TObject);
 begin
-  CheckInt(tedit(sender));
+  CheckInt(tedit(Sender));
 end;
 
 procedure TForm27.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -279,18 +308,16 @@ begin
   Datamodule1.Query1.Close;
 end;
 
-procedure TForm27.Edit1KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm27.Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
-  if key=vk_return then
-    CheckInt(tedit(sender));
+  if key = vk_return then
+    CheckInt(tedit(Sender));
 end;
 
-procedure TForm27.Edit2KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm27.Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
-  if key=vk_return then
-    SetPoint(TEdit(sender));
+  if key = vk_return then
+    SetPoint(TEdit(Sender));
 end;
 
 end.

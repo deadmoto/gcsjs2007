@@ -4,7 +4,7 @@ object Form33: TForm33
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = #1060#1080#1083#1100#1090#1088
-  ClientHeight = 411
+  ClientHeight = 408
   ClientWidth = 633
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -751,7 +751,7 @@ object Form33: TForm33
           Left = 48
           Top = 0
           Width = 41
-          Height = 17
+          Height = 21
           EditMask = '!999/99;1;_'
           MaxLength = 6
           TabOrder = 2
@@ -762,7 +762,7 @@ object Form33: TForm33
         Left = 56
         Top = 8
         Width = 41
-        Height = 17
+        Height = 21
         EditMask = '!999/99;1;_'
         MaxLength = 6
         TabOrder = 2
@@ -773,18 +773,19 @@ object Form33: TForm33
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 373
+    Top = 374
     Width = 627
-    Height = 35
+    Height = 31
     Align = alBottom
-    BevelInner = bvLowered
+    AutoWrap = False
+    BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 4
-    ExplicitTop = 353
+    ExplicitTop = 373
     object Button2: TButton
       AlignWithMargins = True
-      Left = 547
-      Top = 5
+      Left = 549
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1054#1090#1084#1077#1085#1072
@@ -793,8 +794,8 @@ object Form33: TForm33
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 466
-      Top = 5
+      Left = 468
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1042#1099#1073#1088#1072#1090#1100

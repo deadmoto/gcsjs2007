@@ -4,8 +4,8 @@ object Form23: TForm23
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = #1058#1072#1088#1080#1092#1099' '#1085#1072' '#1101#1083#1077#1082#1090#1088#1086#1101#1085#1077#1088#1075#1080#1102'('#1088#1091#1073'./'#1095#1077#1083'.)'
-  ClientHeight = 282
-  ClientWidth = 453
+  ClientHeight = 289
+  ClientWidth = 468
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -22,15 +22,17 @@ object Form23: TForm23
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 447
+    Width = 462
     Height = 186
+    Margins.Bottom = 0
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 0
+    ExplicitWidth = 447
     object StringGrid1: TStringGrid
       Left = 2
       Top = 2
-      Width = 443
+      Width = 458
       Height = 182
       Align = alClient
       BorderStyle = bsNone
@@ -39,54 +41,57 @@ object Form23: TForm23
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowSelect]
       TabOrder = 0
       OnSelectCell = StringGrid1SelectCell
+      ExplicitWidth = 443
     end
   end
   object Panel2: TPanel
-    Left = 0
+    AlignWithMargins = True
+    Left = 3
     Top = 192
-    Width = 453
-    Height = 49
+    Width = 462
+    Height = 60
+    Margins.Bottom = 0
     Align = alTop
-    BevelOuter = bvNone
+    BevelInner = bvLowered
     TabOrder = 1
     object Label1: TLabel
-      Left = 53
-      Top = 3
+      Left = 61
+      Top = 11
       Width = 56
       Height = 13
       Caption = #1058#1080#1087' '#1087#1083#1080#1090#1099':'
     end
     object Label2: TLabel
-      Left = 213
-      Top = 3
+      Left = 221
+      Top = 11
       Width = 68
       Height = 13
       Caption = #1057#1077#1084#1100#1103' 1 '#1095#1077#1083'.:'
     end
     object Label4: TLabel
-      Left = 5
-      Top = 3
+      Left = 13
+      Top = 11
       Width = 22
       Height = 13
       Caption = #1050#1086#1076':'
     end
     object Label3: TLabel
-      Left = 293
-      Top = 3
+      Left = 301
+      Top = 11
       Width = 68
       Height = 13
       Caption = #1057#1077#1084#1100#1103' 2 '#1095#1077#1083'.:'
     end
     object Label5: TLabel
-      Left = 373
-      Top = 3
+      Left = 381
+      Top = 11
       Width = 74
       Height = 13
       Caption = #1057#1077#1084#1100#1103' >2 '#1095#1077#1083'.:'
     end
     object Edit1: TEdit
-      Left = 53
-      Top = 22
+      Left = 61
+      Top = 30
       Width = 145
       Height = 21
       Hint = 
@@ -100,8 +105,8 @@ object Form23: TForm23
       OnKeyDown = Edit1KeyDown
     end
     object Edit4: TEdit
-      Left = 5
-      Top = 22
+      Left = 13
+      Top = 30
       Width = 33
       Height = 21
       Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1091#1085#1080#1082#1072#1083#1100#1085#1086#1077' '#1079#1085#1072#1095#1077#1085#1080#1077' '#1087#1086#1083#1103', '#1094#1077#1083#1086#1077' '#1095#1080#1089#1083#1086
@@ -112,8 +117,8 @@ object Form23: TForm23
       OnKeyDown = Edit4KeyDown
     end
     object Edit2: TEdit
-      Left = 213
-      Top = 22
+      Left = 221
+      Top = 30
       Width = 65
       Height = 21
       Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1095#1080#1089#1083#1086
@@ -124,8 +129,8 @@ object Form23: TForm23
       OnKeyDown = Edit2KeyDown
     end
     object Edit3: TEdit
-      Left = 293
-      Top = 22
+      Left = 301
+      Top = 30
       Width = 65
       Height = 21
       Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1095#1080#1089#1083#1086
@@ -136,8 +141,8 @@ object Form23: TForm23
       OnKeyDown = Edit2KeyDown
     end
     object Edit5: TEdit
-      Left = 373
-      Top = 22
+      Left = 381
+      Top = 30
       Width = 65
       Height = 21
       Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1095#1080#1089#1083#1086
@@ -151,18 +156,20 @@ object Form23: TForm23
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 244
-    Width = 447
-    Height = 35
+    Top = 255
+    Width = 462
+    Height = 31
     Align = alTop
     AutoWrap = False
-    BevelInner = bvLowered
+    BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 2
+    ExplicitTop = 244
+    ExplicitWidth = 447
     object Button4: TButton
       AlignWithMargins = True
-      Left = 367
-      Top = 5
+      Left = 384
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1042#1099#1081#1090#1080
@@ -171,8 +178,8 @@ object Form23: TForm23
     end
     object Button3: TButton
       AlignWithMargins = True
-      Left = 286
-      Top = 5
+      Left = 303
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1059#1076#1072#1083#1080#1090#1100
@@ -181,8 +188,8 @@ object Form23: TForm23
     end
     object Button2: TButton
       AlignWithMargins = True
-      Left = 205
-      Top = 5
+      Left = 222
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1048#1079#1084#1077#1085#1080#1090#1100
@@ -191,8 +198,8 @@ object Form23: TForm23
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 124
-      Top = 5
+      Left = 141
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1044#1086#1073#1072#1074#1080#1090#1100

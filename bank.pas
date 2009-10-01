@@ -3,35 +3,46 @@ unit bank;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Grids, DBGrids;
+  Classes,
+  Controls,
+  Dialogs,
+  ExtCtrls,
+  Forms,
+  Graphics,
+  Grids,
+  Messages,
+  StdCtrls,
+  SysUtils,
+  Variants,
+  Windows;
 
 type
   TForm31 = class(TForm)
-    Label1: TLabel;
-    DBGrid1: TDBGrid;
-    Edit1: TEdit;
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    Button4: TButton;
-    Label2: TLabel;
-    Edit2: TEdit;
-    Label3: TLabel;
-    Edit3: TEdit;
+    Panel1:      TPanel;
+    StringGrid1: TStringGrid;
+    Panel2:      TPanel;
+    Edit3:       TEdit;
+    Label3:      TLabel;
+    Label1:      TLabel;
+    Edit1:       TEdit;
+    Edit2:       TEdit;
+    Label2:      TLabel;
+    FlowPanel1:  TFlowPanel;
+    Button1:     TButton;
+    Button2:     TButton;
+    Button3:     TButton;
+    Button4:     TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
-    procedure DBGrid1CellClick(Column: TColumn);
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Edit3Exit(Sender: TObject);
-    procedure Edit3KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure Edit3KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure Edit1Exit(Sender: TObject);
-    procedure Edit1KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
   private
     { Private declarations }
     oldid: integer;//текущие значения полей до изменения
@@ -46,18 +57,50 @@ var
 
 implementation
 
-uses datamodule, main, service;
+uses
+  datamodule,
+  main,
+  service;
 
 {$R *.dfm}
 
 procedure TForm31.SetDefault;
+var
+  i: integer;
 begin
-  with Datamodule1.Query1 do begin
+  with Datamodule1.Query1 do
+  begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
     SQL.Add('from bank');
     SQL.Add('order by id_bank');
+    Open;
+    First;
+  end;
+
+  FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'BIK'),
+    TIntArray.Create(25, 200, 155), Datamodule1.Query1.RecordCount + 1);
+
+  for i := 0 to Datamodule1.Query1.RecordCount - 1 do
+  begin
+    StringGrid1.Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_bank').Value;
+    StringGrid1.Cells[1, i + 1] := Datamodule1.Query1.FieldByName('namebank').Value;
+    StringGrid1.Cells[2, i + 1] := Datamodule1.Query1.FieldByName('bik').Value;
+    Datamodule1.Query1.Next;
+  end;
+
+end;
+
+procedure TForm31.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
+begin
+  if ARow <> 0 then
+  begin
+    Edit1.Text := StringGrid1.Cells[1, ARow];// DBGrid1.Fields[1].AsString;
+    Edit2.Text := StringGrid1.Cells[2, ARow];//DBGrid1.Fields[2].AsString;
+    Edit3.Text := StringGrid1.Cells[0, ARow];//DBGrid1.Fields[0].AsString;
+    if Edit3.Text <> '' then
+      oldid := StrToInt(Edit3.Text);
   end;
 end;
 
@@ -66,50 +109,53 @@ procedure TForm31.Button1Click(Sender: TObject);
 var
   flag: boolean;
 begin
-  if (Edit1.Text <> '')and(Edit2.Text <> '')and(Edit3.Text <> '') then begin
-    with DataModule1.Query1 do begin
+  if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
+  begin
+    with DataModule1.Query1 do
+    begin
       Close;
       SQL.Clear;
-      SQl.Add('select id_bank');
-      SQl.Add('from bank');
-      SQl.Add('where (id_bank=:id)');
+      SQL.Add('select id_bank');
+      SQL.Add('from bank');
+      SQL.Add('where (id_bank=:id)');
       ParamByName('id').AsInteger := StrToInt(Edit3.Text);
       Open;
-      if IsEmpty then begin
+      if IsEmpty then
+      begin
         Close;
         SQL.Clear;
-        SQl.Add('select id_bank');
-        SQl.Add('from bank');
-        SQl.Add('where (namebank = :name)');
+        SQL.Add('select id_bank');
+        SQL.Add('from bank');
+        SQL.Add('where (namebank = :name)');
         ParamByName('name').AsString := Edit1.Text;
         Open;
         if IsEmpty then
-          flag := true
+          flag := True
         else
-          flag := false;
+          flag := False;
         Close;
       end
-      else begin
-        flag := false;
+      else
+      begin
+        flag := False;
         Close;
       end;
-      if flag then begin
+      if flag then
+      begin
         Close;
         SQL.Clear;
         SQL.Add('insert into bank');
         SQL.Add('values (:id, :name, :bik)');
-        ParamByName('id').AsInteger := StrToInt(Edit3.Text);
+        ParamByName('id').AsInteger  := StrToInt(Edit3.Text);
         ParamByName('name').AsString := Edit1.Text;
-        ParamByName('bik').AsString := Edit2.Text;
+        ParamByName('bik').AsString  := Edit2.Text;
         ExecSQL;
         SetDefault;
-        Open;
-        oldid := StrToInt(Edit3.Text);
       end
-      else begin
+      else
+      begin
         ShowMessage('Наименование банка и код должны быть уникальны!');
         SetDefault;
-        Open;
       end;
     end;
   end
@@ -122,63 +168,68 @@ procedure TForm31.Button2Click(Sender: TObject);
 var
   flag: bool;
 begin
-  if (Edit1.Text <> '')and(Edit2.Text <> '')and(Edit3.Text <> '') then begin
-    with DataModule1.Query1 do begin                 
+  if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
+  begin
+    with DataModule1.Query1 do
+    begin
       Close;
       SQL.Clear;
-      SQl.Add('select id_bank');
-      SQl.Add('from bank');
-      SQl.Add('where (id_bank=:id)');
+      SQL.Add('select id_bank');
+      SQL.Add('from bank');
+      SQL.Add('where (id_bank=:id)');
       ParamByName('id').AsInteger := StrToInt(Edit3.Text);
       Open;
-      if IsEmpty or not IsEmpty and (FieldByName('id_bank').AsInteger = oldid) then begin
+      if IsEmpty or not IsEmpty and (FieldByName('id_bank').AsInteger = oldid) then
+      begin
         Close;
         SQL.Clear;
-        SQl.Add('select id_bank');
-        SQl.Add('from bank');
-        SQl.Add('where (namebank = :name)');
+        SQL.Add('select id_bank');
+        SQL.Add('from bank');
+        SQL.Add('where (namebank = :name)');
         ParamByName('name').AsString := Edit1.Text;
         Open;
         if IsEmpty or not IsEmpty and (FieldByName('id_bank').AsInteger = oldid) then
-          flag := true
+          flag := True
         else
-          flag := false;
+          flag := False;
         Close;
       end
-      else begin
-        flag := false;
+      else
+      begin
+        flag := False;
         Close;
       end;
-      if flag then begin
+      if flag then
+      begin
         Close;
         SQL.Clear;
         SQL.Add('update bank');
         SQL.Add('set namebank = :name, bik = :bik');
         SQL.Add('where (id_bank = :id)');
-        ParamByName('id').AsInteger := oldid;
+        ParamByName('id').AsInteger  := oldid;
         ParamByName('name').AsString := Edit1.Text;
-        ParamByName('bik').AsString := Edit2.Text;
+        ParamByName('bik').AsString  := Edit2.Text;
         ExecSQL;
         SetDefault;
-        Open;
-        oldid := StrToInt(Edit3.Text);
       end
-      else begin
+      else
+      begin
         ShowMessage('Наименование банка и код должны быть уникальны!');
         SetDefault;
-        Open;
       end;
     end;
   end
   else
-      ShowMessage('Все поля ввода должны быть заполнены!');
+    ShowMessage('Все поля ввода должны быть заполнены!');
 end;
 
 procedure TForm31.Button3Click(Sender: TObject);
 { удалить банк }
 begin
-  with DataModule1.Query1 do begin
-    if not IsEmpty then begin
+  with DataModule1.Query1 do
+  begin
+    if not IsEmpty then
+    begin
       Close;
       SQL.Clear;
       SQL.Add('delete from bank');
@@ -186,11 +237,6 @@ begin
       ParamByName('id').AsInteger := oldid;
       ExecSQL;
       SetDefault;
-      Open;
-      Edit1.Text := DBGrid1.Fields[1].AsString;
-      Edit2.Text := DBGrid1.Fields[2].AsString;
-      Edit3.Text := DBGrid1.Fields[0].AsString;
-      oldid := StrToInt(Edit3.Text);
     end;
   end;
 end;
@@ -200,33 +246,21 @@ begin
   Close;
 end;
 
-procedure TForm31.DBGrid1CellClick(Column: TColumn);
-begin
-  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := DBGrid1.Fields[2].AsString;
-  Edit3.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit3.Text);
-end;
-
 procedure TForm31.FormShow(Sender: TObject);
 begin
-  with DataModule1.Query1 do begin
-    SetDefault;
-    Open;
-  end;
-  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := DBGrid1.Fields[2].AsString;
-  Edit3.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit3.Text);
-  if status=0 then begin
-    Button1.Enabled := false;
-    Button2.Enabled := false;
-    Button3.Enabled := false;
+  SetDefault;
+
+  if status = 0 then
+  begin
+    Button1.Enabled := False;
+    Button2.Enabled := False;
+    Button3.Enabled := False;
   end
-  else begin
-    Button1.Enabled := true;
-    Button2.Enabled := true;
-    Button3.Enabled := true;
+  else
+  begin
+    Button1.Enabled := True;
+    Button2.Enabled := True;
+    Button3.Enabled := True;
   end;
 end;
 
@@ -240,10 +274,9 @@ begin
   CheckRus(Edit3);
 end;
 
-procedure TForm31.Edit3KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm31.Edit3KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
-  if Key=VK_RETURN then
+  if Key = VK_RETURN then
     CheckRus(Edit3);
 end;
 
@@ -252,10 +285,9 @@ begin
   CheckRus(Edit1);
 end;
 
-procedure TForm31.Edit1KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm31.Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
-  if Key=VK_RETURN then
+  if Key = VK_RETURN then
     CheckRus(Edit1);
 end;
 

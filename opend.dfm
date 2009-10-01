@@ -22,12 +22,12 @@ object Form26: TForm26
     Left = 3
     Top = 3
     Width = 250
-    Height = 73
+    Height = 77
     Margins.Bottom = 0
-    Align = alClient
+    Align = alTop
     Caption = #1054#1090#1082#1088#1099#1090#1100' '#1086#1090#1095#1077#1090#1085#1099#1081' '#1087#1077#1088#1080#1086#1076':'
     TabOrder = 0
-    ExplicitHeight = 70
+    ExplicitLeft = -2
     object Label1: TLabel
       Left = 89
       Top = 17
@@ -68,18 +68,19 @@ object Form26: TForm26
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 79
+    Top = 83
     Width = 250
-    Height = 35
-    Align = alBottom
+    Height = 31
+    Align = alTop
     AutoWrap = False
-    BevelInner = bvLowered
+    BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 1
+    ExplicitTop = 79
     object Button2: TButton
       AlignWithMargins = True
-      Left = 170
-      Top = 5
+      Left = 172
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1042#1099#1081#1090#1080
@@ -88,8 +89,8 @@ object Form26: TForm26
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 89
-      Top = 5
+      Left = 91
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1054#1090#1082#1088#1099#1090#1100
