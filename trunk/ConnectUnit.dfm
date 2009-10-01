@@ -2,7 +2,7 @@ object Form45: TForm45
   Left = 0
   Top = 0
   BorderStyle = bsToolWindow
-  ClientHeight = 99
+  ClientHeight = 95
   ClientWidth = 285
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -23,10 +23,9 @@ object Form45: TForm45
     Width = 279
     Height = 55
     Margins.Bottom = 0
-    Align = alClient
+    Align = alTop
     Caption = #1042#1099#1073#1086#1088' '#1089#1077#1088#1074#1077#1088#1072':'
     TabOrder = 0
-    ExplicitHeight = 52
     object ComboBox1: TComboBox
       Left = 8
       Top = 22
@@ -42,16 +41,17 @@ object Form45: TForm45
     Left = 3
     Top = 61
     Width = 279
-    Height = 35
-    Align = alBottom
-    AutoSize = True
-    BevelInner = bvLowered
+    Height = 31
+    Align = alTop
+    AutoWrap = False
+    BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 1
+    ExplicitTop = 63
     object Button2: TButton
       AlignWithMargins = True
-      Left = 199
-      Top = 5
+      Left = 201
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1054#1090#1084#1077#1085#1072
@@ -60,8 +60,8 @@ object Form45: TForm45
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 118
-      Top = 5
+      Left = 120
+      Top = 3
       Width = 75
       Height = 25
       Caption = 'Ok'

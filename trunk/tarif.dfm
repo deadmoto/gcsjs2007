@@ -4,7 +4,7 @@ object Form15: TForm15
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = #1058#1072#1088#1080#1092#1099' '
-  ClientHeight = 384
+  ClientHeight = 389
   ClientWidth = 423
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -24,6 +24,7 @@ object Form15: TForm15
     Top = 3
     Width = 417
     Height = 289
+    Margins.Bottom = 0
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 0
@@ -45,17 +46,18 @@ object Form15: TForm15
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 348
+    Top = 355
     Width = 417
-    Height = 33
+    Height = 31
     Align = alTop
     AutoWrap = False
-    BevelInner = bvLowered
+    BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 2
+    ExplicitTop = 348
     object Button4: TButton
       AlignWithMargins = True
-      Left = 337
+      Left = 339
       Top = 3
       Width = 75
       Height = 25
@@ -65,7 +67,7 @@ object Form15: TForm15
     end
     object Button3: TButton
       AlignWithMargins = True
-      Left = 256
+      Left = 258
       Top = 3
       Width = 75
       Height = 25
@@ -75,7 +77,7 @@ object Form15: TForm15
     end
     object Button2: TButton
       AlignWithMargins = True
-      Left = 175
+      Left = 177
       Top = 3
       Width = 75
       Height = 25
@@ -85,7 +87,7 @@ object Form15: TForm15
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 94
+      Left = 96
       Top = 3
       Width = 75
       Height = 25
@@ -95,37 +97,39 @@ object Form15: TForm15
     end
   end
   object Panel2: TPanel
-    Left = 0
+    AlignWithMargins = True
+    Left = 3
     Top = 295
-    Width = 423
-    Height = 50
+    Width = 417
+    Height = 57
+    Margins.Bottom = 0
     Align = alTop
-    BevelOuter = bvNone
+    BevelInner = bvLowered
     TabOrder = 1
     object Label1: TLabel
-      Left = 44
-      Top = 3
+      Left = 58
+      Top = 12
       Width = 119
       Height = 13
       Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1090#1072#1088#1080#1092#1072':'
     end
     object Label2: TLabel
-      Left = 283
-      Top = 3
+      Left = 305
+      Top = 12
       Width = 36
       Height = 13
       Caption = #1058#1072#1088#1080#1092':'
     end
     object Label3: TLabel
-      Left = 5
-      Top = 3
+      Left = 10
+      Top = 12
       Width = 22
       Height = 13
       Caption = #1050#1086#1076':'
     end
     object Edit1: TEdit
-      Left = 44
-      Top = 22
+      Left = 58
+      Top = 28
       Width = 233
       Height = 21
       Hint = 
@@ -137,8 +141,8 @@ object Form15: TForm15
       TabOrder = 1
     end
     object Edit2: TEdit
-      Left = 283
-      Top = 22
+      Left = 305
+      Top = 28
       Width = 41
       Height = 21
       Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1095#1080#1089#1083#1086
@@ -149,8 +153,8 @@ object Form15: TForm15
       OnKeyDown = Edit2KeyDown
     end
     object Edit3: TEdit
-      Left = 5
-      Top = 22
+      Left = 10
+      Top = 28
       Width = 33
       Height = 21
       Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1091#1085#1080#1082#1072#1083#1100#1085#1086#1077' '#1079#1085#1072#1095#1077#1085#1080#1077' '#1087#1086#1083#1103', '#1094#1077#1083#1086#1077' '#1095#1080#1089#1083#1086

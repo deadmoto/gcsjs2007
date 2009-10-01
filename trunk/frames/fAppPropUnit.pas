@@ -99,12 +99,10 @@ begin
   if ConfigFrm.checkChanges then
   begin
     ConfigFrm.Button2.Enabled := True;
-    //    ConfigFrm.Button3.Enabled:= TRUE;
   end
   else
   begin
     ConfigFrm.Button2.Enabled := False;
-    //      ConfigFrm.Button3.Enabled:= FALSE;
   end;
 end;
 

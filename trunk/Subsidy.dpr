@@ -12,9 +12,6 @@ uses
   Street in 'Street.pas' {Form5},
   fond in 'fond.pas' {Form6},
   manager in 'manager.pas' {Form7},
-  ownertype in 'ownertype.pas' {Form8},
-  settlingtype in 'settlingtype.pas' {Form9},
-  control in 'control.pas' {Form10},
   privilege in 'privilege.pas' {Form12},
   minimum in 'minimum.pas' {Form13},
   status in 'status.pas' {Form14},
@@ -22,13 +19,11 @@ uses
   houses in 'houses.pas' {Form24},
   config in 'config.pas' {Form25},
   norm in 'norm.pas' {Form27},
-  certification in 'certification.pas' {Form28},
   chpriv in 'chpriv.pas' {Form11},
   Client in 'Client.pas',
   service in 'service.pas',
   chhouse in 'chhouse.pas' {Form30},
   bank in 'bank.pas' {Form31},
-  relation in 'relation.pas' {Form32},
   search in 'search.pas' {Form33},
   opend in 'opend.pas' {Form26},
   fstruct in 'fstruct.pas',
@@ -64,10 +59,12 @@ uses
   ConfigPropertiesUnit in 'ConfigPropertiesUnit.pas' {ConfigFrm},
   fAppPropUnit in 'frames\fAppPropUnit.pas' {fAppProp: TFrame},
   fAppUpdateUnit in 'frames\fAppUpdateUnit.pas' {fAppUpdate: TFrame},
-  AddReportDataUnit in 'AddReportDataUnit.pas' {AddReportDataFrm};
+  AddReportDataUnit in 'AddReportDataUnit.pas' {AddReportDataFrm},
+  AnyDirectoryUnit in 'AnyDirectoryUnit.pas' {AnyDirectoryFrm},
+  EditReportUnit in 'EditReportUnit.pas' {EditReportFrm};
 
 //  Plugins in 'Plugins.pas' {Plugins},
-
+//  ownertype in 'ownertype.pas' {Form8},
 
 {$R *.res}
 
@@ -105,9 +102,6 @@ begin
         Application.CreateForm(TForm5, Form5);
         Application.CreateForm(TForm6, Form6);
         Application.CreateForm(TForm7, Form7);
-        Application.CreateForm(TForm8, Form8);
-        Application.CreateForm(TForm9, Form9);
-        Application.CreateForm(TForm10, Form10);
         Application.CreateForm(TForm12, Form12);
         Application.CreateForm(TForm13, Form13);
         Application.CreateForm(TForm14, Form14);
@@ -116,11 +110,9 @@ begin
         Application.CreateForm(TForm24, Form24);
         Application.CreateForm(TForm25, Form25);
         Application.CreateForm(TForm27, Form27);
-        Application.CreateForm(TForm28, Form28);
         Application.CreateForm(TForm11, Form11);
         Application.CreateForm(TForm30, Form30);
         Application.CreateForm(TForm31, Form31);
-        Application.CreateForm(TForm32, Form32);
         Application.CreateForm(TAboutBox, AboutBox);
         Application.CreateForm(TForm33, Form33);
         Application.CreateForm(TForm26, Form26);
@@ -136,6 +128,8 @@ begin
         Application.CreateForm(TFactSumFrm, FactSumFrm);
         Application.CreateForm(TConfigFrm, ConfigFrm);
         Application.CreateForm(TAddReportDataFrm, AddReportDataFrm);
+        Application.CreateForm(TAnyDirectoryFrm, AnyDirectoryFrm);
+//        Application.CreateForm(TEditReportFrm, EditReportFrm);
         Application.Run;
       except
         ShowMessage('ѕроизошел сбой при создании одной из форм!');
@@ -152,3 +146,9 @@ begin
       '4.—осто€ние сети(в случае сетевого соединени€): возможно нет сетевого доступа к серверу.');
   end;
 end.
+
+//        Application.CreateForm(TForm8, Form8);
+//        Application.CreateForm(TForm32, Form32);
+//        Application.CreateForm(TForm28, Form28);
+//        Application.CreateForm(TForm9, Form9);
+//        Application.CreateForm(TForm10, Form10);

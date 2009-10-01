@@ -3,24 +3,36 @@ unit mdd;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Grids, DBGrids;
+  Classes,
+  Controls,
+  Dialogs,
+  ExtCtrls,
+  Forms,
+  Graphics,
+  Grids,
+  Messages,
+  StdCtrls,
+  SysUtils,
+  Variants,
+  Windows;
 
 type
   TForm20 = class(TForm)
-    DBGrid1: TDBGrid;
-    Edit3: TEdit;
-    Edit1: TEdit;
-    Edit2: TEdit;
-    Button4: TButton;
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    Label3: TLabel;
-    Label1: TLabel;
-    Label2: TLabel;
+    Panel1:      TPanel;
+    StringGrid1: TStringGrid;
+    Panel2:      TPanel;
+    Label3:      TLabel;
+    Label1:      TLabel;
+    Label2:      TLabel;
+    Edit3:       TEdit;
+    Edit1:       TEdit;
+    Edit2:       TEdit;
+    FlowPanel1:  TFlowPanel;
+    Button4:     TButton;
+    Button1:     TButton;
+    Button2:     TButton;
+    Button3:     TButton;
     procedure Button4Click(Sender: TObject);
-    procedure DBGrid1CellClick(Column: TColumn);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -28,10 +40,9 @@ type
     procedure Edit2Exit(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Edit1Exit(Sender: TObject);
-    procedure Edit1KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
-    procedure Edit2KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
   private
     { Private declarations }
     oldid: integer;//текущие значения полей до изменения
@@ -46,18 +57,48 @@ var
 
 implementation
 
-uses service, main, datamodule;
+uses
+  service,
+  main,
+  datamodule;
 
 {$R *.dfm}
 
 procedure TForm20.SetDefault;
+var
+  i: integer;
 begin
-  with DataModule1.Query4 do begin
+  with DataModule1.Query4 do
+  begin
     Close;
     SQL.Clear;
     SQL.Add('select * from "curmdd.dbf" sbros');
     SQL.Add('order by sbros.id_mdd');
     Open;
+    First;
+  end;
+
+  FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'МДД'),
+    TIntArray.Create(25, 220, 40), Datamodule1.Query4.RecordCount + 1);
+
+  for i := 0 to Datamodule1.Query4.RecordCount - 1 do
+  begin
+    StringGrid1.Cells[0, i + 1] := Datamodule1.Query4.FieldByName('id_mdd').Value;
+    StringGrid1.Cells[1, i + 1] := Datamodule1.Query4.FieldByName('namegroup').Value;
+    StringGrid1.Cells[2, i + 1] := Datamodule1.Query4.FieldByName('vmdd').Value;
+    Datamodule1.Query4.Next;
+  end;
+end;
+
+procedure TForm20.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
+begin
+  if ARow <> 0 then
+  begin
+    Edit1.Text := StringGrid1.Cells[1, ARow];
+    Edit2.Text := StringGrid1.Cells[2, ARow];
+    Edit3.Text := StringGrid1.Cells[0, ARow];
+    if Edit3.Text <> '' then
+      oldid := StrToInt(Edit3.Text);
   end;
 end;
 
@@ -67,58 +108,54 @@ begin
   Close;
 end;
 
-procedure TForm20.DBGrid1CellClick(Column: TColumn);
-{ выбрана ячейка }
-begin
-  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := IntToStr(DBGrid1.Fields[2].AsInteger);
-  Edit3.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit3.Text);
-end;
-
 procedure TForm20.Button1Click(Sender: TObject);
 { добавить мдд }
 var
   flag: bool;
 begin
-  if (Edit1.Text <> '')and(Edit2.Text <> '')and(Edit3.Text<>'') then begin
-    with DataModule1.Query1 do begin
+  if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
+  begin
+    with DataModule1.Query1 do
+    begin
       Close;
       SQL.Clear;
-      SQl.Add('select id_mdd');
-      SQl.Add('from mdd');
+      SQL.Add('select id_mdd');
+      SQL.Add('from mdd');
       SQL.Add('where (id_mdd=:id)');
       ParamByName('id').AsInteger := StrToInt(Edit3.Text);
       Open;
-      if IsEmpty then begin
+      if IsEmpty then
+      begin
         Close;
         SQL.Clear;
-        SQl.Add('select id_mdd');
-        SQl.Add('from mdd');
+        SQL.Add('select id_mdd');
+        SQL.Add('from mdd');
         SQL.Add('where (namegroup=:name)');
         ParamByName('name').AsString := Edit1.Text;
         Open;
         if IsEmpty then
-          flag := true
+          flag := True
         else
-          flag := false;
+          flag := False;
         Close;
       end
-      else begin
-        flag := false;
+      else
+      begin
+        flag := False;
         Close;
       end;
-      if flag then begin
+      if flag then
+      begin
         Close;
         SQL.Clear;
         SQL.Add('insert into mdd');
         SQL.Add('values (convert(smalldatetime,:d,104),:id,:name,:v)');
-        ParamByName('d').AsString := Form1.rdt;
+        ParamByName('d').AsString  := Form1.rdt;
         ParamByName('id').AsInteger := StrToInt(Edit3.Text);
         ParamByName('name').AsString := Edit1.Text;
         ParamByName('v').AsInteger := StrToInt(Edit2.Text);
         ExecSQL;
-        FillMdd(Form1.bpath,Form1.rdt,Form1.codedbf);
+        FillMdd(Form1.bpath, Form1.rdt, Form1.codedbf);
         oldid := StrToInt(Edit3.Text);
       end
       else
@@ -135,48 +172,55 @@ procedure TForm20.Button2Click(Sender: TObject);
 var
   flag: boolean;
 begin
-  if (Edit1.Text <> '')and(Edit2.Text <> '')and(Edit3.Text<>'') then begin
-    with DataModule1.Query1 do begin
+  if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
+  begin
+    with DataModule1.Query1 do
+    begin
       Close;
       SQL.Clear;
-      SQl.Add('select id_mdd');
-      SQl.Add('from mdd');
+      SQL.Add('select id_mdd');
+      SQL.Add('from mdd');
       SQL.Add('where (id_mdd=:id)');
       ParamByName('id').AsInteger := StrToInt(Edit3.Text);
       Open;
-      if IsEmpty or not IsEmpty and(FieldByName('id_mdd').AsInteger=oldid) then begin
+      if IsEmpty or not IsEmpty and (FieldByName('id_mdd').AsInteger = oldid) then
+      begin
         if IsEmpty then
-          flag := false
-        else begin
+          flag := False
+        else
+        begin
           Close;
           SQL.Clear;
-          SQl.Add('select id_mdd');
-          SQl.Add('from mdd');
-          SQl.Add('where (id_mdd=:id)and(sdate=Convert(smalldatetime,:d,104))');
+          SQL.Add('select id_mdd');
+          SQL.Add('from mdd');
+          SQL.Add('where (id_mdd=:id)and(sdate=Convert(smalldatetime,:d,104))');
           ParamByName('id').AsInteger := StrToInt(Edit3.Text);
           ParamByName('d').AsString := Form1.rdt;
           Open;
           if IsEmpty then
-            flag := false
+            flag := False
           else
-            flag := true;
+            flag := True;
         end;
         Close;
         SQL.Clear;
-        SQl.Add('select id_mdd');
-        SQl.Add('from mdd');
+        SQL.Add('select id_mdd');
+        SQL.Add('from mdd');
         SQL.Add('where (namegroup=:name)');
         ParamByName('name').AsString := Edit1.Text;
         Open;
-        if IsEmpty or not IsEmpty and (FieldByName('id_mdd').AsInteger = oldid) then begin
-          if not flag then begin
+        if IsEmpty or not IsEmpty and (FieldByName('id_mdd').AsInteger = oldid) then
+        begin
+          if not flag then
+          begin
             Close;
             SQL.Clear;
             SQL.Add('insert into mdd');
             SQL.Add('values (convert(smalldatetime,:d,104),:id,:name,:v)');
             ParamByName('id').AsInteger := StrToInt(Edit3.Text);
           end
-          else begin
+          else
+          begin
             Close;
             SQL.Clear;
             SQL.Add('update mdd');
@@ -184,11 +228,11 @@ begin
             SQL.Add('where (id_mdd = :id)and(sdate=Convert(smalldatetime,:d,104))');
             ParamByName('id').AsInteger := oldid;
           end;
-          ParamByName('d').AsString := Form1.rdt;
+          ParamByName('d').AsString  := Form1.rdt;
           ParamByName('name').AsString := Edit1.Text;
           ParamByName('v').AsInteger := StrToInt(Edit2.Text);
           ExecSQL;
-          FillMdd(Form1.bpath,Form1.rdt,Form1.codedbf);
+          FillMdd(Form1.bpath, Form1.rdt, Form1.codedbf);
           oldid := StrToInt(Edit3.Text);
         end
         else
@@ -206,39 +250,35 @@ end;
 procedure TForm20.Button3Click(Sender: TObject);
 { удалить минимум }
 begin
-  with DataModule1.Query1 do begin
+  with DataModule1.Query1 do
+  begin
     Close;
     SQL.Clear;
     SQL.Add('delete from mdd');
-    SQl.Add('where (id_mdd=:id)and(sdate=Convert(smalldatetime,:d,104))');
+    SQL.Add('where (id_mdd=:id)and(sdate=Convert(smalldatetime,:d,104))');
     ParamByName('d').AsString := Form1.rdt;
     ParamByName('id').AsInteger := oldid;
     ExecSQL;
-    FillMdd(Form1.bpath,Form1.rdt,Form1.codedbf);
+    FillMdd(Form1.bpath, Form1.rdt, Form1.codedbf);
   end;
   SetDefault;
-  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := IntToStr(DBGrid1.Fields[2].AsInteger);
-  Edit3.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit3.Text);
 end;
 
 procedure TForm20.FormShow(Sender: TObject);
 begin
   SetDefault;
-  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := IntToStr(DBGrid1.Fields[2].AsInteger);
-  Edit3.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit3.Text);
-  if status=0 then begin
-    Button1.Enabled := false;
-    Button2.Enabled := false;
-    Button3.Enabled := false;
+
+  if status = 0 then
+  begin
+    Button1.Enabled := False;
+    Button2.Enabled := False;
+    Button3.Enabled := False;
   end
-  else begin
-    Button1.Enabled := true;
-    Button2.Enabled := true;
-    Button3.Enabled := true;
+  else
+  begin
+    Button1.Enabled := True;
+    Button2.Enabled := True;
+    Button3.Enabled := True;
   end;
 end;
 
@@ -258,17 +298,15 @@ begin
   CheckRus(edit1);
 end;
 
-procedure TForm20.Edit1KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm20.Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
-  if key=vk_return then
+  if key = vk_return then
     CheckRus(edit1);
 end;
 
-procedure TForm20.Edit2KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm20.Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
-  if key=vk_return then
+  if key = vk_return then
     CheckInt(edit2);
 end;
 

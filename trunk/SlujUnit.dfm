@@ -2,9 +2,9 @@ object Form44: TForm44
   Left = 279
   Top = 210
   BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
+  BorderStyle = bsDialog
   Caption = #1055#1088#1086#1089#1084#1086#1090#1088' '#1089#1083#1091#1078#1077#1073#1085#1099#1093
-  ClientHeight = 496
+  ClientHeight = 492
   ClientWidth = 623
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -21,16 +21,16 @@ object Form44: TForm44
     Left = 3
     Top = 458
     Width = 617
-    Height = 35
-    Align = alBottom
+    Height = 31
+    Align = alTop
     AutoWrap = False
-    BevelInner = bvLowered
+    BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 1
     object Button2: TButton
       AlignWithMargins = True
-      Left = 537
-      Top = 5
+      Left = 539
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1047#1072#1082#1088#1099#1090#1100
@@ -39,8 +39,8 @@ object Form44: TForm44
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 456
-      Top = 5
+      Left = 458
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1059#1076#1072#1083#1080#1090#1100
@@ -49,8 +49,8 @@ object Form44: TForm44
     end
     object Button3: TButton
       AlignWithMargins = True
-      Left = 360
-      Top = 5
+      Left = 362
+      Top = 3
       Width = 90
       Height = 25
       Caption = #1069#1082#1089#1087#1086#1088#1090' '#1074' Excel'
@@ -65,7 +65,7 @@ object Form44: TForm44
     Width = 617
     Height = 452
     Margins.Bottom = 0
-    Align = alClient
+    Align = alTop
     TabOrder = 0
     object SlujGrid: TStringGrid
       Left = 2

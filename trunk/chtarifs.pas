@@ -3,16 +3,16 @@ unit chtarifs;
 interface
 
 uses
-  Windows,
+  Classes,
+  Controls,
+  Dialogs,
+  Forms,
+  Graphics,
   Messages,
+  StdCtrls,
   SysUtils,
   Variants,
-  Classes,
-  Graphics,
-  Controls,
-  Forms,
-  Dialogs,
-  StdCtrls;
+  Windows;
 
 type
   TForm42 = class(TForm)

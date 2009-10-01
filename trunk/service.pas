@@ -9,19 +9,20 @@ unit service;
 interface
 
 uses
-  SysUtils,
-  Windows,
   Controls,
-  Dialogs,
-  StdCtrls,
-  Variants,
-  dbf,
   DB,
-  Mask,
-  Grids,
+  dbf,
+  Dialogs,
   ExcelXP,
+  FileCtrl,
+  Grids,
+  Mask,
+  padegFIO,
   Registry,
-  FileCtrl;
+  StdCtrls,
+  SysUtils,
+  Variants,
+  Windows;
 
 const
   numbtarif = 14;
@@ -29,7 +30,7 @@ const
     '=',
     '>=',
     '<='
-  );
+    );
 
 type
   TStringArray = array of string;
@@ -80,7 +81,9 @@ function FileVersion(AFileName: string): string;
 function GetTempDir: string;
 function getConfValue(str: string): variant;
 function SelectDir: string;
+function WithoutDoubleSpaces(str: string): string;
 procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidths: TIntArray; RecCount: integer);
+function GetShortName(FIO: string): string;
 
 implementation
 
@@ -852,6 +855,25 @@ begin
     StrGrid.Cells[i, 0] := SGHead[i];
   for i := 0 to length(SGColWidths) - 1 do
     StrGrid.ColWidths[i] := SGColWidths[i];
+end;
+
+function WithoutDoubleSpaces(str: string): string;
+var
+  i: integer;
+begin
+  for i := 0 to 2 do
+    str := Trim(StringReplace(str, '  ', ' ', [rfReplaceAll]));
+  Result := str;
+end;
+
+function GetShortName(FIO: string): string;
+var
+  FIOParts: TFIOParts;
+begin
+  FIOParts := GetFIOParts(FIO);
+  Result := Trim(FIOParts.LastName) + ' ' +
+    Trim(FIOParts.FirstName)[1] + '. ' +
+    Trim(FIOParts.MiddleName)[1] + '.';
 end;
 
 end.

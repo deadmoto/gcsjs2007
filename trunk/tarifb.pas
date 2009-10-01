@@ -3,18 +3,18 @@ unit tarifb;
 interface
 
 uses
-  Windows,
+  Classes,
+  Controls,
+  Dialogs,
+  ExtCtrls,
+  Forms,
+  Graphics,
+  Grids,
   Messages,
+  StdCtrls,
   SysUtils,
   Variants,
-  Classes,
-  Graphics,
-  Controls,
-  Forms,
-  Dialogs,
-  StdCtrls,
-  Grids,
-  ExtCtrls;
+  Windows;
 
 type
   TForm19 = class(TForm)

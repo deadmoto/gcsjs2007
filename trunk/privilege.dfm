@@ -2,9 +2,9 @@ object Form12: TForm12
   Left = 233
   Top = 116
   BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
+  BorderStyle = bsDialog
   ClientHeight = 337
-  ClientWidth = 473
+  ClientWidth = 472
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -25,7 +25,7 @@ object Form12: TForm12
     Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1083#1100#1075#1086#1090#1099':'
   end
   object Label11: TLabel
-    Left = 16
+    Left = 8
     Top = 8
     Width = 22
     Height = 13
@@ -402,7 +402,7 @@ object Form12: TForm12
   end
   object Button1: TButton
     Left = 336
-    Top = 248
+    Top = 273
     Width = 75
     Height = 25
     Caption = #1042#1099#1081#1090#1080
@@ -411,7 +411,7 @@ object Form12: TForm12
   end
   object Button2: TButton
     Left = 336
-    Top = 280
+    Top = 304
     Width = 75
     Height = 25
     TabOrder = 6
@@ -420,7 +420,7 @@ object Form12: TForm12
   object Edit1: TEdit
     Left = 64
     Top = 24
-    Width = 393
+    Width = 401
     Height = 21
     Hint = 
       #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1091#1085#1080#1082#1072#1083#1100#1085#1086#1077' '#1079#1085#1072#1095#1077#1085#1080#1077' '#1087#1086#1083#1103', '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 51 ' +
@@ -433,7 +433,7 @@ object Form12: TForm12
     OnKeyDown = Edit1KeyDown
   end
   object Edit11: TEdit
-    Left = 16
+    Left = 8
     Top = 24
     Width = 33
     Height = 21

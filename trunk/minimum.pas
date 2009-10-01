@@ -1,26 +1,40 @@
-unit minimum;                                                                 
+unit minimum;
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Mask, DBCtrls, Grids, DBGrids;
+  Classes,
+  Controls,
+  Dialogs,
+  Forms,
+  Graphics,
+  Grids,
+  Mask,
+  Messages,
+  StdCtrls,
+  SysUtils,
+  Variants,
+  Windows,
+  ExtCtrls;
 
 type
   TForm13 = class(TForm)
-    DBGrid1: TDBGrid;
-    Label1: TLabel;
-    Label2: TLabel;
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    Button4: TButton;
-    Edit1: TEdit;
-    Edit2: TEdit;
-    Label3: TLabel;
-    Edit3: TEdit;
+    Panel1:      TPanel;
+    StringGrid1: TStringGrid;
+    Panel2:      TPanel;
+    Label1:      TLabel;
+    Label2:      TLabel;
+    Label3:      TLabel;
+    Edit1:       TEdit;
+    Edit2:       TEdit;
+    Edit3:       TEdit;
+    FlowPanel1:  TFlowPanel;
+    Button1:     TButton;
+    Button2:     TButton;
+    Button3:     TButton;
+    Button4:     TButton;
     procedure Button4Click(Sender: TObject);
-    procedure DBGrid1CellClick(Column: TColumn);
+
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -29,12 +43,10 @@ type
     procedure Edit2Exit(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Edit1Exit(Sender: TObject);
-    procedure Edit1KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
-    procedure Edit2KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
-    procedure Edit3KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure Edit3KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
   private
     { Private declarations }
     oldid: integer;//текущие значения полей до изменения
@@ -49,18 +61,49 @@ var
 
 implementation
 
-uses datamodule, main, service;
+uses
+  datamodule,
+  main,
+  service;
 
 {$R *.dfm}
 
 procedure TForm13.SetDefault;
+var
+  i: integer;
 begin
-  with DataModule1.Query4 do begin
+  with DataModule1.Query4 do
+  begin
     Close;
     SQL.Clear;
     SQL.Add('select * from "curlmin.dbf" sbros');
     SQL.Add('order by sbros.id_min');
     Open;
+    First;
+  end;
+
+  FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Минимум'),
+    TIntArray.Create(25, 200, 65), Datamodule1.Query4.RecordCount + 1);
+
+  for i := 0 to Datamodule1.Query4.RecordCount - 1 do
+  begin
+    StringGrid1.Cells[0, i + 1] := Datamodule1.Query4.FieldByName('id_min').Value;
+    StringGrid1.Cells[1, i + 1] := Datamodule1.Query4.FieldByName('namemin').Value;
+    StringGrid1.Cells[2, i + 1] := Datamodule1.Query4.FieldByName('minim').Value;
+    Datamodule1.Query4.Next;
+  end;
+end;
+
+procedure TForm13.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
+{ выбрана ячейка }
+begin
+  if ARow <> 0 then
+  begin
+    Edit1.Text := StringGrid1.Cells[1, ARow];
+    Edit2.Text := StringGrid1.Cells[2, ARow];
+    Edit3.Text := StringGrid1.Cells[0, ARow];
+    if Edit3.Text <> '' then
+      oldid := StrToInt(Edit3.Text);
   end;
 end;
 
@@ -70,48 +113,44 @@ begin
   Form13.Close;
 end;
 
-procedure TForm13.DBGrid1CellClick(Column: TColumn);
-{ выбрана ячейка }
-begin
-  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := FlToStr(DBGrid1.Fields[2].AsFloat);
-  Edit3.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit3.Text);
-end;
-
 procedure TForm13.Button1Click(Sender: TObject);
 { добавить минимум }
 var
   flag: bool;
 begin
-  if (Edit1.Text <> '')and(Edit2.Text <> '')and(Edit3.Text<>'') then begin
-    with DataModule1.Query1 do begin
+  if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
+  begin
+    with DataModule1.Query1 do
+    begin
       Close;
       SQL.Clear;
-      SQl.Add('select id_min');
-      SQl.Add('from lmin');
+      SQL.Add('select id_min');
+      SQL.Add('from lmin');
       SQL.Add('where (id_min=:id)');
       ParamByName('id').AsInteger := StrToInt(Edit3.Text);
       Open;
-      if IsEmpty then begin
+      if IsEmpty then
+      begin
         Close;
         SQL.Clear;
-        SQl.Add('select id_min');
-        SQl.Add('from lmin');
+        SQL.Add('select id_min');
+        SQL.Add('from lmin');
         SQL.Add('where (namemin=:name)');
         ParamByName('name').AsString := Edit1.Text;
         Open;
         if IsEmpty then
-          flag := true
+          flag := True
         else
-          flag := false;
+          flag := False;
         Close;
       end
-      else begin
-        flag := false;
+      else
+      begin
+        flag := False;
         Close;
       end;
-      if flag then begin
+      if flag then
+      begin
         Close;
         SQL.Clear;
         SQL.Add('insert into lmin');
@@ -121,7 +160,7 @@ begin
         ParamByName('name').AsString := Edit1.Text;
         ParamByName('minim').AsFloat := StrToFloat(Edit2.Text);
         ExecSQL;
-        FillMin(Form1.bpath,Form1.rdt,Form1.codedbf);
+        FillMin(Form1.bpath, Form1.rdt, Form1.codedbf);
         oldid := StrToInt(Edit3.Text);
       end
       else
@@ -138,48 +177,55 @@ procedure TForm13.Button2Click(Sender: TObject);
 var
   flag: boolean;
 begin
-  if (Edit1.Text <> '')and(Edit2.Text <> '')and(Edit3.Text<>'') then begin
-    with DataModule1.Query1 do begin
+  if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
+  begin
+    with DataModule1.Query1 do
+    begin
       Close;
       SQL.Clear;
-      SQl.Add('select id_min');
-      SQl.Add('from lmin');
+      SQL.Add('select id_min');
+      SQL.Add('from lmin');
       SQL.Add('where (id_min=:id)');
       ParamByName('id').AsInteger := StrToInt(Edit3.Text);
       Open;
-      if IsEmpty or not IsEmpty and(FieldByName('id_min').AsInteger=oldid) then begin
+      if IsEmpty or not IsEmpty and (FieldByName('id_min').AsInteger = oldid) then
+      begin
         if IsEmpty then
-          flag := false
-        else begin
+          flag := False
+        else
+        begin
           Close;
           SQL.Clear;
-          SQl.Add('select id_min');
-          SQl.Add('from lmin');
-          SQl.Add('where (id_min=:id)and(sdate=Convert(smalldatetime,:d,104))');
+          SQL.Add('select id_min');
+          SQL.Add('from lmin');
+          SQL.Add('where (id_min=:id)and(sdate=Convert(smalldatetime,:d,104))');
           ParamByName('id').AsInteger := StrToInt(Edit3.Text);
           ParamByName('d').AsString := Form1.rdt;
           Open;
           if IsEmpty then
-            flag := false
+            flag := False
           else
-            flag := true;
+            flag := True;
         end;
         Close;
         SQL.Clear;
-        SQl.Add('select id_min');
-        SQl.Add('from lmin');
+        SQL.Add('select id_min');
+        SQL.Add('from lmin');
         SQL.Add('where (namemin=:name)');
         ParamByName('name').AsString := Edit1.Text;
         Open;
-        if IsEmpty or not IsEmpty and (FieldByName('id_min').AsInteger = oldid) then begin
-          if not flag then begin
+        if IsEmpty or not IsEmpty and (FieldByName('id_min').AsInteger = oldid) then
+        begin
+          if not flag then
+          begin
             Close;
             SQL.Clear;
             SQL.Add('insert into lmin');
             SQL.Add('values (convert(smalldatetime,:d,104),:id,:name,:minim)');
             ParamByName('id').AsInteger := StrToInt(Edit3.Text);
           end
-          else begin
+          else
+          begin
             Close;
             SQL.Clear;
             SQL.Add('update lmin');
@@ -191,7 +237,7 @@ begin
           ParamByName('name').AsString := Edit1.Text;
           ParamByName('minim').AsFloat := StrToFloat(Edit2.Text);
           ExecSQL;
-          FillMin(Form1.bpath,Form1.rdt,Form1.codedbf);
+          FillMin(Form1.bpath, Form1.rdt, Form1.codedbf);
           oldid := StrToInt(Edit3.Text);
         end
         else
@@ -209,39 +255,34 @@ end;
 procedure TForm13.Button3Click(Sender: TObject);
 { удалить минимум }
 begin
-  with DataModule1.Query1 do begin
+  with DataModule1.Query1 do
+  begin
     Close;
     SQL.Clear;
     SQL.Add('delete from lmin');
-    SQl.Add('where (id_min=:id)and(sdate=Convert(smalldatetime,:d,104))');
+    SQL.Add('where (id_min=:id)and(sdate=Convert(smalldatetime,:d,104))');
     ParamByName('d').AsString := Form1.rdt;
     ParamByName('id').AsInteger := oldid;
     ExecSQL;
-    FillMin(Form1.bpath,Form1.rdt,Form1.codedbf);
+    FillMin(Form1.bpath, Form1.rdt, Form1.codedbf);
   end;
   SetDefault;
-  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := FlToStr(DBGrid1.Fields[2].AsFloat);
-  Edit3.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit3.Text);
 end;
 
 procedure TForm13.FormShow(Sender: TObject);
 begin
   SetDefault;
-  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := FlToStr(DBGrid1.Fields[2].AsFloat);
-  Edit3.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit3.Text);
-  if status=0 then begin
-    Button1.Enabled := false;
-    Button2.Enabled := false;
-    Button3.Enabled := false;
+  if status = 0 then
+  begin
+    Button1.Enabled := False;
+    Button2.Enabled := False;
+    Button3.Enabled := False;
   end
-  else begin
-    Button1.Enabled := true;
-    Button2.Enabled := true;
-    Button3.Enabled := true;
+  else
+  begin
+    Button1.Enabled := True;
+    Button2.Enabled := True;
+    Button3.Enabled := True;
   end;
 end;
 
@@ -266,24 +307,21 @@ begin
   CheckRus(edit1);
 end;
 
-procedure TForm13.Edit1KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm13.Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
-  if key=vk_return then
+  if key = vk_return then
     CheckRus(edit1);
 end;
 
-procedure TForm13.Edit2KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm13.Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
-  if key=vk_return then
+  if key = vk_return then
     SetPoint(edit2);
 end;
 
-procedure TForm13.Edit3KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm13.Edit3KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
-  if key=vk_return then
+  if key = vk_return then
     CheckInt(edit3);
 end;
 

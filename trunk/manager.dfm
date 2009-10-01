@@ -4,7 +4,7 @@ object Form7: TForm7
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = #1056#1072#1089#1087#1086#1088#1103#1076#1080#1090#1077#1083#1080' '#1078#1080#1083#1100#1103
-  ClientHeight = 394
+  ClientHeight = 411
   ClientWidth = 335
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -24,12 +24,10 @@ object Form7: TForm7
     Top = 3
     Width = 329
     Height = 306
+    Margins.Bottom = 0
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 0
-    ExplicitLeft = 8
-    ExplicitTop = 8
-    ExplicitWidth = 313
     object StringGrid1: TStringGrid
       Left = 2
       Top = 2
@@ -42,35 +40,35 @@ object Form7: TForm7
       FixedCols = 0
       TabOrder = 0
       OnSelectCell = StringGrid1SelectCell
-      ExplicitWidth = 309
     end
   end
   object Panel2: TPanel
-    Left = 0
+    AlignWithMargins = True
+    Left = 3
     Top = 312
-    Width = 335
-    Height = 41
+    Width = 329
+    Height = 62
+    Margins.Bottom = 0
     Align = alTop
-    BevelOuter = bvNone
+    BevelInner = bvLowered
     TabOrder = 1
-    ExplicitWidth = 348
     object Label3: TLabel
-      Left = 5
-      Top = 1
+      Left = 13
+      Top = 9
       Width = 22
       Height = 13
       Caption = #1050#1086#1076':'
     end
     object Label1: TLabel
-      Left = 44
-      Top = 1
+      Left = 52
+      Top = 9
       Width = 159
       Height = 13
       Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1088#1072#1089#1087#1086#1088#1103#1076#1080#1090#1077#1083#1103':'
     end
     object Edit2: TEdit
-      Left = 5
-      Top = 20
+      Left = 13
+      Top = 28
       Width = 33
       Height = 21
       Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1091#1085#1080#1082#1072#1083#1100#1085#1086#1077' '#1079#1085#1072#1095#1077#1085#1080#1077' '#1087#1086#1083#1103', '#1094#1077#1083#1086#1077' '#1095#1080#1089#1083#1086
@@ -81,9 +79,9 @@ object Form7: TForm7
       OnKeyDown = Edit2KeyDown
     end
     object Edit1: TEdit
-      Left = 44
-      Top = 20
-      Width = 225
+      Left = 52
+      Top = 28
+      Width = 274
       Height = 21
       Hint = 
         #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1091#1085#1080#1082#1072#1083#1100#1085#1086#1077' '#1079#1085#1072#1095#1077#1085#1080#1077' '#1087#1086#1083#1103', '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 51 ' +
@@ -99,19 +97,18 @@ object Form7: TForm7
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 356
+    Top = 377
     Width = 329
-    Height = 35
+    Height = 31
     Align = alTop
     AutoWrap = False
-    BevelInner = bvLowered
+    BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 2
-    ExplicitWidth = 342
     object Button4: TButton
       AlignWithMargins = True
-      Left = 249
-      Top = 5
+      Left = 251
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1042#1099#1081#1090#1080
@@ -120,8 +117,8 @@ object Form7: TForm7
     end
     object Button3: TButton
       AlignWithMargins = True
-      Left = 168
-      Top = 5
+      Left = 170
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1059#1076#1072#1083#1080#1090#1100
@@ -130,8 +127,8 @@ object Form7: TForm7
     end
     object Button2: TButton
       AlignWithMargins = True
-      Left = 87
-      Top = 5
+      Left = 89
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1048#1079#1084#1077#1085#1080#1090#1100
@@ -140,8 +137,8 @@ object Form7: TForm7
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 6
-      Top = 5
+      Left = 8
+      Top = 3
       Width = 75
       Height = 25
       Caption = #1044#1086#1073#1072#1074#1080#1090#1100

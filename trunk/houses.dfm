@@ -2,7 +2,7 @@ object Form24: TForm24
   Left = 295
   Top = 138
   BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
+  BorderStyle = bsDialog
   ClientHeight = 416
   ClientWidth = 482
   Color = clBtnFace

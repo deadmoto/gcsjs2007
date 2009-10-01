@@ -450,7 +450,7 @@ uses
   shtarifb,
   chpriv,
   chinsp,
-  FactSumUnit;
+  FactSumUnit, wininet;
 
 {$R *.dfm}
 
@@ -4640,8 +4640,9 @@ end;
 
 procedure TForm2.Edit57Exit(Sender: TObject);
 begin
-  if CheckRus(edit57) and load then
+  if CheckRus(Edit57) and load then
     Cl.Data.fio := Edit57.Text;
+  Edit57.Text := WithoutDoubleSpaces(Edit57.Text);
 end;
 
 procedure TForm2.Edit57KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
@@ -4917,6 +4918,7 @@ end;
 procedure TForm2.Edit69Exit(Sender: TObject);
 begin
   CheckRus(Edit69);
+  Edit69.Text := WithoutDoubleSpaces(Edit69.Text);
 end;
 
 procedure TForm2.Edit69KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);

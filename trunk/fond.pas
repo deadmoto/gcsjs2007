@@ -3,23 +3,33 @@ unit fond;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Mask, DBCtrls, Grids, DBGrids, ExtCtrls;
+  Classes,
+  Controls,
+  Dialogs,
+  ExtCtrls,
+  Forms,
+  Graphics,
+  Grids,
+  Messages,
+  StdCtrls,
+  SysUtils,
+  Variants,
+  Windows;
 
 type
   TForm6 = class(TForm)
-    Panel1: TPanel;
+    Panel1:      TPanel;
     StringGrid1: TStringGrid;
-    Panel2: TPanel;
-    Label1: TLabel;
-    Label3: TLabel;
-    Edit1: TEdit;
-    Edit2: TEdit;
-    FlowPanel1: TFlowPanel;
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    Button4: TButton;
+    Panel2:      TPanel;
+    Label1:      TLabel;
+    Label3:      TLabel;
+    Edit1:       TEdit;
+    Edit2:       TEdit;
+    FlowPanel1:  TFlowPanel;
+    Button1:     TButton;
+    Button2:     TButton;
+    Button3:     TButton;
+    Button4:     TButton;
     procedure Button4Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -27,13 +37,10 @@ type
     procedure FormShow(Sender: TObject);
     procedure Edit2Exit(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure Edit2KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure Edit1Exit(Sender: TObject);
-    procedure Edit1KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
-    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
-      var CanSelect: Boolean);
+    procedure Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
   private
     { Private declarations }
     oldid: integer;//текущие значения полей до изменения
@@ -48,7 +55,10 @@ var
 
 implementation
 
-uses datamodule, main, service;
+uses
+  datamodule,
+  main,
+  service;
 
 {$R *.dfm}
 
@@ -57,7 +67,8 @@ procedure TForm6.SetDefault;
 var
   i: integer;
 begin
-  with Datamodule1.Query1 do begin
+  with Datamodule1.Query1 do
+  begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
@@ -75,12 +86,11 @@ begin
     StringGrid1.Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_fond').Value;
     StringGrid1.Cells[1, i + 1] := Datamodule1.Query1.FieldByName('namefond').Value;
     Datamodule1.Query1.Next;
-  end; 
-    
+  end;
+
 end;
 
-procedure TForm6.StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
-  var CanSelect: Boolean);
+procedure TForm6.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
 begin
   if ARow <> 0 then
   begin
@@ -102,46 +112,52 @@ procedure TForm6.Button1Click(Sender: TObject);
 var
   flag: bool;
 begin
-  if (Edit1.Text <> '')and(Edit2.Text <> '') then begin
-    with DataModule1.Query1 do begin
+  if (Edit1.Text <> '') and (Edit2.Text <> '') then
+  begin
+    with DataModule1.Query1 do
+    begin
       Close;
       SQL.Clear;
-      SQl.Add('select id_fond');
-      SQl.Add('from fond');
-      SQl.Add('where (id_fond=:id)');
+      SQL.Add('select id_fond');
+      SQL.Add('from fond');
+      SQL.Add('where (id_fond=:id)');
       ParamByName('id').AsInteger := StrToInt(Edit2.Text);
       Open;
-      if IsEmpty then begin
+      if IsEmpty then
+      begin
         Close;
         SQL.Clear;
-        SQl.Add('select id_fond');
-        SQl.Add('from fond');
-        SQl.Add('where (namefond = :name)');
+        SQL.Add('select id_fond');
+        SQL.Add('from fond');
+        SQL.Add('where (namefond = :name)');
         ParamByName('name').AsString := Edit1.Text;
         Open;
         if IsEmpty then
-          flag := true
+          flag := True
         else
-          flag := false;
+          flag := False;
         Close;
       end
-      else begin
-        flag := false;
+      else
+      begin
+        flag := False;
         Close;
       end;
-      if flag then begin
+      if flag then
+      begin
         Close;
         SQL.Clear;
         SQL.Add('insert into fond');
         SQL.Add('values (:id, :name)');
-        ParamByName('id').AsInteger := StrToInt(Edit2.Text);
+        ParamByName('id').AsInteger  := StrToInt(Edit2.Text);
         ParamByName('name').AsString := Edit1.Text;
         ExecSQL;
         SetDefault;
         Open;
         oldid := StrToInt(Edit2.Text);
       end
-      else begin
+      else
+      begin
         ShowMessage('Наименование фонда и код должны быть уникальны!');
         SetDefault;
         Open;
@@ -157,49 +173,55 @@ procedure TForm6.Button2Click(Sender: TObject);
 var
   flag: bool;
 begin
-  if (Edit1.Text <> '')and(Edit2.Text <> '') then begin
-    with DataModule1.Query1 do begin
+  if (Edit1.Text <> '') and (Edit2.Text <> '') then
+  begin
+    with DataModule1.Query1 do
+    begin
       Close;
       SQL.Clear;
-      SQl.Add('select id_fond');
-      SQl.Add('from fond');
-      SQl.Add('where (id_fond=:id)');
+      SQL.Add('select id_fond');
+      SQL.Add('from fond');
+      SQL.Add('where (id_fond=:id)');
       ParamByName('id').AsInteger := StrToInt(Edit2.Text);
       Open;
       if IsEmpty or not IsEmpty and
-          (FieldByName('id_fond').AsInteger = oldid) then begin
+        (FieldByName('id_fond').AsInteger = oldid) then
+      begin
         Close;
         SQL.Clear;
-        SQl.Add('select id_fond');
-        SQl.Add('from fond');
-        SQl.Add('where (namefond = :name)');
+        SQL.Add('select id_fond');
+        SQL.Add('from fond');
+        SQL.Add('where (namefond = :name)');
         ParamByName('name').AsString := Edit1.Text;
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_fond').AsInteger = oldid) then
-          flag := true
+          flag := True
         else
-          flag := false;
+          flag := False;
         Close;
       end
-      else begin
-        flag := false;
+      else
+      begin
+        flag := False;
         Close;
       end;
-      if flag then begin
+      if flag then
+      begin
         Close;
         SQL.Clear;
         SQL.Add('update fond');
         SQL.Add('set namefond = :name');
         SQL.Add('where id_fond = :id');
-        ParamByName('id').AsInteger := oldid;
+        ParamByName('id').AsInteger  := oldid;
         ParamByName('name').AsString := Edit1.Text;
         ExecSQL;
         SetDefault;
         Open;
         oldid := StrToInt(Edit2.Text);
       end
-      else begin
+      else
+      begin
         ShowMessage('Наименование фонда и код должны быть уникальны!');
         SetDefault;
         Open;
@@ -213,8 +235,10 @@ end;
 procedure TForm6.Button3Click(Sender: TObject);
 { удалить фонд }
 begin
-  with DataModule1.Query1 do begin
-    if not IsEmpty then begin
+  with DataModule1.Query1 do
+  begin
+    if not IsEmpty then
+    begin
       Close;
       SQL.Clear;
       SQL.Add('delete from fond');
@@ -240,15 +264,17 @@ begin
   Edit1.Text := DBGrid1.Fields[1].AsString;
   Edit2.Text := DBGrid1.Fields[0].AsString;
   oldid := StrToInt(Edit2.Text);}
-  if status=0 then begin
-    Button1.Enabled := false;
-    Button2.Enabled := false;
-    Button3.Enabled := false;
+  if status = 0 then
+  begin
+    Button1.Enabled := False;
+    Button2.Enabled := False;
+    Button3.Enabled := False;
   end
-  else begin
-    Button1.Enabled := true;
-    Button2.Enabled := true;
-    Button3.Enabled := true;
+  else
+  begin
+    Button1.Enabled := True;
+    Button2.Enabled := True;
+    Button3.Enabled := True;
   end;
 end;
 
@@ -262,10 +288,9 @@ begin
   Datamodule1.Query1.Close;
 end;
 
-procedure TForm6.Edit2KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm6.Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
-  if key=vk_return then
+  if key = vk_return then
     CheckInt(edit2);
 end;
 
@@ -274,10 +299,9 @@ begin
   CheckRus(Edit1);
 end;
 
-procedure TForm6.Edit1KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm6.Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
-  if key=vk_return then
+  if key = vk_return then
     CheckRus(Edit1);
 end;
 

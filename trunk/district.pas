@@ -3,17 +3,18 @@ unit district;
 interface
 
 uses
-  Windows,
+  Classes,
+  Controls,
+  Dialogs,
+  ExtCtrls,
+  Forms,
+  Graphics,
+  Grids,
   Messages,
+  StdCtrls,
   SysUtils,
   Variants,
-  Classes,
-  Graphics,
-  Controls,
-  Forms,
-  Dialogs,
-  StdCtrls, {Mask, {DBCtrls,} Grids,
-  ExtCtrls;
+  Windows;
 
 type
   TForm4 = class(TForm)
@@ -31,7 +32,6 @@ type
     Edit1:      TEdit;
     Label2:     TLabel;
     Edit3:      TEdit;
-    Button5:    TButton;
     Label4:     TLabel;
     Edit4:      TEdit;
     Label5:     TLabel;
@@ -46,7 +46,6 @@ type
     procedure Edit1Exit(Sender: TObject);
     procedure Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
-    procedure Button5Click(Sender: TObject);
     procedure distGridSelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
   private
     { Private declarations }
@@ -84,8 +83,8 @@ begin
     First;
   end;
 
-  FormerStringGrid(distGrid, TStringArray.Create('Код', 'Наименование', 'Начальник отдела', 'Адрес', 'Телефон'),
-    TIntArray.Create(25, 90, 100, 120, 90), Datamodule1.Query1.RecordCount + 1);
+  FormerStringGrid(distGrid, TStringArray.Create('Код', 'Наименование', 'Нач. отдела', 'Адрес', 'Телефон'),
+    TIntArray.Create(25, 225, 100, 120, 90), Datamodule1.Query1.RecordCount + 1);
 
   for i := 0 to Datamodule1.Query1.RecordCount + 1 do
   begin
@@ -106,16 +105,6 @@ procedure TForm4.Button4Click(Sender: TObject);
 { выйти }
 begin
   Form4.Close;
-end;
-
-procedure TForm4.Button5Click(Sender: TObject);
-var
-  i: shortint;
-begin
-  for i := 0 to Form4.ComponentCount - 1 do
-    if Form4.Components[i] is TEdit then
-      TEdit(Form4.Components[i]).Text := '';
-
 end;
 
 procedure TForm4.distGridSelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);

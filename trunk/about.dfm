@@ -17,17 +17,20 @@ object AboutBox: TAboutBox
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
-    AlignWithMargins = True
-    Left = 3
-    Top = 3
-    Width = 256
-    Height = 128
+    Left = 0
+    Top = 0
+    Width = 262
+    Height = 134
     Align = alClient
     BevelInner = bvRaised
     BevelOuter = bvLowered
     ParentColor = True
     TabOrder = 0
     OnClick = Panel1Click
+    ExplicitLeft = 3
+    ExplicitTop = 3
+    ExplicitWidth = 256
+    ExplicitHeight = 128
     object ProgramIcon: TImage
       Left = 24
       Top = 16

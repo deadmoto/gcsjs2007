@@ -30,7 +30,6 @@ type
     constructor Create;
   end;
 
-type
   TConfigFrm = class(TForm)
     Panel1:     TPanel;
     Panel2:     TPanel;
@@ -106,7 +105,7 @@ begin
     if checkChanges then
       Button2.Enabled := True
     else
-      ConfigFrm.Button2.Enabled := False;
+      Button2.Enabled := False;
   end;
 end;
 
@@ -138,7 +137,7 @@ begin
               Result := True;
       end;
     end;
-  end;
+  end
 end;
 
 procedure TConfigFrm.FormClose(Sender: TObject; var Action: TCloseAction);

@@ -1,36 +1,47 @@
 unit Street;
 
-interface                                                            
+interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Mask, DBCtrls, Grids, DBGrids;
+  Classes,
+  Controls,
+  Dialogs,
+  ExtCtrls,
+  Forms,
+  Graphics,
+  Grids,
+  Messages,
+  StdCtrls,
+  SysUtils,
+  Variants,
+  Windows;
 
 type
   TForm5 = class(TForm)
-    DBGrid1: TDBGrid;
-    Label1: TLabel;
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    Button4: TButton;
-    Edit1: TEdit;
-    Label3: TLabel;
-    Edit2: TEdit;
-    CheckBox1: TCheckBox;
+    Panel1:      TPanel;
+    StringGrid1: TStringGrid;
+    Panel2:      TPanel;
+    Label3:      TLabel;
+    Edit2:       TEdit;
+    Edit1:       TEdit;
+    Label1:      TLabel;
+    CheckBox1:   TCheckBox;
+    FlowPanel1:  TFlowPanel;
+    Button1:     TButton;
+    Button2:     TButton;
+    Button3:     TButton;
+    Button4:     TButton;
     procedure Button4Click(Sender: TObject);
-    procedure DBGrid1CellClick(Column: TColumn);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure Edit2KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure Edit1Exit(Sender: TObject);
-    procedure Edit1KeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure Edit2Exit(Sender: TObject);
+    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
   private
     { Private declarations }
     oldid: integer;//текущее значение поля код
@@ -45,7 +56,10 @@ var
 
 implementation
 
-uses datamodule, main, service;
+uses
+  datamodule,
+  main,
+  service;
 
 {$R *.dfm}
 
@@ -53,13 +67,42 @@ procedure TForm5.SetDefault;
 {*******************************************************************************
   Процедура SetDefault создает запрос для выборки всех записей из таблицы улиц.
 *******************************************************************************}
+var
+  i: integer;
 begin
-  with Datamodule1.Query1 do begin
+  with Datamodule1.Query1 do
+  begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
     SQL.Add('from strt');
     SQL.Add('order by id_street');
+    Open;
+    First;
+  end;
+
+  FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Статус'),
+    TIntArray.Create(25, 275, 40), Datamodule1.Query1.RecordCount + 1);
+
+  for i := 0 to Datamodule1.Query1.RecordCount - 1 do
+  begin
+    StringGrid1.Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_street').Value;
+    StringGrid1.Cells[1, i + 1] := Datamodule1.Query1.FieldByName('namestreet').Value;
+    StringGrid1.Cells[2, i + 1] := Datamodule1.Query1.FieldByName('status').Value;
+    Datamodule1.Query1.Next;
+  end;
+end;
+
+procedure TForm5.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
+begin
+  if ARow <> 0 then
+  begin
+    Edit1.Text := StringGrid1.Cells[1, ARow];
+    Edit2.Text := StringGrid1.Cells[0, ARow];
+    if StringGrid1.Cells[2, ARow] <> '' then
+      CheckBox1.Checked := variant(StringGrid1.Cells[2, ARow]);//(DBGrid1.Fields[2].AsInteger = 1);
+    if Edit2.Text <> '' then
+      oldid := StrToInt(Edit2.Text);
   end;
 end;
 
@@ -70,19 +113,6 @@ procedure TForm5.Button4Click(Sender: TObject);
 *******************************************************************************}
 begin
   Form5.Close;
-end;
-
-procedure TForm5.DBGrid1CellClick(Column: TColumn);
-{*******************************************************************************
-  Процедура DBGrid1CellClick обрабатывает выбор ячейки в DBGrid1.
-  В результате в полях ввода отражается информация из выбранной строки и
-  устанавливается текущее значение id.
-*******************************************************************************}
-begin
-  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := DBGrid1.Fields[0].AsString;
-  CheckBox1.Checked := (DBGrid1.Fields[2].AsInteger=1);
-  oldid := StrToInt(Edit2.Text);
 end;
 
 procedure TForm5.Button1Click(Sender: TObject);
@@ -96,39 +126,44 @@ procedure TForm5.Button1Click(Sender: TObject);
 var
   flag: bool;
 begin
-  if (Edit1.Text <> '')and(Edit2.Text <> '') then begin
-    with DataModule1.Query1 do begin
+  if (Edit1.Text <> '') and (Edit2.Text <> '') then
+  begin
+    with DataModule1.Query1 do
+    begin
       Close;
       SQL.Clear;
-      SQl.Add('select id_street');
-      SQl.Add('from strt');
-      SQl.Add('where (id_street=:id)');
+      SQL.Add('select id_street');
+      SQL.Add('from strt');
+      SQL.Add('where (id_street=:id)');
       ParamByName('id').AsInteger := StrToInt(Edit2.Text);
       Open;
-      if IsEmpty then begin
+      if IsEmpty then
+      begin
         Close;
         SQL.Clear;
-        SQl.Add('select id_street');
-        SQl.Add('from strt');
-        SQl.Add('where (namestreet = :name)');
+        SQL.Add('select id_street');
+        SQL.Add('from strt');
+        SQL.Add('where (namestreet = :name)');
         ParamByName('name').AsString := Edit1.Text;
         Open;
         if IsEmpty then
-          flag := true
+          flag := True
         else
-          flag := false;
+          flag := False;
         Close;
       end
-      else begin
-        flag := false;
+      else
+      begin
+        flag := False;
         Close;
       end;
-      if flag then begin
+      if flag then
+      begin
         Close;
         SQL.Clear;
         SQL.Add('insert into strt');
         SQL.Add('values (:id, :name,:st)');
-        ParamByName('id').AsInteger := StrToInt(Edit2.Text);
+        ParamByName('id').AsInteger  := StrToInt(Edit2.Text);
         ParamByName('name').AsString := Edit1.Text;
         if CheckBox1.Checked then
           ParamByName('st').AsInteger := 1
@@ -136,13 +171,11 @@ begin
           ParamByName('st').AsInteger := 0;
         ExecSQL;
         SetDefault;
-        Open;
-        oldid := StrToInt(Edit2.Text);
       end
-      else begin
+      else
+      begin
         ShowMessage('Наименование улицы и код должны быть уникальны!');
         SetDefault;
-        Open;
       end;
     end;
   end
@@ -164,42 +197,47 @@ procedure TForm5.Button2Click(Sender: TObject);
 var
   flag: bool;
 begin
-  if (Edit1.Text <> '')and(Edit2.Text <> '') then begin
-    with DataModule1.Query1 do begin
+  if (Edit1.Text <> '') and (Edit2.Text <> '') then
+  begin
+    with DataModule1.Query1 do
+    begin
       Close;
       SQL.Clear;
-      SQl.Add('select id_street');
-      SQl.Add('from strt');
-      SQl.Add('where (id_street=:id)');
+      SQL.Add('select id_street');
+      SQL.Add('from strt');
+      SQL.Add('where (id_street=:id)');
       ParamByName('id').AsInteger := StrToInt(Edit2.Text);
       Open;
       if IsEmpty or not IsEmpty and
-          (FieldByName('id_street').AsInteger = oldid) then begin
+        (FieldByName('id_street').AsInteger = oldid) then
+      begin
         Close;
         SQL.Clear;
-        SQl.Add('select id_street');
-        SQl.Add('from strt');
-        SQl.Add('where (namestreet = :name)');
+        SQL.Add('select id_street');
+        SQL.Add('from strt');
+        SQL.Add('where (namestreet = :name)');
         ParamByName('name').AsString := Edit1.Text;
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_street').AsInteger = oldid) then
-          flag := true
+          flag := True
         else
-          flag := false;
+          flag := False;
         Close;
       end
-      else begin
-        flag := false;
+      else
+      begin
+        flag := False;
         Close;
       end;
-      if flag then begin
+      if flag then
+      begin
         Close;
         SQL.Clear;
         SQL.Add('update strt');
         SQL.Add('set namestreet = :name,status=:st');
         SQL.Add('where id_street = :id');
-        ParamByName('id').AsInteger := oldid;
+        ParamByName('id').AsInteger  := oldid;
         ParamByName('name').AsString := Edit1.Text;
         if CheckBox1.Checked then
           ParamByName('st').AsInteger := 1
@@ -207,13 +245,11 @@ begin
           ParamByName('st').AsInteger := 0;
         ExecSQL;
         SetDefault;
-        Open;
-        oldid := StrToInt(Edit2.Text);
       end
-      else begin
+      else
+      begin
         ShowMessage('Наименование улицы и код должны быть уникальны!');
         SetDefault;
-        Open;
       end;
     end;
   end
@@ -227,8 +263,10 @@ procedure TForm5.Button3Click(Sender: TObject);
   удаляется запись, которая соответствует текущему id.
 *******************************************************************************}
 begin
-  with DataModule1.Query1 do begin
-    if not IsEmpty then begin
+  with DataModule1.Query1 do
+  begin
+    if not IsEmpty then
+    begin
       Close;
       SQL.Clear;
       SQL.Add('delete from strt');
@@ -236,11 +274,6 @@ begin
       ParamByName('id').AsInteger := oldid;
       ExecSQL;
       SetDefault;
-      Open;
-      Edit1.Text := DBGrid1.Fields[1].AsString;
-      Edit2.Text := DBGrid1.Fields[0].AsString;
-      CheckBox1.Checked := (DBGrid1.Fields[2].asInteger=1);
-      oldid := StrToInt(Edit2.Text);
     end;
   end;
 end;
@@ -253,23 +286,19 @@ procedure TForm5.FormShow(Sender: TObject);
   доступными(запись) для нажатия.
 *******************************************************************************}
 begin
-  with DataModule1.Query1 do begin
-    SetDefault;
-    Open;
-  end;
-  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := DBGrid1.Fields[0].AsString;
-  CheckBox1.Checked := (DBGrid1.Fields[2].asInteger=1);
-  oldid := StrToInt(Edit2.Text);
-  if status=0 then begin
-    Button1.Enabled := false;
-    Button2.Enabled := false;
-    Button3.Enabled := false;
+  SetDefault;
+
+  if status = 0 then
+  begin
+    Button1.Enabled := False;
+    Button2.Enabled := False;
+    Button3.Enabled := False;
   end
-  else begin
-    Button1.Enabled := true;
-    Button2.Enabled := true;
-    Button3.Enabled := true;
+  else
+  begin
+    Button1.Enabled := True;
+    Button2.Enabled := True;
+    Button3.Enabled := True;
   end;
 end;
 
@@ -291,8 +320,7 @@ begin
   CheckInt(Edit2);
 end;
 
-procedure TForm5.Edit2KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm5.Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 {*******************************************************************************
   Процедура Edit2KeyDown обрабатывает нажатие клавиши enter. Если строка не
   является целым числом, то устанавливается ноль.
@@ -311,8 +339,7 @@ begin
   CheckRus(Edit1);
 end;
 
-procedure TForm5.Edit1KeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm5.Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 {*******************************************************************************
   Процедура Edit1KeyDown обрабатывает нажатие клавиши enter. Если строка содержит
   некириллические символы, то выдается сообщение, а строка становится пустой.

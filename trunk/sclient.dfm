@@ -24,7 +24,7 @@ object Form2: TForm2
     Top = 3
     Width = 587
     Height = 379
-    ActivePage = TabSheet1
+    ActivePage = TabSheet5
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change
@@ -574,10 +574,6 @@ object Form2: TForm2
     object TabSheet2: TTabSheet
       Caption = #1057#1077#1084#1100#1103
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label21: TLabel
         Left = 8
         Top = 320
@@ -787,7 +783,7 @@ object Form2: TForm2
         Hint = 
           #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1089#1086#1094#1080#1072#1083#1100#1085#1099#1081' '#1089#1090#1072#1090#1091#1089' '#1076#1086#1083#1078#1077#1085' '#1089#1086#1086#1090#1074#1077#1090#1089#1090#1074#1086#1074#1072#1090#1100' '#1074#1086#1079#1088#1072#1089#1090#1091' '#1080 +
           ' '#1083#1100#1075#1086#1090#1077
-        ItemHeight = 0
+        ItemHeight = 13
         MaxLength = 30
         ParentShowHint = False
         ShowHint = True
@@ -800,7 +796,7 @@ object Form2: TForm2
         Top = 256
         Width = 266
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         MaxLength = 40
         TabOrder = 7
         OnChange = ComboBox18Change
@@ -812,7 +808,7 @@ object Form2: TForm2
         Width = 194
         Height = 21
         Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1082#1083#1080#1077#1085#1090' '#1074' '#1089#1077#1084#1100#1077' '#1084#1086#1078#1077#1090' '#1073#1099#1090#1100' '#1090#1086#1083#1100#1082#1086' '#1086#1076#1080#1085
-        ItemHeight = 0
+        ItemHeight = 13
         ParentShowHint = False
         ShowHint = True
         TabOrder = 6
@@ -874,10 +870,6 @@ object Form2: TForm2
     object TabSheet3: TTabSheet
       Caption = #1058#1072#1088#1080#1092#1099
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label24: TLabel
         Left = 12
         Top = 95
@@ -960,7 +952,7 @@ object Form2: TForm2
         Top = 95
         Width = 334
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 1
         OnChange = ComboBox1Change
       end
@@ -969,7 +961,7 @@ object Form2: TForm2
         Top = 119
         Width = 334
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 2
         OnChange = ComboBox2Change
       end
@@ -978,7 +970,7 @@ object Form2: TForm2
         Top = 143
         Width = 334
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 3
         OnChange = ComboBox3Change
       end
@@ -987,7 +979,7 @@ object Form2: TForm2
         Top = 167
         Width = 334
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 4
         OnChange = ComboBox4Change
       end
@@ -999,7 +991,7 @@ object Form2: TForm2
         Hint = 
           #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1086#1090#1086#1087#1083#1077#1085#1080#1077' '#1085#1077' '#1074#1099#1073#1088#1072#1085#1086', '#1079#1085#1072#1095#1080#1090' '#1077#1089#1090#1100' '#1090#1074#1077#1088#1076#1086#1077' '#1090#1086#1087#1083 +
           #1080#1074#1086', '#1080' '#1085#1072#1086#1073#1086#1088#1086#1090
-        ItemHeight = 0
+        ItemHeight = 13
         ParentShowHint = False
         ShowHint = True
         TabOrder = 6
@@ -1011,7 +1003,7 @@ object Form2: TForm2
         Width = 334
         Height = 21
         Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1075#1072#1079#1072' '#1085#1077#1090', '#1090#1086' '#1087#1083#1080#1090#1072' '#1085#1077' '#1076#1086#1083#1078#1085#1072' '#1073#1099#1090#1100' '#1075#1072#1079#1086#1074#1086#1081
-        ItemHeight = 0
+        ItemHeight = 13
         ParentShowHint = False
         ShowHint = True
         TabOrder = 7
@@ -1022,7 +1014,7 @@ object Form2: TForm2
         Top = 288
         Width = 334
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 8
         OnChange = ComboBox8Change
       end
@@ -1031,7 +1023,7 @@ object Form2: TForm2
         Top = 312
         Width = 334
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 9
         OnChange = ComboBox9Change
       end
@@ -1120,7 +1112,7 @@ object Form2: TForm2
         Top = 64
         Width = 334
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 0
         OnChange = ComboBox10Change
       end
@@ -1139,7 +1131,7 @@ object Form2: TForm2
         Top = 191
         Width = 334
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 5
         OnChange = ComboBox20Change
       end
@@ -1261,7 +1253,7 @@ object Form2: TForm2
             #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1074#1099#1073#1088#1072#1085#1072' '#1075#1072#1079#1086#1074#1072#1103' '#1087#1083#1080#1090#1072', '#1090#1086' '#1075#1072#1079' '#1076#1086#1083#1078#1077#1085' '#1073#1099#1090#1100' '#1090#1086#1078#1077 +
             ' '#1074#1099#1073#1088#1072#1085
           Align = alTop
-          ItemHeight = 0
+          ItemHeight = 13
           ItemIndex = 0
           ParentShowHint = False
           ShowHint = True
@@ -1288,7 +1280,7 @@ object Form2: TForm2
           Width = 175
           Height = 21
           Align = alTop
-          ItemHeight = 0
+          ItemHeight = 13
           ItemIndex = 0
           TabOrder = 0
           Text = #1062#1077#1085#1090#1088#1072#1083#1100#1085#1086#1077
@@ -1305,10 +1297,6 @@ object Form2: TForm2
       Caption = #1057#1095#1077#1090#1072
       ImageIndex = 3
       OnExit = TabSheet4Exit
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GroupBox7: TGroupBox
         Left = 8
         Top = 24
@@ -1568,7 +1556,7 @@ object Form2: TForm2
           Top = 32
           Width = 177
           Height = 21
-          ItemHeight = 0
+          ItemHeight = 13
           TabOrder = 0
           OnChange = ComboBox19Change
           OnExit = ComboBox19Change
