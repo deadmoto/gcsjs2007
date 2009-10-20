@@ -4,8 +4,8 @@ interface
 
 uses
   Classes,
+  ComCtrls,
   Controls,
-  DBGrids,
   Dialogs,
   ExcelXP,
   ExtCtrls,
@@ -20,45 +20,39 @@ uses
   Windows;
 
 type
-  TRepMode = (mStat, mPriv);
-
-type
   TStats = class(TForm)
-    GroupBox1:  TGroupBox;
-    DBGrid1:    TDBGrid;
-    GroupBox2:  TGroupBox;
-    Label4:     TLabel;
-    Edit1:      TEdit;
-    Label5:     TLabel;
-    Edit2:      TEdit;
-    Label6:     TLabel;
-    lFamcount:  TLabel;
-    GroupBox3:  TGroupBox;
-    Label1:     TLabel;
-    lFamCLMin:  TLabel;
-    GroupBox4:  TGroupBox;
-    Label9:     TLabel;
-    Label10:    TLabel;
-    Edit3:      TEdit;
-    Edit4:      TEdit;
-    Label11:    TLabel;
-    MenCount:   TLabel;
-    GroupBox5:  TGroupBox;
-    Label3:     TLabel;
-    Label12:    TLabel;
-    FlowPanel1: TFlowPanel;
-    Button2:    TButton;
-    Button1:    TButton;
-    CheckBox1:  TCheckBox;
+    TabControl1: TTabControl;
+    StringGrid1: TStringGrid;
+    Button1:     TButton;
+    Button2:     TButton;
+    Button3:     TButton;
+    GroupBox1:   TGroupBox;
+    CheckBox1:   TCheckBox;
+    Edit1:       TEdit;
+    Label3:      TLabel;
+    Edit2:       TEdit;
+    Label4:      TLabel;
+    Label5:      TLabel;
+    GroupBox2:   TGroupBox;
+    Label6:      TLabel;
+    Label7:      TLabel;
+    Label8:      TLabel;
+    Edit3:       TEdit;
+    Edit4:       TEdit;
+    Label1:      TLabel;
+    Label9:      TLabel;
+    Label11:     TLabel;
+    Label12:     TLabel;
+    Button4:     TButton;
+    procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
-    procedure FormShow(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Edit1Exit(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
-    mode: TRepMode;
-    procedure StatReport(Sender: TObject);
-    procedure PrivReport(Sender: TObject);
   end;
 
 var
@@ -70,190 +64,60 @@ implementation
 
 uses
   DataModule,
-  main;
+  main,
+  service;
 
-procedure TStats.FormShow(Sender: TObject);
-begin
-  case mode of
-    mStat:
-    begin
-      Button1.OnClick := StatReport;
-    end;
-    mPriv:
-    begin
-      GroupBox1.Caption := 'Льготы';
-      GroupBox2.Visible := False;
-      GroupBox3.Visible := False;
-      GroupBox4.Visible := False;
-      GroupBox5.Visible := False;
-      Button1.OnClick := PrivReport;
-    end;
-  end;
-  DataModule1.Query1.Close;
-end;
-
-procedure TStats.PrivReport(Sender: TObject);
+procedure TStats.Button1Click(Sender: TObject);
 var
-  List: TStringList;
   i: integer;
 begin
-  List := TStringList.Create;
-  with datamodule1 do
+  with Datamodule1.Query1 do
   begin
-    Query1.Close;
-    if CheckBox1.Checked then
-    begin
-      Query1.SQL.Text := 'SELECT Priv.namepriv ''Льгота'', COUNT(Fam.id_priv) ''Кол-во''' + #13 +
-        'FROM Fam INNER JOIN' + #13 +
-        'Hist ON Fam.regn = Hist.regn INNER JOIN' + #13 +
-        '(SELECT regn, MAX(bdate) AS bdate' + #13 +
-        'FROM hist' + #13 +
-        'WHERE (bdate <= CONVERT(smalldatetime, :d, 104))' + #13 +
-        'GROUP BY regn) sb ON Hist.regn = sb.regn AND Hist.bdate = sb.bdate INNER JOIN' + #13 +
-        'Priv ON Fam.id_priv = Priv.id_priv' + #13 +
-        'WHERE (Hist.bdate <= CONVERT(smalldatetime, :d, 104)) AND (Hist.edate > CONVERT(smalldatetime,:d, 104))' + #13 +
-        'GROUP BY Priv.namepriv';
-      Query1.ParamByName('d').Value := StrToDate(Form1.rdt);
-    end
-    else
-    begin
-      Query1.SQL.Text := 'SELECT Priv.namepriv ''Льгота'', COUNT(Fam.id_priv) ''Кол-во'' ' + #13 +
-        'FROM Priv INNER JOIN' + #13 +
-        'Fam ON Priv.id_priv = Fam.id_priv' + #13 +
-        'GROUP BY Priv.namepriv';
-    end;
-    Query1.Open;
+    Close;
+    SQL.Clear;
+    SQL.Text := ('exec statistic :date, :dist, :selmode, :mode');
+    Params.ParamValues['date'] := Form1.rdt;
+    Params.ParamValues['dist'] := Form1.dist;
 
-    List.Add('Льгота =  ');
-    Query1.First;
-    while not Query1.EOF do
-    begin
-      List.Add(Query1.Fields.Fields[0].AsString + ' = ' + Query1.Fields.Fields[1].AsString);
-      Query1.Next;
+    if CheckBox1.Checked then
+      Params.ParamValues['mode'] := 2
+    else
+      Params.ParamValues['mode'] := 1;
+
+    case TabControl1.TabIndex of
+      0:
+        Params.ParamValues['selmode'] := 1;
+      1:
+        Params.ParamValues['selmode'] := 2;
     end;
+
+    Open;
+    First;
   end;
-  with Form1.ExcelApplication1 do
-  begin
-    Visible[0] := True;
-    Workbooks.Add(Form1.reports_path + 'stats.xlt', 0);
-    for i := 0 to List.Count - 1 do
+
+  case TabControl1.TabIndex of
+    0:
     begin
-      Range['a' + IntToStr(i + 1), 'a' + IntToStr(i + 1)].Value2 := List.Names[i];
-      Range['b' + IntToStr(i + 1), 'b' + IntToStr(i + 1)].Value2 := List.ValueFromIndex[i];
-    end;
-  end;
-end;
+      FormerStringGrid(StringGrid1, TStringArray.Create('Льгота', 'Кол-во'),
+        TIntArray.Create(280, 45), Datamodule1.Query1.RecordCount + 1);
 
-procedure TStats.StatReport(Sender: TObject);
-var
-  s: string;
-  i: integer;
-  List: TStringList;
-begin
-  List := TStringList.Create;
-  with datamodule1 do
-  begin
-    Query1.Close;
-    Query1.SQL.Clear;
-    if CheckBox1.Checked then
-    begin
-      Query1.SQL.Text := 'SELECT Stat.namestatus ''Статус'', COUNT(Fam.id_status) ''Кол-во''' + #13 +
-        'FROM Fam INNER JOIN' + #13 +
-        'Hist ON Fam.regn = Hist.regn INNER JOIN' + #13 +
-        '(SELECT     regn, MAX(bdate) AS bdate' + #13 +
-        'FROM          hist' + #13 +
-        'WHERE      (bdate <= CONVERT(smalldatetime, :d, 104))' + #13 +
-        'GROUP BY regn) sb ON Hist.regn = sb.regn AND Hist.bdate = sb.bdate INNER JOIN' + #13 +
-        'Stat ON Fam.id_status = Stat.id_status' + #13 +
-        'WHERE     (Hist.bdate <= CONVERT(smalldatetime, :d, 104)) AND (Hist.edate > CONVERT(smalldatetime, :d, 104))' + #13 +
-        'GROUP BY Stat.namestatus';
-      Query1.ParamByName('d').Value := StrToDate(Form1.rdt);
-    end
-    else
-    begin
-      Query1.SQL.Add('select namestatus ''Статус'', count(fam.id_status) ''Кол-во'' from stat, fam');
-      Query1.SQL.Add('where fam.id_status = stat.id_status');
-      Query1.SQL.Add('group by namestatus');
-    end;
-    Query1.Open;
-    Query1.First;
-
-    List.Add('Соц. Статус =  ');
-
-    while not Query1.EOF do
-    begin
-      List.Add(Query1.Fields.Fields[0].AsString + ' = ' + Query1.Fields.Fields[1].AsString);
-      Query1.Next;
-    end;
-
-    Query2.SQL.Clear;
-    if CheckBox1.Checked then
-    begin
-      Query2.SQL.Text := 'SELECT     COUNT(Fam.id_mem) AS Expr1' + #13 +
-        'FROM         Fam INNER JOIN' + #13 +
-        'Hist ON Fam.regn = Hist.regn INNER JOIN' + #13 +
-        '(SELECT     regn, MAX(bdate) AS bdate' + #13 +
-        'FROM          hist' + #13 +
-        'WHERE      (bdate <= CONVERT(smalldatetime, :d, 104))' + #13 +
-        'GROUP BY regn) sb ON Hist.regn = sb.regn AND Hist.bdate = sb.bdate' + #13 +
-        'WHERE     (Hist.bdate <= CONVERT(smalldatetime, :d, 104)) AND (Hist.edate > CONVERT(smalldatetime, :d, 104)) AND ' + #13 +
-        '(Fam.mid >= :p1) AND (Fam.mid <= :p2)';
-      Query2.ParamByName('d').Value := StrToDate(Form1.rdt);
-    end
-    else
-    begin
-      Query2.SQL.Add('select count(id_mem) from fam where mid >= :p1 and mid <= :p2');
-    end;
-    Query2.ParamByName('p1').AsFloat := StrToFloat(Edit1.Text);
-    Query2.ParamByName('p2').AsFloat := StrToFloat(Edit2.Text);
-    Query2.Open;
-
-    lFamCount.Caption := Query2.Fields[0].AsString;
-    List.Add('Доход=' + ' ');
-    List.Add('От=' + Edit1.Text);
-    List.Add('До=' + Edit2.Text);
-    List.Add('Кол-во семей=' + lFamCount.Caption);
-
-    Query2.Close;
-    Query2.SQL.Clear;
-    Query2.SQL.Add('select count(regn) from hist where income / mcount < pmin and edate > :p1');
-    Query2.Params[0].AsDateTime := Now;
-    Query2.Open;
-    lFamCLMin.Caption := Query2.Fields[0].AsString + ' (активные клиенты)';
-    List.Add('Семьи с доходом ниже ПМ=' + lFamCLMin.Caption);
-
-    Query2.SQL.Clear;
-    Query2.SQL.Add('select count(regn) from (' +
-      ' select hist.regn as regn, sum(sub) as sub from hist, sub where hist.regn = sub.regn ' +
-      ' and sdate = :p1 group by hist.regn having sum(sub) >= :p2 and sum(sub) <= :p3 ) t ');
-    s := DateToStr(Date);
-    s[1] := '0';
-    s[2] := '1';
-    Query2.Params[0].AsDateTime := StrToDateTime(s);
-    Query2.Params[1].AsFloat := StrToFloat(Edit3.Text);
-    Query2.Params[2].AsFloat := StrToFloat(Edit4.Text);
-    Query2.Open;
-    List.Add('Субсидия=' + ' ');
-    List.Add('От=' + Edit1.Text);
-    List.Add('До=' + Edit2.Text);
-    MenCount.Caption := Query2.Fields[0].AsString;
-    List.Add('Кол-во семей=' + MenCount.Caption);
-
-    Query2.SQL.Clear;
-    Query2.SQL.Add('SELECT SUM(Sub.sub) / t.c AS Expr1 FROM Sub CROSS JOIN (SELECT COUNT(regn) AS c FROM hist WHERE edate > :p1) t WHERE Sub.sdate = :p1 GROUP BY t.c');
-    Query2.Params[0].AsDateTime := StrToDateTime(s);
-    Query2.Open;
-    Label12.Caption := FloatToStr(SimpleRoundTo(Query2.Fields[0].AsFloat, -2));
-    List.Add('Средняя субсидия=' + Label12.Caption);
-    with Form1.ExcelApplication1 do
-    begin
-      Visible[0] := True;
-
-      Workbooks.Add(Form1.reports_path + 'stats.xlt', 0);
-      for i := 0 to List.Count - 1 do
+      for i := 0 to Datamodule1.Query1.RecordCount - 1 do
       begin
-        Range['a' + IntToStr(i + 1), 'a' + IntToStr(i + 1)].Value2 := List.Names[i];
-        Range['b' + IntToStr(i + 1), 'b' + IntToStr(i + 1)].Value2 := List.ValueFromIndex[i];
+        StringGrid1.Cells[0, i + 1] := Datamodule1.Query1.FieldByName('namepriv').Value;
+        StringGrid1.Cells[1, i + 1] := Datamodule1.Query1.FieldByName('kolvo').Value;
+        Datamodule1.Query1.Next;
+      end;
+    end;
+    1:
+    begin
+      FormerStringGrid(StringGrid1, TStringArray.Create('Соц. статус', 'Кол-во'),
+        TIntArray.Create(280, 45), Datamodule1.Query1.RecordCount + 1);
+
+      for i := 0 to Datamodule1.Query1.RecordCount - 1 do
+      begin
+        StringGrid1.Cells[0, i + 1] := Datamodule1.Query1.FieldByName('namestatus').Value;
+        StringGrid1.Cells[1, i + 1] := Datamodule1.Query1.FieldByName('kolvo').Value;
+        Datamodule1.Query1.Next;
       end;
     end;
   end;
@@ -261,7 +125,86 @@ end;
 
 procedure TStats.Button2Click(Sender: TObject);
 begin
+  ExportGridToExcel(StringGrid1, '1', Form1.reports_path + 'stats.xlt');
+end;
+
+procedure TStats.Button3Click(Sender: TObject);
+begin
   Close;
+end;
+
+procedure TStats.Button4Click(Sender: TObject);
+var
+  summ: real;
+  i: integer;
+begin
+  //Субсидия
+  summ := 0;
+  with DataModule1.Query1 do
+  begin
+    Close;
+    SQL.Text := (
+      'SELECT Cl.regn, sb1.summa' + #13 +
+      'FROM Cl INNER JOIN' + #13 +
+      'Hist ON Cl.regn = Hist.regn INNER JOIN' + #13 +
+      '(SELECT regn, MAX(bdate) AS bdate' + #13 +
+      'FROM  hist' + #13 +
+      'WHERE  (bdate <= convert(smalldatetime, :d, 104))' + #13 +
+      'GROUP BY regn) sb ON Hist.regn = sb.regn AND Hist.bdate = sb.bdate AND Hist.bdate <= convert(smalldatetime, :d, 104)' + #13 +
+      'AND Hist.edate > convert(smalldatetime, :d, 104) LEFT JOIN' + #13 +
+      '(SELECT regn, sum(Sub.sub) AS summa' + #13 +
+      'FROM Sub' + #13 +
+      'WHERE Sub.sdate = convert(smalldatetime, :d, 104)' + #13 +
+      'GROUP BY Sub.regn' + #13 +
+      ') sb1 ON sb1.regn = cl.regn' + #13 +
+      'WHERE Cl.id_dist = :idd AND sb1.summa >= :limsub1 AND sb1.summa <= :limsub2'
+      );
+    ParamByName('d').AsString := Form1.rdt;
+    ParamByName('idd').Value := Form1.dist;
+    ParamByName('limsub1').Value := Edit3.Text;
+    ParamByName('limsub2').Value := Edit4.Text;
+    Open;
+    First;
+    for i := 1 to RecordCount do
+    begin
+      summ := summ + FieldByName('summa').Value;
+      Next;
+    end;
+  end;
+  Label11.Caption := IntToStr(DataModule1.Query1.RecordCount);
+  if DataModule1.Query1.RecordCount = 0 then
+    Label12.Caption := '0'
+  else
+    Label12.Caption := FloatToStr(RoundTo(summ / StrToFloat(Label11.Caption), -2));
+
+  //Доход
+  with DataModule1.Query1 do
+  begin
+    Close;
+    SQL.Text := (
+      'SELECT Cl.regn , hist.income' + #13 +
+      'FROM Cl INNER JOIN' + #13 +
+      'Hist ON Cl.regn = Hist.regn INNER JOIN' + #13 +
+      '(SELECT regn, MAX(bdate) AS bdate' + #13 +
+      'FROM  hist' + #13 +
+      'WHERE  (bdate <= convert(smalldatetime, :d, 104))' + #13 +
+      'GROUP BY regn) sb ON Hist.regn = sb.regn AND Hist.bdate = sb.bdate AND Hist.bdate <= convert(smalldatetime, :d, 104)' + #13 +
+      'AND Hist.edate > convert(smalldatetime, :d, 104)' + #13 +
+      'WHERE Cl.id_dist = :idd AND hist.income >= :inclim1 AND hist.income <= :inclim2'
+      );
+    ParamByName('d').AsString := Form1.rdt;
+    ParamByName('idd').Value := Form1.dist;
+    ParamByName('inclim1').Value := Edit1.Text;
+    ParamByName('inclim2').Value := Edit2.Text;
+    Open;
+    First;
+  end;
+  Label9.Caption := IntToStr(DataModule1.Query1.RecordCount);
+end;
+
+procedure TStats.Edit1Exit(Sender: TObject);
+begin
+  ReplacePoint(TEdit(Sender).Text);
 end;
 
 end.

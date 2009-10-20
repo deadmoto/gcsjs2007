@@ -2,8 +2,8 @@ object AboutBox: TAboutBox
   Left = 263
   Top = 226
   BorderStyle = bsNone
-  ClientHeight = 134
-  ClientWidth = 262
+  ClientHeight = 123
+  ClientWidth = 211
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,18 +19,14 @@ object AboutBox: TAboutBox
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 262
-    Height = 134
+    Width = 211
+    Height = 123
     Align = alClient
     BevelInner = bvRaised
     BevelOuter = bvLowered
     ParentColor = True
     TabOrder = 0
     OnClick = Panel1Click
-    ExplicitLeft = 3
-    ExplicitTop = 3
-    ExplicitWidth = 256
-    ExplicitHeight = 128
     object ProgramIcon: TImage
       Left = 24
       Top = 16
@@ -63,17 +59,17 @@ object AboutBox: TAboutBox
     object Copyright: TLabel
       Left = 8
       Top = 72
-      Width = 184
+      Width = 190
       Height = 13
-      Caption = #1040#1074#1090#1086#1088': '#1062#1077#1087#1091#1082#1086#1074#1072' '#1058#1072#1090#1100#1103#1085#1072' 2005-2006'
+      Caption = #1040#1074#1090#1086#1088': '#1062#1077#1087#1091#1082#1086#1074#1072' '#1058#1072#1090#1100#1103#1085#1072' 2005 - 2006'
       IsControl = True
     end
     object Comments: TLabel
       Left = 8
       Top = 96
-      Width = 119
-      Height = 13
-      Caption = #1050#1086#1084#1087#1072#1085#1080#1103': '#1052#1059' '#1043#1062#1057#1046#1057' '
+      Width = 123
+      Height = 17
+      Caption = #1050#1086#1084#1087#1072#1085#1080#1103': '#1041#1059' '#1043#1062#1057#1046#1057' '
       WordWrap = True
       IsControl = True
     end

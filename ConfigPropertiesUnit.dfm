@@ -2,7 +2,7 @@ object ConfigFrm: TConfigFrm
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
+  BorderStyle = bsDialog
   Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
   ClientHeight = 364
   ClientWidth = 468
@@ -49,7 +49,7 @@ object ConfigFrm: TConfigFrm
     Height = 324
     Margins.Bottom = 0
     Align = alClient
-    BevelOuter = bvNone
+    BevelInner = bvLowered
     TabOrder = 1
   end
   object FlowPanel1: TFlowPanel

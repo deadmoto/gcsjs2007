@@ -1,10 +1,9 @@
 object AddReportDataFrm: TAddReportDataFrm
   Left = 0
   Top = 0
-  AutoSize = True
   BorderStyle = bsToolWindow
   Caption = #1044#1072#1085#1085#1099#1077' '#1076#1083#1103' '#1086#1090#1095#1077#1090#1072
-  ClientHeight = 315
+  ClientHeight = 313
   ClientWidth = 227
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -20,7 +19,7 @@ object AddReportDataFrm: TAddReportDataFrm
   object GroupBox1: TGroupBox
     AlignWithMargins = True
     Left = 3
-    Top = 3
+    Top = 64
     Width = 221
     Height = 78
     Margins.Bottom = 0
@@ -72,7 +71,7 @@ object AddReportDataFrm: TAddReportDataFrm
   object GroupBox2: TGroupBox
     AlignWithMargins = True
     Left = 3
-    Top = 84
+    Top = 3
     Width = 221
     Height = 58
     Margins.Bottom = 0
@@ -99,50 +98,14 @@ object AddReportDataFrm: TAddReportDataFrm
   object Button1: TButton
     AlignWithMargins = True
     Left = 3
-    Top = 287
+    Top = 285
     Width = 221
     Height = 25
-    Align = alTop
+    Align = alBottom
     Caption = 'Ok'
-    TabOrder = 5
-    OnClick = Button1Click
-    ExplicitLeft = 149
-    ExplicitTop = 290
-    ExplicitWidth = 75
-  end
-  object GroupBox3: TGroupBox
-    AlignWithMargins = True
-    Left = 3
-    Top = 206
-    Width = 221
-    Height = 58
-    Margins.Bottom = 0
-    Align = alTop
-    Caption = #1048#1089#1087#1086#1083#1085#1080#1090#1077#1083#1100':'
     TabOrder = 3
-    object Edit5: TEdit
-      Left = 16
-      Top = 24
-      Width = 187
-      Height = 19
-      Ctl3D = False
-      ParentCtl3D = False
-      TabOrder = 0
-    end
-  end
-  object CheckBox1: TCheckBox
-    AlignWithMargins = True
-    Left = 3
-    Top = 267
-    Width = 221
-    Height = 17
-    Margins.Bottom = 0
-    Align = alTop
-    Caption = #1048#1089#1087#1086#1083#1085#1080#1090#1077#1083#1100' ('#1060#1048#1054' '#1080#1085#1089#1087#1077#1082#1090#1086#1088#1072')'
-    TabOrder = 4
-    OnClick = CheckBox1Click
-    ExplicitLeft = 8
-    ExplicitWidth = 185
+    OnClick = Button1Click
+    ExplicitTop = 287
   end
   object GroupBox4: TGroupBox
     AlignWithMargins = True
@@ -162,6 +125,51 @@ object AddReportDataFrm: TAddReportDataFrm
       Ctl3D = False
       ParentCtl3D = False
       TabOrder = 0
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 203
+    Width = 227
+    Height = 81
+    Align = alTop
+    AutoSize = True
+    BevelOuter = bvNone
+    TabOrder = 4
+    object CheckBox1: TCheckBox
+      AlignWithMargins = True
+      Left = 3
+      Top = 64
+      Width = 221
+      Height = 17
+      Margins.Bottom = 0
+      Align = alTop
+      Caption = #1048#1089#1087#1086#1083#1085#1080#1090#1077#1083#1100' ('#1060#1048#1054' '#1080#1085#1089#1087#1077#1082#1090#1086#1088#1072')'
+      TabOrder = 0
+      OnClick = CheckBox1Click
+      ExplicitTop = 44
+      ExplicitWidth = 219
+    end
+    object GroupBox3: TGroupBox
+      AlignWithMargins = True
+      Left = 3
+      Top = 3
+      Width = 221
+      Height = 58
+      Margins.Bottom = 0
+      Align = alTop
+      Caption = #1048#1089#1087#1086#1083#1085#1080#1090#1077#1083#1100':'
+      TabOrder = 1
+      ExplicitWidth = 219
+      object Edit5: TEdit
+        Left = 16
+        Top = 24
+        Width = 187
+        Height = 19
+        Ctl3D = False
+        ParentCtl3D = False
+        TabOrder = 0
+      end
     end
   end
 end

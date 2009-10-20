@@ -958,6 +958,20 @@ object Form1: TForm1
       Height = 13
       Caption = #1055#1088#1077#1082#1088#1072#1097#1077#1085#1080#1077
     end
+    object Label9: TLabel
+      Left = 213
+      Top = 19
+      Width = 66
+      Height = 13
+      Caption = 'C'#1091#1073#1089#1080#1076#1080#1103' < 0'
+    end
+    object Bevel1: TBevel
+      Left = 150
+      Top = 19
+      Width = 50
+      Height = 50
+      Shape = bsLeftLine
+    end
     object Edit5: TEdit
       Left = 10
       Top = 17
@@ -1061,6 +1075,32 @@ object Form1: TForm1
       ReadOnly = True
       TabOrder = 7
     end
+    object Edit13: TEdit
+      Left = 169
+      Top = 17
+      Width = 20
+      Height = 14
+      TabStop = False
+      AutoSize = False
+      Color = clMaroon
+      Ctl3D = False
+      ParentCtl3D = False
+      ReadOnly = True
+      TabOrder = 8
+    end
+    object Edit14: TEdit
+      Left = 187
+      Top = 17
+      Width = 20
+      Height = 14
+      TabStop = False
+      AutoSize = False
+      Color = clSilver
+      Ctl3D = False
+      ParentCtl3D = False
+      ReadOnly = True
+      TabOrder = 9
+    end
   end
   object MainMenu1: TMainMenu
     Images = ImageList2
@@ -1101,11 +1141,11 @@ object Form1: TForm1
       object N72: TMenuItem
         Caption = #1040#1088#1093#1080#1074#1072#1094#1080#1103
         object N78: TMenuItem
-          Caption = #1088#1077#1079#1077#1088#1074#1085#1072#1103' '#1082#1086#1087#1080#1103
+          Caption = #1056#1077#1079#1077#1088#1074#1085#1072#1103' '#1082#1086#1087#1080#1103
           OnClick = N78Click
         end
         object N80: TMenuItem
-          Caption = #1076#1083#1103' '#1094#1077#1085#1090#1088#1072
+          Caption = #1044#1083#1103' '#1094#1077#1085#1090#1088#1072
           OnClick = N80Click
         end
       end
@@ -1163,6 +1203,10 @@ object Form1: TForm1
       object N38: TMenuItem
         Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1082#1083#1080#1077#1085#1090#1091' '#1084#1077#1089#1103#1094
         OnClick = N38Click
+      end
+      object N37: TMenuItem
+        Caption = #1059#1076#1072#1083#1080#1090#1100' '#1090#1077#1082#1091#1097#1080#1081' '#1087#1077#1088#1080#1086#1076
+        OnClick = N37Click
       end
       object N35: TMenuItem
         Caption = #1054#1095#1080#1089#1090#1082#1072' '#1085#1091#1083#1077#1074#1099#1093
@@ -1404,12 +1448,8 @@ object Form1: TForm1
           OnClick = N83Click
         end
         object N36: TMenuItem
-          Caption = #1057#1086#1094'. '#1089#1090#1072#1090#1091#1089' '#1080' '#1076#1086#1093#1086#1076#1099
+          Caption = #1057#1086#1094'. '#1089#1090#1072#1090#1091#1089'/'#1051#1100#1075#1086#1090#1072' ...'
           OnClick = N36Click
-        end
-        object N37: TMenuItem
-          Caption = #1051#1100#1075#1086#1090#1099
-          OnClick = N37Click
         end
       end
     end
@@ -2481,7 +2521,7 @@ object Form1: TForm1
     PrintOptions.Printer = 'Default'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 39975.638255567100000000
-    ReportOptions.LastChange = 40081.443067638900000000
+    ReportOptions.LastChange = 40098.646347164350000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'var sumsub: string;'
@@ -3878,8 +3918,6 @@ object Form1: TForm1
         Font.Name = 'Arial'
         Font.Style = []
         HAlign = haCenter
-        Memo.UTF8 = (
-          '[spec2]')
         ParentFont = False
       end
     end
@@ -4415,8 +4453,6 @@ object Form1: TForm1
         Font.Name = 'Arial'
         Font.Style = []
         HAlign = haCenter
-        Memo.UTF8 = (
-          '[spec2]')
         ParentFont = False
       end
     end

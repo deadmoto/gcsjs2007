@@ -10,7 +10,6 @@ object fAppUpdate: TfAppUpdate
     Width = 280
     Height = 25
     Align = alTop
-    BevelInner = bvLowered
     Ctl3D = True
     ParentCtl3D = False
     TabOrder = 0

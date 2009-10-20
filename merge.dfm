@@ -1,9 +1,9 @@
 object Form21: TForm21
   Left = 273
   Top = 192
-  BorderStyle = bsDialog
+  BorderStyle = bsToolWindow
   Caption = #1055#1077#1088#1077#1076#1072#1095#1072' '#1080' '#1087#1088#1080#1077#1084' '#1076#1072#1085#1085#1099#1093
-  ClientHeight = 98
+  ClientHeight = 88
   ClientWidth = 282
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -25,14 +25,14 @@ object Form21: TForm21
   end
   object ProgressBar1: TProgressBar
     Left = 8
-    Top = 40
+    Top = 35
     Width = 265
     Height = 17
     TabOrder = 3
   end
   object Button1: TButton
-    Left = 56
-    Top = 64
+    Left = 8
+    Top = 58
     Width = 75
     Height = 25
     Caption = #1055#1077#1088#1077#1076#1072#1095#1072
@@ -40,8 +40,8 @@ object Form21: TForm21
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 144
-    Top = 64
+    Left = 89
+    Top = 58
     Width = 75
     Height = 25
     Caption = #1055#1088#1080#1077#1084
@@ -49,7 +49,7 @@ object Form21: TForm21
     OnClick = Button2Click
   end
   object MaskEdit1: TMaskEdit
-    Left = 128
+    Left = 136
     Top = 8
     Width = 72
     Height = 21
@@ -59,5 +59,14 @@ object Form21: TForm21
     Text = '  .  .    '
     OnExit = MaskEdit1Exit
     OnKeyDown = MaskEdit1KeyDown
+  end
+  object Button3: TButton
+    Left = 198
+    Top = 58
+    Width = 75
+    Height = 25
+    Caption = #1054#1090#1084#1077#1085#1072
+    TabOrder = 4
+    OnClick = Button3Click
   end
 end

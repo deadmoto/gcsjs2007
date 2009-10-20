@@ -2,9 +2,9 @@ object Form34: TForm34
   Left = 319
   Top = 169
   BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsToolWindow
+  BorderStyle = bsDialog
   Caption = 'SQL-'#1079#1072#1087#1088#1086#1089
-  ClientHeight = 473
+  ClientHeight = 465
   ClientWidth = 546
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -23,7 +23,7 @@ object Form34: TForm34
     Left = 3
     Top = 239
     Width = 540
-    Height = 231
+    Height = 223
     Hint = #1056#1077#1079#1091#1083#1100#1090#1072#1090' SQL-'#1079#1072#1087#1088#1086#1089#1072
     Align = alClient
     DataSource = DataModule1.DataSource1
@@ -64,8 +64,6 @@ object Form34: TForm34
         Width = 405
         Height = 177
         Hint = #1058#1077#1082#1089#1090' '#1090#1077#1082#1091#1097#1077#1075#1086' SQL-'#1079#1072#1087#1088#1086#1089#1072
-        Ctl3D = True
-        ParentCtl3D = False
         ParentShowHint = False
         ShowHint = True
         TabOrder = 0

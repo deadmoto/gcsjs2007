@@ -80,8 +80,12 @@ type
     Panel2:     TPanel;
     Button4:    TButton;
     UpDown2:    TUpDown;
-    MaskEdit6:  TMaskEdit;
-    MaskEdit7:  TMaskEdit;
+    CheckBox23: TCheckBox;
+    ComboBox15: TComboBox;
+    CheckBox24: TCheckBox;
+    ComboBox16: TComboBox;
+    Edit1: TEdit;
+    Edit6: TEdit;
     procedure CheckBox1Click(Sender: TObject);
     procedure CheckBox2Click(Sender: TObject);
     procedure CheckBox3Click(Sender: TObject);
@@ -138,6 +142,10 @@ type
     procedure CheckBox21Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure UpDown2Click(Sender: TObject; Button: TUDBtnType);
+    procedure CheckBox23Click(Sender: TObject);
+    procedure CheckBox24Click(Sender: TObject);
+    procedure ComboBox15Change(Sender: TObject);
+    procedure Edit1Exit(Sender: TObject);
   private
     { Private declarations }
     procedure Fill;
@@ -148,7 +156,7 @@ type
     function SearchSettl(s: string): integer;
     function SearchOwn(s: string): integer;
     function SearchCntrl(s: string): integer;
-    function SearchPriv(s: string): integer;
+    function SearchComboBox(CBox: TComboBox; s: string): integer;
     function SearchInsp(s: string): integer;
     function SearchMonth(s: string): integer;
     function SearchCert(s: string): integer;
@@ -167,9 +175,9 @@ type
     //    function FormHouse: string;
   public
     { Public declarations }
-    cntrl, mng, fnd, settl, own, p, str, cert, insp, month, calc: array of integer;
-    cur:    array[0..17] of string;//текущие наименования в полях ввода в combobox
-    curind: array[0..17] of integer;//индексы, соответствующие текущим наименованиям в полях ввода
+    cntrl, mng, fnd, settl, own, p, str, cert, insp, month, calc, stat: array of integer;
+    cur:    array[0..18] of string;//текущие наименования в полях ввода в combobox
+    curind: array[0..18] of integer;//индексы, соответствующие текущим наименованиям в полях ввода
     rsel:   boolean;
   end;
 
@@ -201,6 +209,7 @@ begin
   Combobox9.Clear;
   Combobox10.Clear;
   Combobox11.Clear;
+  Combobox15.Clear;
   Edit3.Text := '';
   Edit5.Text := '';
 end;
@@ -386,7 +395,23 @@ begin
       Next;
       Inc(l);
     end;
+    //Соц. Статус
     Close;
+    l := 0;
+    SQL.Clear;
+    SQL.Add('select id_status, namestatus');
+    SQL.Add('from stat');
+    SQL.Add('order by namestatus');
+    Open;
+    First;
+    while not EOF do
+    begin
+      SetLength(stat, Length(stat) + 1);
+      Combobox15.Items.Add(FieldByName('namestatus').AsString);
+      stat[l] := FieldByName('id_status').AsInteger;
+      Next;
+      Inc(l);
+    end;
     //Combobox6.ItemIndex := 0;
   end;
 end;
@@ -433,7 +458,7 @@ begin
   else
   begin
     Panel1.Visible := False;
-    MaskEdit6.Text := '';
+    Edit1.Text := '';
     CheckBox22.Checked := False;
   end;
 end;
@@ -445,8 +470,41 @@ begin
   else
   begin
     Panel2.Visible := False;
-    MaskEdit7.Text := '';
+    Edit6.Text := '';
   end;
+end;
+
+procedure TForm33.CheckBox23Click(Sender: TObject);
+begin
+  if not Checkbox23.Checked then
+  begin
+    combobox15.Color := clBtnFace;
+    combobox15.Font.Color := clGrayText;
+    combobox15.Text  := '';
+  end
+  else
+  begin
+    combobox15.Color := clWindow;
+    combobox15.Font.Color := clWindowText;
+    combobox15.ItemIndex := 0;
+  end;
+end;
+
+procedure TForm33.CheckBox24Click(Sender: TObject);
+begin
+  if not Checkbox24.Checked then
+  begin
+    combobox16.Color := clBtnFace;
+    combobox16.Font.Color := clGrayText;
+    combobox16.Text  := '';
+  end
+  else
+  begin
+    combobox16.Color := clWindow;
+    combobox16.Font.Color := clWindowText;
+//    combobox16.ItemIndex := 0;
+  end;
+
 end;
 
 procedure TForm33.CheckBox2Click(Sender: TObject);
@@ -735,7 +793,7 @@ procedure TForm33.ComboBox6Change(Sender: TObject);
 var
   ind: integer;
 begin
-  ind := SearchPriv(Combobox6.Text);
+  ind := SearchComboBox(Combobox6, Combobox6.Text);
   if ind <> -1 then
     Combobox6.ItemIndex := ind
   else
@@ -914,7 +972,8 @@ begin
     checkbox13.Checked or checkbox14.Checked or
     checkbox15.Checked or Checkbox16.Checked or
     Checkbox19.Checked or Checkbox20.Checked or
-    Checkbox21.Checked then
+    Checkbox21.Checked or Checkbox23.Checked or
+    Checkbox24.Checked then
   begin
     q.SQL := 'select cl.regn,hist.bdate,hist.edate,hist.calc from cl ';
     q.SQL := q.SQL + 'inner join hist on cl.regn=hist.regn ';
@@ -930,7 +989,7 @@ begin
     SetLength(q.parval, Length(q.parval) + 1);
     q.parname[j] := 'idd';
     q.parval[j]  := IntToStr(Form1.dist);
-    if Checkbox14.Checked then
+    if Checkbox14.Checked or Checkbox23.Checked then
       q.SQL := q.SQL + 'inner join fam on cl.regn=fam.regn ';
     q.SQL := q.SQL + 'where (cl.id_dist=:idd)';
     if Checkbox1.Checked then
@@ -1169,7 +1228,7 @@ begin
       SetLength(q.parname, Length(q.parname) + 1);
       SetLength(q.parval, Length(q.parval) + 1);
       q.parname[j] := 'sq';
-      q.parval[j]  := MaskEdit6.Text;
+      q.parval[j]  := Edit1.Text;
       //Дополнительное условие
       if Checkbox22.Checked then
       begin
@@ -1178,9 +1237,29 @@ begin
         SetLength(q.parname, Length(q.parname) + 1);
         SetLength(q.parval, Length(q.parval) + 1);
         q.parname[j] := 'sq1';
-        q.parval[j]  := MaskEdit7.Text;
+        q.parval[j]  := Edit6.Text;
       end;
     end;
+    //МДД
+    if Checkbox24.Checked then
+    begin
+      Inc(j);
+      q.SQL := q.SQL + 'and(hist.mdd=:mdd)';
+      SetLength(q.parname, Length(q.parname) + 1);
+      SetLength(q.parval, Length(q.parval) + 1);
+      q.parname[j] := 'mdd';
+      q.parval[j]  := IntToStr(Combobox16.ItemIndex);
+    end;
+    if Checkbox23.Checked then
+    begin//среди найденных выбираем тех, у кого опр. льгота
+      Inc(j);
+      q.SQL := q.SQL + 'and(fam.id_status=:stat)';
+      SetLength(q.parname, Length(q.parname) + 1);
+      SetLength(q.parval, Length(q.parval) + 1);
+      q.parname[j] := 'stat';
+      q.parval[j]  := IntToStr(stat[Combobox15.ItemIndex]);
+    end;
+
     Form1.qr := q;
   end
   else //выбрать всех клиентов
@@ -1333,18 +1412,18 @@ begin
     Result := -1;
 end;
 
-function TForm33.SearchPriv(s: string): integer;
+function TForm33.SearchComboBox(CBox: TComboBox; s: string): integer;
 {*******************************************************************************
 *******************************************************************************}
 var
   i: integer;
 begin
-  for i := 0 to combobox6.Items.Count - 1 do
+  for i := 0 to CBox.Items.Count - 1 do
   begin
-    if AnsiLowerCase(Combobox6.Items.Strings[i]) = AnsiLowerCase(s) then
+    if AnsiLowerCase(CBox.Items.Strings[i]) = AnsiLowerCase(s) then
       break;
   end;
-  if i < combobox6.Items.Count then
+  if i < CBox.Items.Count then
     Result := i
   else
     Result := -1;
@@ -1682,9 +1761,11 @@ procedure TForm33.FormShow(Sender: TObject);
 begin
   Clear;
   Fill;
+
   Edit2.Text := cur[0];
   Edit3.Text := cur[11];
   Edit5.Text := cur[12];
+
   MaskEdit1.Text := cur[1];
   MaskEdit2.Text := cur[5];
   MaskEdit3.Text := cur[6];
@@ -1700,6 +1781,7 @@ begin
   Combobox9.ItemIndex := curind[15];
   Combobox10.ItemIndex := curind[16];
   Combobox11.ItemIndex := curind[17];
+  Combobox15.ItemIndex := curind[18];
 end;
 
 procedure TForm33.JvArrowButton1Click(Sender: TObject);
@@ -1724,6 +1806,11 @@ procedure TForm33.FormClose(Sender: TObject; var Action: TCloseAction);
 *******************************************************************************}
 begin
   Datamodule1.Query1.Close;
+end;
+
+procedure TForm33.Edit1Exit(Sender: TObject);
+begin
+  ReplacePoint(TEdit(Sender).Text);
 end;
 
 procedure TForm33.Edit2Exit(Sender: TObject);
@@ -1906,6 +1993,22 @@ begin
   end;
   cur[17] := Combobox11.Text;
   curind[17] := Combobox11.ItemIndex;
+end;
+
+procedure TForm33.ComboBox15Change(Sender: TObject);
+var
+  ind: integer;
+begin
+  ind := SearchComboBox(ComboBox15,ComboBox15.Text);
+  if ind <> -1 then
+    ComboBox15.ItemIndex := ind
+  else
+  begin
+//    ComboBox15.ItemIndex := 0;
+//    Combobox6.Text := SelPriv(stat[0]);
+  end;
+  cur[18] := ComboBox15.Text;
+  curind[18] := ComboBox15.ItemIndex;
 end;
 
 procedure TForm33.CheckBox16Click(Sender: TObject);

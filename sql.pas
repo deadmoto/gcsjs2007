@@ -223,7 +223,7 @@ procedure TForm34.Button3Click(Sender: TObject);
 *******************************************************************************}
 begin
   if SaveDialog1.Execute then
-    Memo1.Lines.SaveToFile(Savedialog1.FileName);
+    Memo1.Lines.SaveToFile(SaveDialog1.FileName);
 end;
 
 procedure TForm34.Button5Click(Sender: TObject);
@@ -233,7 +233,9 @@ procedure TForm34.Button5Click(Sender: TObject);
 *******************************************************************************}
 begin
   if OpenDialog1.Execute then
-    Memo1.Lines.LoadFromFile(Opendialog1.FileName);
+    begin
+      Memo1.Lines.LoadFromFile(OpenDialog1.FileName);
+    end;
 end;
 
 end.

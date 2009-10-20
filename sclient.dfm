@@ -3,7 +3,7 @@ object Form2: TForm2
   Top = 259
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  ClientHeight = 385
+  ClientHeight = 389
   ClientWidth = 593
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -23,14 +23,16 @@ object Form2: TForm2
     Left = 3
     Top = 3
     Width = 587
-    Height = 379
-    ActivePage = TabSheet5
+    Height = 383
+    ActivePage = TabSheet4
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change
+    ExplicitHeight = 379
     object TabSheet1: TTabSheet
       Caption = #1050#1083#1080#1077#1085#1090
       OnExit = TabSheet1Exit
+      ExplicitHeight = 351
       object Label1: TLabel
         Left = 8
         Top = 24
@@ -368,7 +370,7 @@ object Form2: TForm2
         Width = 41
         Height = 21
         Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 4 '#1082#1080#1088#1080#1083#1083#1080#1095#1077#1089#1082#1080#1093' '#1089#1080#1084#1074#1086#1083#1086#1074
-        MaxLength = 6
+        MaxLength = 8
         ParentShowHint = False
         ShowHint = True
         TabOrder = 4
@@ -574,6 +576,7 @@ object Form2: TForm2
     object TabSheet2: TTabSheet
       Caption = #1057#1077#1084#1100#1103
       ImageIndex = 1
+      ExplicitHeight = 351
       object Label21: TLabel
         Left = 8
         Top = 320
@@ -870,6 +873,7 @@ object Form2: TForm2
     object TabSheet3: TTabSheet
       Caption = #1058#1072#1088#1080#1092#1099
       ImageIndex = 2
+      ExplicitHeight = 351
       object Label24: TLabel
         Left = 12
         Top = 95
@@ -1297,6 +1301,7 @@ object Form2: TForm2
       Caption = #1057#1095#1077#1090#1072
       ImageIndex = 3
       OnExit = TabSheet4Exit
+      ExplicitHeight = 351
       object GroupBox7: TGroupBox
         Left = 8
         Top = 24
@@ -1566,6 +1571,7 @@ object Form2: TForm2
     object TabSheet5: TTabSheet
       Caption = #1057#1091#1073#1089#1080#1076#1080#1103
       ImageIndex = 4
+      ExplicitHeight = 351
       object Label46: TLabel
         Left = 16
         Top = 48

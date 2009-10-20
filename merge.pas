@@ -23,11 +23,13 @@ type
     Button2:      TButton;
     Label1:       TLabel;
     MaskEdit1:    TMaskEdit;
+    Button3: TButton;
     procedure FormShow(Sender: TObject);
     procedure MaskEdit1Exit(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure MaskEdit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure Button3Click(Sender: TObject);
   private
     { Private declarations }
     path: string;
@@ -66,7 +68,6 @@ procedure TForm21.Button1Click(Sender: TObject);
 { архиваци€ базы дл€ сброса по дате}
 var
   cmd, flst, Name, dt: string;
-  cmdp: array[0..399] of char;
   ext1, ext2: string;
 begin
   ext1 := '.dbf';
@@ -76,9 +77,9 @@ begin
   if MaskEdit1.Text = '' then
     dt := Form1.rdt;
   //удалить файлы из архива
-  cmd := 'rar d ' + path + Name;
-  StrPCopy(cmdp, cmd);
-  WinExec(cmdp, SW_RESTORE);
+  cmd := 'rar d ' + path + Name + ext1;
+  WinExec(PChar(cmd), SW_HIDE);
+
   //добавить файлы в архив
   ExportHouse(path, Form1.dist);
   flst := path + 'house' + ext2 + ' ';
@@ -101,8 +102,7 @@ begin
   ExportInsp(path, Form1.dist, False);
   flst := flst + path + 'insp' + ext2;
   cmd  := 'rar m -s -v1440 -vn -y -ep ' + path + Name + ' ' + flst;
-  StrPCopy(cmdp, cmd);
-  WinExec(cmdP, SW_RESTORE);
+  WinExec(PChar(cmd), SW_HIDE);
   ProgressBar1.StepIt;
   ShowMessage('Ёкспорт файлов завершен!');
   Close;
@@ -112,14 +112,12 @@ procedure TForm21.Button2Click(Sender: TObject);
 { автоматический импорт данных из филиала или отдела }
 var
   cmd: string;
-  cmdp: array[0..399] of char;
   i: integer;
 begin
   path := path + '4merge';
   //извлечь файлы из архива
   cmd  := 'rar e -y ' + path + ' *.dbf' + ' arc\';
-  StrPCopy(cmdp, cmd);
-  WinExec(cmdP, SW_SHOW);
+  WinExec(PChar(cmd), SW_HIDE);
   path := 'arc\';
   i := 0;
   while not FileExists(path + 'insp' + IntToStr(Form1.dist) + '.dbf') do
@@ -147,6 +145,11 @@ begin
     Datamodule1.Database1.Rollback;
     ShowMessage('ќшибка импорта!');
   end;
+  Close;
+end;
+
+procedure TForm21.Button3Click(Sender: TObject);
+begin
   Close;
 end;
 

@@ -10,7 +10,6 @@ object fAppProp: TfAppProp
     Width = 280
     Height = 25
     Align = alTop
-    BevelInner = bvLowered
     Ctl3D = True
     ParentCtl3D = False
     TabOrder = 0
@@ -54,7 +53,7 @@ object fAppProp: TfAppProp
     Left = 16
     Top = 190
     Width = 249
-    Height = 131
+    Height = 123
     Caption = #1044#1080#1088#1077#1082#1090#1086#1088#1080#1080':'
     TabOrder = 5
     object IniCheckBox3: TIniCheckBox
@@ -165,6 +164,7 @@ object fAppProp: TfAppProp
     ShowHint = True
     TabOrder = 6
     WordWrap = True
+    OnClick = IniCheckBox6Click
     SectionName = 'Config'
     KeyName = '0.ShowAddReportData'
   end

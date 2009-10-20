@@ -1,12 +1,11 @@
 object Stats: TStats
   Left = 229
   Top = 197
-  AutoSize = True
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = #1057#1090#1072#1090#1080#1089#1090#1080#1082#1072
-  ClientHeight = 541
-  ClientWidth = 303
+  ClientHeight = 427
+  ClientWidth = 441
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,299 +14,198 @@ object Stats: TStats
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object GroupBox1: TGroupBox
+  object TabControl1: TTabControl
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 297
-    Height = 234
-    Margins.Bottom = 0
+    Width = 435
+    Height = 296
     Align = alTop
-    Caption = #1057#1086#1094'. '#1089#1090#1072#1090#1091#1089':'
     TabOrder = 0
-    object DBGrid1: TDBGrid
-      Left = 2
-      Top = 32
-      Width = 293
-      Height = 200
-      Align = alClient
-      BorderStyle = bsNone
-      DataSource = DataModule1.DataSource1
+    Tabs.Strings = (
+      #1051#1100#1075#1086#1090#1099
+      #1057#1086#1094'. '#1089#1090#1072#1090#1091#1089)
+    TabIndex = 0
+    object StringGrid1: TStringGrid
+      Left = 4
+      Top = 24
+      Width = 427
+      Height = 234
+      Align = alTop
+      ColCount = 2
+      Ctl3D = True
+      DefaultRowHeight = 20
+      FixedCols = 0
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowSelect]
+      ParentCtl3D = False
       TabOrder = 0
-      TitleFont.Charset = DEFAULT_CHARSET
-      TitleFont.Color = clWindowText
-      TitleFont.Height = -11
-      TitleFont.Name = 'MS Sans Serif'
-      TitleFont.Style = []
+    end
+    object Button1: TButton
+      Left = 3
+      Top = 264
+      Width = 75
+      Height = 25
+      Caption = #1054#1073#1085#1086#1074#1080#1090#1100
+      TabOrder = 1
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 85
+      Top = 264
+      Width = 75
+      Height = 25
+      Caption = #1042' Excel'
+      TabOrder = 2
+      OnClick = Button2Click
     end
     object CheckBox1: TCheckBox
-      Left = 2
-      Top = 15
-      Width = 293
+      Left = 174
+      Top = 264
+      Width = 51
       Height = 17
-      Align = alTop
-      Caption = #1040#1082#1090#1080#1074#1085#1099#1077
+      Hint = #1042#1099#1073#1080#1088#1072#1077#1090#1089#1103' '#1082#1086#1083'-'#1074#1086' '#1083#1102#1076#1077#1081' ('#1080#1085#1072#1095#1077' '#1082#1086#1083'-'#1074#1086' '#1089#1077#1084#1077#1081')'
+      Caption = #1051#1102#1076#1080
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+  end
+  object Button3: TButton
+    Left = 363
+    Top = 397
+    Width = 75
+    Height = 25
+    Caption = #1047#1072#1082#1088#1099#1090#1100
+    TabOrder = 1
+    OnClick = Button3Click
+  end
+  object GroupBox1: TGroupBox
+    Left = 4
+    Top = 302
+    Width = 215
+    Height = 91
+    Caption = #1044#1086#1093#1086#1076':'
+    TabOrder = 2
+    object Label3: TLabel
+      Left = 10
+      Top = 24
+      Width = 16
+      Height = 13
+      Caption = #1054#1090':'
+    end
+    object Label4: TLabel
+      Left = 85
+      Top = 24
+      Width = 18
+      Height = 13
+      Caption = #1044#1086':'
+    end
+    object Label5: TLabel
+      Left = 10
+      Top = 51
+      Width = 40
+      Height = 13
+      Caption = #1050#1086#1083'-'#1074#1086': '
+    end
+    object Label9: TLabel
+      Left = 52
+      Top = 51
+      Width = 6
+      Height = 13
+      Caption = '0'
+    end
+    object Edit1: TEdit
+      Left = 32
+      Top = 24
+      Width = 49
+      Height = 21
+      TabOrder = 0
+      OnExit = Edit1Exit
+    end
+    object Edit2: TEdit
+      Left = 109
+      Top = 24
+      Width = 49
+      Height = 21
       TabOrder = 1
+      OnExit = Edit1Exit
     end
   end
   object GroupBox2: TGroupBox
-    AlignWithMargins = True
-    Left = 3
-    Top = 240
-    Width = 297
-    Height = 78
-    Margins.Bottom = 0
-    Align = alTop
-    Caption = #1044#1086#1093#1086#1076':'
-    TabOrder = 1
-    ExplicitLeft = 75
-    ExplicitTop = 241
-    object Label4: TLabel
-      Left = 16
-      Top = 24
-      Width = 14
-      Height = 13
-      Caption = #1086#1090':'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = []
-      ParentFont = False
-    end
-    object Label5: TLabel
-      Left = 107
-      Top = 24
-      Width = 15
-      Height = 13
-      Caption = #1076#1086':'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = []
-      ParentFont = False
-    end
-    object Label6: TLabel
-      Left = 16
-      Top = 50
-      Width = 72
-      Height = 13
-      Caption = #1050#1086#1083'-'#1074#1086' '#1089#1077#1084#1077#1081':'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = []
-      ParentFont = False
-    end
-    object lFamcount: TLabel
-      Left = 107
-      Top = 50
-      Width = 6
-      Height = 13
-      Caption = '0'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = []
-      ParentFont = False
-    end
-    object Edit1: TEdit
-      Left = 36
-      Top = 24
-      Width = 65
-      Height = 21
-      TabOrder = 0
-      Text = '0'
-    end
-    object Edit2: TEdit
-      Left = 128
-      Top = 24
-      Width = 65
-      Height = 21
-      TabOrder = 1
-      Text = '0'
-    end
-  end
-  object GroupBox3: TGroupBox
-    AlignWithMargins = True
-    Left = 3
-    Top = 321
-    Width = 297
-    Height = 50
-    Margins.Bottom = 0
-    Align = alTop
-    Caption = #1044#1086#1093#1086#1076#1086#1084' '#1085#1080#1078#1077' '#1087#1088'. '#1084#1080#1085#1080#1084':'
-    TabOrder = 2
-    ExplicitTop = 327
-    object Label1: TLabel
-      Left = 16
-      Top = 24
-      Width = 72
-      Height = 13
-      Caption = #1050#1086#1083'-'#1074#1086' '#1089#1077#1084#1077#1081':'
-    end
-    object lFamCLMin: TLabel
-      Left = 107
-      Top = 24
-      Width = 6
-      Height = 13
-      Caption = '0'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = []
-      ParentFont = False
-    end
-  end
-  object GroupBox4: TGroupBox
-    AlignWithMargins = True
-    Left = 3
-    Top = 374
-    Width = 297
-    Height = 74
-    Margins.Bottom = 0
-    Align = alTop
+    Left = 224
+    Top = 302
+    Width = 215
+    Height = 91
     Caption = #1057#1091#1073#1089#1080#1076#1080#1103':'
     TabOrder = 3
-    ExplicitTop = 383
-    object Label9: TLabel
-      Left = 16
+    object Label6: TLabel
+      Left = 10
       Top = 24
-      Width = 14
+      Width = 16
       Height = 13
-      Caption = #1086#1090':'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = []
-      ParentFont = False
+      Caption = #1054#1090':'
     end
-    object Label10: TLabel
-      Left = 107
+    object Label7: TLabel
+      Left = 85
       Top = 24
-      Width = 15
+      Width = 18
       Height = 13
-      Caption = #1076#1086':'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = []
-      ParentFont = False
+      Caption = #1044#1086':'
     end
-    object Label11: TLabel
-      Left = 16
-      Top = 50
-      Width = 78
-      Height = 13
-      Caption = #1050#1086#1083'-'#1074#1086' '#1095#1077#1083#1086#1074#1077#1082
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = []
-      ParentFont = False
-    end
-    object MenCount: TLabel
-      Left = 107
-      Top = 50
-      Width = 6
-      Height = 13
-      Caption = '0'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = []
-      ParentFont = False
-    end
-    object Edit3: TEdit
-      Left = 36
-      Top = 24
-      Width = 65
-      Height = 21
-      TabOrder = 0
-      Text = '0'
-    end
-    object Edit4: TEdit
-      Left = 128
-      Top = 24
-      Width = 65
-      Height = 21
-      TabOrder = 1
-      Text = '0'
-    end
-  end
-  object GroupBox5: TGroupBox
-    AlignWithMargins = True
-    Left = 3
-    Top = 451
-    Width = 297
-    Height = 53
-    Margins.Bottom = 0
-    Align = alTop
-    Caption = #1057#1088#1077#1076#1085#1103#1103' '#1089#1091#1073#1089#1080#1076#1080#1103': '
-    TabOrder = 4
-    ExplicitTop = 463
-    object Label3: TLabel
-      Left = 19
-      Top = 24
+    object Label8: TLabel
+      Left = 10
+      Top = 51
       Width = 37
       Height = 13
       Caption = #1050#1086#1083'-'#1074#1086':'
     end
-    object Label12: TLabel
-      Left = 107
-      Top = 24
+    object Label1: TLabel
+      Left = 12
+      Top = 70
+      Width = 96
+      Height = 13
+      Caption = #1057#1088#1077#1076#1085#1103#1103' '#1089#1091#1073#1089#1080#1076#1080#1103':'
+    end
+    object Label11: TLabel
+      Left = 52
+      Top = 51
       Width = 6
       Height = 13
       Caption = '0'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = []
-      ParentFont = False
+    end
+    object Label12: TLabel
+      Left = 114
+      Top = 70
+      Width = 6
+      Height = 13
+      Caption = '0'
+    end
+    object Edit3: TEdit
+      Left = 32
+      Top = 24
+      Width = 49
+      Height = 21
+      TabOrder = 0
+      OnExit = Edit1Exit
+    end
+    object Edit4: TEdit
+      Left = 107
+      Top = 24
+      Width = 49
+      Height = 21
+      TabOrder = 1
+      OnExit = Edit1Exit
     end
   end
-  object FlowPanel1: TFlowPanel
-    AlignWithMargins = True
-    Left = 3
-    Top = 507
-    Width = 297
-    Height = 31
-    Align = alTop
-    AutoWrap = False
-    BevelOuter = bvNone
-    FlowStyle = fsRightLeftBottomTop
-    TabOrder = 5
-    ExplicitTop = 519
-    object Button2: TButton
-      AlignWithMargins = True
-      Left = 219
-      Top = 3
-      Width = 75
-      Height = 25
-      Caption = #1054#1090#1084#1077#1085#1072
-      TabOrder = 1
-      OnClick = Button2Click
-    end
-    object Button1: TButton
-      AlignWithMargins = True
-      Left = 138
-      Top = 3
-      Width = 75
-      Height = 25
-      Caption = #1057#1095#1080#1090#1072#1090#1100
-      TabOrder = 0
-    end
+  object Button4: TButton
+    Left = 282
+    Top = 397
+    Width = 75
+    Height = 25
+    Caption = #1057#1095#1080#1090#1072#1090#1100
+    TabOrder = 4
+    OnClick = Button4Click
   end
 end

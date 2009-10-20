@@ -807,8 +807,9 @@ end;
 procedure TClient.CalcSub(sts: integer);//расчет субсидии за месяц
 var
   ppm, pm,fpm, subs, stnd,cnt, subold: real;
-  i,mdd, mbc: integer;
+  i,mdd, mbc, tmp: integer;
   p: array[0..numbtarif-1] of real;
+  havePriv: boolean;
 begin
   if (sts<>3) then begin//расчет активного
     mdd := GetMdd;
@@ -856,16 +857,29 @@ begin
       end;
     if cdata.rstnd=0 then
       if cdata.income/cdata.mcount >= cdata.pmin then
-        subs := Rnd(pm - (mdd*cdata.income)/100)
+        subs := rnd(pm - (mdd*cdata.income)/100)
       else
         subs := rnd(pm - (mdd*cdata.income*Rnd(cdata.koef))/100)
-    else
-      if cdata.priv[0] = 0 then
-        subs:=Rnd(stnd*cdata.mcount-(mdd*cdata.income{*rnd(ppm/pm)})/100)
+    else//по рег сдандарту
+    begin
+      havePriv := False;
+      for i:= 0 to cdata.mcount - 1 do
+      if cdata.priv[i] <> 0 then
+        havePriv := True;
+      if havePriv then
+        subs := (stnd * cdata.mcount * rnd(ppm/fpm) - ((mdd / 100) * cdata.income * rnd(cdata.koef)))
       else
-        subs:=rnd(((stnd*cdata.mcount)-(mdd*cdata.income*rnd(cdata.koef)/100))*ppm/fpm);
+        subs := (stnd * cdata.mcount - ((mdd / 100) * cdata.income * rnd(cdata.koef)));
+//      if cdata.priv[0] = 0 then
+//        subs:=Rnd(stnd*cdata.mcount-(mdd*cdata.income{*rnd(ppm/pm)})/100)
+//      else
+//        subs:=rnd(((stnd*cdata.mcount)-(mdd*cdata.income*rnd(cdata.koef)/100))*ppm/fpm);
+    end;
+
     subold := 0;
-    for i:=0 to numbtarif-1 do subold := subold + cdata.sub[i];
+    for i:=0 to numbtarif-1 do
+      subold := subold + cdata.sub[i];
+
     if (subs + 1< subold ) and (cdata.mcount > 3) and (cdata.square > 60) and (sts <> 0) and (cdata.begindate < StrToDate('01.01.2007')) then
     begin
      mbc :=  MessageDlg('Произошло уменьшение субсидии' + #13#10 +

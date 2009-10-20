@@ -79,11 +79,13 @@ function ExportGridToExcel(AGrid: TStringGrid; ASheetName, AFileName: string): b
 {******************************************************************************}
 function FileVersion(AFileName: string): string;
 function GetTempDir: string;
+function GetSystemDir: string;
 function getConfValue(str: string): variant;
 function SelectDir: string;
 function WithoutDoubleSpaces(str: string): string;
 procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidths: TIntArray; RecCount: integer);
 function GetShortName(FIO: string): string;
+function ReplacePoint(str: string): string; //заминить , на .
 
 implementation
 
@@ -512,6 +514,9 @@ procedure FillCurr(path, rdt: string; dis: integer; code: TCodePage);
   прожиточных минимумов.
 *******************************************************************************}
 begin
+  if not DirectoryExists(path) then
+    ForceDirectories(path);
+
   FillTarif(path, 'cont', rdt, dis, code);
   FillTarif(path, 'rep', rdt, dis, code);
   FillTarifb(path, 'cold', rdt, dis, code);
@@ -817,6 +822,17 @@ begin
   SetString(Result, Buf, GetTempPath(Sizeof(Buf) - 1, Buf));
 end;
 
+function GetSystemDir: string;
+{*******************************************************************************
+    Функция возвращает путь к папки %WINDIR%\system32
+*******************************************************************************}
+var
+  Buf: array[0..1023] of char;
+begin
+  SetString(Result, Buf, GetSystemDirectory(Buf,Sizeof(Buf) - 1));
+end;
+
+
 function getConfValue(str: string): variant;
 {*******************************************************************************
     Функция getConfValue возвращает значение переменной в реестре, которое
@@ -871,9 +887,26 @@ var
   FIOParts: TFIOParts;
 begin
   FIOParts := GetFIOParts(FIO);
-  Result := Trim(FIOParts.LastName) + ' ' +
-    Trim(FIOParts.FirstName)[1] + '. ' +
-    Trim(FIOParts.MiddleName)[1] + '.';
+
+  if Trim(FIOParts.MiddleName) <> '' then
+    Result := Trim(FIOParts.LastName) + ' ' +
+      Trim(FIOParts.FirstName)[1] + '. ' +
+      Trim(FIOParts.MiddleName)[1] + '.'
+  else
+    Result := Trim(FIOParts.LastName) + ' ' +
+      Trim(FIOParts.FirstName)[1] + '. ';
+end;
+
+function ReplacePoint(str: string): string;
+var
+  i: integer;
+  tmpStr: string;
+begin
+  tmpStr := str;
+  for i:=0 to Length(tmpStr)-1 do
+    if tmpStr[i] = ',' then
+      tmpStr[i] := '.';
+  str := tmpStr;
 end;
 
 end.

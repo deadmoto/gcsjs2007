@@ -27,7 +27,7 @@ uses
   search in 'search.pas' {Form33},
   opend in 'opend.pas' {Form26},
   fstruct in 'fstruct.pas',
-  sql in 'sql.pas' {Form34},
+  SQL in 'sql.pas' {Form34},
   imexp in 'imexp.pas' {Form35},
   progress in 'progress.pas' {AboutBox1},
   chserv in 'chserv.pas' {Form29},
@@ -62,9 +62,6 @@ uses
   AddReportDataUnit in 'AddReportDataUnit.pas' {AddReportDataFrm},
   AnyDirectoryUnit in 'AnyDirectoryUnit.pas' {AnyDirectoryFrm},
   EditReportUnit in 'EditReportUnit.pas' {EditReportFrm};
-
-//  Plugins in 'Plugins.pas' {Plugins},
-//  ownertype in 'ownertype.pas' {Form8},
 
 {$R *.res}
 
@@ -129,7 +126,6 @@ begin
         Application.CreateForm(TConfigFrm, ConfigFrm);
         Application.CreateForm(TAddReportDataFrm, AddReportDataFrm);
         Application.CreateForm(TAnyDirectoryFrm, AnyDirectoryFrm);
-//        Application.CreateForm(TEditReportFrm, EditReportFrm);
         Application.Run;
       except
         ShowMessage('ѕроизошел сбой при создании одной из форм!');
@@ -146,9 +142,3 @@ begin
       '4.—осто€ние сети(в случае сетевого соединени€): возможно нет сетевого доступа к серверу.');
   end;
 end.
-
-//        Application.CreateForm(TForm8, Form8);
-//        Application.CreateForm(TForm32, Form32);
-//        Application.CreateForm(TForm28, Form28);
-//        Application.CreateForm(TForm9, Form9);
-//        Application.CreateForm(TForm10, Form10);
