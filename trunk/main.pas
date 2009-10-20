@@ -236,13 +236,17 @@ type
     Edit8:        TEdit;
     ToolButton17: TToolButton;
     ToolButton19: TToolButton;
-    N37:          TMenuItem;
     N105:         TMenuItem;
     N106:         TMenuItem;
     N109:         TMenuItem;
     N110:         TMenuItem;
     N111: TMenuItem;
     N112: TMenuItem;
+    Edit13: TEdit;
+    Edit14: TEdit;
+    Label9: TLabel;
+    Bevel1: TBevel;
+    N37: TMenuItem;
     procedure N15Click(Sender: TObject);
     procedure N25Click(Sender: TObject);
     procedure N24Click(Sender: TObject);
@@ -330,12 +334,12 @@ type
     procedure N102Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
     procedure ToolButton17Click(Sender: TObject);
-    procedure N37Click(Sender: TObject);
     procedure ToolButton14Click(Sender: TObject);
     procedure N109Click(Sender: TObject);
     procedure N105Click(Sender: TObject);
     procedure N110Click(Sender: TObject);
     procedure N112Click(Sender: TObject);
+    procedure N37Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -468,29 +472,10 @@ uses
 
 {$R *.dfm}
 
-//  const section_str: string = 'Subsidy';
-{  Const CountBtns         = 21;
-  Type  TListPlugin       = Array[1..CountBtns] of TPlugin;
-
-  Var   ListPlugin        : TListPlugin;
-}
 procedure TForm1.SetTarifs;
 begin
   with DataModule1 do
   begin
-{  t1 := TQuery.Create(Self);
-  t2 := TQuery.Create(Self);
-  t3 := TQuery.Create(Self);
-  t4 := TQuery.Create(Self);
-  t5 := TQuery.Create(Self);
-  t6 := TQuery.Create(Self);
-  t7 := TQuery.Create(Self);
-  t8 := TQuery.Create(Self);
-  t9 := TQuery.Create(Self);
-  t10 := TQuery.Create(Self);
-  pv := TQuery.Create(Self);
-  norm1 := TQuery.Create(Self);
-  tc := TQuery.Create(Self);    }
     t1.DatabaseName  := 'Curr';
     t2.DatabaseName  := 'Curr';
     t3.DatabaseName  := 'Curr';
@@ -612,16 +597,15 @@ begin
   begin
     if st[i] < 3 then
       Result := Result + sub[i];
+   end;
 
-  end;
-
-  with Datamodule1.Query1 do
+{  with Datamodule1.Query1 do
   begin
     Close;
     SQL.Clear;
 {    SQL.Add('execute getsumsluj :idd,:d');
     ParamByName('idd').AsInteger := dist;   }
-    SQL.Add('select regn, sum(sub) as summa from sluj where sdate = :d  group by regn');
+{    SQL.Add('select regn, sum(sub) as summa from sluj where sdate = :d  group by regn');
 
     ParamByName('d').AsString := rdt;
     Open;
@@ -638,7 +622,7 @@ begin
       Next;
     end;
     Close;
-  end;
+  end;}
 end;
 
 procedure TForm1.Button9Click(Sender: TObject);
@@ -1193,7 +1177,7 @@ var
   y, m, d, i, j, c: word;
   priv: TStringList;
   s1, s2, priv_str: string;
-  pl, mdd, stnd, mc: integer;
+  pl{, mdd, stnd, mc}: integer;
   pmin, income: real;
   cd: TDateTime;
 
@@ -1331,8 +1315,6 @@ begin
         DataModule1.Query2.Next;
       end;
 
-      AddReportDataFrm.RepType := rUvedom;
-      ReportsFillAdditionData(Datamodule1.Query1.FieldValues['nameinsp']);
       ReportsFillDistInfo();
 
       frxReport1.Variables.Variables['cd']  := Quotedstr(rdt);
@@ -2240,7 +2222,6 @@ procedure TForm1.N78Click(Sender: TObject);
 var
   cmd, flst, Name, path, dt: string;
   d: word;
-  cmdp: array[0..600] of char;
   ext1, ext2: string;
 begin
   ext1 := '.dbf';
@@ -2251,11 +2232,15 @@ begin
     Name := dt + '0' + IntToStr(d)
   else
     Name := dt + IntToStr(d);
-  path := 'arc\';
+
+  path := ExtractFilePath(Application.ExeName) + 'arc\';
+  if not DirectoryExists(path) then
+    ForceDirectories(path);
+
   //удалить файлы из архива
   cmd := 'rar d ' + path + Name;
-  StrPCopy(cmdp, cmd);
-  WinExec(cmdp, SW_RESTORE);
+  WinExec(PChar(cmd), SW_HIDE);
+
   //добавить файлы в архив
   ExportDiff(path, 'bank');
   flst := path + 'bank' + ext1 + ' ';
@@ -2324,27 +2309,31 @@ begin
   ExportTarif(path, rdt, 'coal', dist);
   flst := flst + path + 'coal' + ext2;
   cmd  := 'rar m -s -v1440 -vn -y -ep ' + path + Name + ' ' + flst;
-  StrPCopy(cmdp, cmd);
-  WinExec(cmdP, SW_RESTORE);
+
+  WinExec(PChar(cmd), SW_HIDE);
 end;
 
 procedure TForm1.N80Click(Sender: TObject);
 { архивация базы для центра }
 var
   cmd, flst, Name, path, dt: string;
-  cmdp: array[0..499] of char;
   ext1, ext2: string;
 begin
   ext1 := '.dbf';
   ext2 := IntToStr(dist) + ext1;
-  path := 'arc\';
+
+  path := ExtractFilePath(Application.ExeName) + 'arc\';
+  if not DirectoryExists(path) then
+    ForceDirectories(path);
+
   Name := '4center';
   SetPer2(rdt, dt);
   dt  := '01.' + Copy(dt, 3, 2) + '.20' + Copy(dt, 1, 2);
+
   //удалить файлы из архива
   cmd := 'rar d ' + path + Name;
-  StrPCopy(cmdp, cmd);
-  WinExec(cmdp, SW_RESTORE);
+  WinExec(PChar(cmd), SW_HIDE);
+
   //добавить файлы в архив
   ExportDiff(path, 'priv');
   flst := path + 'priv' + ext1 + ' ';
@@ -2385,8 +2374,8 @@ begin
   ExportTarif(path, dt, 'coal', dist);
   flst := flst + path + 'coal' + ext2;
   cmd  := 'rar m -s -v1440 -vn -y -ep ' + path + Name + ' ' + flst;
-  StrPCopy(cmdp, cmd);
-  WinExec(cmdP, SW_RESTORE);
+
+  WinExec(PChar(cmd), SW_HIDE);
 end;
 
 procedure TForm1.N81Click(Sender: TObject);
@@ -2958,7 +2947,7 @@ begin
   Result := 0;
   for i := 0 to Length(cl) - 1 do
     Result := Result + sub[i];
-  with Datamodule1.Query1 do
+{  with Datamodule1.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2968,7 +2957,7 @@ begin
     Open;
     Result := Result - FieldByName('summa').AsFloat;
     Close;
-  end;
+  end;}
 end;
 
 procedure TForm1.Reload;
@@ -2993,7 +2982,6 @@ begin
   pr.Show;
   pr.Update;
   SendMessage(pr.Handle, wm_paint, 0, 0);
-  //  if DataModule1.Database1.Connected = false then ShowMessage('Connect failed');
   with Datamodule1.Query1 do
   begin
     Close;
@@ -3139,7 +3127,7 @@ procedure TForm1.Load(q: CQuery; rsel: boolean);
 }
 var
   i, c: integer;
-  f:  string;
+  f,tmp:  string;
   pr: TAboutBox1;
 begin
   ClearSG;
@@ -3157,14 +3145,44 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('select cl.regn,cl.fio,strt.namestreet,cl.nhouse,cl.corp,cl.apart,');
+
+    SQL.Text := (
+      'select cl.regn,cl.fio,strt.namestreet,cl.nhouse,cl.corp,cl.apart,' + #13 +
+      'sb1.calc,sb1.bdate,sb1.edate,sb.summa,sb.stop' + #13 +
+      'from cl inner join strt on cl.id_street=strt.id_street' + #13 +
+      'left join' + #13 +
+      '(' + #13 +
+      'SELECT    sub.regn,' + #13 +
+      '(case when' + #13 +
+        'sub.regn not in' + #13 +
+          '(select sluj.regn' + #13 +
+          'from sluj' + #13 +
+          'where sluj.sdate = CONVERT(smalldatetime, :d, 104)' + #13 +
+            'and sluj.regn=sub.regn)' + #13 +
+      'then SUM(sub.sub)' + #13 +
+      'else (SUM(sub.sub) - (select sum(sluj.sub)' + #13 +
+                'from sluj' + #13 +
+                'where sluj.sdate = CONVERT(smalldatetime, :d, 104)' + #13 +
+                  'and sluj.regn=sub.regn))' + #13 +
+      'end) as summa, stop' + #13 +
+      'FROM          Sub' + #13 +
+
+      'WHERE      (sub.sdate = CONVERT(smalldatetime, :d, 104))' + #13 +
+      'GROUP BY sub.regn, sub.stop' + #13 +
+      ')' + #13 +
+       'sb on sb.regn=cl.regn' + #13 +
+          'inner join (' + q.SQL + ') sb1 on cl.regn=sb1.regn' + #13 +
+      'order by cl.fio');
+{    SQL.Add('select cl.regn,cl.fio,strt.namestreet,cl.nhouse,cl.corp,cl.apart,');
     SQL.Add('sb1.calc,sb1.bdate,sb1.edate,sb.summa,sb.stop');
     SQL.Add('from cl inner join strt on cl.id_street=strt.id_street');
     SQL.Add('left join (select sum(sub) as summa,regn,stop from sub');
     SQL.Add('where(sdate=convert(smalldatetime,:d,104))');
     SQL.Add('group by regn,stop) sb on sb.regn=cl.regn');
-    SQL.Add('inner join (' + q.SQL + ') sb1 on cl.regn=sb1.regn');
-    SQL.Add('order by cl.fio');
+}
+//    SQL.Add('inner join (' + q.SQL + ') sb1 on cl.regn=sb1.regn');
+//    SQL.Add('order by cl.fio');
+
     ParamByName('idd').AsInteger := dist;
     ParamByName('d').AsString := rdt;
     for i := 0 to Length(q.parname) - 1 do
@@ -3279,10 +3297,15 @@ begin
             SGCl.Canvas.Brush.Color := clSilver;
         end;
       end;
+      if sub[ARow - 1] < 0  then
+        if (Arow = SGCl.Row) then
+          SGCl.Canvas.Brush.Color := clSilver
+        else
+          SGCl.Canvas.Brush.Color := clMaroon;
     end
     else
     begin
-      if (Arow = SGCl.Row) then
+      if (ARow = SGCl.Row) then
         SGCl.Canvas.Brush.Color := clSkyBlue
       else
         SGCl.Canvas.Brush.Color := clWindow;
@@ -3297,6 +3320,7 @@ begin
   else
     SGCl.Canvas.TextOut(rect.Left + 2, rect.Top + 2, SGCl.Cells[acol, arow]);
 end;
+
 
 procedure TForm1.ClearSG;
 { очистка stringgrid }
@@ -3690,8 +3714,11 @@ end;
 procedure TForm1.dbf1Click(Sender: TObject);
 { общий сброс в dbf }
 var
-  dt: string;
+  dt, outdir: string;
 begin
+  outdir := 'out\';
+  if not DirectoryExists(outdir) then
+    CreateDir(outdir);
   try
     with Datamodule1.Query1 do
     begin
@@ -3704,7 +3731,7 @@ begin
       if not IsEmpty then
       begin
         dt := Copy(rdt, 9, 2) + Copy(rdt, 4, 2);
-        FillTable(ExtractFilePath(Application.ExeName) + 'out\', dt + '_r0' + IntToStr(dist), codedbf);
+        FillTable(ExtractFilePath(Application.ExeName) + outdir, dt + '_r0' + IntToStr(dist), codedbf);
         ShowMessage('Сброс в dbf завершен!');
       end
       else
@@ -3776,7 +3803,7 @@ procedure TForm1.ToolButton9Click(Sender: TObject);
   Процедура вызывает программу Калькулятор.
 *******************************************************************************}
 begin
-  WinExec(PChar('calc'), SW_RESTORE);
+  WinExec(PChar('calc'), SW_SHOW);
 end;
 
 procedure TForm1.N73Click(Sender: TObject);
@@ -4465,72 +4492,82 @@ end;
 procedure TForm1.N36Click(Sender: TObject);
 begin
   Stats := TStats.Create(Form1);
-  Stats.mode := mStat;
   Stats.ShowModal;
   Stats.Free;
 end;
 
 procedure TForm1.N37Click(Sender: TObject);
-begin
-  Stats := TStats.Create(Form1);
-  Stats.mode := mPriv;
-  Stats.ShowModal;
-  Stats.Free;
-end;
+var
+  i: integer;
 
-{procedure TForm1.CreateListPlugin;
-Var  SearchRec        : TSearchRec;
-     hLib             : THandle;
-     ExtConf          : TExternalConf;
-     PlugIn_Conf      : TPlugin;
-     ID: byte;
+function GetCert(regn: integer): integer;
 begin
-FillChar(ListPlugin, SizeOf(TListPlugin), #0);
-If FindFirst(PathDLL + '*.dll', faAnyFile, SearchRec) <> 0 Then
-  Begin
-  //ShowMessage('Не найдено подключаемых модулей...');
-  //Close;
-  exit;
+  with Datamodule1.Query1 do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Text := ('SELECT id_cert FROM hist');
+    SQL.Add('WHERE regn = :id and bdate=convert(smalldatetime,:d,104)');
+    ParamByName('id').AsInteger := client;
+    ParamByName('d').AsString := Form1.rdt;
+    Open;
+    First;
   end;
-Repeat
-  hLib := LoadLibrary(PChar(PathDLL + SearchRec.Name)); @ExtConf := Nil;
-  If hLib <> 0 Then
-    Begin
-    @ExtConf := GetProcAddress(hLib, 'ExternalConf');
-    If @ExtConf = Nil Then FreeLibrary(hLib) Else
-      Begin
-      ExtConf(PlugIn_Conf);
-      id :=  PlugIn_Conf.ID;
-      ListPlugin[PlugIn_Conf.ID]          := PlugIn_Conf;
-      ListPlugin[PlugIn_Conf.ID].FileName := SearchRec.Name;
-      ListPlugin[PlugIn_Conf.ID].Handle   := hLib;
-      MainMenu1.Items[9].Add(NewItem(ListPlugin[ID].BtnName,0,False,True,ModuleMenuClick,0,'MenuItem' + IntToStr(ID)));
-      MainMenu1.Items[9].Items[ID - 1].Tag := ID;
-      end;
-    end;
-Until FindNext(SearchRec) <> 0;
-end;
- }
-{procedure TForm1.ModuleMenuClick(Sender: TObject);
-Var vTag                : Integer;
-    ExternalStart       : TExternalStart;
-begin
-    vTag := (Sender as TMenuItem).Tag;
-    ExternalStart := TExternalStart(GetProcAddress(ListPlugin[vTag].Handle, 'ExternalStart'));
-    ExternalStart(Handle, DataModule1.Database1);
+  Result := Datamodule1.Query1.FieldByName('id_cert').Value;
 end;
 
-procedure TForm1._FreeAllLibrary;
-Var i   : Integer;
 begin
-For i:=1 to CountBtns do
-  If ListPlugin[i].Handle <> 0 Then
-    Try
-      FreeLibrary(ListPlugin[i].Handle);
-    Except ; end;
-FillChar(ListPlugin, SizeOf(TListPlugin), #0);
+  if (Length(cl) > 0) then
+  begin
+    if (status = 0) and (GetCert(client) = 2) then
+    begin
+      i := SGCl.Row - 1;
+      if MessageBox(Form1.Handle, PChar('Удаление у клиента "' + SGCL.Cells[0, i + 1] + '" текущего периода.' + #13 +
+        'Подтверждаете?'), PChar('Удаление у клиента текущего периода'),
+        MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
+      begin
+        Datamodule1.Database1.StartTransaction;
+        try
+          with Datamodule1.Query1 do
+          begin
+            Close;
+            SQL.Clear;
+            SQL.Add('delete from hist');
+            SQL.Add('where regn = :id and bdate=convert(smalldatetime,:d,104)');
+            ParamByName('id').AsInteger := client;
+            ParamByName('d').AsString := Form1.rdt;
+            ExecSQL;
+            Close;
+            SQL.Clear;
+            SQL.Add('delete from sub');
+            SQL.Add('where regn = :id and sdate=convert(smalldatetime,:d,104)');
+            ParamByName('id').AsInteger := client;
+            ParamByName('d').AsString := Form1.rdt;
+            ExecSQL;
+            Close;
+            SQL.Clear;
+            SQL.Add('delete from sluj');
+            SQL.Add('where regn = :id and sdate=convert(smalldatetime,:d,104)');
+            ParamByName('id').AsInteger := client;
+            ParamByName('d').AsString := Form1.rdt;
+            ExecSQL;
+            Close;
+          end;
+          Datamodule1.Database1.Commit;
+          Reload;
+        except
+          //не выполнена транзакция
+          Datamodule1.Database1.Rollback;
+        end;
+      end;
+    end
+    else
+      ShowMessage('У клиента нельзя удалить текущий срок!');
+  end
+  else
+    ShowMessage('База пуста!');
 end;
- }
+
 procedure TForm1.N38Click(Sender: TObject);
 var
   i: integer;
@@ -4562,7 +4599,6 @@ begin
     end;
   end;
 end;
-
 
 procedure TForm1.N39Click(Sender: TObject);
 var

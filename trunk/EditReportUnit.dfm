@@ -25,7 +25,6 @@ object EditReportFrm: TEditReportFrm
     Align = alTop
     Caption = #1054#1090#1095#1077#1090' '#1076#1083#1103' '#1088#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1085#1080#1103':'
     TabOrder = 0
-    ExplicitWidth = 422
     object ComboBox1: TComboBox
       Left = 8
       Top = 24
@@ -57,8 +56,6 @@ object EditReportFrm: TEditReportFrm
     BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 1
-    ExplicitTop = 63
-    ExplicitWidth = 275
     object Button2: TButton
       AlignWithMargins = True
       Left = 148

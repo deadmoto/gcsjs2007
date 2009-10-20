@@ -2,10 +2,10 @@ object Form22: TForm22
   Left = 212
   Top = 168
   BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
+  BorderStyle = bsDialog
   Caption = #1057#1090#1072#1090#1080#1089#1090#1080#1082#1072' '#1087#1086' '#1074#1086#1079#1088#1072#1089#1090#1091
-  ClientHeight = 117
-  ClientWidth = 265
+  ClientHeight = 98
+  ClientWidth = 263
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,19 +15,18 @@ object Form22: TForm22
   OldCreateOrder = False
   Position = poScreenCenter
   OnClose = FormClose
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Label2: TLabel
-    Left = 56
-    Top = 16
+    Left = 47
+    Top = 8
     Width = 66
     Height = 13
     Caption = '<='#1042#1086#1079#1088#1072#1089#1090'<='
   end
   object Label3: TLabel
     Left = 8
-    Top = 48
+    Top = 35
     Width = 129
     Height = 49
     AutoSize = False
@@ -36,8 +35,8 @@ object Form22: TForm22
     WordWrap = True
   end
   object Edit1: TEdit
-    Left = 16
-    Top = 16
+    Left = 8
+    Top = 8
     Width = 33
     Height = 21
     TabOrder = 0
@@ -46,8 +45,8 @@ object Form22: TForm22
     OnKeyDown = Edit1KeyDown
   end
   object Edit2: TEdit
-    Left = 128
-    Top = 16
+    Left = 119
+    Top = 8
     Width = 33
     Height = 21
     TabOrder = 1
@@ -57,7 +56,7 @@ object Form22: TForm22
   end
   object Edit3: TEdit
     Left = 152
-    Top = 48
+    Top = 35
     Width = 41
     Height = 21
     TabStop = False
@@ -67,7 +66,7 @@ object Form22: TForm22
   end
   object Button1: TButton
     Left = 200
-    Top = 48
+    Top = 35
     Width = 57
     Height = 25
     Caption = #1056#1072#1089#1095#1077#1090
@@ -76,7 +75,7 @@ object Form22: TForm22
   end
   object Button3: TButton
     Left = 200
-    Top = 80
+    Top = 67
     Width = 57
     Height = 25
     Caption = #1042' DBF'

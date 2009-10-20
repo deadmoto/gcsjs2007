@@ -6,6 +6,7 @@ uses
   Classes,
   Controls,
   Dialogs,
+  ExtCtrls,
   Forms,
   Graphics,
   Messages,
@@ -30,11 +31,12 @@ type
     Edit4:     TEdit;
     Label3:    TLabel;
     Button1:   TButton;
-    GroupBox3: TGroupBox;
-    Edit5:     TEdit;
-    CheckBox1: TCheckBox;
     GroupBox4: TGroupBox;
     Edit6:     TEdit;
+    Panel1:    TPanel;
+    CheckBox1: TCheckBox;
+    GroupBox3: TGroupBox;
+    Edit5:     TEdit;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
@@ -92,9 +94,8 @@ procedure TAddReportDataFrm.FormShow(Sender: TObject);
   begin
     GroupBox1.Visible := True;
     GroupBox2.Visible := True;
-    GroupBox3.Visible := True;
     GroupBox4.Visible := True;
-    CheckBox1.Visible := True;
+    Panel1.Visible := True;
   end;
 
 begin
@@ -102,31 +103,17 @@ begin
     rSolut:
     begin
       VisibleAll();
-      Edit1.SetFocus;
     end;
 
     rSolutb:
     begin
       VisibleAll();
-      GroupBox3.Visible := False;
       GroupBox4.Visible := False;
-      CheckBox1.Visible := False;
-      Edit1.SetFocus;
     end;
 
     rSolute:
     begin
       VisibleAll();
-      Edit1.SetFocus;
-    end;
-
-    rUvedom:
-    begin
-      VisibleAll();
-      GroupBox1.Visible := False;
-      GroupBox2.Visible := False;
-      GroupBox4.Visible := False;
-      Edit5.SetFocus;
     end;
 
     rUvedomo:
@@ -134,7 +121,6 @@ begin
       VisibleAll();
       GroupBox1.Visible := False;
       GroupBox4.Visible := False;
-      Edit4.SetFocus;
     end;
   end;
 end;

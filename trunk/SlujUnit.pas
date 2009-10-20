@@ -3,19 +3,19 @@ unit SlujUnit;
 interface
 
 uses
-  Windows,
+  Classes,
+  Controls,
+  DateUtils,
+  Dialogs,
+  ExtCtrls,
+  Forms,
+  Graphics,
+  Grids,
   Messages,
+  StdCtrls,
   SysUtils,
   Variants,
-  Classes,
-  Graphics,
-  Controls,
-  Forms,
-  Dialogs,
-  Grids,
-  StdCtrls,
-  DateUtils,
-  ExtCtrls;
+  Windows;
 
 type
   TSlujMode = (mSum, mDetail);
@@ -64,13 +64,13 @@ begin
     case mode of
       mDetail:
       begin
-        Query1.SQL.Text := ('SELECT Sluj.sdate, Sluj.regn, Cl.fio, Sluj.sub AS sluj_sum, Sub.sub AS Expr1, Sub.service, Serv.nameserv AS nameserv' + #13 +
+        Query1.SQL.Text := ('SELECT Sluj.sdate, Sluj.regn, Cl.fio, Sluj.sub AS sluj_sum, Sub.sub AS Expr1, Serv.nameserv AS nameserv' + #13 +
           'FROM Sluj INNER JOIN' + #13 +
           'Cl ON Sluj.regn = Cl.regn INNER JOIN' + #13 +
           'Sub ON Sluj.sdate = Sub.sdate AND Sluj.regn = Sub.regn AND Sluj.service = Sub.service INNER JOIN' + #13 +
           'Serv ON Sub.service = Serv.id_serv' + #13 +
           'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104))' + #13 +
-          'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio, Sub.sub, Sub.service, Serv.nameserv, Sluj.sub' + #13 +
+          'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio, Sub.sub, Serv.nameserv, Sluj.sub' + #13 +
           'ORDER BY Cl.fio');
       end;
       mSum:
@@ -87,6 +87,7 @@ begin
     end;
     Query1.ParamByName('rdt').Value := form1.rdt;
     Query1.Open;
+    Query1.First;
   end;
 
   if DataModule1.Query1.RecordCount > 0 then
@@ -95,23 +96,12 @@ begin
       mDetail:
       begin
         Form44.Width := 670;
-        with SlujGrid do
-        begin
-          RowCount := DataModule1.Query1.RecordCount + 1;
-          colcount := DataModule1.Query1.FieldCount - 1;
-          Cells[0, 0] := 'Месяц';
-          Cells[1, 0] := 'Рег. №';
-          Cells[2, 0] := 'ФИО';
-          Cells[3, 0] := 'Сумм. служ.';
-          Cells[4, 0] := 'Субсидия';
-          Cells[5, 0] := 'Услуга';
-          colwidths[1] := 75;
-          colwidths[2] := 240;
-          colwidths[3] := 65;
-          colwidths[4] := 65;
-          colwidths[5] := 115;
-        end;
-        DataModule1.Query1.First;
+        SlujGrid.ColCount := DataModule1.Query1.FieldCount;
+
+        FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
+          'ФИО', 'Сумм. служ.', 'Субсидия', 'Услуга'),
+          TIntArray.Create(64, 75, 240, 65, 65, 115), Datamodule1.Query1.RecordCount + 1);
+
         with DataModule1.Query1 do
           for i := 0 to RecordCount do
           begin
@@ -123,26 +113,19 @@ begin
             SlujGrid.Cells[5, i + 1] := FieldByName('nameserv').Value;
             DataModule1.Query1.Next;
           end;
+
         GroupBox1.Caption := 'Подробно по тарифам:';
       end;
+
       mSum:
       begin
         Form44.Width := 580;
-        with SlujGrid do
-        begin
-          RowCount := DataModule1.Query1.RecordCount + 1;
-          colcount := DataModule1.Query1.FieldCount;
-          Cells[0, 0] := 'Месяц';
-          Cells[1, 0] := 'Рег. №';
-          Cells[2, 0] := 'ФИО';
-          Cells[3, 0] := 'Сумм. служ.';
-          Cells[4, 0] := 'Субсидия';
-          colwidths[0] := 75;
-          colwidths[2] := 255;
-          colwidths[1] := 75;
-          colwidths[3] := 75;
-        end;
-        DataModule1.Query1.First;
+        SlujGrid.ColCount := DataModule1.Query1.FieldCount;
+
+        FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
+          'ФИО', 'Сумм. служ.', 'Субсидия'),
+          TIntArray.Create(64, 75, 255, 75, 115), Datamodule1.Query1.RecordCount + 1);
+
         with DataModule1.Query1 do
           for i := 0 to RecordCount do
           begin

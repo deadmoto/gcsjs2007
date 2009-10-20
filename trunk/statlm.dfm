@@ -2,8 +2,9 @@ object Form40: TForm40
   Left = 314
   Top = 357
   BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsDialog
   Caption = #1057#1090#1072#1090#1080#1089#1090#1080#1082#1072' '#1087#1086' '#1087#1088#1086#1078#1080#1090'.'#1084#1080#1085#1080#1084#1091#1084#1091' '#1080' '#1052#1044#1044
-  ClientHeight = 167
+  ClientHeight = 159
   ClientWidth = 505
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET

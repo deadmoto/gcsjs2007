@@ -4,7 +4,7 @@ object Form33: TForm33
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = #1060#1080#1083#1100#1090#1088
-  ClientHeight = 408
+  ClientHeight = 431
   ClientWidth = 633
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -21,7 +21,7 @@ object Form33: TForm33
   object GroupBox1: TGroupBox
     AlignWithMargins = True
     Left = 3
-    Top = 171
+    Top = 196
     Width = 313
     Height = 198
     TabOrder = 1
@@ -255,7 +255,7 @@ object Form33: TForm33
     Left = 3
     Top = 3
     Width = 313
-    Height = 169
+    Height = 194
     TabOrder = 0
     object Edit2: TEdit
       Left = 128
@@ -398,7 +398,7 @@ object Form33: TForm33
     end
     object CheckBox19: TCheckBox
       Left = 8
-      Top = 139
+      Top = 160
       Width = 97
       Height = 17
       Caption = #1058#1080#1087' '#1086#1090#1086#1087#1083#1077#1085#1080#1103
@@ -407,8 +407,8 @@ object Form33: TForm33
     end
     object ComboBox13: TComboBox
       Left = 128
-      Top = 139
-      Width = 152
+      Top = 160
+      Width = 153
       Height = 21
       Color = clBtnFace
       ItemHeight = 13
@@ -419,13 +419,39 @@ object Form33: TForm33
         #1043#1072#1079#1086#1074#1086#1077
         #1069#1083#1077#1082#1090#1080#1088#1080#1095#1077#1089#1082#1086#1077)
     end
+    object CheckBox23: TCheckBox
+      Left = 8
+      Top = 136
+      Width = 97
+      Height = 17
+      Caption = #1057#1086#1094'. '#1089#1090#1072#1090#1091#1089
+      TabOrder = 12
+      OnClick = CheckBox23Click
+    end
+    object ComboBox15: TComboBox
+      Left = 128
+      Top = 136
+      Width = 153
+      Height = 21
+      Color = clBtnFace
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clGrayText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ItemHeight = 13
+      ParentFont = False
+      TabOrder = 13
+      OnChange = ComboBox15Change
+      OnExit = ComboBox15Change
+    end
   end
   object GroupBox3: TGroupBox
     AlignWithMargins = True
     Left = 320
     Top = 3
     Width = 311
-    Height = 169
+    Height = 194
     TabOrder = 2
     object Label9: TLabel
       Left = 24
@@ -603,11 +629,32 @@ object Form33: TForm33
       OnChange = ComboBox11Change
       OnExit = ComboBox11Change
     end
+    object CheckBox24: TCheckBox
+      Left = 8
+      Top = 160
+      Width = 97
+      Height = 17
+      Caption = #1052#1044#1044
+      TabOrder = 11
+      OnClick = CheckBox24Click
+    end
+    object ComboBox16: TComboBox
+      Left = 120
+      Top = 163
+      Width = 145
+      Height = 21
+      Color = clBtnFace
+      ItemHeight = 13
+      TabOrder = 12
+      Items.Strings = (
+        '20'
+        '18')
+    end
   end
   object GroupBox4: TGroupBox
     AlignWithMargins = True
     Left = 320
-    Top = 171
+    Top = 196
     Width = 311
     Height = 198
     TabOrder = 3
@@ -717,7 +764,7 @@ object Form33: TForm33
         Width = 26
         Height = 17
         Caption = #1080
-        TabOrder = 3
+        TabOrder = 2
         OnClick = CheckBox22Click
       end
       object Panel2: TPanel
@@ -726,7 +773,7 @@ object Form33: TForm33
         Width = 89
         Height = 17
         BevelOuter = bvNone
-        TabOrder = 4
+        TabOrder = 3
         Visible = False
         object Button4: TButton
           Left = 0
@@ -747,33 +794,33 @@ object Form33: TForm33
           Thousands = False
           OnClick = UpDown2Click
         end
-        object MaskEdit7: TMaskEdit
+        object Edit6: TEdit
           Left = 48
           Top = 0
           Width = 41
           Height = 21
-          EditMask = '!999/99;1;_'
+          Ctl3D = True
           MaxLength = 6
+          ParentCtl3D = False
           TabOrder = 2
-          Text = '   .  '
+          OnExit = Edit1Exit
         end
       end
-      object MaskEdit6: TMaskEdit
+      object Edit1: TEdit
         Left = 56
         Top = 8
         Width = 41
         Height = 21
-        EditMask = '!999/99;1;_'
         MaxLength = 6
-        TabOrder = 2
-        Text = '   .  '
+        TabOrder = 4
+        OnExit = Edit1Exit
       end
     end
   end
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 374
+    Top = 397
     Width = 627
     Height = 31
     Align = alBottom
@@ -781,7 +828,6 @@ object Form33: TForm33
     BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 4
-    ExplicitTop = 373
     object Button2: TButton
       AlignWithMargins = True
       Left = 549

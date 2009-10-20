@@ -25,23 +25,23 @@ unit ODBC_DSN;
 interface
 
 uses
-  Windows, Registry;
+  Registry,
+  Service,
+  Windows;
 
 //function AddDSNdBaseSource(const ADSNName, DefaultDir, ADescription: string): Boolean;
-function AddDSNMSSQLSource(const ADSNName, AServer, ADataBase: string;
-                          ADescription: string = ''): Boolean;
+function AddDSNMSSQLSource(const ADSNName, AServer, ADataBase: string; ADescription: string = ''): boolean;
 
-function SQLConfigDataSource(
-  hwndParent: HWND; // Указатель на окно вызвавшее функцию
-  fRequest: WORD; // Тип запроса
-  lpszDriver: PChar; // Пользовательское имя драйвера
+function SQLConfigDataSource(hwndParent: HWND; // Указатель на окно вызвавшее функцию
+  fRequest: word;       // Тип запроса
+  lpszDriver: PChar;    // Пользовательское имя драйвера
   lpszAttributes: PChar // атрибуты
-  ): Boolean; stdcall; external 'odbccp32.dll' name 'SQLConfigDataSource';
+  ): boolean; stdcall; external 'odbccp32.dll' Name 'SQLConfigDataSource';
 
 const
-  ODBC_ADD_DSN = 1; // Add data source
-  ODBC_CONFIG_DSN = 2; // Configure (edit) data source
-  ODBC_REMOVE_DSN = 3; // Remove data source
+  ODBC_ADD_DSN     = 1; // Add data source
+  ODBC_CONFIG_DSN  = 2; // Configure (edit) data source
+  ODBC_REMOVE_DSN  = 3; // Remove data source
   ODBC_ADD_SYS_DSN = 4; // Add system data source
 
 implementation
@@ -60,35 +60,36 @@ implementation
  * Выход: TRUE - в случае успеха, FALSE - в противном случае
  ******************************************************************************}
 
-function AddDSNMSSQLSource(const ADSNName, AServer, ADataBase: string;
-                          ADescription: string = ''): Boolean;
-const driver = 'SQL Server';
-var params: string;
+function AddDSNMSSQLSource(const ADSNName, AServer, ADataBase: string; ADescription: string = ''): boolean;
+const
+  driver = 'SQL Server';
+var
+  params: string;
 
   function AddODBCiniRecord: boolean;
   begin
-    Result := FALSE;
+    Result := False;
     with TRegistry.Create do
-    try
-      RootKey := HKEY_CURRENT_USER;//HKEY_LOCAL_MACHINE;
-      if OpenKey('\Software\ODBC\ODBC.INI\', TRUE) then
-        if not KeyExists('SQLSub') then
-          CreateKey('SQLSub');
-      if OpenKey('SQLSub', TRUE) then
-      begin
-        WriteString('Database',ADataBase);
-        WriteString('Description',ADescription);
-        WriteString('Driver','C:\SYS\system32\SQLSRV32.dll');
-        WriteString('LastUser','sa');
-        WriteString('Server',AServer);
-        Result := TRUE;
+      try
+        RootKey := HKEY_CURRENT_USER;//HKEY_LOCAL_MACHINE;
+        if OpenKey('\Software\ODBC\ODBC.INI\', True) then
+          if not KeyExists('SQLSub') then
+            CreateKey('SQLSub');
+        if OpenKey('SQLSub', True) then
+        begin
+          WriteString('Database', ADataBase);
+          WriteString('Description', ADescription);
+          WriteString('Driver', GetSystemDir + '\SQLSRV32.dll');
+          WriteString('LastUser', 'sa');
+          WriteString('Server', AServer);
+          Result := True;
+        end;
+      finally
+        CloseKey;
+        Free;
       end;
-    finally
-      CloseKey;
-      Free;
-    end;
-
   end;
+
 begin
   params := 'DSN=' + ADSNName + #0'Server=' + AServer + #0'DataBase= ' +
     ADataBase + #0'Description=' + ADescription + #0#0;

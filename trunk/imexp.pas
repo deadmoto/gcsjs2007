@@ -736,6 +736,10 @@ procedure TForm35.FormShow(Sender: TObject);
 begin
   Edit1.Text := ExtractFilePath(Application.ExeName) + 'out\';//путь по умолчанию
   path := Edit1.Text;
+
+  if not DirectoryExists(path) then
+    CreateDir(path);
+
   MaskEdit1.Enabled := False;//экспорт/импорт всех данных
   MaskEdit1.Text := '';
   CheckBox29.Checked := False;
