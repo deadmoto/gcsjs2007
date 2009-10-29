@@ -2,7 +2,7 @@ unit Client;
 
 interface
 
-uses min,controls, Contnrs, service, Dialogs;
+uses Controls, Contnrs, Dialogs, service, min;
 
 type
   T2DInt = array of array of integer;
@@ -859,7 +859,7 @@ begin
       if cdata.income/cdata.mcount >= cdata.pmin then
         subs := rnd(pm - (mdd*cdata.income)/100)
       else
-        subs := rnd(pm - (mdd*cdata.income*Rnd(cdata.koef))/100)
+        subs := rnd(pm - (mdd*cdata.income*rnd(cdata.koef))/100)
     else//по рег сдандарту
     begin
       havePriv := False;
@@ -870,10 +870,6 @@ begin
         subs := (stnd * cdata.mcount * rnd(ppm/fpm) - ((mdd / 100) * cdata.income * rnd(cdata.koef)))
       else
         subs := (stnd * cdata.mcount - ((mdd / 100) * cdata.income * rnd(cdata.koef)));
-//      if cdata.priv[0] = 0 then
-//        subs:=Rnd(stnd*cdata.mcount-(mdd*cdata.income{*rnd(ppm/pm)})/100)
-//      else
-//        subs:=rnd(((stnd*cdata.mcount)-(mdd*cdata.income*rnd(cdata.koef)/100))*ppm/fpm);
     end;
 
     subold := 0;

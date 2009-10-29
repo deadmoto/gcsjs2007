@@ -397,7 +397,8 @@ begin
           Query1.ParamByName('regn').Value:= c.data.regn;
           Query1.ParamByName('bdate').Value:= DateToStr(c.cdata.begindate);//StrToDate(form1.rdt);//
         end
-        else begin
+        else
+        begin
           Query1.Close;
           Query1.SQL.Text:= 'SELECT regn, bdate, edate'+#13+
                             'FROM Hist'+#13+
@@ -407,22 +408,6 @@ begin
                               'WHERE (regn = :regn) AND (bdate < CONVERT(smallDATETIME, :bdate, 104))'+#13+
                               'GROUP BY bdate))'+#13+
                             'GROUP BY regn, bdate, edate';
-{'SELECT Hist.regn, Hist.bdate, Hist.edate'+#13+
-                            'FROM Hist INNER JOIN'+#13+
-                              '(SELECT bdate'+#13+
-                                'FROM FactSale'+#13+
-                                'WHERE (regn = :regn) AND (bdate < CONVERT(smallDATETIME, :bdate, 104))'+#13+
-                                'GROUP BY bdate) tt ON Hist.bdate <> tt.bdate'+#13+
-                            'WHERE (Hist.regn = :regn) AND (Hist.bdate <> CONVERT(smallDATETIME, :bdate, 104))'+#13+
-                            'GROUP BY Hist.regn, Hist.bdate, Hist.edate';}
-
-{           'SELECT regn, bdate, edate'+#13+
-              'FROM Hist'+#13+
-              'WHERE     (bdate NOT IN'+#13+
-              '(SELECT Hist.bdate'+#13+
-              'FROM          Hist INNER JOIN'+#13+
-              'FactSale ON Hist.regn = FactSale.regn AND Hist.bdate = FactSale.bdate AND Hist.edate = FactSale.edate'+#13+
-              'GROUP BY Hist.bdate)) AND (regn = :regn) AND (bdate <> CONVERT(smallDATETIME, :bdate, 104))';}
 
           Query1.ParamByName('regn').Value:= c.data.regn;
           Query1.ParamByName('bdate').Value:= DateToStr(c.cdata.begindate); //StrToDate(form1.rdt);//

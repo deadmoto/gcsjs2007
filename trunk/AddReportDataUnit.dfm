@@ -3,8 +3,8 @@ object AddReportDataFrm: TAddReportDataFrm
   Top = 0
   BorderStyle = bsToolWindow
   Caption = #1044#1072#1085#1085#1099#1077' '#1076#1083#1103' '#1086#1090#1095#1077#1090#1072
-  ClientHeight = 313
-  ClientWidth = 227
+  ClientHeight = 213
+  ClientWidth = 457
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,13 +17,11 @@ object AddReportDataFrm: TAddReportDataFrm
   PixelsPerInch = 96
   TextHeight = 13
   object GroupBox1: TGroupBox
-    AlignWithMargins = True
     Left = 3
-    Top = 64
+    Top = 8
     Width = 221
     Height = 78
     Margins.Bottom = 0
-    Align = alTop
     Caption = #1053#1086#1084#1077#1088' '#1080#1089#1093#1086#1076#1103#1097#1077#1075#1086':'
     TabOrder = 0
     object Label1: TLabel
@@ -69,13 +67,11 @@ object AddReportDataFrm: TAddReportDataFrm
     end
   end
   object GroupBox2: TGroupBox
-    AlignWithMargins = True
     Left = 3
-    Top = 3
+    Top = 89
     Width = 221
     Height = 58
     Margins.Bottom = 0
-    Align = alTop
     Caption = #1053#1086#1084#1077#1088' '#1088#1077#1096#1077#1085#1080#1103':'
     TabOrder = 1
     object Label3: TLabel
@@ -96,25 +92,20 @@ object AddReportDataFrm: TAddReportDataFrm
     end
   end
   object Button1: TButton
-    AlignWithMargins = True
-    Left = 3
-    Top = 285
+    Left = 230
+    Top = 183
     Width = 221
     Height = 25
-    Align = alBottom
     Caption = 'Ok'
-    TabOrder = 3
+    TabOrder = 5
     OnClick = Button1Click
-    ExplicitTop = 287
   end
   object GroupBox4: TGroupBox
-    AlignWithMargins = True
     Left = 3
-    Top = 145
+    Top = 150
     Width = 221
     Height = 58
     Margins.Bottom = 0
-    Align = alTop
     Caption = #1055#1086#1095#1090#1086#1074#1099#1081' '#1080#1085#1076#1077#1082#1089':'
     TabOrder = 2
     object Edit6: TEdit
@@ -128,18 +119,15 @@ object AddReportDataFrm: TAddReportDataFrm
     end
   end
   object Panel1: TPanel
-    Left = 0
-    Top = 203
-    Width = 227
-    Height = 81
-    Align = alTop
-    AutoSize = True
+    Left = 230
+    Top = 8
+    Width = 221
+    Height = 75
     BevelOuter = bvNone
-    TabOrder = 4
+    TabOrder = 3
     object CheckBox1: TCheckBox
-      AlignWithMargins = True
-      Left = 3
-      Top = 64
+      Left = 0
+      Top = 58
       Width = 221
       Height = 17
       Margins.Bottom = 0
@@ -147,20 +135,16 @@ object AddReportDataFrm: TAddReportDataFrm
       Caption = #1048#1089#1087#1086#1083#1085#1080#1090#1077#1083#1100' ('#1060#1048#1054' '#1080#1085#1089#1087#1077#1082#1090#1086#1088#1072')'
       TabOrder = 0
       OnClick = CheckBox1Click
-      ExplicitTop = 44
-      ExplicitWidth = 219
     end
     object GroupBox3: TGroupBox
-      AlignWithMargins = True
-      Left = 3
-      Top = 3
+      Left = 0
+      Top = 0
       Width = 221
       Height = 58
       Margins.Bottom = 0
       Align = alTop
       Caption = #1048#1089#1087#1086#1083#1085#1080#1090#1077#1083#1100':'
       TabOrder = 1
-      ExplicitWidth = 219
       object Edit5: TEdit
         Left = 16
         Top = 24
@@ -170,6 +154,24 @@ object AddReportDataFrm: TAddReportDataFrm
         ParentCtl3D = False
         TabOrder = 0
       end
+    end
+  end
+  object GroupBox5: TGroupBox
+    Left = 230
+    Top = 89
+    Width = 221
+    Height = 58
+    Margins.Bottom = 0
+    Caption = #1052#1077#1089#1103#1094' '#1074#1086#1079#1086#1073#1085#1086#1074#1083#1077#1085#1080#1103'/'#1087#1088#1077#1082#1088#1072#1097#1077#1085#1080#1103':'
+    TabOrder = 4
+    object Edit7: TEdit
+      Left = 16
+      Top = 24
+      Width = 187
+      Height = 19
+      Ctl3D = False
+      ParentCtl3D = False
+      TabOrder = 0
     end
   end
 end

@@ -36,7 +36,7 @@ type
   PAdditionRepData = ^TAdditionRepData;
 
   TAdditionRepData = packed record
-    Num1, Num2, toNum, soluteNum, zipCode, spec2: string;
+    Num1, Num2, toNum, soluteNum, zipCode, spec2, StartDate: string;
     insp: boolean;
     procedure Clear();
   end;
@@ -332,7 +332,6 @@ type
     procedure N52Click(Sender: TObject);
     procedure N99Click(Sender: TObject);
     procedure N102Click(Sender: TObject);
-    procedure Button9Click(Sender: TObject);
     procedure ToolButton17Click(Sender: TObject);
     procedure ToolButton14Click(Sender: TObject);
     procedure N109Click(Sender: TObject);
@@ -340,6 +339,7 @@ type
     procedure N110Click(Sender: TObject);
     procedure N112Click(Sender: TObject);
     procedure N37Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -466,7 +466,7 @@ uses
   version,
   SlujUnit,
   ConnectUnit,
-  FactSumUnit,
+//  FactSumUnit,
   ConfigPropertiesUnit,
   AddReportDataUnit, AnyDirectoryUnit, EditReportUnit;
 
@@ -625,13 +625,15 @@ begin
   end;}
 end;
 
-procedure TForm1.Button9Click(Sender: TObject);
+procedure TForm1.Button7Click(Sender: TObject);
 { фактические расходы }
 begin
-  if status <> 3 then
+
+//Showmessage(FloatToStr(rnd(0.57499840632)));
+{  if status <> 3 then
     FactSumFrm.ShowModal
   else
-    ShowMessage('Нельзя вызывать форму редактирования фактических расходов для неактивного клиента');
+    ShowMessage('Нельзя вызывать форму редактирования фактических расходов для неактивного клиента');}
 end;
 
 function TForm1.GetStatus(b, e: TDate): integer;
@@ -991,6 +993,7 @@ begin
       sec1 := 0;
     Datamodule1.ChAttrTable(dist);
     FillCurr(bpath, rdt, dist, Form1.codedbf);
+    SetTarifs;    
     Reload;
     Statusbar1.Panels[1].Text := 'Инспектор: ' + ins;
     Statusbar1.Panels[2].Text := 'Округ: ' + dis;
@@ -1015,6 +1018,7 @@ begin
     else
       sec1 := 0;
     Statusbar1.Panels[1].Text := 'Инспектор: ' + ins;
+    FillCurr(bpath, rdt, dist, Form1.codedbf);
     SetTarifs;
   end;
 
@@ -2282,6 +2286,8 @@ begin
   flst := flst + path + 'fam' + ext2 + ' ';
   ExportSluj(path, rdt, dist);
   flst := flst + path + 'sluj' + ext2 + ' ';
+  ExportFact(path, dist);
+  flst := flst + path + 'factsale' + ext2 + ' ';
   ExportSub(path, rdt, dist);
   flst := flst + path + 'sub' + ext2 + ' ';
   ExportMin(path, rdt);
@@ -2351,6 +2357,8 @@ begin
   flst := flst + path + 'fam' + ext2 + ' ';
   ExportSluj(path, dt, dist);
   flst := flst + path + 'sluj' + ext2 + ' ';
+  ExportFact(path, dist);
+  flst := flst + path + 'factsale' + ext2 + ' ';
   ExportSub(path, dt, dist);
   flst := flst + path + 'sub' + ext2 + ' ';
   ExportTarif(path, dt, 'cont', dist);
@@ -3087,6 +3095,7 @@ begin
     Variables['toNum'] := quotedstr(ARepData.toNum);
     Variables['soluteNum'] := quotedstr(ARepData.soluteNum);
     Variables['zipCode'] := quotedstr(ARepData.zipCode);
+    Variables['StartDate'] := quotedstr(ARepData.StartDate);
 //    Variables['spec'] := quotedstr(ARepData.spec);
     if ARepData.insp then
       Variables['spec2'] := quotedstr(nameInsp)
@@ -3635,7 +3644,7 @@ end;
 procedure TForm1.ToolButton14Click(Sender: TObject);
 { выбор сервера для подключения}
 begin
-  Form45.Show;
+  Form45.ShowModal;
 end;
 
 procedure TForm1.ToolButton16Click(Sender: TObject);
@@ -4418,8 +4427,7 @@ begin
   with DataModule1 do
   begin
     Query1.Close;
-    Query1.SQL.Clear;
-    Query1.SQL.Add('EXEC getclfactsum ' + quotedstr(rdt));
+    Query1.SQL.Text := 'EXEC getclfactsum ' + quotedstr(rdt) + ', ' + IntToStr(dist);
     Query1.Open;
 
     Query2.Close;
@@ -4782,6 +4790,7 @@ begin
   toNum := '_______________________';
   soluteNum := '_____________';
   zipCode := '_____________';
+  StartDate := '01.___.20___';
   spec2 := '';
   insp :=  False;
 end;

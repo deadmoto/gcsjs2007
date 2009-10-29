@@ -59,6 +59,7 @@ type
     CheckBox28: TCheckBox;
     CheckBox29: TCheckBox;
     CheckBox30: TCheckBox;
+    CheckBox31: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -185,6 +186,15 @@ begin
         if CheckBox7.Checked then
         begin
           ExportHouse(path, Form1.dist);
+          Inc(i);
+          pr.ProgressBar1.StepIt;
+          pr.Label3.Caption := IntToStr(i);
+          pr.Update;
+          SendMessage(pr.Handle, wm_paint, 0, 0);
+        end;
+        if CheckBox31.Checked then
+        begin
+          ExportFact(path, Form1.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -716,6 +726,15 @@ begin
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
+        if CheckBox31.Checked then
+        begin
+          ImportFact(path, Form1.dist);
+          Inc(i);
+          pr.ProgressBar1.StepIt;
+          pr.Label3.Caption := IntToStr(i);
+          pr.Update;
+          SendMessage(pr.Handle, wm_paint, 0, 0);
+        end;
         pr.Close;
         pr.Release;
         Datamodule1.Database1.Commit;
@@ -926,6 +945,8 @@ begin
   if CheckBox20.Checked then
     Inc(Result);
   if CheckBox21.Checked then
+    Inc(Result);
+  if CheckBox31.Checked then
     Inc(Result);
 end;
 

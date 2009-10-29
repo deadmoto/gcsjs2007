@@ -3,7 +3,7 @@ object Form35: TForm35
   Top = 249
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  ClientHeight = 256
+  ClientHeight = 253
   ClientWidth = 424
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -35,8 +35,8 @@ object Form35: TForm35
     TabOrder = 7
   end
   object Button1: TButton
-    Left = 16
-    Top = 224
+    Left = 8
+    Top = 228
     Width = 97
     Height = 21
     TabOrder = 14
@@ -87,7 +87,7 @@ object Form35: TForm35
     Top = 160
     Width = 97
     Height = 17
-    Caption = #1048#1085#1089#1087#1077#1082#1090#1086#1088#1099
+    Caption = #1048#1085#1089#1087#1077#1082#1090#1086#1088#1072
     Checked = True
     State = cbChecked
     TabOrder = 10
@@ -311,7 +311,7 @@ object Form35: TForm35
   end
   object CheckBox24: TCheckBox
     Left = 8
-    Top = 192
+    Top = 208
     Width = 97
     Height = 17
     Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
@@ -388,5 +388,15 @@ object Form35: TForm35
     Checked = True
     State = cbChecked
     TabOrder = 5
+  end
+  object CheckBox31: TCheckBox
+    Left = 8
+    Top = 192
+    Width = 97
+    Height = 17
+    Caption = #1060'. '#1088#1072#1089#1093#1086#1076#1099
+    Checked = True
+    State = cbChecked
+    TabOrder = 15
   end
 end

@@ -4,7 +4,7 @@ object Form15: TForm15
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = #1058#1072#1088#1080#1092#1099' '
-  ClientHeight = 389
+  ClientHeight = 428
   ClientWidth = 423
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -46,7 +46,7 @@ object Form15: TForm15
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 355
+    Top = 394
     Width = 417
     Height = 31
     Align = alTop
@@ -54,7 +54,7 @@ object Form15: TForm15
     BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 2
-    ExplicitTop = 348
+    ExplicitTop = 355
     object Button4: TButton
       AlignWithMargins = True
       Left = 339
@@ -101,36 +101,36 @@ object Form15: TForm15
     Left = 3
     Top = 295
     Width = 417
-    Height = 57
+    Height = 96
     Margins.Bottom = 0
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 1
     object Label1: TLabel
-      Left = 58
-      Top = 12
+      Left = 15
+      Top = 7
       Width = 119
       Height = 13
       Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1090#1072#1088#1080#1092#1072':'
     end
     object Label2: TLabel
-      Left = 305
-      Top = 12
+      Left = 70
+      Top = 50
       Width = 36
       Height = 13
       Caption = #1058#1072#1088#1080#1092':'
     end
     object Label3: TLabel
-      Left = 10
-      Top = 12
+      Left = 15
+      Top = 50
       Width = 22
       Height = 13
       Caption = #1050#1086#1076':'
     end
     object Edit1: TEdit
-      Left = 58
-      Top = 28
-      Width = 233
+      Left = 15
+      Top = 23
+      Width = 386
       Height = 21
       Hint = 
         #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1091#1085#1080#1082#1072#1083#1100#1085#1086#1077' '#1079#1085#1072#1095#1077#1085#1080#1077' '#1087#1086#1083#1103', '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 51 ' +
@@ -141,9 +141,9 @@ object Form15: TForm15
       TabOrder = 1
     end
     object Edit2: TEdit
-      Left = 305
-      Top = 28
-      Width = 41
+      Left = 70
+      Top = 66
+      Width = 78
       Height = 21
       Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1095#1080#1089#1083#1086
       ParentShowHint = False
@@ -153,8 +153,8 @@ object Form15: TForm15
       OnKeyDown = Edit2KeyDown
     end
     object Edit3: TEdit
-      Left = 10
-      Top = 28
+      Left = 15
+      Top = 66
       Width = 33
       Height = 21
       Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1091#1085#1080#1082#1072#1083#1100#1085#1086#1077' '#1079#1085#1072#1095#1077#1085#1080#1077' '#1087#1086#1083#1103', '#1094#1077#1083#1086#1077' '#1095#1080#1089#1083#1086

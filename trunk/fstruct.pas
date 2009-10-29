@@ -23,6 +23,7 @@ type
   procedure ExportDiff(path,t: string);
   procedure ExportRStnd(path,dt: string);
   procedure ExportStr(path: string);
+  procedure ExportFact(path: string;dis: integer);
 
   procedure ImportInsp(path: string;dis: integer);
   procedure ImportBank(path: string);
@@ -46,6 +47,7 @@ type
   procedure ImportNorm(path: string);
   procedure ImportPriv(path: string);
   procedure ImportRStnd(path: string);
+  procedure ImportFact(path: string;dis: integer);
 
   function GetData(nam: string;var f: T2DString): boolean;
   function ConvertChar(s: array of char): string;
@@ -60,9 +62,9 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from cl');
-    SQL.Add('where regn in (select regn from hist');
-    SQL.Add('where');
+    SQL.Add('SELECT * FROM cl');
+    SQL.Add('WHERE regn in (SELECT regn FROM hist');
+    SQL.Add('WHERE');
     if dt<>'' then begin
       SQl.Add('(bdate<=CONVERT(smalldatetime, :d, 104))and');
       SQL.Add('(edate>=CONVERT(smalldatetime, :d, 104))and');
@@ -81,8 +83,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from hist');
-    SQL.Add('where (id_dist = :dist)');
+    SQL.Add('SELECT * FROM hist');
+    SQL.Add('WHERE (id_dist = :dist)');
     if dt<>'' then begin
       SQl.Add('and (bdate<=CONVERT(smalldatetime, :d, 104))');
       SQL.Add('and(edate>=CONVERT(smalldatetime, :d, 104))');
@@ -100,9 +102,9 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from fam');
-    SQL.Add('where regn in (select regn from hist');
-    SQL.Add('where');
+    SQL.Add('SELECT * FROM fam');
+    SQL.Add('WHERE regn in (SELECT regn FROM hist');
+    SQL.Add('WHERE');
     if dt<>'' then begin
       SQl.Add('(bdate<=CONVERT(smalldatetime, :d, 104))and');
       SQL.Add('(edate>CONVERT(smalldatetime, :d, 104))and');
@@ -124,8 +126,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from cl');
-    SQL.Add('where change>:d1 and change<:d2 and id_dist = :dist');
+    SQL.Add('SELECT * FROM cl');
+    SQL.Add('WHERE change>:d1 and change<:d2 and id_dist = :dist');
     ParamByName('dist').AsInteger := dis;
 //    ParamByName('d2').AsString := DateToStr(EncodeDate(YearOf(d),MonthOf(d),16));
     ParamByName('d2').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),16);
@@ -146,9 +148,9 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from hist');
-    SQL.Add('where regn in (select regn from cl');
-    SQL.Add('where change>:d1 and change<:d2 and id_dist = :dist)');
+    SQL.Add('SELECT * FROM hist');
+    SQL.Add('WHERE regn in (SELECT regn FROM cl');
+    SQL.Add('WHERE change>:d1 and change<:d2 and id_dist = :dist)');
     SQl.Add('and (bdate<=CONVERT(smalldatetime, :d, 104))');
     SQL.Add('and(edate>=CONVERT(smalldatetime, :d, 104))');
     ParamByName('d').AsString := dt;
@@ -172,9 +174,9 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from fam');
-    SQL.Add('where regn in (select regn from cl');
-    SQL.Add('where change>:d1 and change<:d2 and id_dist = :dist)');
+    SQL.Add('SELECT * FROM fam');
+    SQL.Add('WHERE regn in (SELECT regn FROM cl');
+    SQL.Add('WHERE change>:d1 and change<:d2 and id_dist = :dist)');
     ParamByName('dist').AsInteger := dis;
 //    ParamByName('d2').AsString := DateToStr(EncodeDate(YearOf(d),MonthOf(d),16));
     ParamByName('d2').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),16);
@@ -192,8 +194,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select sub.* from sub inner join cl on sub.regn=cl.regn');
-    SQL.Add('where (cl.id_dist = :dist)');
+    SQL.Add('SELECT sub.* FROM sub inner join cl on sub.regn=cl.regn');
+    SQL.Add('WHERE (cl.id_dist = :dist)');
     if dt<>'' then begin
       SQL.Add('and(sub.sdate = convert(smalldatetime,:d,104))');
       ParamByName('d').AsString := dt;
@@ -210,8 +212,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select sluj.* from sluj inner join cl on sluj.regn=cl.regn');
-    SQL.Add('where (cl.id_dist = :dist)');
+    SQL.Add('SELECT sluj.* FROM sluj inner join cl on sluj.regn=cl.regn');
+    SQL.Add('WHERE (cl.id_dist = :dist)');
     if dt<>'' then begin
       SQL.Add('and(sluj.sdate = convert(smalldatetime,:d,104))');
       ParamByName('d').AsString := dt;
@@ -228,8 +230,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from '+t);
-    SQL.Add('where (id_dist = :dist)');
+    SQL.Add('SELECT * FROM '+t);
+    SQL.Add('WHERE (id_dist = :dist)');
     if dt<>'' then begin
       SQL.Add('and(sdate = convert(smalldatetime,:d,104))');
       ParamByName('d').AsString := dt;
@@ -246,9 +248,9 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from rstnd');
+    SQL.Add('SELECT * FROM rstnd');
     if dt<>'' then begin
-      SQL.Add('where (sdate = convert(smalldatetime,:d,104))');
+      SQL.Add('WHERE (sdate = convert(smalldatetime,:d,104))');
       ParamByName('d').AsString := dt;
     end;
     Open;
@@ -262,9 +264,9 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from lmin');
+    SQL.Add('SELECT * FROM lmin');
     if dt<>'' then begin
-      SQL.Add('where (sdate = convert(smalldatetime,:d,104))');
+      SQL.Add('WHERE (sdate = convert(smalldatetime,:d,104))');
       ParamByName('d').AsString := dt;
     end;
     Open;
@@ -278,8 +280,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from insp');
-    SQL.Add('where id_dist = :id');
+    SQL.Add('SELECT * FROM insp');
+    SQL.Add('WHERE id_dist = :id');
     if not all then
       SQL.Add('and status=1');
     ParamByName('id').AsInteger := dis;
@@ -294,8 +296,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from house');
-    SQL.Add('where id_dist = :id');
+    SQL.Add('SELECT * FROM house');
+    SQL.Add('WHERE id_dist = :id');
     ParamByName('id').AsInteger := dis;
     Open;
     FillTable(path,'house'+IntToStr(dis),Form1.codedbf);
@@ -308,8 +310,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from mng');
-    SQL.Add('where id_dist = :dist');
+    SQL.Add('SELECT * FROM mng');
+    SQL.Add('WHERE id_dist = :dist');
     ParamByName('dist').AsInteger := dis;
     Open;
     FillTable(path,'mng'+IntToStr(dis),Form1.codedbf);
@@ -322,8 +324,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from strt');
-    SQL.Add('where status=1');
+    SQL.Add('SELECT * FROM strt');
+    SQL.Add('WHERE status=1');
     Open;
     FillTable(path,'strt',Form1.codedbf);
   end;
@@ -337,9 +339,23 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from '+t);
+    SQL.Add('SELECT * FROM '+t);
     Open;
     FillTable(path,t,Form1.codedbf);
+  end;
+end;
+
+procedure ExportFact(path: string;dis: integer);
+{ процедура экспорта фактических расходов }
+begin
+  With DataModule1.Query1 do begin
+    Close;
+    SQL.Clear;
+    SQL.Add('SELECT * FROM FactSale');
+    SQL.Add('WHERE id_dist=:dist');
+    ParamByName('dist').AsInteger := dis;
+    Open;
+    FillTable(path, 'factsale'+IntToStr(dis), Form1.codedbf);
   end;
 end;
 
@@ -352,8 +368,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into '+t);
-    SQL.Add('values (:idd,convert(smalldatetime,:d,104),:id,:name,:tarif)');
+    SQL.Add('INSERT INTO '+t);
+    SQL.Add('VALUES (:idd,convert(smalldatetime,:d,104),:id,:name,:tarif)');
   end;
   if FileExists(path+t+IntToStr(dis)+'.dbf') then begin
     GetData(path+t+IntToStr(dis)+'.dbf',f);
@@ -361,8 +377,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from '+t);
-        Query2.SQL.Add('where (id_'+t+'=:id)and(sdate=convert(smalldatetime,:d,104))and(id_dist=:idd)');
+        Query2.SQL.Add('DELETE FROM '+t);
+        Query2.SQL.Add('WHERE (id_'+t+'=:id)and(sdate=convert(smalldatetime,:d,104))and(id_dist=:idd)');
         Query2.ParamByName('idd').AsString := f[i][0];
         Query2.ParamByName('d').AsString := f[i][1];
         Query2.ParamByName('id').AsString:= f[i][2];
@@ -391,8 +407,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into '+t);
-    SQL.Add('values (:idd,convert(smalldatetime,:d,104),:id,:name,:tarif1,:tarif2)');
+    SQL.Add('INSERT INTO '+t);
+    SQL.Add('VALUES (:idd,convert(smalldatetime,:d,104),:id,:name,:tarif1,:tarif2)');
   end;
   if FileExists(path+t+IntToStr(dis)+'.dbf') then begin
     GetData(path+t+IntToStr(dis)+'.dbf',f);
@@ -400,8 +416,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from '+t);
-        Query2.SQL.Add('where (id_'+t+'=:id)and(sdate=convert(smalldatetime,:d,104))and(id_dist=:idd)');
+        Query2.SQL.Add('DELETE FROM '+t);
+        Query2.SQL.Add('WHERE (id_'+t+'=:id)and(sdate=convert(smalldatetime,:d,104))and(id_dist=:idd)');
         Query2.ParamByName('id').AsString := f[i][2];
         Query2.ParamByName('d').AsString := f[i][1];
         Query2.ParamByName('idd').AsString := f[i][0];
@@ -431,8 +447,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into el');
-    SQL.Add('values (:idd,convert(smalldatetime,:d,104),:id,:plate,:tarif1,:tarif2,:tarif3)');
+    SQL.Add('INSERT INTO el');
+    SQL.Add('VALUES (:idd,convert(smalldatetime,:d,104),:id,:plate,:tarif1,:tarif2,:tarif3)');
   end;
   if FileExists(path+'el'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'el'+IntToStr(dis)+'.dbf',f);
@@ -440,8 +456,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from el');
-        Query2.SQL.Add('where (id_el=:id)and(sdate=convert(smalldatetime,:d,104))and(id_dist=:idd)');
+        Query2.SQL.Add('DELETE FROM el');
+        Query2.SQL.Add('WHERE (id_el=:id)and(sdate=convert(smalldatetime,:d,104))and(id_dist=:idd)');
         Query2.ParamByName('id').AsString := f[i][2];
         Query2.ParamByName('d').AsString := f[i][1];
         Query2.ParamByName('idd').AsString := f[i][0];
@@ -463,6 +479,50 @@ begin
     ShowMessage('Файл '+path+'el'+IntToStr(dis)+'.dbf не найден!');
 end;
 
+procedure ImportFact(path: string;dis: integer);
+{ процедура импорта Фактических }
+var
+  f: T2DString;
+  i: integer;
+begin
+  with Datamodule1.Query1 do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('INSERT INTO FactSale');
+    SQL.Add('VALUES (convert(smalldatetime,:d,104),:id,convert(smalldatetime,:bdate,104), convert(smalldatetime,:edate,104),:sub,:factsum,:dis)');
+  end;
+  if FileExists(path+'factsale'+IntToStr(dis)+'.dbf') then
+  begin
+    GetData(path+'factsale'+IntToStr(dis)+'.dbf',f);
+    With DataModule1 do begin
+      for i:=0 to high(f) do begin
+        Query2.Close;
+        Query2.SQL.Clear;
+        Query2.SQL.Add('DELETE FROM FactSale');
+        Query2.SQL.Add('WHERE (regn =:id)and(sdate=convert(smalldatetime,:d,104))');
+        Query2.SQL.Add('and(id_dist=:dis)');
+        Query2.ParamByName('d').AsString := f[i][0];
+        Query2.ParamByName('id').AsString := f[i][1];
+        Query2.ParamByName('dis').AsString := f[i][6];
+        Query2.ExecSQL;
+        Query1.ParamByName('d').AsString := f[i][0];
+        Query1.ParamByName('id').AsString := f[i][1];
+        Query1.ParamByName('bdate').AsString := f[i][2];
+        Query1.ParamByName('edate').AsString := f[i][3];
+        Query1.ParamByName('sub').AsFloat := StrToFloat(f[i][4]);
+        Query1.ParamByName('factsum').AsFloat := StrToFloat(f[i][5]);
+        Query1.ParamByName('dis').AsFloat := StrToFloat(f[i][6]);
+        Query1.ExecSQL;
+      end;
+      Query1.Close;
+      Query2.Close;
+    end;
+  end
+  else
+    ShowMessage('Файл '+path+'factsale'+IntToStr(dis)+'.dbf не найден!');
+end;
+
 procedure ImportRStnd(path: string);
 { процедура импорта региональных стандартов }
 var
@@ -472,8 +532,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into rstnd');
-    SQL.Add('values (convert(smalldatetime,:d,104),:id,:name,:v1,:v2,:v3)');
+    SQL.Add('INSERT INTO rstnd');
+    SQL.Add('VALUES (convert(smalldatetime,:d,104),:id,:name,:v1,:v2,:v3)');
   end;
   if FileExists(path+'rstnd.dbf') then begin
     GetData(path+'rstnd.dbf',f);
@@ -481,8 +541,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from rstnd');
-        Query2.SQL.Add('where (id_stnd=:id)and(sdate=convert(smalldatetime,:d,104))');
+        Query2.SQL.Add('DELETE FROM rstnd');
+        Query2.SQL.Add('WHERE (id_stnd=:id)and(sdate=convert(smalldatetime,:d,104))');
         Query2.ParamByName('id').AsString := f[i][1];
         Query2.ParamByName('d').AsString := f[i][0];
         Query2.ExecSQL;
@@ -511,8 +571,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into lmin');
-    SQL.Add('values (convert(smalldatetime,:d,104), :id, :name, :minim)');
+    SQL.Add('INSERT INTO lmin');
+    SQL.Add('VALUES (convert(smalldatetime,:d,104), :id, :name, :minim)');
   end;
   if FileExists(path+'lmin.dbf') then begin
     GetData(path+'lmin.dbf',f);
@@ -520,8 +580,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from lmin');
-        Query2.SQL.Add('where (id_min=:id)and(sdate=convert(smalldatetime,:d,104))');
+        Query2.SQL.Add('DELETE FROM lmin');
+        Query2.SQL.Add('WHERE (id_min=:id)and(sdate=convert(smalldatetime,:d,104))');
         Query2.ParamByName('id').AsString := f[i][1];
         Query2.ParamByName('d').AsString := f[i][0];
         Query2.ExecSQL;
@@ -548,8 +608,8 @@ begin
   with Datamodule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into cl');
-    SQL.Add('values (:id,:fio,CONVERT(smalldatetime, :rdate, 104),');
+    SQL.Add('INSERT INTO cl');
+    SQL.Add('VALUES (:id,:fio,CONVERT(smalldatetime, :rdate, 104),');
     SQL.Add('CONVERT(smalldatetime, :change, 104),:dist, :str, :nh,');
     SQL.Add(':cp,:apart, :tel, :lsquare, :square,:stnd,:settl,:boil,:declar,:mail)');
   end;
@@ -559,8 +619,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from cl');
-        Query2.SQL.Add('where (regn = :id)');
+        Query2.SQL.Add('DELETE FROM cl');
+        Query2.SQL.Add('WHERE (regn = :id)');
         Query2.ParamByName('id').AsString := f[i][0];
         Query2.ExecSQL;
         Query1.ParamByName('id').AsString := f[i][0];
@@ -599,8 +659,8 @@ begin
   with Datamodule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into hist');
-    SQL.Add('values (:id,CONVERT(smalldatetime,:bdate,104),');
+    SQL.Add('INSERT INTO hist');
+    SQL.Add('VALUES (:id,CONVERT(smalldatetime,:bdate,104),');
     SQL.Add('CONVERT(smalldatetime,:edate,104),:mcount,:quanpriv,:pmin,:income,');
     SQL.Add(':insp,:dist,:control,:reason,:own,:manager,:fond,:cert,:bank,:acbank,');
     SQL.Add(':calc,:mdd,:heating)');
@@ -611,8 +671,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from hist');
-        Query2.SQL.Add('where (regn = :id)and(bdate>=convert(smalldatetime,:sd,104)');
+        Query2.SQL.Add('DELETE FROM hist');
+        Query2.SQL.Add('WHERE (regn = :id)and(bdate>=convert(smalldatetime,:sd,104)');
         Query2.SQL.Add(' or edate > convert(smalldatetime, :sd, 104))');
         Query2.ParamByName('id').AsString := f[i][0];
         Query2.ParamByName('sd').AsString := f[i][1];
@@ -656,8 +716,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into fam');
-    SQL.Add('values (:id, :cl, :fio,');
+    SQL.Add('INSERT INTO fam');
+    SQL.Add('VALUES (:id, :cl, :fio,');
     SQL.Add('convert(smalldatetime,:birth,104), :pol, :st, :priv,');
     SQL.Add(':mid, :rel)');
   end;
@@ -673,8 +733,8 @@ begin
         begin
           Query2.Close;
           Query2.SQL.Clear;
-          Query2.SQL.Add('delete from fam');
-          Query2.SQL.Add('where (regn = :id)');
+          Query2.SQL.Add('DELETE FROM fam');
+          Query2.SQL.Add('WHERE (regn = :id)');
           Query2.ParamByName('id').AsString := f[i][1];
           Query2.ExecSQL;
         end;
@@ -682,8 +742,8 @@ begin
         begin
           Query2.Close;
           Query2.SQL.Clear;
-          Query2.SQL.Add('delete from fam');
-          Query2.SQL.Add('where (regn = :id)');
+          Query2.SQL.Add('DELETE FROM fam');
+          Query2.SQL.Add('WHERE (regn = :id)');
           Query2.ParamByName('id').AsString := f[i][1];
           Query2.ExecSQL;
         end;
@@ -715,8 +775,8 @@ begin
   with Datamodule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into sub');
-    SQL.Add('values (CONVERT(smalldatetime,:d,104),:id,:serv,:idserv,:ac,:pm,:snp,:sub,:sp,:stp)');
+    SQL.Add('INSERT INTO sub');
+    SQL.Add('VALUES (CONVERT(smalldatetime,:d,104),:id,:serv,:idserv,:ac,:pm,:snp,:sub,:sp,:stp)');
   end;
   if FileExists(path+'sub'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'sub'+IntToStr(dis)+'.dbf',f);
@@ -724,8 +784,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from sub');
-        Query2.SQL.Add('where (regn =:id)and(sdate=convert(smalldatetime,:d,104))');
+        Query2.SQL.Add('DELETE FROM sub');
+        Query2.SQL.Add('WHERE (regn =:id)and(sdate=convert(smalldatetime,:d,104))');
         Query2.SQL.Add('and(service=:serv)');
         Query2.ParamByName('id').AsString := f[i][1];
         Query2.ParamByName('d').AsString := f[i][0];
@@ -760,8 +820,8 @@ begin
   with Datamodule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into sluj');
-    SQL.Add('values (CONVERT(smalldatetime,:d,104),:id,:serv,:pm,:snp,:sub)');
+    SQL.Add('INSERT INTO sluj');
+    SQL.Add('VALUES (CONVERT(smalldatetime,:d,104),:id,:serv,:pm,:snp,:sub)');
   end;
   if FileExists(path+'sluj'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'sluj'+IntToStr(dis)+'.dbf',f);
@@ -769,8 +829,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from sluj');
-        Query2.SQL.Add('where (regn =:id)and(sdate=convert(smalldatetime,:d,104))');
+        Query2.SQL.Add('DELETE FROM sluj');
+        Query2.SQL.Add('WHERE (regn =:id)and(sdate=convert(smalldatetime,:d,104))');
         Query2.SQL.Add('and(service=:serv)');
         Query2.ParamByName('id').AsString := f[i][1];
         Query2.ParamByName('d').AsString := f[i][0];
@@ -801,8 +861,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into insp');
-    SQL.Add('values (:id,:idd,:insp,:st,:l)');
+    SQL.Add('INSERT INTO insp');
+    SQL.Add('VALUES (:id,:idd,:insp,:st,:l)');
   end;
   if FileExists(path+'insp'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'insp'+IntToStr(dis)+'.dbf',f);
@@ -810,8 +870,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from insp');
-        Query2.SQL.Add('where (id_insp=:id)and(id_dist=:idd)');
+        Query2.SQL.Add('DELETE FROM insp');
+        Query2.SQL.Add('WHERE (id_insp=:id)and(id_dist=:idd)');
         Query2.ParamByName('id').AsString := f[i][0];
         Query2.ParamByName('idd').AsString := f[i][1];
         Query2.ExecSQL;
@@ -839,8 +899,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into mng');
-    SQL.Add('values (:id, :idd,:name)');
+    SQL.Add('INSERT INTO mng');
+    SQL.Add('VALUES (:id, :idd,:name)');
   end;
   if FileExists(path+'mng'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'mng'+IntToStr(dis)+'.dbf',f);
@@ -848,8 +908,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from mng');
-        Query2.SQL.Add('where (id_mng=:id)and(id_dist=:idd)');
+        Query2.SQL.Add('DELETE FROM mng');
+        Query2.SQL.Add('WHERE (id_mng=:id)and(id_dist=:idd)');
         Query2.ParamByName('id').AsString := f[i][0];
         Query2.ParamByName('idd').AsString := f[i][1];
         Query2.ExecSQL;
@@ -875,8 +935,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into house');
-    SQL.Add('values (:id, :idd, :str, :nh,:cp,:stnd,');
+    SQL.Add('INSERT INTO house');
+    SQL.Add('VALUES (:id, :idd, :str, :nh,:cp,:stnd,');
     SQL.Add(':cont, :rep, :cold, :hot,:canal, :heat, :gas,');
     SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil)');
   end;
@@ -886,8 +946,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from house');
-        Query2.SQL.Add('where (id_house=:id)and(id_dist=:idd)');
+        Query2.SQL.Add('DELETE FROM house');
+        Query2.SQL.Add('WHERE (id_house=:id)and(id_dist=:idd)');
         Query2.ParamByName('id').AsString := f[i][0];
         Query2.ParamByName('idd').AsString := f[i][1];
         Query2.ExecSQL;
@@ -929,8 +989,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into dist');
-    SQL.Add('values (:id, :name, :b, :adr, :tel)');
+    SQL.Add('INSERT INTO dist');
+    SQL.Add('VALUES (:id, :name, :b, :adr, :tel)');
   end;
   if FileExists(path+'dist.dbf') then begin
     GetData(path+'dist.dbf',f);
@@ -938,8 +998,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from dist');
-        Query2.SQL.Add('where id_dist=:id');
+        Query2.SQL.Add('DELETE FROM dist');
+        Query2.SQL.Add('WHERE id_dist=:id');
         Query2.ParamByName('id').AsString := f[i][0];
         Query2.ExecSQL;
         Query1.ParamByName('id').AsString := f[i][0];
@@ -966,8 +1026,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into '+t);
-    SQL.Add('values (:id, :name)');
+    SQL.Add('INSERT INTO '+t);
+    SQL.Add('VALUES (:id, :name)');
   end;
   if FileExists(path+t+'.dbf') then begin
     GetData(path+t+'.dbf',f);
@@ -975,8 +1035,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from '+t);
-        Query2.SQL.Add('where id_'+t+'=:id');
+        Query2.SQL.Add('DELETE FROM '+t);
+        Query2.SQL.Add('WHERE id_'+t+'=:id');
         Query2.ParamByName('id').AsString := f[i][0];
         Query2.ExecSQL;
         Query1.ParamByName('id').AsString := f[i][0];
@@ -1000,8 +1060,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into charge');
-    SQL.Add('values (:id, :p)');
+    SQL.Add('INSERT INTO charge');
+    SQL.Add('VALUES (:id, :p)');
   end;
   if FileExists(path+'charge.dbf') then begin
     GetData(path+'charge.dbf',f);
@@ -1009,8 +1069,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from charge');
-        Query2.SQL.Add('where id_month=:id');
+        Query2.SQL.Add('DELETE FROM charge');
+        Query2.SQL.Add('WHERE id_month=:id');
         Query2.ParamByName('id').AsString := f[i][0];
         Query2.ExecSQl;
         Query1.ParamByName('id').AsString := f[i][0];
@@ -1034,8 +1094,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into norm');
-    SQL.Add('values (:id, :c, :s, :ps,:h, :ph)');
+    SQL.Add('INSERT INTO norm');
+    SQL.Add('VALUES (:id, :c, :s, :ps,:h, :ph)');
   end;
   if FileExists(path+'norm.dbf') then begin
     GetData(path+'norm.dbf',f);
@@ -1043,8 +1103,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from norm');
-        Query2.SQL.Add('where id_norm=:id');
+        Query2.SQL.Add('DELETE FROM norm');
+        Query2.SQL.Add('WHERE id_norm=:id');
         Query2.ParamByName('id').AsString := IntToStr(StrToInt(f[i][0]));
         Query2.ExecSQL;
         Query1.ParamByName('id').AsString := f[i][0];
@@ -1072,8 +1132,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into priv');
-    SQL.Add('values (:id, :name, :sq, :lev,');
+    SQL.Add('INSERT INTO priv');
+    SQL.Add('VALUES (:id, :name, :sq, :lev,');
     SQL.Add(':pcont,:fcont,:prep,:frep,:pcold,:fcold,:phot,:fhot,:pcanal,:fcanal,');
     SQL.Add(':pheat,:fheat,:pgas,:fgas,:pel,:fel,:pwood,:fwood,:pcoal,:fcoal)');
   end;
@@ -1083,8 +1143,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from priv');
-        Query2.SQL.Add('where (id_priv=:id)');
+        Query2.SQL.Add('DELETE FROM priv');
+        Query2.SQL.Add('WHERE (id_priv=:id)');
         Query2.ParamByName('id').AsString := f[i][0];
         Query2.ExecSQL;
         Query1.ParamByName('id').AsString := f[i][0];
@@ -1130,8 +1190,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into fond');
-    SQL.Add('values (:id, :name)');
+    SQL.Add('INSERT INTO fond');
+    SQL.Add('VALUES (:id, :name)');
   end;
   if FileExists(path+'fond.dbf') then begin
     GetData(path+'fond.dbf',f);
@@ -1139,8 +1199,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from fond');
-        Query2.SQL.Add('where id_fond=:id');
+        Query2.SQL.Add('DELETE FROM fond');
+        Query2.SQL.Add('WHERE id_fond=:id');
         Query2.ParamByName('id').AsString := f[i][0];
         Query2.ExecSQL;
         Query1.ParamByName('id').AsString := f[i][0];
@@ -1164,8 +1224,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into strt');
-    SQL.Add('values (:id, :name,:st)');
+    SQL.Add('INSERT INTO strt');
+    SQL.Add('VALUES (:id, :name,:st)');
   end;
   if FileExists(path+'strt.dbf') then begin
     GetData(path+'strt.dbf',f);
@@ -1173,8 +1233,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from strt');
-        Query2.SQL.Add('where id_street=:id');
+        Query2.SQL.Add('DELETE FROM strt');
+        Query2.SQL.Add('WHERE id_street=:id');
         Query2.ParamByName('id').AsString := f[i][0];
         Query2.ExecSQL;
         Query1.ParamByName('id').AsString := f[i][0];
@@ -1199,8 +1259,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into stat');
-    SQL.Add('values (:id, :name, :minim)');
+    SQL.Add('INSERT INTO stat');
+    SQL.Add('VALUES (:id, :name, :minim)');
   end;
   if FileExists(path+'stat.dbf') then begin
     GetData(path+'stat.dbf',f);
@@ -1208,8 +1268,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from stat');
-        Query2.SQL.Add('where id_status=:id');
+        Query2.SQL.Add('DELETE FROM stat');
+        Query2.SQL.Add('WHERE id_status=:id');
         Query2.ParamByName('id').AsString := f[i][0];
         Query2.ExecSQL;
         Query1.ParamByName('id').AsString := f[i][0];
@@ -1234,8 +1294,8 @@ begin
   With DataModule1.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('insert into bank');
-    SQL.Add('values (:id,:name,:bik)');
+    SQL.Add('INSERT INTO bank');
+    SQL.Add('VALUES (:id,:name,:bik)');
   end;
   if FileExists(path+'bank.dbf') then begin
     GetData(path+'bank.dbf',f);
@@ -1243,8 +1303,8 @@ begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
-        Query2.SQL.Add('delete from bank');
-        Query2.SQL.Add('where id_bank=:id');
+        Query2.SQL.Add('DELETE FROM bank');
+        Query2.SQL.Add('WHERE id_bank=:id');
         Query2.ParamByName('id').AsString := f[i][0];
         Query2.ExecSQL;
         Query1.ParamByName('id').AsString := f[i][0];
