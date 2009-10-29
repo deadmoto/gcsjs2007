@@ -45,6 +45,8 @@ type
     procedure Edit3Exit(Sender: TObject);
     procedure Edit2Exit(Sender: TObject);
     procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
+    procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
   private
     { Private declarations }
     oldid: integer;//текущее значение поля код
@@ -97,6 +99,12 @@ begin
     StringGrid1.Cells[3, i + 1] := DataModule1.Query4.FieldByName('tarif2').Value;
     DataModule1.Query4.Next;
   end;
+end;
+
+procedure TForm19.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
+  Rect: TRect; State: TGridDrawState);
+begin
+  SGDrawCell(Sender, ACol, ARow, Rect, State);
 end;
 
 procedure TForm19.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);

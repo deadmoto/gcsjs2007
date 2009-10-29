@@ -37,6 +37,8 @@ type
     CheckBox1: TCheckBox;
     GroupBox3: TGroupBox;
     Edit5:     TEdit;
+    GroupBox5: TGroupBox;
+    Edit7: TEdit;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
@@ -70,6 +72,8 @@ begin
     Form1.ARepData.soluteNum := Edit4.Text;
   if (Edit6.Text <> '') then
     Form1.ARepData.zipCode := Edit6.Text;
+  if (Edit7.Text <> '') then
+    Form1.ARepData.StartDate := Edit7.Text;
   if CheckBox1.Checked = False then
     if (Edit5.Text <> '') then
       Form1.ARepData.spec2 := Edit5.Text;
@@ -92,10 +96,11 @@ procedure TAddReportDataFrm.FormShow(Sender: TObject);
 
   procedure VisibleAll;
   begin
-    GroupBox1.Visible := True;
-    GroupBox2.Visible := True;
-    GroupBox4.Visible := True;
-    Panel1.Visible := True;
+    GroupBox1.Enabled := True;
+    GroupBox2.Enabled := True;
+    GroupBox4.Enabled := True;
+    GroupBox5.Enabled := True;
+    Panel1.Enabled := True;
   end;
 
 begin
@@ -103,12 +108,13 @@ begin
     rSolut:
     begin
       VisibleAll();
+      GroupBox5.Enabled := False;
     end;
 
     rSolutb:
     begin
       VisibleAll();
-      GroupBox4.Visible := False;
+      GroupBox4.Enabled := False;
     end;
 
     rSolute:
@@ -119,8 +125,9 @@ begin
     rUvedomo:
     begin
       VisibleAll();
-      GroupBox1.Visible := False;
-      GroupBox4.Visible := False;
+      GroupBox1.Enabled := False;
+      GroupBox4.Enabled := False;
+      GroupBox5.Enabled := False;
     end;
   end;
 end;

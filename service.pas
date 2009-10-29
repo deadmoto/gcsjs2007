@@ -26,6 +26,11 @@ uses
 
 const
   numbtarif = 14;
+
+  FactDateBase = '01.08.2008';
+  FactDateWC   = '01.02.2008';
+  FactDateYear = '01.01.2009';
+
   cDiffOperation: array[0..2] of string = (
     '=',
     '>=',
@@ -34,7 +39,6 @@ const
 
 type
   TStringArray = array of string;
-
   TIntArray = array of integer;
 
 procedure SetPoint(edt: TEdit);//установить запятую с учетом копеек
@@ -72,20 +76,24 @@ procedure FillTable(path, nam: string; code: TCodePage);
 procedure EditField(f: string; code: TCodePage; n: integer);
 
 function GetMonthsCount(BeginDate, EndDate: TDateTime; var DaysCount: byte): integer;
+function WithoutDoubleSpaces(str: string): string;
+function GetShortName(FIO: string): string;
+function ReplacePoint(str: string): string; //заминить , на .
 
 {******************************************************************************}
 function RefToCell(ARow, ACol: integer): string;
 function ExportGridToExcel(AGrid: TStringGrid; ASheetName, AFileName: string): boolean;
 {******************************************************************************}
+
 function FileVersion(AFileName: string): string;
 function GetTempDir: string;
 function GetSystemDir: string;
-function getConfValue(str: string): variant;
 function SelectDir: string;
-function WithoutDoubleSpaces(str: string): string;
+
+function getConfValue(str: string): variant;
+
 procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidths: TIntArray; RecCount: integer);
-function GetShortName(FIO: string): string;
-function ReplacePoint(str: string): string; //заминить , на .
+procedure SGDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 
 implementation
 
@@ -465,6 +473,9 @@ procedure FillTable(path, nam: string; code: TCodePage);
 var
   i: integer;
 begin
+  if FileExists(path + nam + '.dbf') then
+    DeleteFile(PAnsiChar(path + nam + '.dbf'));
+
   with Datamodule1 do
   begin
     if Dbf1.Active then
@@ -907,6 +918,57 @@ begin
     if tmpStr[i] = ',' then
       tmpStr[i] := '.';
   str := tmpStr;
+end;
+
+
+procedure SGDrawCell(Sender: TObject; ACol, ARow: Integer;
+  Rect: TRect; State: TGridDrawState);
+var
+  i,pos: integer;
+  buffer: string;
+  dict: array of string;
+begin
+  with (Sender as TStrinGgrid) do
+    if (ARow > 0) and (Canvas.TextWidth(Cells[ACol, ARow]) > ColWidths[ACol]) then
+    begin
+      setlength(dict,1);
+      for i := 1 to length(Cells[ACol, ARow]) do
+      begin
+        dict[high(dict)] := dict[high(dict)] + Cells[ACol, ARow][i];
+        if Cells[ACol, ARow][i] = ' ' then
+          setlength(dict, length(dict) + 1);
+      end;
+      pos := 0;
+      for i := 0 to length(dict) - 1 do
+        if canvas.textwidth(buffer + dict[i]) > (ColWidths[ACol]) then
+        begin
+          buffer := dict[i];
+          inc(pos);
+        end
+        else
+          buffer := buffer + dict[i];
+      if length(buffer) > 0 then
+      begin
+        buffer := '';
+        inc(pos);
+      end;
+      rowheights[arow] := defaultrowheight * (pos);
+      Canvas.Pen.color := Color;
+//      Canvas.Brush.color:= Color;
+      Canvas.Rectangle(rect.left, rect.top, rect.right, rect.bottom);
+      pos := 0;
+      for i := 0 to length(dict) - 1 do
+        if Canvas.textwidth(buffer + dict[i]) > (colwidths[acol]) then
+        begin
+          Canvas.textout(rect.left, rect.top + 2 + pos * Canvas.TextHeight(buffer), buffer);
+          buffer := dict[i];
+          inc(pos);
+        end
+        else
+          buffer := buffer + dict[i];
+      if length(buffer) > 0 then
+        Canvas.TextOut(rect.left, rect.top + 2 + pos * Canvas.TextHeight(buffer), buffer);
+    end;
 end;
 
 end.

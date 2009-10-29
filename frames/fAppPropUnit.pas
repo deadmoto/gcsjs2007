@@ -22,7 +22,6 @@ type
   TfAppProp = class(TFrame)
     Panel1:          TPanel;
     IniCheckBox1:    TIniCheckBox;
-    IniCheckBox2:    TIniCheckBox;
     IniCheckBox4:    TIniCheckBox;
     GroupBox1:       TGroupBox;
     IniCheckBox3:    TIniCheckBox;
