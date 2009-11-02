@@ -546,7 +546,7 @@ begin
     Cl.Data.bank := bank[Combobox19.ItemIndex];
     Cl.cdata.boiler := 0;
     Cl.cdata.stop := 0;
-    Cl.cdata.heating := 0;
+    Cl.cdata.heating := 1;
     SetRegn;
     SetRegDate;
     SetPeriod;

@@ -55,7 +55,7 @@ begin
   path := 'arc\';//путь по умолчанию
   MaskEdit1.Text := Form1.rdt;
   ProgressBar1.Position := 0;
-  ProgressBar1.Max := 7;
+  ProgressBar1.Max := 8;
   ProgressBar1.Step := 1;
 end;
 
@@ -95,6 +95,8 @@ begin
   ProgressBar1.StepIt;
   ExportSluj(path, dt, Form1.dist);
   flst := flst + path + 'sluj' + ext2 + ' ';
+  ExportFact(path, Form1.dist);
+  flst := flst + path + 'factsale' + ext2 + ' ';  
   ProgressBar1.StepIt;
   ExportSub(path, dt, Form1.dist);
   flst := flst + path + 'sub' + ext2 + ' ';
@@ -120,6 +122,7 @@ begin
   WinExec(PChar(cmd), SW_HIDE);
   path := 'arc\';
   i := 0;
+  sleep(1000);
   while not FileExists(path + 'insp' + IntToStr(Form1.dist) + '.dbf') do
     Inc(i);
   try
@@ -137,6 +140,8 @@ begin
     ImportSub(path, Form1.dist);
     ProgressBar1.StepIt;
     ImportSluj(path, Form1.dist);
+    ProgressBar1.StepIt;
+    ImportFact(path, Form1.dist);
     Datamodule1.Database1.Commit;
     ProgressBar1.StepIt;
     ShowMessage('Импорт найденных файлов успешно завершен!');

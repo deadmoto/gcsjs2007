@@ -54,7 +54,6 @@ object Form15: TForm15
     BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 2
-    ExplicitTop = 355
     object Button4: TButton
       AlignWithMargins = True
       Left = 339
@@ -135,7 +134,7 @@ object Form15: TForm15
       Hint = 
         #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1091#1085#1080#1082#1072#1083#1100#1085#1086#1077' '#1079#1085#1072#1095#1077#1085#1080#1077' '#1087#1086#1083#1103', '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 51 ' +
         #1089#1080#1084#1074#1086#1083#1072
-      MaxLength = 51
+      MaxLength = 120
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
