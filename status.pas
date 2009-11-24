@@ -88,7 +88,7 @@ procedure TForm14.Fill;
 var
   l: integer;
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     l := 0;
     Close;
@@ -133,7 +133,7 @@ end;
 procedure TForm14.SetDefault;
 {*******************************************************************************
   Процедура SetDefault создает запрос для выборки всех записей из таблицы статусов.
-  При этом выбирается еще и наименование соц-демогр. группы для отображения в DBGrid1.
+  При этом выбирается еще и наименование соц-демогр. группы для отображения в StringGrid1.
 *******************************************************************************}
 var
   i: integer;
@@ -369,7 +369,7 @@ end;
 
 procedure TForm14.FormShow(Sender: TObject);
 {*******************************************************************************
-  Процедура FormShow обрабатывает событие OnShow формы. В DBGrid1 загружаются данные,
+  Процедура FormShow обрабатывает событие OnShow формы. В StringGrid1 загружаются данные,
   в полях ввода появляются значения 1 строки. В зависимости от статуса открытия
   формы управляющие кнопки становятся недоступными(чтение) или доступными(запись)
   для нажатия.
@@ -409,7 +409,7 @@ procedure TForm14.FormClose(Sender: TObject; var Action: TCloseAction);
 *******************************************************************************}
 begin
   Datamodule1.Query1.Close;
-  Datamodule1.Query4.Close;
+  Datamodule1.qTarif.Close;
 end;
 
 procedure TForm14.Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);

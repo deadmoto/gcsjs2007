@@ -78,7 +78,7 @@ procedure TForm19.SetDefault;
 var
   i: integer;
 begin
-  with DataModule1.Query4 do
+  with DataModule1.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -89,15 +89,15 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Откр.в/разбор', 'Закр.в/разбор'),
-    TIntArray.Create(30, 237, 78, 48), DataModule1.Query4.RecordCount + 1);
+    TIntArray.Create(30, 237, 78, 48), DataModule1.qTarif.RecordCount + 1);
 
-  for i := 0 to DataModule1.Query4.RecordCount - 1 do
+  for i := 0 to DataModule1.qTarif.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DataModule1.Query4.FieldByName('id_' + nam).Value;
-    StringGrid1.Cells[1, i + 1] := DataModule1.Query4.FieldByName('name' + nam).Value;
-    StringGrid1.Cells[2, i + 1] := DataModule1.Query4.FieldByName('tarif1').Value;
-    StringGrid1.Cells[3, i + 1] := DataModule1.Query4.FieldByName('tarif2').Value;
-    DataModule1.Query4.Next;
+    StringGrid1.Cells[0, i + 1] := DataModule1.qTarif.FieldByName('id_' + nam).Value;
+    StringGrid1.Cells[1, i + 1] := DataModule1.qTarif.FieldByName('name' + nam).Value;
+    StringGrid1.Cells[2, i + 1] := DataModule1.qTarif.FieldByName('tarif1').Value;
+    StringGrid1.Cells[3, i + 1] := DataModule1.qTarif.FieldByName('tarif2').Value;
+    DataModule1.qTarif.Next;
   end;
 end;
 
@@ -116,10 +116,10 @@ procedure TForm19.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; va
 begin
   if ARow <> 0 then
   begin
-    Edit1.Text := StringGrid1.Cells[1, ARow];// DBGrid1.Fields[1].AsString;
-    Edit2.Text := StringGrid1.Cells[2, ARow];// FlToStr(DBGrid1.Fields[2].AsFloat);
-    Edit4.Text := StringGrid1.Cells[3, ARow];// FlToStr(DBGrid1.Fields[3].AsFloat);
-    Edit3.Text := StringGrid1.Cells[0, ARow];// DBGrid1.Fields[0].AsString;
+    Edit1.Text := StringGrid1.Cells[1, ARow];
+    Edit2.Text := StringGrid1.Cells[2, ARow];
+    Edit4.Text := StringGrid1.Cells[3, ARow];
+    Edit3.Text := StringGrid1.Cells[0, ARow];
     if Edit3.Text <> '' then
       oldid := StrToInt(Edit3.Text);
   end;
@@ -132,7 +132,7 @@ procedure TForm19.FormClose(Sender: TObject; var Action: TCloseAction);
 *******************************************************************************}
 begin
   Datamodule1.Query1.Close;
-  Datamodule1.Query4.Close;
+  Datamodule1.qTarif.Close;
 end;
 
 procedure TForm19.Button4Click(Sender: TObject);
@@ -338,17 +338,12 @@ begin
     FillTarifb(Form1.bpath, nam, Form1.rdt, Form1.dist, Form1.codedbf);
   end;
   SetDefault;
-{  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := FlToStr(DBGrid1.Fields[2].AsFloat);
-  Edit4.Text := FlToStr(DBGrid1.Fields[3].AsFloat);
-  Edit3.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit3.Text);}
 end;
 
 procedure TForm19.FormShow(Sender: TObject);
 {*******************************************************************************
   Процедура FormShow обрабатывает событие OnShow формы. Устанавливаются названия
-  полей, которые отражает DBGrid1, в него загружаются данные, в полях ввода появляются
+  полей, которые отражает StringGrid1, в него загружаются данные, в полях ввода появляются
   значения 1 строки. В зависимости от статуса открытия формы управляющие кнопки
   становятся недоступными(чтение) или доступными(запись) для нажатия.
 *******************************************************************************}

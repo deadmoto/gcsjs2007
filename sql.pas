@@ -17,7 +17,7 @@ uses
   DBGrids,
   DB,
   DBTables,
-  FileCtrl,
+//  FileCtrl,
   ComCtrls;
 
 type

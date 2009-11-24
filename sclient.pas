@@ -9,8 +9,6 @@ uses
   ComCtrls,
   contnrs,
   Controls,
-  DBCtrls,
-  DBGrids,
   Dialogs,
   ExtCtrls,
   Forms,
@@ -1036,7 +1034,7 @@ begin
     end;
     Combobox18.ItemIndex := 0;
   end;
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1565,14 +1563,14 @@ end;
 
 function TForm2.SelMin(n: integer): real;//найти min
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.minim');
     SQL.Add('from "curlmin.dbf" sbros');
     SQL.Add('where sbros.id_min = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('minim').AsFloat;
     Close;
@@ -2101,14 +2099,14 @@ end;
 
 function TForm2.SelStnd(n: integer): string;//выбрать стандарт
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namestnd');
     SQL.Add('from "currstnd.dbf" sbros');
     SQL.Add('where sbros.id_stnd = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('namestnd').AsString;
     Close;
@@ -2117,14 +2115,14 @@ end;
 
 function TForm2.SelCont(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namecont');
     SQL.Add('from "curcont.dbf" sbros');
     SQL.Add('where sbros.id_cont = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('namecont').AsString;
     Close;
@@ -2133,14 +2131,14 @@ end;
 
 function TForm2.SelRep(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namerep');
     SQL.Add('from "currep.dbf" sbros');
     SQL.Add('where sbros.id_rep = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('namerep').AsString;
     Close;
@@ -2149,14 +2147,14 @@ end;
 
 function TForm2.SelCold(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namecold');
     SQL.Add('from "curcold.dbf" sbros');
     SQL.Add('where sbros.id_cold = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('namecold').AsString;
     Close;
@@ -2165,14 +2163,14 @@ end;
 
 function TForm2.SelCanal(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namecanal');
     SQL.Add('from "curcanal.dbf" sbros');
     SQL.Add('where sbros.id_canal = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('namecanal').AsString;
     Close;
@@ -2181,14 +2179,14 @@ end;
 
 function TForm2.SelHot(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namehot');
     SQL.Add('from "curhot.dbf" sbros');
     SQL.Add('where sbros.id_hot = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('namehot').AsString;
     Close;
@@ -2197,14 +2195,14 @@ end;
 
 function TForm2.SelHeat(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.nameheat');
     SQL.Add('from "curheat.dbf" sbros');
     SQL.Add('where sbros.id_heat = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('nameheat').AsString;
     Close;
@@ -2213,14 +2211,14 @@ end;
 
 function TForm2.SelGas(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namegas');
     SQL.Add('from "curgas.dbf" sbros');
     SQL.Add('where sbros.id_gas = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('namegas').AsString;
     Close;
@@ -2229,14 +2227,14 @@ end;
 
 function TForm2.SelWood(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namewood');
     SQL.Add('from "curwood.dbf" sbros');
     SQL.Add('where sbros.id_wood = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('namewood').AsString;
     Close;
@@ -2245,14 +2243,14 @@ end;
 
 function TForm2.SelCoal(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namecoal');
     SQL.Add('from "curcoal.dbf" sbros');
     SQL.Add('where sbros.id_coal = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('namecoal').AsString;
     Close;
@@ -2554,7 +2552,7 @@ procedure TForm2.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Datamodule1.Query1.Close;
   Datamodule1.Query2.Close;
-  Datamodule1.Query4.Close;
+  Datamodule1.qTarif.Close;
 end;
 
 function TForm2.AddAnyMonth(BD, ED: TDateTime): TStringList;
@@ -3975,8 +3973,9 @@ begin
 end;
 
 procedure TForm2.ChangeFactPeriod(BD, ED: TDateTime);
-var i,j: integer;
-    tmp: byte;
+var
+  i,j: integer;
+  tmp: byte;
 begin
   StringGrid1.RowCount:= GetMonthsCount(BD,ED,tmp)+1;
   for i:=0 to (AddAnyMonth(BD,ED)).Count-1 do begin
@@ -4000,7 +3999,7 @@ begin
   for i:=0 to datamodule1.Query1.RecordCount-1 do begin
     for j:=0 to StringGrid1.RowCount-1 do
       if StringGrid1.Cells[0,j+1]=datamodule1.Query1.FieldByName('sd').asString then
-        StringGrid1.Cells[1,j+1]:=datamodule1.Query1.FieldValues['sum_sub'];
+        StringGrid1.Cells[1,j+1]:=datamodule1.Query1.FieldByName('sum_sub').asString;//.FieldValues['sum_sub'];
     datamodule1.Query1.Next;
   end;
 
@@ -4845,9 +4844,9 @@ procedure TForm2.CheckDifferenceFactSum;
 begin
   if TabControl1.TabIndex=1 then begin
     if StrToFloat(StringGrid1.Cells[1,StringGrid1.RowCount-1]) <= StrToFloat(StringGrid1.Cells[2,StringGrid1.RowCount-1]) then
-      label77.Caption:= 'Размер субсидии не привешает фактических расходов'
+      label77.Caption:= 'Размер субсидии не превышает фактических расходов'
     else
-      label77.Caption:= 'Размер субсидии привешает фактические расходы на +'+
+      label77.Caption:= 'Размер субсидии превышает фактические расходы на +'+
                         FloatToStr(StrToFloat(StringGrid1.Cells[1,StringGrid1.RowCount-1])-StrToFloat(StringGrid1.Cells[2,StringGrid1.RowCount-1]));
   end;
 end;
@@ -4951,6 +4950,7 @@ begin
   end;
   if (Sender = Button12) or (Sender = Button13) then
   begin
+    Form39 := TForm39.Create(Form2);
     Form39.Caption := capt;
     Form39.nam := nam;
     Form39.namet := namet;
@@ -4968,11 +4968,13 @@ begin
         Combobox4.OnChange(combobox4);
       end;
     end;
+    Form39.Free;
   end;
   if (Sender = Button10) or (Sender = Button11) or (Sender = Button14) or
     (Sender = Button15) or (Sender = Button16) or (Sender = Button17) or
     (Sender = Button18) then
   begin
+    Form37 := TForm37.Create(Form2);
     Form37.Caption := capt;
     Form37.nam := nam;
     Form37.namet := namet;
@@ -5015,6 +5017,7 @@ begin
         Combobox9.OnChange(combobox9);
       end;
     end;
+    Form37.Free;
   end;
 end;
 

@@ -47,31 +47,26 @@ object DataModule1: TDataModule1
     Left = 248
     Top = 8
   end
-  object Database2: TDatabase
-    AliasName = 'DBFSub'
-    DatabaseName = 'Curr'
-    LoginPrompt = False
-    SessionName = 'Default'
-    Left = 16
-    Top = 64
-  end
-  object Query4: TQuery
-    DatabaseName = 'Curr'
-    Left = 136
-    Top = 64
-  end
   object DataSource1: TDataSource
     DataSet = Query1
     Left = 80
     Top = 8
   end
-  object DataSource2: TDataSource
-    DataSet = Query4
-    Left = 80
-    Top = 64
+  object qTarif: TADOQuery
+    Connection = dbfConnection
+    CursorType = ctStatic
+    Parameters = <>
+    Left = 32
+    Top = 128
   end
-  object qtarif: TQuery
-    Left = 192
-    Top = 64
+  object DataSource2: TDataSource
+    DataSet = qTarif
+    Left = 32
+    Top = 184
+  end
+  object dbfConnection: TADOConnection
+    LoginPrompt = False
+    Left = 32
+    Top = 72
   end
 end

@@ -73,7 +73,7 @@ var
   i: integer;
 begin
   Edit6.Text := '0';
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;

@@ -88,6 +88,8 @@ object Form38: TForm38
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowSelect]
       TabOrder = 0
       OnSelectCell = StringGrid1SelectCell
+      ExplicitLeft = 1
+      ExplicitTop = 1
     end
   end
   object Panel3: TPanel

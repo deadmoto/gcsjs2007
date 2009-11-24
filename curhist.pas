@@ -44,6 +44,7 @@ type
     client: integer;
     fio:    string;
     status: integer;
+    changes: boolean;
     procedure ModSub(n: integer; s: real);
   end;
 
@@ -172,13 +173,16 @@ begin
     SGH.Cells[2, i + 1] := FlToStr(cl.sub[i]);
     sum := sum + cl.sub[i];
   end;
+
+  changes := False;
+
   StatusBar1.Panels[1].Text := 'Сумма субсидий: ' + FlToStr(sum);
   StatusBar1.Panels[0].Text := 'Клиентов: ' + IntToStr(Length(cl.reg));
 end;
 
 procedure TForm18.FormCreate(Sender: TObject);
 begin
-  with SGH do
+  {with SGH do
   begin
     colcount := 3;
     ColWidths[0] := 240;
@@ -187,7 +191,10 @@ begin
     SGH.Cells[0, 0] := 'ФИО';
     SGH.Cells[1, 0] := 'Рег.номер';
     SGH.Cells[2, 0] := 'Субсидия';
-  end;
+  end;}
+  FormerStringGrid(SGH, TStringArray.Create('ФИО', 'Рег.номер', 'Субсидия'),
+    TIntArray.Create(240, 70, 70), 2);
+
   //для быстрого поиска по фамилии
   ItemIndex := -1;
   LastTime  := Time;

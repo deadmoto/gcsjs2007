@@ -307,6 +307,7 @@ function TForm30.NewPlace(id: integer; s: string): integer;
 var
   i, c: integer;
 begin
+  Result := 0;
   for i := 0 to SGH.RowCount - 1 do
   begin
     C := CompareText(SGH.Cells[0, i], s);

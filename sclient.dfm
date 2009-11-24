@@ -24,12 +24,14 @@ object Form2: TForm2
     Top = 3
     Width = 587
     Height = 383
-    ActivePage = TabSheet3
+    ActivePage = TabSheet6
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
     OnChange = PageControl1Change
     OnDrawTab = PageControl1DrawTab
+    ExplicitLeft = -2
+    ExplicitTop = 8
     object TabSheet1: TTabSheet
       Caption = #1050#1083#1080#1077#1085#1090
       OnExit = TabSheet1Exit
@@ -951,7 +953,7 @@ object Form2: TForm2
       end
       object ComboBox1: TComboBox
         Left = 115
-        Top = 95
+        Top = 93
         Width = 334
         Height = 21
         ItemHeight = 13
@@ -960,7 +962,7 @@ object Form2: TForm2
       end
       object ComboBox2: TComboBox
         Left = 115
-        Top = 119
+        Top = 118
         Width = 334
         Height = 21
         ItemHeight = 13

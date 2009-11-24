@@ -114,17 +114,17 @@ procedure TForm21.Button2Click(Sender: TObject);
 { автоматический импорт данных из филиала или отдела }
 var
   cmd: string;
-  i: integer;
+//  i: integer;
 begin
   path := path + '4merge';
   //извлечь файлы из архива
   cmd  := 'rar e -y ' + path + ' *.dbf' + ' arc\';
   WinExec(PChar(cmd), SW_HIDE);
   path := 'arc\';
-  i := 0;
+//  i := 0;
   sleep(1000);
-  while not FileExists(path + 'insp' + IntToStr(Form1.dist) + '.dbf') do
-    Inc(i);
+{  while not FileExists(path + 'insp' + IntToStr(Form1.dist) + '.dbf') do
+    Inc(i);}
   try
     Datamodule1.Database1.StartTransaction;
     ImportInsp(path, Form1.dist);

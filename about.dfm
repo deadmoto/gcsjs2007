@@ -2,7 +2,7 @@ object AboutBox: TAboutBox
   Left = 263
   Top = 226
   BorderStyle = bsNone
-  ClientHeight = 123
+  ClientHeight = 110
   ClientWidth = 211
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -20,13 +20,14 @@ object AboutBox: TAboutBox
     Left = 0
     Top = 0
     Width = 211
-    Height = 123
+    Height = 110
     Align = alClient
     BevelInner = bvRaised
     BevelOuter = bvLowered
     ParentColor = True
     TabOrder = 0
     OnClick = Panel1Click
+    ExplicitHeight = 123
     object ProgramIcon: TImage
       Left = 24
       Top = 16
@@ -66,10 +67,10 @@ object AboutBox: TAboutBox
     end
     object Comments: TLabel
       Left = 8
-      Top = 96
-      Width = 123
-      Height = 17
-      Caption = #1050#1086#1084#1087#1072#1085#1080#1103': '#1041#1059' '#1043#1062#1057#1046#1057' '
+      Top = 88
+      Width = 117
+      Height = 13
+      Caption = #1050#1086#1084#1087#1072#1085#1080#1103': '#1041#1059' '#1043#1062'C'#1046#1057' '
       WordWrap = True
       IsControl = True
     end

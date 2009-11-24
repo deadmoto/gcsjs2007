@@ -18,6 +18,7 @@
     <DCC_ObjOutput>dcu</DCC_ObjOutput>
     <DCC_HppOutput>dcu</DCC_HppOutput>
     <DCC_Define>RELEASE</DCC_Define>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Version>7.0</Version>
@@ -26,12 +27,18 @@
     <DCC_ObjOutput>dcu</DCC_ObjOutput>
     <DCC_HppOutput>dcu</DCC_HppOutput>
     <DCC_Define>DEBUG</DCC_Define>
+    <DCC_Optimize>False</DCC_Optimize>
+    <DCC_UnitSearchPath>$(BDS)\lib\Debug;$(BDS)\Lib\Debug\Indy10</DCC_UnitSearchPath>
+    <DCC_ResourcePath>$(BDS)\lib\Debug;$(BDS)\Lib\Debug\Indy10</DCC_ResourcePath>
+    <DCC_ObjPath>$(BDS)\lib\Debug;$(BDS)\Lib\Debug\Indy10</DCC_ObjPath>
+    <DCC_IncludePath>$(BDS)\lib\Debug;$(BDS)\Lib\Debug\Indy10</DCC_IncludePath>
+    <DCC_UNIT_PLATFORM>False</DCC_UNIT_PLATFORM>
   </PropertyGroup>
   <ProjectExtensions>
     <Borland.Personality>Delphi.Personality</Borland.Personality>
     <Borland.ProjectType>VCLApplication</Borland.ProjectType>
     <BorlandProject>
-<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">2</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">0</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">True</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">ГЦСЖС</VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.2.0.0</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName">Subsidy</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments">Учет предоставления субсидий на оплату ЖКУ населению г.Омска</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">Subsidy.dpr</Source></Source><Excluded_Packages /></Delphi.Personality></BorlandProject></BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">2</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">0</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">True</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">БУ ГЦCЖС</VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.2.0.0</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName">Subsidy</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments">Учет предоставления субсидий на оплату ЖКУ населению г.Омска</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">Subsidy.dpr</Source></Source><Excluded_Packages /></Delphi.Personality></BorlandProject></BorlandProject>
   </ProjectExtensions>
   <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
   <ItemGroup>
@@ -49,12 +56,6 @@
     </DCCReference>
     <DCCReference Include="bank.pas">
       <Form>Form31</Form>
-    </DCCReference>
-    <DCCReference Include="browse.pas">
-      <Form>Form36</Form>
-    </DCCReference>
-    <DCCReference Include="certification.pas">
-      <Form>Form28</Form>
     </DCCReference>
     <DCCReference Include="chhouse.pas">
       <Form>Form30</Form>
@@ -84,9 +85,6 @@
     <DCCReference Include="ConnectUnit.pas">
       <Form>Form45</Form>
     </DCCReference>
-    <DCCReference Include="control.pas">
-      <Form>Form10</Form>
-    </DCCReference>
     <DCCReference Include="core\subtypes.pas" />
     <DCCReference Include="curhist.pas">
       <Form>Form18</Form>
@@ -106,9 +104,6 @@
     </DCCReference>
     <DCCReference Include="elpower.pas">
       <Form>Form23</Form>
-    </DCCReference>
-    <DCCReference Include="FactSumUnit.pas">
-      <Form>FactSumFrm</Form>
     </DCCReference>
     <DCCReference Include="fond.pas">
       <Form>Form6</Form>
@@ -155,20 +150,11 @@
     <DCCReference Include="opend.pas">
       <Form>Form26</Form>
     </DCCReference>
-    <DCCReference Include="ownertype.pas">
-      <Form>Form8</Form>
-    </DCCReference>
-    <DCCReference Include="Plugins.pas">
-      <Form>Plugins</Form>
-    </DCCReference>
     <DCCReference Include="privilege.pas">
       <Form>Form12</Form>
     </DCCReference>
     <DCCReference Include="progress.pas">
       <Form>AboutBox1</Form>
-    </DCCReference>
-    <DCCReference Include="relation.pas">
-      <Form>Form32</Form>
     </DCCReference>
     <DCCReference Include="rrecalc.pas">
       <Form>Form43</Form>
@@ -183,9 +169,6 @@
       <Form>Form33</Form>
     </DCCReference>
     <DCCReference Include="service.pas" />
-    <DCCReference Include="settlingtype.pas">
-      <Form>Form9</Form>
-    </DCCReference>
     <DCCReference Include="shtarif.pas">
       <Form>Form37</Form>
     </DCCReference>

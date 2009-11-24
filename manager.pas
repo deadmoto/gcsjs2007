@@ -95,8 +95,8 @@ procedure TForm7.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var
 begin
   if ARow <> 0 then
   begin
-    Edit1.Text := StringGrid1.Cells[1, ARow];// DBGrid1.Fields[1].AsString;
-    Edit2.Text := StringGrid1.Cells[0, ARow];//DBGrid1.Fields[0].AsString;
+    Edit1.Text := StringGrid1.Cells[1, ARow];
+    Edit2.Text := StringGrid1.Cells[0, ARow];
     if Edit2.Text <> '' then
       oldid := StrToInt(Edit2.Text);
   end;
@@ -255,9 +255,6 @@ begin
       ExecSQL;
       SetDefault;
       Open;
-{      Edit1.Text := DBGrid1.Fields[1].AsString;
-      Edit2.Text := DBGrid1.Fields[0].AsString;
-      oldid := StrToInt(Edit2.Text);}
     end;
   end;
 end;
@@ -265,13 +262,6 @@ end;
 procedure TForm7.FormShow(Sender: TObject);
 begin
   SetDefault;
-{  with DataModule1.Query1 do begin
-    SetDefault;
-    Open;
-    Edit1.Text := FieldByName('namemng').AsString;
-    Edit2.Text := FieldByName('id_mng').AsString;
-  end;
-  oldid := StrToInt(Edit2.Text);}
   if status = 0 then
   begin
     Button1.Enabled := False;

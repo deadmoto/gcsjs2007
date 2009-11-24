@@ -3,13 +3,7 @@ unit DataModule;
 interface
 
 uses
-  SysUtils,
-  Classes,
-  DB,
-  DBTables,
-  Dialogs,
-  dbf,
-  Registry;
+  SysUtils, Classes, DB, DBTables, Dialogs, Registry, ADODB, dbf;
 
 type
   TDataModule1 = class(TDataModule)
@@ -17,19 +11,19 @@ type
     Query2:      TQuery;
     Database1:   TDatabase;
     Query3:      TQuery;
-    Database2:   TDatabase;
-    Query4:      TQuery;
     DataSource1: TDataSource;
+    qTarif: TADOQuery;
     DataSource2: TDataSource;
-    qtarif:      TQuery;
+    dbfConnection: TADOConnection;
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
     DBF1: TDBF;
     { Public declarations }
-    t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, pv, tc, norm1: TQuery;
-    procedure ChAttrTable(d: integer);
+    t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, tc: TADOQuery;
+    pv, norm1: TQuery;
+    function SetConnectStr(path: string): string;
   end;
 
 var
@@ -64,8 +58,6 @@ begin
         begin
           if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ReadString('Server'), 'Subsidy', '') then
             ShowMessage('Ошибка при создании DSN записи SQLSub!');
-          //        if not ODBC_DSN.AddDSNdBaseSource('DBFSub', ExtractFilePath(paramstr(0))+'database' , '') then
-          //        ShowMessage('Ошибка при создании DSN записи DBFSub!');
         end;
     finally
       CloseKey;
@@ -73,38 +65,39 @@ begin
     end;
 
   //назначение директории для файлов _QSQL*.dbf
-  if getConfValue('0.UseTempDir') then
-    Session.PrivateDir := GetTempDir;
+{  if getConfValue('0.UseTempDir') then
+    Session.PrivateDir := GetTempDir;}
+
+  //Назначение пути для баз *.dbf
+  if getConfValue('0.OtherDatabasePath') then
+    dbfConnection.ConnectionString := SetConnectStr(getConfValue('0.DatabasePath'))
+  else
+    dbfConnection.ConnectionString := SetConnectStr(ExtractFilePath(ParamStr(0)) + '\database');
+
 
   dbf1 := tdbf.Create(self);//создание парсера dbf-файлов
-  //   tc := TQuery.Create(Self);
-  t1  := TQuery.Create(Self);
-  t2  := TQuery.Create(Self);
-  t3  := TQuery.Create(Self);
-  t4  := TQuery.Create(Self);
-  t5  := TQuery.Create(Self);
-  t6  := TQuery.Create(Self);
-  t7  := TQuery.Create(Self);
-  t8  := TQuery.Create(Self);
-  t9  := TQuery.Create(Self);
-  t10 := TQuery.Create(Self);
+
+  t1  := TADOQuery.Create(Self);
+  t2  := TADOQuery.Create(Self);
+  t3  := TADOQuery.Create(Self);
+  t4  := TADOQuery.Create(Self);
+  t5  := TADOQuery.Create(Self);
+  t6  := TADOQuery.Create(Self);
+  t7  := TADOQuery.Create(Self);
+  t8  := TADOQuery.Create(Self);
+  t9  := TADOQuery.Create(Self);
+  t10 := TADOQuery.Create(Self);
+  tc  := TADOQuery.Create(Self);
+
   pv  := TQuery.Create(Self);
   norm1 := TQuery.Create(Self);
-  tc  := TQuery.Create(Self);
-
-  //Назначение базе DBFSub переменной PATH
-  if getConfValue('0.OtherDatabasePath') then
-    DataBase2.Params.Add('PATH=' + getConfValue('0.DatabasePath'))
-  else
-    DataBase2.Params.Add('PATH=' + ExtractFilePath(ParamStr(0)) + 'database');
 end;
 
-procedure TDataModule1.ChAttrTable(d: integer);
-{
-  Процедура производит изменения alias
-}
+function TDataModule1.SetConnectStr(path: string): string;
 begin
-
+  Result := 'Provider=MSDASQL.1; Persist Security Info=False; '+ #13 +
+    'Extended Properties="Driver={Microsoft dBASE Driver (*.dbf)};'+ #13 +
+    'DriverID=277; Dbq='+path+'\"'
 end;
 
 end.

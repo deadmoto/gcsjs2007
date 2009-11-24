@@ -28,9 +28,6 @@ object Form3: TForm3
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 0
-    ExplicitLeft = 8
-    ExplicitTop = 327
-    ExplicitWidth = 384
     object StringGrid1: TStringGrid
       Left = 2
       Top = 2
@@ -44,7 +41,6 @@ object Form3: TForm3
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowSelect]
       TabOrder = 0
       OnSelectCell = StringGrid1SelectCell
-      ExplicitWidth = 380
     end
   end
   object Panel2: TPanel
@@ -139,8 +135,6 @@ object Form3: TForm3
     BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 2
-    ExplicitTop = 295
-    ExplicitWidth = 411
     object Button4: TButton
       AlignWithMargins = True
       Left = 346

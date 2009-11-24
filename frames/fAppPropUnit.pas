@@ -15,7 +15,6 @@ uses
   StdCtrls,
   IniCheckBox,
   ExtCtrls,
-  FileCtrl,
   IniLabeledEdit;
 
 type
@@ -32,7 +31,6 @@ type
     Panel3:          TPanel;
     IniLabeledEdit2: TIniLabeledEdit;
     Button2:         TButton;
-    IniCheckBox6:    TIniCheckBox;
     IniCheckBox7: TIniCheckBox;
     procedure IniCheckBox3Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -49,7 +47,7 @@ type
 implementation
 
 uses
-  ConfigPropertiesUnit;
+  ConfigPropertiesUnit, service;
 
 {$R *.dfm}
 
@@ -57,22 +55,18 @@ procedure TfAppProp.Button1Click(Sender: TObject);
 var
   dir: string;
 begin
-  if SelectDirectory('Select directory', '', dir, [sdShowShares, sdNewUI, sdValidateDir]) then
-    if (dir[length(dir)] <> '\') then
-      IniLabeledEdit1.Text := dir + '\'
-    else
-      IniLabeledEdit1.Text := dir;
+  dir := SelectDir;
+  if dir <> '' then
+    IniLabeledEdit1.Text := dir;
 end;
 
 procedure TfAppProp.Button2Click(Sender: TObject);
 var
   dir: string;
 begin
-  if SelectDirectory('Select directory', '', dir, [sdShowShares, sdNewUI, sdValidateDir, sdNewFolder]) then
-    if (dir[length(dir)] <> '\') then
-      IniLabeledEdit2.Text := dir + '\'
-    else
-      IniLabeledEdit2.Text := dir;
+  dir := SelectDir;
+  if dir <> '' then
+    IniLabeledEdit2.Text := dir;
 end;
 
 procedure TfAppProp.IniCheckBox3Click(Sender: TObject);

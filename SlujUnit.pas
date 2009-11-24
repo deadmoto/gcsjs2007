@@ -47,17 +47,15 @@ var
 implementation
 
 uses
-  datamodule,
-  main,
-  service;
+  datamodule, main, service;
 
 {$R *.dfm}
-
 
 procedure TForm44.FillSlujGrid;
 var
   i: integer;
 begin
+  Button1.Enabled := True;
   with DataModule1 do
   begin
     Query1.Close;
@@ -69,7 +67,7 @@ begin
           'Cl ON Sluj.regn = Cl.regn INNER JOIN' + #13 +
           'Sub ON Sluj.sdate = Sub.sdate AND Sluj.regn = Sub.regn AND Sluj.service = Sub.service INNER JOIN' + #13 +
           'Serv ON Sub.service = Serv.id_serv' + #13 +
-          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104))' + #13 +
+          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104) AND Cl.id_dist=:dist)' + #13 +
           'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio, Sub.sub, Serv.nameserv, Sluj.sub' + #13 +
           'ORDER BY Cl.fio');
       end;
@@ -80,12 +78,13 @@ begin
           'Cl ON Sluj.regn = Cl.regn INNER JOIN' + #13 +
           'Sub ON Sluj.sdate = Sub.sdate ' + #13 +
           'AND Sluj.regn = Sub.regn AND Sluj.service = Sub.service' + #13 +
-          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104))' + #13 +
+          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104) AND Cl.id_dist=:dist)' + #13 +
           'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio' + #13 +
           'ORDER BY Cl.fio');
       end;
     end;
     Query1.ParamByName('rdt').Value := form1.rdt;
+    Query1.ParamByName('dist').Value := form1.dist;
     Query1.Open;
     Query1.First;
   end;
@@ -96,7 +95,7 @@ begin
       mDetail:
       begin
         Form44.Width := 670;
-        SlujGrid.ColCount := DataModule1.Query1.FieldCount;
+        //SlujGrid.ColCount := DataModule1.Query1.FieldCount;
 
         FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
           'ФИО', 'Сумм. служ.', 'Субсидия', 'Услуга'),
@@ -120,11 +119,11 @@ begin
       mSum:
       begin
         Form44.Width := 580;
-        SlujGrid.ColCount := DataModule1.Query1.FieldCount;
+        //SlujGrid.ColCount := DataModule1.Query1.FieldCount;
 
         FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
           'ФИО', 'Сумм. служ.', 'Субсидия'),
-          TIntArray.Create(64, 75, 255, 75, 115), Datamodule1.Query1.RecordCount + 1);
+          TIntArray.Create(64, 75, 255, 75, 75), Datamodule1.Query1.RecordCount + 1);
 
         with DataModule1.Query1 do
           for i := 0 to RecordCount do
@@ -139,9 +138,31 @@ begin
         GroupBox1.Caption := 'Общая сумма за месяц:';
       end;
     end;
+    cl_regn := SlujGrid.Cells[1, SlujGrid.Row];
   end
   else
   begin
+    case mode of
+      mDetail:
+      begin
+      FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
+        'ФИО', 'Сумм. служ.', 'Субсидия', 'Услуга'),
+        TIntArray.Create(64, 75, 240, 65, 65, 115), 2);
+      end;
+
+      mSum:
+      begin
+      FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
+        'ФИО', 'Сумм. служ.', 'Субсидия'),
+        TIntArray.Create(64, 75, 255, 75, 75), 2);
+      end;
+    end;
+    SlujGrid.Cells[0, 1] := '';
+    SlujGrid.Cells[1, 1] := '';
+    SlujGrid.Cells[2, 1] := '';
+    SlujGrid.Cells[3, 1] := '';
+    SlujGrid.Cells[4, 1] := '';
+    Button1.Enabled := False;
     ShowMessage('В текушем месяце нет подобных записей.');
   end;
 end;

@@ -27,7 +27,7 @@ uses
   search in 'search.pas' {Form33},
   opend in 'opend.pas' {Form26},
   fstruct in 'fstruct.pas',
-  SQL in 'sql.pas' {Form34},
+  sql in 'sql.pas' {Form34},
   imexp in 'imexp.pas' {Form35},
   progress in 'progress.pas' {AboutBox1},
   chserv in 'chserv.pas' {Form29},
@@ -48,14 +48,12 @@ uses
   chtarifs in 'chtarifs.pas' {Form42},
   rrecalc in 'rrecalc.pas' {Form43},
   stat in 'stat.pas' {Stats},
-  subtypes in 'core\subtypes.pas',
   ODBC_DSN in 'data\ODBC_DSN.pas',
   srvinfo in 'data\srvinfo.pas',
   min in 'data\min.pas',
   version in 'version.pas',
   SlujUnit in 'SlujUnit.pas' {Form44},
   ConnectUnit in 'ConnectUnit.pas' {Form45},
-//  FactSumUnit in 'FactSumUnit.pas' {FactSumFrm},
   ConfigPropertiesUnit in 'ConfigPropertiesUnit.pas' {ConfigFrm},
   fAppPropUnit in 'frames\fAppPropUnit.pas' {fAppProp: TFrame},
   fAppUpdateUnit in 'frames\fAppUpdateUnit.pas' {fAppUpdate: TFrame},
@@ -74,7 +72,7 @@ begin
   try//Подключение к SQLSub - ODBC alias for Subsidy (MS SQL)
     datamodule1.database1.connected := True;
     try//Подключение к DBFSub - BDE alias for DBASE driver (BDE)
-      datamodule1.database2.connected := True;
+      datamodule1.dbfConnection.connected := True;
       try
         Application.CreateForm(TForm1, Form1);
         Application.CreateForm(TAboutBox1, AboutBox1);
@@ -84,12 +82,11 @@ begin
         Application.CreateForm(TForm16, Form16);
         Application.CreateForm(TForm17, Form17);
         Application.CreateForm(TForm18, Form18);
-//        Application.CreateForm(TForm19, Form19);
         Application.CreateForm(TForm20, Form20);
         Application.CreateForm(TAboutBox, AboutBox);
         Application.CreateForm(TForm21, Form21);
-        Application.CreateForm(TForm37, Form37);
-        Application.CreateForm(TForm39, Form39);
+//        Application.CreateForm(TForm37, Form37);
+//        Application.CreateForm(TForm39, Form39);
         Form1.Show;
         Form1.Update;
         Form1.Reload;
@@ -102,7 +99,6 @@ begin
         Application.CreateForm(TForm12, Form12);
         Application.CreateForm(TForm13, Form13);
         Application.CreateForm(TForm14, Form14);
-//        Application.CreateForm(TForm15, Form15);
         Application.CreateForm(TForm23, Form23);
         Application.CreateForm(TForm24, Form24);
         Application.CreateForm(TForm25, Form25);
@@ -122,7 +118,6 @@ begin
         Application.CreateForm(TForm43, Form43);
         Application.CreateForm(TForm44, Form44);
         Application.CreateForm(TForm45, Form45);
-//        Application.CreateForm(TFactSumFrm, FactSumFrm);
         Application.CreateForm(TConfigFrm, ConfigFrm);
         Application.CreateForm(TAddReportDataFrm, AddReportDataFrm);
         Application.CreateForm(TAnyDirectoryFrm, AnyDirectoryFrm);
@@ -131,7 +126,7 @@ begin
         ShowMessage('Произошел сбой при создании одной из форм!');
       end;
     except
-      ShowMessage('Произошел сбой при попытке соединения с alias DBFSub: возможно он отстутствует или неверно настроен!');
+      ShowMessage('Произошел сбой при попытке назначения директории для временных баз: возможно данная директория не существует!');
     end;
   except
     ShowMessage('Произошел сбой при попытке соединения с сервером!' + #13 +

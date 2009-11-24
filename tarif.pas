@@ -43,6 +43,8 @@ type
     procedure Edit2Exit(Sender: TObject);
     procedure Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
+    procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
   private
     { Private declarations }
     oldid: integer;//текущее значение пол€ код
@@ -75,7 +77,7 @@ procedure TForm15.SetDefault;
 var
   i: integer;
 begin
-  with DataModule1.Query4 do
+  with DataModule1.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -86,15 +88,21 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create(' од', 'Ќаименование', '“ариф'),
-    TIntArray.Create(30, 305, 45), DataModule1.Query4.RecordCount + 1);
+    TIntArray.Create(30, 305, 45), DataModule1.qTarif.RecordCount + 1);
 
-  for i := 0 to DataModule1.Query4.RecordCount - 1 do
+  for i := 0 to DataModule1.qTarif.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DataModule1.Query4.FieldByName('id_' + nam).Value;
-    StringGrid1.Cells[1, i + 1] := DataModule1.Query4.FieldByName('name' + nam).Value;
-    StringGrid1.Cells[2, i + 1] := DataModule1.Query4.FieldByName('tarif' + nam).Value;
-    DataModule1.Query4.Next;
+    StringGrid1.Cells[0, i + 1] := DataModule1.qTarif.FieldByName('id_' + nam).Value;
+    StringGrid1.Cells[1, i + 1] := DataModule1.qTarif.FieldByName('name' + nam).Value;
+    StringGrid1.Cells[2, i + 1] := DataModule1.qTarif.FieldByName('tarif' + nam).Value;
+    DataModule1.qTarif.Next;
   end;
+end;
+
+procedure TForm15.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
+  Rect: TRect; State: TGridDrawState);
+begin
+  SGDrawCell(Sender, ACol, ARow, Rect, State);
 end;
 
 procedure TForm15.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
@@ -106,9 +114,9 @@ procedure TForm15.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; va
 begin
   if ARow <> 0 then
   begin
-    Edit1.Text := StringGrid1.Cells[1, ARow];//Fields[1].AsString;
-    Edit2.Text := StringGrid1.Cells[2, ARow];//FlToStr(DBGrid1.Fields[2].AsFloat);
-    Edit3.Text := StringGrid1.Cells[0, ARow];//DBGrid1.Fields[0].AsString;}
+    Edit1.Text := StringGrid1.Cells[1, ARow];
+    Edit2.Text := StringGrid1.Cells[2, ARow];
+    Edit3.Text := StringGrid1.Cells[0, ARow];
     if Edit3.Text <> '' then
       oldid := StrToInt(Edit3.Text);
   end;
@@ -314,29 +322,16 @@ begin
     FillTarif(Form1.bpath, nam, Form1.rdt, Form1.dist, Form1.codedbf);
   end;
   SetDefault;
-{  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := FlToStr(DBGrid1.Fields[2].AsFloat);
-  Edit3.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit3.Text);}
 end;
 
 procedure TForm15.FormShow(Sender: TObject);
 {*******************************************************************************
   ѕроцедура FormShow обрабатывает событие OnShow формы. ”станавливаютс€ названи€
-  полей, которые отражает DBGrid1, в него загружаютс€ данные, в пол€х ввода по€вл€ютс€
+  полей, которые отражает StringGrid1, в него загружаютс€ данные, в пол€х ввода по€вл€ютс€
   значени€ 1 строки. ¬ зависимости от статуса открыти€ формы управл€ющие кнопки
   станов€тс€ недоступными(чтение) или доступными(запись) дл€ нажати€.
 *******************************************************************************}
 begin
-  //  DBGrid1.Columns[0].FieldName := 'id_' + nam;
-  //  DBGrid1.Columns[1].FieldName := 'name' + nam;
-  //  DBGrid1.Columns[2].FieldName := 'tarif' + nam;
-
-  //  Edit1.Text := DBGrid1.Fields[1].AsString;
-  //  Edit2.Text := FlToStr(DBGrid1.Fields[2].AsFloat);
-  //  Edit3.Text := DBGrid1.Fields[0].AsString;
-  //  oldid := StrToInt(Edit3.Text);
-
   SetDefault;
 
   if status = 0 then
@@ -360,7 +355,7 @@ procedure TForm15.FormClose(Sender: TObject; var Action: TCloseAction);
 *******************************************************************************}
 begin
   Datamodule1.Query1.Close;
-  Datamodule1.Query4.Close;
+  Datamodule1.qTarif.Close;
 end;
 
 procedure TForm15.Edit3Exit(Sender: TObject);

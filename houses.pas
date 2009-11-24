@@ -319,7 +319,7 @@ begin
       Inc(l);
     end;
   end;
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     l := 0;
     Close;
@@ -532,14 +532,14 @@ begin
   if ind <> -1 then
   begin
     Combobox2.ItemIndex := ind;
-    with DataModule1.Query4 do
+    with DataModule1.qTarif do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select sbros.tarifcont');
       SQL.Add('from "curcont.dbf" sbros');
       SQL.Add('where sbros.id_cont = :id');
-      ParamByName('id').AsInteger := cont[Combobox2.ItemIndex];
+      Parameters.ParamByName('id').Value := integer(cont[Combobox2.ItemIndex]);
       Open;
       Edit6.Text := FieldByName('tarifcont').AsString;
       Close;
@@ -558,14 +558,14 @@ begin
   if ind <> -1 then
   begin
     Combobox3.ItemIndex := ind;
-    with DataModule1.Query4 do
+    with DataModule1.qTarif do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select sbros.tarifrep');
       SQL.Add('from "currep.dbf" sbros');
       SQL.Add('where sbros.id_rep = :id');
-      ParamByName('id').AsInteger := rep[Combobox3.ItemIndex];
+      Parameters.ParamByName('id').Value := integer(rep[Combobox3.ItemIndex]);
       Open;
       Edit7.Text := FieldByName('tarifrep').AsString;
       Close;
@@ -584,14 +584,14 @@ begin
   if ind <> -1 then
   begin
     Combobox4.ItemIndex := ind;
-    with DataModule1.Query4 do
+    with DataModule1.qTarif do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select sbros.tarif' + IntToStr(boiler + 1));
       SQL.Add('from "curcold.dbf" sbros');
       SQL.Add('where sbros.id_cold = :id');
-      ParamByName('id').AsInteger := cold[Combobox4.ItemIndex];
+      Parameters.ParamByName('id').Value := integer(cold[Combobox4.ItemIndex]);
       Open;
       Edit8.Text := FieldByName('tarif' + IntToStr(boiler + 1)).AsString;
       Close;
@@ -610,14 +610,14 @@ begin
   if ind <> -1 then
   begin
     Combobox5.ItemIndex := ind;
-    with DataModule1.Query4 do
+    with DataModule1.qTarif do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select sbros.tarif' + IntToStr(boiler + 1));
       SQL.Add('from "curhot.dbf" sbros');
       SQL.Add('where sbros.id_hot = :id');
-      ParamByName('id').AsInteger := hot[Combobox5.ItemIndex];
+      Parameters.ParamByName('id').Value := integer(hot[Combobox5.ItemIndex]);
       Open;
       Edit9.Text := FieldByName('tarif' + IntToStr(boiler + 1)).AsString;
       Close;
@@ -636,14 +636,14 @@ begin
   if ind <> -1 then
   begin
     Combobox14.ItemIndex := ind;
-    with DataModule1.Query4 do
+    with DataModule1.qTarif do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select sbros.tarifcanal');
       SQL.Add('from "curcanal.dbf" sbros');
       SQL.Add('where sbros.id_canal = :id');
-      ParamByName('id').AsInteger := canal[Combobox14.ItemIndex];
+      Parameters.ParamByName('id').Value := integer(canal[Combobox14.ItemIndex]);
       Open;
       Edit2.Text := FieldByName('tarifcanal').AsString;
       Close;
@@ -662,14 +662,14 @@ begin
   if ind <> -1 then
   begin
     Combobox6.ItemIndex := ind;
-    with DataModule1.Query4 do
+    with DataModule1.qTarif do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select sbros.tarifheat');
       SQL.Add('from "curheat.dbf" sbros');
       SQL.Add('where sbros.id_heat = :id');
-      ParamByName('id').AsInteger := heat[Combobox6.ItemIndex];
+      Parameters.ParamByName('id').Value := integer(heat[Combobox6.ItemIndex]);
       Open;
       Edit10.Text := FieldByName('tarifheat').AsString;
       Close;
@@ -688,14 +688,14 @@ begin
   if ind <> -1 then
   begin
     Combobox7.ItemIndex := ind;
-    with DataModule1.Query4 do
+    with DataModule1.qTarif do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select sbros.tarifgas');
       SQL.Add('from "curgas.dbf" sbros');
       SQL.Add('where sbros.id_gas = :id');
-      ParamByName('id').AsInteger := gas[Combobox7.ItemIndex];
+      Parameters.ParamByName('id').Value := integer(gas[Combobox7.ItemIndex]);
       Open;
       Edit11.Text := FieldByName('tarifgas').AsString;
       Close;
@@ -732,14 +732,14 @@ begin
   if ind <> -1 then
   begin
     Combobox9.ItemIndex := ind;
-    with DataModule1.Query4 do
+    with DataModule1.qTarif do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select sbros.tarifwood');
       SQL.Add('from "curwood.dbf" sbros');
       SQL.Add('where sbros.id_wood = :id');
-      ParamByName('id').AsInteger := wood[Combobox9.ItemIndex];
+      Parameters.ParamByName('id').Value := integer(wood[Combobox9.ItemIndex]);
       Open;
       Edit13.Text := FieldByName('tarifwood').AsString;
       Close;
@@ -758,14 +758,14 @@ begin
   if ind <> -1 then
   begin
     Combobox10.ItemIndex := ind;
-    with DataModule1.Query4 do
+    with DataModule1.qTarif do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select sbros.tarifcoal');
       SQL.Add('from "curcoal.dbf" sbros');
       SQL.Add('where sbros.id_coal = :id');
-      ParamByName('id').AsInteger := coal[Combobox10.ItemIndex];
+      Parameters.ParamByName('id').Value := integer(coal[Combobox10.ItemIndex]);
       Open;
       Edit14.Text := FieldByName('tarifcoal').AsString;
       Close;
@@ -1042,14 +1042,14 @@ end;
 
 function TForm24.SelStnd(n: integer): string;//выбрать
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namestnd');
     SQL.Add('from "currstnd.dbf" sbros');
     SQL.Add('where sbros.id_stnd = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('namestnd').AsString;
     Close;
@@ -1058,14 +1058,14 @@ end;
 
 function TForm24.SelCont(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namecont');
     SQL.Add('from "curcont.dbf" sbros');
     SQL.Add('where sbros.id_cont = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('namecont').AsString;
     Close;
@@ -1074,14 +1074,14 @@ end;
 
 function TForm24.SelRep(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namerep');
     SQL.Add('from "currep.dbf" sbros');
     SQL.Add('where sbros.id_rep = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := n;
     Open;
     Result := FieldByName('namerep').AsString;
     Close;
@@ -1090,14 +1090,14 @@ end;
 
 function TForm24.SelCold(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namecold');
     SQL.Add('from "curcold.dbf" sbros');
     SQL.Add('where sbros.id_cold = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := n;
     Open;
     Result := FieldByName('namecold').AsString;
     Close;
@@ -1106,14 +1106,14 @@ end;
 
 function TForm24.SelHot(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namehot');
     SQL.Add('from "curhot.dbf" sbros');
     SQL.Add('where sbros.id_hot = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := n;
     Open;
     Result := FieldByName('namehot').AsString;
     Close;
@@ -1122,14 +1122,14 @@ end;
 
 function TForm24.SelCanal(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namecanal');
     SQL.Add('from "curcanal.dbf" sbros');
     SQL.Add('where sbros.id_canal = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := n;
     Open;
     Result := FieldByName('namecanal').AsString;
     Close;
@@ -1138,14 +1138,14 @@ end;
 
 function TForm24.SelHeat(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.nameheat');
     SQL.Add('from "curheat.dbf" sbros');
     SQL.Add('where sbros.id_heat = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := n;
     Open;
     Result := FieldByName('nameheat').AsString;
     Close;
@@ -1154,14 +1154,14 @@ end;
 
 function TForm24.SelWood(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namewood');
     SQL.Add('from "curwood.dbf" sbros');
     SQL.Add('where sbros.id_wood = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := n;
     Open;
     Result := FieldByName('namewood').AsString;
     Close;
@@ -1170,14 +1170,14 @@ end;
 
 function TForm24.SelCoal(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namecoal');
     SQL.Add('from "curcoal.dbf" sbros');
     SQL.Add('where sbros.id_coal = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := n;
     Open;
     Result := FieldByName('namecoal').AsString;
     Close;
@@ -1187,14 +1187,14 @@ end;
 
 function TForm24.SelGas(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namegas');
     SQL.Add('from "curgas.dbf" sbros');
     SQL.Add('where sbros.id_gas = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := n;
     Open;
     Result := FieldByName('namegas').AsString;
     Close;
@@ -1203,14 +1203,14 @@ end;
 
 function TForm24.SelEl(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.plate');
     SQL.Add('from "curel.dbf" sbros');
     SQL.Add('where sbros.id_el = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := n;
     Open;
     Result := FieldByName('plate').AsString;
     Close;
@@ -1230,7 +1230,7 @@ end;
 procedure TForm24.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Datamodule1.Query1.Close;
-  Datamodule1.Query4.Close;
+  Datamodule1.qTarif.Close;
 end;
 
 procedure TForm24.Edit3Exit(Sender: TObject);
