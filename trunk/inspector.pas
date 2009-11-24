@@ -128,10 +128,6 @@ begin
     Edit1.Text := StringGrid1.Cells[1, ARow];
     Edit2.Text := StringGrid1.Cells[0, ARow];
     Edit3.Text := StringGrid1.Cells[3, ARow];
-  {  if DBGrid1.Fields[2].AsInteger = 0 then
-      CheckBox1.Checked := False
-    else
-      CheckBox1.Checked := True;}
     if StringGrid1.Cells[2, ARow] <> '' then
       CheckBox1.Checked := variant(StringGrid1.Cells[2, ARow]);
 

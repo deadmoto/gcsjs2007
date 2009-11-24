@@ -8,28 +8,17 @@ unit service;
 
 interface
 
+
 uses
-  Controls,
-  DB,
-  dbf,
-  Dialogs,
-  ExcelXP,
-  FileCtrl,
-  Grids,
-  Mask,
-  padegFIO,
-  Registry,
-  StdCtrls,
-  SysUtils,
-  Variants,
-  Windows;
+  Controls, DB, dbf, Dialogs, ExcelXP, FileCtrl, Grids, Mask, padegFIO, Registry,
+  StdCtrls, SysUtils, Variants, Windows, ExtCtrls;
 
 const
   numbtarif = 14;
 
-  FactDateBase = '01.08.2008';
-  FactDateWC   = '01.02.2008';
-  FactDateYear = '01.01.2009';
+  FactDateBase = '01.08.2008'; //выбирает клиентов с обычным типом отоплени€, начина€ с данной даты
+  FactDateWC   = '01.02.2008'; //выбирает клиентов с отличным от обычного типа отоплени€, начина€ с данной даты
+  FactDateYear = '01.01.2009'; //дата начала учета фактических расходов
 
   cDiffOperation: array[0..2] of string = (
     '=',
@@ -85,7 +74,9 @@ function RefToCell(ARow, ACol: integer): string;
 function ExportGridToExcel(AGrid: TStringGrid; ASheetName, AFileName: string): boolean;
 {******************************************************************************}
 
+//¬озвращает версию exe по имени файла
 function FileVersion(AFileName: string): string;
+
 function GetTempDir: string;
 function GetSystemDir: string;
 function SelectDir: string;
@@ -93,8 +84,14 @@ function SelectDir: string;
 function getConfValue(str: string): variant;
 
 procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidths: TIntArray; RecCount: integer);
+
+//ѕроцеду отрисовки TStringGrig, разбивает текст в €чейк на несколько строк
 procedure SGDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 
+{//ѕроцеду отрисовки TComboBox, разбивает текст в items на несколько строк
+procedure CBMeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
+procedure CBDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
+}
 implementation
 
 uses
@@ -123,8 +120,12 @@ begin
       if (len > 0) and (len < 3) then
       begin
         if len = 1 then
+        begin
           r := '0';
-        edt.Text := '0,' + r + Copy(str, len - 1, 2);
+          edt.Text := '0,' + r + Copy(str, len - 1, 2);
+        end;
+        if len = 2 then
+          edt.Text := Copy(str, len - 1, 2) + ',00';
       end;
     end
     else
@@ -355,12 +356,25 @@ function FindCl(RegNumber: integer; buffer: array of integer): integer;
 var
   i: integer;
 begin
-  for i := 0 to Length(buffer) - 1 do
+  Result := 0;
+{  for i := 0 to Length(buffer) - 1 do
     if buffer[i] = RegNumber then
     begin
       Result := i;
       exit;
     end;
+  if i = Length(buffer) then
+    Result := -1;}
+  i := 0;
+  while i <>  Length(buffer) - 1 do
+  begin
+    if buffer[i] = RegNumber then
+    begin
+      Result := i;
+      exit;
+    end;
+    Inc(i);
+  end;
   if i = Length(buffer) then
     Result := -1;
 end;
@@ -373,6 +387,7 @@ function FindReg(RegNumber, b: integer; buffer: array of integer): integer;
 var
   a, c: integer;
 begin
+  Result := 0;
   if b <> 0 then
   begin
     a := 0;
@@ -486,15 +501,19 @@ begin
     Dbf1.TableName := path + nam + '.dbf';
     Dbf1.CreateTable;
     Dbf1.CodePage := code;
-    while not Query1.EOF do
-    begin
-      dbf1.Append;
-      for i := 1 to Query1.FieldCount do
-        EditField(Query1.Fields[i - 1].AsString, code, i);
-      Dbf1.Post;
-      Query1.Next;
-    end;
-    dbf1.Close;
+//    try
+      while not Query1.EOF do
+      begin
+        dbf1.Append;
+        for i := 1 to Query1.FieldCount do
+          EditField(Query1.Fields[i - 1].AsString, code, i);
+        Dbf1.Post;
+        Query1.Next;
+      end;
+//    except
+//      ShowMessage(Query1.Fields[i - 1].AsString);
+//    end;
+    Dbf1.Close;
     Query1.Close;
   end;
 end;
@@ -864,8 +883,11 @@ end;
 function SelectDir: string;
 var
   dir: string;
+  bool: boolean;
 begin
-  if SelectDirectory('Select directory', '', dir, [sdShowShares, sdNewUI, sdValidateDir, sdNewFolder]) then
+  bool := SelectDirectory('Select directory', '', dir, [sdShowShares, sdNewUI, sdValidateDir, sdNewFolder]);
+  if not bool then exit
+  else
   begin
     if dir[length(dir)] <> '\' then
       dir := dir + '\';
@@ -878,10 +900,13 @@ var
   i: integer;
 begin
   StrGrid.RowCount := RecCount;
+  StrGrid.ColCount := length(SGHead);
   for i := 0 to length(SGHead) - 1 do
+  begin
     StrGrid.Cells[i, 0] := SGHead[i];
-  for i := 0 to length(SGColWidths) - 1 do
+//  for i := 0 to length(SGColWidths) - 1 do
     StrGrid.ColWidths[i] := SGColWidths[i];
+  end;
 end;
 
 function WithoutDoubleSpaces(str: string): string;
@@ -924,12 +949,12 @@ end;
 procedure SGDrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
 var
-  i,pos: integer;
+  {i,pos}H: integer;
   buffer: string;
-  dict: array of string;
+//  dict: array of string;
 begin
   with (Sender as TStrinGgrid) do
-    if (ARow > 0) and (Canvas.TextWidth(Cells[ACol, ARow]) > ColWidths[ACol]) then
+ {   if (ARow > 0) and (Canvas.TextWidth(Cells[ACol, ARow]) > ColWidths[ACol]) then
     begin
       setlength(dict,1);
       for i := 1 to length(Cells[ACol, ARow]) do
@@ -952,6 +977,7 @@ begin
         buffer := '';
         inc(pos);
       end;
+
       rowheights[arow] := defaultrowheight * (pos);
       Canvas.Pen.color := Color;
 //      Canvas.Brush.color:= Color;
@@ -969,6 +995,54 @@ begin
       if length(buffer) > 0 then
         Canvas.TextOut(rect.left, rect.top + 2 + pos * Canvas.TextHeight(buffer), buffer);
     end;
+    }
+  if (ARow > 0) and (Canvas.TextWidth(Cells[ACol, ARow]) > ColWidths[ACol]) then
+    begin
+      (Sender as TStrinGgrid).Canvas.FillRect(Rect);
+      buffer:= (Sender as TStrinGgrid).Cells[ACol, ARow];
+      Inc(Rect.Left,3);
+      Dec(Rect.Right,3);
+      H := DrawText((Sender as TStrinGgrid).Canvas.Handle, PChar(buffer),
+        length(buffer), Rect, DT_WORDBREAK);
+      if H > (Sender as TStrinGgrid).RowHeights[ARow] then
+        (Sender as TStrinGgrid).RowHeights[ARow] := H;
+    end;
+end;
+{
+procedure CBMeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
+var
+  ItemString: string;
+  MyRect: TRect;
+  MyImage: TImage;
+  MyCombo: TComboBox;
+begin
+  // Don't waste time with this on Index = -1
+  if (Index > -1) then
+  begin
+    MyCombo := TComboBox(Control);
+    // Create a temporary canvas to calculate the height
+    MyImage := TImage.Create(MyCombo);
+    try
+      MyRect := MyCombo.ClientRect;
+      ItemString := MyCombo.Items.Strings[Index];
+      MyImage.Canvas.Font := MyCombo.Font;
+      // Calc. using this ComboBox's font size
+      Height := DrawText(MyImage.Canvas.Handle, PChar(ItemString),
+        length(ItemString), MyRect, DT_CALCRECT or DT_WORDBREAK);
+    finally
+      MyImage.Free;
+    end;
+  end;
 end;
 
+procedure CBDrawItem(Control: TWinControl; Index: Integer; Rect: TRect;
+  State: TOwnerDrawState);
+var
+  ItemString: string;
+begin
+  TComboBox(Control).Canvas.FillRect(Rect);
+  ItemString := TComboBox(Control).Items.Strings[Index];
+  DrawText(TComboBox(Control).Canvas.Handle, PChar(ItemString), length(ItemString), Rect, DT_WORDBREAK);
+end;
+}
 end.

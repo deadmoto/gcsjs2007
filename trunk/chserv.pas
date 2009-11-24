@@ -90,13 +90,13 @@ uses service, main, datamodule;
 
 function TForm29.SelStnd(n: integer): string;//выбрать стандарт
 begin
-  with Datamodule1.Query4 do begin
+  with Datamodule1.qTarif do begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namestnd');
     SQL.Add('from "currstnd.dbf" sbros');
     SQL.Add('where sbros.id_stnd = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := n;
     Open;
     Result := FieldByName('namestnd').AsString;
     Close;
@@ -119,7 +119,7 @@ begin
     12: nam := 'wood';
     13: nam := 'coal';
   end;
-  with Datamodule1.Query4 do begin
+  with Datamodule1.qTarif do begin
     Close;
     SQL.Clear;
     if n<>7 then
@@ -128,7 +128,7 @@ begin
       SQL.Add('select sbros.plate as name'+nam);
     SQL.Add('from "cur'+nam+'.dbf" sbros');
     SQL.Add('where sbros.id_'+nam+' = :id');
-    ParamByName('id').AsInteger := t;
+    Parameters.ParamByName('id').Value := t;
     Open;
     Result := FieldByName('name'+nam).AsString;
     Close;
@@ -233,7 +233,7 @@ procedure TForm29.FillTarif(n: string;num: integer);
 var
   l: integer;
 begin
-  with Datamodule1.Query4 do begin
+  with Datamodule1.qTarif do begin
     l := 0;
     Close;
     SQL.Clear;
@@ -261,7 +261,7 @@ procedure TForm29.FillTarifb(n: string;num: integer);
 var
   l: integer;
 begin
-  with Datamodule1.Query4 do begin
+  with Datamodule1.qTarif do begin
     l := 0;
     Close;
     SQL.Clear;
@@ -360,7 +360,7 @@ begin
     SetLength(curt,Length(serv));
     Combobox4.ItemIndex := 0;
   end;
-  with Datamodule1.Query4 do begin
+  with Datamodule1.qTarif do begin
     l := 0;
     Close;
     SQL.Clear;
@@ -444,7 +444,7 @@ end;
 procedure TForm29.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Datamodule1.Query1.Close;
-  Datamodule1.Query4.Close;
+  Datamodule1.qTarif.Close;
 end;
 
 procedure TForm29.ComboBox2Change(Sender: TObject);

@@ -76,7 +76,7 @@ procedure TForm23.SetDefault;
 var
   i: integer;
 begin
-  with DataModule1.Query4 do
+  with DataModule1.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -87,16 +87,16 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Тип плиты', 'Семья 1 чел.', 'Семья 2 чел.', 'Семья >2 чел.'),
-    TIntArray.Create(30, 146, 74, 74, 74), DataModule1.Query4.RecordCount + 1);
+    TIntArray.Create(30, 146, 74, 74, 74), DataModule1.qTarif.RecordCount + 1);
 
-  for i := 0 to DataModule1.Query4.RecordCount - 1 do
+  for i := 0 to DataModule1.qTarif.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DataModule1.Query4.FieldByName('id_el').Value;
-    StringGrid1.Cells[1, i + 1] := DataModule1.Query4.FieldByName('plate').Value;
-    StringGrid1.Cells[2, i + 1] := DataModule1.Query4.FieldByName('tarifel1').Value;
-    StringGrid1.Cells[3, i + 1] := DataModule1.Query4.FieldByName('tarifel2').Value;
-    StringGrid1.Cells[4, i + 1] := DataModule1.Query4.FieldByName('tarifel3').Value;
-    DataModule1.Query4.Next;
+    StringGrid1.Cells[0, i + 1] := DataModule1.qTarif.FieldByName('id_el').Value;
+    StringGrid1.Cells[1, i + 1] := DataModule1.qTarif.FieldByName('plate').Value;
+    StringGrid1.Cells[2, i + 1] := DataModule1.qTarif.FieldByName('tarifel1').Value;
+    StringGrid1.Cells[3, i + 1] := DataModule1.qTarif.FieldByName('tarifel2').Value;
+    StringGrid1.Cells[4, i + 1] := DataModule1.qTarif.FieldByName('tarifel3').Value;
+    DataModule1.qTarif.Next;
   end;
 
 end;
@@ -105,11 +105,11 @@ procedure TForm23.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; va
 begin
   if ARow <> 0 then
   begin
-    Edit1.Text := StringGrid1.Cells[1, ARow];//DBGrid1.Fields[1].AsString;
-    Edit2.Text := StringGrid1.Cells[2, ARow];//FlToStr(DBGrid1.Fields[2].AsFloat);
-    Edit3.Text := StringGrid1.Cells[3, ARow];//FlToStr(DBGrid1.Fields[3].AsFloat);
-    Edit5.Text := StringGrid1.Cells[4, ARow];//FlToStr(DBGrid1.Fields[4].AsFloat);
-    Edit4.Text := StringGrid1.Cells[0, ARow];// DBGrid1.Fields[0].AsString;
+    Edit1.Text := StringGrid1.Cells[1, ARow];
+    Edit2.Text := StringGrid1.Cells[2, ARow];
+    Edit3.Text := StringGrid1.Cells[3, ARow];
+    Edit5.Text := StringGrid1.Cells[4, ARow];
+    Edit4.Text := StringGrid1.Cells[0, ARow];
     if Edit4.Text <> '' then
       oldid := StrToInt(Edit4.Text);
   end;
@@ -294,12 +294,6 @@ begin
     FillEl(Form1.bpath, Form1.rdt, Form1.dist, Form1.codedbf);
   end;
   SetDefault;
-{  Edit1.Text := DBGrid1.Fields[1].AsString;
-  Edit2.Text := FlToStr(DBGrid1.Fields[2].AsFloat);
-  Edit3.Text := FlToStr(DBGrid1.Fields[3].AsFloat);
-  Edit5.Text := FlToStr(DBGrid1.Fields[4].AsFloat);
-  Edit4.Text := DBGrid1.Fields[0].AsString;
-  oldid := StrToInt(Edit4.Text);}
 end;
 
 procedure TForm23.FormShow(Sender: TObject);
@@ -323,7 +317,7 @@ end;
 procedure TForm23.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Datamodule1.Query1.Close;
-  Datamodule1.Query4.Close;
+  Datamodule1.qTarif.Close;
 end;
 
 procedure TForm23.Edit1Enter(Sender: TObject);

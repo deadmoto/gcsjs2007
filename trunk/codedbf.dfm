@@ -1,10 +1,10 @@
 object Form41: TForm41
   Left = 190
   Top = 111
-  Width = 246
-  Height = 91
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = #1050#1086#1076#1080#1088#1086#1074#1082#1072' dbf-'#1092#1072#1081#1083#1086#1074
+  ClientHeight = 57
+  ClientWidth = 238
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

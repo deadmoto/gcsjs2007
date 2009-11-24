@@ -3,18 +3,8 @@ unit rstnd;
 interface
 
 uses
-  Classes,
-  Controls,
-  Dialogs,
-  ExtCtrls,
-  Forms,
-  Graphics,
-  Grids,
-  Messages,
-  StdCtrls,
-  SysUtils,
-  Variants,
-  Windows;
+  Classes, Controls, Dialogs, ExtCtrls, Forms, Graphics, Grids, Messages,
+  StdCtrls, SysUtils, Variants, Windows;
 
 type
   TForm38 = class(TForm)
@@ -77,10 +67,7 @@ var
 implementation
 
 uses
-  datamodule,
-  service,
-  main,
-  elpower;
+  datamodule, service, main, elpower;
 
 {$R *.dfm}
 
@@ -88,7 +75,7 @@ procedure TForm38.SetDefault;
 var
   i: integer;
 begin
-  with DataModule1.Query4 do
+  with DataModule1.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -100,20 +87,20 @@ begin
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Ст-рт 1', 'Ст-рт 2',
     'Ст-рт 3', 'Ст-рт 4', 'Ст-рт 5', 'Ст-рт 6', 'Ст-рт 7'),
-    TIntArray.Create(25, 170, 50, 50, 50, 50, 50, 50, 50), Datamodule1.Query4.RecordCount + 1);
+    TIntArray.Create(25, 170, 50, 50, 50, 50, 50, 50, 50), Datamodule1.qTarif.RecordCount + 1);
 
-  for i := 0 to Datamodule1.Query4.RecordCount - 1 do
+  for i := 0 to Datamodule1.qTarif.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := Datamodule1.Query4.FieldByName('id_stnd').Value;
-    StringGrid1.Cells[1, i + 1] := Datamodule1.Query4.FieldByName('namestnd').Value;
-    StringGrid1.Cells[2, i + 1] := Datamodule1.Query4.FieldByName('value1').Value;
-    StringGrid1.Cells[3, i + 1] := Datamodule1.Query4.FieldByName('value2').Value;
-    StringGrid1.Cells[4, i + 1] := Datamodule1.Query4.FieldByName('value3').Value;
-    StringGrid1.Cells[5, i + 1] := Datamodule1.Query4.FieldByName('value4').Value;
-    StringGrid1.Cells[6, i + 1] := Datamodule1.Query4.FieldByName('value5').Value;
-    StringGrid1.Cells[7, i + 1] := Datamodule1.Query4.FieldByName('value6').Value;
-    StringGrid1.Cells[8, i + 1] := Datamodule1.Query4.FieldByName('value7').Value;
-    Datamodule1.Query4.Next;
+    StringGrid1.Cells[0, i + 1] := Datamodule1.qTarif.FieldByName('id_stnd').Value;
+    StringGrid1.Cells[1, i + 1] := Datamodule1.qTarif.FieldByName('namestnd').Value;
+    StringGrid1.Cells[2, i + 1] := Datamodule1.qTarif.FieldByName('value1').Value;
+    StringGrid1.Cells[3, i + 1] := Datamodule1.qTarif.FieldByName('value2').Value;
+    StringGrid1.Cells[4, i + 1] := Datamodule1.qTarif.FieldByName('value3').Value;
+    StringGrid1.Cells[5, i + 1] := Datamodule1.qTarif.FieldByName('value4').Value;
+    StringGrid1.Cells[6, i + 1] := Datamodule1.qTarif.FieldByName('value5').Value;
+    StringGrid1.Cells[7, i + 1] := Datamodule1.qTarif.FieldByName('value6').Value;
+    StringGrid1.Cells[8, i + 1] := Datamodule1.qTarif.FieldByName('value7').Value;
+    Datamodule1.qTarif.Next;
   end;
 
 end;
@@ -269,7 +256,7 @@ begin
             Close;
             SQL.Clear;
             SQL.Add('update rstnd');
-            SQL.Add('set namestnd=:name,value1=:v1,value2=:v2,value3=:v3,value3=:v3,value4=:v4,value5=:v5,value6=:v6,value7=:v7');
+            SQL.Add('set namestnd=:name,value1=:v1,value2=:v2,value3=:v3,value4=:v4,value5=:v5,value6=:v6,value7=:v7');
             SQL.Add('where (id_stnd = :id)and(sdate=Convert(smalldatetime,:d,104))');
             ParamByName('id').AsInteger := oldid;
           end;
@@ -335,7 +322,7 @@ end;
 procedure TForm38.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Datamodule1.Query1.Close;
-  Datamodule1.Query4.Close;
+  Datamodule1.qTarif.Close;
 end;
 
 procedure TForm38.Edit4Exit(Sender: TObject);

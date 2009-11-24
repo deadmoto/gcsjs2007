@@ -4,8 +4,8 @@ object Form44: TForm44
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = #1055#1088#1086#1089#1084#1086#1090#1088' '#1089#1083#1091#1078#1077#1073#1085#1099#1093
-  ClientHeight = 492
-  ClientWidth = 623
+  ClientHeight = 497
+  ClientWidth = 625
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,17 +19,18 @@ object Form44: TForm44
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 458
-    Width = 617
+    Top = 463
+    Width = 619
     Height = 31
     Align = alTop
     AutoWrap = False
     BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 1
+    ExplicitWidth = 617
     object Button2: TButton
       AlignWithMargins = True
-      Left = 539
+      Left = 541
       Top = 3
       Width = 75
       Height = 25
@@ -39,7 +40,7 @@ object Form44: TForm44
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 458
+      Left = 460
       Top = 3
       Width = 75
       Height = 25
@@ -49,7 +50,7 @@ object Form44: TForm44
     end
     object Button3: TButton
       AlignWithMargins = True
-      Left = 362
+      Left = 364
       Top = 3
       Width = 90
       Height = 25
@@ -62,16 +63,17 @@ object Form44: TForm44
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 617
-    Height = 452
+    Width = 619
+    Height = 457
     Margins.Bottom = 0
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 617
     object SlujGrid: TStringGrid
       Left = 2
       Top = 15
-      Width = 613
-      Height = 435
+      Width = 615
+      Height = 440
       Align = alClient
       BorderStyle = bsNone
       Ctl3D = True
@@ -81,6 +83,7 @@ object Form44: TForm44
       ParentCtl3D = False
       TabOrder = 0
       OnSelectCell = SlujGridSelectCell
+      ExplicitWidth = 613
       ColWidths = (
         64
         64

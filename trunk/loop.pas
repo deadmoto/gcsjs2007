@@ -252,6 +252,7 @@ begin
     Form18.ModSub(Form18.client,StrToFloat(Edit22.Text));
   end;
   Close;
+  Form18.changes := True;
 end;
 
 procedure TForm16.FormShow(Sender: TObject);

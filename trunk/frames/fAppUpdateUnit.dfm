@@ -62,7 +62,7 @@ object fAppUpdate: TfAppUpdate
     end
   end
   object Button1: TButton
-    Left = 207
+    Left = 215
     Top = 50
     Width = 25
     Height = 21

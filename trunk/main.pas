@@ -3,40 +3,16 @@ unit main;
 interface
 
 uses
-  activex,
-  Buttons,
-  Classes,
-  ComCtrls,
-  comobj,
-  Controls,
-  DB,
-  dbf,
-  DBGrids,
-  DBTables,
-  Dialogs,
-  ExcelXP,
-  ExtCtrls,
-  Forms,
-  frxClass,
-  frxDBSet,
-  Graphics,
-  Grids,
-  ImgList,
-  Menus,
-  Messages,
-  OleServer,
-  Registry,
-  StdCtrls,
-  SysUtils,
-  ToolWin,
-  Variants,
-  Windows;
+  Buttons, Classes, ComCtrls, comobj, Controls, DB, DBTables, Dialogs, Windows,
+  ExtCtrls, Forms, frxClass, frxDBSet, Graphics, Grids, ImgList, Menus, ExcelXP,
+  Messages, OleServer, Registry, StdCtrls, SysUtils, ToolWin, Variants,
+  activex, dbf;
 
 type
   PAdditionRepData = ^TAdditionRepData;
 
   TAdditionRepData = packed record
-    Num1, Num2, toNum, soluteNum, zipCode, spec2, StartDate: string;
+    Num1, Num2, toNum, soluteNum, zipCode, spec2, StartDate, sumBeg: string;
     insp: boolean;
     procedure Clear();
   end;
@@ -360,7 +336,7 @@ type
     procedure ClearSG;
     procedure Load(q: CQuery; rsel: boolean);
     procedure ReloadConfig;
-    procedure SaveBaseCfg;
+    procedure SaveSubsidyCfg;
 
     function GenPer(b, e: TDate): string;
     function GenCalc(c: integer): string;
@@ -418,9 +394,6 @@ uses
   street,
   fond,
   manager,
-//  ownertype,
-//  settlingtype,
-//  control,
   privilege,
   minimum,
   status,
@@ -430,11 +403,9 @@ uses
   opend,
   houses,
   norm,
-//  certification,
   chpriv,
   chhouse,
   bank,
-//  relation,
   about,
   datamodule,
   search,
@@ -466,7 +437,6 @@ uses
   version,
   SlujUnit,
   ConnectUnit,
-//  FactSumUnit,
   ConfigPropertiesUnit,
   AddReportDataUnit, AnyDirectoryUnit, EditReportUnit;
 
@@ -476,43 +446,34 @@ procedure TForm1.SetTarifs;
 begin
   with DataModule1 do
   begin
-    t1.DatabaseName  := 'Curr';
-    t2.DatabaseName  := 'Curr';
-    t3.DatabaseName  := 'Curr';
-    t4.DatabaseName  := 'Curr';
-    t5.DatabaseName  := 'Curr';
-    t6.DatabaseName  := 'Curr';
-    t7.DatabaseName  := 'Curr';
-    t8.DatabaseName  := 'Curr';
-    t9.DatabaseName  := 'Curr';
-    t10.DatabaseName := 'Curr';
     pv.DatabaseName  := 'Subsidy';
     norm1.DatabaseName := 'Subsidy';
-    t1.SQL.Clear;
-    t2.SQL.Clear;
-    t3.SQL.Clear;
-    t4.SQL.Clear;
-    t5.SQL.Clear;
-    t6.SQL.Clear;
-    t7.SQL.Clear;
-    t8.SQL.Clear;
-    t9.SQL.Clear;
-    t10.SQL.Clear;
-    pv.SQL.Clear;
-    norm1.SQL.Clear;
 
-    t1.SQL.Add('select * from "curcont"');
-    t2.SQL.Add('select * from "currep"');
-    t3.SQL.Add('select * from "curcold"');
-    t4.SQL.Add('select * from "curhot"');
-    t5.SQL.Add('select * from "curcanal"');
-    t6.SQL.Add('select * from "curheat"');
-    t7.SQL.Add('select * from "curgas"');
-    t8.SQL.Add('select * from "curel"');
-    t9.SQL.Add('select * from "curwood"');
-    t10.SQL.Add('select * from "curcoal"');
-    pv.SQL.Add('select * from priv');
-    norm1.SQL.Add('select * from norm');
+    t1.Connection := DataModule1.dbfConnection;
+    t2.Connection := DataModule1.dbfConnection;
+    t3.Connection := DataModule1.dbfConnection;
+    t4.Connection := DataModule1.dbfConnection;
+    t5.Connection := DataModule1.dbfConnection;
+    t6.Connection := DataModule1.dbfConnection;
+    t7.Connection := DataModule1.dbfConnection;
+    t8.Connection := DataModule1.dbfConnection;
+    t9.Connection := DataModule1.dbfConnection;
+    t10.Connection := DataModule1.dbfConnection;
+
+    t1.SQL.Text := 'select * from "curcont"';
+    t2.SQL.Text := 'select * from "currep"';
+    t3.SQL.Text := 'select * from "curcold"';
+    t4.SQL.Text := 'select * from "curhot"';
+    t5.SQL.Text := 'select * from "curcanal"';
+    t6.SQL.Text := 'select * from "curheat"';
+    t7.SQL.Text := 'select * from "curgas"';
+    t8.SQL.Text := 'select * from "curel"';
+    t9.SQL.Text := 'select * from "curwood"';
+    t10.SQL.Text := 'select * from "curcoal"';
+
+    pv.SQL.Text := 'select * from priv';
+    norm1.SQL.Text := 'select * from norm';
+
     t1.Open;
     t2.Open;
     t3.Open;
@@ -523,6 +484,7 @@ begin
     t8.Open;
     t9.Open;
     t10.Open;
+
     pv.Open;
     norm1.Open;
   end;
@@ -991,7 +953,7 @@ begin
       sec1 := 1
     else
       sec1 := 0;
-    Datamodule1.ChAttrTable(dist);
+//    Datamodule1.ChAttrTable(dist);
     FillCurr(bpath, rdt, dist, Form1.codedbf);
     SetTarifs;    
     Reload;
@@ -1022,7 +984,7 @@ begin
     SetTarifs;
   end;
 
-  SaveBaseCfg;
+  SaveSubsidyCfg;
 end;
 
 procedure TForm1.N110Click(Sender: TObject);
@@ -1181,8 +1143,7 @@ var
   y, m, d, i, j, c: word;
   priv: TStringList;
   s1, s2, priv_str: string;
-  pl{, mdd, stnd, mc}: integer;
-  pmin, income: real;
+  pl: integer;
   cd: TDateTime;
 
 procedure GetPPriv;
@@ -1245,14 +1206,14 @@ begin
     pl := FieldByName('id_service').AsInteger;
     Close;
   end;
-  with Datamodule1.Query4 do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select el.plate');
     SQL.Add('from "curel.dbf" el');
     SQL.Add('where el.id_el=:id');
-    ParamByName('id').AsInteger := pl;
+    Parameters.ParamByName('id').Value := pl;
     Open;
     frxReport1.Variables.Variables['plate'] := quotedstr(FieldByName('plate').AsString);
     Close;
@@ -1346,81 +1307,7 @@ begin
       frxReport1.Variables.Variables['fio_g'] := quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 2));
       frxReport1.Variables.Variables['fio_s'] := quotedstr(GetShortName(SGCl.Cells[0, SGCl.row]));
       frxReport1.Variables.Variables['address'] := quotedstr(SGCl.Cells[1, SGCl.row]);
-{      with Datamodule1.Query1 do
-      begin
-        Close;
-        SQL.Clear;
-        SQL.Add('select rdate,id_dist,id_stnd, change from cl where regn=:id');
-        ParamByName('id').AsInteger := client;
-        Open;
-        stnd := FieldByName('id_stnd').AsInteger;
-        frxReport1.Variables.Variables['regdate'] := quotedstr(FieldByName('rdate').AsString);
-        frxReport1.Variables.Variables['change'] := quotedstr(FieldByName('change').AsString);
-        case FieldByName('id_dist').AsInteger of
-          2: frxReport1.Variables.Variables['otdel'] := quotedstr('Ленинскому');
-          3: frxReport1.Variables.Variables['otdel'] := quotedstr('Октябрьскому');
-          4: frxReport1.Variables.Variables['otdel'] := quotedstr('Советскому');
-          6: frxReport1.Variables.Variables['otdel'] := quotedstr('Центральному');
-          7: frxReport1.Variables.Variables['otdel'] := quotedstr('Кировскому');
-        end;
 
-        Close;
-        SQL.Clear;
-        SQL.Add('select boss from dist where id_dist=:id');
-        ParamByName('id').AsInteger := dist;
-        Open;
-        frxReport1.Variables.Variables['boss'] := quotedstr(FieldByName('boss').AsString);
-
-        Close;
-        SQL.Clear;
-        SQL.Add('select income,pmin,mdd,mcount');
-        SQL.Add('from hist where regn=:id and bdate=convert(smalldatetime,:d,104)');
-        ParamByName('id').AsInteger := client;
-        ParamByName('d').AsString := Copy(SGCl.Cells[2, SGCl.row], 1, 10);
-        Open;
-        pmin := FieldByName('pmin').AsFloat;
-        mdd := FieldByName('mdd').AsInteger;
-        income := FieldByName('income').AsFloat;
-        mc := FieldByName('mcount').AsInteger;
-//        frxReport1.Variables.Variables['income'] := quotedstr(FlToStr(income));
-
-        Close;
-        SQL.Clear;
-        if stnd <> 0 then//расчет с учетом рег.стандартов
-          SQL.Add('select sum(pm) as sumpm from sub')
-        else//расчет по с/н
-          SQL.Add('select sum(snpm) as sumpm from sub');
-        SQL.Add('where regn=:id and sdate=convert(smalldatetime,:d,104)');
-        ParamByName('id').AsInteger := client;
-        ParamByName('d').AsString := rdt;
-        Open;
-        frxReport1.Variables.Variables['nach'] := quotedstr(FlToStr(FieldByName('sumpm').AsFloat));
-
-        Close;
-        SQL.Clear;
-        SQL.Add('select nameinsp from hist, insp where regn = :id and bdate = :d and hist.id_insp = insp.id_insp');
-        ParamByName('id').AsInteger := client;
-        ParamByName('d').AsDateTime := StrToDateTime(rdt);
-        Open;
-        frxReport1.Variables.Variables['spec'] := quotedstr(FieldByName('nameinsp').AsString);
-        Close;
-      end;
-      with Datamodule1.Query4 do
-      begin
-        Close;
-        SQL.Clear;
-        SQL.Add('select sbros.vmdd from "curmdd.dbf" sbros');
-        SQL.Add('where sbros.id_mdd=:id');
-        ParamByName('id').AsInteger := mdd;
-        Open;
-        mdd := FieldByName('vmdd').AsInteger;
-        Close;
-      end;
-      if income / mc >= pmin then
-        frxReport1.Variables.Variables['level'] := quotedstr(FlToStr((mdd * income) / 100))
-      else
-        frxReport1.Variables.Variables['level'] := quotedstr(FlToStr((mdd * income * Rnd((income / mc) / pmin)) / 100));
-    }
       GetPPriv();
       GetPlate();
 
@@ -1550,14 +1437,14 @@ begin
         pl := FieldByName('id_service').AsInteger;
         Close;
       end;
-      with Datamodule1.Query4 do
+      with Datamodule1.qTarif do
       begin
         Close;
         SQL.Clear;
         SQL.Add('select el.plate');
         SQL.Add('from "curel.dbf" el');
         SQL.Add('where el.id_el=:id');
-        ParamByName('id').AsInteger := pl;
+        Parameters.ParamByName('id').Value := pl;
         Open;
         frxReport1.Variables.Variables['plate'] := quotedstr(FieldByName('plate').AsString);
         Close;
@@ -1930,7 +1817,7 @@ begin
   begin
     Query1.Close;
     Query1.SQL.Clear;
-    Query1.SQL.Add('EXEC nach ' + quotedstr(rdt) + ',' + IntToStr(dist));
+    Query1.SQL.Add('EXEC nachnew ' + quotedstr(rdt) + ',' + IntToStr(dist));
     Query1.Open;
 
     Query2.Close;
@@ -2196,6 +2083,8 @@ begin
       Form18.status := sec1;
       Form18.ShowModal;
       Edit4.Text := FlToStr(SetSumSub);
+      if Form18.changes then
+        Form1.Reload;
     end
     else
       ShowMessage('Нет активных клиентов!');
@@ -2624,7 +2513,6 @@ var
   rl, el: THandle;
   Layouts: array[0..7] of THandle;
   y, m, d: word;
-  //    abbb: TSession;
 begin
   IDate := EncodeDate(2006, 6, 1);//дата запуска программы в использование
 
@@ -2705,23 +2593,10 @@ begin
     Close;
   end;
 
-  with SGCl do
-  begin
-    colcount := 5;
-    ColWidths[0] := 200;
-    ColWidths[1] := 170;
-    ColWidths[2] := 128;
-    ColWidths[3] := 39;
-    ColWidths[4] := 55;
-    Cells[0, 0] := 'ФИО';
-    Cells[1, 0] := 'Адрес';
-    Cells[2, 0] := 'Срок субсидии';
-    Cells[3, 0] := 'Расчет';
-    Cells[4, 0] := 'Субсидия';
-  end;
+  FormerStringGrid(SGCL, TStringArray.Create('ФИО', 'Адрес', 'Срок субсидии',
+    'Расчет','Субсидия'), TIntArray.Create(200, 170, 128, 40, 55), 2);
 
-
-  form1.Caption := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ' +
+  Form1.Caption := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ' +
     LongMonthNames[StrToInt(FormatDateTime('m', StrToDate(rdt)))] + ' ' +
     IntToStr(YearOf(StrToDate(rdt))) + 'г.' + ' [' + version.svnrev + ']';
 
@@ -2742,6 +2617,7 @@ begin
   else
     sec1 := 0;
 
+  Form1.codedbf := OEM;
   FillCurr(bpath, rdt, dist, Form1.codedbf);
 
   //для быстрого поиска по фамилии
@@ -2752,7 +2628,6 @@ begin
   fdate := Date;
   lDate := Date;
   SetTarifs;
-  //  CreateListPlugin;
 end;
 
 function TForm1.NewPlace(id: integer; s1, s2: string): integer;
@@ -2762,6 +2637,7 @@ function TForm1.NewPlace(id: integer; s1, s2: string): integer;
 var
   i, c1, c2: integer;
 begin
+  Result := 1;
   if Length(cl) > 1 then
   begin
     for i := 0 to Length(cl) - 2 do
@@ -2859,7 +2735,7 @@ begin
       ed := FieldByName('edate').AsDateTime;
       Close;
     end;
-    Datamodule1.Query4.Close;
+    Datamodule1.qTarif.Close;
   except
     ShowMessage('Произошел сбой при попытке соединения с сервером! Обратитесь к ' +
       'администратору для устранения этих неполадок.' + #13 +
@@ -2915,7 +2791,7 @@ begin
       Free;
     end;
 }
-  SaveBaseCfg;
+  SaveSubsidyCfg;
 
   try
     Datamodule1.Database1.Connected := True;
@@ -3088,6 +2964,7 @@ begin
   ARepData.Clear;
   if getConfValue('0.ShowAddReportData') = True then
     AddReportDataFrm.ShowModal;
+
   with frxReport1 do
   begin
     Variables['Num1']  := quotedstr(ARepData.Num1);
@@ -3096,6 +2973,7 @@ begin
     Variables['soluteNum'] := quotedstr(ARepData.soluteNum);
     Variables['zipCode'] := quotedstr(ARepData.zipCode);
     Variables['StartDate'] := quotedstr(ARepData.StartDate);
+    Variables['sumBeg'] := quotedstr(ARepData.sumBeg);
 //    Variables['spec'] := quotedstr(ARepData.spec);
     if ARepData.insp then
       Variables['spec2'] := quotedstr(nameInsp)
@@ -3136,7 +3014,7 @@ procedure TForm1.Load(q: CQuery; rsel: boolean);
 }
 var
   i, c: integer;
-  f,tmp:  string;
+  f:  string;
   pr: TAboutBox1;
 begin
   ClearSG;
@@ -3182,15 +3060,6 @@ begin
        'sb on sb.regn=cl.regn' + #13 +
           'inner join (' + q.SQL + ') sb1 on cl.regn=sb1.regn' + #13 +
       'order by cl.fio');
-{    SQL.Add('select cl.regn,cl.fio,strt.namestreet,cl.nhouse,cl.corp,cl.apart,');
-    SQL.Add('sb1.calc,sb1.bdate,sb1.edate,sb.summa,sb.stop');
-    SQL.Add('from cl inner join strt on cl.id_street=strt.id_street');
-    SQL.Add('left join (select sum(sub) as summa,regn,stop from sub');
-    SQL.Add('where(sdate=convert(smalldatetime,:d,104))');
-    SQL.Add('group by regn,stop) sb on sb.regn=cl.regn');
-}
-//    SQL.Add('inner join (' + q.SQL + ') sb1 on cl.regn=sb1.regn');
-//    SQL.Add('order by cl.fio');
 
     ParamByName('idd').AsInteger := dist;
     ParamByName('d').AsString := rdt;
@@ -3385,7 +3254,7 @@ begin
   end;
 end;
 
-procedure TForm1.SaveBaseCfg;
+procedure TForm1.SaveSubsidyCfg;
 begin
   //Сохранение в реестр
   with TRegistry.Create do
@@ -3571,7 +3440,7 @@ var
   i, j: integer;
   s1: string;
 begin
-  for i := 1 to SGCL.RowCount - 1 do
+{  for i := 1 to SGCL.RowCount - 1 do
   begin
     s1 := AnsiLowerCase(SG.Cells[0, i]);
     j  := Pos(s, s1);
@@ -3581,6 +3450,22 @@ begin
       exit;
     end;
   end;
+  if i = SG.RowCount then
+    Result := -1; }
+  Result := -1;
+  i := 1;
+  while i <> SGCL.RowCount - 1 do
+  begin
+    s1 := AnsiLowerCase(SG.Cells[0, i]);
+    j  := Pos(s, s1);
+    if j = 1 then
+    begin
+      Result := i;
+      exit;
+    end;
+    Inc(i);
+  end;
+
   if i = SG.RowCount then
     Result := -1;
 end;
@@ -4299,6 +4184,12 @@ begin
                 c.SetCalc(t[j], rdt);
                 c.Calc(getstatus(c.cdata.begindate, c.cdata.enddate));
                 Close;
+
+                //если клиент не приостановлен(2) и не прекращен(3), то производится перерасчет, иначе
+                //рассматриваем следующего клиента
+                if (c.cdata.stop = 2) or (c.cdata.stop = 3) then
+                  Continue;
+
                 SQL.Clear;
                 SQL.Add('update hist');
                 SQL.Add('set pmin=:pm');
@@ -4343,8 +4234,8 @@ begin
       except
         Datamodule1.Database1.Rollback;
       end;
-      pr.Close;
-      pr.Release;
+      pr.Free;
+      //pr.Release;
       Reload;
     end;
   end
@@ -4745,7 +4636,7 @@ begin
 
   frxReport1.Variables.Variables['fio_n'] := quotedstr(SGCl.Cells[0, SGCl.row]);
   frxReport1.Variables.Variables['address'] := quotedstr(SGCl.Cells[1, SGCl.row]);
-  frxReport1.Variables.Variables['sub']  := quotedstr(SGCl.Cells[4, SGCl.row]);
+//  frxReport1.Variables.Variables['sub']  := quotedstr(SGCl.Cells[4, SGCl.row]);
   frxReport1.Variables.Variables['boss'] := quotedstr(Datamodule1.Query1.FieldValues['boss']);
   frxReport1.Variables.Variables['id_dist'] := Datamodule1.Query1.FieldByName('id_dist').AsInteger;
 
@@ -4792,6 +4683,7 @@ begin
   zipCode := '_____________';
   StartDate := '01.___.20___';
   spec2 := '';
+  sumBeg := '_______';
   insp :=  False;
 end;
 

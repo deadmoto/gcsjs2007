@@ -68,7 +68,7 @@ procedure TForm20.SetDefault;
 var
   i: integer;
 begin
-  with DataModule1.Query4 do
+  with DataModule1.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -79,14 +79,14 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'МДД'),
-    TIntArray.Create(25, 220, 40), Datamodule1.Query4.RecordCount + 1);
+    TIntArray.Create(25, 220, 40), Datamodule1.qTarif.RecordCount + 1);
 
-  for i := 0 to Datamodule1.Query4.RecordCount - 1 do
+  for i := 0 to Datamodule1.qTarif.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := Datamodule1.Query4.FieldByName('id_mdd').Value;
-    StringGrid1.Cells[1, i + 1] := Datamodule1.Query4.FieldByName('namegroup').Value;
-    StringGrid1.Cells[2, i + 1] := Datamodule1.Query4.FieldByName('vmdd').Value;
-    Datamodule1.Query4.Next;
+    StringGrid1.Cells[0, i + 1] := Datamodule1.qTarif.FieldByName('id_mdd').Value;
+    StringGrid1.Cells[1, i + 1] := Datamodule1.qTarif.FieldByName('namegroup').Value;
+    StringGrid1.Cells[2, i + 1] := Datamodule1.qTarif.FieldByName('vmdd').Value;
+    Datamodule1.qTarif.Next;
   end;
 end;
 
@@ -290,7 +290,7 @@ end;
 procedure TForm20.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Datamodule1.Query1.Close;
-  Datamodule1.Query4.Close;
+  Datamodule1.qTarif.Close;
 end;
 
 procedure TForm20.Edit1Exit(Sender: TObject);

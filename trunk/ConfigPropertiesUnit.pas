@@ -119,6 +119,7 @@ function TConfigFrm.CheckChanges: boolean;
 var
   i: integer;
 begin
+  Result := False;
   if ListBox1.ItemIndex <> -1 then
   begin
     case cGroup.GetID[ListBox1.Items[ListBox1.ItemIndex]] of
@@ -235,6 +236,7 @@ function TConfigGroup.returnID(name: string): integer;
 var
   i: integer;
 begin
+  Result := 0; 
   for i := 0 to length(cConfig) - 1 do
     if cConfig[i] = Name then
       Result := i;

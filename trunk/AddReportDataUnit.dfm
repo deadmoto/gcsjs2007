@@ -3,7 +3,7 @@ object AddReportDataFrm: TAddReportDataFrm
   Top = 0
   BorderStyle = bsToolWindow
   Caption = #1044#1072#1085#1085#1099#1077' '#1076#1083#1103' '#1086#1090#1095#1077#1090#1072
-  ClientHeight = 213
+  ClientHeight = 214
   ClientWidth = 457
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -23,6 +23,9 @@ object AddReportDataFrm: TAddReportDataFrm
     Height = 78
     Margins.Bottom = 0
     Caption = #1053#1086#1084#1077#1088' '#1080#1089#1093#1086#1076#1103#1097#1077#1075#1086':'
+    Color = clBtnFace
+    ParentBackground = False
+    ParentColor = False
     TabOrder = 0
     object Label1: TLabel
       Left = 103
@@ -92,12 +95,12 @@ object AddReportDataFrm: TAddReportDataFrm
     end
   end
   object Button1: TButton
-    Left = 230
+    Left = 352
     Top = 183
-    Width = 221
+    Width = 97
     Height = 25
     Caption = 'Ok'
-    TabOrder = 5
+    TabOrder = 6
     OnClick = Button1Click
   end
   object GroupBox4: TGroupBox
@@ -168,6 +171,23 @@ object AddReportDataFrm: TAddReportDataFrm
       Left = 16
       Top = 24
       Width = 187
+      Height = 19
+      Ctl3D = False
+      ParentCtl3D = False
+      TabOrder = 0
+    end
+  end
+  object GroupBox6: TGroupBox
+    Left = 230
+    Top = 150
+    Width = 107
+    Height = 58
+    Caption = 'C'#1091#1084#1084#1072' '#1074#1086#1079#1086#1073#1085#1086#1074#1083'.'
+    TabOrder = 5
+    object Edit8: TEdit
+      Left = 16
+      Top = 24
+      Width = 73
       Height = 19
       Ctl3D = False
       ParentCtl3D = False

@@ -1,22 +1,28 @@
-unit shtarifb;                                                
+unit shtarifb;
 
 interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Grids, DBGrids, StdCtrls;
+  Dialogs, Grids, StdCtrls, ExtCtrls;
 
 type
   TForm39 = class(TForm)
-    DBGrid1: TDBGrid;
-    Button1: TButton;
+    Panel1: TPanel;
+    StringGrid1: TStringGrid;
+    FlowPanel1: TFlowPanel;
     Button2: TButton;
+    Button1: TButton;
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure StringGrid1DblClick(Sender: TObject);
   private
     { Private declarations }
+    procedure SetDefault;
   public
     { Public declarations }
     nam: string;//название услуги
@@ -29,7 +35,7 @@ var
 
 implementation
 
-uses datamodule;
+uses datamodule, service;
 
 {$R *.dfm}
 
@@ -40,19 +46,45 @@ procedure TForm39.FormShow(Sender: TObject);
   появляются значения 1 строки.
 *******************************************************************************}
 begin
-  DBGrid1.Columns[0].FieldName := 'id_'+nam;
-  DBGrid1.Columns[1].FieldName := 'name'+nam;
-  DBGrid1.Columns[2].FieldName := 'tarif1';
-  DBGrid1.Columns[3].FieldName := 'tarif2';
-  with DataModule1.Query4 do begin
+  ac := false;
+  SetDefault;
+end;
+
+procedure TForm39.SetDefault;
+var
+  i: integer;
+begin
+  with DataModule1.qTarif do
+  begin
     Close;
     SQL.Clear;
     SQL.Add('select * from "cur'+nam+'.dbf" sbros');
     SQL.Add('order by sbros.id_'+nam);
     Open;
   end;
-  namet := DBGrid1.Fields[1].AsString;
-  ac := false;
+
+  FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Откр.в/разбор', 'Закр.в/разбор'),
+    TIntArray.Create(30, 300, 80, 80), DataModule1.qTarif.RecordCount + 1);
+
+  for i := 0 to DataModule1.qTarif.RecordCount - 1 do
+  begin
+    StringGrid1.Cells[0, i + 1] := DataModule1.qTarif.FieldByName('id_' + nam).Value;
+    StringGrid1.Cells[1, i + 1] := DataModule1.qTarif.FieldByName('name' + nam).Value;
+    StringGrid1.Cells[2, i + 1] := DataModule1.qTarif.FieldByName('tarif1').Value;
+    StringGrid1.Cells[3, i + 1] := DataModule1.qTarif.FieldByName('tarif2').Value;
+    DataModule1.qTarif.Next;
+  end;
+end;
+
+procedure TForm39.StringGrid1DblClick(Sender: TObject);
+begin
+  Button1.OnClick(Self);
+end;
+
+procedure TForm39.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
+  Rect: TRect; State: TGridDrawState);
+begin
+  SGDrawCell(Sender, ACol, ARow, Rect, State);
 end;
 
 procedure TForm39.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -62,7 +94,7 @@ procedure TForm39.FormClose(Sender: TObject; var Action: TCloseAction);
 *******************************************************************************}
 begin
   Datamodule1.Query1.Close;
-  Datamodule1.Query4.Close;
+  Datamodule1.qTarif.Close;
 end;
 
 procedure TForm39.Button2Click(Sender: TObject);
@@ -81,7 +113,7 @@ procedure TForm39.Button1Click(Sender: TObject);
   считается совершенным и форма закрывается.
 *******************************************************************************}
 begin
-  namet := DBGrid1.Fields[1].AsString;
+  namet := StringGrid1.Cells[1, StringGrid1.Row];
   ac := true;
   Close;
 end;

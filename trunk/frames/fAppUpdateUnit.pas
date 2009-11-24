@@ -15,8 +15,7 @@ uses
   ExtCtrls,
   StdCtrls,
   IniCheckBox,
-  IniLabeledEdit,
-  FileCtrl;
+  IniLabeledEdit;
 
 type
   TfAppUpdate = class(TFrame)
@@ -37,7 +36,7 @@ type
 implementation
 
 uses
-  ConfigPropertiesUnit;
+  ConfigPropertiesUnit, service;
 
 {$R *.dfm}
 
@@ -45,8 +44,9 @@ procedure TfAppUpdate.Button1Click(Sender: TObject);
 var
   dir: string;
 begin
-  if SelectDirectory('Select directory', '', dir, [sdShowShares, sdNewUI, sdValidateDir]) then
-    IniLabeledEdit1.Text:= dir;
+  dir := SelectDir;
+  if dir <> '' then
+    IniLabeledEdit1.Text := dir;
 end;
 
 procedure TfAppUpdate.IniLabeledEdit1Click(Sender: TObject);

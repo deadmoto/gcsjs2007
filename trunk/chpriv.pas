@@ -16,7 +16,7 @@ uses
   Mask,
   DBCtrls,
   Grids,
-  DBGrids, ExtCtrls;
+  {DBGrids,} ExtCtrls;
 
 type
   TForm11 = class(TForm)

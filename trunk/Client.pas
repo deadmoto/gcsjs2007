@@ -718,41 +718,48 @@ function TClient.GetStandard: real;
 var
   nv: string;
 begin
-  result:=0;
+  Result:=0;
+  if cdata.mcount = 0 then
+  begin
+    Result := 0;
+    exit;
+  end;
+
   if cdata.mcount = 1 then nv := '1';
   if cdata.mcount = 2 then nv := '2';
-  if (cdata.mcount = 3) or ((cdata.mcount > 4) and (cdata.quanpriv  = cdata.mcount)) then
-                           nv := '3';
+  if (cdata.mcount = 3) or ((cdata.mcount > 4)
+    and (cdata.quanpriv  = cdata.mcount)) then nv := '3';
   if cdata.mcount = 4 then nv := '4';
   if cdata.mcount >= 5 then nv := '5';
   if (cdata.mcount = 1) and (cdata.mdd = 1) then nv := '6';
   if (cdata.mcount > 1) and (cdata.mdd = 1) then nv := '7';
   try
-  with DataModule1.Query4 do begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select value'+nv);
-    SQL.Add('from "currstnd.dbf" sbros');
-    SQL.Add('where sbros.id_stnd=:id');
-    ParamByName('id').AsInteger := cdata.rstnd;
-    Open;
-    Result := FieldByName('value'+nv).AsFloat;
-    Close;
-  end;
+    with DataModule1.qTarif do
+    begin
+      Close;
+      SQL.Clear;
+      SQL.Add('select value'+nv);
+      SQL.Add('from "currstnd.dbf" sbros');
+      SQL.Add('where sbros.id_stnd=:id');
+      Parameters.ParamByName('id').Value := integer(cdata.rstnd);
+      Open;
+      Result := FieldByName('value'+nv).AsFloat;
+      Close;
+    end;
   except
-  ShowMessage(floattostr(cdata.square)+' '+IntToStr(cdata.rstnd));
+    ShowMessage(floattostr(cdata.square)+' '+IntToStr(cdata.rstnd));
   end;
 end;
 
 function TClient.GetMdd: integer;
 begin
-  with DataModule1.Query4 do begin
+  with DataModule1.qTarif do begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.vmdd');
     SQL.Add('from "curmdd.dbf" sbros');
     SQL.Add('where sbros.id_mdd=:id');
-    ParamByName('id').AsInteger := cdata.mdd;
+    Parameters.ParamByName('id').Value := integer(cdata.mdd);
     Open;
     Result := FieldByName('vmdd').AsInteger;
     Close;
@@ -807,43 +814,49 @@ end;
 procedure TClient.CalcSub(sts: integer);//расчет субсидии за месяц
 var
   ppm, pm,fpm, subs, stnd,cnt, subold: real;
-  i,mdd, mbc, tmp: integer;
+  i,mdd, mbc{, tmp}: integer;
   p: array[0..numbtarif-1] of real;
   havePriv: boolean;
 begin
-  if (sts<>3) then begin//расчет активного
+  if (sts<>3) then
+  begin//расчет активного
     mdd := GetMdd;
     fpm:=CalcFull;
-    if cdata.rstnd<>0 then begin//с учетом стандарта
+    stnd := GetStandard;
+    if cdata.rstnd<>0 then
+    begin//с учетом стандарта
       pm := CalcFull;//полная оплата без учета льготы
       //оплата c учетом льготы
       ppm := 0;
       for i:=0 to numbtarif-1 do
         ppm := ppm + cdata.pm[i];
       //% соответственно услугам
-      if (ppm <> 0) then begin
+      if (ppm <> 0) then
+      begin
         for i:=0 to numbtarif-1 do
           p[i] := cdata.pm[i]/ppm;
       end
-      else begin
+      else
+      begin
         for i:=0 to numbtarif-1 do
           p[i] := 0;
       end;
-      stnd := GetStandard;
       if pm<>0 then
         pm := stnd*cdata.mcount*Rnd(ppm/pm);
     end
-    else begin
-      //оплата по соц.норме
+    else
+    begin //оплата по соц.норме
       pm := 0;
       for i:=0 to numbtarif-1 do
         pm := pm + cdata.snpm[i];
       //% соответственно услугам
-      if (pm <> 0) then begin
+      if (pm <> 0) then
+      begin
         for i:=0 to numbtarif-1 do
           p[i] := cdata.snpm[i]/pm;
       end
-      else begin
+      else
+      begin
         for i:=0 to numbtarif-1 do
           p[i] := 0;
       end;
@@ -876,7 +889,8 @@ begin
     for i:=0 to numbtarif-1 do
       subold := subold + cdata.sub[i];
 
-    if (subs + 1< subold ) and (cdata.mcount > 3) and (cdata.square > 60) and (sts <> 0) and (cdata.begindate < StrToDate('01.01.2007')) then
+    if (subs + 1< subold ) and (cdata.mcount > 3) and (cdata.square > 60)
+      and (sts <> 0) and (cdata.begindate < StrToDate('01.01.2007')) then
     begin
      mbc :=  MessageDlg('Произошло уменьшение субсидии' + #13#10 +
                    '   Имя - ' + TMan(cdata.family.Items[0]).fio + #13#10 +
@@ -887,8 +901,8 @@ begin
       mtConfirmation, [mbYes, mbNo], 0);
      if mbc = mrNo then
       exit;
-
     end;
+
     if subs>0 then begin
       if (subs<ppm) then begin
         cnt := 0;
@@ -902,8 +916,10 @@ begin
         cnt := subs - cnt;
         cdata.sub[i] := Rnd(cdata.sub[i] + cnt);
       end
-      else begin//subs>=ppm
-        for i:=0 to numbtarif-1 do begin
+      else
+      begin//subs>=ppm
+        for i:=0 to numbtarif-1 do
+        begin
           if cdata.rstnd<>0 then
             cdata.sub[i]:=subs*p[i]
           else
@@ -911,13 +927,17 @@ begin
         end;
       end;
     end
-    else begin
+    else
+    begin
       for i:=0 to numbtarif-1 do
         cdata.sub[i] := 0;
     end;
-    if (sts=0) then begin //первый месяц
-      if (cdata.calc=0) then begin //типовой расчет
-        for i:=0 to numbtarif-1 do begin
+    if (sts=0) then
+    begin //первый месяц
+      if (cdata.calc=0) then
+      begin //типовой расчет
+        for i:=0 to numbtarif-1 do
+        begin
           cdata.bpm[i]:=cdata.pm[i];
           cdata.bsnpm[i]:=cdata.snpm[i];
           cdata.bfpm[i]:=cdata.fpm[i];
@@ -926,7 +946,8 @@ begin
       for i:=0 to numbtarif-1 do
         cdata.bsub[i]:=cdata.sub[i];
     end
-    else begin
+    else
+    begin
       i := 0;
       while cdata.sub[i]=0 do
         inc(i);
@@ -939,7 +960,8 @@ begin
       else
         cnt := cnt + cdata.bsub[13] - cdata.sub[13];
       cdata.sub[i] := Rnd(cdata.sub[i] + cnt);
-      if (cdata.calc=0) and(cdata.tarifs[12]<>0) then begin //типовой расчет
+      if (cdata.calc=0) and(cdata.tarifs[12]<>0) then
+      begin //типовой расчет
         cdata.pm[12] := 0; cdata.pm[13] := 0;
         cdata.snpm[12] := 0; cdata.snpm[13] := 0;
         cdata.sub[12] := 0; cdata.sub[13] := 0;

@@ -12,9 +12,6 @@ type
   procedure ExportCl(path,dt: string;dis: integer);
   procedure ExportHist(path,dt: string;dis: integer);
   procedure ExportFam(path,dt: string;dis: integer);
-  procedure ExportClm(path,dt: string;dis: integer);
-  procedure ExportHistm(path,dt: string;dis: integer);
-  procedure ExportFamm(path,dt: string;dis: integer);
   procedure ExportSub(path,dt: string;dis: integer);
   procedure ExportSluj(path,dt: string;dis: integer);
   procedure ExportMin(path,dt: string);
@@ -24,6 +21,9 @@ type
   procedure ExportRStnd(path,dt: string);
   procedure ExportStr(path: string);
   procedure ExportFact(path: string;dis: integer);
+  procedure ExportClm(path,dt: string;dis: integer);
+  procedure ExportHistm(path,dt: string;dis: integer);
+  procedure ExportFamm(path,dt: string;dis: integer);
 
   procedure ImportInsp(path: string;dis: integer);
   procedure ImportBank(path: string);
@@ -127,13 +127,13 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM cl');
-    SQL.Add('WHERE change>:d1 and change<:d2 and id_dist = :dist');
+    SQL.Add('WHERE change>=:d1 and change<=:d2 and id_dist = :dist');
     ParamByName('dist').AsInteger := dis;
 //    ParamByName('d2').AsString := DateToStr(EncodeDate(YearOf(d),MonthOf(d),16));
-    ParamByName('d2').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),16);
+    ParamByName('d2').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),19);
     d := IncMonth(d,-1);
 //    ParamByName('d1').AsString := DateToStr(EncodeDate(YearOf(d),MonthOf(d),15));
-    ParamByName('d1').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),15);
+    ParamByName('d1').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),20);
     Open;
     FillTable(path,'cl'+IntToStr(dis),Form1.codedbf);
   end;
@@ -150,16 +150,16 @@ begin
     SQL.Clear;
     SQL.Add('SELECT * FROM hist');
     SQL.Add('WHERE regn in (SELECT regn FROM cl');
-    SQL.Add('WHERE change>:d1 and change<:d2 and id_dist = :dist)');
+    SQL.Add('WHERE change>=:d1 and change<=:d2 and id_dist = :dist)');
     SQl.Add('and (bdate<=CONVERT(smalldatetime, :d, 104))');
     SQL.Add('and(edate>=CONVERT(smalldatetime, :d, 104))');
     ParamByName('d').AsString := dt;
     ParamByName('dist').AsInteger := dis;
 //    ParamByName('d2').AsString := DateToStr(EncodeDate(YearOf(d),MonthOf(d),16));
-    ParamByName('d2').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),16);
+    ParamByName('d2').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),19);
     d := IncMonth(d,-1);
 //    ParamByName('d1').AsString := DateToStr(EncodeDate(YearOf(d),MonthOf(d),15));
-    ParamByName('d1').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),15);
+    ParamByName('d1').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),20);
     Open;
     FillTable(path,'hist'+IntToStr(dis),Form1.codedbf);
   end;
@@ -176,13 +176,13 @@ begin
     SQL.Clear;
     SQL.Add('SELECT * FROM fam');
     SQL.Add('WHERE regn in (SELECT regn FROM cl');
-    SQL.Add('WHERE change>:d1 and change<:d2 and id_dist = :dist)');
+    SQL.Add('WHERE change>=:d1 and change<=:d2 and id_dist = :dist)');
     ParamByName('dist').AsInteger := dis;
 //    ParamByName('d2').AsString := DateToStr(EncodeDate(YearOf(d),MonthOf(d),16));
-    ParamByName('d2').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),16);
+    ParamByName('d2').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),19);
     d := IncMonth(d,-1);
 //    ParamByName('d1').AsString := DateToStr(EncodeDate(YearOf(d),MonthOf(d),15));
-    ParamByName('d1').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),15);
+    ParamByName('d1').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),20);
     Open;
     FillTable(path,'fam'+IntToStr(dis),Form1.codedbf);
   end;
@@ -1337,26 +1337,35 @@ function GetData(nam: string;var f: T2DString): boolean;
 var
   i,j: integer;
 begin
-  With DataModule1 do begin
-    if DBF1.Active then
+  try
+    with DataModule1 do
+    begin
+      if DBF1.Active then
+        DBF1.Close;
+      DBF1.TableName := nam;
+      DBF1.Open;
+      SetLength(f,DBF1.RecordCount);
+      i:=0;
+      while not DBF1.Eof do
+      begin
+        SetLength(f[i],DBF1.FieldCount);
+        for j:=0 to Length(f[i])-1 do
+          f[i][j] := DBF1.GetFieldData(j+1);
+        DBF1.Next;
+        inc(i);
+      end;
+      if Length(f)>0 then
+      begin
+        SetLength(f[i],DBF1.FieldCount);
+        for j:=0 to Length(f[i])-1 do
+          f[i][j] := DBF1.GetFieldData(j+1);
+      end;
       DBF1.Close;
-    Dbf1.TableName := nam;
-    DBF1.Open;
-    SetLength(f,DBF1.RecordCount);
-    i:=0;
-    while not DBF1.Eof do begin
-      SetLength(f[i],DBF1.FieldCount);
-      for j:=0 to Length(f[i])-1 do
-        f[i][j] := DBF1.GetFieldData(j+1);
-      DBF1.Next;
-      inc(i);
+      Result := True;
     end;
-    if Length(f)>0 then begin
-      SetLength(f[i],DBF1.FieldCount);
-      for j:=0 to Length(f[i])-1 do
-        f[i][j] := DBF1.GetFieldData(j+1);
-    end;
-    DBF1.Close;
+  except
+    Result := False;
+    Raise;
   end;
 end;
 

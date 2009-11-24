@@ -40,6 +40,7 @@ object Form15: TForm15
       FixedCols = 0
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowSelect]
       TabOrder = 0
+      OnDrawCell = StringGrid1DrawCell
       OnSelectCell = StringGrid1SelectCell
     end
   end

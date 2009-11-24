@@ -39,6 +39,8 @@ type
     Edit5:     TEdit;
     GroupBox5: TGroupBox;
     Edit7: TEdit;
+    GroupBox6: TGroupBox;
+    Edit8: TEdit;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
@@ -74,9 +76,13 @@ begin
     Form1.ARepData.zipCode := Edit6.Text;
   if (Edit7.Text <> '') then
     Form1.ARepData.StartDate := Edit7.Text;
+  if (Edit8.Text <> '') then
+    Form1.ARepData.sumBeg := Edit8.Text;
+
   if CheckBox1.Checked = False then
     if (Edit5.Text <> '') then
       Form1.ARepData.spec2 := Edit5.Text;
+
   Form1.ARepData.insp := CheckBox1.Checked;
   Close;
 end;
@@ -94,40 +100,61 @@ end;
 
 procedure TAddReportDataFrm.FormShow(Sender: TObject);
 
-  procedure VisibleAll;
+  procedure EnableAll;
   begin
     GroupBox1.Enabled := True;
     GroupBox2.Enabled := True;
     GroupBox4.Enabled := True;
     GroupBox5.Enabled := True;
+    GroupBox6.Enabled := True;
     Panel1.Enabled := True;
+
+    GroupBox1.Color := clActiveBorder;
+    GroupBox2.Color := clActiveBorder;
+    GroupBox4.Color := clActiveBorder;
+    GroupBox5.Color := clActiveBorder;
+    GroupBox6.Color := clActiveBorder;
+    Panel1.Color := clActiveBorder;
   end;
 
 begin
   case RepType of
     rSolut:
     begin
-      VisibleAll();
+      EnableAll();
       GroupBox5.Enabled := False;
+      GroupBox6.Enabled := False;
+
+      GroupBox5.Color := clBtnFace;
+      GroupBox6.Color := clBtnFace;
     end;
 
     rSolutb:
     begin
-      VisibleAll();
+      EnableAll();
       GroupBox4.Enabled := False;
+      GroupBox4.Color := clBtnFace;
     end;
 
     rSolute:
     begin
-      VisibleAll();
+      EnableAll();
+      GroupBox6.Enabled := False;
+      GroupBox6.Color := clBtnFace;
     end;
 
     rUvedomo:
     begin
-      VisibleAll();
+      EnableAll();
       GroupBox1.Enabled := False;
       GroupBox4.Enabled := False;
       GroupBox5.Enabled := False;
+      GroupBox6.Enabled := False;
+
+      GroupBox1.Color := clBtnFace;
+      GroupBox4.Color := clBtnFace;
+      GroupBox5.Color := clBtnFace;
+      GroupBox6.Color := clBtnFace;
     end;
   end;
 end;

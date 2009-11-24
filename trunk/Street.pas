@@ -100,7 +100,7 @@ begin
     Edit1.Text := StringGrid1.Cells[1, ARow];
     Edit2.Text := StringGrid1.Cells[0, ARow];
     if StringGrid1.Cells[2, ARow] <> '' then
-      CheckBox1.Checked := variant(StringGrid1.Cells[2, ARow]);//(DBGrid1.Fields[2].AsInteger = 1);
+      CheckBox1.Checked := variant(StringGrid1.Cells[2, ARow]);
     if Edit2.Text <> '' then
       oldid := StrToInt(Edit2.Text);
   end;
@@ -280,7 +280,7 @@ end;
 
 procedure TForm5.FormShow(Sender: TObject);
 {*******************************************************************************
-  Процедура FormShow обрабатывает событие OnShow формы. В DBGrid1 загружаются
+  Процедура FormShow обрабатывает событие OnShow формы. В StringGrid1 загружаются
   данные, в полях ввода появляются значения 1 строки. В зависимости от статуса
   открытия формы управляющие кнопки становятся недоступными(чтение) или
   доступными(запись) для нажатия.
