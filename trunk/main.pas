@@ -1241,7 +1241,7 @@ begin
         y := y - 1;
       end;
       p1 := EncodeDate(y, m, 16);
-      frxReport1.Variables.Variables['newatt'] := quotedstr('с ' + DateToStr(p1) + ' до ' + DateToStr(p2));
+      frxReport1.Variables.Variables['newatt'] := quotedstr('с ' + DateToStr(p1) + ' по ' + DateToStr(p2));
 
       GetPPriv();
       GetPlate();

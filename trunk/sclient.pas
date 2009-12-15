@@ -291,6 +291,24 @@ type
     Label77:      TLabel;
     Button20:     TButton;
     Button21:     TButton;
+    Label78: TLabel;
+    Label80: TLabel;
+    Label79: TLabel;
+    Label81: TLabel;
+    Edit111: TEdit;
+    Edit112: TEdit;
+    Edit113: TEdit;
+    Edit114: TEdit;
+    Label82: TLabel;
+    GroupBox11: TGroupBox;
+    GroupBox12: TGroupBox;
+    MaskEdit5: TMaskEdit;
+    MaskEdit6: TMaskEdit;
+    Label85: TLabel;
+    Label83: TLabel;
+    Label86: TLabel;
+    Edit115: TEdit;
+    Edit116: TEdit;
     procedure Button2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure ComboBox1Change(Sender: TObject);
@@ -365,6 +383,7 @@ type
       Rect: TRect; State: TGridDrawState);
     procedure PageControl1DrawTab(Control: TCustomTabControl; TabIndex: Integer;
       const Rect: TRect; Active: Boolean);
+    procedure StringGrid1MouseLeave(Sender: TObject);
   private
     { Private declarations }
     load, fam: boolean;
@@ -454,10 +473,12 @@ type
     procedure ModFamMan;
 
     procedure ClearFactGrids;
-    function AddAnyMonth(BD, ED: TDateTime):TStringList;
     procedure ChangeFactPeriod(BD, ED: TDateTime);
-    function GetColSum(StrGrid: TStringGrid; Col:integer):double;
     procedure CheckDifferenceFactSum;
+    procedure UpdateFactInfo();
+    function AddAnyMonth(BD, ED: TDateTime):TStringList;
+    function GetColSum(StrGrid: TStringGrid; Col:integer): string;
+    function calcMDiff(sub, fact: string): string;
     //procedure ChangePeriod(BD, ED: TDateTime);
   public
     { Public declarations }
@@ -545,6 +566,12 @@ begin
     Cl.cdata.boiler := 0;
     Cl.cdata.stop := 0;
     Cl.cdata.heating := 1;
+    //------
+    Cl.cdata.prevbegindate := 0;
+    Cl.cdata.prevenddate := 0;
+    Cl.cdata.averageFact := 0;
+    Cl.cdata.dolgFact := 0;
+    //------
     SetRegn;
     SetRegDate;
     SetPeriod;
@@ -591,6 +618,16 @@ begin
     Result := True
   else
     Result := False;
+end;
+
+function TForm2.calcMDiff(sub, fact: string): string;
+var
+  mountDiff: double;
+begin
+  mountDiff := StrToFloat(sub) - StrToFloat(fact);
+  if mountDiff < 0 then
+    mountDiff := 0;
+  Result := FloatToStr(mountDiff);
 end;
 
 function TForm2.CardEmpty: bool;//пусты ключевые поля?
@@ -725,6 +762,12 @@ begin
   Edit104.Text := '0';
   Edit105.Text := '0';
   Edit106.Text := '0';
+  //------
+  Edit115.Text := '0';
+  Edit116.Text := '0';
+  MaskEdit5.Text := '';
+  MaskEdit6.Text := '';
+  //------
   MaskEdit4.Text := '';
   Combobox1.Clear;
   Combobox2.Clear;
@@ -788,15 +831,21 @@ begin
     cells[0,0]:='Месяц';
     cells[1,0]:='Субсидия';
     cells[2,0]:='Ф. расход';
+    cells[3,0]:='М. разница';
     cells[0,1]:='';
-    cells[1,1]:='';
-    cells[2,1]:='';
+    cells[1,1]:='0';
+    cells[2,1]:='0';
+    cells[3,1]:='0';
     RowCount:=2;
     Repaint;
   end;
 
   Label77.Caption := '';
   ComboBox23.Text := '';
+  Edit111.Text := '0';
+  Edit112.Text := '0';
+  Edit113.Text := '0';
+  Edit114.Text := '0';
 end;
 
 procedure TForm2.Fill;
@@ -1310,6 +1359,12 @@ begin
   Edit95.Text := IntToStr(Cl.cdata.quanpriv);
   MaskEdit2.Text := DateToStr(Cl.cdata.begindate);
   MaskEdit3.Text := DateToStr(Cl.cdata.enddate);
+  //------
+  MaskEdit5.Text := DateToStr(Cl.cdata.prevbegindate);
+  MaskEdit6.Text := DateToStr(Cl.cdata.prevenddate);
+  Edit115.Text := FloatToStr(Cl.cdata.dolgFact);
+  Edit116.Text := FloatToStr(Cl.cdata.averageFact);
+  //------
   Edit109.Text := IntToStr(Cl.cdata.period);
   Combobox11.Text := SelCntrl(Cl.Data.control);
   Memo1.Text  := Cl.Data.reason;
@@ -2405,10 +2460,10 @@ end;
 
 procedure TForm2.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
-var
-  Buf: array[byte] of char;
+{var
+  Buf: array[byte] of char;}
 begin
-  if TabControl1.TabIndex=1 then
+{  if TabControl1.TabIndex=1 then
     if aRow= StringGrid1.RowCount-1 then
       with StringGrid1 do begin
         Canvas.Font := Font;
@@ -2417,28 +2472,53 @@ begin
         Canvas.FillRect(Rect);
         StrPCopy(Buf, Cells[ACol, ARow]);
         Canvas.TextRect(Rect, Rect.Left + 2, Rect.Top + 2, Cells[aCol, aRow]);
-      end;
+      end;}
+end;
+
+procedure TForm2.StringGrid1MouseLeave(Sender: TObject);
+var
+  i: integer;
+begin
+  for i := 0 to StringGrid1.RowCount - 2 do
+    StringGrid1.Cells[3,i+1] := calcMDiff(StringGrid1.Cells[1,i+1], StringGrid1.Cells[2,i+1]);
+  UpdateFactInfo();
 end;
 
 procedure TForm2.StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
   var CanSelect: Boolean);
+var
+  i: integer;
 begin
-  if TabControl1.TabIndex=1 then begin
+    if (ACol = 0)  then
+      StringGrid1.Options := StringGrid1.Options - [goEditing, goAlwaysShowEditor]
+    else
+      StringGrid1.Options := StringGrid1.Options + [goEditing, goAlwaysShowEditor];
+
+    StringGrid1.Cells[3,ARow] := calcMDiff(StringGrid1.Cells[1,ARow], StringGrid1.Cells[2,ARow]);
+    UpdateFactInfo();
+
+    if TabControl1.TabIndex = 1 then
+      CheckDifferenceFactSum;
+
+{  if TabControl1.TabIndex=1 then
+  begin
     if (ARow = StringGrid1.RowCount - 1) or (ACol = 0)  then
       StringGrid1.Options := StringGrid1.Options - [goEditing, goAlwaysShowEditor]
     else
       StringGrid1.Options := StringGrid1.Options + [goEditing, goAlwaysShowEditor];
 
-    StringGrid1.Cells[1,StringGrid1.RowCount-1]:= FloatToStr(GetColSum(StringGrid1,1));
-    StringGrid1.Cells[2,StringGrid1.RowCount-1]:= FloatToStr(GetColSum(StringGrid1,2));
+//    StringGrid1.Cells[1,StringGrid1.RowCount-1]:= FloatToStr(GetColSum(StringGrid1,1));
+//    StringGrid1.Cells[2,StringGrid1.RowCount-1]:= FloatToStr(GetColSum(StringGrid1,2));
+//    StringGrid1.Cells[3,StringGrid1.RowCount-1]:= FloatToStr(GetColSum(StringGrid1,3));
     CheckDifferenceFactSum;
   end
   else
-    StringGrid1.Options := StringGrid1.Options + [goEditing, goAlwaysShowEditor];
+    StringGrid1.Options := StringGrid1.Options + [goEditing, goAlwaysShowEditor];}
 end;
 
 procedure TForm2.Button20Click(Sender: TObject);
-var i: integer;
+var
+  i: integer;
 begin
   case TabControl1.TabIndex of
     0:
@@ -2465,10 +2545,24 @@ begin
               Query1.ParamByName('factsum').Value:=StrToFloat(StringGrid1.Cells[2,i+1]);
               Query1.ParamByName('dis').Value:=Form1.dist;
               Query1.ExecSQL;
-            except
+             except
               showmessage('Ошибка при добавлении! Проверьте правильность ввода данных.')
             end;
           end;
+            try
+              Query1.Close;
+              Query1.SQL.Text:= 'INSERT INTO FactBalance'+#13+
+                                'VALUES (:regn,'+
+                                'convert(smalldatetime,:bdate,104),convert(smalldatetime,:edate,104),:balance,:dolg)';
+              Query1.ParamByName('regn').Value := cl.data.regn;
+              Query1.ParamByName('bdate').Value := DateToStr(fbegindate);
+              Query1.ParamByName('edate').Value := DateToStr(fenddate);
+              Query1.ParamByName('balance').Value := StrToFloat(Edit114.Text);
+              Query1.ParamByName('dolg').Value := StrToFloat(Edit113.Text);
+              Query1.ExecSQL;
+            except
+              showmessage('Ошибка при добавлении! Проверьте правильность ввода данных.')
+            end;
         end;
     end;
 
@@ -2479,7 +2573,7 @@ begin
         if ComboBox1.Text='' then
           showmessage('Не выбран период для изменения')
         else
-        for i:=0 to StringGrid1.RowCount-3 do
+        for i:=0 to StringGrid1.RowCount-2 do
         begin
           try
             Query1.Close;
@@ -2496,6 +2590,26 @@ begin
           except
             showmessage('Ошибка при изменении! Проверьте правильность ввода данных.')
           end;
+          try
+            Query1.Close;
+            Query1.SQL.Text:= 'UPDATE FactBalance'+#13+
+                              'SET balance = :balance, dolg=:dolg'+#13+
+                              'WHERE (regn = :regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104))';
+            Query1.ParamByName('balance').Value:=StrToFloat(Edit114.Text);
+            Query1.ParamByName('dolg').Value:=StrToFloat(Edit113.Text);
+            Query1.ParamByName('regn').Value:=cl.data.regn;
+            Query1.ParamByName('bdate').Value:=DateToStr(fbegindate);
+            Query1.ExecSQL;
+          except
+            showmessage('Ошибка при изменении! Проверьте правильность ввода данных.')
+          end;
+        if fbegindate = Cl.cdata.prevbegindate then
+        begin
+          Cl.cdata.averageFact := StrToFloat(Edit114.Text);
+          Cl.cdata.dolgFact := StrToFloat(Edit113.Text);
+          Edit115.Text := Edit113.Text;
+          Edit116.Text := Edit114.Text;
+        end;
         end;
       end;
     end;
@@ -2515,6 +2629,13 @@ begin
       with DataModule1 do
       begin
         Query1.Close;
+        Query1.SQL.Text:= 'DELETE FROM FactBalance'+#13+
+                          'WHERE (regn=:regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104))';
+        Query1.ParamByName('regn').Value:= cl.data.regn;
+        Query1.ParamByName('bdate').Value:= DateToStr(fbegindate);
+        Query1.ExecSQL;
+        //-----------------
+        Query1.Close;
         Query1.SQL.Text:= 'DELETE FROM FactSale'+#13+
                           'WHERE (regn=:regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104))';
         Query1.ParamByName('regn').Value:= cl.data.regn;
@@ -2523,6 +2644,13 @@ begin
       end;
     except
       showmessage('Ошибка при удалении');
+    end;
+    if fbegindate = Cl.cdata.prevbegindate then
+    begin
+      Cl.cdata.averageFact := 0;
+      Cl.cdata.dolgFact := 0;
+      Edit115.Text := '0';
+      Edit116.Text := '0';
     end;
 
     ClearFactGrids();
@@ -2559,12 +2687,12 @@ function TForm2.AddAnyMonth(BD, ED: TDateTime): TStringList;
 var tmpDate: TDateTime;
     StrList: TStringList;
     i: integer;
-    tmp: byte;
+//    tmp: byte;
 begin
   StrList:= TStringList.Create;
   tmpDate:= BD;
       StrList.Add(DateToStr(tmpdate));
-      for i:=1 to GetMonthsCount(BD,ED,tmp)-1 do
+      for i:=1 to GetMonthsCount(BD,ED)-1 do
         begin
           tmpdate:=IncMonth(tmpdate,1);
           StrList.Add(DateToStr(tmpdate));
@@ -3291,7 +3419,9 @@ procedure TForm2.ComboBox23Change(Sender: TObject);
 begin
   fbegindate:= StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex],1,10));
   fenddate:= StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex],14,23));
+
   ChangeFactPeriod(fbegindate, fenddate);
+  UpdateFactInfo();
   CheckDifferenceFactSum;
 end;
 
@@ -3975,13 +4105,14 @@ end;
 procedure TForm2.ChangeFactPeriod(BD, ED: TDateTime);
 var
   i,j: integer;
-  tmp: byte;
+  mountDiff: double;
 begin
-  StringGrid1.RowCount:= GetMonthsCount(BD,ED,tmp)+1;
+  StringGrid1.RowCount:= GetMonthsCount(BD,ED)+1;
   for i:=0 to (AddAnyMonth(BD,ED)).Count-1 do begin
     StringGrid1.Cells[0,i+1]:= AddanyMonth(BD,ED)[i];
     StringGrid1.Cells[1,i+1]:= '0';
     StringGrid1.Cells[2,i+1]:= '0';
+    StringGrid1.Cells[3,i+1]:= '0';
   end;
 
   //-------------
@@ -4022,14 +4153,20 @@ begin
       begin
         StringGrid1.Cells[1,i+1]:= Query1.FieldValues['sub'];
         StringGrid1.Cells[2,i+1]:= Query1.FieldValues['factsum'];
+
+{        mountDiff := StrToFloat(StringGrid1.Cells[1,i+1]) - StrToFloat(StringGrid1.Cells[2,i+1]);
+        if mountDiff < 0 then
+          mountDiff := 0;}
+        StringGrid1.Cells[3,i+1]:= calcMDiff(StringGrid1.Cells[1,i+1],StringGrid1.Cells[2,i+1]);
         Query1.Next;
       end;
     end;
 
-    StringGrid1.RowCount:= StringGrid1.RowCount+1;
+{    StringGrid1.RowCount:= StringGrid1.RowCount+1;
     StringGrid1.Cells[0,StringGrid1.RowCount-1]:= 'Сумма:';
     StringGrid1.Cells[1,StringGrid1.RowCount-1]:= FloatToStr(GetColSum(StringGrid1,1));
     StringGrid1.Cells[2,StringGrid1.RowCount-1]:= FloatToStr(GetColSum(StringGrid1,2));
+    StringGrid1.Cells[3,StringGrid1.RowCount-1]:= FloatToStr(GetColSum(StringGrid1,3));}
   end;
 end;
 
@@ -4422,13 +4559,16 @@ begin
   end;
 end;
 
-function TForm2.GetColSum(StrGrid: TStringGrid; Col: integer): double;
+function TForm2.GetColSum(StrGrid: TStringGrid; Col: integer): string;
 var
   i:integer;
+  tmp: double;
 begin
-  Result:=0;
-  for i:=0 to StrGrid.RowCount-3 do
-    Result:= Result + StrToFloat(StrGrid.Cells[Col,i+1]);
+  tmp:=0;
+  for i:=0 to StrGrid.RowCount-1 do
+    if StrGrid.Cells[Col,i+1] <> '' then
+      tmp:= tmp + StrToFloat(StrGrid.Cells[Col,i+1]);
+  Result := FloatToStr(tmp);
 end;
 
 procedure TForm2.Button8Click(Sender: TObject);
@@ -4649,6 +4789,17 @@ begin
     Pagecontrol1.TabIndex := 3;
 end;
 
+procedure TForm2.UpdateFactInfo;
+begin
+  if ComboBox23.ItemIndex <> -1 then
+  begin
+    Edit111.Text := GetColSum(StringGrid1,1);
+    Edit112.Text := GetColSum(StringGrid1,2);
+    Edit113.Text := GetColSum(StringGrid1,3);
+    Edit114.Text := FloatToStr(rnd(StrToFloat(Edit112.Text) / GetMonthsCount(fbegindate,fenddate)));
+  end;
+end;
+
 procedure TForm2.TabControl1Change(Sender: TObject);
 var
   recCount: integer;
@@ -4842,12 +4993,19 @@ end;
 
 procedure TForm2.CheckDifferenceFactSum;
 begin
-  if TabControl1.TabIndex=1 then begin
-    if StrToFloat(StringGrid1.Cells[1,StringGrid1.RowCount-1]) <= StrToFloat(StringGrid1.Cells[2,StringGrid1.RowCount-1]) then
+  if TabControl1.TabIndex=1 then
+  begin
+{    if StrToFloat(StringGrid1.Cells[1,StringGrid1.RowCount-1]) <= StrToFloat(StringGrid1.Cells[2,StringGrid1.RowCount-1]) then
       label77.Caption:= 'Размер субсидии не превышает фактических расходов'
     else
       label77.Caption:= 'Размер субсидии превышает фактические расходы на +'+
                         FloatToStr(StrToFloat(StringGrid1.Cells[1,StringGrid1.RowCount-1])-StrToFloat(StringGrid1.Cells[2,StringGrid1.RowCount-1]));
+  end;}
+  if StrToFloat(Edit111.Text) <= StrToFloat(Edit113.Text) then
+    label77.Caption:= 'Размер субсидии не превышает фактических расходов'
+  else
+    label77.Caption:= 'Размер субсидии превышает фактические расходы на +'+
+      Edit113.Text;
   end;
 end;
 

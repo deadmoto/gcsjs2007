@@ -3,7 +3,7 @@ object Form2: TForm2
   Top = 259
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  ClientHeight = 389
+  ClientHeight = 433
   ClientWidth = 593
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -23,15 +23,13 @@ object Form2: TForm2
     Left = 3
     Top = 3
     Width = 587
-    Height = 383
+    Height = 427
     ActivePage = TabSheet6
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
     OnChange = PageControl1Change
     OnDrawTab = PageControl1DrawTab
-    ExplicitLeft = -2
-    ExplicitTop = 8
     object TabSheet1: TTabSheet
       Caption = #1050#1083#1080#1077#1085#1090
       OnExit = TabSheet1Exit
@@ -198,7 +196,7 @@ object Form2: TForm2
         end
         object ComboBox11: TComboBox
           Left = 8
-          Top = 20
+          Top = 17
           Width = 153
           Height = 21
           ItemHeight = 13
@@ -380,7 +378,7 @@ object Form2: TForm2
         OnKeyDown = Edit63KeyDown
       end
       object Edit64: TEdit
-        Left = 528
+        Left = 524
         Top = 144
         Width = 49
         Height = 21
@@ -535,8 +533,8 @@ object Form2: TForm2
         OnClick = Button19Click
       end
       object RadioGroup3: TRadioGroup
-        Left = 328
-        Top = 216
+        Left = 321
+        Top = 215
         Width = 49
         Height = 57
         Caption = #1052#1044#1044
@@ -573,6 +571,79 @@ object Form2: TForm2
         MaxLength = 10
         TabOrder = 25
         Text = '  .  .    '
+      end
+      object GroupBox12: TGroupBox
+        Left = 8
+        Top = 348
+        Width = 398
+        Height = 49
+        Caption = #1055#1088#1086#1096#1083#1099#1081' '#1087#1077#1088#1080#1086#1076':'
+        TabOrder = 26
+        object Label85: TLabel
+          Left = 158
+          Top = 20
+          Width = 29
+          Height = 13
+          Caption = #1044#1086#1083#1075':'
+        end
+        object Label83: TLabel
+          Left = 76
+          Top = 22
+          Width = 3
+          Height = 13
+          Caption = '-'
+        end
+        object Label86: TLabel
+          Left = 258
+          Top = 20
+          Width = 71
+          Height = 13
+          Caption = #1057#1088'. '#1092'. '#1088#1072#1089#1093#1086#1076':'
+        end
+        object MaskEdit5: TMaskEdit
+          Left = 8
+          Top = 20
+          Width = 64
+          Height = 21
+          TabStop = False
+          Color = clBtnFace
+          EditMask = '!90/90/0000;1;_'
+          MaxLength = 10
+          ReadOnly = True
+          TabOrder = 0
+          Text = '  .  .    '
+        end
+        object MaskEdit6: TMaskEdit
+          Left = 86
+          Top = 20
+          Width = 64
+          Height = 21
+          TabStop = False
+          Color = clBtnFace
+          EditMask = '!90/90/0000;1;_'
+          MaxLength = 10
+          ReadOnly = True
+          TabOrder = 1
+          Text = '  .  .    '
+        end
+        object Edit115: TEdit
+          Left = 193
+          Top = 20
+          Width = 59
+          Height = 21
+          ReadOnly = True
+          TabOrder = 2
+          Text = '0'
+        end
+        object Edit116: TEdit
+          Left = 334
+          Top = 20
+          Width = 59
+          Height = 21
+          ReadOnly = True
+          TabOrder = 3
+          Text = '0'
+        end
       end
     end
     object TabSheet2: TTabSheet
@@ -1519,10 +1590,10 @@ object Form2: TForm2
         end
       end
       object GroupBox8: TGroupBox
-        Left = 336
+        Left = 332
         Top = 24
         Width = 241
-        Height = 113
+        Height = 109
         Caption = #1055#1077#1088#1089#1086#1085#1080#1092#1080#1094#1080#1088#1086#1074#1072#1085#1085#1099#1081' '#1089#1095#1077#1090
         TabOrder = 1
         object Label35: TLabel
@@ -2987,7 +3058,7 @@ object Form2: TForm2
         Left = 0
         Top = 0
         Width = 579
-        Height = 355
+        Height = 399
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
@@ -2996,6 +3067,19 @@ object Form2: TForm2
           #1048#1079#1084#1077#1085#1080#1090#1100)
         TabIndex = 0
         OnChange = TabControl1Change
+        object Label78: TLabel
+          Left = 152
+          Top = 5
+          Width = 260
+          Height = 13
+          Caption = '<- '#1042#1099#1073#1080#1088#1080#1090#1077' '#1088#1077#1078#1080#1084' '#1088#1072#1073#1086#1090#1099' '#1089' '#1092'. '#1088#1072#1089#1093#1086#1076#1072#1084#1080
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
         object Panel1: TPanel
           Left = 4
           Top = 27
@@ -3026,7 +3110,7 @@ object Form2: TForm2
           object Button20: TButton
             Left = 167
             Top = 6
-            Width = 75
+            Width = 96
             Height = 21
             Caption = #1044#1086#1073#1072#1074#1080#1090#1100
             TabOrder = 1
@@ -3035,7 +3119,7 @@ object Form2: TForm2
           object Button21: TButton
             Left = 167
             Top = 33
-            Width = 75
+            Width = 96
             Height = 21
             Caption = #1059#1076#1072#1083#1080#1090#1100
             TabOrder = 2
@@ -3046,31 +3130,32 @@ object Form2: TForm2
         object GroupBox5: TGroupBox
           Left = 4
           Top = 81
-          Width = 245
-          Height = 270
+          Width = 265
+          Height = 314
           Align = alLeft
           Caption = #1044#1072#1085#1085#1099#1077' '#1079#1072' '#1087#1077#1088#1080#1086#1076':'
           TabOrder = 1
           object StringGrid1: TStringGrid
             Left = 2
             Top = 15
-            Width = 241
-            Height = 218
+            Width = 261
+            Height = 262
             Align = alClient
             BorderStyle = bsNone
-            ColCount = 3
+            ColCount = 4
             DefaultRowHeight = 20
             FixedCols = 0
             RowCount = 2
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing]
             TabOrder = 0
             OnDrawCell = StringGrid1DrawCell
+            OnMouseLeave = StringGrid1MouseLeave
             OnSelectCell = StringGrid1SelectCell
           end
           object Panel2: TPanel
             Left = 2
-            Top = 233
-            Width = 241
+            Top = 277
+            Width = 261
             Height = 35
             Align = alBottom
             BevelOuter = bvNone
@@ -3084,7 +3169,7 @@ object Form2: TForm2
             object Label77: TLabel
               Left = 0
               Top = 0
-              Width = 241
+              Width = 261
               Height = 35
               Align = alClient
               Alignment = taCenter
@@ -3092,6 +3177,78 @@ object Form2: TForm2
               ExplicitWidth = 4
               ExplicitHeight = 16
             end
+          end
+        end
+        object GroupBox11: TGroupBox
+          Left = 280
+          Top = 81
+          Width = 193
+          Height = 154
+          Caption = #1054#1073#1097#1080#1077' '#1089#1091#1084#1084#1099':'
+          TabOrder = 2
+          object Label79: TLabel
+            Left = 8
+            Top = 23
+            Width = 87
+            Height = 13
+            Caption = #1057#1091#1084#1084#1072' '#1089#1091#1073#1089#1080#1076#1080#1080':'
+          end
+          object Label80: TLabel
+            Left = 8
+            Top = 58
+            Width = 101
+            Height = 13
+            Caption = #1057#1091#1084#1084#1072' '#1092'. '#1088#1072#1089#1093#1086#1076#1086#1074':'
+          end
+          object Label82: TLabel
+            Left = 8
+            Top = 85
+            Width = 98
+            Height = 13
+            Caption = #1057#1088#1077#1076#1085#1080#1081' '#1092'. '#1088#1072#1089#1093#1086#1076':'
+          end
+          object Label81: TLabel
+            Left = 8
+            Top = 120
+            Width = 104
+            Height = 13
+            Caption = #1057#1091#1084#1084#1072' '#1087#1088#1077#1074#1099#1096#1077#1085#1080#1103':'
+          end
+          object Edit111: TEdit
+            Left = 120
+            Top = 23
+            Width = 59
+            Height = 21
+            ReadOnly = True
+            TabOrder = 0
+            Text = '0'
+          end
+          object Edit112: TEdit
+            Left = 120
+            Top = 58
+            Width = 59
+            Height = 21
+            ReadOnly = True
+            TabOrder = 1
+            Text = '0'
+          end
+          object Edit114: TEdit
+            Left = 120
+            Top = 85
+            Width = 59
+            Height = 21
+            ReadOnly = True
+            TabOrder = 2
+            Text = '0'
+          end
+          object Edit113: TEdit
+            Left = 120
+            Top = 120
+            Width = 59
+            Height = 21
+            ReadOnly = True
+            TabOrder = 3
+            Text = '0'
           end
         end
       end

@@ -64,7 +64,7 @@ function GetPrec(fld: TField): byte;
 procedure FillTable(path, nam: string; code: TCodePage);
 procedure EditField(f: string; code: TCodePage; n: integer);
 
-function GetMonthsCount(BeginDate, EndDate: TDateTime; var DaysCount: byte): integer;
+function GetMonthsCount(BeginDate, EndDate: TDateTime): integer;
 function WithoutDoubleSpaces(str: string): string;
 function GetShortName(FIO: string): string;
 function ReplacePoint(str: string): string; //заминить , на .
@@ -691,7 +691,7 @@ begin
   end;
 end;
 
-function GetMonthsCount(BeginDate, EndDate: TDateTime; var DaysCount: byte): integer;
+function GetMonthsCount(BeginDate, EndDate: TDateTime): integer;
 {*******************************************************************************
  Функция, которая возвращает разницу между двумя датами в месяцах.
  Исходные данные: BeginDate, EndDate - начальная и конечная даты;
@@ -705,6 +705,7 @@ var
   Months1, Months2,         // количество месяцев начальной и конечной дат
   Years1, Years2: integer;  // количество лет начальной и конечной дат
   BufferDate: TDateTime;    // буфер для обмена значениями
+  DaysCount: byte;
 begin
   if BeginDate > EndDate then  // сравниваем даты, если начальная позднее
   begin                        // конечной, то меняем даты между собой
