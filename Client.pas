@@ -26,6 +26,13 @@ type
     rstnd: integer;//региональный стандарт
     begindate: TDate;//дата начала действия субсидии
     enddate: TDate;//дата окончания действия субсидии
+    //------
+    prevbegindate: TDate;//дата начала действия субсидии (прошлый период)
+    prevenddate: TDate;//дата окончания действия субсидии (прошлый период)
+    averageFact: real;//средний размер ф.расходов за прошлый период
+    dolgFact: real;//долг за прошлый период
+    //curMinus: real;//сумма текущих уменьшений
+    //------
     period: integer;//срок субсидии
     boiler: integer;//бойлер 0 - нет, 1 - есть
     family: TObjectList;//семья
@@ -49,9 +56,9 @@ type
     snpm: array[0..(numbtarif-1)] of real;//начисления по каждому тарифу
     sub: array[0..(numbtarif-1)] of real;//субсидия по каждому тарифу
     fpm: array[0..(numbtarif-1)] of real;//платежи без учета льготы
-    //сведения по приостановке
-    stop: integer;
-    heating: integer;
+
+    stop: integer; //сведения по приостановке
+    heating: integer; //тип отопления
   end;
 
   TData = packed record
@@ -267,6 +274,48 @@ begin
     else
       cdata.period := MonthOf(cdata.enddate)+12-MonthOf(cdata.begindate);
     cdata.heating:= FieldByName('id_heating').AsInteger;
+
+    //------
+    Close;
+    SQL.Clear;
+    SQL.Text := 'SELECT *' + #13 +
+      'FROM hist INNER JOIN' + #13 +
+  	    '(SELECT regn, max(bdate) as bdate' + #13 +
+          'FROM hist' + #13 +
+	        'WHERE bdate < convert(smalldatetime,:bdate,104)' + #13 +
+        	'GROUP BY regn) sb on hist.regn = sb.regn AND hist.bdate = sb.bdate' + #13 +
+      'WHERE hist.regn = :regn';
+    ParamByName('regn').AsInteger := data.regn;
+    ParamByName('bdate').AsString := DateToStr(cdata.begindate);
+    Open;
+    cdata.prevbegindate := FieldByName('bdate').AsDateTime;
+    cdata.prevenddate := FieldByName('edate').AsDateTime;
+    //------
+    //------
+    Close;
+    SQL.Clear;
+    SQL.Text := 'SELECT *' + #13 +
+      'FROM FactBalance' + #13 +
+      'WHERE (regn = :regn) AND (bdate = convert(smalldatetime,:bdate,104))';
+    ParamByName('regn').AsInteger := data.regn;
+    ParamByName('bdate').AsString := DateToStr(cdata.prevbegindate);
+    Open;
+    cdata.dolgFact := FieldByName('dolg').AsFloat;
+    cdata.averageFact := FieldByName('balance').AsFloat;
+
+    {Close;
+    SQL.Clear;
+    SQL.Text := 'SELECT sum(curminus) as curminus' + #13 +
+      'FROM FactMinus' + #13 +
+      'WHERE (regn = :regn) AND (bdate = convert(smalldatetime,:bdate,104)) AND (sdate = convert(smalldatetime,:sdate,104))';
+    ParamByName('regn').AsInteger := data.regn;
+    ParamByName('bdate').AsString := DateToStr(cdata.begindate);
+    ParamByName('sdate').AsString := Form1.rdt;
+    Open;
+    cdata.curMinus := FieldByName('curminus').AsFloat;
+    }
+    //------
+
     Close;
     SQL.Clear;
     SQL.Add('select *');
@@ -772,7 +821,8 @@ var
 begin
 
   if (sts<>3) then begin//расчет активного
-    if (cdata.calc=0) then begin //типовой расчет
+    if (cdata.calc=0) then
+    begin //типовой расчет
       //расчет начислений с учетом льгот
       CalcPriv;
       CalcServSq(0);
@@ -813,18 +863,21 @@ end;
 
 procedure TClient.CalcSub(sts: integer);//расчет субсидии за месяц
 var
-  ppm, pm,fpm, subs, stnd,cnt, subold: real;
-  i,mdd, mbc{, tmp}: integer;
+  ppm, pm,fpm, subs, stnd,cnt, subold, tmpkoef, cursub: real;
+  i,mdd, mbc: integer;
   p: array[0..numbtarif-1] of real;
   havePriv: boolean;
 begin
   if (sts<>3) then
-  begin//расчет активного
+  //расчет активного
+  begin
     mdd := GetMdd;
     fpm:=CalcFull;
     stnd := GetStandard;
+
     if cdata.rstnd<>0 then
-    begin//с учетом стандарта
+    //------с учетом стандарта
+    begin
       pm := CalcFull;//полная оплата без учета льготы
       //оплата c учетом льготы
       ppm := 0;
@@ -844,8 +897,10 @@ begin
       if pm<>0 then
         pm := stnd*cdata.mcount*Rnd(ppm/pm);
     end
+    //------
     else
-    begin //оплата по соц.норме
+    //------оплата по соц.норме
+    begin
       pm := 0;
       for i:=0 to numbtarif-1 do
         pm := pm + cdata.snpm[i];
@@ -862,27 +917,37 @@ begin
       end;
       ppm := pm;
     end;
-    //определение размера субсидии
+
+    //------определение размера субсидии
     if fpm=0 then
-      begin
-        fpm:=1;
-        ppm:=0;
-      end;
+    begin
+      fpm:=1;
+      ppm:=0;
+    end;
+
     if cdata.rstnd=0 then
+    //------типовой расчет
       if cdata.income/cdata.mcount >= cdata.pmin then
         subs := rnd(pm - (mdd*cdata.income)/100)
       else
         subs := rnd(pm - (mdd*cdata.income*rnd(cdata.koef))/100)
-    else//по рег сдандарту
+    else
+    //------с учетом стандарта
     begin
       havePriv := False;
+      //проверка на koef
+      if cdata.koef <= 1 then
+        tmpkoef := cdata.koef
+      else
+        tmpkoef := 1;
+
       for i:= 0 to cdata.mcount - 1 do
       if cdata.priv[i] <> 0 then
         havePriv := True;
       if havePriv then
-        subs := (stnd * cdata.mcount * rnd(ppm/fpm) - ((mdd / 100) * cdata.income * rnd(cdata.koef)))
+        subs := (stnd * cdata.mcount * rnd(ppm/fpm) - ((mdd / 100) * cdata.income * rnd(tmpkoef)))
       else
-        subs := (stnd * cdata.mcount - ((mdd / 100) * cdata.income * rnd(cdata.koef)));
+        subs := (stnd * cdata.mcount - ((mdd / 100) * cdata.income * rnd(tmpkoef)));
     end;
 
     subold := 0;
@@ -892,21 +957,25 @@ begin
     if (subs + 1< subold ) and (cdata.mcount > 3) and (cdata.square > 60)
       and (sts <> 0) and (cdata.begindate < StrToDate('01.01.2007')) then
     begin
-     mbc :=  MessageDlg('Произошло уменьшение субсидии' + #13#10 +
-                   '   Имя - ' + TMan(cdata.family.Items[0]).fio + #13#10 +
-                   '   значение площади - ' + FloatToStr(cdata.square) + #13#10 +
-                   '   Кол-во чел. - ' + FloatToStr(cdata.mcount) + #13#10 +
-                   '   Новое знач. субс. - ' + FloatToStr(subs) + #13#10 +
-                   'Принять данное изменение?',
-      mtConfirmation, [mbYes, mbNo], 0);
+      mbc :=  MessageDlg('Произошло уменьшение субсидии' + #13#10 +
+                    '   Имя - ' + TMan(cdata.family.Items[0]).fio + #13#10 +
+                    '   значение площади - ' + FloatToStr(cdata.square) + #13#10 +
+                    '   Кол-во чел. - ' + FloatToStr(cdata.mcount) + #13#10 +
+                    '   Новое знач. субс. - ' + FloatToStr(subs) + #13#10 +
+                    'Принять данное изменение?',
+        mtConfirmation, [mbYes, mbNo], 0);
      if mbc = mrNo then
       exit;
     end;
 
-    if subs>0 then begin
-      if (subs<ppm) then begin
+    if subs>0 then
+    begin
+      if (subs<ppm) then
+      begin
         cnt := 0;
-        for i:=0 to numbtarif-1 do begin
+        for i:=0 to numbtarif-1 do
+        //------распределяем субсидию по тарифам
+        begin
           cdata.sub[i] := Rnd(subs*p[i]);
           cnt := cnt + cdata.sub[i];
         end;
@@ -914,7 +983,7 @@ begin
         while cdata.sub[i]=0 do
           inc(i);
         cnt := subs - cnt;
-        cdata.sub[i] := Rnd(cdata.sub[i] + cnt);
+        cdata.sub[i] := rnd(cdata.sub[i] + cnt);
       end
       else
       begin//subs>=ppm
@@ -926,12 +995,61 @@ begin
             cdata.sub[i] := cdata.snpm[i];
         end;
       end;
+      //обрезаем по факту (если он больше 0) | sts = 0 первичная
+      if (cdata.averageFact > 0) and (subs > cdata.averageFact) and (data.cert = 2) then
+      begin
+        for i:=0 to numbtarif-1 do
+          cdata.sub[i] := cdata.sub[i] * (cdata.averageFact/subs);
+      end;
+{      //проверка на переплату субсидии и уменьшение размера субсидии
+      if cdata.dolgFact > 0 then
+      begin
+        if cdata.averageFact < subs then
+          cursub := cdata.averageFact
+        else
+          cursub := subs;
+
+        if (cursub * GetMonthsCount(cdata.begindate, cdata.enddate)) > cdata.dolgFact then
+        begin
+          with DataModule1 do
+          begin
+            Query1.Close;
+            Query1.SQL.Text := 'DELETE FROM FactMinus' + #13 +
+              'WHERE (sdate = convert(smalldatetime,:sdate,104)) AND (regn = :regn)';
+            Query1.ParamByName('sdate').Value := Form1.rdt;
+            Query1.ParamByName('regn').Value := data.regn;
+            Query1.ExecSQL;
+
+            Query1.Close;
+            Query1.SQL.Text := 'INSERT INTO FactMinus' + #13 +
+              'VALUES(convert(smalldatetime,:sdate,104),:regn,convert(smalldatetime,:bdate,104),convert(smalldatetime,:edate,104),:minus)';
+            Query1.ParamByName('sdate').Value := Form1.rdt;
+            Query1.ParamByName('regn').Value := data.regn;
+            Query1.ParamByName('bdate').Value := DateToStr(cdata.begindate);
+            Query1.ParamByName('edate').Value := DateToStr(cdata.enddate);
+            Query1.ParamByName('minus').Value := rnd(cdata.dolgFact / GetMonthsCount(cdata.begindate, cdata.enddate));
+            Query1.ExecSQL;
+          end;
+          if (cdata.dolgFact - cdata.curMinus) < (cdata.dolgFact / 6) then
+          begin
+          for i:=0 to numbtarif-1 do
+            cdata.sub[i] := cdata.sub[i] - rnd(cdata.sub[i] * ((cdata.dolgFact - cdata.curMinus) / cursub));
+          end
+          else
+          begin
+          for i:=0 to numbtarif-1 do
+            cdata.sub[i] := cdata.sub[i] - rnd(cdata.sub[i] * ((cdata.dolgFact / 6) / cursub));
+          end;
+        end;
+
+      end;}
     end
-    else
+    else//subs<0
     begin
       for i:=0 to numbtarif-1 do
         cdata.sub[i] := 0;
     end;
+
     if (sts=0) then
     begin //первый месяц
       if (cdata.calc=0) then
@@ -962,15 +1080,23 @@ begin
       cdata.sub[i] := Rnd(cdata.sub[i] + cnt);
       if (cdata.calc=0) and(cdata.tarifs[12]<>0) then
       begin //типовой расчет
-        cdata.pm[12] := 0; cdata.pm[13] := 0;
-        cdata.snpm[12] := 0; cdata.snpm[13] := 0;
-        cdata.sub[12] := 0; cdata.sub[13] := 0;
-        cdata.fpm[12] := 0; cdata.fpm[13] := 0;
+        cdata.pm[12] := 0;
+        cdata.snpm[12] := 0;
+        cdata.sub[12] := 0;
+        cdata.fpm[12] := 0;
+
+        cdata.pm[13] := 0;
+        cdata.snpm[13] := 0;
+        cdata.sub[13] := 0;
+        cdata.fpm[13] := 0;
       end;
-      if (cdata.calc=1) and(cdata.tarifs[12]<>0) then  //ИНДИВИДУАЛЬНЫЙ расчет
+      if (cdata.calc = 1) and (cdata.tarifs[12] <> 0) then  //ИНДИВИДУАЛЬНЫЙ расчет
       begin
-          cdata.sub[12] := 0; cdata.sub[13] := 0;
-          cdata.snpm[12] := 0; cdata.snpm[13] := 0;
+        cdata.sub[12] := 0;
+        cdata.snpm[12] := 0;
+
+        cdata.sub[13] := 0;
+        cdata.snpm[13] := 0;
       end;
     end;
   end;
@@ -991,12 +1117,15 @@ var
   i: integer;
 begin
   valtarif := cdata.cost[s];
-  if valtarif<>0 then begin
+  if valtarif<>0 then
+  begin
     value1 := cdata.mcount;
     value2 := cdata.mcount;
     cdata.fpm[s] := Rnd(valtarif * value1);
-    for i:=0 to cdata.mcount-1 do begin
-      if cdata.pc[i][s]<>0 then begin//если ненулевая льгота
+    for i:=0 to cdata.mcount-1 do
+    begin
+      if cdata.pc[i][s]<>0 then
+      begin//если ненулевая льгота
         value1 := value1 - cdata.pc[i][s]/100;
         value2 := value2 - cdata.pc[i][s]/100;
       end;
@@ -1004,7 +1133,8 @@ begin
     cdata.pm[s] := rnd(valtarif * value1);
     cdata.snpm[s] := rnd(valtarif * value2);
   end
-  else begin
+  else
+  begin
     cdata.fpm[s] := 0;
     cdata.pm[s] := 0;
     cdata.snpm[s] := 0;
@@ -1093,14 +1223,15 @@ begin
   case cdata.tarifs[7] of
     1 : cost:=2.08;
     2 : cost:=1.44;
-  else cost:=0;
+  else
+    cost:=0;
   end;
   norm:=cdata.cost[service];//получаем стоимость услуги @service
   for i:=0 to cdata.mcount-1 do
     begin
-    price:=price+(cost*norm*(100-cdata.pc[i][service])/100);
+      price:=price+(cost*norm*(100-cdata.pc[i][service])/100);
     end;
-  cdata.fpm[service]:=rnd(price);
+  cdata.fpm[service]:= rnd(cdata.mcount*cost*norm); //rnd(price);
   cdata.pm[service]:=rnd(price);
   cdata.snpm[service]:=rnd(price);
 end;
@@ -1113,8 +1244,8 @@ var
   i,j,quan:integer;
 begin
   valtarif := cdata.cost[s];
-  if valtarif<>0 then begin
-
+  if valtarif<>0 then
+  begin
     if s=12 then norm := Form1.normw
       else norm := Form1.normc;
 
@@ -1290,6 +1421,13 @@ begin
   d.dist := s.dist;
   d.begindate := s.begindate;
   d.enddate := s.enddate;
+  //------
+  d.prevbegindate := s.prevbegindate;
+  d.prevenddate := s.prevenddate;
+  d.averageFact := s.averageFact;
+  d.dolgFact := s.dolgFact;
+  //d.curMinus := s.curMinus;
+  //------
   d.period := s.period;
   d.snorm := s.snorm;
   d.psnorm := s.psnorm;
@@ -1376,6 +1514,13 @@ begin
   Result.rstnd := 0;
   Result.begindate := 0;
   Result.enddate := 0;
+  //------
+  Result.prevbegindate := 0;
+  Result.prevenddate := 0;
+  Result.averageFact := 0;
+  Result.dolgFact := 0;
+  //Result.curMinus := 0;
+  //------
   Result.period := 6;
   Result.snorm := 0;
   Result.psnorm := 0;
