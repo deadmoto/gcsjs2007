@@ -1,4 +1,4 @@
-unit loop;                                                  
+unit loop;
 
 interface
 
@@ -61,6 +61,7 @@ type
     Edit32: TEdit;
     Edit33: TEdit;
     Button2: TButton;
+    CheckBox2: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -139,11 +140,19 @@ procedure TForm16.Button1Click(Sender: TObject);
   на которой отображены последние изменения.
 }
 var
-  i: integer;
+  i, isFact: integer;
 begin
-  if CheckBox1.Checked then begin
-  for i:=0 to numbtarif-1 do begin
-    with Datamodule1.Query1 do begin
+  if CheckBox1.Checked then
+  begin
+  for i:=0 to numbtarif-1 do
+  begin
+    if CheckBox2.Checked then
+      isFact := 1
+    else
+      isFact := 0;
+
+    with Datamodule1.Query1 do
+    begin
       Close;
       Close;
       SQL.Clear;
@@ -155,23 +164,27 @@ begin
       ParamByName('serv').AsInteger := i;
       Open;
       If IsEmpty or not IsEmpty and
-        (FieldByName('regn').AsInteger=Form18.client) then begin
-        If IsEmpty then begin
+        (FieldByName('regn').AsInteger=Form18.client) then
+        begin
+        If IsEmpty then
+        begin
           Close;
           SQL.Clear;
           SQL.Add('insert into sluj');
-          SQL.Add('values (CONVERT(smalldatetime,:s,104),:r,:serv,:pm,:snp,:sub)');
+          SQL.Add('values (CONVERT(smalldatetime,:s,104),:r,:serv,:pm,:snp,:sub,:fact)');
         end
-        else begin
+        else
+        begin
           Close;
           SQL.Clear;
           SQL.Add('update sluj');
-          SQL.Add('set pm=:pm,snpm=:snp,sub=:sub');
+          SQL.Add('set pm=:pm,snpm=:snp,sub=:sub, factminus = :fact');
           SQL.Add('where (regn=:r)and(sdate=CONVERT(smalldatetime,:s,104))');
           SQL.Add('and(service=:serv)');
         end;
         ParamByName('s').AsString := Form1.rdt;
         ParamByName('r').AsInteger := Form18.client;
+        ParamByName('fact').AsInteger := isFact;
         ParamByName('serv').AsInteger := i;
         case i of
         0://содержание жилья
@@ -408,6 +421,7 @@ begin
     Edit27.Color := clWindow;Edit28.Color := clWindow;
     Edit29.Color := clWindow;Edit30.Color := clWindow;
     Edit31.Color := clWindow;Edit32.Color := clWindow;
+    CheckBox2.Enabled := True;
   end
   else begin
     wrt := false;
@@ -441,6 +455,8 @@ begin
     Edit27.Color := clBtnFace;Edit28.Color := clBtnFace;
     Edit29.Color := clBtnFace;Edit30.Color := clBtnFace;
     Edit31.Color := clBtnFace;Edit32.Color := clBtnFace;
+    CheckBox2.Enabled := False;
+    CheckBox2.Checked := False;
   end;
 end;
 

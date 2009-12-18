@@ -11,7 +11,7 @@ interface
 
 uses
   Controls, DB, dbf, Dialogs, ExcelXP, FileCtrl, Grids, Mask, padegFIO, Registry,
-  StdCtrls, SysUtils, Variants, Windows, ExtCtrls;
+  StdCtrls, SysUtils, Variants, Windows, ExtCtrls, Graphics, Classes, jpeg;
 
 const
   numbtarif = 14;
@@ -92,13 +92,14 @@ procedure SGDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: T
 procedure CBMeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
 procedure CBDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
 }
+procedure LoadJPEGFromRes(TheJPEG : string; ThePicture : TPicture);
+
 implementation
 
 uses
   datamodule,
   dateutils,
   Math,
-  Graphics,
   main;
 
 procedure SetPoint(edt: TEdit);
@@ -701,11 +702,11 @@ function GetMonthsCount(BeginDate, EndDate: TDateTime): integer;
 *******************************************************************************}
 
 var
-  Days1, Days2,             // количество дней начальной и конечной дат
+//  Days1, Days2,             // количество дней начальной и конечной дат
   Months1, Months2,         // количество месяцев начальной и конечной дат
   Years1, Years2: integer;  // количество лет начальной и конечной дат
   BufferDate: TDateTime;    // буфер для обмена значениями
-  DaysCount: byte;
+//  DaysCount: byte;
 begin
   if BeginDate > EndDate then  // сравниваем даты, если начальная позднее
   begin                        // конечной, то меняем даты между собой
@@ -713,8 +714,8 @@ begin
     BeginDate := EndDate;
     EndDate := BufferDate;
   end;
-  Days1  := StrToInt(FormatDateTime('dd', BeginDate));     // считываем количе-
-  Days2  := StrToInt(FormatDateTime('dd', EndDate));       // ство дней, месяцев
+//  Days1  := StrToInt(FormatDateTime('dd', BeginDate));     // считываем количе-
+//  Days2  := StrToInt(FormatDateTime('dd', EndDate));       // ство дней, месяцев
   Months1 := StrToInt(FormatDateTime('mm', BeginDate));    // и лет каждой из дат
   Months2 := StrToInt(FormatDateTime('mm', EndDate));      // и заносим в соот-
   Years1 := StrToInt(FormatDateTime('yyyy', BeginDate));   // ветствующие пере-
@@ -723,7 +724,7 @@ begin
   Result := (Years2 - Years1) * 12 + (Months2 - Months1);
   // Учитываем влияние разницы в днях на количество месяцев + остаток в днях в
   // переменной DaysCount
-  if (Days2 - Days1) < 0 then
+{  if (Days2 - Days1) < 0 then
   begin  // если разница отрицательна, то
     Result := Result - 1;  // производим заем месяца из имеющихся
     // В зависимости от месяца в "меньшей" дате, вычисляем остаток в днях
@@ -741,7 +742,7 @@ begin
     end;
   end  // конец действий при отрицательной разнице дней
   else  // при положительной или нулевой разнице дней
-    DaysCount := Days2 - Days1;  // банальная разность
+    DaysCount := Days2 - Days1;  // банальная разность}
 end;
 
 {StringGrid->ExcelExport*******************************************************}
@@ -1046,4 +1047,30 @@ begin
   DrawText(TComboBox(Control).Canvas.Handle, PChar(ItemString), length(ItemString), Rect, DT_WORDBREAK);
 end;
 }
+
+procedure LoadJPEGFromRes(TheJPEG : string; ThePicture : TPicture);
+var
+        ResHandle : THandle;
+        MemHandle : THandle;
+        MemStream : TMemoryStream;
+        ResPtr    : PByte;
+        ResSize   : Longint;
+        JPEGImage : TJPEGImage;
+begin
+        ResHandle := FindResource(hInstance, PChar(TheJPEG), 'JPEG');
+        MemHandle := LoadResource(hInstance, ResHandle);
+        ResPtr    := LockResource(MemHandle);
+        MemStream := TMemoryStream.Create;
+        JPEGImage := TJPEGImage.Create;
+        ResSize := SizeOfResource(hInstance, ResHandle);
+        MemStream.SetSize(ResSize);
+        MemStream.Write(ResPtr^, ResSize);
+        FreeResource(MemHandle);
+        MemStream.Seek(0, 0);
+        JPEGImage.LoadFromStream(MemStream);
+        ThePicture.Assign(JPEGImage);
+        JPEGImage.Free;
+        MemStream.Free;
+end;
+
 end.

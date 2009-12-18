@@ -420,16 +420,16 @@ begin
             SendMessage(pr.Handle, wm_paint, 0, 0);
           end;
         end;
-        //pr.Close;
+        pr.Close;
         //pr.Release;
-        pr.Free;
         ShowMessage('Экспорт успешно завершен!');
       except
         if Assigned(pr) then
           pr.Free;
         ShowMessage('Ошибка экспорта!');
       end;
-    pr.Free;
+      if Assigned(pr) then
+        pr.Free;
     end;
     mImport: //import
     begin
@@ -739,9 +739,9 @@ begin
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
-        //pr.Close;
+        pr.Close;
         //pr.Release;
-        pr.Free;
+        //pr.Free;
         Datamodule1.Database1.Commit;
         FillCurr(Form1.bpath, Form1.rdt, Form1.dist, Form1.codedbf);
         ShowMessage('Импорт найденных файлов успешно завершен!');
@@ -752,7 +752,8 @@ begin
           pr.Free;
         ShowMessage('Ошибка импорта!');
       end;
-
+      if Assigned(pr) then
+        pr.Free;
     end;
   end;
   Close;

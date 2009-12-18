@@ -231,6 +231,7 @@ object Form1: TForm1
       OnDrawCell = SGClDrawCell
       OnKeyDown = SGClKeyDown
       OnKeyPress = SGClKeyPress
+      OnMouseDown = SGClMouseDown
       OnSelectCell = SGClSelectCell
     end
     object GridPanel1: TGridPanel
@@ -1537,7 +1538,7 @@ object Form1: TForm1
   end
   object ImageList1: TImageList
     Left = 184
-    Top = 397
+    Top = 392
     Bitmap = {
       494C010104000900040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
@@ -1812,7 +1813,7 @@ object Form1: TForm1
   end
   object ImageList2: TImageList
     Left = 215
-    Top = 397
+    Top = 392
     Bitmap = {
       494C010112001300040010001000FFFFFFFFFF00FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000005000000001002000000000000050
@@ -2486,11 +2487,11 @@ object Form1: TForm1
     AutoQuit = True
     OnWorkbookBeforeClose = ExcelApplication1WorkbookBeforeClose
     Left = 184
-    Top = 363
+    Top = 360
   end
   object PopupMenu1: TPopupMenu
     Left = 136
-    Top = 395
+    Top = 392
     object N73: TMenuItem
       Caption = #1055#1088#1080#1086#1089#1090#1072#1085#1086#1074#1080#1090#1100' '#1089#1091#1073#1089#1080#1076#1080#1102
       OnClick = N73Click

@@ -27,7 +27,6 @@ object AboutBox: TAboutBox
     ParentColor = True
     TabOrder = 0
     OnClick = Panel1Click
-    ExplicitHeight = 123
     object ProgramIcon: TImage
       Left = 24
       Top = 16
@@ -68,9 +67,9 @@ object AboutBox: TAboutBox
     object Comments: TLabel
       Left = 8
       Top = 88
-      Width = 117
-      Height = 13
-      Caption = #1050#1086#1084#1087#1072#1085#1080#1103': '#1041#1059' '#1043#1062'C'#1046#1057' '
+      Width = 203
+      Height = 26
+      Caption = #1050#1086#1084#1087#1072#1085#1080#1103': '#1041#1059' '#1054#1054' '#1054#1062#1046#1057#1057#1042#1080#1051' '#1075'.'#1054#1084#1089#1082
       WordWrap = True
       IsControl = True
     end

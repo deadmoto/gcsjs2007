@@ -4,7 +4,7 @@ object Form16: TForm16
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = #1055#1088#1086#1089#1084#1086#1090#1088'/'#1048#1079#1084#1077#1085#1077#1085#1080#1077' '#1089#1091#1073#1089#1080#1076#1080#1080
-  ClientHeight = 383
+  ClientHeight = 381
   ClientWidth = 354
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -111,35 +111,35 @@ object Form16: TForm16
   end
   object GroupBox10: TGroupBox
     Left = 119
-    Top = 32
+    Top = 40
     Width = 226
-    Height = 313
+    Height = 305
     Caption = #1058#1077#1082#1091#1097#1080#1077' '#1076#1072#1085#1085#1099#1077
     TabOrder = 2
     object Label58: TLabel
       Left = 80
-      Top = 24
+      Top = 16
       Width = 61
       Height = 13
       Caption = #1055#1086' '#1089'.'#1085#1086#1088#1084#1077':'
     end
     object Label59: TLabel
       Left = 150
-      Top = 24
+      Top = 16
       Width = 51
       Height = 13
       Caption = #1057#1091#1073#1089#1080#1076#1080#1103':'
     end
     object Label4: TLabel
       Left = 6
-      Top = 24
+      Top = 16
       Width = 58
       Height = 13
       Caption = #1053#1072#1095#1080#1089#1083#1077#1085#1086':'
     end
     object Edit1: TEdit
       Left = 80
-      Top = 40
+      Top = 32
       Width = 65
       Height = 21
       TabStop = False
@@ -158,7 +158,7 @@ object Form16: TForm16
     end
     object Edit2: TEdit
       Left = 152
-      Top = 40
+      Top = 32
       Width = 65
       Height = 21
       TabStop = False
@@ -177,7 +177,7 @@ object Form16: TForm16
     end
     object Edit3: TEdit
       Left = 80
-      Top = 64
+      Top = 56
       Width = 65
       Height = 21
       TabStop = False
@@ -196,7 +196,7 @@ object Form16: TForm16
     end
     object Edit4: TEdit
       Left = 152
-      Top = 64
+      Top = 56
       Width = 65
       Height = 21
       TabStop = False
@@ -215,7 +215,7 @@ object Form16: TForm16
     end
     object Edit5: TEdit
       Left = 80
-      Top = 88
+      Top = 80
       Width = 65
       Height = 21
       TabStop = False
@@ -234,7 +234,7 @@ object Form16: TForm16
     end
     object Edit6: TEdit
       Left = 152
-      Top = 88
+      Top = 80
       Width = 65
       Height = 21
       TabStop = False
@@ -253,7 +253,7 @@ object Form16: TForm16
     end
     object Edit7: TEdit
       Left = 80
-      Top = 112
+      Top = 104
       Width = 65
       Height = 21
       TabStop = False
@@ -272,7 +272,7 @@ object Form16: TForm16
     end
     object Edit8: TEdit
       Left = 152
-      Top = 112
+      Top = 104
       Width = 65
       Height = 21
       TabStop = False
@@ -291,7 +291,7 @@ object Form16: TForm16
     end
     object Edit11: TEdit
       Left = 80
-      Top = 160
+      Top = 152
       Width = 65
       Height = 21
       TabStop = False
@@ -310,7 +310,7 @@ object Form16: TForm16
     end
     object Edit12: TEdit
       Left = 152
-      Top = 160
+      Top = 152
       Width = 65
       Height = 21
       TabStop = False
@@ -329,7 +329,7 @@ object Form16: TForm16
     end
     object Edit13: TEdit
       Left = 80
-      Top = 184
+      Top = 176
       Width = 65
       Height = 21
       TabStop = False
@@ -348,7 +348,7 @@ object Form16: TForm16
     end
     object Edit14: TEdit
       Left = 152
-      Top = 184
+      Top = 176
       Width = 65
       Height = 21
       TabStop = False
@@ -367,7 +367,7 @@ object Form16: TForm16
     end
     object Edit15: TEdit
       Left = 80
-      Top = 208
+      Top = 200
       Width = 65
       Height = 21
       TabStop = False
@@ -386,7 +386,7 @@ object Form16: TForm16
     end
     object Edit16: TEdit
       Left = 152
-      Top = 208
+      Top = 200
       Width = 65
       Height = 21
       TabStop = False
@@ -405,7 +405,7 @@ object Form16: TForm16
     end
     object Edit17: TEdit
       Left = 80
-      Top = 232
+      Top = 224
       Width = 65
       Height = 21
       TabStop = False
@@ -424,7 +424,7 @@ object Form16: TForm16
     end
     object Edit18: TEdit
       Left = 152
-      Top = 232
+      Top = 224
       Width = 65
       Height = 21
       TabStop = False
@@ -443,7 +443,7 @@ object Form16: TForm16
     end
     object Edit19: TEdit
       Left = 80
-      Top = 256
+      Top = 248
       Width = 65
       Height = 21
       TabStop = False
@@ -462,7 +462,7 @@ object Form16: TForm16
     end
     object Edit20: TEdit
       Left = 152
-      Top = 256
+      Top = 248
       Width = 65
       Height = 21
       TabStop = False
@@ -481,7 +481,7 @@ object Form16: TForm16
     end
     object Edit9: TEdit
       Left = 80
-      Top = 136
+      Top = 128
       Width = 65
       Height = 21
       TabStop = False
@@ -500,7 +500,7 @@ object Form16: TForm16
     end
     object Edit10: TEdit
       Left = 152
-      Top = 136
+      Top = 128
       Width = 65
       Height = 21
       TabStop = False
@@ -519,7 +519,7 @@ object Form16: TForm16
     end
     object Edit21: TEdit
       Left = 80
-      Top = 280
+      Top = 272
       Width = 65
       Height = 21
       TabStop = False
@@ -537,7 +537,7 @@ object Form16: TForm16
     end
     object Edit22: TEdit
       Left = 152
-      Top = 280
+      Top = 272
       Width = 65
       Height = 21
       TabStop = False
@@ -555,7 +555,7 @@ object Form16: TForm16
     end
     object Edit23: TEdit
       Left = 8
-      Top = 40
+      Top = 32
       Width = 65
       Height = 21
       TabStop = False
@@ -574,7 +574,7 @@ object Form16: TForm16
     end
     object Edit24: TEdit
       Left = 8
-      Top = 64
+      Top = 56
       Width = 65
       Height = 21
       TabStop = False
@@ -593,7 +593,7 @@ object Form16: TForm16
     end
     object Edit25: TEdit
       Left = 8
-      Top = 88
+      Top = 80
       Width = 65
       Height = 21
       TabStop = False
@@ -612,7 +612,7 @@ object Form16: TForm16
     end
     object Edit26: TEdit
       Left = 8
-      Top = 112
+      Top = 104
       Width = 65
       Height = 21
       TabStop = False
@@ -631,7 +631,7 @@ object Form16: TForm16
     end
     object Edit27: TEdit
       Left = 8
-      Top = 136
+      Top = 128
       Width = 65
       Height = 21
       TabStop = False
@@ -650,7 +650,7 @@ object Form16: TForm16
     end
     object Edit28: TEdit
       Left = 8
-      Top = 160
+      Top = 152
       Width = 65
       Height = 21
       TabStop = False
@@ -669,7 +669,7 @@ object Form16: TForm16
     end
     object Edit29: TEdit
       Left = 8
-      Top = 184
+      Top = 176
       Width = 65
       Height = 21
       TabStop = False
@@ -688,7 +688,7 @@ object Form16: TForm16
     end
     object Edit30: TEdit
       Left = 8
-      Top = 208
+      Top = 200
       Width = 65
       Height = 21
       TabStop = False
@@ -707,7 +707,7 @@ object Form16: TForm16
     end
     object Edit31: TEdit
       Left = 8
-      Top = 232
+      Top = 224
       Width = 65
       Height = 21
       TabStop = False
@@ -726,7 +726,7 @@ object Form16: TForm16
     end
     object Edit32: TEdit
       Left = 8
-      Top = 256
+      Top = 248
       Width = 65
       Height = 21
       TabStop = False
@@ -745,7 +745,7 @@ object Form16: TForm16
     end
     object Edit33: TEdit
       Left = 8
-      Top = 280
+      Top = 272
       Width = 65
       Height = 21
       TabStop = False
@@ -777,7 +777,7 @@ object Form16: TForm16
   end
   object Button1: TButton
     Left = 240
-    Top = 352
+    Top = 351
     Width = 81
     Height = 25
     Caption = #1048#1079#1084#1077#1085#1080#1090#1100
@@ -786,11 +786,23 @@ object Form16: TForm16
   end
   object Button2: TButton
     Left = 144
-    Top = 352
+    Top = 351
     Width = 75
     Height = 25
     Caption = #1042#1099#1081#1090#1080
     TabOrder = 0
     OnClick = Button2Click
+  end
+  object CheckBox2: TCheckBox
+    Left = 119
+    Top = 24
+    Width = 129
+    Height = 17
+    Hint = #1045#1089#1083#1080' '#1087#1088#1086#1080#1079#1074#1086#1076#1080#1090#1089#1103' '#1091#1076#1077#1088#1078#1072#1085#1080#1077' '#1089#1091#1073#1089#1080#1076#1080#1080' '#1080#1079'-'#1079#1072' '#1092#1072#1082#1090#1080#1095#1077#1089#1082#1080#1093' '#1088#1072#1089#1093#1086#1076#1086#1074
+    Caption = #1057#1085#1103#1090#1080#1077' '#1092'. '#1088#1072#1089#1093#1086#1076#1086#1074
+    Enabled = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 4
   end
 end

@@ -303,6 +303,19 @@ begin
     cdata.dolgFact := FieldByName('dolg').AsFloat;
     cdata.averageFact := FieldByName('balance').AsFloat;
 
+    if cdata.dolgFact > 0 then
+    begin
+      Close;
+      SQL.Text := 'SELECT sum(sub) as sumsub' + #13 +
+        'FROM Sluj' + #13 +
+        'WHERE (regn = :regn) AND (factminus = 1) AND (sdate >= convert(smalldatetime,:bdate,104))' + #13 +
+        'AND (sdate < convert(smalldatetime,:edate,104))';
+      ParamByName('regn').AsInteger := data.regn;
+      ParamByName('bdate').AsString := DateToStr(cdata.begindate);
+      ParamByName('edate').AsString := DateToStr(cdata.enddate);
+      Open;
+      cdata.dolgFact := cdata.dolgFact - FieldByName('sumsub').AsFloat
+    end;
     {Close;
     SQL.Clear;
     SQL.Text := 'SELECT sum(curminus) as curminus' + #13 +
@@ -863,7 +876,7 @@ end;
 
 procedure TClient.CalcSub(sts: integer);//расчет субсидии за месяц
 var
-  ppm, pm,fpm, subs, stnd,cnt, subold, tmpkoef, cursub: real;
+  ppm, pm,fpm, subs, stnd,cnt, subold, tmpkoef, tmpLkoef: real;
   i,mdd, mbc: integer;
   p: array[0..numbtarif-1] of real;
   havePriv: boolean;
@@ -937,17 +950,22 @@ begin
       havePriv := False;
       //проверка на koef
       if cdata.koef <= 1 then
-        tmpkoef := cdata.koef
+        tmpkoef := rnd(cdata.koef)
       else
         tmpkoef := 1;
+      //проверка на льготный к.
+      if rnd(ppm/fpm) <= 1 then
+        tmpLkoef := rnd(ppm/fpm)
+      else
+        tmpLkoef := 1;
 
       for i:= 0 to cdata.mcount - 1 do
       if cdata.priv[i] <> 0 then
         havePriv := True;
       if havePriv then
-        subs := (stnd * cdata.mcount * rnd(ppm/fpm) - ((mdd / 100) * cdata.income * rnd(tmpkoef)))
+        subs := (stnd * cdata.mcount * tmpLkoef - ((mdd / 100) * cdata.income * tmpkoef))
       else
-        subs := (stnd * cdata.mcount - ((mdd / 100) * cdata.income * rnd(tmpkoef)));
+        subs := (stnd * cdata.mcount - ((mdd / 100) * cdata.income * tmpkoef));
     end;
 
     subold := 0;
@@ -995,8 +1013,8 @@ begin
             cdata.sub[i] := cdata.snpm[i];
         end;
       end;
-      //обрезаем по факту (если он больше 0) | sts = 0 первичная
-      if (cdata.averageFact > 0) and (subs > cdata.averageFact) and (data.cert = 2) then
+      //обрезаем по факту (если он больше 0)
+      if (cdata.averageFact > 0) and (subs > cdata.averageFact) then
       begin
         for i:=0 to numbtarif-1 do
           cdata.sub[i] := cdata.sub[i] * (cdata.averageFact/subs);

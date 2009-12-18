@@ -2486,8 +2486,8 @@ end;
 
 procedure TForm2.StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
   var CanSelect: Boolean);
-var
-  i: integer;
+{var
+  i: integer;}
 begin
     if (ACol = 0)  then
       StringGrid1.Options := StringGrid1.Options - [goEditing, goAlwaysShowEditor]
@@ -2603,16 +2603,33 @@ begin
           except
             showmessage('Ошибка при изменении! Проверьте правильность ввода данных.')
           end;
-        if fbegindate = Cl.cdata.prevbegindate then
-        begin
-          Cl.cdata.averageFact := StrToFloat(Edit114.Text);
-          Cl.cdata.dolgFact := StrToFloat(Edit113.Text);
-          Edit115.Text := Edit113.Text;
-          Edit116.Text := Edit114.Text;
-        end;
         end;
       end;
     end;
+  end;
+  if fbegindate = Cl.cdata.prevbegindate then
+  begin
+    Cl.cdata.averageFact := StrToFloat(Edit114.Text);
+    Cl.cdata.dolgFact := StrToFloat(Edit113.Text);
+
+    Edit116.Text := Edit114.Text;
+    if Cl.cdata.dolgFact > 0 then
+    begin
+      with DataModule1.Query1 do
+      begin
+        Close;
+        SQL.Text := 'SELECT sum(sub) as sumsub' + #13 +
+          'FROM Sluj' + #13 +
+          'WHERE (regn = :regn) AND (factminus = 1) AND (sdate >= convert(smalldatetime,:bdate,104))' + #13 +
+          'AND (sdate < convert(smalldatetime,:edate,104))';
+        ParamByName('regn').AsInteger := Cl.data.regn;
+        ParamByName('bdate').AsString := DateToStr(Cl.cdata.begindate);
+        ParamByName('edate').AsString := DateToStr(Cl.cdata.enddate);
+        Open;
+        Cl.cdata.dolgFact := Cl.cdata.dolgFact - FieldByName('sumsub').AsFloat
+      end;
+    end;
+    Edit115.Text := FloatToStr(Cl.cdata.dolgFact);
   end;
 
   ClearFactGrids();
@@ -4105,7 +4122,7 @@ end;
 procedure TForm2.ChangeFactPeriod(BD, ED: TDateTime);
 var
   i,j: integer;
-  mountDiff: double;
+//  mountDiff: double;
 begin
   StringGrid1.RowCount:= GetMonthsCount(BD,ED)+1;
   for i:=0 to (AddAnyMonth(BD,ED)).Count-1 do begin
