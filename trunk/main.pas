@@ -316,6 +316,8 @@ type
     procedure N112Click(Sender: TObject);
     procedure N37Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
+    procedure SGClMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
 
   private
     { Private declarations }
@@ -3603,6 +3605,12 @@ begin
       SGCl.Row := ItemIndex;
     end;
   end;
+end;
+
+procedure TForm1.SGClMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  SGCL.Row := SGCL.MouseCoord(x,y ).Y;
 end;
 
 procedure TForm1.dbf1Click(Sender: TObject);

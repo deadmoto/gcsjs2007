@@ -62,6 +62,7 @@ uses
   EditReportUnit in 'EditReportUnit.pas' {EditReportFrm};
 
 {$R *.res}
+{$R myRes.RES}
 
 {$SETPEFLAGS IMAGE_FILE_RELOCS_STRIPPED}
 
@@ -85,8 +86,6 @@ begin
         Application.CreateForm(TForm20, Form20);
         Application.CreateForm(TAboutBox, AboutBox);
         Application.CreateForm(TForm21, Form21);
-//        Application.CreateForm(TForm37, Form37);
-//        Application.CreateForm(TForm39, Form39);
         Form1.Show;
         Form1.Update;
         Form1.Reload;

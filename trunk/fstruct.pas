@@ -821,7 +821,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO sluj');
-    SQL.Add('VALUES (CONVERT(smalldatetime,:d,104),:id,:serv,:pm,:snp,:sub)');
+    SQL.Add('VALUES (CONVERT(smalldatetime,:d,104),:id,:serv,:pm,:snp,:sub, :fact)');
   end;
   if FileExists(path+'sluj'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'sluj'+IntToStr(dis)+'.dbf',f);
@@ -842,6 +842,7 @@ begin
         Query1.ParamByName('pm').AsFloat := StrToFloat(f[i][3]);
         Query1.ParamByName('snp').AsFloat := StrToFloat(f[i][4]);
         Query1.ParamByName('sub').AsFloat := StrToFloat(f[i][5]);
+        Query1.ParamByName('fact').AsInteger := StrToInt(f[i][6]);
         Query1.ExecSQL;
       end;
       Query1.Close;
