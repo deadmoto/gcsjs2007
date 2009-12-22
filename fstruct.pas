@@ -348,7 +348,7 @@ end;
 procedure ExportFact(path: string;dis: integer);
 { процедура экспорта фактических расходов }
 begin
-  With DataModule1.Query1 do begin
+  with DataModule1.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM FactSale');
@@ -357,6 +357,17 @@ begin
     Open;
     FillTable(path, 'factsale'+IntToStr(dis), Form1.codedbf);
   end;
+  //-------
+  with DataModule1.Query1 do begin
+    Close;
+    SQL.Clear;
+    SQL.Add('SELECT * FROM FactBalance');
+    SQL.Add('WHERE id_dist=:dist');
+    ParamByName('dist').AsInteger := dis;
+    Open;
+    FillTable(path, 'factbalance'+IntToStr(dis), Form1.codedbf);
+  end;
+
 end;
 
 procedure ImportTarif(path,t:string;dis: integer);
@@ -500,7 +511,7 @@ begin
         Query2.Close;
         Query2.SQL.Clear;
         Query2.SQL.Add('DELETE FROM FactSale');
-        Query2.SQL.Add('WHERE (regn =:id)and(sdate=convert(smalldatetime,:d,104))');
+        Query2.SQL.Add('WHERE (regn =:id) and (sdate=convert(smalldatetime,:d,104))');
         Query2.SQL.Add('and(id_dist=:dis)');
         Query2.ParamByName('d').AsString := f[i][0];
         Query2.ParamByName('id').AsString := f[i][1];
@@ -521,6 +532,45 @@ begin
   end
   else
     ShowMessage('Файл '+path+'factsale'+IntToStr(dis)+'.dbf не найден!');
+  //------
+  with Datamodule1.Query1 do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('INSERT INTO FactBalance');
+    SQL.Add('VALUES (:id,convert(smalldatetime,:bdate,104), convert(smalldatetime,:edate,104),:balance,:dolg,:dis)');
+  end;
+  if FileExists(path+'factbalance'+IntToStr(dis)+'.dbf') then
+  begin
+    GetData(path+'factbalance'+IntToStr(dis)+'.dbf',f);
+    With DataModule1 do begin
+      for i:=0 to high(f) do begin
+        Query2.Close;
+        Query2.SQL.Clear;
+        Query2.SQL.Add('DELETE FROM FactBalance');
+        Query2.SQL.Add('WHERE (regn =:id)and(bdate=convert(smalldatetime,:bdate,104))');
+        Query2.SQL.Add('and(id_dist=:dis)');
+        Query2.ParamByName('bdate').AsString := f[i][1];
+        Query2.ParamByName('id').AsString := f[i][0];
+        Query2.ParamByName('dis').AsString := f[i][5];
+        Query2.ExecSQL;
+        Query1.ParamByName('id').AsString := f[i][0];
+        Query1.ParamByName('bdate').AsString := f[i][1];
+        Query1.ParamByName('edate').AsString := f[i][2];
+        Query1.ParamByName('balance').AsFloat := StrToFloat(f[i][3]);
+        if f[i][4] = '' then
+          Query1.ParamByName('dolg').AsString := ''
+        else
+          Query1.ParamByName('dolg').AsFloat := StrToFloat(f[i][4]);
+        Query1.ParamByName('dis').AsFloat := StrToFloat(f[i][5]);
+        Query1.ExecSQL;
+      end;
+      Query1.Close;
+      Query2.Close;
+    end;
+  end
+  else
+    ShowMessage('Файл '+path+'factbalance'+IntToStr(dis)+'.dbf не найден!');
 end;
 
 procedure ImportRStnd(path: string);
@@ -663,7 +713,7 @@ begin
     SQL.Add('VALUES (:id,CONVERT(smalldatetime,:bdate,104),');
     SQL.Add('CONVERT(smalldatetime,:edate,104),:mcount,:quanpriv,:pmin,:income,');
     SQL.Add(':insp,:dist,:control,:reason,:own,:manager,:fond,:cert,:bank,:acbank,');
-    SQL.Add(':calc,:mdd,:heating)');
+    SQL.Add(':calc,:mdd,:heating,:rmcount)');
   end;
   if FileExists(path+'hist'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'hist'+IntToStr(dis)+'.dbf',f);
@@ -697,6 +747,7 @@ begin
         Query1.ParamByName('calc').AsString := f[i][17];
         Query1.ParamByName('mdd').AsString := f[i][18];
         Query1.ParamByName('heating').AsString := f[i][19];
+        Query1.ParamByName('rmcount').AsString := f[i][20];
         Query1.ExecSQL;
       end;
       Query1.Close;

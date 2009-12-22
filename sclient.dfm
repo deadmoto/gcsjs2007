@@ -24,7 +24,7 @@ object Form2: TForm2
     Top = 3
     Width = 587
     Height = 427
-    ActivePage = TabSheet1
+    ActivePage = TabSheet6
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
@@ -92,9 +92,9 @@ object Form2: TForm2
       object Label9: TLabel
         Left = 8
         Top = 320
-        Width = 106
+        Width = 81
         Height = 13
-        Caption = #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1095#1077#1083#1086#1074#1077#1082':'
+        Caption = #1050#1086#1083'-'#1074#1086' '#1095#1077#1083#1086#1074#1077#1082':'
       end
       object Label10: TLabel
         Left = 8
@@ -139,7 +139,7 @@ object Form2: TForm2
         Caption = #1082#1074'.'#1084'.'
       end
       object Label17: TLabel
-        Left = 160
+        Left = 128
         Top = 320
         Width = 93
         Height = 13
@@ -179,6 +179,13 @@ object Form2: TForm2
         Width = 73
         Height = 13
         Caption = #1059#1074#1077#1076#1086#1084#1083#1077#1085#1080#1077':'
+      end
+      object Label84: TLabel
+        Left = 263
+        Top = 320
+        Width = 98
+        Height = 13
+        Caption = #1047#1072#1088#1077#1075#1080#1089#1090#1088#1080#1088#1086#1074#1072#1085#1086':'
       end
       object GroupBox2: TGroupBox
         Left = 408
@@ -421,7 +428,7 @@ object Form2: TForm2
         OnKeyDown = Edit66KeyDown
       end
       object Edit68: TEdit
-        Left = 128
+        Left = 97
         Top = 320
         Width = 25
         Height = 21
@@ -498,8 +505,8 @@ object Form2: TForm2
         OnExit = ComboBox16Change
       end
       object Edit95: TEdit
-        Left = 256
-        Top = 320
+        Left = 227
+        Top = 321
         Width = 25
         Height = 21
         Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1083#1100#1075#1086#1090#1085#1080#1082#1086#1074' '#1085#1077' '#1084#1086#1078#1077#1090' '#1073#1099#1090#1100' '#1073#1086#1083#1100#1096#1077','#1095#1077#1084' '#1095#1083#1077#1085#1086#1074' '#1089#1077#1084#1100#1080
@@ -644,6 +651,15 @@ object Form2: TForm2
           TabOrder = 3
           Text = '0'
         end
+      end
+      object Edit117: TEdit
+        Left = 367
+        Top = 321
+        Width = 25
+        Height = 21
+        TabOrder = 27
+        Text = '0'
+        OnExit = Edit117Exit
       end
     end
     object TabSheet2: TTabSheet
@@ -3112,7 +3128,6 @@ object Form2: TForm2
             Top = 6
             Width = 96
             Height = 21
-            Caption = #1044#1086#1073#1072#1074#1080#1090#1100
             TabOrder = 1
             OnClick = Button20Click
           end
@@ -3151,6 +3166,7 @@ object Form2: TForm2
             OnDrawCell = StringGrid1DrawCell
             OnMouseLeave = StringGrid1MouseLeave
             OnSelectCell = StringGrid1SelectCell
+            OnSetEditText = StringGrid1SetEditText
           end
           object Panel2: TPanel
             Left = 2

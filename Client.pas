@@ -20,6 +20,7 @@ type
     psnorm: real;
     phnorm: real;
     mcount: integer;//число человек в семье
+    rmcount: integer;//число зарегистрированных человек
     income: real;//совокупный доход семьи
     pmin: real;//прожиточный минимум семьи
     koef: real;//коэффициент СД/ПМ
@@ -264,6 +265,7 @@ begin
     cdata.calc := FieldByName('calc').AsInteger;
     cdata.mdd := FieldByName('mdd').AsInteger;
     cdata.mcount := FieldByName('mcount').AsInteger;
+    cdata.rmcount := FieldByName('rmcount').AsInteger;
     cdata.quanpriv := FieldByName('quanpriv').AsInteger;
     cdata.income := FieldByName('income').AsFloat;
     cdata.pmin := FieldByName('pmin').AsFloat;
@@ -288,8 +290,17 @@ begin
     ParamByName('regn').AsInteger := data.regn;
     ParamByName('bdate').AsString := DateToStr(cdata.begindate);
     Open;
-    cdata.prevbegindate := FieldByName('bdate').AsDateTime;
-    cdata.prevenddate := FieldByName('edate').AsDateTime;
+    //если запись в базе нет (нет прошлого периода)
+    if RecordCount = 0 then
+    begin
+      cdata.prevbegindate := cdata.begindate;
+      cdata.prevenddate := cdata.enddate;
+    end
+    else
+    begin
+      cdata.prevbegindate := FieldByName('bdate').AsDateTime;
+      cdata.prevenddate := FieldByName('edate').AsDateTime;
+    end;
     //------
     //------
     Close;
@@ -963,9 +974,9 @@ begin
       if cdata.priv[i] <> 0 then
         havePriv := True;
       if havePriv then
-        subs := (stnd * cdata.mcount * tmpLkoef - ((mdd / 100) * cdata.income * tmpkoef))
+        subs := (stnd * cdata.rmcount * tmpLkoef - ((mdd / 100) * cdata.income * tmpkoef))
       else
-        subs := (stnd * cdata.mcount - ((mdd / 100) * cdata.income * tmpkoef));
+        subs := (stnd * cdata.rmcount - ((mdd / 100) * cdata.income * tmpkoef));
     end;
 
     subold := 0;
@@ -1019,48 +1030,6 @@ begin
         for i:=0 to numbtarif-1 do
           cdata.sub[i] := cdata.sub[i] * (cdata.averageFact/subs);
       end;
-{      //проверка на переплату субсидии и уменьшение размера субсидии
-      if cdata.dolgFact > 0 then
-      begin
-        if cdata.averageFact < subs then
-          cursub := cdata.averageFact
-        else
-          cursub := subs;
-
-        if (cursub * GetMonthsCount(cdata.begindate, cdata.enddate)) > cdata.dolgFact then
-        begin
-          with DataModule1 do
-          begin
-            Query1.Close;
-            Query1.SQL.Text := 'DELETE FROM FactMinus' + #13 +
-              'WHERE (sdate = convert(smalldatetime,:sdate,104)) AND (regn = :regn)';
-            Query1.ParamByName('sdate').Value := Form1.rdt;
-            Query1.ParamByName('regn').Value := data.regn;
-            Query1.ExecSQL;
-
-            Query1.Close;
-            Query1.SQL.Text := 'INSERT INTO FactMinus' + #13 +
-              'VALUES(convert(smalldatetime,:sdate,104),:regn,convert(smalldatetime,:bdate,104),convert(smalldatetime,:edate,104),:minus)';
-            Query1.ParamByName('sdate').Value := Form1.rdt;
-            Query1.ParamByName('regn').Value := data.regn;
-            Query1.ParamByName('bdate').Value := DateToStr(cdata.begindate);
-            Query1.ParamByName('edate').Value := DateToStr(cdata.enddate);
-            Query1.ParamByName('minus').Value := rnd(cdata.dolgFact / GetMonthsCount(cdata.begindate, cdata.enddate));
-            Query1.ExecSQL;
-          end;
-          if (cdata.dolgFact - cdata.curMinus) < (cdata.dolgFact / 6) then
-          begin
-          for i:=0 to numbtarif-1 do
-            cdata.sub[i] := cdata.sub[i] - rnd(cdata.sub[i] * ((cdata.dolgFact - cdata.curMinus) / cursub));
-          end
-          else
-          begin
-          for i:=0 to numbtarif-1 do
-            cdata.sub[i] := cdata.sub[i] - rnd(cdata.sub[i] * ((cdata.dolgFact / 6) / cursub));
-          end;
-        end;
-
-      end;}
     end
     else//subs<0
     begin
@@ -1137,8 +1106,8 @@ begin
   valtarif := cdata.cost[s];
   if valtarif<>0 then
   begin
-    value1 := cdata.mcount;
-    value2 := cdata.mcount;
+    value1 := cdata.rmcount;
+    value2 := cdata.rmcount;
     cdata.fpm[s] := Rnd(valtarif * value1);
     for i:=0 to cdata.mcount-1 do
     begin
@@ -1175,57 +1144,62 @@ begin
   cost:=cdata.cost[service];//получаем стоимость услуги @service
   quan:=0;
   squareold:=cdata.square;
+
   if (service=0) and (cdata.square<>cdata.lsquare) and (data.fond in [2,3,4]) then
-    begin
-      cdata.square:=cdata.lsquare;
-    end;
+  begin
+    cdata.square:=cdata.lsquare;
+  end;
+
   if cost<>0 then
+  begin
+    squarenp:=cdata.square;//получаем полную площадь
+    squarep:=math.min(cdata.square,cdata.snorm);//получаем льготную площадь
+    cdata.fpm[service]:=rnd(cost*squarenp);//начисления по полной площади
+    for i:=0 to cdata.mcount-1 do
     begin
-      squarenp:=cdata.square;//получаем полную площадь
-      squarep:=math.min(cdata.square,cdata.snorm);//получаем льготную площадь
-      cdata.fpm[service]:=rnd(cost*squarenp);//начисления по полной площади
-      for i:=0 to cdata.mcount-1 do
+      if cdata.pc[i][service]<>0 then//если ненулевая льгота
+      begin
+        if cdata.sq[i][service]=0 then
+        begin//льгота распространяется на всю площадь
+          squarenp:=squarenp-cdata.square/cdata.mcount*(cdata.pc[i][service]/100);
+          squarep:=squarep-math.min(cdata.square,cdata.snorm)/cdata.mcount*(cdata.pc[i][service]/100);
+        end
+      else
+      begin//льгота распространяется на соцнорму
+        inc(quan);
+        for j:=0 to cdata.mcount-1 do
+          if cdata.f[j][service]=1 then
+            quan:=cdata.mcount;
+        if cdata.square<=cdata.psnorm*quan then
         begin
-          if cdata.pc[i][service]<>0 then//если ненулевая льгота
-            begin
-              if cdata.sq[i][service]=0 then
-                begin//льгота распространяется на всю площадь
-                 squarenp:=squarenp-cdata.square/cdata.mcount*(cdata.pc[i][service]/100);
-                 squarep:=squarep-math.min(cdata.square,cdata.snorm)/cdata.mcount*(cdata.pc[i][service]/100);
-                end
-                else
-                  begin//льгота распространяется на соцнорму
-                    inc(quan);
-                    for j:=0 to cdata.mcount-1 do
-                      if cdata.f[j][service]=1 then
-                        quan:=cdata.mcount;
-                    if cdata.square<=cdata.psnorm*quan then
-                      begin
-                        squarenp:=squarenp-cdata.square/quan*(cdata.pc[i][service]/100);
-                        squarep:=squarep-cdata.square/quan*(cdata.pc[i][service]/100);
-                      end
-                    else
-                      begin
-                        squarenp:=squarenp-cdata.psnorm*(cdata.pc[i][service]/100);
-                        squarep:=squarep-cdata.psnorm*(cdata.pc[i][service]/100);
-                      end;
-                    squarenp:=math.max(squarenp,cdata.snorm/2);
-                    squarep:=math.max(squarep,math.min(cdata.snorm/2,cdata.square/2));
-                  end;
-            end;
+          squarenp:=squarenp-cdata.square/quan*(cdata.pc[i][service]/100);
+          squarep:=squarep-cdata.square/quan*(cdata.pc[i][service]/100);
+        end
+        else
+        begin
+          squarenp:=squarenp-cdata.psnorm*(cdata.pc[i][service]/100);
+          squarep:=squarep-cdata.psnorm*(cdata.pc[i][service]/100);
         end;
-        if (service=5) and (cdata.tarifs[5]=99) then//частный дом
-          calchnorm(m,squarenp,squarep);
-        cdata.pm[service]:=rnd(cost*squarenp);
-        cdata.snpm[service]:=rnd(cost*squarep);
-      end
-//    end
-  else
-    begin
-      cdata.fpm[service]:=0;
-      cdata.pm[service]:=0;
-      cdata.snpm[service]:=0;
+//      squarenp:=math.max(squarenp,cdata.snorm/2);
+//      squarep:=math.max(squarep,math.min(cdata.snorm/2,cdata.square/2));
+      end;
     end;
+  end;
+
+  if (service=5) and (cdata.tarifs[5]=99) then//частный дом
+    calchnorm(m,squarenp,squarep);
+
+  cdata.pm[service]:=rnd(cost*squarenp);
+  cdata.snpm[service]:=rnd(cost*squarep);
+  end
+
+  else
+  begin
+    cdata.fpm[service]:=0;
+    cdata.pm[service]:=0;
+    cdata.snpm[service]:=0;
+  end;
+
   cdata.square:=squareold;
 end;
 
@@ -1284,7 +1258,7 @@ begin
 //    value2 := value2;//*norm;
     cdata.fpm[s] := Rnd((valtarif * norm * value1)/12);
 
-    if value2 < 0 then ShowMessage('Проверьте льготную площадь');
+  if value2 < 0 then ShowMessage('Проверьте льготную площадь');
 /////////////////////////
   for i := 0 to cdata.mcount - 1 do
   begin
@@ -1435,6 +1409,7 @@ begin
     d.mid[i] := s.mid[i];
   end;
   d.mcount := s.mcount;
+  d.rmcount := s.rmcount;
   d.rstnd := s.rstnd;
   d.dist := s.dist;
   d.begindate := s.begindate;
@@ -1529,6 +1504,7 @@ begin
   Result.square := 0;
   Result.family := TObjectList.Create;
   Result.mcount := 0;
+  Result.rmcount := 0;
   Result.rstnd := 0;
   Result.begindate := 0;
   Result.enddate := 0;

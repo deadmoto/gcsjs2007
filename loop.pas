@@ -288,14 +288,15 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sub.service,sub.pm as pm1,sub.snpm as sn1,sub.sub as s1,');
-    SQL.Add('sluj.pm as pm2,sluj.snpm as sn2,sluj.sub as s2');
+    SQL.Add('sluj.pm as pm2,sluj.snpm as sn2,sluj.sub as s2, sluj.factminus as factminus');
     SQL.Add('from sub left join sluj on sub.regn=sluj.regn');
     SQL.Add('and sub.service=sluj.service and sub.sdate=sluj.sdate');
     SQL.Add('where (sub.regn=:id)and(sub.sdate=convert(smalldatetime,:d,104))');
     ParamByName('id').AsInteger := Form18.client;
     ParamByName('d').AsString := Form1.rdt;
     Open;
-    while not eof do begin    
+    while not eof do
+    begin
       serv := FieldByName('service').AsInteger;
       values1[serv] := FieldByName('sn1').AsFloat;
       values2[serv] := FieldByName('s1').AsFloat;
@@ -303,6 +304,7 @@ begin
       pm := FieldByName('pm1').AsFloat-FieldByName('pm2').AsFloat;
       snpm := FieldByName('sn1').AsFloat-FieldByName('sn2').AsFloat;
       sub := FieldByName('s1').AsFloat-FieldByName('s2').AsFloat;
+      CheckBox2.Checked := boolean(FieldByName('factminus').AsInteger);
       case serv of
       0://содержание жилья
         begin
@@ -456,7 +458,7 @@ begin
     Edit29.Color := clBtnFace;Edit30.Color := clBtnFace;
     Edit31.Color := clBtnFace;Edit32.Color := clBtnFace;
     CheckBox2.Enabled := False;
-    CheckBox2.Checked := False;
+    //CheckBox2.Checked := False;
   end;
 end;
 

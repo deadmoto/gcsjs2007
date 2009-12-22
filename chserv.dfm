@@ -4,7 +4,7 @@ object Form29: TForm29
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1090#1072#1088#1080#1092' '#1091' '#1082#1083#1080#1077#1085#1090#1086#1074
-  ClientHeight = 401
+  ClientHeight = 389
   ClientWidth = 417
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -13,13 +13,14 @@ object Form29: TForm29
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
   OnClose = FormClose
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Button1: TButton
-    Left = 144
-    Top = 368
+    Left = 272
+    Top = 359
     Width = 65
     Height = 25
     Caption = 'Ok'
@@ -176,8 +177,8 @@ object Form29: TForm29
     end
   end
   object Button2: TButton
-    Left = 216
-    Top = 368
+    Left = 344
+    Top = 359
     Width = 65
     Height = 25
     Caption = #1042#1099#1093#1086#1076
