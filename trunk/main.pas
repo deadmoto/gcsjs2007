@@ -2179,6 +2179,7 @@ begin
   flst := flst + path + 'sluj' + ext2 + ' ';
   ExportFact(path, dist);
   flst := flst + path + 'factsale' + ext2 + ' ';
+  flst := flst + path + 'factbalance' + ext2 + ' ';
   ExportSub(path, rdt, dist);
   flst := flst + path + 'sub' + ext2 + ' ';
   ExportMin(path, rdt);
@@ -2250,6 +2251,7 @@ begin
   flst := flst + path + 'sluj' + ext2 + ' ';
   ExportFact(path, dist);
   flst := flst + path + 'factsale' + ext2 + ' ';
+  flst := flst + path + 'factbalance' + ext2 + ' ';
   ExportSub(path, dt, dist);
   flst := flst + path + 'sub' + ext2 + ' ';
   ExportTarif(path, dt, 'cont', dist);

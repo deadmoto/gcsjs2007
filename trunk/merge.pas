@@ -55,7 +55,7 @@ begin
   path := 'arc\';//путь по умолчанию
   MaskEdit1.Text := Form1.rdt;
   ProgressBar1.Position := 0;
-  ProgressBar1.Max := 8;
+  ProgressBar1.Max := 7;
   ProgressBar1.Step := 1;
 end;
 
@@ -96,7 +96,8 @@ begin
   ExportSluj(path, dt, Form1.dist);
   flst := flst + path + 'sluj' + ext2 + ' ';
   ExportFact(path, Form1.dist);
-  flst := flst + path + 'factsale' + ext2 + ' ';  
+  flst := flst + path + 'factsale' + ext2 + ' ';
+  flst := flst + path + 'factbalance' + ext2 + ' ';  
   ProgressBar1.StepIt;
   ExportSub(path, dt, Form1.dist);
   flst := flst + path + 'sub' + ext2 + ' ';

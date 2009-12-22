@@ -309,6 +309,8 @@ type
     Label86: TLabel;
     Edit115: TEdit;
     Edit116: TEdit;
+    Label84: TLabel;
+    Edit117: TEdit;
     procedure Button2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure ComboBox1Change(Sender: TObject);
@@ -384,6 +386,9 @@ type
     procedure PageControl1DrawTab(Control: TCustomTabControl; TabIndex: Integer;
       const Rect: TRect; Active: Boolean);
     procedure StringGrid1MouseLeave(Sender: TObject);
+    procedure Edit117Exit(Sender: TObject);
+    procedure StringGrid1SetEditText(Sender: TObject; ACol, ARow: Integer;
+      const Value: string);
   private
     { Private declarations }
     load, fam: boolean;
@@ -726,6 +731,7 @@ begin
   Edit66.Text  := '0';
   Edit110.Text := '0';
   Edit68.Text  := '0';
+  Edit117.Text := '0';
   Edit69.Text  := '';
   Edit72.Text  := '0';
   Edit73.Text  := '0';
@@ -1356,6 +1362,7 @@ begin
   Edit66.Text := FlToStr(Cl.cdata.square);
   RadioGroup3.ItemIndex := Cl.cdata.mdd;
   Edit68.Text := IntToStr(Cl.cdata.mcount);
+  Edit117.Text := IntToStr(Cl.cdata.rmcount);
   Edit95.Text := IntToStr(Cl.cdata.quanpriv);
   MaskEdit2.Text := DateToStr(Cl.cdata.begindate);
   MaskEdit3.Text := DateToStr(Cl.cdata.enddate);
@@ -2494,7 +2501,8 @@ begin
     else
       StringGrid1.Options := StringGrid1.Options + [goEditing, goAlwaysShowEditor];
 
-    StringGrid1.Cells[3,ARow] := calcMDiff(StringGrid1.Cells[1,ARow], StringGrid1.Cells[2,ARow]);
+    if ARow <> 0 then
+      StringGrid1.Cells[3,ARow] := calcMDiff(StringGrid1.Cells[1,ARow], StringGrid1.Cells[2,ARow]);
     UpdateFactInfo();
 
     if TabControl1.TabIndex = 1 then
@@ -2514,6 +2522,17 @@ begin
   end
   else
     StringGrid1.Options := StringGrid1.Options + [goEditing, goAlwaysShowEditor];}
+end;
+
+procedure TForm2.StringGrid1SetEditText(Sender: TObject; ACol, ARow: Integer;
+  const Value: string);
+begin
+  if ARow <> 0 then
+    if Value <> '' then
+    begin
+      StringGrid1.Cells[3,ARow] := calcMDiff(StringGrid1.Cells[1,ARow], StringGrid1.Cells[2,ARow]);
+      UpdateFactInfo();
+    end;
 end;
 
 procedure TForm2.Button20Click(Sender: TObject);
@@ -2553,12 +2572,13 @@ begin
               Query1.Close;
               Query1.SQL.Text:= 'INSERT INTO FactBalance'+#13+
                                 'VALUES (:regn,'+
-                                'convert(smalldatetime,:bdate,104),convert(smalldatetime,:edate,104),:balance,:dolg)';
+                                'convert(smalldatetime,:bdate,104),convert(smalldatetime,:edate,104),:balance,:dolg,:dist)';
               Query1.ParamByName('regn').Value := cl.data.regn;
               Query1.ParamByName('bdate').Value := DateToStr(fbegindate);
               Query1.ParamByName('edate').Value := DateToStr(fenddate);
               Query1.ParamByName('balance').Value := StrToFloat(Edit114.Text);
               Query1.ParamByName('dolg').Value := StrToFloat(Edit113.Text);
+              Query1.ParamByName('dist').Value := cl.data.dist;
               Query1.ExecSQL;
             except
               showmessage('Ошибка при добавлении! Проверьте правильность ввода данных.')
@@ -2773,7 +2793,7 @@ begin
           SQL.Add('insert into hist');
           SQL.Add('values (:id,CONVERT(smalldatetime,:bdate,104),CONVERT(smalldatetime,:edate,104),');
           SQL.Add(':mcount,:quanpriv,:pmin,:income,:insp,:dist,:control,:reason,');
-          SQL.Add(':own, :manager, :fond, :cert, :bank, :acbank,:calc,:mdd,:heating)');
+          SQL.Add(':own, :manager, :fond, :cert, :bank, :acbank,:calc,:mdd,:heating,:rmcount)');
           ParamByName('id').AsInteger  := Cl.Data.regn;
           ParamByName('mcount').AsInteger := Cl.cdata.mcount;
           ParamByName('quanpriv').AsInteger := Cl.cdata.quanpriv;
@@ -2794,6 +2814,7 @@ begin
           ParamByName('calc').AsInteger := Cl.cdata.calc;
           ParamByName('mdd').AsInteger := Cl.cdata.mdd;
           ParamByName('heating').AsInteger := Cl.cdata.heating;
+          ParamByName('rmcount').AsInteger := Cl.cdata.rmcount;
           ExecSQL;
           Close;
           SQL.Clear;
@@ -2988,7 +3009,7 @@ begin
               SQL.Add('insert into hist');
               SQL.Add('values (:id,CONVERT(smalldatetime,:bdate,104),');
               SQL.Add('CONVERT(smalldatetime,:edate,104),:mcount,:quanpriv,:pmin,:income,:insp,');
-              SQL.Add(':idd,:control,:reason,:own, :manager, :fond,:cert,:bank,:acbank,:calc,:mdd,:heating)');
+              SQL.Add(':idd,:control,:reason,:own, :manager, :fond,:cert,:bank,:acbank,:calc,:mdd,:heating,:rmcount)');
             end
             else
             begin
@@ -2998,7 +3019,7 @@ begin
               SQL.Add('set edate=CONVERT(smalldatetime,:edate,104),mcount=:mcount,');
               SQL.Add('quanpriv=:quanpriv,pmin=:pmin,income=:income,id_insp=:insp,id_dist=:idd,');
               SQL.Add('id_cntrl=:control,reason=:reason,id_own=:own,id_mng=:manager,');
-              SQL.Add('id_fond=:fond,id_cert=:cert,id_bank=:bank,acbank=:acbank,calc=:calc,mdd=:mdd, id_heating=:heating');
+              SQL.Add('id_fond=:fond,id_cert=:cert,id_bank=:bank,acbank=:acbank,calc=:calc,mdd=:mdd, id_heating=:heating, rmcount=:rmcount');
               SQL.Add('where regn=:id and bdate=CONVERT(smalldatetime,:bdate,104)');
             end;
             ParamByName('id').AsInteger  := Cl.Data.regn;
@@ -3021,6 +3042,7 @@ begin
             ParamByName('calc').AsInteger := Cl.cdata.calc;
             ParamByName('mdd').AsInteger := Cl.cdata.mdd;
             ParamByName('heating').AsInteger := Cl.cdata.heating;
+            ParamByName('rmcount').AsInteger := Cl.cdata.rmcount;
             ExecSQL;
             Close;
             SQL.Clear;
@@ -3188,6 +3210,37 @@ begin
   MaskEdit4.Text := DateToStr(Date);
   CheckBox3.Checked := False;
   Cl.Data.mail := 0;
+
+  //установка даты прошлого периода
+  with DataModule1.Query1 do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Text := 'SELECT *' + #13 +
+      'FROM hist INNER JOIN' + #13 +
+  	    '(SELECT regn, max(bdate) as bdate' + #13 +
+          'FROM hist' + #13 +
+	        'WHERE bdate < convert(smalldatetime,:bdate,104)' + #13 +
+        	'GROUP BY regn) sb on hist.regn = sb.regn AND hist.bdate = sb.bdate' + #13 +
+      'WHERE hist.regn = :regn';
+    ParamByName('regn').AsInteger := cl.data.regn;
+    ParamByName('bdate').AsString := DateToStr(cl.cdata.begindate);
+    Open;
+    //если запись в базе нет (нет прошлого периода)
+    if RecordCount = 0 then
+    begin
+      cl.cdata.prevbegindate := cl.cdata.begindate;
+      cl.cdata.prevenddate := cl.cdata.enddate;
+    end
+    else
+    begin
+      cl.cdata.prevbegindate := FieldByName('bdate').AsDateTime;
+      cl.cdata.prevenddate := FieldByName('edate').AsDateTime;
+    end;
+  end;
+  MaskEdit5.Text := DateToStr(Cl.cdata.prevbegindate);
+  MaskEdit6.Text := DateToStr(Cl.cdata.prevenddate);
+
   Cl.CalcSub(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
   SetVCalc;
   SumV;
@@ -3723,6 +3776,10 @@ begin
   if Cl.cdata.family.Count > Cl.cdata.mcount then
     Inc(Cl.cdata.mcount);
   Edit68.Text := IntToStr(Cl.cdata.mcount);
+
+  Cl.cdata.rmcount := Cl.cdata.mcount;
+  Edit117.Text := IntToStr(Cl.cdata.rmcount);
+
   SetLength(Cl.cdata.mid, Cl.cdata.mcount);
   SetLength(Cl.cdata.min, Cl.cdata.mcount);
   SetLength(Cl.cdata.priv, Cl.cdata.mcount);
@@ -3935,6 +3992,10 @@ begin
   SetLength(Cl.cdata.min, Cl.cdata.mcount);
   SetLength(Cl.cdata.priv, Cl.cdata.mcount);
   Edit68.Text := IntToStr(Cl.cdata.mcount);
+
+  Cl.cdata.rmcount := Cl.cdata.mcount;
+  Edit117.Text := IntToStr(Cl.cdata.rmcount);
+
   if Cl.cdata.family.Count <> 0 then
     curman := Cl.cdata.family.Count - 1
   else
@@ -4813,7 +4874,10 @@ begin
     Edit111.Text := GetColSum(StringGrid1,1);
     Edit112.Text := GetColSum(StringGrid1,2);
     Edit113.Text := GetColSum(StringGrid1,3);
-    Edit114.Text := FloatToStr(rnd(StrToFloat(Edit112.Text) / GetMonthsCount(fbegindate,fenddate)));
+    if GetMonthsCount(fbegindate,fenddate) <> 0 then
+      Edit114.Text := FloatToStr(rnd(StrToFloat(Edit112.Text) / GetMonthsCount(fbegindate,fenddate)))
+    else
+      Edit114.Text := '0'
   end;
 end;
 
@@ -5585,6 +5649,11 @@ begin
     ShowMessage('Указанная дата выходит за рамки доступного периода!');
     MaskEdit4.Text := Edit87.Text;
   end;
+end;
+
+procedure TForm2.Edit117Exit(Sender: TObject);
+begin
+  Cl.cdata.rmcount := StrToInt(Edit117.Text);
 end;
 
 end.
