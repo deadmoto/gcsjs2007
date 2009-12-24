@@ -4183,11 +4183,10 @@ end;
 procedure TForm2.ChangeFactPeriod(BD, ED: TDateTime);
 var
   i,j: integer;
-//  mountDiff: double;
 begin
   StringGrid1.RowCount:= GetMonthsCount(BD,ED)+1;
   for i:=0 to (AddAnyMonth(BD,ED)).Count-1 do begin
-    StringGrid1.Cells[0,i+1]:= AddanyMonth(BD,ED)[i];
+    StringGrid1.Cells[0,i+1]:= AddAnyMonth(BD,ED)[i];
     StringGrid1.Cells[1,i+1]:= '0';
     StringGrid1.Cells[2,i+1]:= '0';
     StringGrid1.Cells[3,i+1]:= '0';
@@ -4195,7 +4194,8 @@ begin
 
   //-------------
 
-  with datamodule1 do begin
+  with datamodule1 do
+  begin
     Query1.Close;
     Query1.SQL.Text:= 'exec factSum :bdate, :edate, :regn';
     Query1.ParamByName('bdate').Value:= DateToStr(BD);
@@ -4205,7 +4205,8 @@ begin
   end;
 
   datamodule1.Query1.First;
-  for i:=0 to datamodule1.Query1.RecordCount-1 do begin
+  for i:=0 to datamodule1.Query1.RecordCount-1 do
+  begin
     for j:=0 to StringGrid1.RowCount-1 do
       if StringGrid1.Cells[0,j+1]=datamodule1.Query1.FieldByName('sd').asString then
         StringGrid1.Cells[1,j+1]:=datamodule1.Query1.FieldByName('sum_sub').asString;//.FieldValues['sum_sub'];
@@ -4216,7 +4217,8 @@ begin
 
   if TabControl1.TabIndex=1 then
   begin
-    with datamodule1 do begin
+    with datamodule1 do
+    begin
       Query1.Close;
       Query1.SQL.Text:= 'SELECT sdate, regn, bdate, sub, factsum'+#13+
                         'FROM FactSale'+#13+
@@ -4231,20 +4233,10 @@ begin
       begin
         StringGrid1.Cells[1,i+1]:= Query1.FieldValues['sub'];
         StringGrid1.Cells[2,i+1]:= Query1.FieldValues['factsum'];
-
-{        mountDiff := StrToFloat(StringGrid1.Cells[1,i+1]) - StrToFloat(StringGrid1.Cells[2,i+1]);
-        if mountDiff < 0 then
-          mountDiff := 0;}
         StringGrid1.Cells[3,i+1]:= calcMDiff(StringGrid1.Cells[1,i+1],StringGrid1.Cells[2,i+1]);
         Query1.Next;
       end;
     end;
-
-{    StringGrid1.RowCount:= StringGrid1.RowCount+1;
-    StringGrid1.Cells[0,StringGrid1.RowCount-1]:= 'Ñóììà:';
-    StringGrid1.Cells[1,StringGrid1.RowCount-1]:= FloatToStr(GetColSum(StringGrid1,1));
-    StringGrid1.Cells[2,StringGrid1.RowCount-1]:= FloatToStr(GetColSum(StringGrid1,2));
-    StringGrid1.Cells[3,StringGrid1.RowCount-1]:= FloatToStr(GetColSum(StringGrid1,3));}
   end;
 end;
 

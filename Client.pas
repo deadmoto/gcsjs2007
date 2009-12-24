@@ -604,7 +604,6 @@ function GetCostTarif(s,id: integer;bdate: TDate;b,c,se: integer): real;
 var
   nam, strf: string;
   cgas,cel: real;
-
 begin
   cel:=0;
   cgas:=0;
@@ -887,7 +886,7 @@ end;
 
 procedure TClient.CalcSub(sts: integer);//расчет субсидии за месяц
 var
-  ppm, pm,fpm, subs, stnd,cnt, subold, tmpkoef, tmpLkoef: real;
+  ppm, pm,fpm, subs, stnd,cnt, subold, tmpkoef, tmpLkoef, tmpsubs: real;
   i,mdd, mbc: integer;
   p: array[0..numbtarif-1] of real;
   havePriv: boolean;
@@ -921,7 +920,6 @@ begin
       if pm<>0 then
         pm := stnd*cdata.mcount*Rnd(ppm/pm);
     end
-    //------
     else
     //------оплата по соц.норме
     begin
@@ -1019,16 +1017,20 @@ begin
         for i:=0 to numbtarif-1 do
         begin
           if cdata.rstnd<>0 then
-            cdata.sub[i]:=subs*p[i]
+            cdata.sub[i]:= cdata.pm[i]//subs*p[i]
           else
             cdata.sub[i] := cdata.snpm[i];
         end;
       end;
+
       //обрезаем по факту (если он больше 0)
-      if (cdata.averageFact > 0) and (subs > cdata.averageFact) then
+      tmpsubs := 0;
+      for i:=0 to numbtarif-1 do
+        tmpsubs := tmpsubs + cdata.sub[i];
+      if (cdata.averageFact > 0) and (tmpsubs > cdata.averageFact) and (data.cert <> 1) then
       begin
         for i:=0 to numbtarif-1 do
-          cdata.sub[i] := cdata.sub[i] * (cdata.averageFact/subs);
+          cdata.sub[i] := (cdata.sub[i] * (cdata.averageFact/tmpsubs));
       end;
     end
     else//subs<0
@@ -1209,20 +1211,37 @@ procedure tclient.calcserve(service:integer);
 *******************************************************************************}
 var
   cost,price,norm:real;//стоимость текущей услуги
-  i:integer;
+  i, tval:integer;
 begin
   price:=0;
-  case cdata.tarifs[7] of
-    1 : cost:=2.08;
-    2 : cost:=1.44;
+{  case cdata.tarifs[7] of
+    1 : cost:=2.28;
+    2 : cost:=1.60;
   else
     cost:=0;
-  end;
-  norm:=cdata.cost[service];//получаем стоимость услуги @service
-  for i:=0 to cdata.mcount-1 do
+  end;}
+
+  if cdata.mcount > 2 then
+    tval := 3
+  else
+    tval := cdata.mcount;
+
+  with DataModule1 do begin
+  if cdata.tarifs[7] > 2 then
+    cost:=0
+  else
     begin
-      price:=price+(cost*norm*(100-cdata.pc[i][service])/100);
+      t8.Locate('id_el', cdata.tarifs[7], [loCaseInsensitive]);
+      cost := t8.FieldByName('tarifel'+IntToStr(tval)).Value;
     end;
+  end;
+
+  norm:=cdata.cost[service];//получаем стоимость услуги @service
+
+  for i:=0 to cdata.mcount-1 do
+  begin
+    price:=price+(cost*norm*(100-cdata.pc[i][service])/100);
+  end;
   cdata.fpm[service]:= rnd(cdata.mcount*cost*norm); //rnd(price);
   cdata.pm[service]:=rnd(price);
   cdata.snpm[service]:=rnd(price);

@@ -583,7 +583,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO rstnd');
-    SQL.Add('VALUES (convert(smalldatetime,:d,104),:id,:name,:v1,:v2,:v3)');
+    SQL.Add('VALUES (convert(smalldatetime,:d,104),:id,:name,:v1,:v2,:v3,:v4,:v5,:v6,:v7)');
   end;
   if FileExists(path+'rstnd.dbf') then begin
     GetData(path+'rstnd.dbf',f);
@@ -602,6 +602,10 @@ begin
         Query1.ParamByName('v1').AsFloat := StrToFloat(f[i][3]);
         Query1.ParamByName('v2').AsFloat := StrToFloat(f[i][4]);
         Query1.ParamByName('v3').AsFloat := StrToFloat(f[i][5]);
+        Query1.ParamByName('v4').AsFloat := StrToFloat(f[i][6]);
+        Query1.ParamByName('v5').AsFloat := StrToFloat(f[i][7]);
+        Query1.ParamByName('v6').AsFloat := StrToFloat(f[i][8]);
+        Query1.ParamByName('v7').AsFloat := StrToFloat(f[i][9]);
         Query1.ExecSQL;
       end;
       Query1.Close;
