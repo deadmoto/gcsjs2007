@@ -11,6 +11,6 @@ MD %CD%\release\%SVNREV%
 call rsvars.bat
 msbuild Subsidy.dproj /t:rebuild /p:configuration=Release
 
-copy "C:\.dev\subsidy2007\bin\Subsidy.exe" "%CD%\release\%SVNREV%"
+copy "..\Subsidy.exe" "%CD%\release\%SVNREV%"
 pause
 

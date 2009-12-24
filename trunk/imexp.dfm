@@ -163,9 +163,9 @@ object Form35: TForm35
     object CheckBox14: TCheckBox
       Left = 168
       Top = 40
-      Width = 81
+      Width = 110
       Height = 17
-      Caption = #1056#1077#1084#1086#1085#1090
+      Caption = #1054#1089#1074#1077#1097#1077#1085#1080#1077' '#1052#1054#1055
       Color = clBtnFace
       ParentColor = False
       TabOrder = 11

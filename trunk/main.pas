@@ -4190,25 +4190,26 @@ begin
               begin
                 Application.ProcessMessages();
                 curregn := t[j];
-                c.SetClient(Form1.client, Form1.rdt);
-                c.SetCalc(t[j], rdt);
+                c.SetClient(curregn, Form1.rdt);
+                c.SetCalc(curregn, Form1.rdt);
                 c.Calc(getstatus(c.cdata.begindate, c.cdata.enddate));
-                Close;
 
                 //если клиент не приостановлен(2) и не прекращен(3), то производится перерасчет, иначе
                 //рассматриваем следующего клиента
                 if (c.cdata.stop = 2) or (c.cdata.stop = 3) then
                   Continue;
 
+                Close;
                 SQL.Clear;
                 SQL.Add('update hist');
                 SQL.Add('set pmin=:pm');
                 SQL.Add('where bdate<=CONVERT(smalldatetime,:s,104)and ');
                 SQL.Add('edate>CONVERT(smalldatetime,:s,104) and regn=:r');
                 ParamByName('s').AsString  := rdt;
-                ParamByName('r').AsInteger := t[j];
+                ParamByName('r').AsInteger := curregn;
                 ParamByName('pm').AsFloat  := c.cdata.pmin;
                 ExecSQL;
+
                 Close;
                 SQL.Clear;
                 SQL.Add('update sub');
@@ -4216,7 +4217,7 @@ begin
                 SQL.Add('where sdate=CONVERT(smalldatetime,:s,104) and regn=:r');
                 SQL.Add('and service=:serv');
                 ParamByName('s').AsString  := rdt;
-                ParamByName('r').AsInteger := t[j];
+                ParamByName('r').AsInteger := curregn;
                 for i := 0 to numbtarif - 1 do
                 begin
                   if (i < 8) or (i > 11) then
@@ -4245,7 +4246,6 @@ begin
         Datamodule1.Database1.Rollback;
       end;
       pr.Free;
-      //pr.Release;
       Reload;
     end;
   end
