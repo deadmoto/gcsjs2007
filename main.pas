@@ -1221,6 +1221,42 @@ begin
     Close;
   end;
 end;
+procedure GetStnd;
+var
+  c: TClient;
+  pm, ppm: Real;
+  s1: string;
+  i, mdd: integer;
+  tmpfpm: array of variant;
+begin
+  s1 := (Copy(SGCl.Cells[2, SGCl.row], 1, 10));
+  c := TClient.Create(Empty, EmptyC);
+  c.SetClient(client, s1);
+  c.SetCalc(client, s1);
+  c.Calc(getstatus(c.cdata.begindate, c.cdata.enddate));
+  mdd := c.GetMdd;
+  pm  := c.CalcFull;
+  //оплата c учетом льготы
+  ppm := 0;
+  for i := 0 to numbtarif - 1 do
+    ppm := ppm + c.cdata.pm[i];
+  if (pm <> 0) and (ppm <> 0) then
+    frxReport1.Variables.Variables['lkoef'] := quotedstr(FlToStr(ppm / pm))
+  else
+    frxReport1.Variables.Variables['lkoef'] := '';
+
+  setlength(tmpfpm,length(c.cdata.fpm));
+  for i := 0 to length(c.cdata.fpm)-1 do
+    tmpfpm[i] := c.cdata.fpm[i];
+
+  frxReport1.Script.Variables['fpm']:= VarArrayOf(tmpfpm);
+  frxReport1.Variables.Variables['stnd'] := c.GetStandard;
+  frxReport1.Variables.Variables['pmin'] := c.cdata.pmin;
+  if rnd(c.cdata.koef) <= 1 then
+    frxReport1.Variables.Variables['mdd'] := c.cdata.income * rnd(c.cdata.koef) * (mdd / 100)
+  else
+    frxReport1.Variables.Variables['mdd'] := c.cdata.income * (mdd / 100)
+end;
 
 begin
   if (Length(cl) > 0) then
@@ -1247,6 +1283,7 @@ begin
 
       GetPPriv();
       GetPlate();
+      GetStnd();
 
       with Datamodule1.Query1 do
       begin
@@ -1312,6 +1349,7 @@ begin
 
       GetPPriv();
       GetPlate();
+      GetStnd();
 
       with Datamodule1.Query1 do
       begin

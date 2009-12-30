@@ -431,7 +431,7 @@ begin
   cdata.koef := (cdata.income/cdata.mcount)/cdata.pmin;
   for i:=0 to numbtarif-1 do
     if (i<8)or(i>11) then
-      cdata.cost[i] := GetCostTarif(i,cdata.tarifs[i],cdata.begindate,cdata.boiler,cdata.mcount,cdata.settl);
+      cdata.cost[i] := GetCostTarif(i,cdata.tarifs[i],cdata.begindate,cdata.boiler,cdata.rmcount,cdata.settl);
 end;
 
 procedure TClient.SetNorm;//установить норму
@@ -441,10 +441,10 @@ var
 
 begin
   flag:=false;
-  if cdata.mcount<>0 then
+  if cdata.rmcount<>0 then
     with datamodule1.norm1 do begin
-      if cdata.mcount in [1,2,3,4] then
-        mparam:=cdata.mcount
+      if cdata.rmcount in [1,2,3,4] then
+        mparam:=cdata.rmcount
       else
         mparam:=5;
       open;
@@ -455,18 +455,22 @@ begin
            flag := true;
       end;
       Locate('countp', mparam, [loCaseInsensitive]);
-      if cdata.mdd = 1 then begin
-         cdata.snorm := cdata.mcount*datamodule1.norm1.FieldByName('psnorm').AsFloat;
-         cdata.hnorm := cdata.mcount*FieldByName('phnorm').AsFloat; end
-      else begin
-        cdata.snorm := cdata.mcount*datamodule1.norm1.FieldByName('snorm').AsFloat;
-        cdata.hnorm := cdata.mcount*FieldByName('hnorm').AsFloat; end;
+      if cdata.mdd = 1 then
+      begin
+         cdata.snorm := cdata.rmcount*datamodule1.norm1.FieldByName('psnorm').AsFloat;
+         cdata.hnorm := cdata.rmcount*FieldByName('phnorm').AsFloat;
+      end
+      else
+      begin
+        cdata.snorm := cdata.rmcount*datamodule1.norm1.FieldByName('snorm').AsFloat;
+        cdata.hnorm := cdata.rmcount*FieldByName('hnorm').AsFloat;
+      end;
 
       if flag and (cdata.quanpriv > 3) then
-         cdata.snorm := 18 * cdata.quanpriv + FieldByName('snorm').AsFloat * (cdata.mcount - cdata.quanpriv);
+         cdata.snorm := 18 * cdata.quanpriv + FieldByName('snorm').AsFloat * (cdata.rmcount - cdata.quanpriv);
 
       cdata.psnorm := FieldByName('phnorm').AsFloat;
-//      cdata.phnorm := cdata.mcount*FieldByName('hnorm').AsFloat;
+//      cdata.phnorm := cdata.rmcount*FieldByName('hnorm').AsFloat;
 
     end;
 {    end;  }
@@ -791,20 +795,23 @@ var
   nv: string;
 begin
   Result:=0;
-  if cdata.mcount = 0 then
+  if cdata.rmcount = 0 then
   begin
     Result := 0;
     exit;
   end;
 
-  if cdata.mcount = 1 then nv := '1';
-  if cdata.mcount = 2 then nv := '2';
-  if (cdata.mcount = 3) or ((cdata.mcount > 4)
-    and (cdata.quanpriv  = cdata.mcount)) then nv := '3';
-  if cdata.mcount = 4 then nv := '4';
-  if cdata.mcount >= 5 then nv := '5';
-  if (cdata.mcount = 1) and (cdata.mdd = 1) then nv := '6';
-  if (cdata.mcount > 1) and (cdata.mdd = 1) then nv := '7';
+  if cdata.rmcount = 1 then nv := '1';
+  if cdata.rmcount = 2 then nv := '2';
+  if (cdata.rmcount = 3) or ((cdata.rmcount > 4)
+    and (cdata.quanpriv  = cdata.rmcount)) then nv := '3';
+  if cdata.rmcount = 4 then nv := '4';
+  if cdata.rmcount >= 5 then nv := '5';
+  if (cdata.rmcount >= 4) and (cdata.quanpriv  = cdata.rmcount) then
+    nv := '3';
+
+  if (cdata.rmcount = 1) and (cdata.mdd = 1) then nv := '6';
+  if (cdata.rmcount > 1) and (cdata.mdd = 1) then nv := '7';
   try
     with DataModule1.qTarif do
     begin
@@ -972,9 +979,9 @@ begin
       if cdata.priv[i] <> 0 then
         havePriv := True;
       if havePriv then
-        subs := (stnd * cdata.rmcount * tmpLkoef - ((mdd / 100) * cdata.income * tmpkoef))
+        subs := (stnd * cdata.mcount * tmpLkoef - ((mdd / 100) * cdata.income * tmpkoef))
       else
-        subs := (stnd * cdata.rmcount - ((mdd / 100) * cdata.income * tmpkoef));
+        subs := (stnd * cdata.mcount - ((mdd / 100) * cdata.income * tmpkoef));
     end;
 
     subold := 0;
@@ -1024,14 +1031,14 @@ begin
       end;
 
       //обрезаем по факту (если он больше 0)
-      tmpsubs := 0;
+{      tmpsubs := 0;
       for i:=0 to numbtarif-1 do
         tmpsubs := tmpsubs + cdata.sub[i];
       if (cdata.averageFact > 0) and (tmpsubs > cdata.averageFact) and (data.cert <> 1) then
       begin
         for i:=0 to numbtarif-1 do
           cdata.sub[i] := (cdata.sub[i] * (cdata.averageFact/tmpsubs));
-      end;
+      end;}
     end
     else//subs<0
     begin
@@ -1106,10 +1113,10 @@ var
   i: integer;
 begin
   valtarif := cdata.cost[s];
-  if valtarif<>0 then
+  if valtarif <> 0 then
   begin
-    value1 := cdata.rmcount;
-    value2 := cdata.rmcount;
+    value1 := cdata.mcount;
+    value2 := cdata.mcount;
     cdata.fpm[s] := Rnd(valtarif * value1);
     for i:=0 to cdata.mcount-1 do
     begin
@@ -1176,11 +1183,21 @@ begin
         begin
           squarenp:=squarenp-cdata.square/quan*(cdata.pc[i][service]/100);
           squarep:=squarep-cdata.square/quan*(cdata.pc[i][service]/100);
+//          squarenp:=squarenp - cdata.square /quan*(cdata.pc[i][service]/100);
+//          squarep:=squarep - cdata.square /quan*(cdata.pc[i][service]/100);
         end
         else
         begin
-          squarenp:=squarenp-cdata.psnorm*(cdata.pc[i][service]/100);
-          squarep:=squarep-cdata.psnorm*(cdata.pc[i][service]/100);
+          if (cdata.priv[i] = 3) or (cdata.priv[i] = 12) or (cdata.priv[i] = 13) or (cdata.priv[i] = 22) then
+          begin
+            squarenp:=squarenp - math.min(cdata.square/cdata.mcount,cdata.psnorm) *(cdata.pc[i][service]/100);
+            squarep:=squarep - math.min(cdata.square/cdata.mcount,cdata.psnorm) *(cdata.pc[i][service]/100);
+          end
+          else
+          begin
+            squarenp:=squarenp - cdata.psnorm *(cdata.pc[i][service]/100);
+            squarep:=squarep - cdata.psnorm *(cdata.pc[i][service]/100);
+          end;
         end;
 //      squarenp:=math.max(squarenp,cdata.snorm/2);
 //      squarep:=math.max(squarep,math.min(cdata.snorm/2,cdata.square/2));
