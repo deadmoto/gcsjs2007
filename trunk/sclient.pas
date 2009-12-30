@@ -5644,8 +5644,17 @@ begin
 end;
 
 procedure TForm2.Edit117Exit(Sender: TObject);
+var
+  i: integer;
 begin
   Cl.cdata.rmcount := StrToInt(Edit117.Text);
+
+  Edit9.Text := FloatToStr(Cl.GetStandard);
+  Cl.SetNorm;
+
+  for i:=0 to numbtarif-1 do
+    if (i<8)or(i>11) then
+      cl.cdata.cost[i] := GetCostTarif(i,cl.cdata.tarifs[i],cl.cdata.begindate,cl.cdata.boiler,cl.cdata.rmcount,cl.cdata.settl);
 end;
 
 end.
