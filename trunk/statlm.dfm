@@ -147,7 +147,7 @@ object Form40: TForm40
     Text = '0'
   end
   object Button1: TButton
-    Left = 360
+    Left = 366
     Top = 128
     Width = 57
     Height = 25

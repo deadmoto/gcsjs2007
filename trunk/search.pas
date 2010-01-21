@@ -1259,7 +1259,7 @@ begin
       q.parname[j] := 'stat';
       q.parval[j]  := IntToStr(stat[Combobox15.ItemIndex]);
     end;
-
+    q.SQL := q.SQL + #13+ 'GROUP BY Cl.regn, Hist.bdate, Hist.edate, Hist.calc';
     Form1.qr := q;
   end
   else //выбрать всех клиентов

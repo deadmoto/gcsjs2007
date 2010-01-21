@@ -39,7 +39,7 @@ object fAppProp: TfAppProp
   end
   object GroupBox1: TGroupBox
     Left = 16
-    Top = 134
+    Top = 159
     Width = 249
     Height = 123
     Caption = #1044#1080#1088#1077#1082#1090#1086#1088#1080#1080':'
@@ -143,5 +143,17 @@ object fAppProp: TfAppProp
     OnClick = IniCheckBox6Click
     SectionName = 'Config'
     KeyName = '0.ShowAddReportData'
+  end
+  object IniCheckBox2: TIniCheckBox
+    Left = 16
+    Top = 127
+    Width = 233
+    Height = 26
+    Caption = #1053#1072#1079#1085#1072#1095#1077#1085#1080#1077' '#1089#1091#1073#1089#1080#1076#1080#1080' '#1087#1086' '#1089#1088#1077#1076#1085#1077#1084#1091' '#1092#1072#1082#1090#1080#1095#1077#1089#1082#1086#1084#1091' '#1088#1072#1089#1093#1086#1076#1091
+    TabOrder = 5
+    WordWrap = True
+    OnClick = IniCheckBox6Click
+    SectionName = 'Config'
+    KeyName = '0.AverageFactMinus'
   end
 end

@@ -192,7 +192,6 @@ type
     Button5:      TButton;
     Button6:      TButton;
     Button9:      TButton;
-    Button7:      TButton;
     Panel7:       TPanel;
     Panel8:       TPanel;
     Label4:       TLabel;
@@ -315,7 +314,6 @@ type
     procedure N110Click(Sender: TObject);
     procedure N112Click(Sender: TObject);
     procedure N37Click(Sender: TObject);
-    procedure Button7Click(Sender: TObject);
     procedure SGClMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
 
@@ -587,17 +585,6 @@ begin
     end;
     Close;
   end;}
-end;
-
-procedure TForm1.Button7Click(Sender: TObject);
-{ фактические расходы }
-begin
-
-//Showmessage(FloatToStr(rnd(0.57499840632)));
-{  if status <> 3 then
-    FactSumFrm.ShowModal
-  else
-    ShowMessage('Нельзя вызывать форму редактирования фактических расходов для неактивного клиента');}
 end;
 
 function TForm1.GetStatus(b, e: TDate): integer;
@@ -1236,7 +1223,25 @@ begin
   c.Calc(getstatus(c.cdata.begindate, c.cdata.enddate));
   mdd := c.GetMdd;
   pm  := c.CalcFull;
-  //оплата c учетом льготы
+
+  if c.cdata.calc = 1 then
+  begin
+    with c do
+    begin
+      CalcPriv;
+      CalcServSq(0);
+      CalcServe(1);
+      CalcServ(2);
+      CalcServ(3);
+      CalcServ(4);
+      CalcServSq(5,StrToInt(System.Copy(Form1.rdt,4,2)));
+      CalcServ(6);
+      CalcServ(7);
+      CalcServWC(12);
+      CalcServWC(13);
+    end;
+  end;
+
   ppm := 0;
   for i := 0 to numbtarif - 1 do
     ppm := ppm + c.cdata.pm[i];
@@ -1245,6 +1250,7 @@ begin
   else
     frxReport1.Variables.Variables['lkoef'] := '';
 
+  //полные начисления
   setlength(tmpfpm,length(c.cdata.fpm));
   for i := 0 to length(c.cdata.fpm)-1 do
     tmpfpm[i] := c.cdata.fpm[i];
@@ -1405,6 +1411,24 @@ var
   s1, s2, priv_str: string;
   priv: TStringList;
   pl: integer;
+
+procedure GetStnd;
+var
+  c: TClient;
+  pm, ppm: Real;
+  s1: string;
+  i, mdd: integer;
+  tmpfpm: array of variant;
+begin
+  s1 := (Copy(SGCl.Cells[2, SGCl.row], 1, 10));
+  c := TClient.Create(Empty, EmptyC);
+  c.SetClient(client, s1);
+  c.SetCalc(client, s1);
+  c.Calc(getstatus(c.cdata.begindate, c.cdata.enddate));
+
+  frxReport1.Variables.Variables['stnd'] := c.GetStandard;
+end;
+
 begin
   if (Length(cl) > 0) then
   begin
@@ -1415,8 +1439,9 @@ begin
       frxData1.DataSet := Datamodule1.Query2;
       frxData2.DataSet := Datamodule1.Query3;
       priv := TStringList.Create;
-      //    frVariables['sumsn2']:=0;
-      //    frVariables['sumsub2']:=0;
+
+      GetStnd();
+
       s1 := Copy(SGCl.Cells[2, SGCl.row], 1, 10);//begindate
       s2 := Copy(SGCl.Cells[2, SGCl.row], 14, 10);//enddate
       //льготы семьи
@@ -1515,6 +1540,7 @@ begin
         ParamByName('id').AsInteger := client;
         ParamByName('s').AsString := rdt;
       end;
+
       frxReport1.PrepareReport;
       if MessageBox(Form1.Handle, PChar('Нужен предварительный просмотр учетной карты ' + SGCL.Cells[0, SGCl.Row] + '?'),
         PChar('Предварительный просмотр'),
