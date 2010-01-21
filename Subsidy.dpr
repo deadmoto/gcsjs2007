@@ -62,7 +62,7 @@ uses
   EditReportUnit in 'EditReportUnit.pas' {EditReportFrm};
 
 {$R *.res}
-{$R myRes.RES}
+//{$R myRes.RES}
 
 {$SETPEFLAGS IMAGE_FILE_RELOCS_STRIPPED}
 

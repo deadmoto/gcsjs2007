@@ -99,13 +99,11 @@ begin
     WriteConnSettings(ComboBox1.Text);
 
     datamodule1.database1.connected := False;
-//    datamodule1.database2.connected := False;
 
     if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy', '') then
       ShowMessage('Ошибка при создании DSN записи SQLSub!');
 
     datamodule1.database1.connected := True;
-//    datamodule1.database2.connected := True;
 
     Form1.OnCreate(self);
 

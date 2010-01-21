@@ -152,7 +152,6 @@ begin
   end;
   with Datamodule1.norm1 do
   begin
-
     Close;
     SQL.Clear;
     SQL.Add('select * from norm');
@@ -208,6 +207,7 @@ begin
         begin
           c.SetClient(t[j], Form1.rdt);
           c.SetCalc(t[j], Form1.rdt);
+          //c.cdata.rstnd := 0;//!
           c.Calc(0);
           val := 0;
           for i := 0 to numbtarif - 1 do
@@ -381,18 +381,14 @@ begin
   lcl := TObjectList.Create;
 end;
 
-
-
 procedure TForm40.Button2Click(Sender: TObject);
 begin
-  with Datamodule1.norm1 do
+  with DataModule1.norm1 do
   begin
-
     Close;
     SQL.Clear;
     SQL.Add('select id_norm, countp, snorm, phnorm as "psnorm",hnorm, phnorm from norm');
     Open;
-
   end;
 end;
 

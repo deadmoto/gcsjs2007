@@ -2,7 +2,7 @@ unit Client;
 
 interface
 
-uses Controls, Contnrs, Dialogs, service, min;
+uses Controls, Contnrs, Dialogs, sysutils, dateutils, DB, service;
 
 type
   T2DInt = array of array of integer;
@@ -140,7 +140,7 @@ type
 
 implementation
 
-uses datamodule, sysutils, math,main,sclient,dateutils, DB;
+uses datamodule, math, main, sclient, min;
 
 constructor TClient.Create;
 begin
@@ -247,7 +247,8 @@ begin
 //
     Close;
     SQL.Clear;
-    if Form1.status<>3 then begin
+    if Form1.status<>3 then
+    begin
       SQL.Add('select *');
       SQL.Add('from hist');
       SQL.Add('where regn=:id and bdate<=convert(smalldatetime,:d,104)');
@@ -403,7 +404,8 @@ begin
     ParamByName('s').AsString :=date;
     Open;
     First;
-    while not Eof do begin
+    while not Eof do
+    begin
       serv := FieldByName('service').AsInteger;//сервис
       cdata.accounts[serv] := FieldByName('acservice').AsString;
       cdata.tarifs[serv] := FieldByName('id_service').AsInteger;//тариф на него
@@ -624,35 +626,41 @@ begin
     12: nam := 'wood';
     13: nam := 'coal';
   end;
-  with DataModule1 do begin
-  case s of
-    0: begin t1.Locate('id_cont', id, [loCaseInsensitive]); tc := t1; end;
-    1: begin t2.Locate('id_rep', id, [loCaseInsensitive]);  tc := t2; end;
-    2: begin t3.Locate('id_cold', id, [loCaseInsensitive]); tc := t3; end;
-    3: begin t4.Locate('id_hot', id, [loCaseInsensitive]);  tc := t4; end;
-    4: begin t5.Locate('id_canal', id, [loCaseInsensitive]); tc := t5; end;
-    5: begin t6.Locate('id_heat', id, [loCaseInsensitive]); tc := t6; end;
-    6: begin t7.Locate('id_gas', id, [loCaseInsensitive]); tc := t7; end;
-    7: begin t8.Locate('id_el', id, [loCaseInsensitive]); tc := t8; end;
-    12: begin t9.Locate('id_wood', id, [loCaseInsensitive]); tc := t9; end;
-    13: begin t10.Locate('id_coal', id, [loCaseInsensitive]); tc := t10; end;
+  with DataModule1 do
+  begin
+    case s of
+      0: begin t1.Locate('id_cont', id, [loCaseInsensitive]); tc := t1; end;
+      1: begin t2.Locate('id_rep', id, [loCaseInsensitive]);  tc := t2; end;
+      2: begin t3.Locate('id_cold', id, [loCaseInsensitive]); tc := t3; end;
+      3: begin t4.Locate('id_hot', id, [loCaseInsensitive]);  tc := t4; end;
+      4: begin t5.Locate('id_canal', id, [loCaseInsensitive]); tc := t5; end;
+      5: begin t6.Locate('id_heat', id, [loCaseInsensitive]); tc := t6; end;
+      6: begin t7.Locate('id_gas', id, [loCaseInsensitive]); tc := t7; end;
+      7: begin t8.Locate('id_el', id, [loCaseInsensitive]); tc := t8; end;
+      12: begin t9.Locate('id_wood', id, [loCaseInsensitive]); tc := t9; end;
+      13: begin t10.Locate('id_coal', id, [loCaseInsensitive]); tc := t10; end;
+    end;
+    strf := tc.Fields[1].AsString;
   end;
-     strf := tc.Fields[1].AsString;
-  end;
-  if s<12 then begin
-    with DataModule1{.Query4} do begin
-      if s<>7 then begin
+  if s<12 then
+  begin
+    with DataModule1{.Query4} do
+    begin
+      if s<>7 then
+      begin
         if (s=2)or(s=3) then
           Result := tc.Fields[2 + b].AsCurrency
         else
           Result := tc.Fields[2].AsCurrency;
      end;
-      if s = 7 then  begin
-           cel := tc.Fields[2].AsCurrency;
-           cgas :=  tc.Fields[2].AsCurrency;
+      if s = 7 then
+      begin
+        cel := tc.Fields[2].AsCurrency;
+        cgas :=  tc.Fields[2].AsCurrency;
       end;
     end;
-    if s=7 then begin
+    if s=7 then
+    begin
       case id of
       1:
         begin
@@ -770,8 +778,10 @@ begin
       end;
     end;
   end
-  else begin
-    with DataModule1.Query1 do begin
+  else
+  begin
+    with DataModule1.Query1 do
+    begin
       Close;
       SQL.Clear;
       SQL.add('select tarif'+nam+' as cost');
@@ -793,6 +803,8 @@ end;
 function TClient.GetStandard: real;
 var
   nv: string;
+  manychild: boolean;
+  i: integer;
 begin
   Result:=0;
   if cdata.rmcount = 0 then
@@ -807,7 +819,13 @@ begin
     and (cdata.quanpriv  = cdata.rmcount)) then nv := '3';
   if cdata.rmcount = 4 then nv := '4';
   if cdata.rmcount >= 5 then nv := '5';
-  if (cdata.rmcount >= 4) and (cdata.quanpriv  = cdata.rmcount) then
+
+  //Многодетные
+  manychild := true;
+  for i:= 0 to cdata.mcount - 1 do
+    if (cdata.priv[i] <> 10) and (cdata.priv[i] <> 26) then
+      manychild := False;
+  if (cdata.rmcount >= 4) and (cdata.quanpriv  = cdata.rmcount) and manychild then
     nv := '3';
 
   if (cdata.rmcount = 1) and (cdata.mdd = 1) then nv := '6';
@@ -866,11 +884,14 @@ begin
       CalcServWC(12);
       CalcServWC(13);
     end
-    else begin //индивидуальный расчет
-      if sts=0 then  begin//первый месяц
+    else
+    begin //индивидуальный расчет
+      if sts=0 then
+      begin//первый месяц
         cdata.bfpm[0] := CalcFull;
         cdata.fpm[0] := cdata.bfpm[0];
-        for i:=0 to numbtarif-1 do begin
+        for i:=0 to numbtarif-1 do
+        begin
           cdata.pm[i] := cdata.bpm[i];
           cdata.snpm[i] := cdata.bsnpm[i];
           if i<>0 then
@@ -880,6 +901,8 @@ begin
       else
       begin
         cdata.fpm[0] := CalcFull;
+        cdata.pm[12] := cdata.bpm[12];
+        cdata.pm[13] := cdata.bpm[13];
         cdata.snpm[12] := cdata.bsnpm[12];
         cdata.snpm[13] := cdata.bsnpm[13];
       end;
@@ -902,7 +925,7 @@ begin
   //расчет активного
   begin
     mdd := GetMdd;
-    fpm:=CalcFull;
+    fpm := CalcFull;
     stnd := GetStandard;
 
     if cdata.rstnd<>0 then
@@ -988,7 +1011,7 @@ begin
     for i:=0 to numbtarif-1 do
       subold := subold + cdata.sub[i];
 
-    if (subs + 1< subold ) and (cdata.mcount > 3) and (cdata.square > 60)
+    if (subs + 1 < subold ) and (cdata.mcount > 3) and (cdata.square > 60)
       and (sts <> 0) and (cdata.begindate < StrToDate('01.01.2007')) then
     begin
       mbc :=  MessageDlg('Произошло уменьшение субсидии' + #13#10 +
@@ -1010,7 +1033,7 @@ begin
         for i:=0 to numbtarif-1 do
         //------распределяем субсидию по тарифам
         begin
-          cdata.sub[i] := Rnd(subs*p[i]);
+          cdata.sub[i] := rnd(subs*p[i]);
           cnt := cnt + cdata.sub[i];
         end;
         i:=0;
@@ -1024,21 +1047,24 @@ begin
         for i:=0 to numbtarif-1 do
         begin
           if cdata.rstnd<>0 then
-            cdata.sub[i]:= cdata.pm[i]//subs*p[i]
+            cdata.sub[i] := cdata.pm[i]//subs*p[i]
           else
             cdata.sub[i] := cdata.snpm[i];
         end;
       end;
 
       //обрезаем по факту (если он больше 0)
-{      tmpsubs := 0;
-      for i:=0 to numbtarif-1 do
-        tmpsubs := tmpsubs + cdata.sub[i];
-      if (cdata.averageFact > 0) and (tmpsubs > cdata.averageFact) and (data.cert <> 1) then
+      if getConfValue('0.AverageFactMinus') then
       begin
+        tmpsubs := 0;
         for i:=0 to numbtarif-1 do
-          cdata.sub[i] := (cdata.sub[i] * (cdata.averageFact/tmpsubs));
-      end;}
+          tmpsubs := tmpsubs + cdata.sub[i];
+        if (cdata.averageFact > 0) and (tmpsubs > cdata.averageFact) and (data.cert <> 1) then
+        begin
+          for i:=0 to numbtarif-1 do
+            cdata.sub[i] := (cdata.sub[i] * (cdata.averageFact/tmpsubs));
+        end;
+      end;
     end
     else//subs<0
     begin
@@ -1146,8 +1172,6 @@ var
   squarenp:real;//площадь, на которую не распространяется льгота
   squarep:real;//площадь, на которую распространяется льгота
   squareold:real;//разница площадей
-//  sq:real;
-//  sqc:real;
   i,j,quan:integer;
 begin
   cost:=cdata.cost[service];//получаем стоимость услуги @service
@@ -1170,8 +1194,8 @@ begin
       begin
         if cdata.sq[i][service]=0 then
         begin//льгота распространяется на всю площадь
-          squarenp:=squarenp-cdata.square/cdata.mcount*(cdata.pc[i][service]/100);
-          squarep:=squarep-math.min(cdata.square,cdata.snorm)/cdata.mcount*(cdata.pc[i][service]/100);
+          squarenp:=squarenp-cdata.square/cdata.rmcount*(cdata.pc[i][service]/100);
+          squarep:=squarep-math.min(cdata.square,cdata.snorm)/cdata.rmcount*(cdata.pc[i][service]/100);
         end
       else
       begin//льгота распространяется на соцнорму
@@ -1190,8 +1214,8 @@ begin
         begin
           if (cdata.priv[i] = 3) or (cdata.priv[i] = 12) or (cdata.priv[i] = 13) or (cdata.priv[i] = 22) then
           begin
-            squarenp:=squarenp - math.min(cdata.square/cdata.mcount,cdata.psnorm) *(cdata.pc[i][service]/100);
-            squarep:=squarep - math.min(cdata.square/cdata.mcount,cdata.psnorm) *(cdata.pc[i][service]/100);
+            squarenp:=squarenp - math.min(cdata.square/cdata.rmcount,cdata.psnorm) *(cdata.pc[i][service]/100);
+            squarep:=squarep - math.min(cdata.square/cdata.rmcount,cdata.psnorm) *(cdata.pc[i][service]/100);
           end
           else
           begin
@@ -1267,89 +1291,65 @@ end;
 procedure TClient.CalcServWC(s: integer);
 var
   valtarif, value1, value2, norm: real;
-//  maxpriv: integer;
-//  norms:real;
   i,j,quan:integer;
 begin
   valtarif := cdata.cost[s];
   if valtarif<>0 then
   begin
-    if s=12 then norm := Form1.normw
-      else norm := Form1.normc;
+{    if s = 12 then norm := Form1.normw
+      else norm := Form1.normc;}
+    norm := 0;
+    case s of
+      12 : norm := Form1.normw;
+      13 : norm := Form1.normc;
+    end;
 
     value1 := cdata.square;
-    value2:= math.min(cdata.square,cdata.snorm);
+    value2 := math.min(cdata.square,cdata.snorm);
 
-{    if cdata.square > cdata.snorm then
-      value2 := cdata.snorm
-    else
-      value2 := cdata.square;}
-{    if cdata.quanpriv > 0 then
-    begin
-       value1 := value1 - cdata.lsquare / 2;
-       value2 := value2 - cdata.lsquare / 2;
-    end;// изменено в 21М}
-      quan:=0;
-//    value1 := value1;//*norm;
-//    value2 := value2;//*norm;
-    cdata.fpm[s] := Rnd((valtarif * norm * value1)/12);
+    cdata.fpm[s] := rnd((valtarif * norm * value1)/12);
 
-  if value2 < 0 then ShowMessage('Проверьте льготную площадь');
-/////////////////////////
-  for i := 0 to cdata.mcount - 1 do
-  begin
-    if cdata.pc[i][s] <> 0 then//если ненулевая льгота
+    quan:=0;
+    if value2 < 0 then ShowMessage('Проверьте льготную площадь');
+
+    for i := 0 to cdata.mcount - 1 do
     begin
-      if cdata.sq[i][s] = 0 then
-      begin//льгота распространяется на всю площадь
-        value1 := value1 - cdata.square / cdata.mcount * (cdata.pc[i][s] / 100);
-        value2 := value2 - Math.min(cdata.square, cdata.snorm) / cdata.mcount * (cdata.pc[i][s] / 100);
-      end
-      else
-      begin//льгота распространяется на соцнорму
-        Inc(quan);
-        for j := 0 to cdata.mcount - 1 do
-          if cdata.f[j][s] = 1 then
-            quan := cdata.mcount;
-        if cdata.square <= cdata.psnorm * quan then
-        begin
-          value1 := value1 - cdata.square / quan * (cdata.pc[i][s] / 100);
-          value2 := value2 - cdata.square / quan * (cdata.pc[i][s] / 100);
+      if cdata.pc[i][s] <> 0 then//если ненулевая льгота
+      begin
+        if cdata.sq[i][s] = 0 then
+        begin//льгота распространяется на всю площадь
+          value1 := value1 - cdata.square / cdata.mcount * (cdata.pc[i][s] / 100);
+          value2 := value2 - Math.min(cdata.square, cdata.snorm) / cdata.mcount * (cdata.pc[i][s] / 100);
         end
         else
-        begin
-          value1 := value1 - cdata.psnorm * (cdata.pc[i][s] / 100);
-          value2 := value2 - cdata.psnorm * (cdata.pc[i][s] / 100);
+        begin//льгота распространяется на соцнорму
+          Inc(quan);
+          for j := 0 to cdata.mcount - 1 do
+            if cdata.f[j][s] = 1 then
+              quan := cdata.mcount;
+          if cdata.square <= cdata.psnorm * quan then
+          begin
+            value1 := value1 - cdata.square / quan * (cdata.pc[i][s] / 100);
+            value2 := value2 - cdata.square / quan * (cdata.pc[i][s] / 100);
+          end
+          else
+          begin
+            if (cdata.priv[i] = 3) or (cdata.priv[i] = 12) or (cdata.priv[i] = 13) or (cdata.priv[i] = 22) then
+            begin
+              value1 := value1 - math.min(cdata.square/cdata.rmcount,cdata.psnorm) * (cdata.pc[i][s] / 100);
+              value2 := value2 - math.min(cdata.square/cdata.rmcount,cdata.psnorm) * (cdata.pc[i][s] / 100);
+            end;
+          end;
+//          value1 := Math.max(value1, cdata.snorm / 2);
+//          value2 := Math.max(value2, Math.min(cdata.snorm / 2, cdata.square / 2));
         end;
-        value1 := Math.max(value1, cdata.snorm / 2);
-        value2 := Math.max(value2, Math.min(cdata.snorm / 2, cdata.square / 2));
       end;
     end;
-  end;
-
-///  ////////////////////
-    {    cdata.fpm[s] := Rnd((valtarif * norm * value1)/12);
-    maxpriv := cdata.pc[0][s];
-    for i:=1 to cdata.mcount-1 do
-      if cdata.pc[i][s]>cdata.pc[i-1][s] then
-        maxpriv := cdata.pc[i][s];
-    value1 := value1*norm;
-    value2 := value2*norm;
-    if maxpriv<>0 then begin
-      if value1>norms then
-        value1 := Rnd(norms*(maxpriv/100)) + Rnd(value1 - norms)
-      else
-        value1 := value1*(maxpriv/100);
-      if value2>norms then
-        value2 := Rnd(norms*(maxpriv/100)) + Rnd(value2 - norms)
-      else
-        value2 := value2*(maxpriv/100);
-    end; }
-
     cdata.pm[s] := Rnd((valtarif * value1 * norm)/12);
     cdata.snpm[s] := Rnd((valtarif * value2 * norm))/12;
   end
-  else begin
+  else
+  begin
     cdata.fpm[s] := 0;
     cdata.pm[s] := 0;
     cdata.snpm[s] := 0;

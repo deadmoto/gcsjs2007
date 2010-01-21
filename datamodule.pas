@@ -45,7 +45,7 @@ procedure TDataModule1.FormCreate(Sender: TObject);
 begin
   with TRegistry.Create do
     try
-      RootKey := System.cardinal($80000001);
+      RootKey := System.cardinal($80000001);//HKEY_CURRENT_USER
       if OpenKey('\Software\Subsidy\Connection', True) then
         if not ValueExists('Server') then
         begin
