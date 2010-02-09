@@ -67,8 +67,8 @@ object AboutBox: TAboutBox
     object Comments: TLabel
       Left = 8
       Top = 88
-      Width = 203
-      Height = 26
+      Width = 195
+      Height = 13
       Caption = #1050#1086#1084#1087#1072#1085#1080#1103': '#1041#1059' '#1054#1054' '#1054#1062#1046#1057#1057#1042#1080#1051' '#1075'.'#1054#1084#1089#1082
       WordWrap = True
       IsControl = True

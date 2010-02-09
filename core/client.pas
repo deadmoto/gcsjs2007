@@ -110,7 +110,7 @@ type
     procedure CalcHNorm(m: integer;var sq1, sq2: real);//вычислить норматив потребления тепла в ч/д
     function SearchOne(m: T2DInt;serv: integer): integer;//выяснить есть ли единица
     procedure SetClient(cl: integer;s: string);//взять данные на клиента
-    procedure setcalc(regn:integer;date:string);
+    procedure setcalc(regn: integer; date: string);
     procedure SetNorm;//установить норму
     procedure SetMin;//установить min
   end;
@@ -221,7 +221,7 @@ begin
   end;
 end;
 
-procedure tclient.setcalc(regn:integer;date:string);
+procedure tclient.setcalc(regn: integer; date: string);
 {*******************************************************************************
 Загружает данные клиента из базы данных. regn - № клиента, date - учётный период
 *******************************************************************************}
@@ -382,7 +382,8 @@ begin
     ParamByName('s').AsString := DateToStr(cdata.begindate);
     Open;
     First;
-    while not Eof do begin
+    while not Eof do
+    begin
       serv := FieldByName('service').AsInteger;//сервис
       cdata.accounts[serv] := FieldByName('acservice').AsString;
       cdata.tarifs[serv] := FieldByName('id_service').AsInteger;//тариф на него
@@ -1129,7 +1130,7 @@ var
   i: integer;
 begin
   Result := 0;
-  for i:=0 to numbtarif-1 do
+  for i:=0 to numbtarif - 1 do
     Result := Result + cdata.fpm[i];
 end;
 

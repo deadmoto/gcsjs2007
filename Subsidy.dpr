@@ -17,16 +17,13 @@ uses
   status in 'status.pas' {Form14},
   elpower in 'elpower.pas' {Form23},
   houses in 'houses.pas' {Form24},
-  config in 'config.pas' {Form25},
+  uSelectDist in 'uSelectDist.pas' {SelectDistFrm},
   norm in 'norm.pas' {Form27},
   chpriv in 'chpriv.pas' {Form11},
-  Client in 'Client.pas',
-  service in 'service.pas',
   chhouse in 'chhouse.pas' {Form30},
   bank in 'bank.pas' {Form31},
   search in 'search.pas' {Form33},
   opend in 'opend.pas' {Form26},
-  fstruct in 'fstruct.pas',
   sql in 'sql.pas' {Form34},
   imexp in 'imexp.pas' {Form35},
   progress in 'progress.pas' {AboutBox1},
@@ -48,18 +45,24 @@ uses
   chtarifs in 'chtarifs.pas' {Form42},
   rrecalc in 'rrecalc.pas' {Form43},
   stat in 'stat.pas' {Stats},
+  uSluj in 'uSluj.pas' {SlujFrm},
+  uConnection in 'uConnection.pas' {ConnectionFrm},
+  uSettings in 'uSettings.pas' {SettingsFrm},
+  uReportData in 'uReportData.pas' {ReportDataFrm},
+  uGenRefBook in 'uGenRefBook.pas' {GenRefBookFrm},
+  uReportEdit in 'uReportEdit.pas' {ReportEditFrm},
+  uShade in 'uShade.pas' {ShadeForm},
+  fAppProp in 'frames\fAppProp.pas' {fAppProp: TFrame},
+  fAppUpdate in 'frames\fAppUpdate.pas' {fAppUpdate: TFrame},
   ODBC_DSN in 'data\ODBC_DSN.pas',
   srvinfo in 'data\srvinfo.pas',
+  SevenZipVCL in 'data\SevenZipVCL.pas',
   min in 'data\min.pas',
-  version in 'version.pas',
-  SlujUnit in 'SlujUnit.pas' {Form44},
-  ConnectUnit in 'ConnectUnit.pas' {Form45},
-  ConfigPropertiesUnit in 'ConfigPropertiesUnit.pas' {ConfigFrm},
-  fAppPropUnit in 'frames\fAppPropUnit.pas' {fAppProp: TFrame},
-  fAppUpdateUnit in 'frames\fAppUpdateUnit.pas' {fAppUpdate: TFrame},
-  AddReportDataUnit in 'AddReportDataUnit.pas' {AddReportDataFrm},
-  AnyDirectoryUnit in 'AnyDirectoryUnit.pas' {AnyDirectoryFrm},
-  EditReportUnit in 'EditReportUnit.pas' {EditReportFrm};
+  dbf in 'data\dbf.pas',
+  padegFIO in 'data\padegFIO.pas',
+  client in 'core\client.pas',
+  service in 'core\service.pas',
+  fstruct in 'core\fstruct.pas';
 
 {$R *.res}
 //{$R myRes.RES}
@@ -100,7 +103,7 @@ begin
         Application.CreateForm(TForm14, Form14);
         Application.CreateForm(TForm23, Form23);
         Application.CreateForm(TForm24, Form24);
-        Application.CreateForm(TForm25, Form25);
+        Application.CreateForm(TSelectDistFrm, SelectDistFrm);
         Application.CreateForm(TForm27, Form27);
         Application.CreateForm(TForm11, Form11);
         Application.CreateForm(TForm30, Form30);
@@ -115,11 +118,11 @@ begin
         Application.CreateForm(TForm41, Form41);
         Application.CreateForm(TForm42, Form42);
         Application.CreateForm(TForm43, Form43);
-        Application.CreateForm(TForm44, Form44);
-        Application.CreateForm(TForm45, Form45);
-        Application.CreateForm(TConfigFrm, ConfigFrm);
-        Application.CreateForm(TAddReportDataFrm, AddReportDataFrm);
-        Application.CreateForm(TAnyDirectoryFrm, AnyDirectoryFrm);
+        Application.CreateForm(TSlujFrm, SlujFrm);
+        Application.CreateForm(TConnectionFrm, ConnectionFrm);
+        Application.CreateForm(TSettingsFrm, SettingsFrm);
+        Application.CreateForm(TReportDataFrm, ReportDataFrm);
+        Application.CreateForm(TGenRefBookFrm, GenRefBookFrm);
         Application.Run;
       except
         ShowMessage('Произошел сбой при создании одной из форм!');

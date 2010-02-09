@@ -1,4 +1,4 @@
-object AddReportDataFrm: TAddReportDataFrm
+object ReportDataFrm: TReportDataFrm
   Left = 0
   Top = 0
   BorderStyle = bsToolWindow

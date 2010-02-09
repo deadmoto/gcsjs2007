@@ -1,4 +1,4 @@
-unit AnyDirectoryUnit;
+unit uGenRefBook;
 
 interface
 
@@ -25,7 +25,7 @@ type
     mRelation       { справочник отношений }
     );
 
-  TAnyDirectoryFrm = class(TForm)
+  TGenRefBookFrm = class(TForm)
     Panel1:      TPanel;
     StringGrid1: TStringGrid;
     Panel2:      TPanel;
@@ -76,7 +76,7 @@ type
   end;
 
 var
-  AnyDirectoryFrm: TAnyDirectoryFrm;
+  GenRefBookFrm: TGenRefBookFrm;
 
 implementation
 
@@ -86,34 +86,34 @@ uses
 
 {$R *.dfm}
 
-procedure TAnyDirectoryFrm.Button4Click(Sender: TObject);
+procedure TGenRefBookFrm.Button4Click(Sender: TObject);
 begin
   Close;
 end;
 
-procedure TAnyDirectoryFrm.Edit1Exit(Sender: TObject);
+procedure TGenRefBookFrm.Edit1Exit(Sender: TObject);
 begin
   CheckInt(Edit1);
 end;
 
-procedure TAnyDirectoryFrm.Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TGenRefBookFrm.Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
     CheckInt(edit1);
 end;
 
-procedure TAnyDirectoryFrm.Edit2Exit(Sender: TObject);
+procedure TGenRefBookFrm.Edit2Exit(Sender: TObject);
 begin
   CheckRus(edit2);
 end;
 
-procedure TAnyDirectoryFrm.Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TGenRefBookFrm.Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
     CheckRus(edit2);
 end;
 
-procedure TAnyDirectoryFrm.FormShow(Sender: TObject);
+procedure TGenRefBookFrm.FormShow(Sender: TObject);
 begin
   SetDefault;
 
@@ -123,7 +123,7 @@ begin
       Button1.OnClick := mOwnTypeAdd;
       Button2.OnClick := mOwnTypeEdit;
       Button3.OnClick := mOwnTypeDelete;
-      AnyDirectoryFrm.Caption := 'Типы владения';
+      GenRefBookFrm.Caption := 'Типы владения';
     end;
 
     mCertification:
@@ -131,7 +131,7 @@ begin
       Button1.OnClick := mCertificationAdd;
       Button2.OnClick := mCertificationEdit;
       Button3.OnClick := mCertificationDelete;
-      AnyDirectoryFrm.Caption := 'Типы аттестации';
+      GenRefBookFrm.Caption := 'Типы аттестации';
     end;
 
     mSettlingType:
@@ -139,7 +139,7 @@ begin
       Button1.OnClick := mSettlingTypeAdd;
       Button2.OnClick := mSettlingTypeEdit;
       Button3.OnClick := mSettlingTypeDelete;
-      AnyDirectoryFrm.Caption := 'Типы заселения';
+      GenRefBookFrm.Caption := 'Типы заселения';
     end;
 
     mControl:
@@ -147,7 +147,7 @@ begin
       Button1.OnClick := mControlAdd;
       Button2.OnClick := mControlEdit;
       Button3.OnClick := mControlDelete;
-      AnyDirectoryFrm.Caption := 'Типы контроля';
+      GenRefBookFrm.Caption := 'Типы контроля';
     end;
 
     mRelation:
@@ -155,7 +155,7 @@ begin
       Button1.OnClick := mRelationAdd;
       Button2.OnClick := mRelationEdit;
       Button3.OnClick := mRelationDelete;
-      AnyDirectoryFrm.Caption := 'Типы отношений';
+      GenRefBookFrm.Caption := 'Типы отношений';
     end;
 
   end;
@@ -174,7 +174,7 @@ begin
   end;
 end;
 
-procedure TAnyDirectoryFrm.mCertificationAdd(Sender: TObject);
+procedure TGenRefBookFrm.mCertificationAdd(Sender: TObject);
 { добавить тип аттестации }
 var
   flag: bool;
@@ -232,7 +232,7 @@ begin
     ShowMessage('Все поля ввода должны быть заполнены!');
 end;
 
-procedure TAnyDirectoryFrm.mCertificationDelete(Sender: TObject);
+procedure TGenRefBookFrm.mCertificationDelete(Sender: TObject);
 { удалить тип аттестации}
 begin
   with DataModule1.Query1 do
@@ -250,7 +250,7 @@ begin
   end;
 end;
 
-procedure TAnyDirectoryFrm.mCertificationEdit(Sender: TObject);
+procedure TGenRefBookFrm.mCertificationEdit(Sender: TObject);
 { изменить тип аттестации }
 var
   flag: bool;
@@ -310,7 +310,7 @@ begin
     ShowMessage('Все поля ввода должны быть заполнены!');
 end;
 
-procedure TAnyDirectoryFrm.mControlAdd(Sender: TObject);
+procedure TGenRefBookFrm.mControlAdd(Sender: TObject);
 { добавить тип контроля }
 var
   flag: bool;
@@ -368,7 +368,7 @@ begin
     ShowMessage('Все поля ввода должны быть заполнены!');
 end;
 
-procedure TAnyDirectoryFrm.mControlDelete(Sender: TObject);
+procedure TGenRefBookFrm.mControlDelete(Sender: TObject);
 begin
   with DataModule1.Query1 do
   begin
@@ -385,7 +385,7 @@ begin
   end;
 end;
 
-procedure TAnyDirectoryFrm.mControlEdit(Sender: TObject);
+procedure TGenRefBookFrm.mControlEdit(Sender: TObject);
 { изменить тип контроля }
 var
   flag: bool;
@@ -446,7 +446,7 @@ begin
     ShowMessage('Все поля ввода должны быть заполнены!');
 end;
 
-procedure TAnyDirectoryFrm.mOwnTypeAdd(Sender: TObject);
+procedure TGenRefBookFrm.mOwnTypeAdd(Sender: TObject);
 { добавить тип владения }
 var
   flag: bool;
@@ -504,7 +504,7 @@ begin
     ShowMessage('Все поля ввода должны быть заполнены!');
 end;
 
-procedure TAnyDirectoryFrm.mOwnTypeDelete(Sender: TObject);
+procedure TGenRefBookFrm.mOwnTypeDelete(Sender: TObject);
 { удалить тип владения }
 begin
   with DataModule1.Query1 do
@@ -522,7 +522,7 @@ begin
   end;
 end;
 
-procedure TAnyDirectoryFrm.mOwnTypeEdit(Sender: TObject);
+procedure TGenRefBookFrm.mOwnTypeEdit(Sender: TObject);
 { изменить тип владения }
 var
   flag: bool;
@@ -583,7 +583,7 @@ begin
     ShowMessage('Все поля ввода должны быть заполнены!');
 end;
 
-procedure TAnyDirectoryFrm.mRelationAdd(Sender: TObject);
+procedure TGenRefBookFrm.mRelationAdd(Sender: TObject);
 { добавить отношение }
 var
   flag: boolean;
@@ -641,7 +641,7 @@ begin
     ShowMessage('Все поля ввода должны быть заполнены!');
 end;
 
-procedure TAnyDirectoryFrm.mRelationDelete(Sender: TObject);
+procedure TGenRefBookFrm.mRelationDelete(Sender: TObject);
 { удалить отношение }
 begin
   if Edit2.Text <> 'клиент' then
@@ -662,7 +662,7 @@ begin
     ShowMessage('Эту запись удалить нельзя!');
 end;
 
-procedure TAnyDirectoryFrm.mRelationEdit(Sender: TObject);
+procedure TGenRefBookFrm.mRelationEdit(Sender: TObject);
 { изменить отношение }
 var
   flag: bool;
@@ -723,7 +723,7 @@ begin
     ShowMessage('Все поля ввода должны быть заполнены!');
 end;
 
-procedure TAnyDirectoryFrm.mSettlingTypeAdd(Sender: TObject);
+procedure TGenRefBookFrm.mSettlingTypeAdd(Sender: TObject);
 var
   flag: bool;
 begin
@@ -780,7 +780,7 @@ begin
     ShowMessage('Все поля ввода должны быть заполнены!');
 end;
 
-procedure TAnyDirectoryFrm.mSettlingTypeDelete(Sender: TObject);
+procedure TGenRefBookFrm.mSettlingTypeDelete(Sender: TObject);
 {*******************************************************************************
   Процедура Button3Click обрабатывает нажатие клавиши Удалить на форме. Из таблицы
   удаляется запись, которая соответствует текущему id.
@@ -801,7 +801,7 @@ begin
   end;
 end;
 
-procedure TAnyDirectoryFrm.mSettlingTypeEdit(Sender: TObject);
+procedure TGenRefBookFrm.mSettlingTypeEdit(Sender: TObject);
 {*******************************************************************************
   Процедура Button2Click обрабатывает нажатие клавиши Изменить на форме.
   Если все поля ввода заполнены, то проверяется существует ли в таблице запись с
@@ -871,7 +871,7 @@ begin
     ShowMessage('Все поля ввода должны быть заполнены!');
 end;
 
-procedure TAnyDirectoryFrm.SetDefault;
+procedure TGenRefBookFrm.SetDefault;
 var
   i: integer;
 begin
@@ -1015,7 +1015,7 @@ begin
   Edit2.Text := '';
 end;
 
-procedure TAnyDirectoryFrm.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
+procedure TGenRefBookFrm.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
 begin
   if ARow <> 0 then
   begin

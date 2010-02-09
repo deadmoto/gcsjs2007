@@ -161,11 +161,11 @@ end;
 
 function TForm40.Recalc: integer;
 var
-  c:  TClient;
+  c: TClient;
   i, j, cnt, ncl: integer;
-  odt{,vals}: string;
+  odt: string;
   pr: TAboutBox1;
-  val{,valf}: real;
+  val: real;
   t:  array of integer;
 begin
   odt := DateToStr(IncMonth(StrToDate(Form1.rdt), -1));
@@ -175,7 +175,7 @@ begin
   pr.Label3.Caption := '';
   pr.Show;
   pr.Update;
-  //Application.ProcessMessages;
+
   SendMessage(pr.Handle, wm_paint, 0, 0);
   pr.ProgressBar1.Step := 1;
   c := TClient.Create(Empty, EmptyC);
@@ -184,7 +184,7 @@ begin
   val := 0;
   lcl.Clear;
   try
-    Datamodule1.Database1.StartTransaction;
+    DataModule1.Database1.StartTransaction;
     with Datamodule1.Query1 do
     begin
       Close;

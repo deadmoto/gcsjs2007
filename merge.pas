@@ -3,18 +3,8 @@ unit merge;
 interface
 
 uses
-  Windows,
-  Messages,
-  SysUtils,
-  Variants,
-  Classes,
-  Graphics,
-  Controls,
-  Forms,
-  Dialogs,
-  StdCtrls,
-  Mask,
-  ComCtrls;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, ComCtrls, SevenZipVCL;
 
 type
   TForm21 = class(TForm)
@@ -67,89 +57,114 @@ end;
 procedure TForm21.Button1Click(Sender: TObject);
 { архиваци€ базы дл€ сброса по дате}
 var
-  cmd, flst, Name, dt: string;
-  ext1, ext2: string;
+  ext1, ext2, Name, dt: string;
+  SevenZip: TSevenZip;
+  i: integer;
 begin
   ext1 := '.dbf';
   ext2 := IntToStr(Form1.dist) + ext1;
-  Name := '4merge';
+
+  Name := '4merge' + IntToStr(Form1.dist);
   dt := '01.' + Copy(MaskEdit1.Text, 4, 2) + '.' + Copy(MaskEdit1.Text, 7, 4);
   if MaskEdit1.Text = '' then
     dt := Form1.rdt;
-  //удалить файлы из архива
-  cmd := 'rar d ' + path + Name + ext1;
-  WinExec(PChar(cmd), SW_HIDE);
 
-  //добавить файлы в архив
-  ExportHouse(path, Form1.dist);
-  flst := path + 'house' + ext2 + ' ';
-  ProgressBar1.StepIt;
-  ExportClm(path, dt, Form1.dist);
-  flst := flst + path + 'cl' + ext2 + ' ';
-  ProgressBar1.StepIt;
-  ExportHistm(path, dt, Form1.dist);
-  flst := flst + path + 'hist' + ext2 + ' ';
-  ProgressBar1.StepIt;
-  ExportFamm(path, dt, Form1.dist);
-  flst := flst + path + 'fam' + ext2 + ' ';
-  ProgressBar1.StepIt;
-  ExportSluj(path, dt, Form1.dist);
-  flst := flst + path + 'sluj' + ext2 + ' ';
-  ExportFact(path, Form1.dist);
-  flst := flst + path + 'factsale' + ext2 + ' ';
-  flst := flst + path + 'factbalance' + ext2 + ' ';  
-  ProgressBar1.StepIt;
-  ExportSub(path, dt, Form1.dist);
-  flst := flst + path + 'sub' + ext2 + ' ';
-  ProgressBar1.StepIt;
-  ExportInsp(path, Form1.dist, False);
-  flst := flst + path + 'insp' + ext2;
-  cmd  := 'rar m -s -v1440 -vn -y -ep ' + path + Name + ' ' + flst;
-  WinExec(PChar(cmd), SW_HIDE);
-  ProgressBar1.StepIt;
-  ShowMessage('Ёкспорт файлов завершен!');
-  Close;
+  try
+    if FileExists(path + Name + '.7z') then
+      DeleteFile(PAnsiChar(path + Name + '.7z'));
+    SevenZip := TSevenZip.Create(Application);
+    SevenZip.SZFileName := path + Name + '.7z';
+    with SevenZip do
+    begin
+      AddOptions := [AddStoreOnlyFilename];
+      VolumeSize := 0;
+      LZMACompressType := LZMA;
+      LZMACompressStrength := MAXIMUM;
+      Files.Clear;
+    end;
+
+    //добавить файлы в архив
+    ExportHouse(path, Form1.dist);
+    SevenZip.Files.AddString(path + 'house' + ext2);
+    ProgressBar1.StepIt;
+    ExportClm(path, dt, Form1.dist);
+    SevenZip.Files.AddString(path + 'cl' + ext2);
+    ProgressBar1.StepIt;
+    ExportHistm(path, dt, Form1.dist);
+    SevenZip.Files.AddString(path + 'hist' + ext2);
+    ProgressBar1.StepIt;
+    ExportFamm(path, dt, Form1.dist);
+    SevenZip.Files.AddString(path + 'fam' + ext2);
+    ProgressBar1.StepIt;
+    ExportSluj(path, dt, Form1.dist);
+    SevenZip.Files.AddString(path + 'sluj' + ext2);
+    ExportFact(path, Form1.dist);
+    SevenZip.Files.AddString(path + 'factsale' + ext2);
+    SevenZip.Files.AddString(path + 'factbalance' + ext2);
+    ProgressBar1.StepIt;
+    ExportSub(path, dt, Form1.dist);
+    SevenZip.Files.AddString(path + 'sub' + ext2);
+    ProgressBar1.StepIt;
+    ExportInsp(path, Form1.dist, False);
+    SevenZip.Files.AddString(path + 'insp' + ext2);
+    SevenZip.Add;
+    ProgressBar1.StepIt;
+    ShowMessage('Ёкспорт файлов завершен!');
+    Close;
+  finally
+    for i := 0 to SevenZip.Files.Count - 1 do
+      DeleteFile(SevenZip.Files.WStrings[i]);
+    SevenZip.Free;
+  end;
 end;
 
 procedure TForm21.Button2Click(Sender: TObject);
 { автоматический импорт данных из филиала или отдела }
 var
-  cmd: string;
-//  i: integer;
+  SevenZip: TSevenZip;
 begin
-  path := path + '4merge';
-  //извлечь файлы из архива
-  cmd  := 'rar e -y ' + path + ' *.dbf' + ' arc\';
-  WinExec(PChar(cmd), SW_HIDE);
-  path := 'arc\';
-//  i := 0;
-  sleep(1000);
-{  while not FileExists(path + 'insp' + IntToStr(Form1.dist) + '.dbf') do
-    Inc(i);}
+  path := path + '4merge' + IntToStr(Form1.dist) +'.7z';
   try
-    Datamodule1.Database1.StartTransaction;
-    ImportInsp(path, Form1.dist);
-    ProgressBar1.StepIt;
-    ImportCl(path, Form1.dist);
-    ProgressBar1.StepIt;
-    ImportHist(path, Form1.dist);
-    ProgressBar1.StepIt;
-    ImportFam(path, Form1.dist);
-    ProgressBar1.StepIt;
-    ImportHouse(path, Form1.dist);
-    ProgressBar1.StepIt;
-    ImportSub(path, Form1.dist);
-    ProgressBar1.StepIt;
-    ImportSluj(path, Form1.dist);
-    ProgressBar1.StepIt;
-    ImportFact(path, Form1.dist);
-    Datamodule1.Database1.Commit;
-    ProgressBar1.StepIt;
-    ShowMessage('»мпорт найденных файлов успешно завершен!');
-    Form1.Reload;
-  except
-    Datamodule1.Database1.Rollback;
-    ShowMessage('ќшибка импорта!');
+    SevenZip := TSevenZip.Create(Application);
+    SevenZip.SZFileName := path;
+
+    //извлечь файлы из архива
+    with SevenZip do
+    begin
+      ExtrBaseDir := 'arc\';
+      ExtractOptions := [ExtractOverwrite];
+      Extract();
+    end;
+    path := 'arc\';
+
+    sleep(1000);
+    try
+      Datamodule1.Database1.StartTransaction;
+      ImportInsp(path, Form1.dist);
+      ProgressBar1.StepIt;
+      ImportCl(path, Form1.dist);
+      ProgressBar1.StepIt;
+      ImportHist(path, Form1.dist);
+      ProgressBar1.StepIt;
+      ImportFam(path, Form1.dist);
+      ProgressBar1.StepIt;
+      ImportHouse(path, Form1.dist);
+      ProgressBar1.StepIt;
+      ImportSub(path, Form1.dist);
+      ProgressBar1.StepIt;
+      ImportSluj(path, Form1.dist);
+      ProgressBar1.StepIt;
+      ImportFact(path, Form1.dist);
+      Datamodule1.Database1.Commit;
+      ProgressBar1.StepIt;
+      ShowMessage('»мпорт найденных файлов успешно завершен!');
+      Form1.Reload;
+    except
+      Datamodule1.Database1.Rollback;
+      ShowMessage('ќшибка импорта!');
+    end;
+  finally
+    SevenZip.Free;
   end;
   Close;
 end;

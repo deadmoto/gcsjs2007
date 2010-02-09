@@ -48,7 +48,6 @@ type
     CheckBox22: TCheckBox;
     CheckBox24: TCheckBox;
     CheckBox23: TCheckBox;
-    Button4:    TButton;
     CheckBox16: TCheckBox;
     CheckBox27: TCheckBox;
     Label1:     TLabel;
@@ -60,15 +59,16 @@ type
     CheckBox29: TCheckBox;
     CheckBox30: TCheckBox;
     CheckBox31: TCheckBox;
+    CheckBox32: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure CheckBox24Click(Sender: TObject);
-    procedure Button4Click(Sender: TObject);
     procedure CheckBox29Click(Sender: TObject);
     procedure MaskEdit1Exit(Sender: TObject);
     procedure MaskEdit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure CheckBox32Click(Sender: TObject);
   private
     { Private declarations }
     function CountCh: integer;
@@ -835,34 +835,16 @@ procedure TForm35.CheckBox24Click(Sender: TObject);
 }
 begin
   if CheckBox24.Checked then
-    GroupBox1.Enabled := True
+    begin
+      GroupBox1.Enabled := True;
+      CheckBox32.Enabled := True;
+    end
   else
-    GroupBox1.Enabled := False;
-end;
-
-procedure TForm35.Button4Click(Sender: TObject);
-{ Обработка нажатия клавиши "Все". Происходит выбор всех справочников в группе. }
-begin
-  CheckBox1.Checked  := True;
-  CheckBox2.Checked  := True;
-  CheckBox3.Checked  := True;
-  CheckBox4.Checked  := True;
-  CheckBox5.Checked  := True;
-  CheckBox6.Checked  := True;
-  CheckBox12.Checked := True;
-  CheckBox14.Checked := True;
-  CheckBox15.Checked := True;
-  CheckBox16.Checked := True;
-  CheckBox17.Checked := True;
-  CheckBox18.Checked := True;
-  CheckBox19.Checked := True;
-  CheckBox20.Checked := True;
-  CheckBox21.Checked := True;
-  CheckBox22.Checked := True;
-  CheckBox23.Checked := True;
-  CheckBox25.Checked := True;
-  CheckBox26.Checked := True;
-  CheckBox27.Checked := True;
+    begin
+      GroupBox1.Enabled := False;
+      CheckBox32.Checked := False;
+      CheckBox32.OnClick(Self);
+    end;
 end;
 
 procedure TForm35.CheckBox29Click(Sender: TObject);
@@ -881,6 +863,19 @@ begin
     MaskEdit1.Enabled := False;//экспорт/импорт всех данных
     MaskEdit1.Text := '';
   end;
+end;
+
+procedure TForm35.CheckBox32Click(Sender: TObject);
+var
+  i: Integer;
+begin
+  if (Sender = CheckBox32) then
+    for i := 0 to GroupBox1.ControlCount - 1 do
+      if (GroupBox1.Controls[i] is TCheckBox) then
+        if CheckBox32.Checked then
+          TCheckBox(GroupBox1.Controls[i] as TCheckBox).Checked := True
+        else
+          TCheckBox(GroupBox1.Controls[i] as TCheckBox).Checked := False;
 end;
 
 procedure TForm35.MaskEdit1Exit(Sender: TObject);

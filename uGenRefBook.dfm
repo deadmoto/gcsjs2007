@@ -1,4 +1,4 @@
-object AnyDirectoryFrm: TAnyDirectoryFrm
+object GenRefBookFrm: TGenRefBookFrm
   Left = 0
   Top = 0
   BorderStyle = bsDialog

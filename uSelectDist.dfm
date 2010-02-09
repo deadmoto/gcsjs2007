@@ -1,4 +1,4 @@
-object Form25: TForm25
+object SelectDistFrm: TSelectDistFrm
   Left = 390
   Top = 212
   BorderIcons = [biSystemMenu, biMinimize]
@@ -45,7 +45,7 @@ object Form25: TForm25
       Top = 21
       Width = 173
       Height = 21
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 0
       OnChange = ComboBox2Change
       OnExit = ComboBox2Change
@@ -55,7 +55,7 @@ object Form25: TForm25
       Top = 61
       Width = 173
       Height = 21
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 1
       OnChange = ComboBox1Change
       OnExit = ComboBox1Change

@@ -27,7 +27,7 @@ var
 
 implementation
 
-uses version, service;
+uses service;
 
 {$R *.dfm}
 

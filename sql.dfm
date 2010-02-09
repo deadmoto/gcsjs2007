@@ -70,7 +70,7 @@ object Form34: TForm34
       end
       object Button1: TButton
         Left = 424
-        Top = 25
+        Top = 28
         Width = 97
         Height = 25
         Caption = #1042#1099#1087#1086#1083#1085#1080#1090#1100
@@ -79,7 +79,7 @@ object Form34: TForm34
       end
       object Button2: TButton
         Left = 424
-        Top = 56
+        Top = 59
         Width = 97
         Height = 25
         Caption = #1054#1095#1080#1089#1090#1080#1090#1100
@@ -88,7 +88,7 @@ object Form34: TForm34
       end
       object Button4: TButton
         Left = 424
-        Top = 152
+        Top = 155
         Width = 97
         Height = 25
         Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090' '#1074' DBF'
@@ -97,7 +97,7 @@ object Form34: TForm34
       end
       object Button3: TButton
         Left = 424
-        Top = 120
+        Top = 123
         Width = 97
         Height = 25
         Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
@@ -106,7 +106,7 @@ object Form34: TForm34
       end
       object Button5: TButton
         Left = 424
-        Top = 88
+        Top = 91
         Width = 97
         Height = 25
         Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100
