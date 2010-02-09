@@ -1,4 +1,4 @@
-unit fAppPropUnit;
+unit fAppProp;
 
 interface
 
@@ -48,7 +48,7 @@ type
 implementation
 
 uses
-  ConfigPropertiesUnit, service;
+  uSettings, service;
 
 {$R *.dfm}
 
@@ -90,13 +90,13 @@ end;
 
 procedure TfAppProp.IniCheckBox6Click(Sender: TObject);
 begin
-  if ConfigFrm.checkChanges then
+  if SettingsFrm.checkChanges then
   begin
-    ConfigFrm.Button2.Enabled := True;
+    SettingsFrm.Button2.Enabled := True;
   end
   else
   begin
-    ConfigFrm.Button2.Enabled := False;
+    SettingsFrm.Button2.Enabled := False;
   end;
 end;
 

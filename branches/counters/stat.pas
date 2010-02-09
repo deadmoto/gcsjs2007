@@ -7,7 +7,6 @@ uses
   ComCtrls,
   Controls,
   Dialogs,
-  ExcelXP,
   ExtCtrls,
   Forms,
   Graphics,
@@ -125,7 +124,7 @@ end;
 
 procedure TStats.Button2Click(Sender: TObject);
 begin
-  ExportGridToExcel(StringGrid1, '1', Form1.reports_path + 'stats.xlt');
+  ExportGridToExcel(StringGrid1, Form1.reports_path + 'stats.xlt');
 end;
 
 procedure TStats.Button3Click(Sender: TObject);

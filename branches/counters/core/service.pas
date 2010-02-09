@@ -10,8 +10,8 @@ interface
 
 
 uses
-  Controls, DB, dbf, Dialogs, ExcelXP, FileCtrl, Grids, Mask, padegFIO, Registry,
-  StdCtrls, SysUtils, Variants, Windows, ExtCtrls, Graphics, Classes, jpeg;
+  Controls, DB, dbf, Dialogs, FileCtrl, Grids, Mask, padegFIO, Registry, dateutils, Math,
+  StdCtrls, SysUtils, Variants, Windows, ExtCtrls, Graphics, Classes, jpeg, ComObj;
 
 const
   numbtarif = 14;
@@ -71,7 +71,7 @@ function ReplacePoint(str: string): string; //заминить , на .
 
 {******************************************************************************}
 function RefToCell(ARow, ACol: integer): string;
-function ExportGridToExcel(AGrid: TStringGrid; ASheetName, AFileName: string): boolean;
+function ExportGridToExcel(AGrid: TStringGrid; AFileName: string): boolean;
 {******************************************************************************}
 
 //Возвращает версию exe по имени файла
@@ -97,10 +97,7 @@ procedure LoadJPEGFromRes(TheJPEG : string; ThePicture : TPicture);
 implementation
 
 uses
-  datamodule,
-  dateutils,
-  Math,
-  main;
+  datamodule, main;
 
 procedure SetPoint(edt: TEdit);
 {*******************************************************************************
@@ -745,48 +742,50 @@ begin
     DaysCount := Days2 - Days1;  // банальная разность}
 end;
 
-{StringGrid->ExcelExport*******************************************************}
+{******************************************************************************}
 function RefToCell(ARow, ACol: integer): string;
 begin
   Result := Chr(Ord('A') + ACol - 1) + IntToStr(ARow);
 end;
 
-function ExportGridToExcel(AGrid: TStringGrid; ASheetName, AFileName: string): boolean;
-var //Row, Col: Integer;
-  Sheet, Data: olevariant;
+function ExportGridToExcel(AGrid: TStringGrid; AFileName: string): boolean;
+var
+  ExcelApp, Sheet, Data: OleVariant;
   i, j: integer;
-  ExcelApp: TExcelApplication;
 begin
+  try
+    ExcelApp:=CreateOleObject('Excel.Application');
+    ExcelApp.Visible:=False;
+  except
+    on E: Exception do
+      raise Exception.Create('Ошибка создания объекта Excel: ' + E.Message);
+  end;
+
+  try
+    ExcelApp.WorkBooks.Open(aFileName);
+  finally
+  end;
+
   // Prepare Data
   Data := VarArrayCreate([1, AGrid.RowCount, 1, AGrid.colcount], varVariant);
   for i := 0 to AGrid.colcount - 1 do
     for j := 0 to AGrid.RowCount - 1 do
       Data[j + 1, i + 1] := AGrid.Cells[i, j];
 
-  ExcelApp := TExcelApplication.Create(nil);
-  Result := False;
-
   try
-    with ExcelApp do
-    begin
-      Visible[0] := False;
-      try
-        Workbooks.Add(AFileName, 1);
-        Result := True;
-      except
-        // Error ?
-      end;
-
-      Sheet := Form1.ExcelApplication1.WorkSheets[1];
-      Sheet.Name := ASheetName;
-      // Fill up the sheet
-      Sheet.Range[RefToCell(1, 1), RefToCell(AGrid.RowCount, AGrid.colcount)].Value := Data;
-      Visible[0] := True;
-    end;
+    //ExcelApp.ActiveWorkBook.WorkSheets.Add;
+    Sheet :=  ExcelApp.ActiveWorkBook.WorkSheets[1];
+    //Sheet.Name := ASheetName;
+    // Fill up the sheet
+    Sheet.Range[RefToCell(1, 1), RefToCell(AGrid.RowCount, AGrid.colcount)] := Data;
+    ExcelApp.Visible := True;
   finally
-
+    Result := True;
+//    ExcelApp.Quit;
+//    ExcelApp:=Unassigned;
   end;
 end;
+{******************************************************************************}
 
 function FileVersion(AFileName: string): string;
 {*******************************************************************************

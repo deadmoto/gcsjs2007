@@ -1,4 +1,4 @@
-unit SlujUnit;
+unit uSluj;
 
 interface
 
@@ -21,7 +21,7 @@ type
   TSlujMode = (mSum, mDetail);
 
 type
-  TForm44 = class(TForm)
+  TSlujFrm = class(TForm)
     FlowPanel1: TFlowPanel;
     Button2:    TButton;
     Button1:    TButton;
@@ -42,7 +42,7 @@ type
   end;
 
 var
-  Form44: TForm44;
+  SlujFrm: TSlujFrm;
 
 implementation
 
@@ -51,7 +51,7 @@ uses
 
 {$R *.dfm}
 
-procedure TForm44.FillSlujGrid;
+procedure TSlujFrm.FillSlujGrid;
 var
   i: integer;
 begin
@@ -94,7 +94,7 @@ begin
     case mode of
       mDetail:
       begin
-        Form44.Width := 670;
+        SlujFrm.Width := 670;
         //SlujGrid.ColCount := DataModule1.Query1.FieldCount;
 
         FormerStringGrid(SlujGrid, TStringArray.Create('ћес€ц', '–ег. є',
@@ -118,7 +118,7 @@ begin
 
       mSum:
       begin
-        Form44.Width := 580;
+        SlujFrm.Width := 580;
         //SlujGrid.ColCount := DataModule1.Query1.FieldCount;
 
         FormerStringGrid(SlujGrid, TStringArray.Create('ћес€ц', '–ег. є',
@@ -167,22 +167,22 @@ begin
   end;
 end;
 
-procedure TForm44.Button2Click(Sender: TObject);
+procedure TSlujFrm.Button2Click(Sender: TObject);
 begin
   Close;
 end;
 
-procedure TForm44.Button3Click(Sender: TObject);
+procedure TSlujFrm.Button3Click(Sender: TObject);
 begin
-  ExportGridToExcel(SlujGrid, '1', Form1.reports_path + 'tmp.xls');
+  ExportGridToExcel(SlujGrid, Form1.reports_path + 'tmp.xls');
 end;
 
-procedure TForm44.SlujGridSelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
+procedure TSlujFrm.SlujGridSelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
 begin
   cl_regn := SlujGrid.Cells[1, arow];
 end;
 
-procedure TForm44.Button1Click(Sender: TObject);
+procedure TSlujFrm.Button1Click(Sender: TObject);
 begin
   if MessageDlg('”далить выбранный период?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
   begin

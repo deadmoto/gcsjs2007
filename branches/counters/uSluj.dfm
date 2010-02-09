@@ -1,4 +1,4 @@
-object Form44: TForm44
+object SlujFrm: TSlujFrm
   Left = 279
   Top = 210
   BorderIcons = [biSystemMenu, biMinimize]
@@ -27,7 +27,6 @@ object Form44: TForm44
     BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 1
-    ExplicitWidth = 617
     object Button2: TButton
       AlignWithMargins = True
       Left = 541
@@ -68,7 +67,6 @@ object Form44: TForm44
     Margins.Bottom = 0
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 617
     object SlujGrid: TStringGrid
       Left = 2
       Top = 15
@@ -83,7 +81,6 @@ object Form44: TForm44
       ParentCtl3D = False
       TabOrder = 0
       OnSelectCell = SlujGridSelectCell
-      ExplicitWidth = 613
       ColWidths = (
         64
         64
