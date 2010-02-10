@@ -1,4 +1,4 @@
-object ConfigFrm: TConfigFrm
+object SettingsFrm: TSettingsFrm
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]

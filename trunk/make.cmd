@@ -1,16 +1,7 @@
-FOR /F "" %%A in ('svnversion') do SET SVNREV=%%A
-@ECHO OFF
-ECHO unit version; > version.pas
-ECHO interface >> version.pas
-ECHO var svnrev:string='%SVNREV%'; >> version.pas
-ECHO implementation >> version.pas
-ECHO end. >> version.pas
-@ECHO ON
-pause
-MD %CD%\release\%SVNREV%
+FOR /F "tokens=2 delims='" %%A in (Revision.inc) do SET REV=%%A
+MD %CD%\release\%REV%
 call rsvars.bat
 msbuild Subsidy.dproj /t:rebuild /p:configuration=Release
-
-copy "..\Subsidy.exe" "%CD%\release\%SVNREV%"
+copy "..\bin\Subsidy.exe" "%CD%\release\%REV%\"
 pause
 

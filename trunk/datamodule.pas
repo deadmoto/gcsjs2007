@@ -32,9 +32,7 @@ var
 implementation
 
 uses
-  ConnectUnit,
-  service,
-  ODBC_DSN;
+  uConnection, service, ODBC_DSN;
 
 
 {$R *.dfm}
@@ -49,10 +47,10 @@ begin
       if OpenKey('\Software\Subsidy\Connection', True) then
         if not ValueExists('Server') then
         begin
-          Form45 := TForm45.Create(nil);
-          Form45.mode := mBug;
-          Form45.ShowModal;
-          Form45.Free;
+          ConnectionFrm := TConnectionFrm.Create(nil);
+          ConnectionFrm.mode := mBug;
+          ConnectionFrm.ShowModal;
+          ConnectionFrm.Free;
         end
         else
         begin

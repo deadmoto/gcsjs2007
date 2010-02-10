@@ -1678,7 +1678,7 @@ begin
     for i := 0 to numbtarif - 1 do
       ppm := ppm + Cl.cdata.pm[i];
     if (pm <> 0) and (ppm <> 0) then
-      Edit108.Text := FlToStr(ppm / pm)
+      Edit108.Text := FlToStr(rnd(ppm / pm))
     else
       Edit108.Text := '';
   end
@@ -5330,6 +5330,8 @@ begin
 end;
 
 procedure TForm2.Edit66Exit(Sender: TObject);
+var
+  i: Integer;
 begin
   if CheckNumb(TEdit(Sender)) and load then
   begin
@@ -5429,8 +5431,13 @@ begin
         Cl.cdata.snpm[12] := StrToFloat(Edit53.Text);
       if Sender = Edit55 then
         Cl.cdata.snpm[13] := StrToFloat(Edit55.Text);
-      if Sender = Edit65 then
-        Cl.cdata.bfpm[0] := StrToFloat(Edit65.Text);
+      if Sender = Edit65 then//!
+        begin
+          for i := 1 to numbtarif - 1 do
+            Cl.cdata.fpm[i] := 0;
+          Cl.cdata.fpm[0] := StrToFloat(Edit65.Text);
+          //Cl.cdata.bfpm[0] := StrToFloat(Edit65.Text);
+        end;
       if Sender = Edit84 then
         Cl.cdata.fpm[0] := StrToFloat(Edit84.Text);
     end;

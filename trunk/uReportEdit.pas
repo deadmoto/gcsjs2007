@@ -1,4 +1,4 @@
-unit EditReportUnit;
+unit uReportEdit;
 
 interface
 
@@ -23,7 +23,7 @@ type
     constructor Create;
   end;
 
-  TEditReportFrm = class(TForm)
+  TReportEditFrm = class(TForm)
     GroupBox1:  TGroupBox;
     ComboBox1:  TComboBox;
     FlowPanel1: TFlowPanel;
@@ -40,7 +40,7 @@ type
   end;
 
 var
-  EditReportFrm: TEditReportFrm;
+  ReportEditFrm: TReportEditFrm;
 
 implementation
 
@@ -49,12 +49,12 @@ uses
 
 {$R *.dfm}
 
-procedure TEditReportFrm.Button1Click(Sender: TObject);
+procedure TReportEditFrm.Button1Click(Sender: TObject);
 begin
   winExec(PChar('frxdesigner.exe ' + Form1.reports_path + RepFiles.cRepFiles[ComboBox1.ItemIndex]), SW_NORMAL);
 end;
 
-procedure TEditReportFrm.Button2Click(Sender: TObject);
+procedure TReportEditFrm.Button2Click(Sender: TObject);
 begin
   Close;
 end;
@@ -75,7 +75,7 @@ begin
   cRepFiles[9] := 'factsale.fr3';
 end;
 
-procedure TEditReportFrm.FormShow(Sender: TObject);
+procedure TReportEditFrm.FormShow(Sender: TObject);
 begin
   RepFiles := TReportFiles.Create;
 end;

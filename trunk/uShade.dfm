@@ -1,0 +1,20 @@
+object ShadeForm: TShadeForm
+  Left = 0
+  Top = 0
+  AlphaBlend = True
+  AlphaBlendValue = 64
+  BorderStyle = bsNone
+  Caption = 'ShadeForm'
+  ClientHeight = 320
+  ClientWidth = 434
+  Color = clGray
+  Enabled = False
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -13
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 120
+  TextHeight = 16
+end

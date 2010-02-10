@@ -1,4 +1,4 @@
-object EditReportFrm: TEditReportFrm
+object ReportEditFrm: TReportEditFrm
   Left = 0
   Top = 0
   BorderStyle = bsToolWindow

@@ -11,6 +11,7 @@ type
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
     Button1: TButton;
+    GroupBox1: TGroupBox;
     procedure FormShow(Sender: TObject);
     procedure Button1Click(Sender: TObject);
   private

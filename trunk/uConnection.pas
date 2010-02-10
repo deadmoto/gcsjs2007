@@ -1,4 +1,4 @@
-unit ConnectUnit;
+unit uConnection;
 
 interface
 
@@ -20,7 +20,7 @@ type
   TConMode = (nNone, mBug);
 
 type
-  TForm45 = class(TForm)
+  TConnectionFrm = class(TForm)
     GroupBox1:  TGroupBox;
     ComboBox1:  TComboBox;
     FlowPanel1: TFlowPanel;
@@ -44,7 +44,7 @@ type
   end;
 
 var
-  Form45: TForm45;
+  ConnectionFrm: TConnectionFrm;
 
 implementation
 
@@ -64,7 +64,7 @@ begin
 end;
 
 
-procedure TForm45.WriteConnSettings(Server: string);
+procedure TConnectionFrm.WriteConnSettings(Server: string);
 begin
   with TRegistry.Create do
     try
@@ -79,7 +79,7 @@ begin
     end;
 end;
 
-procedure TForm45.Button1Click(Sender: TObject);
+procedure TConnectionFrm.Button1Click(Sender: TObject);
 var
   tt: TMyThread;
 begin
@@ -97,7 +97,7 @@ begin
   else
   begin
     WriteConnSettings(ComboBox1.Text);
-
+    Form1.curServer := ComboBox1.Text;
     datamodule1.database1.connected := False;
 
     if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy', '') then
@@ -116,7 +116,7 @@ begin
 end;
 
 
-procedure TForm45.Button2Click(Sender: TObject);
+procedure TConnectionFrm.Button2Click(Sender: TObject);
 begin
   if mode = mBug then
     halt
@@ -124,13 +124,13 @@ begin
     Close;
 end;
 
-procedure TForm45.ComboBox1KeyPress(Sender: TObject; var Key: char);
+procedure TConnectionFrm.ComboBox1KeyPress(Sender: TObject; var Key: char);
 begin
   if key = #13 then
     Button1.Click;
 end;
 
-procedure TForm45.FormShow(Sender: TObject);
+procedure TConnectionFrm.FormShow(Sender: TObject);
 var
   i: integer;
 begin
