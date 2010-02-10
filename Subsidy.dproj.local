@@ -17,5 +17,19 @@
     <Transaction>2009.09.04 11:00:53.896.dfm,D:\subsidy2007\gcsjs2007\Unit36.dfm=D:\subsidy2007\gcsjs2007\AnyDirectoryUnit.dfm</Transaction>
     <Transaction>2009.09.11 10:13:02.460.pas,D:\subsidy2007\gcsjs2007\Unit8.pas=D:\subsidy2007\gcsjs2007\EditReportUnit.pas</Transaction>
     <Transaction>2009.09.11 10:13:02.460.dfm,D:\subsidy2007\gcsjs2007\Unit8.dfm=D:\subsidy2007\gcsjs2007\EditReportUnit.dfm</Transaction>
+    <Transaction>2010.02.03 13:45:27.765.pas,D:\.develop\.delphi\work\subsidy\counters\AddReportDataUnit.pas=D:\.develop\.delphi\work\subsidy\counters\uReportData.pas</Transaction>
+    <Transaction>2010.02.03 13:45:27.765.dfm,D:\.develop\.delphi\work\subsidy\counters\AddReportDataUnit.dfm=D:\.develop\.delphi\work\subsidy\counters\uReportData.dfm</Transaction>
+    <Transaction>2010.02.03 14:05:27.984.pas,D:\.develop\.delphi\work\subsidy\counters\AnyDirectoryUnit.pas=D:\.develop\.delphi\work\subsidy\counters\uGenRefBook.pas</Transaction>
+    <Transaction>2010.02.03 14:05:27.984.dfm,D:\.develop\.delphi\work\subsidy\counters\AnyDirectoryUnit.dfm=D:\.develop\.delphi\work\subsidy\counters\uGenRefBook.dfm</Transaction>
+    <Transaction>2010.02.03 14:11:07.687.pas,D:\.develop\.delphi\work\subsidy\counters\ConfigPropertiesUnit.pas=D:\.develop\.delphi\work\subsidy\counters\uSettings.pas</Transaction>
+    <Transaction>2010.02.03 14:11:07.687.dfm,D:\.develop\.delphi\work\subsidy\counters\ConfigPropertiesUnit.dfm=D:\.develop\.delphi\work\subsidy\counters\uSettings.dfm</Transaction>
+    <Transaction>2010.02.03 14:23:08.359.pas,D:\.develop\.delphi\work\subsidy\counters\ConnectUnit.pas=D:\.develop\.delphi\work\subsidy\counters\uConnection.pas</Transaction>
+    <Transaction>2010.02.03 14:23:08.359.dfm,D:\.develop\.delphi\work\subsidy\counters\ConnectUnit.dfm=D:\.develop\.delphi\work\subsidy\counters\uConnection.dfm</Transaction>
+    <Transaction>2010.02.03 14:28:23.750.pas,D:\.develop\.delphi\work\subsidy\counters\EditReportUnit.pas=D:\.develop\.delphi\work\subsidy\counters\uReportEdit.pas</Transaction>
+    <Transaction>2010.02.03 14:28:23.750.dfm,D:\.develop\.delphi\work\subsidy\counters\EditReportUnit.dfm=D:\.develop\.delphi\work\subsidy\counters\uReportEdit.dfm</Transaction>
+    <Transaction>2010.02.03 14:44:06.062.pas,D:\.develop\.delphi\work\subsidy\counters\config.pas=D:\.develop\.delphi\work\subsidy\counters\uSelectDist.pas</Transaction>
+    <Transaction>2010.02.03 14:44:06.062.dfm,D:\.develop\.delphi\work\subsidy\counters\config.dfm=D:\.develop\.delphi\work\subsidy\counters\uSelectDist.dfm</Transaction>
+    <Transaction>2010.02.03 15:01:06.937.pas,D:\.develop\.delphi\work\subsidy\counters\SlujUnit.pas=D:\.develop\.delphi\work\subsidy\counters\uSluj.pas</Transaction>
+    <Transaction>2010.02.03 15:01:06.937.dfm,D:\.develop\.delphi\work\subsidy\counters\SlujUnit.dfm=D:\.develop\.delphi\work\subsidy\counters\uSluj.dfm</Transaction>
   </Transactions>
 </BorlandProject>

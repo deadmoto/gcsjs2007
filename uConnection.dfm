@@ -1,4 +1,4 @@
-object Form45: TForm45
+object ConnectionFrm: TConnectionFrm
   Left = 0
   Top = 0
   BorderStyle = bsToolWindow

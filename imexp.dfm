@@ -2,9 +2,9 @@ object Form35: TForm35
   Left = 386
   Top = 249
   BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
-  ClientHeight = 253
-  ClientWidth = 424
+  BorderStyle = bsDialog
+  ClientHeight = 241
+  ClientWidth = 421
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -26,7 +26,7 @@ object Form35: TForm35
   end
   object CheckBox7: TCheckBox
     Left = 8
-    Top = 112
+    Top = 98
     Width = 97
     Height = 17
     Caption = #1044#1086#1084#1072
@@ -36,7 +36,7 @@ object Form35: TForm35
   end
   object Button1: TButton
     Left = 8
-    Top = 228
+    Top = 214
     Width = 97
     Height = 21
     TabOrder = 14
@@ -44,7 +44,7 @@ object Form35: TForm35
   end
   object CheckBox8: TCheckBox
     Left = 8
-    Top = 64
+    Top = 50
     Width = 97
     Height = 17
     Caption = #1050#1083#1080#1077#1085#1090#1099
@@ -54,7 +54,7 @@ object Form35: TForm35
   end
   object CheckBox9: TCheckBox
     Left = 8
-    Top = 96
+    Top = 82
     Width = 97
     Height = 17
     Caption = #1057#1077#1084#1100#1080
@@ -64,7 +64,7 @@ object Form35: TForm35
   end
   object CheckBox10: TCheckBox
     Left = 8
-    Top = 128
+    Top = 114
     Width = 97
     Height = 17
     Caption = #1057#1091#1073#1089#1080#1076#1080#1080
@@ -74,7 +74,7 @@ object Form35: TForm35
   end
   object CheckBox11: TCheckBox
     Left = 8
-    Top = 176
+    Top = 162
     Width = 97
     Height = 17
     Caption = #1056#1072#1089#1087#1086#1088#1103#1076#1080#1090#1077#1083#1080
@@ -84,7 +84,7 @@ object Form35: TForm35
   end
   object CheckBox13: TCheckBox
     Left = 8
-    Top = 160
+    Top = 146
     Width = 97
     Height = 17
     Caption = #1048#1085#1089#1087#1077#1082#1090#1086#1088#1072
@@ -93,16 +93,16 @@ object Form35: TForm35
     TabOrder = 10
   end
   object GroupBox1: TGroupBox
-    Left = 136
-    Top = 56
+    Left = 135
+    Top = 50
     Width = 281
-    Height = 193
-    Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+    Height = 185
+    Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080'   '
     Enabled = False
     TabOrder = 13
     object CheckBox3: TCheckBox
-      Left = 16
-      Top = 40
+      Left = 11
+      Top = 34
       Width = 81
       Height = 17
       Caption = #1054#1082#1088#1091#1075#1072
@@ -111,8 +111,8 @@ object Form35: TForm35
       TabOrder = 1
     end
     object CheckBox4: TCheckBox
-      Left = 16
-      Top = 72
+      Left = 11
+      Top = 66
       Width = 121
       Height = 17
       Caption = #1055#1088#1086#1078#1080#1090'. '#1084#1080#1085#1080#1084#1091#1084#1099
@@ -121,8 +121,8 @@ object Form35: TForm35
       TabOrder = 3
     end
     object CheckBox5: TCheckBox
-      Left = 16
-      Top = 24
+      Left = 11
+      Top = 18
       Width = 57
       Height = 17
       Caption = #1041#1072#1085#1082#1080
@@ -131,8 +131,8 @@ object Form35: TForm35
       TabOrder = 0
     end
     object CheckBox12: TCheckBox
-      Left = 16
-      Top = 56
+      Left = 11
+      Top = 50
       Width = 121
       Height = 17
       Caption = #1046#1080#1083'.'#1092#1086#1085#1076#1099
@@ -141,8 +141,8 @@ object Form35: TForm35
       TabOrder = 2
     end
     object CheckBox2: TCheckBox
-      Left = 16
-      Top = 88
+      Left = 11
+      Top = 82
       Width = 121
       Height = 17
       Caption = #1057#1086#1094'. '#1089#1090#1072#1090#1091#1089#1099
@@ -151,8 +151,8 @@ object Form35: TForm35
       TabOrder = 4
     end
     object CheckBox6: TCheckBox
-      Left = 168
-      Top = 24
+      Left = 163
+      Top = 18
       Width = 81
       Height = 17
       Caption = #1046#1080#1083#1100#1077
@@ -161,8 +161,8 @@ object Form35: TForm35
       TabOrder = 10
     end
     object CheckBox14: TCheckBox
-      Left = 168
-      Top = 40
+      Left = 163
+      Top = 34
       Width = 110
       Height = 17
       Caption = #1054#1089#1074#1077#1097#1077#1085#1080#1077' '#1052#1054#1055
@@ -171,8 +171,8 @@ object Form35: TForm35
       TabOrder = 11
     end
     object CheckBox15: TCheckBox
-      Left = 168
-      Top = 56
+      Left = 163
+      Top = 50
       Width = 81
       Height = 17
       Caption = #1061#1086#1083'. '#1074#1086#1076#1072
@@ -181,8 +181,8 @@ object Form35: TForm35
       TabOrder = 12
     end
     object CheckBox17: TCheckBox
-      Left = 168
-      Top = 104
+      Left = 163
+      Top = 98
       Width = 81
       Height = 17
       Caption = #1054#1090#1086#1087#1083#1077#1085#1080#1077
@@ -191,8 +191,8 @@ object Form35: TForm35
       TabOrder = 15
     end
     object CheckBox18: TCheckBox
-      Left = 168
-      Top = 120
+      Left = 163
+      Top = 114
       Width = 81
       Height = 17
       Caption = #1043#1072#1079
@@ -201,8 +201,8 @@ object Form35: TForm35
       TabOrder = 16
     end
     object CheckBox19: TCheckBox
-      Left = 168
-      Top = 136
+      Left = 163
+      Top = 130
       Width = 81
       Height = 17
       Caption = #1069'/'#1101
@@ -211,8 +211,8 @@ object Form35: TForm35
       TabOrder = 17
     end
     object CheckBox20: TCheckBox
-      Left = 168
-      Top = 152
+      Left = 163
+      Top = 146
       Width = 81
       Height = 17
       Caption = #1044#1088#1086#1074#1072
@@ -221,8 +221,8 @@ object Form35: TForm35
       TabOrder = 18
     end
     object CheckBox21: TCheckBox
-      Left = 168
-      Top = 168
+      Left = 163
+      Top = 162
       Width = 81
       Height = 17
       Caption = #1059#1075#1086#1083#1100
@@ -231,8 +231,8 @@ object Form35: TForm35
       TabOrder = 19
     end
     object CheckBox25: TCheckBox
-      Left = 16
-      Top = 104
+      Left = 11
+      Top = 98
       Width = 121
       Height = 17
       Caption = #1057#1086#1094'. '#1085#1086#1088#1084#1099
@@ -241,8 +241,8 @@ object Form35: TForm35
       TabOrder = 5
     end
     object CheckBox26: TCheckBox
-      Left = 16
-      Top = 120
+      Left = 11
+      Top = 114
       Width = 121
       Height = 17
       Caption = #1051#1100#1075#1086#1090#1099
@@ -251,8 +251,8 @@ object Form35: TForm35
       TabOrder = 6
     end
     object CheckBox22: TCheckBox
-      Left = 16
-      Top = 168
+      Left = 11
+      Top = 162
       Width = 121
       Height = 17
       Caption = #1055#1088#1086#1095#1080#1077
@@ -261,28 +261,16 @@ object Form35: TForm35
       TabOrder = 9
     end
     object CheckBox23: TCheckBox
-      Left = 16
-      Top = 136
+      Left = 11
+      Top = 130
       Width = 121
       Height = 17
       Caption = #1056#1077#1075#1080#1086#1085'. '#1089#1090#1072#1085#1076#1072#1088#1090#1099
       TabOrder = 7
     end
-    object Button4: TButton
-      Left = 120
-      Top = 16
-      Width = 25
-      Height = 17
-      Hint = #1042#1099#1073#1088#1072#1090#1100' '#1074#1089#1077' '#1089#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
-      Caption = #1042#1089#1077
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 20
-      OnClick = Button4Click
-    end
     object CheckBox16: TCheckBox
-      Left = 168
-      Top = 72
+      Left = 163
+      Top = 66
       Width = 81
       Height = 17
       Caption = #1043#1086#1088'. '#1074#1086#1076#1072
@@ -291,8 +279,8 @@ object Form35: TForm35
       TabOrder = 13
     end
     object CheckBox27: TCheckBox
-      Left = 168
-      Top = 88
+      Left = 163
+      Top = 82
       Width = 105
       Height = 17
       Caption = #1042#1086#1076#1086#1086#1090#1074#1077#1076#1077#1085#1080#1077
@@ -301,8 +289,8 @@ object Form35: TForm35
       TabOrder = 14
     end
     object CheckBox1: TCheckBox
-      Left = 16
-      Top = 152
+      Left = 11
+      Top = 146
       Width = 97
       Height = 17
       Caption = #1059#1083#1080#1094#1099
@@ -311,7 +299,7 @@ object Form35: TForm35
   end
   object CheckBox24: TCheckBox
     Left = 8
-    Top = 208
+    Top = 194
     Width = 97
     Height = 17
     Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
@@ -359,7 +347,7 @@ object Form35: TForm35
   end
   object CheckBox28: TCheckBox
     Left = 8
-    Top = 144
+    Top = 130
     Width = 97
     Height = 17
     Caption = #1057#1083#1091#1078#1077#1073#1085#1099#1077
@@ -381,7 +369,7 @@ object Form35: TForm35
   end
   object CheckBox30: TCheckBox
     Left = 8
-    Top = 80
+    Top = 66
     Width = 121
     Height = 17
     Caption = #1048#1089#1090#1086#1088#1080#1103' '#1080#1079#1084#1077#1085#1077#1085#1080#1081
@@ -391,12 +379,21 @@ object Form35: TForm35
   end
   object CheckBox31: TCheckBox
     Left = 8
-    Top = 192
+    Top = 178
     Width = 97
     Height = 17
     Caption = #1060'. '#1088#1072#1089#1093#1086#1076#1099
     Checked = True
     State = cbChecked
     TabOrder = 15
+  end
+  object CheckBox32: TCheckBox
+    Left = 216
+    Top = 50
+    Width = 17
+    Height = 17
+    Enabled = False
+    TabOrder = 16
+    OnClick = CheckBox32Click
   end
 end

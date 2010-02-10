@@ -1,4 +1,4 @@
-unit AddReportDataUnit;
+unit uReportData;
 
 interface
 
@@ -20,7 +20,7 @@ type
   TRepFiles = (rSolut, rSolutb, rSolute, rUvedom, rUvedomo);
   TRepList  = set of TRepFiles;
 
-  TAddReportDataFrm = class(TForm)
+  TReportDataFrm = class(TForm)
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     Edit1:     TEdit;
@@ -52,7 +52,7 @@ type
   end;
 
 var
-  AddReportDataFrm: TAddReportDataFrm;
+  ReportDataFrm: TReportDataFrm;
 
 implementation
 
@@ -61,7 +61,7 @@ uses
 
 {$R *.dfm}
 
-procedure TAddReportDataFrm.Button1Click(Sender: TObject);
+procedure TReportDataFrm.Button1Click(Sender: TObject);
 begin
   //  Form1.ARepData:=allocmem(sizeof(PAdditionRepData));
   if (Edit1.Text <> '') then
@@ -87,7 +87,7 @@ begin
   Close;
 end;
 
-procedure TAddReportDataFrm.CheckBox1Click(Sender: TObject);
+procedure TReportDataFrm.CheckBox1Click(Sender: TObject);
 begin
   if CheckBox1.Checked then
   begin
@@ -98,7 +98,7 @@ begin
     GroupBox3.Enabled := True;
 end;
 
-procedure TAddReportDataFrm.FormShow(Sender: TObject);
+procedure TReportDataFrm.FormShow(Sender: TObject);
 
   procedure EnableAll;
   begin

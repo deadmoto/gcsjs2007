@@ -1,4 +1,4 @@
-unit config;
+unit uSelectDist;
 
 interface
 
@@ -7,7 +7,7 @@ uses
   Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls;
 
 type
-  TForm25 = class(TForm)
+  TSelectDistFrm = class(TForm)
     Label3: TLabel;
     ComboBox2: TComboBox;
     Label1: TLabel;
@@ -34,7 +34,7 @@ type
   end;
 
 var
-  Form25: TForm25;
+  SelectDistFrm: TSelectDistFrm;
 
 implementation
 
@@ -42,7 +42,7 @@ uses datamodule, main, service;
 
 {$R *.dfm}
 
-procedure TForm25.Fill;
+procedure TSelectDistFrm.Fill;
 var
   l: integer;
 begin
@@ -93,19 +93,19 @@ begin
   end;
 end;
 
-procedure TForm25.Clear;
+procedure TSelectDistFrm.Clear;
 begin
   Combobox1.Clear;
   Combobox2.Clear;
 end;
 
-procedure TForm25.Button2Click(Sender: TObject);
+procedure TSelectDistFrm.Button2Click(Sender: TObject);
 { выйти }
 begin
   Close;
 end;
 
-procedure TForm25.Button1Click(Sender: TObject);
+procedure TSelectDistFrm.Button1Click(Sender: TObject);
 {войти}
 begin
   if Combobox1.Text <> '' then
@@ -121,7 +121,7 @@ begin
       if not IsEmpty then begin
         Form1.insp := insp[Combobox1.ItemIndex];
         Form1.dist := dist[Combobox2.ItemIndex];
-        Form25.Close;
+        SelectDistFrm.Close;
       end
       else
         ShowMessage('Вход невозможен! Введите другое ФИО!');
@@ -130,13 +130,13 @@ begin
     ShowMessage('Поле ФИО должно быть заполнено!');
 end;
 
-procedure TForm25.FormShow(Sender: TObject);
+procedure TSelectDistFrm.FormShow(Sender: TObject);
 begin
   Clear;
   Fill;
 end;
 
-procedure TForm25.ComboBox1Change(Sender: TObject);
+procedure TSelectDistFrm.ComboBox1Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -149,7 +149,7 @@ begin
   end;
 end;
 
-function TForm25.SearchInsp(s: string): integer;
+function TSelectDistFrm.SearchInsp(s: string): integer;
 var
   i: integer;
 begin
@@ -163,7 +163,7 @@ begin
     Result := -1;
 end;
 
-function TForm25.SelInsp(n: integer): string;
+function TSelectDistFrm.SelInsp(n: integer): string;
 begin
   with Datamodule1.Query1 do begin
     Close;
@@ -179,7 +179,7 @@ begin
   end;
 end;
 
-procedure TForm25.ComboBox2Change(Sender: TObject);
+procedure TSelectDistFrm.ComboBox2Change(Sender: TObject);
 var
   l: integer;
 begin

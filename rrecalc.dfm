@@ -2,9 +2,10 @@ object Form43: TForm43
   Left = 181
   Top = 188
   BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsDialog
   Caption = #1042#1099#1073#1086#1088' '#1087#1088#1080#1095#1080#1085#1099' '#1087#1077#1088#1077#1088#1072#1089#1095#1077#1090#1072
-  ClientHeight = 194
-  ClientWidth = 290
+  ClientHeight = 179
+  ClientWidth = 292
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,10 +18,13 @@ object Form43: TForm43
   PixelsPerInch = 96
   TextHeight = 13
   object GroupBox1: TGroupBox
-    Left = 8
-    Top = 8
-    Width = 273
+    AlignWithMargins = True
+    Left = 3
+    Top = 3
+    Width = 286
     Height = 145
+    Margins.Bottom = 0
+    Align = alTop
     Caption = #1055#1088#1080#1095#1080#1085#1072' '#1087#1077#1088#1077#1088#1072#1089#1095#1077#1090#1072' '#1074' '#1080#1079#1084#1077#1085#1077#1085#1080#1080
     TabOrder = 0
     object CheckBox1: TCheckBox
@@ -65,19 +69,14 @@ object Form43: TForm43
     end
   end
   object Button1: TButton
-    Left = 104
-    Top = 160
-    Width = 89
+    AlignWithMargins = True
+    Left = 3
+    Top = 151
+    Width = 286
     Height = 25
+    Align = alTop
     Caption = #1055#1086#1076#1090#1074#1077#1088#1076#1080#1090#1100
     TabOrder = 1
     OnClick = Button1Click
-  end
-  object ExcelApplication1: TExcelApplication
-    AutoConnect = False
-    ConnectKind = ckRunningOrNew
-    AutoQuit = False
-    Left = 32
-    Top = 152
   end
 end

@@ -1,4 +1,4 @@
-unit ConfigPropertiesUnit;
+unit uSettings;
 
 interface
 
@@ -30,7 +30,7 @@ type
     constructor Create;
   end;
 
-  TConfigFrm = class(TForm)
+  TSettingsFrm = class(TForm)
     Panel1:     TPanel;
     Panel2:     TPanel;
     ListBox1:   TListBox;
@@ -55,23 +55,21 @@ type
   end;
 
 var
-  ConfigFrm: TConfigFrm;
+  SettingsFrm: TSettingsFrm;
 
 implementation
 
 uses
-  fAppPropUnit,
-  fAppUpdateUnit,
-  service;
+  fAppProp, fAppUpdate, service;
 
 {$R *.dfm}
 
-procedure TConfigFrm.Button1Click(Sender: TObject);
+procedure TSettingsFrm.Button1Click(Sender: TObject);
 begin
   Close;
 end;
 
-procedure TConfigFrm.Button2Click(Sender: TObject);
+procedure TSettingsFrm.Button2Click(Sender: TObject);
 var
   i: integer;
   ProxyI: IIniOperations;
@@ -109,13 +107,13 @@ begin
   end;
 end;
 
-procedure TConfigFrm.Button3Click(Sender: TObject);
+procedure TSettingsFrm.Button3Click(Sender: TObject);
 begin
   Button2.Click;
   Button1.Click;
 end;
 
-function TConfigFrm.CheckChanges: boolean;
+function TSettingsFrm.CheckChanges: boolean;
 var
   i: integer;
 begin
@@ -141,12 +139,12 @@ begin
   end
 end;
 
-procedure TConfigFrm.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TSettingsFrm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   regConf.Free;
 end;
 
-procedure TConfigFrm.FormShow(Sender: TObject);
+procedure TSettingsFrm.FormShow(Sender: TObject);
 var
   list: TStringList;
   i: integer;
@@ -174,7 +172,7 @@ begin
   list.Free;
 end;
 
-procedure TConfigFrm.ListBox1Click(Sender: TObject);
+procedure TSettingsFrm.ListBox1Click(Sender: TObject);
 var
   i: integer;
   ProxyI: IIniOperations;
@@ -186,7 +184,7 @@ begin
       begin
         if Assigned(confFrame) then
           FreeAndNil(confFrame);
-        confFrame := TfAppProp.Create(ConfigFrm);
+        confFrame := TfAppProp.Create(SettingsFrm);
         confFrame.Parent := Panel2;
         confFrame.Align := alClient;
         confFrame.Visible := True;
@@ -205,7 +203,7 @@ begin
       begin
         if Assigned(confFrame) then
           FreeAndNil(confFrame);
-        confFrame := TfAppUpdate.Create(ConfigFrm);
+        confFrame := TfAppUpdate.Create(SettingsFrm);
         confFrame.Parent := Panel2;
         confFrame.Align := alClient;
         confFrame.Visible := True;
