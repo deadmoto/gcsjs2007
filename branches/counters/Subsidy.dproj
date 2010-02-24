@@ -46,6 +46,27 @@
       
       
       
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       <Excluded_Packages Name="$(BDS)\bin\dcltee7100.bpl">TeeChart Components</Excluded_Packages>
       <Excluded_Packages Name="$(BDS)\Bin\dclIndyCore100.bpl">Indy 10 Core Design Time</Excluded_Packages>
       <Excluded_Packages Name="$(BDS)\Bin\dclIndyProtocols100.bpl">Indy 10 Protocols Design Time</Excluded_Packages>
@@ -91,25 +112,17 @@
     <DCCReference Include="curhist.pas">
       <Form>Form18</Form>
     </DCCReference>
-    <DCCReference Include="d" />
-    <DCCReference Include="da" />
-    <DCCReference Include="dat" />
     <DCCReference Include="data" />
     <DCCReference Include="datamodule.pas">
       <Form>DataModule1</Form>
       <DesignClass>TDataModule</DesignClass>
     </DCCReference>
-    <DCCReference Include="data\" />
     <DCCReference Include="data\dbf.pas" />
     <DCCReference Include="data\min.pas" />
     <DCCReference Include="data\ODBC_DSN.pas" />
-    <DCCReference Include="data\padegFIO" />
-    <DCCReference Include="data\padegFIO.p" />
-    <DCCReference Include="data\padegFIO.pa" />
     <DCCReference Include="data\padegFIO.pas" />
     <DCCReference Include="data\SevenZipVCL.pas" />
     <DCCReference Include="data\srvinfo.pas" />
-    <DCCReference Include="data]" />
     <DCCReference Include="district.pas">
       <Form>Form4</Form>
     </DCCReference>
