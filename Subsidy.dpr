@@ -82,7 +82,7 @@ begin
         Application.CreateForm(TAboutBox1, AboutBox1);
         Application.CreateForm(TForm29, Form29);
         Application.CreateForm(TForm38, Form38);
-        Application.CreateForm(TForm15, Form15);
+//        Application.CreateForm(TForm15, Form15);
         Application.CreateForm(TForm16, Form16);
         Application.CreateForm(TForm17, Form17);
         Application.CreateForm(TForm18, Form18);
@@ -121,7 +121,7 @@ begin
         Application.CreateForm(TSlujFrm, SlujFrm);
         Application.CreateForm(TConnectionFrm, ConnectionFrm);
         Application.CreateForm(TSettingsFrm, SettingsFrm);
-        Application.CreateForm(TReportDataFrm, ReportDataFrm);
+//        Application.CreateForm(TReportDataFrm, ReportDataFrm);
         Application.CreateForm(TGenRefBookFrm, GenRefBookFrm);
         Application.Run;
       except
@@ -137,5 +137,8 @@ begin
       '2.Состояние ODBC-соединения SQLSub с сервером: возможно оно отстутствует или неверно настроено;' + #13 +
       '3.Состояние базы данных Subsidy: возможно файлы базы данных отсутствуют;' + #13 +
       '4.Состояние сети(в случае сетевого соединения): возможно нет сетевого доступа к серверу.');
+    Application.CreateForm(TConnectionFrm, ConnectionFrm);
+    ConnectionFrm.mode := mBug;
+    Application.Run;
   end;
 end.

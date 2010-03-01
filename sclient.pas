@@ -3,23 +3,8 @@ unit sclient;
 interface
 
 uses
-  Buttons,
-  Classes,
-  client,
-  ComCtrls,
-  contnrs,
-  Controls,
-  Dialogs,
-  ExtCtrls,
-  Forms,
-  Graphics,
-  Grids,
-  Mask,
-  Menus,
-  Messages,
-  StdCtrls,
-  SysUtils,
-  Variants,
+  Buttons, Classes, client, ComCtrls, contnrs, Controls, Dialogs, ExtCtrls,
+  Forms, Graphics, Grids, Mask, Menus, Messages, StdCtrls, SysUtils, Variants,
   Windows;
 
 type
