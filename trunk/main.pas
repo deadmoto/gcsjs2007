@@ -13,6 +13,7 @@ type
 
   TAdditionRepData = packed record
     Num1, Num2, toNum, soluteNum, zipCode, spec2, StartDate, sumBeg: string;
+    basetext: WideString;
     insp: boolean;
     procedure Clear();
   end;
@@ -1485,6 +1486,7 @@ begin
         Open;
       end;
 
+      ReportDataFrm := TReportDataFrm.Create(Application);
       ReportDataFrm.RepType := rUvedomo;
       ReportsFillAdditionData(Datamodule1.Query1.FieldByName('nameinsp').AsString);
       ReportsFillDistInfo();
@@ -1760,6 +1762,7 @@ begin
 //  frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldByName('nameinsp').AsString);
   frxReport1.Script.Variables['id_dist'] := (Datamodule1.Query1.FieldByName('id_dist').AsInteger);
 
+  ReportDataFrm := TReportDataFrm.Create(Application);
   ReportDataFrm.RepType := rSolut;
   ReportsFillAdditionData(Datamodule1.Query1.FieldByName('nameinsp').AsString);
   ReportsFillDistInfo();
@@ -1803,6 +1806,7 @@ begin
   frxReport1.Variables.Variables['boss'] := quotedstr(Datamodule1.Query1.FieldValues['boss']);
   frxReport1.Variables.Variables['id_dist'] := Datamodule1.Query1.FieldByName('id_dist').AsInteger;
 
+  ReportDataFrm := TReportDataFrm.Create(Application);
   ReportDataFrm.RepType := rSolutb;
   ReportsFillAdditionData(Datamodule1.Query1.FieldValues['nameinsp']);
   frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldByName('nameinsp').AsString);
@@ -1859,6 +1863,7 @@ begin
   s2 := copy(s4, i + 1, 1);
   frxReport1.Variables.Variables['fio_r'] := quotedstr(s3 + ' ' + s1 + '. ' + s2 + '.');
 
+  ReportDataFrm := TReportDataFrm.Create(Application);
   ReportDataFrm.RepType := rSolute;
   ReportsFillAdditionData(Datamodule1.Query1.FieldValues['nameinsp']);
   ReportsFillDistInfo();
@@ -3569,7 +3574,7 @@ begin
   ClearSG;
 {  for i := 0 to MainMenu1.Items.Count - 1 do
     MainMenu1.Items.Items[i].Enabled := False;}
-  Form1.ActionToolBar1.Enabled := False;
+  Form1{.ActionToolBar1}.Enabled := False;
   pr := TAboutBox1.Create(Application);
   pr.Label1.Caption := 'Загрузка базы данных';
   pr.Label2.Caption := 'Загружено записей:';
@@ -3644,7 +3649,7 @@ begin
   pr.Release;
 {  for i := 0 to MainMenu1.Items.Count - 1 do
     MainMenu1.Items.Items[i].Enabled := True;}
-  Form1.ActionToolBar1.Enabled := True;
+  Form1{.ActionToolBar1}.Enabled := True;
   ccl := c;
   acl := ACount;
   Edit1.Text := IntToStr(ccl);
@@ -3675,6 +3680,7 @@ begin
   ARepData.Clear;
   if getConfValue('0.ShowAddReportData') = True then
     ReportDataFrm.ShowModal;
+    ReportDataFrm.Free;
 
   with frxReport1 do
   begin
@@ -3685,6 +3691,7 @@ begin
     Variables['zipCode'] := quotedstr(ARepData.zipCode);
     Variables['StartDate'] := quotedstr(ARepData.StartDate);
     Variables['sumBeg'] := quotedstr(ARepData.sumBeg);
+    Variables['basetext'] := quotedstr(ARepData.basetext);
 //    Variables['spec'] := quotedstr(ARepData.spec);
     if ARepData.insp then
       Variables['spec2'] := quotedstr(nameInsp)
@@ -3731,7 +3738,7 @@ begin
   ClearSG;
 {  for i := 0 to MainMenu1.Items.Count - 1 do
     MainMenu1.Items.Items[i].Enabled := False;}
-  Form1.ActionToolBar1.Enabled := False;
+  Form1.{ActionToolBar1.}Enabled := False;
   pr := TAboutBox1.Create(Application);
   pr.Label1.Caption := 'Загрузка результатов поиска';
   pr.Label2.Caption := 'Загружено записей:';
@@ -3824,7 +3831,7 @@ begin
   pr.Release;
 {  for i := 0 to MainMenu1.Items.Count - 1 do
     MainMenu1.Items.Items[i].Enabled := True;}
-  Form1.ActionToolBar1.Enabled := True;
+  Form1.{ActionToolBar1.}Enabled := True;
   Edit3.Text := IntToStr(c);
   if c > 0 then
   begin
@@ -4440,6 +4447,7 @@ begin
   StartDate := '01.___.20___';
   spec2 := '';
   sumBeg := '_______';
+  basetext := '';
   insp :=  False;
 end;
 

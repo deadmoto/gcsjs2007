@@ -87,11 +87,12 @@ procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidt
 
 //Процеду отрисовки TStringGrig, разбивает текст в ячейк на несколько строк
 procedure SGDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
+//Размещаем содержимое компонента в области прямоугольника ячейки
+procedure FixObjPosn(SG:TStringGrid; vCol, vRow: LongInt);
+//Процеду отрисовки TComboBox, разбивает текст в items на несколько строк
+//procedure CBMeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
+//procedure CBDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
 
-{//Процеду отрисовки TComboBox, разбивает текст в items на несколько строк
-procedure CBMeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
-procedure CBDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
-}
 procedure LoadJPEGFromRes(TheJPEG : string; ThePicture : TPicture);
 
 implementation
@@ -946,57 +947,13 @@ begin
   str := tmpStr;
 end;
 
-
 procedure SGDrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
 var
-  {i,pos}H: integer;
+  H: integer;
   buffer: string;
-//  dict: array of string;
 begin
   with (Sender as TStrinGgrid) do
- {   if (ARow > 0) and (Canvas.TextWidth(Cells[ACol, ARow]) > ColWidths[ACol]) then
-    begin
-      setlength(dict,1);
-      for i := 1 to length(Cells[ACol, ARow]) do
-      begin
-        dict[high(dict)] := dict[high(dict)] + Cells[ACol, ARow][i];
-        if Cells[ACol, ARow][i] = ' ' then
-          setlength(dict, length(dict) + 1);
-      end;
-      pos := 0;
-      for i := 0 to length(dict) - 1 do
-        if canvas.textwidth(buffer + dict[i]) > (ColWidths[ACol]) then
-        begin
-          buffer := dict[i];
-          inc(pos);
-        end
-        else
-          buffer := buffer + dict[i];
-      if length(buffer) > 0 then
-      begin
-        buffer := '';
-        inc(pos);
-      end;
-
-      rowheights[arow] := defaultrowheight * (pos);
-      Canvas.Pen.color := Color;
-//      Canvas.Brush.color:= Color;
-      Canvas.Rectangle(rect.left, rect.top, rect.right, rect.bottom);
-      pos := 0;
-      for i := 0 to length(dict) - 1 do
-        if Canvas.textwidth(buffer + dict[i]) > (colwidths[acol]) then
-        begin
-          Canvas.textout(rect.left, rect.top + 2 + pos * Canvas.TextHeight(buffer), buffer);
-          buffer := dict[i];
-          inc(pos);
-        end
-        else
-          buffer := buffer + dict[i];
-      if length(buffer) > 0 then
-        Canvas.TextOut(rect.left, rect.top + 2 + pos * Canvas.TextHeight(buffer), buffer);
-    end;
-    }
   if (ARow > 0) and (Canvas.TextWidth(Cells[ACol, ARow]) > ColWidths[ACol]) then
     begin
       (Sender as TStrinGgrid).Canvas.FillRect(Rect);
@@ -1009,8 +966,27 @@ begin
         (Sender as TStrinGgrid).RowHeights[ARow] := H;
     end;
 end;
-{
-procedure CBMeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
+
+procedure FixObjPosn(SG:TStringGrid; vCol, vRow: LongInt);
+var
+  R: TRect;
+begin
+  R := SG.CellRect(vCol, vRow);
+  if SG.Objects[vCol, vRow] is TControl then
+    with TControl(SG.Objects[vCol, vRow]) do
+      if R.Right = R.Left then {прямоугольник ячейки невидим}
+        Visible := False
+      else
+      begin
+        InflateRect(R, 0, 0);//-1
+        OffsetRect(R, SG.Left + 0, SG.Top + 0);//+1
+        BoundsRect := R;
+        Visible := True;
+      end;
+end;
+
+
+{procedure CBMeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
 var
   ItemString: string;
   MyRect: TRect;
@@ -1044,8 +1020,8 @@ begin
   TComboBox(Control).Canvas.FillRect(Rect);
   ItemString := TComboBox(Control).Items.Strings[Index];
   DrawText(TComboBox(Control).Canvas.Handle, PChar(ItemString), length(ItemString), Rect, DT_WORDBREAK);
-end;
-}
+end;}
+
 
 procedure LoadJPEGFromRes(TheJPEG : string; ThePicture : TPicture);
 var
