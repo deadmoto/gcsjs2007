@@ -71,7 +71,7 @@ var
 
 procedure TForm18.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  Datamodule1.Query1.Close;
+  DModule.Query1.Close;
 end;
 
 procedure TForm18.ModSub(n: integer; s: real);
@@ -115,7 +115,7 @@ var
   sum: real;
 begin
   Clear;
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;

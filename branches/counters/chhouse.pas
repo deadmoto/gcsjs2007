@@ -130,7 +130,7 @@ var
   s:  string;
   pl: integer;
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     SetLength(h, Length(h) + 1);
     Close;
@@ -159,7 +159,7 @@ var
   i, pl: integer;
   s: string;
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -246,7 +246,7 @@ var
   s: string;
 begin
   SetLength(h, 0);
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;

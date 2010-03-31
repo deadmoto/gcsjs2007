@@ -13,6 +13,7 @@ type
   procedure ExportHist(path,dt: string;dis: integer);
   procedure ExportFam(path,dt: string;dis: integer);
   procedure ExportSub(path,dt: string;dis: integer);
+  procedure ExportCounters(path,dt: string;dis: integer);
   procedure ExportSluj(path,dt: string;dis: integer);
   procedure ExportMin(path,dt: string);
   procedure ExportHouse(path: string;dis: integer);
@@ -27,13 +28,14 @@ type
 
   procedure ImportInsp(path: string;dis: integer);
   procedure ImportBank(path: string);
-  procedure ImportTarif(path,t: string;dis: integer);
+  procedure ImportTarif(path,t: string;dis: integer;norm:boolean = False);
   procedure ImportTarifb(path,t: string;dis: integer);
   procedure ImportEl(path: string;dis: integer);
   procedure ImportCl(path: string;dis: integer);
   procedure ImportHist(path: string;dis: integer);
   procedure ImportFam(path: string;dis: integer);
   procedure ImportSub(path: string;dis: integer);
+  procedure ImportCounters(path: string;dis: integer);
   procedure ImportSluj(path: string;dis: integer);
   procedure ImportMin(path: string);
   procedure ImportStat(path: string);
@@ -59,7 +61,7 @@ uses datamodule, sysutils, DBTables, DB,dateutils,dialogs, main,dbf;
 procedure ExportCl(path,dt: string;dis: integer);
 { процедура экспорта клиентов }
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM cl');
@@ -80,7 +82,7 @@ end;
 procedure ExportHist(path,dt: string;dis: integer);
 { процедура экспорта истории изменения клиентов }
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM hist');
@@ -99,7 +101,7 @@ end;
 procedure ExportFam(path,dt: string;dis: integer);
 { процедура экспорта  семей }
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM fam');
@@ -123,7 +125,7 @@ var
   d: TDate;
 begin
   d := StrToDate(dt);
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM cl');
@@ -145,7 +147,7 @@ var
   d: TDate;
 begin
   d := StrToDate(dt);
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM hist');
@@ -171,7 +173,7 @@ var
   d: TDate;
 begin
   d := StrToDate(dt);
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM fam');
@@ -191,7 +193,8 @@ end;
 procedure ExportSub(path,dt: string;dis: integer);
 { процедура экспорта субсидий }
 begin
-  With DataModule1.Query1 do begin
+  with DModule.Query1 do
+  begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT sub.* FROM sub inner join cl on sub.regn=cl.regn');
@@ -206,10 +209,29 @@ begin
   end;
 end;
 
+procedure ExportCounters(path,dt: string;dis: integer);
+{ процедура экспорта счетчиков }
+begin
+  with DModule.Query1 do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('SELECT counters.* FROM counters inner join cl on counters.regn=cl.regn');
+    SQL.Add('WHERE (cl.id_dist = :dist)');
+    if dt<>'' then begin
+      SQL.Add('and(counters.sdate = convert(smalldatetime,:d,104))');
+      ParamByName('d').AsString := dt;
+    end;
+    ParamByName('dist').AsInteger := dis;
+    Open;
+    FillTable(path,'counters'+IntToStr(dis),Form1.codedbf);
+  end;
+end;
+
 procedure ExportSluj(path,dt: string;dis: integer);
 { процедура экспорта служебных }
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT sluj.* FROM sluj inner join cl on sluj.regn=cl.regn');
@@ -227,7 +249,7 @@ end;
 procedure ExportTarif(path,dt,t: string;dis: integer);
 { Процедура экспорта тарифов без бойлера }
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM '+t);
@@ -245,7 +267,7 @@ end;
 procedure ExportRStnd(path,dt: string);
 { процедура экспорта региональных стандартов }
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM rstnd');
@@ -261,7 +283,7 @@ end;
 procedure ExportMin(path,dt: string);
 { процедура экспорта прожиточных минимумов }
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM lmin');
@@ -277,7 +299,7 @@ end;
 procedure ExportInsp(path: string;dis: integer;all:boolean);
 { процедура экспорта инспекторов }
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM insp');
@@ -293,7 +315,7 @@ end;
 procedure ExportHouse(path: string;dis: integer);
 { процедура экспорта домов }
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM house');
@@ -307,7 +329,7 @@ end;
 procedure ExportMng(path: string;dis: integer);
 { процедура экспорта распорядителей }
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM mng');
@@ -321,7 +343,7 @@ end;
 procedure ExportStr(path: string);
 { процедура экспорта улиц }
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM strt');
@@ -336,7 +358,7 @@ procedure ExportDiff(path,t: string);
   norm,priv,dist,fond,stat,bank
 }
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM '+t);
@@ -348,7 +370,7 @@ end;
 procedure ExportFact(path: string;dis: integer);
 { процедура экспорта фактических расходов }
 begin
-  with DataModule1.Query1 do begin
+  with DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM FactSale');
@@ -358,7 +380,7 @@ begin
     FillTable(path, 'factsale'+IntToStr(dis), Form1.codedbf);
   end;
   //-------
-  with DataModule1.Query1 do begin
+  with DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('SELECT * FROM FactBalance');
@@ -370,21 +392,24 @@ begin
 
 end;
 
-procedure ImportTarif(path,t:string;dis: integer);
+procedure ImportTarif(path,t:string;dis: integer;norm: boolean);
 { процедура импорта тарифов без бойлера }
 var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO '+t);
-    SQL.Add('VALUES (:idd,convert(smalldatetime,:d,104),:id,:name,:tarif)');
+    if norm then
+      SQL.Add('VALUES (:idd,convert(smalldatetime,:d,104),:id,:name,:tarif,:norm)')
+    else
+      SQL.Add('VALUES (:idd,convert(smalldatetime,:d,104),:id,:name,:tarif)');
   end;
   if FileExists(path+t+IntToStr(dis)+'.dbf') then begin
     GetData(path+t+IntToStr(dis)+'.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -399,6 +424,8 @@ begin
         Query1.ParamByName('id').AsString := f[i][2];
         Query1.ParamByName('name').AsString := f[i][3];
         Query1.ParamByName('tarif').AsFloat := StrToFloat(f[i][4]);
+        if norm then
+          Query1.ParamByName('norm').AsFloat := StrToFloat(f[i][5]);
         Query1.ExecSQL;
       end;
       Query1.Close;
@@ -415,15 +442,15 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO '+t);
-    SQL.Add('VALUES (:idd,convert(smalldatetime,:d,104),:id,:name,:tarif1,:tarif2)');
+    SQL.Add('VALUES (:idd,convert(smalldatetime,:d,104),:id,:name,:tarif1,:tarif2,:norm)');
   end;
   if FileExists(path+t+IntToStr(dis)+'.dbf') then begin
     GetData(path+t+IntToStr(dis)+'.dbf',f);
-     With DataModule1 do begin
+     With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -439,6 +466,7 @@ begin
         Query1.ParamByName('name').AsString := f[i][3];
         Query1.ParamByName('tarif1').AsFloat := StrToFloat(f[i][4]);
         Query1.ParamByName('tarif2').AsFloat := StrToFloat(f[i][5]);
+        Query1.ParamByName('norm').AsFloat := StrToFloat(f[i][6]);
         Query1.ExecSQL;
       end;
       Query1.Close;
@@ -455,7 +483,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO el');
@@ -463,7 +491,7 @@ begin
   end;
   if FileExists(path+'el'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'el'+IntToStr(dis)+'.dbf',f);
-     With DataModule1 do begin
+     With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -496,7 +524,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -506,7 +534,7 @@ begin
   if FileExists(path+'factsale'+IntToStr(dis)+'.dbf') then
   begin
     GetData(path+'factsale'+IntToStr(dis)+'.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -533,7 +561,7 @@ begin
   else
     ShowMessage('Файл '+path+'factsale'+IntToStr(dis)+'.dbf не найден!');
   //------
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -543,7 +571,7 @@ begin
   if FileExists(path+'factbalance'+IntToStr(dis)+'.dbf') then
   begin
     GetData(path+'factbalance'+IntToStr(dis)+'.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -579,7 +607,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO rstnd');
@@ -587,7 +615,7 @@ begin
   end;
   if FileExists(path+'rstnd.dbf') then begin
     GetData(path+'rstnd.dbf',f);
-     With DataModule1 do begin
+     With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -622,7 +650,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO lmin');
@@ -630,7 +658,7 @@ begin
   end;
   if FileExists(path+'lmin.dbf') then begin
     GetData(path+'lmin.dbf',f);
-     With DataModule1 do begin
+     With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -659,7 +687,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  with Datamodule1.Query1 do begin
+  with DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO cl');
@@ -669,7 +697,7 @@ begin
   end;
   if FileExists(path+'cl'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'cl'+IntToStr(dis)+'.dbf',f);
-     With DataModule1 do begin
+     With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -710,7 +738,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  with Datamodule1.Query1 do begin
+  with DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO hist');
@@ -721,7 +749,7 @@ begin
   end;
   if FileExists(path+'hist'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'hist'+IntToStr(dis)+'.dbf',f);
-     With DataModule1 do begin
+     With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -768,7 +796,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO fam');
@@ -779,7 +807,7 @@ begin
 
   if FileExists(path+'fam'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'fam'+IntToStr(dis)+'.dbf',f);
-     With DataModule1 do begin
+     With DModule do begin
       for i:=0 to high(f) do begin
         f[i][1] := IntToStr(Trunc(StrToFloat(f[i][1])));
         f[i][0] := IntToStr(Trunc(StrToFloat(f[i][0])));
@@ -827,7 +855,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  with Datamodule1.Query1 do begin
+  with DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO sub');
@@ -835,7 +863,7 @@ begin
   end;
   if FileExists(path+'sub'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'sub'+IntToStr(dis)+'.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -866,13 +894,55 @@ begin
     ShowMessage('Файл '+path+'sub'+IntToStr(dis)+'.dbf не найден!');
 end;
 
+procedure ImportCounters(path: string;dis: integer);
+{ процедура импорта счетчиков }
+var
+  f: T2DString;
+  i: integer;
+begin
+  with DModule.Query1 do begin
+    Close;
+    SQL.Clear;
+    SQL.Add('INSERT INTO Counters');
+    SQL.Add('VALUES (CONVERT(smalldatetime,:d,104),:id,:serv,:count,:countdata)');
+  end;
+  if FileExists(path+'counters'+IntToStr(dis)+'.dbf') then begin
+    GetData(path+'counters'+IntToStr(dis)+'.dbf',f);
+    With DModule do
+    begin
+      for i:=0 to high(f) do
+      begin
+        Query2.Close;
+        Query2.SQL.Clear;
+        Query2.SQL.Add('DELETE FROM Counters');
+        Query2.SQL.Add('WHERE (regn =:id)and(sdate=convert(smalldatetime,:d,104))');
+        Query2.SQL.Add('and(service=:serv)');
+        Query2.ParamByName('id').AsString := f[i][1];
+        Query2.ParamByName('d').AsString := f[i][0];
+        Query2.ParamByName('serv').AsString := f[i][2];
+        Query2.ExecSQL;
+        Query1.ParamByName('d').AsString := f[i][0];
+        Query1.ParamByName('id').AsString := f[i][1];
+        Query1.ParamByName('serv').AsString := f[i][2];
+        Query1.ParamByName('count').AsString := f[i][3];
+        Query1.ParamByName('countdata').AsString := f[i][4];
+        Query1.ExecSQL;
+      end;
+      Query1.Close;
+      Query2.Close;
+    end;
+  end
+  else
+    ShowMessage('Файл '+path+'counters'+IntToStr(dis)+'.dbf не найден!');
+end;
+
 procedure ImportSluj(path: string;dis: integer);
 { процедура импорта служебных }
 var
   f: T2DString;
   i: integer;
 begin
-  with Datamodule1.Query1 do begin
+  with DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO sluj');
@@ -880,7 +950,7 @@ begin
   end;
   if FileExists(path+'sluj'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'sluj'+IntToStr(dis)+'.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -914,7 +984,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO insp');
@@ -922,7 +992,7 @@ begin
   end;
   if FileExists(path+'insp'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'insp'+IntToStr(dis)+'.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -952,7 +1022,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO mng');
@@ -960,7 +1030,7 @@ begin
   end;
   if FileExists(path+'mng'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'mng'+IntToStr(dis)+'.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -988,7 +1058,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO house');
@@ -998,7 +1068,7 @@ begin
   end;
   if FileExists(path+'house'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'house'+IntToStr(dis)+'.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -1042,7 +1112,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO dist');
@@ -1050,7 +1120,7 @@ begin
   end;
   if FileExists(path+'dist.dbf') then begin
     GetData(path+'dist.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -1079,7 +1149,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO '+t);
@@ -1087,7 +1157,7 @@ begin
   end;
   if FileExists(path+t+'.dbf') then begin
     GetData(path+t+'.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -1113,7 +1183,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO charge');
@@ -1121,7 +1191,7 @@ begin
   end;
   if FileExists(path+'charge.dbf') then begin
     GetData(path+'charge.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -1147,7 +1217,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO norm');
@@ -1155,7 +1225,7 @@ begin
   end;
   if FileExists(path+'norm.dbf') then begin
     GetData(path+'norm.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -1185,7 +1255,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO priv');
@@ -1195,7 +1265,7 @@ begin
   end;
   if FileExists(path+'priv.dbf') then begin
     GetData(path+'priv.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -1243,7 +1313,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO fond');
@@ -1251,7 +1321,7 @@ begin
   end;
   if FileExists(path+'fond.dbf') then begin
     GetData(path+'fond.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -1277,7 +1347,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO strt');
@@ -1285,7 +1355,7 @@ begin
   end;
   if FileExists(path+'strt.dbf') then begin
     GetData(path+'strt.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -1312,7 +1382,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO stat');
@@ -1320,7 +1390,7 @@ begin
   end;
   if FileExists(path+'stat.dbf') then begin
     GetData(path+'stat.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -1347,7 +1417,7 @@ var
   f: T2DString;
   i: integer;
 begin
-  With DataModule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO bank');
@@ -1355,7 +1425,7 @@ begin
   end;
   if FileExists(path+'bank.dbf') then begin
     GetData(path+'bank.dbf',f);
-    With DataModule1 do begin
+    With DModule do begin
       for i:=0 to high(f) do begin
         Query2.Close;
         Query2.SQL.Clear;
@@ -1394,7 +1464,7 @@ var
   i,j: integer;
 begin
   try
-    with DataModule1 do
+    with DModule do
     begin
       if DBF1.Active then
         DBF1.Close;

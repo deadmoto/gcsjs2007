@@ -562,7 +562,10 @@ var IField: PField;
 begin
   if (FieldNo<1) or (FieldNo>FNumFields) then
     raise ED.Create('GetFieldPrecision: Неверный номер поля: '+IntToStr(FieldNo)) else
-  begin IField:=FieldList.Items[FieldNo-1]; Result:=IField^.FieldPrecision; end;
+  begin
+    IField:=FieldList.Items[FieldNo-1];
+    Result:=IField^.FieldPrecision;
+  end;
 end;
 
 {*** Возвращает размер (в байтах) поля с номером FieldNo ***}

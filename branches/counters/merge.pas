@@ -139,7 +139,7 @@ begin
 
     sleep(1000);
     try
-      Datamodule1.Database1.StartTransaction;
+      DModule.Database1.StartTransaction;
       ImportInsp(path, Form1.dist);
       ProgressBar1.StepIt;
       ImportCl(path, Form1.dist);
@@ -155,12 +155,12 @@ begin
       ImportSluj(path, Form1.dist);
       ProgressBar1.StepIt;
       ImportFact(path, Form1.dist);
-      Datamodule1.Database1.Commit;
+      DModule.Database1.Commit;
       ProgressBar1.StepIt;
       ShowMessage('Импорт найденных файлов успешно завершен!');
       Form1.Reload;
     except
-      Datamodule1.Database1.Rollback;
+      DModule.Database1.Rollback;
       ShowMessage('Ошибка импорта!');
     end;
   finally

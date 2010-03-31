@@ -45,7 +45,7 @@ object SelectDistFrm: TSelectDistFrm
       Top = 21
       Width = 173
       Height = 21
-      ItemHeight = 0
+      ItemHeight = 13
       TabOrder = 0
       OnChange = ComboBox2Change
       OnExit = ComboBox2Change
@@ -55,7 +55,7 @@ object SelectDistFrm: TSelectDistFrm
       Top = 61
       Width = 173
       Height = 21
-      ItemHeight = 0
+      ItemHeight = 13
       TabOrder = 1
       OnChange = ComboBox1Change
       OnExit = ComboBox1Change

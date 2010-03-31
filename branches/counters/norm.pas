@@ -74,7 +74,7 @@ procedure TForm27.SetDefault;
 var
   i: integer;
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -86,17 +86,17 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Человек в семье', 'Норма пл.', 'Норма пл. для п/и', 'Норма тепла', 'Норма пл. для лгтн.'),
-    TIntArray.Create(25, 96, 60, 105, 75, 105), Datamodule1.Query1.RecordCount + 1);
+    TIntArray.Create(25, 96, 60, 105, 75, 105), DModule.Query1.RecordCount + 1);
 
-  for i := 0 to Datamodule1.Query1.RecordCount - 1 do
+  for i := 0 to DModule.Query1.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_norm').Value;
-    StringGrid1.Cells[1, i + 1] := Datamodule1.Query1.FieldByName('countp').Value;
-    StringGrid1.Cells[2, i + 1] := Datamodule1.Query1.FieldByName('snorm').Value;
-    StringGrid1.Cells[3, i + 1] := Datamodule1.Query1.FieldByName('psnorm').Value;
-    StringGrid1.Cells[4, i + 1] := Datamodule1.Query1.FieldByName('hnorm').Value;
-    StringGrid1.Cells[5, i + 1] := Datamodule1.Query1.FieldByName('phnorm').Value;
-    Datamodule1.Query1.Next;
+    StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('id_norm').Value;
+    StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('countp').Value;
+    StringGrid1.Cells[2, i + 1] := DModule.Query1.FieldByName('snorm').Value;
+    StringGrid1.Cells[3, i + 1] := DModule.Query1.FieldByName('psnorm').Value;
+    StringGrid1.Cells[4, i + 1] := DModule.Query1.FieldByName('hnorm').Value;
+    StringGrid1.Cells[5, i + 1] := DModule.Query1.FieldByName('phnorm').Value;
+    DModule.Query1.Next;
   end;
 end;
 
@@ -125,7 +125,7 @@ begin
     (Edit3.Text <> '') and (Edit4.Text <> '') and
     (Edit5.Text <> '') and (Edit6.Text <> '') then
   begin
-    with DataModule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -189,7 +189,7 @@ begin
     (Edit3.Text <> '') and (Edit4.Text <> '') and
     (Edit5.Text <> '') and (Edit6.Text <> '') then
   begin
-    with DataModule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -250,7 +250,7 @@ end;
 procedure TForm27.Button3Click(Sender: TObject);
 { удалить норму }
 begin
-  with DataModule1.Query1 do
+  with DModule.Query1 do
   begin
     if not IsEmpty then
     begin
@@ -301,11 +301,11 @@ end;
 
 procedure TForm27.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DataModule1.norm1.Close;
-  DataModule1.norm1.SQL.Clear;
-  DataModule1.norm1.SQL.Add('select * from norm');
-  DataModule1.norm1.Open;
-  Datamodule1.Query1.Close;
+  DModule.norm1.Close;
+  DModule.norm1.SQL.Clear;
+  DModule.norm1.SQL.Add('select * from norm');
+  DModule.norm1.Open;
+  DModule.Query1.Close;
 end;
 
 procedure TForm27.Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);

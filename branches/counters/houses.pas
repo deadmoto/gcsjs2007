@@ -133,7 +133,7 @@ uses
 procedure TForm24.SetHouse(n: integer);
 { установить дом с id=n, заполнить все необходимые компоненты }
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -196,7 +196,7 @@ function TForm24.ExistHouse(var n: integer): bool;
   в параметр помещается значение id дома.
 }
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -263,7 +263,7 @@ procedure TForm24.Fill;
 var
   l: integer;
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     l := 0;
     Close;
@@ -319,7 +319,7 @@ begin
       Inc(l);
     end;
   end;
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     l := 0;
     Close;
@@ -532,7 +532,7 @@ begin
   if ind <> -1 then
   begin
     Combobox2.ItemIndex := ind;
-    with DataModule1.qTarif do
+    with DModule.qTarif do
     begin
       Close;
       SQL.Clear;
@@ -558,7 +558,7 @@ begin
   if ind <> -1 then
   begin
     Combobox3.ItemIndex := ind;
-    with DataModule1.qTarif do
+    with DModule.qTarif do
     begin
       Close;
       SQL.Clear;
@@ -584,7 +584,7 @@ begin
   if ind <> -1 then
   begin
     Combobox4.ItemIndex := ind;
-    with DataModule1.qTarif do
+    with DModule.qTarif do
     begin
       Close;
       SQL.Clear;
@@ -610,7 +610,7 @@ begin
   if ind <> -1 then
   begin
     Combobox5.ItemIndex := ind;
-    with DataModule1.qTarif do
+    with DModule.qTarif do
     begin
       Close;
       SQL.Clear;
@@ -636,7 +636,7 @@ begin
   if ind <> -1 then
   begin
     Combobox14.ItemIndex := ind;
-    with DataModule1.qTarif do
+    with DModule.qTarif do
     begin
       Close;
       SQL.Clear;
@@ -662,7 +662,7 @@ begin
   if ind <> -1 then
   begin
     Combobox6.ItemIndex := ind;
-    with DataModule1.qTarif do
+    with DModule.qTarif do
     begin
       Close;
       SQL.Clear;
@@ -688,7 +688,7 @@ begin
   if ind <> -1 then
   begin
     Combobox7.ItemIndex := ind;
-    with DataModule1.qTarif do
+    with DModule.qTarif do
     begin
       Close;
       SQL.Clear;
@@ -732,7 +732,7 @@ begin
   if ind <> -1 then
   begin
     Combobox9.ItemIndex := ind;
-    with DataModule1.qTarif do
+    with DModule.qTarif do
     begin
       Close;
       SQL.Clear;
@@ -758,7 +758,7 @@ begin
   if ind <> -1 then
   begin
     Combobox10.ItemIndex := ind;
-    with DataModule1.qTarif do
+    with DModule.qTarif do
     begin
       Close;
       SQL.Clear;
@@ -901,9 +901,9 @@ begin
   begin
     if not ExistHouse(n) then
     begin
-      Datamodule1.Database1.StartTransaction;
+      DModule.Database1.StartTransaction;
       try
-        with Datamodule1.Query1 do
+        with DModule.Query1 do
         begin
           Close;
           SQL.Clear;
@@ -940,11 +940,11 @@ begin
           ExecSQL;
           Close;
         end;
-        Datamodule1.Database1.Commit;
+        DModule.Database1.Commit;
         Form30.AddH(maxid);
       except
         //транзакция не выполнена
-        Datamodule1.Database1.Rollback;
+        DModule.Database1.Rollback;
       end;
     end
     else
@@ -967,9 +967,9 @@ begin
     n := 0;
     if not ExistHouse(n) or ExistHouse(n) and (n = Form30.house) then
     begin
-      Datamodule1.Database1.StartTransaction;
+      DModule.Database1.StartTransaction;
       try
-        with Datamodule1.Query1 do
+        with DModule.Query1 do
         begin
           Close;
           SQL.Clear;
@@ -1002,11 +1002,11 @@ begin
           ExecSQL;
           Close;
         end;
-        Datamodule1.Database1.Commit;
+        DModule.Database1.Commit;
         Form30.ModH(Form30.house);
       except
         //транзакция не выполнена
-        Datamodule1.Database1.Rollback;
+        DModule.Database1.Rollback;
       end;
     end
     else
@@ -1020,8 +1020,8 @@ procedure TForm24.DelHouse;
 { удалить дом }
 begin
   try
-    Datamodule1.Database1.StartTransaction;
-    with Datamodule1.Query1 do
+    DModule.Database1.StartTransaction;
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -1032,17 +1032,17 @@ begin
       ExecSQL;
       Close;
     end;
-    Datamodule1.Database1.Commit;
+    DModule.Database1.Commit;
     Form30.Delh(Form30.house);
   except
     //не выполнена транзакция
-    Datamodule1.Database1.Rollback;
+    DModule.Database1.Rollback;
   end;
 end;
 
 function TForm24.SelStnd(n: integer): string;//выбрать
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1058,7 +1058,7 @@ end;
 
 function TForm24.SelCont(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1074,7 +1074,7 @@ end;
 
 function TForm24.SelRep(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1090,7 +1090,7 @@ end;
 
 function TForm24.SelCold(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1106,7 +1106,7 @@ end;
 
 function TForm24.SelHot(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1122,7 +1122,7 @@ end;
 
 function TForm24.SelCanal(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1138,7 +1138,7 @@ end;
 
 function TForm24.SelHeat(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1154,7 +1154,7 @@ end;
 
 function TForm24.SelWood(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1170,7 +1170,7 @@ end;
 
 function TForm24.SelCoal(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1187,7 +1187,7 @@ end;
 
 function TForm24.SelGas(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1203,7 +1203,7 @@ end;
 
 function TForm24.SelEl(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1229,8 +1229,8 @@ end;
 
 procedure TForm24.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  Datamodule1.Query1.Close;
-  Datamodule1.qTarif.Close;
+  DModule.Query1.Close;
+  DModule.qTarif.Close;
 end;
 
 procedure TForm24.Edit3Exit(Sender: TObject);

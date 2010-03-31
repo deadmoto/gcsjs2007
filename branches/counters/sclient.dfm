@@ -4,7 +4,7 @@ object Form2: TForm2
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   ClientHeight = 433
-  ClientWidth = 593
+  ClientWidth = 616
   Color = clBtnFace
   DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
@@ -22,9 +22,9 @@ object Form2: TForm2
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 587
+    Width = 610
     Height = 427
-    ActivePage = TabSheet2
+    ActivePage = TabSheet3
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
@@ -1038,6 +1038,20 @@ object Form2: TForm2
         Height = 50
         Shape = bsLeftLine
       end
+      object Label87: TLabel
+        Left = 12
+        Top = 263
+        Width = 86
+        Height = 13
+        Caption = #1069#1083#1077#1082#1090#1088#1086#1101#1085#1077#1088#1075#1080#1103':'
+      end
+      object Bevel6: TBevel
+        Left = 115
+        Top = 272
+        Width = 334
+        Height = 2
+        Shape = bsTopLine
+      end
       object ComboBox1: TComboBox
         Left = 115
         Top = 93
@@ -1209,7 +1223,7 @@ object Form2: TForm2
       end
       object Edit9: TEdit
         Left = 458
-        Top = 64
+        Top = 61
         Width = 71
         Height = 21
         TabStop = False
@@ -1381,6 +1395,149 @@ object Form2: TForm2
             #1058#1074#1077#1088#1076#1086#1077' '#1090#1086#1087#1083#1080#1074#1086
             #1043#1072#1079#1086#1074#1086#1077
             #1069#1083#1077#1082#1090#1080#1088#1080#1095#1077#1089#1082#1086#1077)
+        end
+      end
+      object GroupBox13: TGroupBox
+        Left = 531
+        Top = 81
+        Width = 70
+        Height = 252
+        Caption = 'C'#1095#1077#1090#1095#1080#1082#1080':'
+        TabOrder = 32
+        object Bevel2: TBevel
+          Left = 10
+          Top = 25
+          Width = 50
+          Height = 2
+          Shape = bsTopLine
+        end
+        object Bevel3: TBevel
+          Left = 10
+          Top = 46
+          Width = 50
+          Height = 2
+          Shape = bsTopLine
+        end
+        object Bevel4: TBevel
+          Left = 10
+          Top = 217
+          Width = 50
+          Height = 2
+          Shape = bsTopLine
+        end
+        object Bevel5: TBevel
+          Left = 10
+          Top = 238
+          Width = 50
+          Height = 2
+          Shape = bsTopLine
+        end
+        object CheckBox4: TCheckBox
+          Left = 6
+          Top = 63
+          Width = 15
+          Height = 17
+          TabOrder = 0
+          OnClick = CheckBox4Click
+        end
+        object Edit118: TEdit
+          Left = 24
+          Top = 61
+          Width = 40
+          Height = 21
+          Color = clBtnFace
+          ReadOnly = True
+          TabOrder = 1
+          OnExit = Edit118Exit
+        end
+        object Edit119: TEdit
+          Left = 24
+          Top = 86
+          Width = 40
+          Height = 21
+          Color = clBtnFace
+          ReadOnly = True
+          TabOrder = 2
+          OnExit = Edit118Exit
+        end
+        object CheckBox5: TCheckBox
+          Left = 6
+          Top = 88
+          Width = 15
+          Height = 17
+          TabOrder = 3
+          OnClick = CheckBox4Click
+        end
+        object CheckBox6: TCheckBox
+          Left = 6
+          Top = 111
+          Width = 15
+          Height = 17
+          TabOrder = 4
+          OnClick = CheckBox4Click
+        end
+        object Edit120: TEdit
+          Left = 24
+          Top = 110
+          Width = 40
+          Height = 21
+          Color = clBtnFace
+          ReadOnly = True
+          TabOrder = 5
+          OnExit = Edit118Exit
+        end
+        object Edit121: TEdit
+          Left = 24
+          Top = 134
+          Width = 40
+          Height = 21
+          Color = clBtnFace
+          ReadOnly = True
+          TabOrder = 6
+          OnExit = Edit118Exit
+        end
+        object CheckBox7: TCheckBox
+          Left = 6
+          Top = 136
+          Width = 15
+          Height = 17
+          TabOrder = 7
+          OnClick = CheckBox4Click
+        end
+        object CheckBox8: TCheckBox
+          Left = 6
+          Top = 160
+          Width = 15
+          Height = 17
+          TabOrder = 8
+          OnClick = CheckBox4Click
+        end
+        object Edit122: TEdit
+          Left = 24
+          Top = 158
+          Width = 40
+          Height = 21
+          Color = clBtnFace
+          ReadOnly = True
+          TabOrder = 9
+          OnExit = Edit118Exit
+        end
+        object Edit123: TEdit
+          Left = 24
+          Top = 180
+          Width = 40
+          Height = 21
+          Color = clBtnFace
+          TabOrder = 10
+          OnExit = Edit118Exit
+        end
+        object CheckBox9: TCheckBox
+          Left = 6
+          Top = 182
+          Width = 15
+          Height = 17
+          TabOrder = 11
+          OnClick = CheckBox4Click
         end
       end
     end
@@ -3073,7 +3230,7 @@ object Form2: TForm2
       object TabControl1: TTabControl
         Left = 0
         Top = 0
-        Width = 579
+        Width = 602
         Height = 399
         Align = alClient
         Style = tsFlatButtons
@@ -3099,7 +3256,7 @@ object Form2: TForm2
         object Panel1: TPanel
           Left = 4
           Top = 27
-          Width = 571
+          Width = 594
           Height = 54
           Align = alTop
           BevelOuter = bvNone
@@ -3271,8 +3428,8 @@ object Form2: TForm2
     end
   end
   object Button2: TButton
-    Left = 396
-    Top = 0
+    Left = 395
+    Top = -1
     Width = 107
     Height = 22
     Enabled = False
