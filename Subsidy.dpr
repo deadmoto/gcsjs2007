@@ -5,7 +5,7 @@ uses
   Dialogs,
   Windows,
   main in 'main.pas' {Form1},
-  datamodule in 'datamodule.pas' {DataModule1: TDataModule},
+  datamodule in 'datamodule.pas' {DModule: TDModule},
   sclient in 'sclient.pas' {Form2},
   inspector in 'inspector.pas' {Form3},
   district in 'district.pas' {Form4},
@@ -72,17 +72,16 @@ uses
 begin
   application.Initialize;
   application.title := 'Субсидии';
-  Application.CreateForm(TDataModule1, DataModule1);
+  Application.CreateForm(TDModule, DModule);
   try//Подключение к SQLSub - ODBC alias for Subsidy (MS SQL)
-    datamodule1.database1.connected := True;
+    DModule.database1.connected := True;
     try//Подключение к DBFSub - BDE alias for DBASE driver (BDE)
-      datamodule1.dbfConnection.connected := True;
+      DModule.dbfConnection.connected := True;
       try
         Application.CreateForm(TForm1, Form1);
         Application.CreateForm(TAboutBox1, AboutBox1);
         Application.CreateForm(TForm29, Form29);
         Application.CreateForm(TForm38, Form38);
-//        Application.CreateForm(TForm15, Form15);
         Application.CreateForm(TForm16, Form16);
         Application.CreateForm(TForm17, Form17);
         Application.CreateForm(TForm18, Form18);
@@ -121,7 +120,6 @@ begin
         Application.CreateForm(TSlujFrm, SlujFrm);
         Application.CreateForm(TConnectionFrm, ConnectionFrm);
         Application.CreateForm(TSettingsFrm, SettingsFrm);
-//        Application.CreateForm(TReportDataFrm, ReportDataFrm);
         Application.CreateForm(TGenRefBookFrm, GenRefBookFrm);
         Application.Run;
       except

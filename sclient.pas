@@ -5,9 +5,10 @@ interface
 uses
   Buttons, Classes, client, ComCtrls, contnrs, Controls, Dialogs, ExtCtrls,
   Forms, Graphics, Grids, Mask, Menus, Messages, StdCtrls, SysUtils, Variants,
-  Windows;
+  Windows, DateUtils, Math;
 
 type
+  TViewMode = (vEdit, vAdd);
   TForm2 = class(TForm)
     PageControl1: TPageControl;
     TabSheet1:    TTabSheet;
@@ -296,6 +297,25 @@ type
     Edit116: TEdit;
     Label84: TLabel;
     Edit117: TEdit;
+    Label87: TLabel;
+    GroupBox13: TGroupBox;
+    CheckBox4: TCheckBox;
+    Edit118: TEdit;
+    Edit119: TEdit;
+    CheckBox5: TCheckBox;
+    CheckBox6: TCheckBox;
+    Edit120: TEdit;
+    Edit121: TEdit;
+    CheckBox7: TCheckBox;
+    CheckBox8: TCheckBox;
+    Edit122: TEdit;
+    Edit123: TEdit;
+    CheckBox9: TCheckBox;
+    Bevel2: TBevel;
+    Bevel3: TBevel;
+    Bevel4: TBevel;
+    Bevel5: TBevel;
+    Bevel6: TBevel;
     procedure Button2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure ComboBox1Change(Sender: TObject);
@@ -374,6 +394,8 @@ type
     procedure Edit117Exit(Sender: TObject);
     procedure StringGrid1SetEditText(Sender: TObject; ACol, ARow: Integer;
       const Value: string);
+    procedure CheckBox4Click(Sender: TObject);
+    procedure Edit118Exit(Sender: TObject);
   private
     { Private declarations }
     load, fam: boolean;
@@ -472,7 +494,7 @@ type
     //procedure ChangePeriod(BD, ED: TDateTime);
   public
     { Public declarations }
-    status: integer;//0-добавить,1-изменить
+    mode: TViewMode;//0-добавить,1-изменить
   end;
 
 var
@@ -482,17 +504,7 @@ var
 implementation
 
 uses
-  main,
-  Math,
-  service,
-  datamodule,
-  dateutils,
-  shtarif,
-  shtarifb,
-  chpriv,
-  chinsp,
-//  FactSumUnit,
-  wininet;
+  main, service, datamodule, shtarif, shtarifb, chpriv, chinsp;
 
 {$R *.dfm}
 
@@ -535,6 +547,8 @@ begin
 end;
 
 procedure TForm2.SetDefault;
+var
+  i:integer;
 begin
   if load then
   begin
@@ -577,7 +591,26 @@ begin
     Cl.cdata.tarifs[12] := wood[Combobox8.ItemIndex];
     Cl.cdata.tarifs[13] := coal[Combobox9.ItemIndex];
 
-    Cl.cdata.cost[0]  := GetCostTarif(0, Cl.cdata.tarifs[0], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
+    for i := 0 to numbtarif - 1 do
+      begin
+        Cl.cdata.cost[i]  := GetCostTarif(i, Cl.cdata.tarifs[i], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
+        if i in [2..6] then
+          Cl.cdata.tarifnorm[i]  := GetNormTarif(i, Cl.cdata.tarifs[i], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
+      end;
+    //счетчики
+    Edit118.Text := '0';
+    Edit119.Text := '0';
+    Edit120.Text := '0';
+    Edit121.Text := '0';
+    Edit122.Text := '0';
+    Edit123.Text := '0';
+    CheckBox4.Checked := False;
+    CheckBox5.Checked := False;
+    CheckBox6.Checked := False;
+    CheckBox7.Checked := False;
+    CheckBox8.Checked := False;
+    CheckBox9.Checked := False;
+{    Cl.cdata.cost[0]  := GetCostTarif(0, Cl.cdata.tarifs[0], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
     Cl.cdata.cost[1]  := GetCostTarif(1, Cl.cdata.tarifs[1], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
     Cl.cdata.cost[2]  := GetCostTarif(2, Cl.cdata.tarifs[2], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
     Cl.cdata.cost[3]  := GetCostTarif(3, Cl.cdata.tarifs[3], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
@@ -586,7 +619,7 @@ begin
     Cl.cdata.cost[6]  := GetCostTarif(6, Cl.cdata.tarifs[6], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
     Cl.cdata.cost[7]  := GetCostTarif(7, Cl.cdata.tarifs[7], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
     Cl.cdata.cost[12] := GetCostTarif(12, Cl.cdata.tarifs[12], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
-    Cl.cdata.cost[13] := GetCostTarif(13, Cl.cdata.tarifs[13], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
+    Cl.cdata.cost[13] := GetCostTarif(13, Cl.cdata.tarifs[13], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);}
   end;
 end;
 
@@ -847,7 +880,7 @@ procedure TForm2.Fill;
 var
   l: integer;
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1074,7 +1107,7 @@ begin
     end;
     Combobox18.ItemIndex := 0;
   end;
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1490,6 +1523,20 @@ begin
   combobox18.OnChange(combobox18);
   combobox19.OnChange(combobox19);
   CheckBox3.Checked := (cl.Data.mail = 1);
+  //------счетчики
+  CheckBox4.Checked := cl.cdata.counter[2];
+  CheckBox5.Checked := cl.cdata.counter[3];
+  CheckBox6.Checked := cl.cdata.counter[4];
+  CheckBox7.Checked := cl.cdata.counter[5];
+  CheckBox8.Checked := cl.cdata.counter[6];
+  CheckBox9.Checked := cl.cdata.counter[7];
+  Edit118.Text := FloatToStr(cl.cdata.counterdata[2]);
+  Edit119.Text := FloatToStr(cl.cdata.counterdata[3]);
+  Edit120.Text := FloatToStr(cl.cdata.counterdata[4]);
+  Edit121.Text := FloatToStr(cl.cdata.counterdata[5]);
+  Edit122.Text := FloatToStr(cl.cdata.counterdata[6]);
+  Edit123.Text := FloatToStr(cl.cdata.counterdata[7]);
+  //------
 end;
 
 procedure TForm2.SetVCalc;//расчет субсидии
@@ -1610,7 +1657,7 @@ end;
 
 function TForm2.SelMin(n: integer): real;//найти min
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1983,7 +2030,7 @@ end;
 
 function TForm2.SelInsp(n: integer): string;//выбрать инспектора
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2001,7 +2048,7 @@ end;
 
 function TForm2.SelStr(n: integer): string;//выбрать улицу
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2017,7 +2064,7 @@ end;
 
 function TForm2.SelMng(n: integer): string;//выбрать распорядителя
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2034,7 +2081,7 @@ end;
 
 function TForm2.SelFnd(n: integer): string;//выбрать фонд
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2050,7 +2097,7 @@ end;
 
 function TForm2.SelSettl(n: integer): string;//выбрать тип заселения
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2066,7 +2113,7 @@ end;
 
 function TForm2.SelOwn(n: integer): string;//выбрать тип владения
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2082,7 +2129,7 @@ end;
 
 function TForm2.SelCntrl(n: integer): string;//выбрать тип контроля
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2098,7 +2145,7 @@ end;
 
 function TForm2.SelSt(n: integer): string;//выбрать тип статуса
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2114,7 +2161,7 @@ end;
 
 function TForm2.SelPriv(n: integer): string;//выбрать льготу
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2130,7 +2177,7 @@ end;
 
 function TForm2.SelRel(n: integer): string;
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2146,7 +2193,7 @@ end;
 
 function TForm2.SelStnd(n: integer): string;//выбрать стандарт
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -2162,7 +2209,7 @@ end;
 
 function TForm2.SelCont(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -2178,7 +2225,7 @@ end;
 
 function TForm2.SelRep(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -2194,7 +2241,7 @@ end;
 
 function TForm2.SelCold(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -2210,7 +2257,7 @@ end;
 
 function TForm2.SelCanal(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -2226,7 +2273,7 @@ end;
 
 function TForm2.SelHot(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -2242,7 +2289,7 @@ end;
 
 function TForm2.SelHeat(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -2258,7 +2305,7 @@ end;
 
 function TForm2.SelGas(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -2274,7 +2321,7 @@ end;
 
 function TForm2.SelWood(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -2290,7 +2337,7 @@ end;
 
 function TForm2.SelCoal(n: integer): string;//выбрать тариф
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -2306,7 +2353,7 @@ end;
 
 function TForm2.SelBank(n: integer): string;//выбрать банк
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2322,7 +2369,7 @@ end;
 
 function TForm2.ExistHouse(var n: integer): bool;//существует дом?
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2348,7 +2395,7 @@ end;
 
 function TForm2.ExistClient(var n: integer): bool;
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2532,7 +2579,7 @@ begin
       if ComboBox23.Text='' then
         showmessage('Не выбран период для добавления')
       else
-        with datamodule1 do
+        with DModule do
         begin
           for i := 0 to StringGrid1.RowCount - 2 do
           begin
@@ -2573,7 +2620,7 @@ begin
 
     1:
     begin
-      with datamodule1 do
+      with DModule do
       begin
         if ComboBox1.Text='' then
           showmessage('Не выбран период для изменения')
@@ -2620,7 +2667,7 @@ begin
     Edit116.Text := Edit114.Text;
     if Cl.cdata.dolgFact > 0 then
     begin
-      with DataModule1.Query1 do
+      with DModule.Query1 do
       begin
         Close;
         SQL.Text := 'SELECT sum(sub) as sumsub' + #13 +
@@ -2648,7 +2695,7 @@ begin
   else
   if MessageDlg('Удалить выбранный период?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
     try
-      with DataModule1 do
+      with DModule do
       begin
         Query1.Close;
         Query1.SQL.Text:= 'DELETE FROM FactBalance'+#13+
@@ -2683,13 +2730,13 @@ end;
 procedure TForm2.Button2Click(Sender: TObject);
 { применить изменения }
 begin
-  case status of
-    0:
+  case mode of
+    vAdd:
     begin
       if AddClient = 0 then
         Close;
     end;
-    1:
+    vEdit:
     begin
       if ModifyClient = 0 then
         Close;
@@ -2700,9 +2747,9 @@ end;
 procedure TForm2.FormClose(Sender: TObject; var Action: TCloseAction);
 { закрытие формы }
 begin
-  Datamodule1.Query1.Close;
-  Datamodule1.Query2.Close;
-  Datamodule1.qTarif.Close;
+  DModule.Query1.Close;
+  DModule.Query2.Close;
+  DModule.qTarif.Close;
 end;
 
 function TForm2.AddAnyMonth(BD, ED: TDateTime): TStringList;
@@ -2733,9 +2780,9 @@ begin
     n := 0;
     if not ExistClient(n) then
     begin
-      Datamodule1.Database1.StartTransaction;
+      DModule.Database1.StartTransaction;
       try
-        with DataModule1.Query1 do
+        with DModule.Query1 do
         begin
           if not ExistHouse(n) then
           begin//если такого дома в базе нет
@@ -2850,6 +2897,25 @@ begin
               ExecSQL;
             end;
           end;
+
+          //счетчики
+          Close;
+          SQL.Clear;
+          SQL.Add('insert into Counters');
+          SQL.Add('values (CONVERT(smalldatetime,:d,104),:id,:serv,:count,:countdata)');
+          ParamByName('d').AsString := DateToStr(Cl.cdata.begindate);
+          ParamByName('id').AsInteger := Cl.Data.regn;
+          for i := 0 to numbtarif - 1 do
+          begin
+            if (i in [2..7]) and (Cl.cdata.counter[i]) then
+            begin
+              ParamByName('serv').AsInteger := i;
+              ParamByName('count').Value := Cl.cdata.counter[i];
+              ParamByName('countdata').AsFloat  := Cl.cdata.counterdata[i];
+              ExecSQL;
+            end;
+          end;
+
           Close;
           mem := 0;
           for i := 0 to Cl.cdata.family.Count - 1 do
@@ -2882,20 +2948,20 @@ begin
           try
             ExecSQL;
           except
-            Datamodule1.Database1.Close;
+            DModule.Database1.Close;
             try
-              Datamodule1.Database1.Open;
+              DModule.Database1.Open;
               ExecSQL;
             except
               ShowMessage('Нет соединения с сервером! Обратитесь к специалисту');
             end;
           end;
         end;
-        Datamodule1.Database1.Commit;
+        DModule.Database1.Commit;
         Result := 0;
       except
         //транзакция не выполнена
-        Datamodule1.Database1.Rollback;
+        DModule.Database1.Rollback;
         Result := -1;
       end;
       if Result = 0 then
@@ -2920,9 +2986,9 @@ begin
       n := 0;
       if (not ExistClient(n) or ExistClient(n) and (n = Form1.client)) then
       begin
-        Datamodule1.Database1.StartTransaction;
+        DModule.Database1.StartTransaction;
         try
-          with DataModule1.Query1 do
+          with DModule.Query1 do
           begin
             if not ExistHouse(n) then
             begin//если такого дома в базе нет
@@ -3083,9 +3149,9 @@ begin
                 try
                   ExecSQL;
                 except
-                  Datamodule1.Database1.Close;
+                  DModule.Database1.Close;
                   try
-                    Datamodule1.Database1.Open;
+                    DModule.Database1.Open;
                     ExecSQL;
                   except
                     ShowMessage('Нет соединения с сервером! Обратитесь к специалисту');
@@ -3121,15 +3187,73 @@ begin
               ExecSQL;
               Inc(mem);
             end;
+            //------счетчики
+            Close;
+            for i := 0 to numbtarif - 1 do
+              if (i in [2..7]) and (cl.cdata.counter[i]) then
+              begin
+                SQL.Text := 'SELECT * FROM Counters' + #13 +
+                  'WHERE sdate=convert(smalldatetime,:s,104) AND regn=:r AND service = :serv';
+                ParamByName('s').AsString  := Form1.rdt;
+                ParamByName('r').AsInteger := Form1.client;
+                ParamByName('serv').AsInteger := i;
+                Open;
+                if isEmpty then
+                begin
+                  Close;
+                  SQL.Text := 'insert into Counters' + #13 +
+                    'values (CONVERT(smalldatetime,:d,104),:r,:serv,:count,:countdata)';
+                  ParamByName('r').AsInteger := Form1.client;
+                  ParamByName('d').AsString := Form1.rdt;
+                  ParamByName('serv').AsInteger := i;
+                  ParamByName('count').Value := Cl.cdata.counter[i];
+                  ParamByName('countdata').AsFloat  := Cl.cdata.counterdata[i];
+                  ExecSQL;
+                end
+                else
+                begin
+                  Close;
+                  SQL.Text := 'update Counters' + #13 +
+                    'SET counter=:count, counterdata=:countdata'+ #13 +
+                    'WHERE sdate=CONVERT(smalldatetime,:s,104) AND regn=:r AND service=:serv';
+                  ParamByName('r').AsInteger := Form1.client;
+                  ParamByName('s').AsString := Form1.rdt;
+                  ParamByName('serv').AsInteger := i;
+                  ParamByName('count').Value := Cl.cdata.counter[i];
+                  ParamByName('countdata').AsFloat  := Cl.cdata.counterdata[i];
+                  ExecSQL;
+                end;
+              end
+              else
+              begin
+                SQL.Text := 'SELECT * FROM Counters' + #13 +
+                  'WHERE sdate=convert(smalldatetime,:s,104) AND regn=:r AND service = :serv';
+                ParamByName('s').AsString  := Form1.rdt;
+                ParamByName('r').AsInteger := Form1.client;
+                ParamByName('serv').AsInteger := i;
+                Open;
+                if not isEmpty then
+                begin
+                  Close;
+                  SQL.Text := 'update Counters' + #13 +
+                    'SET counter=:count, counterdata=:countdata'+ #13 +
+                    'WHERE sdate=CONVERT(smalldatetime,:s,104) AND regn=:r AND service=:serv';
+                  ParamByName('r').AsInteger := Form1.client;
+                  ParamByName('s').AsString := Form1.rdt;
+                  ParamByName('serv').AsInteger := i;
+                  ParamByName('count').Value := 0;
+                  ParamByName('countdata').AsFloat  := Cl.cdata.counterdata[i];
+                  ExecSQL;
+                end;
+              end;
+            //------
+            Close;
           end;
-          Datamodule1.Database1.Commit;
+          DModule.Database1.Commit;
           Result := 0;
-{          if getConfValue('0.ShowFactSumFrm') = True then
-            if cl.Data.cert <> 1 then
-              FactSumFrm.ShowModal; //Фактический расход}
         except
           //транзакция не выполнена
-          Datamodule1.Database1.Rollback;
+          DModule.Database1.Rollback;
           Result := -1;
         end;
         if Result = 0 then
@@ -3147,7 +3271,7 @@ procedure TForm2.SetRegn;
 var
   num: integer;
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -3197,7 +3321,7 @@ begin
   Cl.Data.mail := 0;
 
   //установка даты прошлого периода
-  with DataModule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -3347,6 +3471,7 @@ begin
   begin
     Cl.cdata.tarifs[2] := cold[Combobox3.ItemIndex];
     Cl.cdata.cost[2] := GetCostTarif(2, cold[Combobox3.ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl);
+    Cl.cdata.tarifnorm[2] := GetNormTarif(2, cold[Combobox3.ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl);
   end;
   if load and not CalcEmpty then
   begin
@@ -3382,6 +3507,7 @@ begin
   begin
     Cl.cdata.tarifs[3] := hot[Combobox4.ItemIndex];
     Cl.cdata.cost[3] := GetCostTarif(3, hot[Combobox4.ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl);
+    Cl.cdata.tarifnorm[3] := GetNormTarif(3, hot[Combobox4.ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl);
   end;
   if load and not CalcEmpty then
   begin
@@ -3413,6 +3539,7 @@ begin
   begin
     Cl.cdata.tarifs[4] := canal[Combobox20.ItemIndex];
     Cl.cdata.cost[4] := GetCostTarif(4, canal[Combobox20.ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
+    Cl.cdata.tarifnorm[4] := GetNormTarif(4, canal[Combobox20.ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);    
   end;
   if load and not CalcEmpty then
   begin
@@ -3506,6 +3633,7 @@ begin
   begin
     Cl.cdata.tarifs[5] := heat[Combobox5.ItemIndex];
     Cl.cdata.cost[5] := GetCostTarif(5, heat[Combobox5.ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
+    Cl.cdata.tarifnorm[5] := GetNormTarif(5, heat[Combobox5.ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);    
   end;
   if load and not CalcEmpty then
   begin
@@ -3537,6 +3665,7 @@ begin
   begin
     Cl.cdata.tarifs[6] := gas[Combobox6.ItemIndex];
     Cl.cdata.cost[6] := GetCostTarif(6, gas[Combobox6.ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
+    Cl.cdata.tarifnorm[6] := GetNormTarif(6, gas[Combobox6.ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
   end;
   if load and not CalcEmpty then
   begin
@@ -3683,7 +3812,7 @@ var
   b: integer;
 begin
   if IsRus(Edit60.Text) and IsInt(Edit61.Text) and (Combobox12.Text <> '') then
-    with Datamodule1.Query1 do
+    with DModule.Query1 do
     begin
       if load then
       begin
@@ -4179,7 +4308,7 @@ begin
 
   //-------------
 
-  with datamodule1 do
+  with DModule do
   begin
     Query1.Close;
     Query1.SQL.Text:= 'exec factSum :bdate, :edate, :regn';
@@ -4189,20 +4318,20 @@ begin
     Query1.Open;
   end;
 
-  datamodule1.Query1.First;
-  for i:=0 to datamodule1.Query1.RecordCount-1 do
+  DModule.Query1.First;
+  for i:=0 to DModule.Query1.RecordCount-1 do
   begin
     for j:=0 to StringGrid1.RowCount-1 do
-      if StringGrid1.Cells[0,j+1]=datamodule1.Query1.FieldByName('sd').asString then
-        StringGrid1.Cells[1,j+1]:=datamodule1.Query1.FieldByName('sum_sub').asString;//.FieldValues['sum_sub'];
-    datamodule1.Query1.Next;
+      if StringGrid1.Cells[0,j+1]=DModule.Query1.FieldByName('sd').asString then
+        StringGrid1.Cells[1,j+1]:=DModule.Query1.FieldByName('sum_sub').asString;//.FieldValues['sum_sub'];
+    DModule.Query1.Next;
   end;
 
   //-------------
 
   if TabControl1.TabIndex=1 then
   begin
-    with datamodule1 do
+    with DModule do
     begin
       Query1.Close;
       Query1.SQL.Text:= 'SELECT sdate, regn, bdate, sub, factsum'+#13+
@@ -4586,8 +4715,8 @@ begin
   Edit57.SetFocus;
   Cl := TClient.Create(Empty, EmptyC);
   Button2.Enabled := False;
-  case status of
-    0://добавить клиента
+  case mode of
+    vAdd://добавить клиента
     begin
       load := True;
       Form2.Caption := 'Добавить клиента';
@@ -4598,7 +4727,7 @@ begin
       MaskEdit4.Text := DateToStr(Date);
 //      PageControl1.Pages[5].Visible := False;
     end;
-    1://изменить/просмотр клиента
+    vEdit://изменить/просмотр клиента
     begin
       Form2.Caption := 'Изменить/Просмотр клиента';
       Button2.Caption := 'Изменить клиента';
@@ -4687,6 +4816,18 @@ begin
       end;
       if PageControl1.TabIndex = 5 then
         TabControl1.OnChange(Self);
+
+      //выбор регионального стандарта
+      if PageControl1.TabIndex = 2 then
+      begin
+        if cl.data.apart <> '' then
+          ComboBox10.ItemIndex := 1
+        else
+          ComboBox10.ItemIndex := 0;
+        Cl.cdata.rstnd := stnd[Combobox10.ItemIndex];
+        ComboBox10.OnChange(Self);
+      end;
+      
     end;
   end;
 end;
@@ -4866,7 +5007,7 @@ begin
   case TabControl1.TabIndex of
     0:
     begin
-      with DataModule1 do
+      with DModule do
       begin
         Query1.Close;
         Query1.SQL.Text := 'SELECT bdate' + #13 +
@@ -4918,7 +5059,7 @@ begin
 
     1:
     begin
-      with DataModule1 do
+      with DModule do
       begin
         Query1.Close;
         Query1.SQL.Text := 'SELECT regn, bdate, edate' + #13 +
@@ -4936,12 +5077,12 @@ begin
   end;
 
   Combobox23.Items.Clear;
-  with DataModule1 do
+  with DModule do
   begin
     while not Query1.EOF do
     begin
       Combobox23.Items.Add(Query1.FieldByName('bdate').AsString + ' - ' + Query1.FieldByName('edate').AsString);
-      DataModule1.Query1.Next;
+      DModule.Query1.Next;
     end;
   end;
 end;
@@ -5251,7 +5392,7 @@ begin
   begin
     Cl.Data.insp := Form1.insp;
     Edit86.Text  := Form17.nameinsp;
-    if (status = 0) then
+    if (mode = vAdd) then
       SetRegn;
   end;
 end;
@@ -5626,6 +5767,138 @@ begin
   end;
 end;
 
+procedure TForm2.CheckBox4Click(Sender: TObject);
+begin
+  if Sender = CheckBox4 then
+  begin
+    if (Sender as TCheckBox).Checked then
+      begin
+        Edit118.Color := clWindow;
+        Edit118.ReadOnly := False;
+        Edit118.Text := '0';
+//        Edit118.SetFocus;
+        Cl.cdata.counter[2] := True;
+      end
+    else
+    begin
+        Edit118.Color := clBtnFace;
+        Edit118.ReadOnly := True;
+        Edit118.Text := '0';
+        Cl.cdata.counter[2] := False;
+    end;
+  end;
+
+  if Sender = CheckBox5 then
+  begin
+    if (Sender as TCheckBox).Checked then
+      begin
+        Edit119.Color := clWindow;
+        Edit119.ReadOnly := False;
+        Edit119.Text := '0';
+//        Edit119.SetFocus;
+        Cl.cdata.counter[3] := True;
+      end
+    else
+    begin
+        Edit119.Color := clBtnFace;
+        Edit119.ReadOnly := True;
+        Edit119.Text := '0';
+        Cl.cdata.counter[3] := False;
+    end;
+  end;
+
+  if ((CheckBox4.Checked) and (CheckBox5.Checked)) then
+  begin
+    CheckBox6.Checked := true;
+    Edit120.Text := FloatToStr(StrToFloat(Edit118.Text)+StrToFloat(Edit119.Text));
+    Cl.cdata.counter[4] := True;
+  end
+  else
+  begin
+    //CheckBox6.Checked := false;
+    //Edit120.Text := '0';
+    //Cl.cdata.counter[4] := False;
+  end;
+
+  if Sender = CheckBox6 then
+  begin
+    if (Sender as TCheckBox).Checked then
+      begin
+        Edit120.Color := clWindow;
+        Edit120.ReadOnly := False;
+        Edit120.Text := '0';
+//        Edit120.SetFocus;
+        Cl.cdata.counter[4] := True;
+      end
+    else
+    begin
+        Edit120.Color := clBtnFace;
+        Edit120.ReadOnly := True;
+        Edit120.Text := '0';
+        Cl.cdata.counter[4] := False;
+    end;
+  end;
+
+  if Sender = CheckBox7 then
+  begin
+    if (Sender as TCheckBox).Checked then
+      begin
+        Edit121.Color := clWindow;
+        Edit121.ReadOnly := False;
+        Edit121.Text := '0';
+//        Edit121.SetFocus;
+        Cl.cdata.counter[5] := True;
+      end
+    else
+    begin
+        Edit121.Color := clBtnFace;
+        Edit121.ReadOnly := True;
+        Edit121.Text := '0';
+        Cl.cdata.counter[5] := False;
+    end;
+  end;
+
+  if Sender = CheckBox8 then
+  begin
+    if (Sender as TCheckBox).Checked then
+      begin
+        Edit122.Color := clWindow;
+        Edit122.ReadOnly := False;
+        Edit122.Text := '0';
+//        Edit122.SetFocus;
+        Cl.cdata.counter[6] := True;
+      end
+    else
+    begin
+        Edit122.Color := clBtnFace;
+        Edit122.ReadOnly := True;
+        Edit122.Text := '0';
+        Cl.cdata.counter[6] := False;
+    end;
+  end;
+
+  if Sender = CheckBox9 then
+  begin
+    if (Sender as TCheckBox).Checked then
+      begin
+        Edit123.Color := clWindow;
+        Edit123.ReadOnly := False;
+        Edit123.Text := '0';
+//        Edit123.SetFocus;
+        Cl.cdata.counter[7] := True;
+      end
+    else
+    begin
+        Edit123.Color := clBtnFace;
+        Edit123.ReadOnly := True;
+        Edit123.Text := '0';
+        Cl.cdata.counter[7] := False;
+    end;
+  end;
+
+  Edit118.OnExit(self);
+end;
+
 procedure TForm2.Edit111Exit(Sender: TObject);
 begin
   if StrToDate(MaskEdit4.Text) < Form1.Idate then
@@ -5647,6 +5920,52 @@ begin
   for i:=0 to numbtarif-1 do
     if (i<8)or(i>11) then
       cl.cdata.cost[i] := GetCostTarif(i,cl.cdata.tarifs[i],cl.cdata.begindate,cl.cdata.boiler,cl.cdata.rmcount,cl.cdata.settl);
+end;
+
+procedure TForm2.Edit118Exit(Sender: TObject);
+begin
+  if Sender = Edit118 then
+  begin
+    if (CheckBox4.Checked) and (Edit118.Text <> '') then
+      Cl.cdata.counterdata[2] := StrToFloat(Edit118.Text);
+  end;
+
+  if Sender = Edit119 then
+  begin
+    if (CheckBox5.Checked) and (Edit119.Text <> '') then
+      Cl.cdata.counterdata[3] := StrToFloat(Edit119.Text);
+  end;
+
+  if ((CheckBox4.Checked) and (CheckBox5.Checked)) then
+  begin
+    Edit120.Text := FloatToStr(StrToFloat(Edit118.Text) + StrToFloat(Edit119.Text));
+    Cl.cdata.counterdata[4] := StrToFloat(Edit120.Text);
+  end;
+  
+
+  if Sender = Edit120 then
+  begin
+    if (CheckBox6.Checked) and (Edit120.Text <> '') then
+      Cl.cdata.counterdata[4] := StrToFloat(Edit120.Text);
+  end;
+
+  if Sender = Edit121 then
+  begin
+    if (CheckBox7.Checked) and (Edit121.Text <> '') then
+      Cl.cdata.counterdata[5] := StrToFloat(Edit121.Text);
+  end;
+
+  if Sender = Edit122 then
+  begin
+    if (CheckBox8.Checked) and (Edit122.Text <> '') then
+      Cl.cdata.counterdata[6] := StrToFloat(Edit122.Text);
+  end;
+
+  if Sender = Edit123 then
+  begin
+    if (CheckBox9.Checked) and (Edit123.Text <> '') then
+      Cl.cdata.counterdata[7] := StrToFloat(Edit123.Text);
+  end;
 end;
 
 end.

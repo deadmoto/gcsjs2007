@@ -357,21 +357,21 @@ end;
 
 procedure TForm1.SetTarifs;
 begin
-  with DataModule1 do
+  with DModule do
   begin
     pv.DatabaseName  := 'Subsidy';
     norm1.DatabaseName := 'Subsidy';
 
-    t1.Connection := DataModule1.dbfConnection;
-    t2.Connection := DataModule1.dbfConnection;
-    t3.Connection := DataModule1.dbfConnection;
-    t4.Connection := DataModule1.dbfConnection;
-    t5.Connection := DataModule1.dbfConnection;
-    t6.Connection := DataModule1.dbfConnection;
-    t7.Connection := DataModule1.dbfConnection;
-    t8.Connection := DataModule1.dbfConnection;
-    t9.Connection := DataModule1.dbfConnection;
-    t10.Connection := DataModule1.dbfConnection;
+    t1.Connection := DModule.dbfConnection;
+    t2.Connection := DModule.dbfConnection;
+    t3.Connection := DModule.dbfConnection;
+    t4.Connection := DModule.dbfConnection;
+    t5.Connection := DModule.dbfConnection;
+    t6.Connection := DModule.dbfConnection;
+    t7.Connection := DModule.dbfConnection;
+    t8.Connection := DModule.dbfConnection;
+    t9.Connection := DModule.dbfConnection;
+    t10.Connection := DModule.dbfConnection;
 
     t1.SQL.Text := 'select * from "curcont"';
     t2.SQL.Text := 'select * from "currep"';
@@ -458,7 +458,7 @@ procedure TForm1.aClAddExecute(Sender: TObject);
 begin
   if CheckP2 then
   begin
-    Form2.status := 0;
+    Form2.mode := vAdd;
     Form2.ShowModal;
   end
   else
@@ -485,9 +485,9 @@ begin
         'Подтверждаете?'), PChar('Удаление клиента'),
         MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
       begin
-        Datamodule1.Database1.StartTransaction;
+        DModule.Database1.StartTransaction;
         try
-          with Datamodule1.Query1 do
+          with DModule.Query1 do
           begin
             Close;
             SQL.Clear;
@@ -521,12 +521,30 @@ begin
             ParamByName('id').AsInteger := client;
             ExecSQL;
             Close;
+            SQL.Clear;
+            SQL.Add('delete from FactSale');
+            SQL.Add('where regn = :id');
+            ParamByName('id').AsInteger := client;
+            ExecSQL;
+            Close;
+            SQL.Clear;
+            SQL.Add('delete from FactBalance');
+            SQL.Add('where regn = :id');
+            ParamByName('id').AsInteger := client;
+            ExecSQL;
+            Close;
+            SQL.Clear;
+            SQL.Add('delete from Counters');
+            SQL.Add('where regn = :id');
+            ParamByName('id').AsInteger := client;
+            ExecSQL;
+            Close;
           end;
-          Datamodule1.Database1.Commit;
+          DModule.Database1.Commit;
           Res := 0;
         except
           //не выполнена транзакция
-          Datamodule1.Database1.Rollback;
+          DModule.Database1.Rollback;
           Res := -1;
         end;
         if Res = 0 then
@@ -550,7 +568,7 @@ begin
   begin
     if (stop[SGCl.Row - 1] < 2) or (stop[SGCl.Row - 1] > 1) and (status = 3) then
     begin
-      Form2.status := 1;
+      Form2.mode := vEdit;
       Form2.ShowModal;
     end
     else
@@ -682,7 +700,7 @@ procedure TForm1.Action1Execute(Sender: TObject);
 begin
   Form3.status := sec1;
   Form3.ShowModal;
-  with DataModule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -713,7 +731,7 @@ procedure TForm1.Action2Execute(Sender: TObject);
 begin
   Form4.status := sec1;
   Form4.ShowModal;
-  with DataModule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -807,7 +825,7 @@ begin
       subr := sub[i];
       fdate := StrToDate(Copy(SGCl.Cells[2, i + 1], 1, 10));
       ldate := StrToDate(Copy(SGCl.Cells[2, i + 1], 14, 10));
-      with Datamodule1.Query1 do
+      with DModule.Query1 do
       begin
         Close;
         SQL.Clear;
@@ -850,7 +868,7 @@ var
 begin
   if reg <> 0 then
   begin//существует отказ
-    with Datamodule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -913,7 +931,7 @@ procedure TForm1.aClPauseExecute(Sender: TObject);
 begin
   if (stop[SGCl.Row - 1] = 0) and (status <> 3) then
   begin
-    with Datamodule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -960,7 +978,7 @@ begin
     cmp := MonthOf(StrToDate(rdt)) + 12 - MonthOf(StrToDate(Copy(SGCl.Cells[2, SGCl.row], 1, 10)));
   if (stop[SGCl.Row - 1] = 2) and (status <> 3) and (cmp = 1) then
   begin
-    with Datamodule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -1010,7 +1028,7 @@ begin
     cmp := MonthOf(StrToDate(rdt)) + 12 - MonthOf(StrToDate(Copy(SGCl.Cells[2, SGCl.row], 1, 10)));
   if (stop[SGCl.Row - 1] = 3) and (status <> 3) and (cmp >= 1) then
   begin
-    with Datamodule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       c := TClient.Create(Empty, EmptyC);
@@ -1065,7 +1083,7 @@ var
 begin
   if stop[SGCl.Row - 1] = 2 then
   begin
-    with Datamodule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       c := TClient.Create(Empty, EmptyC);
@@ -1108,7 +1126,7 @@ var
   i: integer;
 begin
   i := SGCl.Row - 1;
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     if MessageBox(Form1.Handle, PChar('Добавить месяц клиенту ' + SGCL.Cells[0, i + 1] + ' со сроком ' + SGCL.Cells[2, i + 1] + '.' + #13 + 'Подтверждаете?'), PChar('Отказ от субсидии'),
       MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
@@ -1141,7 +1159,7 @@ var
 
 function GetCert(regn: integer): integer;
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1152,7 +1170,7 @@ begin
     Open;
     First;
   end;
-  Result := Datamodule1.Query1.FieldByName('id_cert').Value;
+  Result := DModule.Query1.FieldByName('id_cert').Value;
 end;
 
 begin
@@ -1165,9 +1183,9 @@ begin
         'Подтверждаете?'), PChar('Удаление у клиента текущего периода'),
         MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
       begin
-        Datamodule1.Database1.StartTransaction;
+        DModule.Database1.StartTransaction;
         try
-          with Datamodule1.Query1 do
+          with DModule.Query1 do
           begin
             Close;
             SQL.Clear;
@@ -1192,11 +1210,11 @@ begin
             ExecSQL;
             Close;
           end;
-          Datamodule1.Database1.Commit;
+          DModule.Database1.Commit;
           Reload;
         except
           //не выполнена транзакция
-          Datamodule1.Database1.Rollback;
+          DModule.Database1.Rollback;
         end;
       end;
     end
@@ -1212,7 +1230,7 @@ var
   i: integer;
 begin
   i := SGCl.Row - 1;
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     if MessageBox(Form1.Handle, PChar('Удалить последнюю запись в истории клиента? ' + SGCL.Cells[0, i + 1] + '.' + #13 + 'Подтверждаете?'), PChar('Отказ от субсидии'),
       MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
@@ -1247,7 +1265,7 @@ var
 procedure GetPPriv;
 begin
   priv := TStringList.Create;
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1291,7 +1309,7 @@ end;
 
 procedure GetPlate;
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1304,7 +1322,7 @@ begin
     pl := FieldByName('id_service').AsInteger;
     Close;
   end;
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -1382,8 +1400,8 @@ begin
     if subs <> 0.0 then
     begin
       frxReport1.LoadFromFile(PChar(reports_path + 'uvedom.fr3'));
-      frxData.DataSet := Datamodule1.Query2;
-      frxData1.DataSet := Datamodule1.Query1;
+      frxData.DataSet := DModule.Query2;
+      frxData1.DataSet := DModule.Query1;
 
       DecodeDate(StrToDate(s2), y, m, d);
       p2 := EncodeDate(y, m, 15);
@@ -1400,7 +1418,7 @@ begin
       GetPlate();
       GetStnd();
 
-      with Datamodule1.Query1 do
+      with DModule.Query1 do
       begin
         Close;
         SQL.Clear;
@@ -1409,7 +1427,7 @@ begin
         ParamByName('d').AsString := s1;
         Open;
       end;
-      with Datamodule1.Query2 do
+      with DModule.Query2 do
       begin
         Close;
         SQL.Clear;
@@ -1419,19 +1437,19 @@ begin
         Open;
       end;
       i  := 0;
-      cd := DataModule1.Query1.FieldByName('bdate').AsDateTime;
-      while DataModule1.Query1.FieldByName('edate').AsDateTime <> cd do
+      cd := DModule.Query1.FieldByName('bdate').AsDateTime;
+      while DModule.Query1.FieldByName('edate').AsDateTime <> cd do
       begin
         cd := IncMonth(cd);
         Inc(i);
       end;
 
       frxReport1.Variables.Variables['sumsub1'] := 0;
-      DataModule1.Query2.First;
-      for j := 0 to DataModule1.Query2.RecordCount - 1 do
+      DModule.Query2.First;
+      for j := 0 to DModule.Query2.RecordCount - 1 do
       begin
-        frxReport1.Variables.Variables['sumsub1'] := frxReport1.Variables.Variables['sumsub1'] + DataModule1.Query2.FieldValues['sub'];
-        DataModule1.Query2.Next;
+        frxReport1.Variables.Variables['sumsub1'] := frxReport1.Variables.Variables['sumsub1'] + DModule.Query2.FieldValues['sub'];
+        DModule.Query2.Next;
       end;
 
       ReportsFillDistInfo();
@@ -1453,8 +1471,8 @@ begin
     else
     begin
       frxReport1.LoadFromFile(PChar(reports_path + 'uvedomo.fr3'));
-      frxData.DataSet := Datamodule1.Query2;
-      frxData1.DataSet := Datamodule1.Query1;
+      frxData.DataSet := DModule.Query2;
+      frxData1.DataSet := DModule.Query1;
 
       frxReport1.Variables.Variables['fio']  := quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 3));
       frxReport1.Variables.Variables['fio_n'] := quotedstr(SGCl.Cells[0, SGCl.row]);
@@ -1466,7 +1484,7 @@ begin
       GetPlate();
       GetStnd();
 
-      with Datamodule1.Query1 do
+      with DModule.Query1 do
       begin
         Close;
         SQL.Clear;
@@ -1476,7 +1494,7 @@ begin
         Open;
       end;
 
-      with Datamodule1.Query2 do
+      with DModule.Query2 do
       begin
         Close;
         SQL.Clear;
@@ -1488,7 +1506,7 @@ begin
 
       ReportDataFrm := TReportDataFrm.Create(Application);
       ReportDataFrm.RepType := rUvedomo;
-      ReportsFillAdditionData(Datamodule1.Query1.FieldByName('nameinsp').AsString);
+      ReportsFillAdditionData(DModule.Query1.FieldByName('nameinsp').AsString);
       ReportsFillDistInfo();
 
       frxReport1.PrepareReport;
@@ -1538,9 +1556,9 @@ begin
     if (status < 3) then
     begin
       frxReport1.LoadFromFile(PChar(reports_path + 'karta.fr3'));
-      frxData.DataSet := Datamodule1.Query1;
-      frxData1.DataSet := Datamodule1.Query2;
-      frxData2.DataSet := Datamodule1.Query3;
+      frxData.DataSet := DModule.Query1;
+      frxData1.DataSet := DModule.Query2;
+      frxData2.DataSet := DModule.Query3;
       priv := TStringList.Create;
 
       GetStnd();
@@ -1548,7 +1566,7 @@ begin
       s1 := Copy(SGCl.Cells[2, SGCl.row], 1, 10);//begindate
       s2 := Copy(SGCl.Cells[2, SGCl.row], 14, 10);//enddate
       //льготы семьи
-      with Datamodule1.Query1 do
+      with DModule.Query1 do
       begin
         Close;
         SQL.Clear;
@@ -1592,7 +1610,7 @@ begin
       frxReport1.Variables.Variables['priv'] := quotedstr(priv_str);
 
       //плита, которая зарегистрирована
-      with Datamodule1.Query1 do
+      with DModule.Query1 do
       begin
         Close;
         SQL.Clear;
@@ -1605,7 +1623,7 @@ begin
         pl := FieldByName('id_service').AsInteger;
         Close;
       end;
-      with Datamodule1.qTarif do
+      with DModule.qTarif do
       begin
         Close;
         SQL.Clear;
@@ -1617,7 +1635,7 @@ begin
         frxReport1.Variables.Variables['plate'] := quotedstr(FieldByName('plate').AsString);
         Close;
       end;
-      with Datamodule1.Query1 do
+      with DModule.Query1 do
       begin
         Close;
         SQL.Clear;
@@ -1626,7 +1644,7 @@ begin
         ParamByName('d').AsString := rdt;
       end;
       //не удалять, необходимо для формирования отчета !!!!
-      with Datamodule1.Query2 do
+      with DModule.Query2 do
       begin
         Close;
         SQL.Clear;
@@ -1635,7 +1653,7 @@ begin
         ParamByName('s').AsString := s1;
       end;
       //не удалять, необходимо для формирования отчета!!!!!
-      with Datamodule1.Query3 do
+      with DModule.Query3 do
       begin
         Close;
         SQL.Clear;
@@ -1676,7 +1694,7 @@ begin
   if status = 3 then
   begin
     rd := DateToStr(c.Data.regdate);
-    with Datamodule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -1693,7 +1711,7 @@ begin
   end
   else
   begin
-    with Datamodule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -1730,7 +1748,7 @@ begin
   s1 := Copy(SGCl.Cells[2, SGCl.row], 1, 10); //begindate
   s2 := Copy(SGCl.Cells[2, SGCl.row], 14, 10);//enddate
 
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1758,13 +1776,12 @@ begin
 
   frxReport1.Variables.Variables['address'] := quotedstr(SGCl.Cells[1, SGCl.row]);
   frxReport1.Variables.Variables['sub'] := quotedstr(SGCl.Cells[4, SGCl.row]);
-  frxReport1.Variables.Variables['boss'] := quotedstr(Datamodule1.Query1.FieldByName('boss').AsString);
-//  frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldByName('nameinsp').AsString);
-  frxReport1.Script.Variables['id_dist'] := (Datamodule1.Query1.FieldByName('id_dist').AsInteger);
+  frxReport1.Variables.Variables['boss'] := quotedstr(DModule.Query1.FieldByName('boss').AsString);
+  frxReport1.Script.Variables['id_dist'] := (DModule.Query1.FieldByName('id_dist').AsInteger);
 
   ReportDataFrm := TReportDataFrm.Create(Application);
   ReportDataFrm.RepType := rSolut;
-  ReportsFillAdditionData(Datamodule1.Query1.FieldByName('nameinsp').AsString);
+  ReportsFillAdditionData(DModule.Query1.FieldByName('nameinsp').AsString);
   ReportsFillDistInfo();
 
   frxReport1.PrepareReport;
@@ -1783,7 +1800,7 @@ begin
   frxReport1.LoadFromFile(reports_path + 'solutb.fr3');
   s1 := Copy(SGCl.Cells[2, SGCl.row], 1, 10); //begindate
   s2 := Copy(SGCl.Cells[2, SGCl.row], 14, 10);//enddate
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1792,7 +1809,6 @@ begin
     ParamByName('d').AsString := s1;
     Open;
   end;
-  //      cd := DataModule1.Query1.FieldByName('bdate').AsDateTime;
   frxReport1.Variables.Variables['cd']  := quotedstr(rdt);
   frxReport1.Variables.Variables['sd']  := quotedstr(s2);
   frxReport1.Variables.Variables['regn'] := '0' + IntToStr(client);
@@ -1803,13 +1819,13 @@ begin
   frxReport1.Variables.Variables['fio_n'] := quotedstr(SGCl.Cells[0, SGCl.row]);
   frxReport1.Variables.Variables['address'] := quotedstr(SGCl.Cells[1, SGCl.row]);
 //  frxReport1.Variables.Variables['sub']  := quotedstr(SGCl.Cells[4, SGCl.row]);
-  frxReport1.Variables.Variables['boss'] := quotedstr(Datamodule1.Query1.FieldValues['boss']);
-  frxReport1.Variables.Variables['id_dist'] := Datamodule1.Query1.FieldByName('id_dist').AsInteger;
+  frxReport1.Variables.Variables['boss'] := quotedstr(DModule.Query1.FieldValues['boss']);
+  frxReport1.Variables.Variables['id_dist'] := DModule.Query1.FieldByName('id_dist').AsInteger;
 
   ReportDataFrm := TReportDataFrm.Create(Application);
   ReportDataFrm.RepType := rSolutb;
-  ReportsFillAdditionData(Datamodule1.Query1.FieldValues['nameinsp']);
-  frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldByName('nameinsp').AsString);
+  ReportsFillAdditionData(DModule.Query1.FieldValues['nameinsp']);
+  frxReport1.Variables.Variables['spec'] := quotedstr(DModule.Query1.FieldByName('nameinsp').AsString);
   ReportsFillDistInfo();
 
   frxReport1.PrepareReport;
@@ -1832,7 +1848,7 @@ begin
   s1 := Copy(SGCl.Cells[2, SGCl.row], 1, 10); //begindate
   s2 := Copy(SGCl.Cells[2, SGCl.row], 14, 10);//enddate
 
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1841,7 +1857,6 @@ begin
     ParamByName('d').AsString := s1;
     Open;
   end;
-  //      cd := DataModule1.Query1.FieldByName('bdate').AsDateTime;
   frxReport1.Variables.Variables['cd']  := quotedstr(rdt);
   frxReport1.Variables.Variables['sd']  := IncMonth(StrToDateTime(rdt));
   frxReport1.Variables.Variables['regn'] := quotedstr('0' + IntToStr(client));
@@ -1851,9 +1866,8 @@ begin
   frxReport1.Variables.Variables['fio_s'] := quotedstr(GetShortName(SGCl.Cells[0, SGCl.row]));
   frxReport1.Variables.Variables['address'] := quotedstr(SGCl.Cells[1, SGCl.row]);
   frxReport1.Variables.Variables['sub'] := quotedstr(SGCl.Cells[4, SGCl.row]);
-  frxReport1.Variables.Variables['boss'] := quotedstr(Datamodule1.Query1.FieldValues['boss']);
-//  frxReport1.Variables.Variables['spec'] := quotedstr(Datamodule1.Query1.FieldValues['nameinsp']);
-  frxReport1.Variables.Variables['edate'] := quotedstr(Datamodule1.Query1.FieldValues['edate']);
+  frxReport1.Variables.Variables['boss'] := quotedstr(DModule.Query1.FieldValues['boss']);
+  frxReport1.Variables.Variables['edate'] := quotedstr(DModule.Query1.FieldValues['edate']);
 
   s4 := GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 3);
   i  := posex(' ', s4, 1);
@@ -1865,7 +1879,7 @@ begin
 
   ReportDataFrm := TReportDataFrm.Create(Application);
   ReportDataFrm.RepType := rSolute;
-  ReportsFillAdditionData(Datamodule1.Query1.FieldValues['nameinsp']);
+  ReportsFillAdditionData(DModule.Query1.FieldValues['nameinsp']);
   ReportsFillDistInfo();
 
   frxReport1.PrepareReport;
@@ -1881,7 +1895,7 @@ end;
 procedure TForm1.aRepNachExecute(Sender: TObject);
 { отчет о начислении }
 begin
-  with DataModule1 do
+  with DModule do
   begin
     Query1.Close;
     Query1.SQL.Clear;
@@ -1896,12 +1910,12 @@ begin
     Query2.Open;
   end;
 
-  frxData.DataSource := Datamodule1.DataSource1;
+  frxData.DataSource := DModule.DataSource1;
   frxReport1.LoadFromFile(PChar(reports_path + 'nach.fr3'));
   frxReport1.Script.Variables['id_dist'] := (dist);
   frxReport1.Variables.Variables['mont'] := quotedstr(LongMonthNames[StrToInt(FormatDateTime('m', StrToDate(rdt)))]);
   frxReport1.Variables.Variables['year'] := IntToStr(yearof(strtodate(rdt)));
-  frxReport1.Variables.Variables['boss'] := quotedstr(DataModule1.Query2.FieldValues['boss']);
+  frxReport1.Variables.Variables['boss'] := quotedstr(DModule.Query2.FieldValues['boss']);
 
   frxReport1.PrepareReport;
   frxReport1.ShowPreparedReport;
@@ -1932,7 +1946,7 @@ begin
   end;
 
   Sheet := ExcelApp.ActiveWorkBook.WorkSheets[1];
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1973,7 +1987,7 @@ begin
   SetLength(s, 3);
   sum := 0;
   gen := 0;
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2050,7 +2064,7 @@ procedure TForm1.aRepFactExecute(Sender: TObject);
 var
   y1: string;
 begin
-  with DataModule1 do
+  with DModule do
   begin
     Query1.Close;
     Query1.SQL.Text := 'EXEC getclfactsum ' + quotedstr(rdt) + ', ' + IntToStr(dist);
@@ -2064,7 +2078,7 @@ begin
     Query2.Open;
   end;
 
-  frxData.DataSource := Datamodule1.DataSource1;
+  frxData.DataSource := DModule.DataSource1;
   frxReport1.LoadFromFile(PChar(reports_path + 'factsale.fr3'));
 
   y1 := IntToStr(YearOf(StrToDate(rdt)));
@@ -2072,7 +2086,7 @@ begin
   frxReport1.Variables.Variables['month'] := quotedstr(LongMonthNames[StrToInt(FormatDateTime('m', StrToDate(rdt)))]);//quotedstr(ReturnMountStr);
   frxReport1.Variables.Variables['year']  := quotedstr(y1);
   frxReport1.Script.Variables['id_dist']  := (dist);
-  frxReport1.Variables.Variables['boss']  := quotedstr(DataModule1.Query2.FieldValues['boss']);
+  frxReport1.Variables.Variables['boss']  := quotedstr(DModule.Query2.FieldValues['boss']);
 
   frxReport1.PrepareReport;
   frxReport1.ShowPreparedReport;
@@ -2083,7 +2097,7 @@ procedure TForm1.aSlujSumTarifExecute(Sender: TObject);
 begin
   SlujFrm.mode := mDetail;
   SlujFrm.FillSlujGrid;
-  if DataModule1.Query1.RecordCount > 0 then
+  if DModule.Query1.RecordCount > 0 then
     SlujFrm.ShowModal;
 end;
 
@@ -2092,7 +2106,7 @@ procedure TForm1.aSlujSumAllExecute(Sender: TObject);
 begin
   SlujFrm.mode := mSum;
   SlujFrm.FillSlujGrid;
-  if DataModule1.Query1.RecordCount > 0 then
+  if DModule.Query1.RecordCount > 0 then
     SlujFrm.ShowModal;
 end;
 
@@ -2104,11 +2118,11 @@ procedure TForm1.aSvodNachExecute(Sender: TObject);
 var
   y1: string;
 begin
-  DataModule1.Query1.SQL.Clear;
-  DataModule1.Query1.SQL.Add('EXEC svodsub ' + quotedstr(rdt));
-  DataModule1.Query1.Open;
+  DModule.Query1.SQL.Clear;
+  DModule.Query1.SQL.Add('EXEC svodsub ' + quotedstr(rdt));
+  DModule.Query1.Open;
 
-  frxData.DataSource := Datamodule1.DataSource1;
+  frxData.DataSource := DModule.DataSource1;
   frxReport1.LoadFromFile(PChar(reports_path + 'svodsub.fr3'));
 
   y1 := IntToStr(YearOf(StrToDate(rdt)));
@@ -2151,7 +2165,7 @@ procedure TForm1.aEditClCertExecute(Sender: TObject);
     которых стоит на контроле по переаттестаци или по внеплановой аттестации.
 *******************************************************************************}
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2174,7 +2188,7 @@ procedure TForm1.aSetActiveAllInspExecute(Sender: TObject);
   Процедура делает активными всех инспекторов текущего округа
 *******************************************************************************}
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2192,7 +2206,7 @@ procedure TForm1.aSetActiveAllStrtExecute(Sender: TObject);
   Процедура делает активными все улицы.
 *******************************************************************************}
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2208,7 +2222,7 @@ procedure TForm1.aSetActiveUseStrtExecute(Sender: TObject);
   Процедура делает активными используемые улицы
 *******************************************************************************}
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2635,8 +2649,8 @@ begin
       pr.Update;
       SendMessage(pr.Handle, wm_paint, 0, 0);
       try
-        Datamodule1.Database1.StartTransaction;
-        with Datamodule1.Query1 do
+        DModule.Database1.StartTransaction;
+        with DModule.Query1 do
         begin
           //делаем расчет активных
           Close;
@@ -2648,9 +2662,9 @@ begin
           ExecSQL;
           Close;
         end;
-        Datamodule1.Database1.Commit;
+        DModule.Database1.Commit;
       except
-        Datamodule1.Database1.Rollback;
+        DModule.Database1.Rollback;
       end;
       pr.Close;
       pr.Release;
@@ -2694,7 +2708,7 @@ var
 begin
   ey := StrToInt(Copy(rdt, 7, 4));
   em := StrToInt(Copy(rdt, 4, 2));
-  with DataModule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SetLength(cl, Length(cl) + 1);
@@ -2759,7 +2773,7 @@ begin
   if not DirectoryExists(outdir) then
     CreateDir(outdir);
   try
-    with Datamodule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -2823,8 +2837,8 @@ begin
       c := TClient.Create(Empty, EmptyC);
       cnt := 0;
       try
-        Datamodule1.Database1.StartTransaction;
-        with Datamodule1.Query1 do
+        DModule.Database1.StartTransaction;
+        with DModule.Query1 do
         begin
           Close;
           SQL.Clear;
@@ -2905,9 +2919,9 @@ begin
             end;
           end;
         end;
-        Datamodule1.Database1.Commit;
+        DModule.Database1.Commit;
       except
-        Datamodule1.Database1.Rollback;
+        DModule.Database1.Rollback;
       end;
       pr.Free;
       Reload;
@@ -2942,7 +2956,7 @@ begin
   SelectDistFrm.ShowModal;
   if (dist1 <> dist) then
   begin
-    with DataModule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -2961,7 +2975,6 @@ begin
       sec1 := 1
     else
       sec1 := 0;
-//    Datamodule1.ChAttrTable(dist);
     FillCurr(bpath, rdt, dist, Form1.codedbf);
     SetTarifs;
     Reload;
@@ -2970,7 +2983,7 @@ begin
   end
   else
   begin
-    with DataModule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -3007,7 +3020,7 @@ begin
   Form17.ShowModal;
   if (insp1 <> insp) then
   begin
-    with DataModule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -3051,7 +3064,7 @@ var
   s: real;
 begin
   sts := status;
-  with DataModule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -3177,7 +3190,7 @@ var
 begin
 
   //делаем перерасчет выбранных
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     cnt := 0;
     Close;
@@ -3324,7 +3337,7 @@ begin
     dt := dt + IntToStr(m);
   SetPer(dt, rdt);
 
-  with DataModule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -3471,8 +3484,8 @@ begin
   pdt := DateToStr(ed);
 
   try
-    Datamodule1.Database1.Connected := True;
-    with Datamodule1.Query1 do
+    DModule.Database1.Connected := True;
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -3482,7 +3495,7 @@ begin
       ed := FieldByName('edate').AsDateTime;
       Close;
     end;
-    Datamodule1.qTarif.Close;
+    DModule.qTarif.Close;
   except
     ShowMessage('Произошел сбой при попытке соединения с сервером! Обратитесь к ' +
       'администратору для устранения этих неполадок.' + #13 +
@@ -3522,8 +3535,8 @@ begin
   SaveSubsidyCfg;
 
   try
-    Datamodule1.Database1.Connected := True;
-    if (pdt > rdt) and Datamodule1.Database1.Connected then
+    DModule.Database1.Connected := True;
+    if (pdt > rdt) and DModule.Database1.Connected then
       FillCurr(bpath, pdt, dist, Form1.codedbf);
   except
     ShowMessage('Произошел сбой при попытке соединения с сервером! Обратитесь к ' +
@@ -3532,7 +3545,7 @@ begin
       'неверных начальных данных.Чтобы это исправить рекомендуется ' +
       'совершить холостой запуск программы и выполнить настройку.');
   end;
-  with DataModule1 do
+  with DModule do
   begin
     t1.Close;
     t2.Close;
@@ -3582,7 +3595,7 @@ begin
   pr.Show;
   pr.Update;
   SendMessage(pr.Handle, wm_paint, 0, 0);
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -3593,9 +3606,9 @@ begin
       Open;
     except
       ShowMessage('Connect failed trying reconnect...');
-      Datamodule1.Database1.Close;
+      DModule.Database1.Close;
       try
-        Datamodule1.Database1.Open;
+        DModule.Database1.Open;
         ShowMessage('Connection restore...');
         Open;
       except
@@ -3707,7 +3720,7 @@ procedure TForm1.ReportsFillDistInfo;
 var
   tmp_query: TQuery;
 begin
-  tmp_query := TQuery.Create(DataModule1);
+  tmp_query := TQuery.Create(DModule);
   tmp_query.DatabaseName := 'Subsidy';
   with tmp_query do
   begin
@@ -3746,7 +3759,7 @@ begin
   pr.Show;
   pr.Update;
   SendMessage(pr.Handle, wm_paint, 0, 0);
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -4049,17 +4062,17 @@ procedure TForm1.PrintVedCr(f, ad, rd, mng: string);
 var
   y1, dt: string;
 begin
-  DataModule1.Query1.SQL.Clear;
-  DataModule1.Query1.SQL.Add('EXEC vedomost "' + rdt + '", "' + IntToStr(client) + '"');
-  DataModule1.Query1.Open;
+  DModule.Query1.SQL.Clear;
+  DModule.Query1.SQL.Add('EXEC vedomost "' + rdt + '", "' + IntToStr(client) + '"');
+  DModule.Query1.Open;
 
-  DataModule1.Query2.SQL.Clear;
-  DataModule1.Query2.SQL.Text := ('SELECT boss ' + #13 +
+  DModule.Query2.SQL.Clear;
+  DModule.Query2.SQL.Text := ('SELECT boss ' + #13 +
     'FROM Dist ' + #13 +
     'WHERE id_dist = ' + IntToStr(dist));
-  DataModule1.Query2.Open;
+  DModule.Query2.Open;
 
-  frxData.DataSource := Datamodule1.DataSource1;
+  frxData.DataSource := DModule.DataSource1;
   frxReport1.LoadFromFile(PChar(reports_path + 'vedomost.fr3'));
   //  frxReport1.Title := 'Ведомость субсидий';
 
@@ -4073,7 +4086,7 @@ begin
   frxReport1.Variables.Variables['rd'] := quotedstr(rd);
   frxReport1.Variables.Variables['mng'] := quotedstr(mng);
   frxReport1.Script.Variables['dist'] := (IntToStr(dist));
-  frxReport1.Variables.Variables['boss'] := quotedstr(DataModule1.Query2.FieldValues['boss']);
+  frxReport1.Variables.Variables['boss'] := quotedstr(DModule.Query2.FieldValues['boss']);
   frxReport1.PrepareReport;
   frxReport1.ShowPreparedReport;
 end;
@@ -4119,7 +4132,7 @@ begin
     sec1 := 0;
     if (stop[SGCl.Row - 1] < 2) or (stop[SGCl.Row - 1] > 1) and (status = 3) then
     begin
-      Form2.status := 1;
+      Form2.mode := vEdit;
       Form2.ShowModal;
     end
     else
@@ -4138,7 +4151,7 @@ begin
   begin
     if CheckP2 then
     begin
-      Form2.status := 0;
+      Form2.mode := vAdd;
       Form2.ShowModal;
     end
     else
@@ -4150,7 +4163,7 @@ begin
     begin
       if (stop[SGCl.Row - 1] < 2) or (stop[SGCl.Row - 1] > 1) and (status = 3) then
       begin
-        Form2.status := 1;
+        Form2.mode := vEdit;
         Form2.ShowModal;
       end
       else
@@ -4238,7 +4251,7 @@ procedure TForm1.N73Click(Sender: TObject);
 begin
   if (stop[SGCl.Row - 1] = 0) and (status <> 3) then
   begin
-    with Datamodule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -4285,7 +4298,7 @@ begin
     cmp := MonthOf(StrToDate(rdt)) + 12 - MonthOf(StrToDate(Copy(SGCl.Cells[2, SGCl.row], 1, 10)));
   if (stop[SGCl.Row - 1] = 2) and (status <> 3) and (cmp = 1) then
   begin
-    with Datamodule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -4335,7 +4348,7 @@ begin
     cmp := MonthOf(StrToDate(rdt)) + 12 - MonthOf(StrToDate(Copy(SGCl.Cells[2, SGCl.row], 1, 10)));
   if (stop[SGCl.Row - 1] = 3) and (status <> 3) and (cmp >= 1) then
   begin
-    with Datamodule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       c := TClient.Create(Empty, EmptyC);
@@ -4390,7 +4403,7 @@ var
 begin
   if stop[SGCl.Row - 1] = 2 then
   begin
-    with Datamodule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       c := TClient.Create(Empty, EmptyC);

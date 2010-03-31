@@ -70,7 +70,7 @@ procedure TStats.Button1Click(Sender: TObject);
 var
   i: integer;
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -98,25 +98,25 @@ begin
     0:
     begin
       FormerStringGrid(StringGrid1, TStringArray.Create('Льгота', 'Кол-во'),
-        TIntArray.Create(280, 45), Datamodule1.Query1.RecordCount + 1);
+        TIntArray.Create(280, 45), DModule.Query1.RecordCount + 1);
 
-      for i := 0 to Datamodule1.Query1.RecordCount - 1 do
+      for i := 0 to DModule.Query1.RecordCount - 1 do
       begin
-        StringGrid1.Cells[0, i + 1] := Datamodule1.Query1.FieldByName('namepriv').Value;
-        StringGrid1.Cells[1, i + 1] := Datamodule1.Query1.FieldByName('kolvo').Value;
-        Datamodule1.Query1.Next;
+        StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('namepriv').Value;
+        StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('kolvo').Value;
+        DModule.Query1.Next;
       end;
     end;
     1:
     begin
       FormerStringGrid(StringGrid1, TStringArray.Create('Соц. статус', 'Кол-во'),
-        TIntArray.Create(280, 45), Datamodule1.Query1.RecordCount + 1);
+        TIntArray.Create(280, 45), DModule.Query1.RecordCount + 1);
 
-      for i := 0 to Datamodule1.Query1.RecordCount - 1 do
+      for i := 0 to DModule.Query1.RecordCount - 1 do
       begin
-        StringGrid1.Cells[0, i + 1] := Datamodule1.Query1.FieldByName('namestatus').Value;
-        StringGrid1.Cells[1, i + 1] := Datamodule1.Query1.FieldByName('kolvo').Value;
-        Datamodule1.Query1.Next;
+        StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('namestatus').Value;
+        StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('kolvo').Value;
+        DModule.Query1.Next;
       end;
     end;
   end;
@@ -139,7 +139,7 @@ var
 begin
   //Субсидия
   summ := 0;
-  with DataModule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Text := (
@@ -170,14 +170,14 @@ begin
       Next;
     end;
   end;
-  Label11.Caption := IntToStr(DataModule1.Query1.RecordCount);
-  if DataModule1.Query1.RecordCount = 0 then
+  Label11.Caption := IntToStr(DModule.Query1.RecordCount);
+  if DModule.Query1.RecordCount = 0 then
     Label12.Caption := '0'
   else
     Label12.Caption := FloatToStr(RoundTo(summ / StrToFloat(Label11.Caption), -2));
 
   //Доход
-  with DataModule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Text := (
@@ -198,7 +198,7 @@ begin
     Open;
     First;
   end;
-  Label9.Caption := IntToStr(DataModule1.Query1.RecordCount);
+  Label9.Caption := IntToStr(DModule.Query1.RecordCount);
 end;
 
 procedure TStats.Edit1Exit(Sender: TObject);
