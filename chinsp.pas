@@ -42,7 +42,7 @@ begin
   ComboBox1.Clear;
 //  ListBox1.Clear;
   l:=0;
-  With Datamodule1.Query1 do begin
+  With DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('select id_insp, nameinsp');
@@ -73,7 +73,7 @@ end;
 
 procedure TForm17.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  Datamodule1.Query1.Close;
+  DModule.Query1.Close;
 end;
 
 procedure TForm17.Button1Click(Sender: TObject);

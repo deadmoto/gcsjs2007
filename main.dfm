@@ -5,7 +5,7 @@ object Form1: TForm1
   Caption = 
     #1059#1095#1077#1090' '#1087#1088#1077#1076#1086#1089#1090#1072#1074#1083#1077#1085#1080#1103' '#1089#1091#1073#1089#1080#1076#1080#1081' '#1085#1072' '#1086#1087#1083#1072#1090#1091' '#1046#1050#1059' '#1085#1072#1089#1077#1083#1077#1085#1080#1102' '#1075'.'#1054#1084#1089#1082#1072' '#1079#1072' ' +
     #1057#1077#1085#1090#1103#1073#1088#1100' 2006 '#1075'.'
-  ClientHeight = 546
+  ClientHeight = 548
   ClientWidth = 706
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,7 +14,7 @@ object Form1: TForm1
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = True
-  Position = poScreenCenter
+  Position = poDesigned
   Visible = True
   OnClose = FormClose
   OnCreate = FormCreate
@@ -24,7 +24,7 @@ object Form1: TForm1
   TextHeight = 13
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 525
+    Top = 527
     Width = 706
     Height = 21
     Panels = <
@@ -39,22 +39,24 @@ object Form1: TForm1
       end>
     ParentShowHint = False
     ShowHint = True
+    ExplicitTop = 525
   end
   object Panel1: TPanel
     AlignWithMargins = True
     Left = 3
     Top = 137
     Width = 700
-    Height = 338
+    Height = 340
     Align = alClient
     BevelInner = bvLowered
     Caption = 'Panel1'
     TabOrder = 1
+    ExplicitHeight = 338
     object SGCl: TStringGrid
       Left = 2
       Top = 2
       Width = 618
-      Height = 334
+      Height = 336
       Hint = #1057#1087#1080#1089#1086#1082' '#1074#1089#1077#1093' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1074' '#1073#1072#1079#1077
       Align = alClient
       BorderStyle = bsNone
@@ -74,12 +76,13 @@ object Form1: TForm1
       OnKeyPress = SGClKeyPress
       OnMouseDown = SGClMouseDown
       OnSelectCell = SGClSelectCell
+      ExplicitHeight = 334
     end
     object GridPanel1: TGridPanel
       Left = 620
       Top = 2
       Width = 78
-      Height = 334
+      Height = 336
       Align = alRight
       BevelOuter = bvNone
       ColumnCollection = <
@@ -187,9 +190,10 @@ object Form1: TForm1
           Value = 23.000000000000000000
         end>
       TabOrder = 1
+      ExplicitHeight = 334
       DesignSize = (
         78
-        334)
+        336)
       object Image1: TImage
         Left = 23
         Top = 0
@@ -351,14 +355,15 @@ object Form1: TForm1
         Left = 0
         Top = 186
         Width = 78
-        Height = 62
+        Height = 64
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 3
+        ExplicitHeight = 62
       end
       object Label1: TLabel
         Left = 22
-        Top = 251
+        Top = 253
         Width = 33
         Height = 13
         Anchors = []
@@ -368,7 +373,7 @@ object Form1: TForm1
       end
       object Edit1: TEdit
         Left = 12
-        Top = 269
+        Top = 271
         Width = 54
         Height = 21
         Hint = #1054#1073#1097#1077#1077' '#1082#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1095#1077#1083#1086#1074#1077#1082' '#1074' '#1073#1072#1079#1077
@@ -382,10 +387,11 @@ object Form1: TForm1
         ReadOnly = True
         ShowHint = True
         TabOrder = 4
+        ExplicitTop = 269
       end
       object Label2: TLabel
         Left = 12
-        Top = 294
+        Top = 296
         Width = 53
         Height = 13
         Anchors = []
@@ -395,7 +401,7 @@ object Form1: TForm1
       end
       object Edit2: TEdit
         Left = 12
-        Top = 312
+        Top = 314
         Width = 54
         Height = 21
         Hint = #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1072#1082#1090#1080#1074#1085#1099#1093' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1074' '#1073#1072#1079#1077
@@ -407,18 +413,20 @@ object Form1: TForm1
         ReadOnly = True
         ShowHint = True
         TabOrder = 5
+        ExplicitTop = 312
       end
     end
   end
   object Panel2: TPanel
     Left = 0
-    Top = 478
+    Top = 480
     Width = 706
     Height = 47
     Align = alBottom
     AutoSize = True
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitTop = 478
     object GridPanel2: TGridPanel
       AlignWithMargins = True
       Left = 3

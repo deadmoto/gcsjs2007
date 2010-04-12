@@ -90,7 +90,7 @@ uses service, main, datamodule;
 
 function TForm29.SelStnd(n: integer): string;//выбрать стандарт
 begin
-  with Datamodule1.qTarif do begin
+  with DModule.qTarif do begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namestnd');
@@ -119,7 +119,7 @@ begin
     12: nam := 'wood';
     13: nam := 'coal';
   end;
-  with Datamodule1.qTarif do begin
+  with DModule.qTarif do begin
     Close;
     SQL.Clear;
     if n<>7 then
@@ -233,7 +233,7 @@ procedure TForm29.FillTarif(n: string;num: integer);
 var
   l: integer;
 begin
-  with Datamodule1.qTarif do begin
+  with DModule.qTarif do begin
     l := 0;
     Close;
     SQL.Clear;
@@ -261,7 +261,7 @@ procedure TForm29.FillTarifb(n: string;num: integer);
 var
   l: integer;
 begin
-  with Datamodule1.qTarif do begin
+  with DModule.qTarif do begin
     l := 0;
     Close;
     SQL.Clear;
@@ -290,7 +290,7 @@ var
   l: integer;
 begin
   checkbox1.Checked := false;
-  with Datamodule1.Query1 do begin
+  with DModule.Query1 do begin
     l := 0;
     Close;
     SQL.Clear;
@@ -360,7 +360,7 @@ begin
     SetLength(curt,Length(serv));
     Combobox4.ItemIndex := 0;
   end;
-  with Datamodule1.qTarif do begin
+  with DModule.qTarif do begin
     l := 0;
     Close;
     SQL.Clear;
@@ -443,8 +443,8 @@ end;
 
 procedure TForm29.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  Datamodule1.Query1.Close;
-  Datamodule1.qTarif.Close;
+  DModule.Query1.Close;
+  DModule.qTarif.Close;
 end;
 
 procedure TForm29.ComboBox2Change(Sender: TObject);
@@ -545,9 +545,9 @@ end;
 procedure TForm29.Button1Click(Sender: TObject);
 begin
   if IsRus(Edit2.Text)and IsInt(Edit3.Text)then begin
-    Datamodule1.Database1.StartTransaction;
+    DModule.Database1.StartTransaction;
     try
-      with Datamodule1.Query1 do begin
+      with DModule.Query1 do begin
         if Checkbox2.Checked then begin
           Close;
           SQL.Clear;
@@ -673,7 +673,7 @@ begin
 
         end;
       end;
-      Datamodule1.Database1.Commit;
+      DModule.Database1.Commit;
       ShowMessage('Все в порядке');
       Form1.qr.SQL := 'select regn from cl where(id_street=:str)and(nhouse=:n)and(corp=:cp)'+
                       'and(id_dist=:idd)';
@@ -695,7 +695,7 @@ begin
       end;
       Form1.RecalcSelectedRows;
     except
-      Datamodule1.Database1.Rollback;
+      DModule.Database1.Rollback;
       ShowMessage('Операция завершилась неудачей!');
       form1.qr.SQL := '';
       SetLength(Form1.qr.parname,0);
@@ -707,7 +707,7 @@ end;
 
 procedure TForm29.Button2Click(Sender: TObject);
 begin
-  Datamodule1.Query1.Close;
+  DModule.Query1.Close;
   ac := false;
   form1.qr.SQL := '';
   SetLength(Form1.qr.parname,0);
@@ -724,7 +724,7 @@ begin
   if key=vk_return then begin
     if IsRus(Edit2.Text)and IsInt(Edit3.Text)and
       (Combobox1.Text <> '') then
-      with Datamodule1.Query1 do begin
+      with DModule.Query1 do begin
         Close;
         SQL.Clear;
         SQL.Add('select *');
@@ -775,7 +775,7 @@ var
   b: integer;
 begin
   if IsRus(Edit2.Text)and IsInt(Edit3.Text)and(Combobox1.Text <> '') then
-      with Datamodule1.Query1 do begin
+      with DModule.Query1 do begin
         Close;
         SQL.Clear;
         SQL.Add('select *');

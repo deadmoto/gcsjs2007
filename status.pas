@@ -88,7 +88,7 @@ procedure TForm14.Fill;
 var
   l: integer;
 begin
-  with Datamodule1.qTarif do
+  with DModule.qTarif do
   begin
     l := 0;
     Close;
@@ -138,7 +138,7 @@ procedure TForm14.SetDefault;
 var
   i: integer;
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -156,17 +156,17 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Группа'),
-    TIntArray.Create(25, 190, 190), Datamodule1.Query1.RecordCount + 1);
+    TIntArray.Create(25, 190, 190), DModule.Query1.RecordCount + 1);
 
-  for i := 0 to Datamodule1.Query1.RecordCount + 1 do
+  for i := 0 to DModule.Query1.RecordCount + 1 do
   begin
     with StringGrid1 do
     begin
-      Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_status').AsString;
-      Cells[1, i + 1] := Datamodule1.Query1.FieldByName('namestatus').AsString;
-      Cells[2, i + 1] := Datamodule1.Query1.FieldByName('namemin').AsString;
+      Cells[0, i + 1] := DModule.Query1.FieldByName('id_status').AsString;
+      Cells[1, i + 1] := DModule.Query1.FieldByName('namestatus').AsString;
+      Cells[2, i + 1] := DModule.Query1.FieldByName('namemin').AsString;
     end;
-    Datamodule1.Query1.Next;
+    DModule.Query1.Next;
   end;
 end;
 
@@ -209,7 +209,7 @@ var
 begin
   if (Edit1.Text <> '') and (Combobox1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DataModule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -277,7 +277,7 @@ var
 begin
   if (Edit1.Text <> '') and (Combobox1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DataModule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -338,7 +338,7 @@ procedure TForm14.Button3Click(Sender: TObject);
   удаляется запись, которая соответствует текущему id.
 *******************************************************************************}
 begin
-  with DataModule1.Query1 do
+  with DModule.Query1 do
   begin
     if not IsEmpty then
     begin
@@ -408,8 +408,8 @@ procedure TForm14.FormClose(Sender: TObject; var Action: TCloseAction);
   в этом unit.
 *******************************************************************************}
 begin
-  Datamodule1.Query1.Close;
-  Datamodule1.qTarif.Close;
+  DModule.Query1.Close;
+  DModule.qTarif.Close;
 end;
 
 procedure TForm14.Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
