@@ -859,7 +859,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO sub');
-    SQL.Add('VALUES (CONVERT(smalldatetime,:d,104),:id,:serv,:idserv,:ac,:pm,:snp,:sub,:sp,:stp)');
+    SQL.Add('VALUES (CONVERT(smalldatetime,:d,104),:id,:serv,:idserv,:ac,:pm,:snp,:sub,:sp,:stp,:stndsub)');
   end;
   if FileExists(path+'sub'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'sub'+IntToStr(dis)+'.dbf',f);
@@ -884,6 +884,7 @@ begin
         Query1.ParamByName('sub').AsFloat := StrToFloat(f[i][7]);
         Query1.ParamByName('sp').AsFloat := StrToFloat(f[i][8]);
         Query1.ParamByName('stp').AsString := f[i][9];
+        Query1.ParamByName('stndsub').AsFloat := f[i][10];
         Query1.ExecSQL;
       end;
       Query1.Close;
@@ -904,7 +905,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO Counters');
-    SQL.Add('VALUES (CONVERT(smalldatetime,:d,104),:id,:serv,:count,:countdata)');
+    SQL.Add('VALUES (CONVERT(smalldatetime,:d,104),:id,:serv,:count,:countdata,:countserv)');
   end;
   if FileExists(path+'counters'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'counters'+IntToStr(dis)+'.dbf',f);
@@ -926,6 +927,7 @@ begin
         Query1.ParamByName('serv').AsString := f[i][2];
         Query1.ParamByName('count').AsString := f[i][3];
         Query1.ParamByName('countdata').AsString := f[i][4];
+        Query1.ParamByName('countserv').AsString := f[i][5];
         Query1.ExecSQL;
       end;
       Query1.Close;
