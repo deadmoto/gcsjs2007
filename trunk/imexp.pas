@@ -3,32 +3,15 @@ unit imexp;
 interface
 
 uses
-  Windows,
-  Messages,
-  SysUtils,
-  Variants,
-  Classes,
-  Graphics,
-  Controls,
-  Forms,
-  Dialogs,
-  StdCtrls,
-  DB,
-  DBTables,
-  Mask;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DB, DBTables, Mask, DateUtils, Buttons, ExtCtrls;
 
 type
   TStatusMode = (mImport, mExport);
 
 type
   TForm35 = class(TForm)
-    CheckBox7:  TCheckBox;
     Button1:    TButton;
-    CheckBox8:  TCheckBox;
-    CheckBox9:  TCheckBox;
-    CheckBox10: TCheckBox;
-    CheckBox11: TCheckBox;
-    CheckBox13: TCheckBox;
     GroupBox1:  TGroupBox;
     CheckBox3:  TCheckBox;
     CheckBox4:  TCheckBox;
@@ -46,20 +29,32 @@ type
     CheckBox25: TCheckBox;
     CheckBox26: TCheckBox;
     CheckBox22: TCheckBox;
-    CheckBox24: TCheckBox;
     CheckBox23: TCheckBox;
     CheckBox16: TCheckBox;
     CheckBox27: TCheckBox;
-    Label1:     TLabel;
-    Edit1:      TEdit;
-    Button2:    TButton;
-    MaskEdit1:  TMaskEdit;
     CheckBox1:  TCheckBox;
-    CheckBox28: TCheckBox;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Edit1: TEdit;
+    Button2: TButton;
+    MaskEdit1: TMaskEdit;
     CheckBox29: TCheckBox;
+    CheckBox7: TCheckBox;
+    CheckBox8: TCheckBox;
+    CheckBox9: TCheckBox;
+    CheckBox10: TCheckBox;
+    CheckBox11: TCheckBox;
+    CheckBox13: TCheckBox;
+    CheckBox24: TCheckBox;
+    CheckBox28: TCheckBox;
     CheckBox30: TCheckBox;
     CheckBox31: TCheckBox;
+    CheckBox33: TCheckBox;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
     CheckBox32: TCheckBox;
+    Button3: TButton;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -69,6 +64,9 @@ type
     procedure MaskEdit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure CheckBox32Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
   private
     { Private declarations }
     function CountCh: integer;
@@ -84,14 +82,29 @@ var
 implementation
 
 uses
-  fstruct,
-  datamodule,
-  main,
-  DateUtils,
-  service,
-  progress;
+  fstruct, datamodule, main, service, progress;
 
 {$R *.dfm}
+
+procedure TForm35.BitBtn1Click(Sender: TObject);
+var
+  i: integer;
+begin
+  for i := 0 to Panel2.ControlCount - 1 do
+    if (Panel2.Controls[i] is TCheckBox) and (Panel2.Controls[i] <> CheckBox24)
+      and (Panel2.Controls[i] <> CheckBox32) then
+        TCheckBox(Panel2.Controls[i] as TCheckBox).Checked := True;
+end;
+
+procedure TForm35.BitBtn2Click(Sender: TObject);
+var
+  i: integer;
+begin
+  for i := 0 to Panel2.ControlCount - 1 do
+    if (Panel2.Controls[i] is TCheckBox) and (Panel2.Controls[i] <> CheckBox24)
+      and (Panel2.Controls[i] <> CheckBox32) then
+        TCheckBox(Panel2.Controls[i] as TCheckBox).Checked := False;
+end;
 
 procedure TForm35.Button1Click(Sender: TObject);
 { Ёкспорт/импорт выбранных файлов }
@@ -195,6 +208,15 @@ begin
         if CheckBox31.Checked then
         begin
           ExportFact(path, Form1.dist);
+          Inc(i);
+          pr.ProgressBar1.StepIt;
+          pr.Label3.Caption := IntToStr(i);
+          pr.Update;
+          SendMessage(pr.Handle, wm_paint, 0, 0);
+        end;
+        if CheckBox33.Checked then
+        begin
+          ExportCounters(path, dt, Form1.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -438,7 +460,7 @@ begin
       pr.Update;
       SendMessage(pr.Handle, wm_paint, 0, 0);
       try
-        Datamodule1.Database1.StartTransaction;
+        DModule.Database1.StartTransaction;
         if CheckBox24.Checked then
         begin
           if CheckBox1.Checked then
@@ -605,7 +627,7 @@ begin
           end;
           if CheckBox27.Checked then
           begin
-            ImportTarif(path, 'canal', Form1.dist);
+            ImportTarif(path, 'canal', Form1.dist, True);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -614,7 +636,7 @@ begin
           end;
           if CheckBox17.Checked then
           begin
-            ImportTarif(path, 'heat', Form1.dist);
+            ImportTarif(path, 'heat', Form1.dist, True);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -623,7 +645,7 @@ begin
           end;
           if CheckBox18.Checked then
           begin
-            ImportTarif(path, 'gas', Form1.dist);
+            ImportTarif(path, 'gas', Form1.dist, True);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -739,15 +761,22 @@ begin
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
+        if CheckBox33.Checked then
+        begin
+          ImportCounters(path, Form1.dist);
+          Inc(i);
+          pr.ProgressBar1.StepIt;
+          pr.Label3.Caption := IntToStr(i);
+          pr.Update;
+          SendMessage(pr.Handle, wm_paint, 0, 0);
+        end;
         pr.Close;
-        //pr.Release;
-        //pr.Free;
-        Datamodule1.Database1.Commit;
+        DModule.Database1.Commit;
         FillCurr(Form1.bpath, Form1.rdt, Form1.dist, Form1.codedbf);
         ShowMessage('»мпорт найденных файлов успешно завершен!');
         Form1.Reload;
       except
-        Datamodule1.Database1.Rollback;
+        DModule.Database1.Rollback;
         if Assigned(pr) then
           pr.Free;
         ShowMessage('ќшибка импорта!');
@@ -784,7 +813,7 @@ begin
       Button1.Caption := '»мпорт';
     end;
   end;
-  CheckBox8.Checked  := True;
+{  CheckBox8.Checked  := True;
   CheckBox30.Checked := True;
   CheckBox9.Checked  := True;
   CheckBox10.Checked := True;
@@ -813,7 +842,7 @@ begin
   CheckBox18.Checked := False;
   CheckBox19.Checked := False;
   CheckBox20.Checked := False;
-  CheckBox21.Checked := False;
+  CheckBox21.Checked := False;}
 end;
 
 procedure TForm35.Button2Click(Sender: TObject);
@@ -826,6 +855,11 @@ begin
     path := ExtractFilePath(Application.ExeName) + 'out\';
 
   Edit1.Text := path;
+end;
+
+procedure TForm35.Button3Click(Sender: TObject);
+begin
+  Close;
 end;
 
 procedure TForm35.CheckBox24Click(Sender: TObject);
@@ -843,6 +877,7 @@ begin
     begin
       GroupBox1.Enabled := False;
       CheckBox32.Checked := False;
+      CheckBox32.Enabled := False;
       CheckBox32.OnClick(Self);
     end;
 end;
@@ -951,6 +986,8 @@ begin
   if CheckBox21.Checked then
     Inc(Result);
   if CheckBox31.Checked then
+    Inc(Result);
+  if CheckBox33.Checked then
     Inc(Result);
 end;
 

@@ -3,8 +3,8 @@ object Form2: TForm2
   Top = 259
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  ClientHeight = 435
-  ClientWidth = 604
+  ClientHeight = 433
+  ClientWidth = 616
   Color = clBtnFace
   DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
@@ -22,9 +22,9 @@ object Form2: TForm2
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 598
-    Height = 429
-    ActivePage = TabSheet5
+    Width = 610
+    Height = 427
+    ActivePage = TabSheet3
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
@@ -975,6 +975,180 @@ object Form2: TForm2
         Height = 50
         Shape = bsLeftLine
       end
+      object Label87: TLabel
+        Left = 12
+        Top = 263
+        Width = 86
+        Height = 13
+        Caption = #1069#1083#1077#1082#1090#1088#1086#1101#1085#1077#1088#1075#1080#1103':'
+      end
+      object Bevel6: TBevel
+        Left = 115
+        Top = 272
+        Width = 334
+        Height = 2
+        Shape = bsTopLine
+      end
+      object ComboBox1: TComboBox
+        Left = 115
+        Top = 93
+        Width = 334
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 1
+        OnChange = ComboBox1Change
+      end
+      object ComboBox2: TComboBox
+        Left = 115
+        Top = 118
+        Width = 334
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 2
+        OnChange = ComboBox2Change
+      end
+      object ComboBox3: TComboBox
+        Left = 115
+        Top = 143
+        Width = 334
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 3
+        OnChange = ComboBox3Change
+      end
+      object ComboBox4: TComboBox
+        Left = 115
+        Top = 167
+        Width = 334
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 4
+        OnChange = ComboBox4Change
+      end
+      object ComboBox5: TComboBox
+        Left = 115
+        Top = 215
+        Width = 334
+        Height = 21
+        Hint = 
+          #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1086#1090#1086#1087#1083#1077#1085#1080#1077' '#1085#1077' '#1074#1099#1073#1088#1072#1085#1086', '#1079#1085#1072#1095#1080#1090' '#1077#1089#1090#1100' '#1090#1074#1077#1088#1076#1086#1077' '#1090#1086#1087#1083 +
+          #1080#1074#1086', '#1080' '#1085#1072#1086#1073#1086#1088#1086#1090
+        ItemHeight = 13
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 6
+        OnChange = ComboBox5Change
+      end
+      object ComboBox6: TComboBox
+        Left = 115
+        Top = 239
+        Width = 334
+        Height = 21
+        Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1075#1072#1079#1072' '#1085#1077#1090', '#1090#1086' '#1087#1083#1080#1090#1072' '#1085#1077' '#1076#1086#1083#1078#1085#1072' '#1073#1099#1090#1100' '#1075#1072#1079#1086#1074#1086#1081
+        ItemHeight = 13
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 7
+        OnChange = ComboBox6Change
+      end
+      object ComboBox8: TComboBox
+        Left = 115
+        Top = 288
+        Width = 334
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 8
+        OnChange = ComboBox8Change
+      end
+      object ComboBox9: TComboBox
+        Left = 115
+        Top = 312
+        Width = 334
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 9
+        OnChange = ComboBox9Change
+      end
+      object Edit3: TEdit
+        Left = 488
+        Top = 95
+        Width = 41
+        Height = 21
+        TabStop = False
+        Color = clBtnFace
+        ReadOnly = True
+        TabOrder = 10
+      end
+      object Edit4: TEdit
+        Left = 488
+        Top = 119
+        Width = 41
+        Height = 21
+        TabStop = False
+        Color = clBtnFace
+        ReadOnly = True
+        TabOrder = 11
+      end
+      object Edit5: TEdit
+        Left = 488
+        Top = 143
+        Width = 41
+        Height = 21
+        TabStop = False
+        Color = clBtnFace
+        ReadOnly = True
+        TabOrder = 12
+      end
+      object Edit6: TEdit
+        Left = 488
+        Top = 167
+        Width = 41
+        Height = 21
+        TabStop = False
+        Color = clBtnFace
+        ReadOnly = True
+        TabOrder = 13
+      end
+      object Edit7: TEdit
+        Left = 488
+        Top = 215
+        Width = 41
+        Height = 21
+        TabStop = False
+        Color = clBtnFace
+        ReadOnly = True
+        TabOrder = 14
+      end
+      object Edit8: TEdit
+        Left = 488
+        Top = 239
+        Width = 41
+        Height = 21
+        TabStop = False
+        Color = clBtnFace
+        ReadOnly = True
+        TabOrder = 15
+      end
+      object Edit10: TEdit
+        Left = 488
+        Top = 288
+        Width = 41
+        Height = 21
+        TabStop = False
+        Color = clBtnFace
+        ReadOnly = True
+        TabOrder = 16
+      end
+      object Edit11: TEdit
+        Left = 488
+        Top = 312
+        Width = 41
+        Height = 21
+        TabStop = False
+        Color = clBtnFace
+        ReadOnly = True
+        TabOrder = 17
+      end
       object ComboBox10: TComboBox
         Left = 115
         Top = 64
@@ -986,7 +1160,7 @@ object Form2: TForm2
       end
       object Edit9: TEdit
         Left = 458
-        Top = 64
+        Top = 61
         Width = 71
         Height = 21
         TabStop = False
@@ -1060,643 +1234,147 @@ object Form2: TForm2
             #1069#1083#1077#1082#1090#1080#1088#1080#1095#1077#1089#1082#1086#1077)
         end
       end
-      object PageControl2: TPageControl
-        Left = 12
-        Top = 88
-        Width = 541
-        Height = 249
-        ActivePage = TabSheet7
-        MultiLine = True
-        TabOrder = 5
-        TabPosition = tpBottom
-        object TabSheet7: TTabSheet
-          Caption = #1054#1073#1099#1095#1085#1099#1077
-          object Label24: TLabel
-            Left = 3
-            Top = 8
-            Width = 101
-            Height = 13
-            Caption = #1057#1086#1076#1077#1088#1078#1072#1085#1080#1077' '#1078#1080#1083#1100#1103':'
-          end
-          object Label25: TLabel
-            Left = 3
-            Top = 30
-            Width = 90
-            Height = 13
-            Caption = #1054#1089#1074#1077#1097#1077#1085#1080#1077' '#1052#1054#1055':'
-          end
-          object Label26: TLabel
-            Left = 3
-            Top = 52
-            Width = 79
-            Height = 13
-            Caption = #1061#1086#1083#1086#1076#1085#1072#1103' '#1074#1086#1076#1072':'
-          end
-          object Label27: TLabel
-            Left = 3
-            Top = 73
-            Width = 71
-            Height = 13
-            Caption = #1043#1086#1088#1103#1095#1072#1103' '#1074#1086#1076#1072':'
-          end
-          object Label65: TLabel
-            Left = 3
-            Top = 96
-            Width = 81
-            Height = 13
-            Caption = #1042#1086#1076#1086#1086#1090#1074#1077#1076#1077#1085#1080#1077':'
-          end
-          object Label29: TLabel
-            Left = 3
-            Top = 118
-            Width = 58
-            Height = 13
-            Caption = #1054#1090#1086#1087#1083#1077#1085#1080#1077':'
-          end
-          object Label30: TLabel
-            Left = 3
-            Top = 141
-            Width = 21
-            Height = 13
-            Caption = #1043#1072#1079':'
-          end
-          object Label60: TLabel
-            Left = 3
-            Top = 172
-            Width = 36
-            Height = 13
-            Caption = #1044#1088#1086#1074#1072':'
-          end
-          object Label72: TLabel
-            Left = 3
-            Top = 193
-            Width = 34
-            Height = 13
-            Caption = #1059#1075#1086#1083#1100':'
-          end
-          object comboBoxCont: TComboBox
-            Left = 106
-            Top = 8
-            Width = 334
-            Height = 21
-            ItemHeight = 13
-            TabOrder = 0
-            OnChange = comboBoxContChange
-          end
-          object Button10: TButton
-            Left = 441
-            Top = 7
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 1
-            OnClick = Button10Click
-          end
-          object Edit3: TEdit
-            Left = 470
-            Top = 8
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 2
-          end
-          object comboBoxRep: TComboBox
-            Left = 106
-            Top = 30
-            Width = 334
-            Height = 21
-            ItemHeight = 13
-            TabOrder = 3
-            OnChange = comboBoxRepChange
-          end
-          object Button11: TButton
-            Left = 441
-            Top = 29
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 4
-            OnClick = Button10Click
-          end
-          object Edit4: TEdit
-            Left = 470
-            Top = 30
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 5
-          end
-          object comboBoxCold: TComboBox
-            Left = 106
-            Top = 52
-            Width = 334
-            Height = 21
-            ItemHeight = 13
-            TabOrder = 6
-            OnChange = comboBoxColdChange
-          end
-          object Button12: TButton
-            Left = 441
-            Top = 51
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 7
-            OnClick = Button10Click
-          end
-          object Edit5: TEdit
-            Left = 470
-            Top = 52
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 8
-          end
-          object comboBoxHot: TComboBox
-            Left = 106
-            Top = 74
-            Width = 334
-            Height = 21
-            ItemHeight = 13
-            TabOrder = 9
-            OnChange = comboBoxHotChange
-          end
-          object Button13: TButton
-            Left = 441
-            Top = 73
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 10
-            OnClick = Button10Click
-          end
-          object Edit6: TEdit
-            Left = 470
-            Top = 74
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 11
-          end
-          object comboBoxCanal: TComboBox
-            Left = 106
-            Top = 96
-            Width = 334
-            Height = 21
-            ItemHeight = 13
-            TabOrder = 12
-            OnChange = comboBoxCanalChange
-          end
-          object Button14: TButton
-            Left = 441
-            Top = 95
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 13
-            OnClick = Button10Click
-          end
-          object Edit2: TEdit
-            Left = 469
-            Top = 96
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 14
-          end
-          object comboBoxHeat: TComboBox
-            Left = 106
-            Top = 118
-            Width = 334
-            Height = 21
-            Hint = 
-              #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1086#1090#1086#1087#1083#1077#1085#1080#1077' '#1085#1077' '#1074#1099#1073#1088#1072#1085#1086', '#1079#1085#1072#1095#1080#1090' '#1077#1089#1090#1100' '#1090#1074#1077#1088#1076#1086#1077' '#1090#1086#1087#1083 +
-              #1080#1074#1086', '#1080' '#1085#1072#1086#1073#1086#1088#1086#1090
-            ItemHeight = 13
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 15
-            OnChange = comboBoxHeatChange
-          end
-          object Button15: TButton
-            Left = 441
-            Top = 118
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 16
-            OnClick = Button10Click
-          end
-          object Edit7: TEdit
-            Left = 469
-            Top = 118
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 17
-          end
-          object comboBoxGas: TComboBox
-            Left = 106
-            Top = 140
-            Width = 334
-            Height = 21
-            Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1075#1072#1079#1072' '#1085#1077#1090', '#1090#1086' '#1087#1083#1080#1090#1072' '#1085#1077' '#1076#1086#1083#1078#1085#1072' '#1073#1099#1090#1100' '#1075#1072#1079#1086#1074#1086#1081
-            ItemHeight = 13
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 18
-            OnChange = comboBoxGasChange
-          end
-          object Button16: TButton
-            Left = 441
-            Top = 141
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 19
-            OnClick = Button10Click
-          end
-          object Edit8: TEdit
-            Left = 469
-            Top = 141
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 20
-          end
-          object comboBoxWood: TComboBox
-            Left = 106
-            Top = 171
-            Width = 334
-            Height = 21
-            ItemHeight = 13
-            TabOrder = 21
-            OnChange = comboBoxWoodChange
-          end
-          object Button17: TButton
-            Left = 441
-            Top = 171
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 22
-            OnClick = Button10Click
-          end
-          object Edit10: TEdit
-            Left = 469
-            Top = 171
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 23
-          end
-          object comboBoxCoal: TComboBox
-            Left = 106
-            Top = 193
-            Width = 334
-            Height = 21
-            ItemHeight = 13
-            TabOrder = 24
-            OnChange = comboBoxCoalChange
-          end
-          object Button18: TButton
-            Left = 441
-            Top = 193
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 25
-            OnClick = Button10Click
-          end
-          object Edit11: TEdit
-            Left = 469
-            Top = 193
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 26
-          end
+      object GroupBox13: TGroupBox
+        Left = 531
+        Top = 81
+        Width = 70
+        Height = 252
+        Caption = 'C'#1095#1077#1090#1095#1080#1082#1080':'
+        TabOrder = 32
+        object Bevel2: TBevel
+          Left = 10
+          Top = 25
+          Width = 50
+          Height = 2
+          Shape = bsTopLine
         end
-        object TabSheet8: TTabSheet
-          Caption = 'C'#1095#1077#1090#1095#1080#1082#1080
-          ImageIndex = 1
-          object Bevel6: TBevel
-            Left = 110
-            Top = 138
-            Width = 351
-            Height = 7
-            Shape = bsTopLine
-          end
-          object Label87: TLabel
-            Left = 7
-            Top = 133
-            Width = 86
-            Height = 13
-            Caption = #1069#1083#1077#1082#1090#1088#1086#1101#1085#1077#1088#1075#1080#1103':'
-          end
-          object Label88: TLabel
-            Left = 7
-            Top = 20
-            Width = 79
-            Height = 13
-            Caption = #1061#1086#1083#1086#1076#1085#1072#1103' '#1074#1086#1076#1072':'
-          end
-          object Label89: TLabel
-            Left = 7
-            Top = 41
-            Width = 71
-            Height = 13
-            Caption = #1043#1086#1088#1103#1095#1072#1103' '#1074#1086#1076#1072':'
-          end
-          object Label90: TLabel
-            Left = 7
-            Top = 64
-            Width = 81
-            Height = 13
-            Caption = #1042#1086#1076#1086#1086#1090#1074#1077#1076#1077#1085#1080#1077':'
-          end
-          object Label91: TLabel
-            Left = 7
-            Top = 86
-            Width = 58
-            Height = 13
-            Caption = #1054#1090#1086#1087#1083#1077#1085#1080#1077':'
-          end
-          object Label92: TLabel
-            Left = 7
-            Top = 109
-            Width = 21
-            Height = 13
-            Caption = #1043#1072#1079':'
-          end
-          object comboBoxColdCounter: TComboBox
-            Left = 110
-            Top = 20
-            Width = 283
-            Height = 21
-            ItemHeight = 13
-            TabOrder = 0
-            OnChange = comboBoxColdCounterChange
-          end
-          object btnColdCounter: TButton
-            Left = 394
-            Top = 19
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 1
-          end
-          object Edit124: TEdit
-            Left = 423
-            Top = 18
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 2
-          end
-          object Edit125: TEdit
-            Left = 423
-            Top = 40
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 3
-          end
-          object btnHotCounter: TButton
-            Left = 394
-            Top = 41
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 4
-          end
-          object comboBoxHotCounter: TComboBox
-            Left = 110
-            Top = 42
-            Width = 283
-            Height = 21
-            ItemHeight = 13
-            TabOrder = 5
-            OnChange = comboBoxHotCounterChange
-          end
-          object comboBoxCanalCounter: TComboBox
-            Left = 110
-            Top = 64
-            Width = 283
-            Height = 21
-            ItemHeight = 13
-            TabOrder = 6
-            OnChange = comboBoxCanalCounterChange
-          end
-          object btnCanalCounter: TButton
-            Left = 394
-            Top = 63
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 7
-          end
-          object Edit126: TEdit
-            Left = 422
-            Top = 62
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 8
-          end
-          object Edit127: TEdit
-            Left = 422
-            Top = 84
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 9
-          end
-          object btnHeatCounter: TButton
-            Left = 394
-            Top = 86
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 10
-          end
-          object comboBoxHeatCounter: TComboBox
-            Left = 110
-            Top = 86
-            Width = 283
-            Height = 21
-            Hint = 
-              #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1086#1090#1086#1087#1083#1077#1085#1080#1077' '#1085#1077' '#1074#1099#1073#1088#1072#1085#1086', '#1079#1085#1072#1095#1080#1090' '#1077#1089#1090#1100' '#1090#1074#1077#1088#1076#1086#1077' '#1090#1086#1087#1083 +
-              #1080#1074#1086', '#1080' '#1085#1072#1086#1073#1086#1088#1086#1090
-            ItemHeight = 13
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 11
-            OnChange = comboBoxHeatCounterChange
-          end
-          object comboBoxGasCounter: TComboBox
-            Left = 110
-            Top = 108
-            Width = 283
-            Height = 21
-            Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1075#1072#1079#1072' '#1085#1077#1090', '#1090#1086' '#1087#1083#1080#1090#1072' '#1085#1077' '#1076#1086#1083#1078#1085#1072' '#1073#1099#1090#1100' '#1075#1072#1079#1086#1074#1086#1081
-            ItemHeight = 13
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 12
-            OnChange = comboBoxGasCounterChange
-          end
-          object btnGasCounter: TButton
-            Left = 394
-            Top = 107
-            Width = 25
-            Height = 20
-            Caption = '...'
-            TabOrder = 13
-          end
-          object Edit128: TEdit
-            Left = 422
-            Top = 107
-            Width = 41
-            Height = 21
-            TabStop = False
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 14
-          end
-          object CheckBox4: TCheckBox
-            Left = 467
-            Top = 20
-            Width = 15
-            Height = 17
-            TabOrder = 15
-            OnClick = CheckBox4Click
-          end
-          object Edit118: TEdit
-            Left = 485
-            Top = 18
-            Width = 40
-            Height = 21
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 16
-            OnExit = Edit118Exit
-          end
-          object CheckBox5: TCheckBox
-            Left = 467
-            Top = 44
-            Width = 15
-            Height = 17
-            TabOrder = 17
-            OnClick = CheckBox4Click
-          end
-          object Edit119: TEdit
-            Left = 485
-            Top = 42
-            Width = 40
-            Height = 21
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 18
-            OnExit = Edit118Exit
-          end
-          object CheckBox6: TCheckBox
-            Left = 467
-            Top = 64
-            Width = 15
-            Height = 17
-            TabOrder = 19
-            OnClick = CheckBox4Click
-          end
-          object Edit120: TEdit
-            Left = 485
-            Top = 64
-            Width = 40
-            Height = 21
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 20
-            OnExit = Edit118Exit
-          end
-          object CheckBox7: TCheckBox
-            Left = 467
-            Top = 87
-            Width = 15
-            Height = 17
-            TabOrder = 21
-            OnClick = CheckBox4Click
-          end
-          object Edit121: TEdit
-            Left = 485
-            Top = 86
-            Width = 40
-            Height = 21
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 22
-            OnExit = Edit118Exit
-          end
-          object CheckBox8: TCheckBox
-            Left = 467
-            Top = 109
-            Width = 15
-            Height = 17
-            TabOrder = 23
-            OnClick = CheckBox4Click
-          end
-          object Edit122: TEdit
-            Left = 485
-            Top = 108
-            Width = 40
-            Height = 21
-            Color = clBtnFace
-            ReadOnly = True
-            TabOrder = 24
-            OnExit = Edit118Exit
-          end
-          object CheckBox9: TCheckBox
-            Left = 467
-            Top = 131
-            Width = 15
-            Height = 17
-            TabOrder = 25
-            OnClick = CheckBox4Click
-          end
-          object Edit123: TEdit
-            Left = 485
-            Top = 130
-            Width = 40
-            Height = 21
-            Color = clBtnFace
-            TabOrder = 26
-            OnExit = Edit118Exit
-          end
+        object Bevel3: TBevel
+          Left = 10
+          Top = 46
+          Width = 50
+          Height = 2
+          Shape = bsTopLine
+        end
+        object Bevel4: TBevel
+          Left = 10
+          Top = 217
+          Width = 50
+          Height = 2
+          Shape = bsTopLine
+        end
+        object Bevel5: TBevel
+          Left = 10
+          Top = 238
+          Width = 50
+          Height = 2
+          Shape = bsTopLine
+        end
+        object CheckBox4: TCheckBox
+          Left = 6
+          Top = 63
+          Width = 15
+          Height = 17
+          TabOrder = 0
+          OnClick = CheckBox4Click
+        end
+        object Edit118: TEdit
+          Left = 24
+          Top = 61
+          Width = 40
+          Height = 21
+          Color = clBtnFace
+          ReadOnly = True
+          TabOrder = 1
+          OnExit = Edit118Exit
+        end
+        object Edit119: TEdit
+          Left = 24
+          Top = 86
+          Width = 40
+          Height = 21
+          Color = clBtnFace
+          ReadOnly = True
+          TabOrder = 2
+          OnExit = Edit118Exit
+        end
+        object CheckBox5: TCheckBox
+          Left = 6
+          Top = 88
+          Width = 15
+          Height = 17
+          TabOrder = 3
+          OnClick = CheckBox4Click
+        end
+        object CheckBox6: TCheckBox
+          Left = 6
+          Top = 111
+          Width = 15
+          Height = 17
+          TabOrder = 4
+          OnClick = CheckBox4Click
+        end
+        object Edit120: TEdit
+          Left = 24
+          Top = 110
+          Width = 40
+          Height = 21
+          Color = clBtnFace
+          ReadOnly = True
+          TabOrder = 5
+          OnExit = Edit118Exit
+        end
+        object Edit121: TEdit
+          Left = 24
+          Top = 134
+          Width = 40
+          Height = 21
+          Color = clBtnFace
+          ReadOnly = True
+          TabOrder = 6
+          OnExit = Edit118Exit
+        end
+        object CheckBox7: TCheckBox
+          Left = 6
+          Top = 136
+          Width = 15
+          Height = 17
+          TabOrder = 7
+          OnClick = CheckBox4Click
+        end
+        object CheckBox8: TCheckBox
+          Left = 6
+          Top = 160
+          Width = 15
+          Height = 17
+          TabOrder = 8
+          OnClick = CheckBox4Click
+        end
+        object Edit122: TEdit
+          Left = 24
+          Top = 158
+          Width = 40
+          Height = 21
+          Color = clBtnFace
+          ReadOnly = True
+          TabOrder = 9
+          OnExit = Edit118Exit
+        end
+        object Edit123: TEdit
+          Left = 24
+          Top = 180
+          Width = 40
+          Height = 21
+          Color = clBtnFace
+          TabOrder = 10
+          OnExit = Edit118Exit
+        end
+        object CheckBox9: TCheckBox
+          Left = 6
+          Top = 182
+          Width = 15
+          Height = 17
+          TabOrder = 11
+          OnClick = CheckBox4Click
         end
       end
     end
@@ -3821,8 +3499,8 @@ object Form2: TForm2
       object TabControl1: TTabControl
         Left = 0
         Top = 0
-        Width = 590
-        Height = 401
+        Width = 602
+        Height = 399
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
@@ -3847,7 +3525,7 @@ object Form2: TForm2
         object Panel1: TPanel
           Left = 4
           Top = 27
-          Width = 582
+          Width = 594
           Height = 54
           Align = alTop
           BevelOuter = bvNone
@@ -4020,7 +3698,7 @@ object Form2: TForm2
   end
   object Button2: TButton
     Left = 395
-    Top = 0
+    Top = -1
     Width = 107
     Height = 22
     Enabled = False

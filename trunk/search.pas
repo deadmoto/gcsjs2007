@@ -236,7 +236,7 @@ begin
   Combobox5.Items.Add('последний');
   Combobox11.Items.Add('типовой расчет');
   Combobox11.Items.Add('индивид. расчет');
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     l := 0;
     Close;
@@ -1512,7 +1512,7 @@ function TForm33.SelInsp(n: integer): string;//выбрать инспектора
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1531,7 +1531,7 @@ function TForm33.SelCert(n: integer): string;//выбрать аттестацию
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1549,7 +1549,7 @@ function TForm33.SelStreet(n: integer): string;//выбрать улицу
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1581,7 +1581,7 @@ function TForm33.SelMng(n: integer): string;//выбрать распорядителя
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1600,7 +1600,7 @@ function TForm33.SelFnd(n: integer): string;//выбрать фонд
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1618,7 +1618,7 @@ function TForm33.SelSettl(n: integer): string;//выбрать тип заселения
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1636,7 +1636,7 @@ function TForm33.SelOwn(n: integer): string;//выбрать тип владения
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1654,7 +1654,7 @@ function TForm33.SelCntrl(n: integer): string;//выбрать тип контроля
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1672,7 +1672,7 @@ function TForm33.SelPriv(n: integer): string;//выбрать льготу
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -1805,7 +1805,7 @@ procedure TForm33.FormClose(Sender: TObject; var Action: TCloseAction);
 {*******************************************************************************
 *******************************************************************************}
 begin
-  Datamodule1.Query1.Close;
+  DModule.Query1.Close;
 end;
 
 procedure TForm33.Edit1Exit(Sender: TObject);

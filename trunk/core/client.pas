@@ -49,16 +49,13 @@ type
     f: T2DInt;//на всю семью распространяется льгота или нет
     min: array of integer;//минимумы членов семьи
     mid: array of real;//среднемесячные доходы членов семей
-    tarifs: TNumbTarifInt;//тарифы
-    cost: TNumbTarifReal;//значение тарифа по соответствующей услуге
-    tarifnorm: TNumbTarifReal;//норматив тарифа по соответствующей услуге
-    accounts: TNumbTarifString;//лиц. счета
+    tarifs: array[0..(numbtarif-1)] of integer;//тарифы
+    cost: array[0..(numbtarif-1)] of real;//значение тарифа по соответствующей услуге
+    tarifnorm: array[0..(numbtarif-1)] of real;//норматив тарифа по соответствующей услуге
+    accounts: array[0..(numbtarif-1)] of string;//лиц. счета
     //счетчики
-    counter: TNumbTarifBool;//есть ли счетчик по соответствующей услуге
-    counterdata: TNumbTarifReal;//среднее показание по соответствующей услуге
-    countertarifs: TNumbTarifInt;//тарифы для услуг с счетчиком
-    countercost: TNumbTarifReal;//значение тарифа по соответствующей услуге с счетчиком
-    counternorm: TNumbTarifReal;//норматив тарифа по соответствующей услуге с счетчиком
+    counter: array[0..(numbtarif-1)] of boolean;//есть ли счетчик по соответствующей услуге
+    counterdata: array[0..(numbtarif-1)] of real;//среднее показание по соответствующей услуге
     //установочные данные
     bpm: TNumbTarifReal;//начисления по каждому тарифу
     bsnpm: TNumbTarifReal;
@@ -151,7 +148,8 @@ type
   function Empty: TData;
   function EmptyC: TCData;
   function FromSt(s:integer):integer;
-  function GetCostTarif(s,id: integer;bdate: TDate;b,c,se:integer): real;
+  function GetCostTarif(s,id: integer;bdate: TDate;b,c,se:integer): real; //s-тариф,id-тип плиты,b-бойлер,c-mcount,se-тип заселения(settl)
+  function GetNormTarif(s,id: integer;bdate: TDate;b,c,se:integer): real;
 
 implementation
 
@@ -185,7 +183,7 @@ end;
 
 procedure TClient.SetClient(cl: integer;s: string);//Забирает данные клиента из SQLSub
 begin
-  with Datamodule1.Query1 do begin
+  with DModule.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
@@ -208,13 +206,15 @@ begin
     data.mail := FieldByName('mail').AsInteger;
     Close;
     SQL.Clear;
-    if Form1.status<>3 then begin
+    if Form1.status<>3 then
+    begin
       SQL.Add('select *');
       SQL.Add('from hist');
       SQL.Add('where regn = :id and bdate<=convert(smalldatetime,:d,104)');
       SQL.Add('and edate>convert(smalldatetime,:d,104)');
     end
-    else begin
+    else
+    begin
       SQL.Add('select * ');
       SQL.Add('from hist');
       SQL.Add('where regn=:id and bdate=(select max(bdate) ');
@@ -244,7 +244,7 @@ var
   serv,i:integer;
   man:tman;
 begin
-  with datamodule1.query1 do
+  with DModule.query1 do
     begin
       close;
       sql.clear;
@@ -269,7 +269,8 @@ begin
       SQL.Add('where regn=:id and bdate<=convert(smalldatetime,:d,104)');
       SQL.Add('and edate>convert(smalldatetime,:d,104)');
     end
-    else begin
+    else
+    begin
       SQL.Add('select * ');
       SQL.Add('from hist');
       SQL.Add('where regn=:id and bdate=(select max(bdate) ');
@@ -367,7 +368,8 @@ begin
     First;
     cdata.family := TObjectList.Create;
     cdata.quanpriv := 0;
-    while not Eof do begin
+    while not Eof do
+    begin
       man := TMan.Create(FieldByName('fio').AsString,
                         FieldByName('birth').AsDateTime,
                         FieldByName('pol').AsInteger,
@@ -421,7 +423,7 @@ begin
     ParamByName('s').AsString :=date;
     Open;
     First;
-    while not Eof do
+    while not EOF do
     begin
       serv := FieldByName('service').AsInteger;//сервис
       cdata.accounts[serv] := FieldByName('acservice').AsString;
@@ -439,15 +441,13 @@ begin
     SQL.Text := 'SELECT * FROM Counters' + #13 +
       'WHERE sdate=convert(smalldatetime,:s,104) AND regn=:r';
     ParamByName('r').AsInteger :=regn;
-    ParamByName('s').AsString := DateToStr(cdata.begindate);//date;
+    ParamByName('s').AsString :=date;
     Open;
     First;
     while not EOF do
     begin
-      serv := FieldByName('service').AsInteger;
-      cdata.counter[serv] := FieldByName('counter').Value;
-      cdata.counterdata[serv] := FieldByName('counterdata').Value;
-      cdata.countertarifs[serv] := FieldByName('counter_serv').Value;
+      cdata.counter[FieldByName('service').AsInteger] := FieldByName('counter').Value;
+      cdata.counterdata[FieldByName('service').AsInteger] := FieldByName('counterdata').Value;
       Next;
     end;
     //------
@@ -457,7 +457,8 @@ begin
   SetLength(cdata.priv, cdata.family.Count);
   SetLength(cdata.mid, cdata.family.Count);
   SetLength(cdata.min, cdata.family.Count);
-  for i:=0 to cdata.family.count-1 do begin
+  for i:=0 to cdata.family.count-1 do
+  begin
     cdata.priv[i] := TMan(cdata.family.Items[i]).priv;
     cdata.mid[i] := TMan(cdata.family.Items[i]).mid;
     cdata.min[i] := FromSt(TMan(cdata.family.Items[i]).status);
@@ -468,28 +469,21 @@ begin
   cdata.koef := (cdata.income/cdata.mcount)/cdata.pmin;
   for i:=0 to numbtarif-1 do
     if (i<8)or(i>11) then
+    begin
       cdata.cost[i] := GetCostTarif(i,cdata.tarifs[i],cdata.begindate,cdata.boiler,cdata.rmcount,cdata.settl);
-      if i in [2..7] then
+      if i in [2..7]{(i > 1) and (i < 7)} then
         cdata.tarifnorm[i] := GetNormTarif(i,cdata.tarifs[i],cdata.begindate,cdata.boiler,cdata.rmcount,cdata.settl);
-      //тарифы по счетчику
-      if cdata.counter[i] then
-      begin
-        cdata.countercost[i] := GetCostTarif(i,cdata.countertarifs[i],cdata.begindate,cdata.boiler,cdata.rmcount,cdata.settl);
-        if i in [2..7] then
-          cdata.counternorm[i] := GetNormTarif(i,cdata.countertarifs[i],cdata.begindate,cdata.boiler,cdata.rmcount,cdata.settl);
-      end;
     end;
 end;
 
 procedure TClient.SetNorm;//установить норму
 var
-  i, priv,mparam{,st}: integer;
+  i, priv,mparam: integer;
   flag: boolean;
-
 begin
   flag:=false;
   if cdata.rmcount<>0 then
-    with datamodule1.norm1 do begin
+    with DModule.norm1 do begin
       if cdata.rmcount in [1,2,3,4] then
         mparam:=cdata.rmcount
       else
@@ -504,12 +498,12 @@ begin
       Locate('countp', mparam, [loCaseInsensitive]);
       if cdata.mdd = 1 then
       begin
-         cdata.snorm := cdata.rmcount*datamodule1.norm1.FieldByName('psnorm').AsFloat;
+         cdata.snorm := cdata.rmcount*DModule.norm1.FieldByName('psnorm').AsFloat;
          cdata.hnorm := cdata.rmcount*FieldByName('phnorm').AsFloat;
       end
       else
       begin
-        cdata.snorm := cdata.rmcount*datamodule1.norm1.FieldByName('snorm').AsFloat;
+        cdata.snorm := cdata.rmcount*DModule.norm1.FieldByName('snorm').AsFloat;
         cdata.hnorm := cdata.rmcount*FieldByName('hnorm').AsFloat;
       end;
 
@@ -529,7 +523,7 @@ var
 begin
   cdata.pmin := 0;
   for i:=0 to cdata.mcount-1 do
-    cdata.pmin:=cdata.pmin+getmin(datamodule1.query1,cdata.min[i]);
+    cdata.pmin:=cdata.pmin+getmin(DModule.query1,cdata.min[i]);
   if cdata.mcount<>0 then
     cdata.pmin:=rnd(cdata.pmin/cdata.mcount);
 {  with Datamodule1.Query4 do begin
@@ -557,7 +551,7 @@ procedure TClient.CalcHNorm(m: integer;var sq1, sq2: real);
 var
   pval: real;
 begin
-  with Datamodule1.Query1 do begin
+  with DModule.Query1 do begin
     Close;
     SQl.Clear;
     SQL.Add('select pcharge');
@@ -602,7 +596,7 @@ var
 begin
 //  if (main.curregn=30305704) and (serv=0) then
 //    sleep(5);
-  with DataModule1.pv do begin
+  with DModule.pv do begin
     for i:=0 to cdata.mcount-1 do begin
 //      Close;
 //      SQL.Clear;
@@ -654,11 +648,12 @@ end;
 function GetCostTarif(s,id: integer;bdate: TDate;b,c,se: integer): real;
 var
   nam, strf: string;
-  cgas,cel: real;
+  cgas, cel: real;
 begin
   cel:=0;
   cgas:=0;
-  result:=0;
+  Result:=0;
+
   case s of
     0: nam := 'cont';
     1: nam := 'rep';
@@ -671,161 +666,196 @@ begin
     12: nam := 'wood';
     13: nam := 'coal';
   end;
-  with DataModule1 do
+
+  with DModule do
   begin
     case s of
-      0: begin t1.Locate('id_cont', id, [loCaseInsensitive]); tc := t1; end;
-      1: begin t2.Locate('id_rep', id, [loCaseInsensitive]);  tc := t2; end;
-      2: begin t3.Locate('id_cold', id, [loCaseInsensitive]); tc := t3; end;
-      3: begin t4.Locate('id_hot', id, [loCaseInsensitive]);  tc := t4; end;
-      4: begin t5.Locate('id_canal', id, [loCaseInsensitive]); tc := t5; end;
-      5: begin t6.Locate('id_heat', id, [loCaseInsensitive]); tc := t6; end;
-      6: begin t7.Locate('id_gas', id, [loCaseInsensitive]); tc := t7; end;
-      7: begin t8.Locate('id_el', id, [loCaseInsensitive]); tc := t8; end;
-      12: begin t9.Locate('id_wood', id, [loCaseInsensitive]); tc := t9; end;
-      13: begin t10.Locate('id_coal', id, [loCaseInsensitive]); tc := t10; end;
+      0:
+      begin
+        t1.Locate('id_cont', id, [loCaseInsensitive]); tc := t1;
+      end;
+      1:
+      begin
+        t2.Locate('id_rep', id, [loCaseInsensitive]);  tc := t2;
+      end;
+      2:
+      begin
+        t3.Locate('id_cold', id, [loCaseInsensitive]); tc := t3;
+      end;
+      3:
+      begin
+        t4.Locate('id_hot', id, [loCaseInsensitive]);  tc := t4;
+      end;
+      4:
+      begin
+        t5.Locate('id_canal', id, [loCaseInsensitive]); tc := t5;
+      end;
+      5:
+      begin
+        t6.Locate('id_heat', id, [loCaseInsensitive]); tc := t6;
+      end;
+      6:
+      begin
+        t7.Locate('id_gas', id, [loCaseInsensitive]); tc := t7;
+      end;
+      7:
+      begin
+        t8.Locate('id_el', id, [loCaseInsensitive]); tc := t8;
+      end;
+      12:
+      begin
+        t9.Locate('id_wood', id, [loCaseInsensitive]); tc := t9;
+      end;
+      13:
+      begin
+        t10.Locate('id_coal', id, [loCaseInsensitive]); tc := t10;
+      end;
     end;
     strf := tc.Fields[1].AsString;
   end;
+
   if s<12 then
   begin
-    with DataModule1{.Query4} do
+    with DModule do
     begin
       if s<>7 then
       begin
         if (s=2)or(s=3) then
-          Result := tc.Fields[2 + b].AsCurrency
+          Result := tc.Fields[2 + b].AsCurrency  //
         else
           Result := tc.Fields[2].AsCurrency;
-     end;
+      end;
       if s = 7 then
       begin
         cel := tc.Fields[2].AsCurrency;
         cgas :=  tc.Fields[2].AsCurrency;
       end;
     end;
+
     if s=7 then
     begin
       case id of
       1:
+      begin
+        case se of
+        1:
         begin
-          case se of
-          1:
-            begin
-              case c of
-                0..1:Result := 84*cgas;
-                2:Result := 52*cgas;
-                3:Result := 40*cgas;
-                4:Result := 33*cgas;
-                else Result := 28*cgas;
-              end;
-            end;
-          2:
-            begin
-              case c of
-                0..1:Result := 108*cgas;
-                2:Result := 67*cgas;
-                3:Result := 52*cgas;
-                4:Result := 42*cgas;
-                else Result := 37*cgas;
-              end;
-            end;
-          3:
-            begin
-              case c of
-                0..1:Result := 122*cgas;
-                2:Result := 76*cgas;
-                3:Result := 59*cgas;
-                4:Result := 48*cgas;
-                else Result := 42*cgas;
-              end;
-            end;
-          4..7:
-            begin
-              case c of
-                0..1:Result := 132*cgas;
-                2:Result := 82*cgas;
-                3:Result := 63*cgas;
-                4:Result := 52*cgas;
-                else Result := 45*cgas;
-              end;
-            end;
+          case c of
+            0..1 : Result := 84*cgas;
+            2 : Result := 52*cgas;
+            3 : Result := 40*cgas;
+            4 : Result := 33*cgas;
+          else
+            Result := 28*cgas;
           end;
         end;
-      2:
+        2:
         begin
-          case se of
-          1:
-            begin
-              case c of
-                0..1:Result := 134*cel;
-                2:Result := 83*cel;
-                3:Result := 64*cel;
-                4:Result := 52*cel;
-                else Result := 45*cel;
-              end;
-            end;
-          2:
-            begin
-              case c of
-                0..1:Result := 158*cel;
-                2:Result := 98*cel;
-                3:Result := 76*cel;
-                4:Result := 62*cel;
-                else Result := 54*cel;
-              end;
-            end;
-          3:
-            begin
-              case c of
-                0..1:Result := 172*cel;
-                2:Result := 107*cel;
-                3:Result := 83*cel;
-                4:Result := 67*cel;
-                else Result := 59*cel;
-              end;
-            end;
-          4..7:
-            begin
-              case c of
-                0..1:Result := 183*cel;
-                2:Result := 114*cel;
-                3:Result := 88*cel;
-                4:Result := 71*cel;
-                else Result := 62*cel;
-              end;
-            end;
-          end;
-        end;
-      3:
-        begin
-          with DataModule1{.Query4} do begin
-       //     Close;
-        //    SQL.Clear;
-            if c>0 then begin
-              if (c<3) then
-         //       SQL.Add('select sbros.tarifel'+IntToStr(c)+' as cost')
-                  Result := tc.Fields[2 + (c - 1)].AsCurrency
-              else
-         //       SQL.Add('select sbros.tarifel3 as cost');
-                  Result := tc.Fields[4].AsCurrency;
-            end
+          case c of
+            0..1 : Result := 108*cgas;
+            2 : Result := 67*cgas;
+            3 : Result := 52*cgas;
+            4 : Result := 42*cgas;
             else
-        //      SQL.Add('select sbros.tarifel1 as cost');
-        //    SQL.Add('from "cur'+nam+'.dbf" sbros');
-        //    SQL.Add('where sbros.id_'+nam+' = :id');
-        //    ParamByName('id').AsInteger := id;
-        //    Open;
-            Result := tc.Fields[2].AsCurrency; //FieldByName('cost').AsFloat;
-        //    Close;
+              Result := 37*cgas;
           end;
         end;
+        3:
+        begin
+          case c of
+            0..1 : Result := 122*cgas;
+            2 : Result := 76*cgas;
+            3 : Result := 59*cgas;
+            4 : Result := 48*cgas;
+            else
+              Result := 42*cgas;
+          end;
+        end;
+        4..7:
+        begin
+          case c of
+            0..1 : Result := 132*cgas;
+            2 : Result := 82*cgas;
+            3 : Result := 63*cgas;
+            4 : Result := 52*cgas;
+            else
+              Result := 45*cgas;
+          end;
+        end;
+        end;
+      end;
+
+      2:
+      begin
+        case se of
+        1:
+        begin
+          case c of
+            0..1 : Result := 134*cel;
+            2 : Result := 83*cel;
+            3 : Result := 64*cel;
+            4 : Result := 52*cel;
+            else
+              Result := 45*cel;
+          end;
+        end;
+        2:
+        begin
+          case c of
+            0..1 : Result := 158*cel;
+            2 : Result := 98*cel;
+            3 : Result := 76*cel;
+            4 : Result := 62*cel;
+            else
+              Result := 54*cel;
+          end;
+        end;
+        3:
+        begin
+          case c of
+            0..1 : Result := 172*cel;
+            2 : Result := 107*cel;
+            3 : Result := 83*cel;
+            4 : Result := 67*cel;
+            else
+              Result := 59*cel;
+          end;
+        end;
+        4..7:
+        begin
+          case c of
+            0..1 : Result := 183*cel;
+            2 : Result := 114*cel;
+            3 : Result := 88*cel;
+            4 : Result := 71*cel;
+            else
+              Result := 62*cel;
+          end;
+        end;
+        end;
+      end;
+
+      3:
+      begin
+        with DModule do
+        begin
+          if c>0 then
+          begin
+            if (c<3) then
+                Result := tc.Fields[2 + (c - 1)].AsCurrency
+            else
+                Result := tc.Fields[4].AsCurrency;
+          end
+          else
+            Result := tc.Fields[2].AsCurrency;
+        end;
+      end;
       end;
     end;
   end
-  else
+  else//wood, coal
   begin
-    with DataModule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -835,12 +865,212 @@ begin
       SQL.add('sdate in (select max(sdate) from '+nam);
       SQL.add('where sdate<=convert(smalldatetime,:d,104)and(id_dist=:idd)and(id_'+nam+'=:id))');
       ParamByName('d').AsString := Form1.rdt;
-//      ShowMessage(    DateToStr(bdate));
       ParamByName('idd').AsInteger := Form1.dist;
       ParamByName('id').AsInteger := id;
       Open;
-      Result := {tc.Fields[2].AsCurrency; }FieldByName('cost').AsFloat;
+      Result := FieldByName('cost').AsFloat;
       Close;
+    end;
+  end;
+end;
+
+function GetNormTarif(s,id: integer;bdate: TDate;b,c,se:integer): real;
+var
+  nam: string;
+begin
+  Result:=0;
+
+  case s of
+    0: nam := 'cont';
+    1: nam := 'rep';
+    2: nam := 'cold';
+    3: nam := 'hot';
+    4: nam := 'canal';
+    5: nam := 'heat';
+    6: nam := 'gas';
+    7: nam := 'el';
+    12: nam := 'wood';
+    13: nam := 'coal';
+  end;
+
+  with DModule do
+  begin
+    case s of
+      0:
+      begin
+        t1.Locate('id_cont', id, [loCaseInsensitive]); tc := t1;
+      end;
+      1:
+      begin
+        t2.Locate('id_rep', id, [loCaseInsensitive]);  tc := t2;
+      end;
+      2:
+      begin
+        t3.Locate('id_cold', id, [loCaseInsensitive]); tc := t3;
+      end;
+      3:
+      begin
+        t4.Locate('id_hot', id, [loCaseInsensitive]);  tc := t4;
+      end;
+      4:
+      begin
+        t5.Locate('id_canal', id, [loCaseInsensitive]); tc := t5;
+      end;
+      5:
+      begin
+        t6.Locate('id_heat', id, [loCaseInsensitive]); tc := t6;
+      end;
+      6:
+      begin
+        t7.Locate('id_gas', id, [loCaseInsensitive]); tc := t7;
+      end;
+      7:
+      begin
+        t8.Locate('id_el', id, [loCaseInsensitive]); tc := t8;
+      end;
+      12:
+      begin
+        t9.Locate('id_wood', id, [loCaseInsensitive]); tc := t9;
+      end;
+      13:
+      begin
+        t10.Locate('id_coal', id, [loCaseInsensitive]); tc := t10;
+      end;
+    end;
+  end;
+
+  if s<12 then
+  begin
+    with DModule do
+    begin
+      if s in [2..6] then
+      begin
+        if (s = 2) or (s = 3) then
+          Result := tc.Fields[4].AsCurrency
+        else
+          Result := tc.Fields[3].AsCurrency;
+      end;
+
+      if s=7 then
+      begin
+        case id of
+        1:
+        begin
+          case se of
+          1:
+          begin
+            case c of
+              0..1 : Result := 84;
+              2 : Result := 52;
+              3 : Result := 40;
+              4 : Result := 33;
+            else
+              Result := 28;
+            end;
+          end;
+          2:
+          begin
+            case c of
+              0..1 : Result := 108;
+              2 : Result := 67;
+              3 : Result := 52;
+              4 : Result := 42;
+              else
+                Result := 37;
+            end;
+          end;
+          3:
+          begin
+            case c of
+              0..1 : Result := 122;
+              2 : Result := 76;
+              3 : Result := 59;
+              4 : Result := 48;
+              else
+                Result := 42;
+            end;
+          end;
+          4..7:
+          begin
+            case c of
+              0..1 : Result := 132;
+              2 : Result := 82;
+              3 : Result := 63;
+              4 : Result := 52;
+              else
+                Result := 45;
+            end;
+          end;
+          end;
+        end;
+
+        2:
+        begin
+          case se of
+          1:
+          begin
+            case c of
+              0..1 : Result := 134;
+              2 : Result := 83;
+              3 : Result := 64;
+              4 : Result := 52;
+              else
+                Result := 45;
+            end;
+          end;
+          2:
+          begin
+            case c of
+              0..1 : Result := 158;
+              2 : Result := 98;
+              3 : Result := 76;
+              4 : Result := 62;
+              else
+                Result := 54;
+            end;
+          end;
+          3:
+          begin
+            case c of
+              0..1 : Result := 172;
+              2 : Result := 107;
+              3 : Result := 83;
+              4 : Result := 67;
+              else
+                Result := 59;
+            end;
+          end;
+          4..7:
+          begin
+            case c of
+              0..1 : Result := 183;
+              2 : Result := 114;
+              3 : Result := 88;
+              4 : Result := 71;
+              else
+                Result := 62;
+            end;
+          end;
+          end;
+        end;
+
+        3:
+        begin
+          with DModule do
+          begin
+            if c>0 then
+            begin
+              if (c<3) then
+                  Result := tc.Fields[2 + (c - 1)].AsCurrency
+              else
+                  Result := tc.Fields[4].AsCurrency;
+            end
+            else
+              Result := tc.Fields[2].AsCurrency;
+          end;
+        end;
+      end;
+    end;
     end;
   end;
 end;
@@ -876,7 +1106,7 @@ begin
   if (cdata.rmcount = 1) and (cdata.mdd = 1) then nv := '6';
   if (cdata.rmcount > 1) and (cdata.mdd = 1) then nv := '7';
   try
-    with DataModule1.qTarif do
+    with DModule.qTarif do
     begin
       Close;
       SQL.Clear;
@@ -895,7 +1125,7 @@ end;
 
 function TClient.GetMdd: integer;
 begin
-  with DataModule1.qTarif do begin
+  with DModule.qTarif do begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.vmdd');
@@ -1203,13 +1433,91 @@ end;
 
 procedure TClient.CalcServ(s: integer);
 var
-  valtarif, value1, value2: real;
-  i: integer;
+  valtarif, normData, counterData, cost: real;
+  i, tval, canalServ: integer;
+  canalCold, canalHot: boolean;
 begin
-  if s <> 7 then
-    valtarif := cdata.cost[s] * cdata.tarifnorm[s]
-  else
-    valtarif := cdata.cost[s];
+  if cdata.counter[s] then
+  begin
+    normData := cdata.tarifnorm[s];
+    counterData := cdata.counterdata[s];
+
+    if s <> 7 then
+      cost := cdata.cost[s]
+    else//электоэнергия
+    begin
+      if cdata.mcount > 2 then
+        tval := 3
+      else
+        tval := cdata.mcount;
+
+      with DModule do
+      begin
+      if cdata.tarifs[7] > 2 then
+        valtarif:=0
+      else
+        begin
+          t8.Locate('id_el', cdata.tarifs[7], [loCaseInsensitive]);
+          cost := t8.FieldByName('tarifel'+IntToStr(tval)).Value;// * cdata.counterdata[s];//стоимоть тарифа * показания счетчика
+        end;
+      end;
+    end;
+
+    canalCold := (s = 4) and (cdata.counter[2]) and (cdata.counter[3] = false);
+    canalHot := (s = 4) and (cdata.counter[3]) and (cdata.counter[2] = false);
+
+    //водоотведение (есть хв)
+    if canalCold then
+    begin
+      canalServ := 2;
+      normData := cdata.counterdata[canalServ];
+      valtarif := cost * normData + counterData;
+    end
+    else//водоотведение (есть гв)
+    if canalHot then
+    begin
+      canalServ := 3;
+      normData := cdata.counterdata[canalServ];
+      valtarif := cost * normData + counterData;
+    end
+    else//другие услуги
+      valtarif := cost * counterData;
+
+    cdata.fpm[s] := Rnd(valtarif);
+
+    for i:=0 to cdata.mcount-1 do
+    begin
+      if cdata.pc[i][s]<>0 then
+      begin//если ненулевая льгота
+        if (canalCold) or (canalHot) then
+        begin
+          if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
+            valtarif := valtarif - ((math.min(normData, cdata.tarifnorm[canalServ]) * cost + counterData / cdata.rmcount) * cdata.pc[i][s]/100) //* math.min(valtarif, cost * (cdata.tarifnorm[2] + cdata.tarifnorm[3])) * cdata.pc[i][s]/100
+          else
+            valtarif := valtarif - ((normData/cdata.rmcount * cost + (counterData/cdata.rmcount)) * cdata.pc[i][s]/100);
+        end
+        else
+        begin
+          if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
+            valtarif := valtarif - (math.min(normData, counterData/cdata.rmcount) * cost * cdata.pc[i][s]/100)
+          else
+            valtarif := valtarif - (cost * (counterData/cdata.rmcount) * cdata.pc[i][s]/100);
+        end;
+      end;
+    end;
+
+    cdata.pm[s] := Rnd(valtarif);
+    cdata.snpm[s] := Rnd(valtarif);
+    Exit;
+  end
+  //------
+  else//без счетчика
+  begin
+    if s <> 7 then
+      valtarif := cdata.cost[s] * cdata.tarifnorm[s]
+    else
+      valtarif := cdata.cost[s];
+  end;
 
   if valtarif <> 0 then
   begin
@@ -1319,9 +1627,42 @@ var
   squarep:real;//площадь, на которую распространяется льгота
   squareold:real;//разница площадей
   i,j,quan:integer;
+  ab: Real;
+  norm: Real;
 begin
-  //расчет содержания жилья и отопления по тарифам
   cost := cdata.cost[service];//получаем стоимость услуги @service
+  //расчет отопления по счетчику
+  if (service = 5) then
+  begin
+    if cdata.counter[service] then
+    begin
+      cost := cdata.cost[service] * cdata.counterdata[service];
+      cdata.fpm[service] := rnd(cost);
+      for i:=0 to cdata.mcount-1 do
+      begin
+        if cdata.pc[i][service]<>0 then//если ненулевая льгота
+        begin
+          //if (cdata.priv[i] = 3) or (cdata.priv[i] = 12) or (cdata.priv[i] = 13) or (cdata.priv[i] = 22) or (cdata.priv[i] = 25) or (cdata.priv[i] = 1) or (cdata.priv[i] = 11) then
+          if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
+          begin
+            norm := math.min(cdata.square/cdata.rmcount, cdata.psnorm);
+            ab := math.min(cdata.counterdata[service]/cdata.rmcount, norm * cdata.tarifnorm[service]);
+
+            cost := cost - (ab * cdata.pc[i][service]/100 * cdata.cost[service])
+          end
+          else
+            cost := cost - ((cdata.counterdata[service]/cdata.rmcount) * cdata.pc[i][service]/100 * cdata.cost[service]);
+        end;
+      end;
+      cdata.pm[service] := rnd(cost);
+      cdata.snpm[service] := rnd(cost);
+      Exit;
+    end
+    else
+      cost := cdata.cost[service] * cdata.tarifnorm[service];
+  end;
+
+  //расчет содержания жилья и отопления по тарифам
   quan:=0;
   squareold:=cdata.square;
 
@@ -1346,19 +1687,19 @@ begin
         end
       else
       begin//льгота распространяется на соцнорму
-        inc(quan);
+        //inc(quan);
         for j:=0 to cdata.mcount-1 do
           if cdata.f[j][service]=1 then
             quan:=cdata.mcount;
-        if cdata.square<=cdata.psnorm*quan then
+        if quan=cdata.mcount then
+        //if cdata.square<=cdata.psnorm*quan then
         begin
           squarenp:=squarenp-cdata.square/quan*(cdata.pc[i][service]/100);
           squarep:=squarep-cdata.square/quan*(cdata.pc[i][service]/100);
-//          squarenp:=squarenp - cdata.square /quan*(cdata.pc[i][service]/100);
-//          squarep:=squarep - cdata.square /quan*(cdata.pc[i][service]/100);
         end
         else
         begin
+          //if (cdata.priv[i] = 3) or (cdata.priv[i] = 12) or (cdata.priv[i] = 13) or (cdata.priv[i] = 22) or (cdata.priv[i] = 25) or (cdata.priv[i] = 1) or (cdata.priv[i] = 11) then
           if ((cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) or
             ((cdata.priv[i] = 30) and (service = 0))) then
           begin
@@ -1367,8 +1708,16 @@ begin
           end
           else
           begin
-            squarenp:=squarenp - cdata.psnorm *(cdata.pc[i][service]/100);
-            squarep:=squarep - cdata.psnorm *(cdata.pc[i][service]/100);
+            if ((cdata.priv[i] = 30) and (service = 5)) then //ветеран тр. инв.
+            begin
+              squarenp:=squarenp-cdata.square/cdata.rmcount*(cdata.pc[i][service]/100);
+              squarep:=squarep-math.min(cdata.square,cdata.snorm)/cdata.rmcount*(cdata.pc[i][service]/100);
+            end
+            else
+            begin
+              squarenp:=squarenp - cdata.psnorm *(cdata.pc[i][service]/100);
+              squarep:=squarep - cdata.psnorm *(cdata.pc[i][service]/100);
+            end;
           end;
         end;
 //      squarenp:=math.max(squarenp,cdata.snorm/2);
@@ -1438,8 +1787,7 @@ begin
   else
     tval := cdata.mcount;
 
-  with DModule do
-  begin
+  with DModule do begin
   if cdata.tarifs[7] > 2 then
     cost:=0
   else
@@ -1602,13 +1950,15 @@ begin
   SetLength(d.sq, s.mcount);
   SetLength(d.pc, s.mcount);
   SetLength(d.f, s.mcount);
-  for i:=0 to s.mcount-1 do begin
+  for i:=0 to s.mcount-1 do
+  begin
     d.family.Add(s.family[i]);
     d.priv[i] := s.priv[i];
     SetLength(d.sq[i], numbtarif);
     SetLength(d.pc[i], numbtarif);
     SetLength(d.f[i], numbtarif);
-    for j:=0 to numbtarif-1 do begin
+    for j:=0 to numbtarif-1 do
+    begin
       d.sq[i][j] := s.sq[i][j];
       d.pc[i][j] := s.pc[i][j];
       d.f[i][j] := s.f[i][j];
@@ -1636,13 +1986,14 @@ begin
   d.hnorm := s.hnorm;
   d.boiler := s.boiler;
   d.stop := s.stop;
-  for i:=0 to numbtarif-1 do begin
+  for i:=0 to numbtarif-1 do
+  begin
     d.accounts[i] := s.accounts[i];
     d.tarifs[i] := s.tarifs[i];
     d.cost[i] := s.cost[i];
-    d.countertarifs[i] := s.countertarifs[i];
-    d.countercost[i] := s.countercost[i];
-    d.counternorm[i] := s.counternorm[i];
+    d.tarifnorm[i] := s.tarifnorm[i];
+    d.counter[i] := s.counter[i];
+    d.counterdata[i] := s.counterdata[i];
     d.pm[i] := s.pm[i];
     d.snpm[i] := s.snpm[i];
     d.sub[i] := s.sub[i];
@@ -1658,7 +2009,8 @@ end;
 
 function FromSt(s:integer):integer;
 begin
-  with DataModule1.Query1 do begin
+  with DModule.Query1 do
+  begin
     Close;
     SQL.Clear;
     SQL.Add('select id_min');
@@ -1735,13 +2087,14 @@ begin
   Result.hnorm := 0;
   Result.boiler := 0;
   Result.stop := 0;
-  for i:=0 to numbtarif-1 do begin
+  for i:=0 to numbtarif-1 do
+  begin
     Result.tarifs[i] := 0;
     Result.cost[i] := 0;
+    Result.tarifnorm[i] := 0;
     Result.accounts[i] := '';
-    Result.countertarifs[i] := 0;
-    Result.countercost[i] := 0;
-    Result.counternorm[i] := 0;
+    Result.counter[i] := False;
+    Result.counterdata[i] := 0;
     Result.pm[i] := 0;
     Result.snpm[i] := 0;
     Result.sub[i] := 0;
