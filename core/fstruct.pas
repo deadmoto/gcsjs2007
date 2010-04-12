@@ -884,7 +884,7 @@ begin
         Query1.ParamByName('sub').AsFloat := StrToFloat(f[i][7]);
         Query1.ParamByName('sp').AsFloat := StrToFloat(f[i][8]);
         Query1.ParamByName('stp').AsString := f[i][9];
-        Query1.ParamByName('stndsub').AsFloat := f[i][10];
+        Query1.ParamByName('stndsub').AsFloat := StrToFloat(f[i][10]);
         Query1.ExecSQL;
       end;
       Query1.Close;
