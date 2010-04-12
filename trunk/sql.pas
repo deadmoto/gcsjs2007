@@ -71,7 +71,7 @@ procedure TForm34.Button1Click(Sender: TObject);
 begin
   if Memo1.Lines.Count <> 0 then
     try
-      with DModule.Query1 do
+      with Datamodule1.Query1 do
       begin
         Close;
         SQL.Clear;
@@ -93,7 +93,7 @@ begin
         end;
       end;
     except
-      DModule.Query1.Close;
+      Datamodule1.Query1.Close;
       ShowMessage('Запрос содержит ошибку!');
     end
   else
@@ -106,7 +106,7 @@ procedure TForm34.Button2Click(Sender: TObject);
 ********************************************************************************}
 begin
   Memo1.Clear;
-  DModule.Query1.Close;
+  Datamodule1.Query1.Close;
 end;
 
 procedure TForm34.Button4Click(Sender: TObject);
@@ -118,7 +118,7 @@ procedure TForm34.Button4Click(Sender: TObject);
 var
   i: integer;
 begin
-  with DModule do
+  with Datamodule1 do
   begin
     if Dbf1.Active then
       Dbf1.Close;
@@ -169,7 +169,7 @@ begin
   end;
   if rl <> 0 then
     ActivateKeyboardLayout(rl, 0);
-  DModule.Query1.Close;
+  Datamodule1.Query1.Close;
 end;
 
 procedure TForm34.FormShow(Sender: TObject);
@@ -184,7 +184,7 @@ var
   Layouts: array[0..7] of THandle;
   c, i: integer;
 begin
-  DModule.Query1.Close;
+  Datamodule1.Query1.Close;
   //английская раскладка
   c := GetKeyboardLayoutList(High(Layouts) + 1, Layouts);
   for i := 0 to c - 1 do

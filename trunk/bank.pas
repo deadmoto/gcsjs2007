@@ -68,7 +68,7 @@ procedure TForm31.SetDefault;
 var
   i: integer;
 begin
-  with DModule.Query1 do
+  with Datamodule1.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -80,14 +80,14 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'BIK'),
-    TIntArray.Create(25, 200, 155), DModule.Query1.RecordCount + 1);
+    TIntArray.Create(25, 200, 155), Datamodule1.Query1.RecordCount + 1);
 
-  for i := 0 to DModule.Query1.RecordCount - 1 do
+  for i := 0 to Datamodule1.Query1.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('id_bank').Value;
-    StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('namebank').Value;
-    StringGrid1.Cells[2, i + 1] := DModule.Query1.FieldByName('bik').Value;
-    DModule.Query1.Next;
+    StringGrid1.Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_bank').Value;
+    StringGrid1.Cells[1, i + 1] := Datamodule1.Query1.FieldByName('namebank').Value;
+    StringGrid1.Cells[2, i + 1] := Datamodule1.Query1.FieldByName('bik').Value;
+    Datamodule1.Query1.Next;
   end;
 
 end;
@@ -111,7 +111,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -170,7 +170,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -226,7 +226,7 @@ end;
 procedure TForm31.Button3Click(Sender: TObject);
 { удалить банк }
 begin
-  with DModule.Query1 do
+  with DataModule1.Query1 do
   begin
     if not IsEmpty then
     begin
@@ -266,7 +266,7 @@ end;
 
 procedure TForm31.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
+  Datamodule1.Query1.Close;
 end;
 
 procedure TForm31.Edit3Exit(Sender: TObject);

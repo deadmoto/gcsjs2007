@@ -70,7 +70,7 @@ procedure TForm5.SetDefault;
 var
   i: integer;
 begin
-  with DModule.Query1 do
+  with Datamodule1.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -82,14 +82,14 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Статус'),
-    TIntArray.Create(25, 275, 40), DModule.Query1.RecordCount + 1);
+    TIntArray.Create(25, 275, 40), Datamodule1.Query1.RecordCount + 1);
 
-  for i := 0 to DModule.Query1.RecordCount - 1 do
+  for i := 0 to Datamodule1.Query1.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('id_street').Value;
-    StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('namestreet').Value;
-    StringGrid1.Cells[2, i + 1] := DModule.Query1.FieldByName('status').Value;
-    DModule.Query1.Next;
+    StringGrid1.Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_street').Value;
+    StringGrid1.Cells[1, i + 1] := Datamodule1.Query1.FieldByName('namestreet').Value;
+    StringGrid1.Cells[2, i + 1] := Datamodule1.Query1.FieldByName('status').Value;
+    Datamodule1.Query1.Next;
   end;
 end;
 
@@ -128,7 +128,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -199,7 +199,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -263,7 +263,7 @@ procedure TForm5.Button3Click(Sender: TObject);
   удаляется запись, которая соответствует текущему id.
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DataModule1.Query1 do
   begin
     if not IsEmpty then
     begin
@@ -308,7 +308,7 @@ procedure TForm5.FormClose(Sender: TObject; var Action: TCloseAction);
   в этом unit.
 *******************************************************************************}
 begin
-  DModule.Query1.Close;
+  Datamodule1.Query1.Close;
 end;
 
 procedure TForm5.Edit2Exit(Sender: TObject);

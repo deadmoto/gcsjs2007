@@ -151,7 +151,7 @@ begin
     else
       isFact := 0;
 
-    with DModule.Query1 do
+    with Datamodule1.Query1 do
     begin
       Close;
       Close;
@@ -284,7 +284,7 @@ begin
   SetLength(values1,numbtarif);
   SetLength(values2,numbtarif);
   SetLength(values3,numbtarif);
-  with DModule.Query1 do begin
+  with Datamodule1.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('select sub.service,sub.pm as pm1,sub.snpm as sn1,sub.sub as s1,');
@@ -381,7 +381,7 @@ end;
 procedure TForm16.FormClose(Sender: TObject; var Action: TCloseAction);
 { Процедура закрытия формы }
 begin
-  DModule.Query1.Close;
+  Datamodule1.Query1.Close;
   wrt := false;
 end;
 

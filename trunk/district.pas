@@ -72,7 +72,7 @@ procedure TForm4.SetDefault;
 var
   i: integer;
 begin
-  with DModule.Query1 do
+  with Datamodule1.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -84,19 +84,19 @@ begin
   end;
 
   FormerStringGrid(distGrid, TStringArray.Create('Код', 'Наименование', 'Нач. отдела', 'Адрес', 'Телефон'),
-    TIntArray.Create(25, 225, 100, 120, 90), DModule.Query1.RecordCount + 1);
+    TIntArray.Create(25, 225, 100, 120, 90), Datamodule1.Query1.RecordCount + 1);
 
-  for i := 0 to DModule.Query1.RecordCount + 1 do
+  for i := 0 to Datamodule1.Query1.RecordCount + 1 do
   begin
     with distGrid do
     begin
-      Cells[0, i + 1] := DModule.Query1.FieldByName('id_dist').AsString;
-      Cells[1, i + 1] := DModule.Query1.FieldByName('namedist').AsString;
-      Cells[2, i + 1] := DModule.Query1.FieldByName('boss').AsString;
-      Cells[3, i + 1] := DModule.Query1.FieldByName('adr').AsString;
-      Cells[4, i + 1] := DModule.Query1.FieldByName('tel').AsString;
+      Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_dist').AsString;
+      Cells[1, i + 1] := Datamodule1.Query1.FieldByName('namedist').AsString;
+      Cells[2, i + 1] := Datamodule1.Query1.FieldByName('boss').AsString;
+      Cells[3, i + 1] := Datamodule1.Query1.FieldByName('adr').AsString;
+      Cells[4, i + 1] := Datamodule1.Query1.FieldByName('tel').AsString;
     end;
-    DModule.Query1.Next;
+    Datamodule1.Query1.Next;
   end;
 
 end;
@@ -128,7 +128,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -192,7 +192,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -254,7 +254,7 @@ end;
 procedure TForm4.Button3Click(Sender: TObject);
 { удалить округ }
 begin
-  with DModule.Query1 do
+  with DataModule1.Query1 do
   begin
     if not IsEmpty then
     begin
@@ -298,7 +298,7 @@ end;
 
 procedure TForm4.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
+  Datamodule1.Query1.Close;
 end;
 
 procedure TForm4.Edit1Exit(Sender: TObject);
