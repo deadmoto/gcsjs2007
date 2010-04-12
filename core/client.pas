@@ -6,6 +6,11 @@ uses Controls, Contnrs, Dialogs, sysutils, dateutils, DB, service;
 
 type
   T2DInt = array of array of integer;
+  
+  TNumbTarifReal = array[0..(numbtarif-1)] of real;
+  TNumbTarifInt = array[0..(numbtarif-1)] of integer;
+  TNumbTarifString = array[0..(numbtarif-1)] of string;
+  TNumbTarifBool = array[0..(numbtarif-1)] of boolean;
 
   TCData = packed record
     dist: integer;//округ
@@ -44,23 +49,28 @@ type
     f: T2DInt;//на всю семью распространяется льгота или нет
     min: array of integer;//минимумы членов семьи
     mid: array of real;//среднемесячные доходы членов семей
-    tarifs: array[0..(numbtarif-1)] of integer;//тарифы
-    cost: array[0..(numbtarif-1)] of real;//значение тарифа по соответствующей услуге
-    tarifnorm: array[0..(numbtarif-1)] of real;//норматив тарифа по соответствующей услуге
-    accounts: array[0..(numbtarif-1)] of string;//лиц. счета
+    tarifs: TNumbTarifInt;//тарифы
+    cost: TNumbTarifReal;//значение тарифа по соответствующей услуге
+    tarifnorm: TNumbTarifReal;//норматив тарифа по соответствующей услуге
+    accounts: TNumbTarifString;//лиц. счета
     //счетчики
-    counter: array[0..(numbtarif-1)] of boolean;//есть ли счетчик по соответствующей услуге
-    counterdata: array[0..(numbtarif-1)] of real;//среднее показание по соответствующей услуге
+    counter: TNumbTarifBool;//есть ли счетчик по соответствующей услуге
+    counterdata: TNumbTarifReal;//среднее показание по соответствующей услуге
+    countertarifs: TNumbTarifInt;//тарифы для услуг с счетчиком
+    countercost: TNumbTarifReal;//значение тарифа по соответствующей услуге с счетчиком
+    counternorm: TNumbTarifReal;//норматив тарифа по соответствующей услуге с счетчиком
     //установочные данные
-    bpm: array[0..(numbtarif-1)] of real;//начисления по каждому тарифу
-    bsnpm: array[0..(numbtarif-1)] of real;
-    bsub: array[0..(numbtarif-1)] of real;
-    bfpm: array[0..(numbtarif-1)] of real;//платежи без учета льготы
+    bpm: TNumbTarifReal;//начисления по каждому тарифу
+    bsnpm: TNumbTarifReal;
+    bsub: TNumbTarifReal;
+    bfpm: TNumbTarifReal;//платежи без учета льготы
+    bstndsub : TNumbTarifReal; //субсидия по региональному стандарту на начало периода
     //текущие
-    pm: array[0..(numbtarif-1)] of real;//начисления по каждому тарифу
-    snpm: array[0..(numbtarif-1)] of real;//начисления по каждому тарифу
-    sub: array[0..(numbtarif-1)] of real;//субсидия по каждому тарифу
-    fpm: array[0..(numbtarif-1)] of real;//платежи без учета льготы
+    pm: TNumbTarifReal;//начисления по каждому тарифу
+    snpm: TNumbTarifReal;//начисления по каждому тарифу
+    stndsub : TNumbTarifReal; //субсидия по региональному стандарту
+    sub: TNumbTarifReal;//субсидия по каждому тарифу
+    fpm: TNumbTarifReal;//платежи без учета льготы
 
     stop: integer; //сведения по приостановке
     heating: integer; //тип отопления
@@ -103,12 +113,13 @@ type
     function GetStandard: real;
     function GetMdd: integer;
     procedure Calc(sts: integer);//расчет за месяц
-    procedure CalcSub(sts: integer);//расчет субсидии за месяц
+    procedure CalcSub(sts: integer);//расчет субсидии по рег. стандарту
+    procedure CalcFinal(sts: integer);
     procedure CalcServ(s: integer);
     procedure calcservsq(service:integer;m:integer=0);//расчёт начислений по площади
     procedure calcserve(service:integer);
     procedure CalcServWC(s: integer);
-    function CalcFull: real;
+    function CalcFull(arr: TNumbTarifReal): real;
     procedure CalcPriv;overload;
     procedure CalcPriv(nam: string;serv: integer);overload;
     procedure CalcHNorm(m: integer;var sq1, sq2: real);//вычислить норматив потребления тепла в ч/д
@@ -376,7 +387,7 @@ begin
     end;
     //базовые данные
     Close;
-//проверка на изменивщееся кол-во семьи
+  //проверка на изменивщееся кол-во семьи
   if cdata.mcount<>cdata.family.count
     then showmessage(inttostr(main.curregn));
 //
@@ -399,6 +410,7 @@ begin
       cdata.bpm[serv] := FieldByName('pm').AsFloat;//начисления;
       cdata.bsnpm[serv] := FieldByName('snpm').AsFloat;//начисления по сн
       cdata.bsub[serv] := FieldByName('sub').AsFloat;//субсидии по услуге
+      cdata.bstndsub[serv] := FieldByName('stndsub').AsFloat;//субсидии по услуге по рег.стандарту
       cdata.bfpm[serv] := FieldByName('spfree').AsFloat;//начисления без учета льгот
       cdata.stop := FieldByName('stop').AsInteger;
       Next;
@@ -421,6 +433,7 @@ begin
       cdata.tarifs[serv] := FieldByName('id_service').AsInteger;//тариф на него
       cdata.pm[serv] := FieldByName('pm').AsFloat;//начисления;
       cdata.snpm[serv] := FieldByName('snpm').AsFloat;//начисления по сн
+      cdata.stndsub[serv] := FieldByName('stndsub').AsFloat;//субсидии по услуге по рег. стандарту
       cdata.sub[serv] := FieldByName('sub').AsFloat;//субсидии по услуге
       cdata.fpm[serv] := FieldByName('spfree').AsFloat;//начисления без учета льгот
       cdata.stop := FieldByName('stop').AsInteger;
@@ -431,13 +444,15 @@ begin
     SQL.Text := 'SELECT * FROM Counters' + #13 +
       'WHERE sdate=convert(smalldatetime,:s,104) AND regn=:r';
     ParamByName('r').AsInteger :=regn;
-    ParamByName('s').AsString :=date;
+    ParamByName('s').AsString := DateToStr(cdata.begindate);//date;
     Open;
     First;
     while not EOF do
     begin
-      cdata.counter[FieldByName('service').AsInteger] := FieldByName('counter').Value;
-      cdata.counterdata[FieldByName('service').AsInteger] := FieldByName('counterdata').Value;
+      serv := FieldByName('service').AsInteger;
+      cdata.counter[serv] := FieldByName('counter').Value;
+      cdata.counterdata[serv] := FieldByName('counterdata').Value;
+      cdata.countertarifs[serv] := FieldByName('counter_serv').Value;
       Next;
     end;
     //------
@@ -461,8 +476,15 @@ begin
     if (i<8)or(i>11) then
     begin
       cdata.cost[i] := GetCostTarif(i,cdata.tarifs[i],cdata.begindate,cdata.boiler,cdata.rmcount,cdata.settl);
-      if i in [2..7]{(i > 1) and (i < 7)} then
+      if i in [2..7] then
         cdata.tarifnorm[i] := GetNormTarif(i,cdata.tarifs[i],cdata.begindate,cdata.boiler,cdata.rmcount,cdata.settl);
+      //тарифы по счетчику
+      if cdata.counter[i] then
+      begin
+        cdata.countercost[i] := GetCostTarif(i,cdata.countertarifs[i],cdata.begindate,cdata.boiler,cdata.rmcount,cdata.settl);
+        if i in [2..7] then
+          cdata.counternorm[i] := GetNormTarif(i,cdata.countertarifs[i],cdata.begindate,cdata.boiler,cdata.rmcount,cdata.settl);
+      end;
     end;
 end;
 
@@ -1153,7 +1175,7 @@ begin
     begin //индивидуальный расчет
       if sts=0 then
       begin//первый месяц
-        cdata.bfpm[0] := CalcFull;
+        cdata.bfpm[0] := CalcFull(cdata.fpm);
         cdata.fpm[0] := cdata.bfpm[0];
         for i:=0 to numbtarif-1 do
         begin
@@ -1165,7 +1187,7 @@ begin
       end
       else
       begin
-        cdata.fpm[0] := CalcFull;
+        cdata.fpm[0] := CalcFull(cdata.fpm);
         cdata.pm[12] := cdata.bpm[12];
         cdata.pm[13] := cdata.bpm[13];
         cdata.snpm[12] := cdata.bsnpm[12];
@@ -1175,13 +1197,14 @@ begin
         cdata.fpm[i] := 0;
     end;
     CalcSub(sts);
+    CalcFinal(sts);
   end;
 end;
 
 
 procedure TClient.CalcSub(sts: integer);//расчет субсидии за месяц
 var
-  ppm, pm,fpm, subs, stnd,cnt, subold, tmpkoef, tmpLkoef, tmpsubs: real;
+  ppm, pm,fpm, subs, stnd,cnt, subold, tmpkoef, tmpLkoef: real;
   i,mdd, mbc: integer;
   p: array[0..numbtarif-1] of real;
   havePriv: boolean;
@@ -1190,17 +1213,15 @@ begin
   //расчет активного
   begin
     mdd := GetMdd;
-    fpm := CalcFull;
+    fpm := CalcFull(cdata.fpm);
     stnd := GetStandard;
 
     if cdata.rstnd<>0 then
     //------с учетом стандарта
     begin
-      pm := CalcFull;//полная оплата без учета льготы
+      pm := CalcFull(cdata.fpm);//полная оплата без учета льготы
       //оплата c учетом льготы
-      ppm := 0;
-      for i:=0 to numbtarif-1 do
-        ppm := ppm + cdata.pm[i];
+      ppm := CalcFull(cdata.pm);
       //% соответственно услугам
       if (ppm <> 0) then
       begin
@@ -1218,7 +1239,9 @@ begin
     else
     //------оплата по соц.норме
     begin
-      pm := 0;
+      ShowMessage(format('Не установлен региональный стандарт для клиента %s', [IntToStr(data.regn)]));
+      exit;
+      {pm := 0;
       for i:=0 to numbtarif-1 do
         pm := pm + cdata.snpm[i];
       //% соответственно услугам
@@ -1232,7 +1255,7 @@ begin
         for i:=0 to numbtarif-1 do
           p[i] := 0;
       end;
-      ppm := pm;
+      ppm := pm;}
     end;
 
     //------определение размера субсидии
@@ -1243,11 +1266,15 @@ begin
     end;
 
     if cdata.rstnd=0 then
+    begin
     //------типовой расчет
-      if cdata.income/cdata.mcount >= cdata.pmin then
+      {if cdata.income/cdata.mcount >= cdata.pmin then
         subs := rnd(pm - (mdd*cdata.income)/100)
       else
-        subs := rnd(pm - (mdd*cdata.income*rnd(cdata.koef))/100)
+        subs := rnd(pm - (mdd*cdata.income*rnd(cdata.koef))/100) }
+      ShowMessage(format('Не установлен региональный стандарт для клиента %s', [IntToStr(data.regn)]));
+      exit;
+    end
     else
     //------с учетом стандарта
     begin
@@ -1274,7 +1301,7 @@ begin
 
     subold := 0;
     for i:=0 to numbtarif-1 do
-      subold := subold + cdata.sub[i];
+      subold := subold + cdata.stndsub[i];
 
     if (subs + 1 < subold ) and (cdata.mcount > 3) and (cdata.square > 60)
       and (sts <> 0) and (cdata.begindate < StrToDate('01.01.2007')) then
@@ -1292,110 +1319,128 @@ begin
 
     if subs>0 then
     begin
-      if (subs<ppm) then
+      //if (subs<ppm) then
+      //if (subs<pm) then
       begin
         cnt := 0;
         for i:=0 to numbtarif-1 do
         //------распределяем субсидию по тарифам
         begin
-          cdata.sub[i] := rnd(subs*p[i]);
-          cnt := cnt + cdata.sub[i];
+          cdata.stndsub[i] := rnd(subs*p[i]);
+          cnt := cnt + cdata.stndsub[i];
         end;
         i:=0;
-        while cdata.sub[i]=0 do
+        while cdata.stndsub[i]=0 do
           inc(i);
         cnt := subs - cnt;
-        cdata.sub[i] := rnd(cdata.sub[i] + cnt);
-      end
-      else
-      begin//subs>=ppm
-        for i:=0 to numbtarif-1 do
-        begin
-          if cdata.rstnd<>0 then
-            cdata.sub[i] := cdata.pm[i]//subs*p[i]
-          else
-            cdata.sub[i] := cdata.snpm[i];
-        end;
-      end;
-
-      //обрезаем по факту (если он больше 0)
-      if getConfValue('0.AverageFactMinus') then
-      begin
-        tmpsubs := 0;
-        for i:=0 to numbtarif-1 do
-          tmpsubs := tmpsubs + cdata.sub[i];
-        if (cdata.averageFact > 0) and (tmpsubs > cdata.averageFact) and (data.cert <> 1) then
-        begin
-          for i:=0 to numbtarif-1 do
-            cdata.sub[i] := (cdata.sub[i] * (cdata.averageFact/tmpsubs));
-        end;
+        cdata.stndsub[i] := rnd(cdata.stndsub[i] + cnt);
       end;
     end
     else//subs<0
     begin
       for i:=0 to numbtarif-1 do
-        cdata.sub[i] := 0;
-    end;
-
-    if (sts=0) then
-    begin //первый месяц
-      if (cdata.calc=0) then
-      begin //типовой расчет
-        for i:=0 to numbtarif-1 do
-        begin
-          cdata.bpm[i]:=cdata.pm[i];
-          cdata.bsnpm[i]:=cdata.snpm[i];
-          cdata.bfpm[i]:=cdata.fpm[i];
-        end;
-      end;
-      for i:=0 to numbtarif-1 do
-        cdata.bsub[i]:=cdata.sub[i];
-    end
-    else
-    begin
-      i := 0;
-      while cdata.sub[i]=0 do
-        inc(i);
-      if cdata.sub[12]>cdata.bsub[12] then
-        cnt := cdata.sub[12] - cdata.bsub[12]
-      else
-        cnt := cdata.bsub[12] - cdata.sub[12];
-      if cdata.sub[13]>cdata.bsub[13] then
-        cnt := cnt + cdata.sub[13] - cdata.bsub[13]
-      else
-        cnt := cnt + cdata.bsub[13] - cdata.sub[13];
-      cdata.sub[i] := Rnd(cdata.sub[i] + cnt);
-      if (cdata.calc=0) and(cdata.tarifs[12]<>0) then
-      begin //типовой расчет
-        cdata.pm[12] := 0;
-        cdata.snpm[12] := 0;
-        cdata.sub[12] := 0;
-        cdata.fpm[12] := 0;
-
-        cdata.pm[13] := 0;
-        cdata.snpm[13] := 0;
-        cdata.sub[13] := 0;
-        cdata.fpm[13] := 0;
-      end;
-      if (cdata.calc = 1) and (cdata.tarifs[12] <> 0) then  //ИНДИВИДУАЛЬНЫЙ расчет
-      begin
-        cdata.sub[12] := 0;
-        cdata.snpm[12] := 0;
-
-        cdata.sub[13] := 0;
-        cdata.snpm[13] := 0;
-      end;
+        cdata.stndsub[i] := 0;
     end;
   end;
 end;
 
-function TClient.CalcFull: real;
+procedure TClient.CalcFinal(sts: integer);
+var
+  fstndsub, fsnpm, tmpsubs, cnt: real;
+  i : integer;
+begin
+  fstndsub := CalcFull(cdata.stndsub);
+  fsnpm := CalcFull(cdata.snpm);
+
+  if (fstndsub >= fsnpm) then
+  begin
+    for i:=0 to numbtarif-1 do
+    begin
+      cdata.sub[i] := cdata.snpm[i];
+    end;
+  end
+  else
+  for i:=0 to numbtarif-1 do
+    cdata.sub[i] := cdata.stndsub[i];
+
+  //обрезаем по факту (если он больше 0)
+  if getConfValue('0.AverageFactMinus') then
+  begin
+    tmpsubs := 0;
+    for i:=0 to numbtarif-1 do
+      tmpsubs := tmpsubs + cdata.sub[i];
+    if (cdata.averageFact > 0) and (tmpsubs > cdata.averageFact) and (data.cert <> 1) then
+    begin
+      for i:=0 to numbtarif-1 do
+        cdata.sub[i] := (cdata.sub[i] * (cdata.averageFact/tmpsubs));
+    end;
+  end;
+
+  if (sts=0) then
+  begin //первый месяц
+    if (cdata.calc=0) then
+    begin //типовой расчет
+      for i:=0 to numbtarif-1 do
+      begin
+        cdata.bpm[i]:=cdata.pm[i];
+        cdata.bsnpm[i]:=cdata.snpm[i];
+        cdata.bfpm[i]:=cdata.fpm[i];
+      end;
+    end;
+    for i:=0 to numbtarif-1 do
+    begin
+      cdata.bsub[i]:=cdata.sub[i];
+      cdata.bstndsub[i]:=cdata.stndsub[i];
+    end;
+  end
+  else
+  begin
+    i := 0;
+    while cdata.sub[i]=0 do
+      inc(i);
+    if cdata.sub[12] > cdata.bsub[12] then
+      cnt := cdata.sub[12] - cdata.bsub[12]
+    else
+      cnt := cdata.bsub[12] - cdata.sub[12];
+    if cdata.sub[13] > cdata.bsub[13] then
+      cnt := cnt + cdata.sub[13] - cdata.bsub[13]
+    else
+      cnt := cnt + cdata.bsub[13] - cdata.sub[13];
+    cdata.sub[i] := Rnd(cdata.sub[i] + cnt);
+    if (cdata.calc = 0) and(cdata.tarifs[12] <> 0) then
+    begin //типовой расчет
+      cdata.pm[12] := 0;
+      cdata.snpm[12] := 0;
+      cdata.sub[12] := 0;
+      cdata.fpm[12] := 0;
+      cdata.stndsub[12] := 0;
+
+      cdata.pm[13] := 0;
+      cdata.snpm[13] := 0;
+      cdata.sub[13] := 0;
+      cdata.fpm[13] := 0;
+      cdata.stndsub[13] := 0;
+    end;
+    if (cdata.calc = 1) and (cdata.tarifs[12] <> 0) then  //ИНДИВИДУАЛЬНЫЙ расчет
+    begin
+      cdata.sub[12] := 0;
+      cdata.snpm[12] := 0;
+      cdata.stndsub[12] := 0;
+
+      cdata.sub[13] := 0;
+      cdata.snpm[13] := 0;
+      cdata.stndsub[13] := 0;
+    end;
+  end;
+end;
+
+function TClient.CalcFull(arr: TNumbTarifReal): real;
 var
   i: integer;
 begin
   Result := 0;
   for i:=0 to numbtarif - 1 do
-    Result := Result + cdata.fpm[i];
+    Result := Result + arr[i];
 end;
 
 procedure TClient.CalcServ(s: integer);
@@ -1404,87 +1449,10 @@ var
   i, tval, canalServ: integer;
   canalCold, canalHot: boolean;
 begin
-  if cdata.counter[s] then
-  begin
-    normData := cdata.tarifnorm[s];
-    counterData := cdata.counterdata[s];
-
-    if s <> 7 then
-      cost := cdata.cost[s]
-    else//электоэнергия
-    begin
-      if cdata.mcount > 2 then
-        tval := 3
-      else
-        tval := cdata.mcount;
-
-      with DModule do
-      begin
-      if cdata.tarifs[7] > 2 then
-        valtarif:=0
-      else
-        begin
-          t8.Locate('id_el', cdata.tarifs[7], [loCaseInsensitive]);
-          cost := t8.FieldByName('tarifel'+IntToStr(tval)).Value;// * cdata.counterdata[s];//стоимоть тарифа * показания счетчика
-        end;
-      end;
-    end;
-
-    canalCold := (s = 4) and (cdata.counter[2]) and (cdata.counter[3] = false);
-    canalHot := (s = 4) and (cdata.counter[3]) and (cdata.counter[2] = false);
-
-    //водоотведение (есть хв)
-    if canalCold then
-    begin
-      canalServ := 2;
-      normData := cdata.counterdata[canalServ];
-      valtarif := cost * normData + counterData;
-    end
-    else//водоотведение (есть гв)
-    if canalHot then
-    begin
-      canalServ := 3;
-      normData := cdata.counterdata[canalServ];
-      valtarif := cost * normData + counterData;
-    end
-    else//другие услуги
-      valtarif := cost * counterData;
-
-    cdata.fpm[s] := Rnd(valtarif);
-
-    for i:=0 to cdata.mcount-1 do
-    begin
-      if cdata.pc[i][s]<>0 then
-      begin//если ненулевая льгота
-        if (canalCold) or (canalHot) then
-        begin
-          if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
-            valtarif := valtarif - ((math.min(normData, cdata.tarifnorm[canalServ]) * cost + counterData / cdata.rmcount) * cdata.pc[i][s]/100) //* math.min(valtarif, cost * (cdata.tarifnorm[2] + cdata.tarifnorm[3])) * cdata.pc[i][s]/100
-          else
-            valtarif := valtarif - ((normData/cdata.rmcount * cost + (counterData/cdata.rmcount)) * cdata.pc[i][s]/100);
-        end
-        else
-        begin
-          if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
-            valtarif := valtarif - (math.min(normData, counterData/cdata.rmcount) * cost * cdata.pc[i][s]/100)
-          else
-            valtarif := valtarif - (cost * (counterData/cdata.rmcount) * cdata.pc[i][s]/100);
-        end;
-      end;
-    end;
-
-    cdata.pm[s] := Rnd(valtarif);
-    cdata.snpm[s] := Rnd(valtarif);
-    Exit;
-  end
-  //------
-  else//без счетчика
-  begin
-    if s <> 7 then
-      valtarif := cdata.cost[s] * cdata.tarifnorm[s]
-    else
-      valtarif := cdata.cost[s];
-  end;
+  if s <> 7 then
+    valtarif := cdata.cost[s] * cdata.tarifnorm[s]
+  else
+    valtarif := cdata.cost[s];
 
   if valtarif <> 0 then
   begin
@@ -1508,6 +1476,80 @@ begin
     cdata.pm[s] := 0;
     cdata.snpm[s] := 0;
   end;
+
+  //счетчик
+  if cdata.counter[s] then
+  begin
+    normData := cdata.counternorm[s];
+    counterData := cdata.counterdata[s];
+
+    if s <> 7 then cost := cdata.countercost[s]
+    else//электоэнергия
+    begin
+      if cdata.mcount > 2 then
+        tval := 3
+      else
+        tval := cdata.mcount;
+
+      with DModule do
+      begin
+        if cdata.tarifs[7] > 2 then
+          valtarif:=0
+        else
+        begin
+          t8.Locate('id_el', cdata.tarifs[7], [loCaseInsensitive]);
+          cost := t8.FieldByName('tarifel'+IntToStr(tval)).Value;//стоимоть тарифа
+        end;
+      end;
+    end;
+
+    //водоотведение (есть cold)
+    if (s = 4) and (cdata.counter[2]) and (cdata.counter[3] = false) then
+    begin
+      canalCold := true;
+      canalServ := 2;
+    end;
+    //водоотведение (есть hot)
+    if (s = 4) and (cdata.counter[3]) and (cdata.counter[2] = false) then
+    begin
+      canalHot := true;
+      canalServ := 3;
+    end;
+
+    if (canalCold) or (canalHot) then //canal
+    begin
+      counterData := counterData * cdata.rmcount;
+      normData := cdata.counterdata[canalServ];
+      valtarif := cost * normData + counterData;
+    end
+    else//другие услуги
+      valtarif := cost * counterData;
+
+    for i:=0 to cdata.mcount-1 do
+    begin
+      if cdata.pc[i][s]<>0 then
+      begin//если ненулевая льгота
+        if (canalCold) or (canalHot) then //canal
+        begin
+          if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
+            valtarif := valtarif - ((math.min(rnd(normData/cdata.rmcount), cdata.counternorm[canalServ]) * cost + counterData / cdata.rmcount) * cdata.pc[i][s]/100) //* math.min(valtarif, cost * (cdata.tarifnorm[2] + cdata.tarifnorm[3])) * cdata.pc[i][s]/100
+          else
+            valtarif := valtarif - ((normData/cdata.rmcount * cost + (counterData/cdata.rmcount)) * cdata.pc[i][s]/100);
+        end
+        else//другие услуги
+        begin
+          if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
+            valtarif := valtarif - (math.min(normData, rnd(counterData/cdata.rmcount)) * cost * cdata.pc[i][s]/100)
+          else
+            valtarif := valtarif - (cost * (counterData/cdata.rmcount) * cdata.pc[i][s]/100);
+        end;
+      end;
+    end;
+
+    //cdata.pm[s] := Rnd(valtarif);
+    cdata.snpm[s] := Rnd(valtarif);
+    //Exit;
+  end;
 end;
 
 procedure tclient.calcservsq(service:integer;m:integer);
@@ -1523,39 +1565,8 @@ var
   ab: Real;
   norm: Real;
 begin
-  cost := cdata.cost[service];//получаем стоимость услуги @service
-  //расчет отопления по счетчику
-  if (service = 5) then
-  begin
-    if cdata.counter[service] then
-    begin
-      cost := cdata.cost[service] * cdata.counterdata[service];
-      cdata.fpm[service] := rnd(cost);
-      for i:=0 to cdata.mcount-1 do
-      begin
-        if cdata.pc[i][service]<>0 then//если ненулевая льгота
-        begin
-          //if (cdata.priv[i] = 3) or (cdata.priv[i] = 12) or (cdata.priv[i] = 13) or (cdata.priv[i] = 22) or (cdata.priv[i] = 25) or (cdata.priv[i] = 1) or (cdata.priv[i] = 11) then
-          if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
-          begin
-            norm := math.min(cdata.square/cdata.rmcount, cdata.psnorm);
-            ab := math.min(cdata.counterdata[service]/cdata.rmcount, norm * cdata.tarifnorm[service]);
-
-            cost := cost - (ab * cdata.pc[i][service]/100 * cdata.cost[service])
-          end
-          else
-            cost := cost - ((cdata.counterdata[service]/cdata.rmcount) * cdata.pc[i][service]/100 * cdata.cost[service]);
-        end;
-      end;
-      cdata.pm[service] := rnd(cost);
-      cdata.snpm[service] := rnd(cost);
-      Exit;
-    end
-    else
-      cost := cdata.cost[service] * cdata.tarifnorm[service];
-  end;
-
   //расчет содержания жилья и отопления по тарифам
+  cost := cdata.cost[service];//получаем стоимость услуги @service
   quan:=0;
   squareold:=cdata.square;
 
@@ -1592,7 +1603,6 @@ begin
         end
         else
         begin
-          //if (cdata.priv[i] = 3) or (cdata.priv[i] = 12) or (cdata.priv[i] = 13) or (cdata.priv[i] = 22) or (cdata.priv[i] = 25) or (cdata.priv[i] = 1) or (cdata.priv[i] = 11) then
           if ((cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) or
             ((cdata.priv[i] = 30) and (service = 0))) then
           begin
@@ -1623,9 +1633,8 @@ begin
     calchnorm(m,squarenp,squarep);
 
   cdata.pm[service]:=rnd(cost*squarenp);
-  cdata.snpm[service]:=rnd(cost*squarep);
+  cdata.snpm[service]:= cdata.pm[service];//rnd(cost*squarep); для правильного расчета по счеьчикам
   end
-
   else
   begin
     cdata.fpm[service]:=0;
@@ -1634,6 +1643,36 @@ begin
   end;
 
   cdata.square:=squareold;
+
+  //расчет отопления по счетчику
+  if (service = 5) then
+  begin
+    if cdata.counter[service] then
+    begin
+      cost := cdata.countercost[service] * cdata.counterdata[service];
+      //cdata.fpm[service] := rnd(cost);
+      for i:=0 to cdata.mcount-1 do
+      begin
+        if cdata.pc[i][service]<>0 then//если ненулевая льгота
+        begin
+        if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
+          begin
+            norm := math.min(cdata.square/cdata.rmcount, cdata.psnorm);
+            ab := math.min(cdata.counterdata[service]/cdata.rmcount, norm * cdata.counternorm[service]);
+
+            cost := cost - (ab * cdata.pc[i][service]/100 * cdata.countercost[service])
+          end
+          else
+            cost := cost - ((cdata.counterdata[service]/cdata.rmcount) * cdata.pc[i][service]/100 * cdata.countercost[service]);
+        end;
+      end;
+      //cdata.pm[service] := rnd(cost);
+      cdata.snpm[service] := rnd(cost);
+      //Exit;
+    end
+    else
+      cost := cdata.countercost[service] * cdata.counternorm[service];
+  end;
 end;
 
 procedure tclient.calcserve(service:integer);
@@ -1645,19 +1684,14 @@ var
   i, tval:integer;
 begin
   price:=0;
-{  case cdata.tarifs[7] of
-    1 : cost:=2.28;
-    2 : cost:=1.60;
-  else
-    cost:=0;
-  end;}
 
   if cdata.mcount > 2 then
     tval := 3
   else
     tval := cdata.mcount;
 
-  with DModule do begin
+  with DModule do
+  begin
   if cdata.tarifs[7] > 2 then
     cost:=0
   else
@@ -1864,13 +1898,18 @@ begin
     d.tarifnorm[i] := s.tarifnorm[i];
     d.counter[i] := s.counter[i];
     d.counterdata[i] := s.counterdata[i];
+    d.countertarifs[i] := s.countertarifs[i];
+    d.countercost[i] := s.countercost[i];
+    d.counternorm[i] := s.counternorm[i];
     d.pm[i] := s.pm[i];
     d.snpm[i] := s.snpm[i];
     d.sub[i] := s.sub[i];
+    d.stndsub[i] := s.stndsub[i];
     d.fpm[i] := s.fpm[i];
     d.bpm[i] := s.bpm[i];
     d.bsnpm[i] := s.bsnpm[i];
     d.bsub[i] := s.bsub[i];
+    d.bstndsub[i] := s.bstndsub[i];
     d.bfpm[i] := s.bfpm[i];
   end;
 end;
@@ -1963,10 +2002,15 @@ begin
     Result.accounts[i] := '';
     Result.counter[i] := False;
     Result.counterdata[i] := 0;
+    Result.countertarifs[i] := 0;
+    Result.countercost[i] := 0;
+    Result.counternorm[i] := 0;
     Result.pm[i] := 0;
     Result.snpm[i] := 0;
     Result.sub[i] := 0;
     Result.fpm[i] := 0;
+    Result.stndsub[i] := 0;
+    Result.bstndsub[i] := 0;
     Result.bpm[i] := 0;
     Result.bsnpm[i] := 0;
     Result.bsub[i] := 0;
