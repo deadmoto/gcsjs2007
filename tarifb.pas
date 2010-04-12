@@ -34,6 +34,8 @@ type
     Edit1:       TEdit;
     Edit2:       TEdit;
     Edit4:       TEdit;
+    Edit5: TEdit;
+    Label5: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button4Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -78,7 +80,7 @@ procedure TForm19.SetDefault;
 var
   i: integer;
 begin
-  with DataModule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -88,16 +90,17 @@ begin
     First;
   end;
 
-  FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Откр.в/разбор', 'Закр.в/разбор'),
-    TIntArray.Create(30, 237, 78, 48), DataModule1.qTarif.RecordCount + 1);
+  FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Откр.в/разбор', 'Закр.в/разбор', 'Норм.'),
+    TIntArray.Create(30, 237, 78, 48, 48), DModule.qTarif.RecordCount + 1);
 
-  for i := 0 to DataModule1.qTarif.RecordCount - 1 do
+  for i := 0 to DModule.qTarif.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DataModule1.qTarif.FieldByName('id_' + nam).Value;
-    StringGrid1.Cells[1, i + 1] := DataModule1.qTarif.FieldByName('name' + nam).Value;
-    StringGrid1.Cells[2, i + 1] := DataModule1.qTarif.FieldByName('tarif1').Value;
-    StringGrid1.Cells[3, i + 1] := DataModule1.qTarif.FieldByName('tarif2').Value;
-    DataModule1.qTarif.Next;
+    StringGrid1.Cells[0, i + 1] := DModule.qTarif.FieldByName('id_' + nam).Value;
+    StringGrid1.Cells[1, i + 1] := DModule.qTarif.FieldByName('name' + nam).Value;
+    StringGrid1.Cells[2, i + 1] := DModule.qTarif.FieldByName('tarif1').Value;
+    StringGrid1.Cells[3, i + 1] := DModule.qTarif.FieldByName('tarif2').Value;
+    StringGrid1.Cells[4, i + 1] := DModule.qTarif.FieldByName('norm' + nam).Value;
+    DModule.qTarif.Next;
   end;
 end;
 
@@ -119,6 +122,7 @@ begin
     Edit1.Text := StringGrid1.Cells[1, ARow];
     Edit2.Text := StringGrid1.Cells[2, ARow];
     Edit4.Text := StringGrid1.Cells[3, ARow];
+    Edit5.Text := StringGrid1.Cells[4, ARow];
     Edit3.Text := StringGrid1.Cells[0, ARow];
     if Edit3.Text <> '' then
       oldid := StrToInt(Edit3.Text);
@@ -131,8 +135,8 @@ procedure TForm19.FormClose(Sender: TObject; var Action: TCloseAction);
   в этом unit.
 *******************************************************************************}
 begin
-  Datamodule1.Query1.Close;
-  Datamodule1.qTarif.Close;
+  DModule.Query1.Close;
+  DModule.qTarif.Close;
 end;
 
 procedure TForm19.Button4Click(Sender: TObject);
@@ -160,7 +164,7 @@ begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and
     (Edit3.Text <> '') and (Edit4.Text <> '') then
   begin
-    with DataModule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -196,13 +200,14 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('insert into ' + nam);
-        SQL.Add('values (:idd,Convert(smalldatetime,:d,104),:id,:name,:t1,:t2)');
+        SQL.Add('values (:idd,Convert(smalldatetime,:d,104),:id,:name,:t1,:t2,:norm)');
         ParamByName('idd').AsInteger := Form1.dist;
         ParamByName('d').AsString := Form1.rdt;
         ParamByName('id').AsInteger := StrToInt(Edit3.Text);
         ParamByName('name').AsString := Edit1.Text;
         ParamByName('t1').AsFloat := StrToFloat(Edit2.Text);
         ParamByName('t2').AsFloat := StrToFloat(Edit4.Text);
+        ParamByName('norm').AsFloat := StrToFloat(Edit5.Text);
         ExecSQL;
         FillTarifb(Form1.bpath, nam, Form1.rdt, Form1.dist, Form1.codedbf);
         oldid := StrToInt(Edit3.Text);
@@ -234,7 +239,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') and (Edit4.Text <> '') then
   begin
-    with DataModule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -280,7 +285,7 @@ begin
             Close;
             SQL.Clear;
             SQL.Add('insert into ' + nam);
-            SQL.Add('values (:idd,Convert(smalldatetime,:d,104),:id,:name,:t1,:t2)');
+            SQL.Add('values (:idd,Convert(smalldatetime,:d,104),:id,:name,:t1,:t2,:norm)');
             ParamByName('id').AsInteger := StrToInt(Edit3.Text);
           end
           else
@@ -288,8 +293,8 @@ begin
             Close;
             SQL.Clear;
             SQL.Add('update ' + nam);
-            SQL.Add('set name' + nam + '=:name,tarif1=:t1,tarif2=:t2');
-            SQL.Add('where (id_' + nam + ' = :id)and(sdate=Convert(smalldatetime,:d,104))and(id_dist=:idd)');
+            SQL.Add('set name' + nam + '=:name,tarif1=:t1,tarif2=:t2,norm'+ nam +'=:norm');
+            SQL.Add('where (id_' + nam + ' = :id)and(sdate=convert(smalldatetime,:d,104))and(id_dist=:idd)');
             ParamByName('id').AsInteger := oldid;
           end;
           ParamByName('idd').AsInteger := Form1.dist;
@@ -297,6 +302,7 @@ begin
           ParamByName('name').AsString := Edit1.Text;
           ParamByName('t1').AsFloat := StrToFloat(Edit2.Text);
           ParamByName('t2').AsFloat := StrToFloat(Edit4.Text);
+          ParamByName('norm').AsFloat := StrToFloat(Edit5.Text);
           ExecSQL;
           FillTarifb(Form1.bpath, nam, Form1.rdt, Form1.dist, Form1.codedbf);
           oldid := StrToInt(Edit3.Text);
@@ -325,7 +331,7 @@ procedure TForm19.Button3Click(Sender: TObject);
   по данной услуге.
 *******************************************************************************}
 begin
-  with DataModule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;

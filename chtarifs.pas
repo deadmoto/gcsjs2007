@@ -34,7 +34,7 @@ type
   public
     { Public declarations }
     status: integer;
-    procedure CreateTarifFrm15(frmNam: string; frmNum, frmStatus: integer; frmCaption: string);
+    procedure CreateTarifFrm15(frmNam: string; frmNum, frmStatus: integer; frmCaption: string; Norm: boolean);
     procedure CreateTarifFrm19(frmNam: string; frmNum, frmStatus: integer; frmCaption: string);
   end;
 
@@ -48,7 +48,7 @@ uses
 
 {$R *.dfm}
 
-procedure TForm42.CreateTarifFrm15(frmNam: string; frmNum, frmStatus: integer; frmCaption: string);
+procedure TForm42.CreateTarifFrm15(frmNam: string; frmNum, frmStatus: integer; frmCaption: string; Norm: boolean);
 begin
   Form15 := TForm15.Create(Application);
   with Form15 do
@@ -57,6 +57,7 @@ begin
     num := frmNum;
     status := frmStatus;
     Caption := frmCaption;
+    isNorm := Norm;
     ShowModal;
     Free;
   end;
@@ -79,13 +80,13 @@ end;
 procedure TForm42.Button1Click(Sender: TObject);
 { справочник тарифов на содержание жилья }
 begin
-  CreateTarifFrm15('cont', 0, status, 'Тарифы на содержание жилья(руб./кв.м.)');
+  CreateTarifFrm15('cont', 0, status, 'Тарифы на содержание жилья(руб./кв.м.)', False);
 end;
 
 procedure TForm42.Button2Click(Sender: TObject);
 { справочник тарифов на текущий ремонт }
 begin
-  CreateTarifFrm15('rep', 1, status, 'Тарифы для освещения МОП');
+  CreateTarifFrm15('rep', 1, status, 'Тарифы для освещения МОП', False);
 end;
 
 procedure TForm42.Button3Click(Sender: TObject);
@@ -105,19 +106,19 @@ procedure TForm42.Button5Click(Sender: TObject);
   Процедура вызывает форму операций с тарифами на водоотведение
 *******************************************************************************}
 begin
-  CreateTarifFrm15('canal', 4, status, 'Тарифы на водоотведение(руб./чел.)');
+  CreateTarifFrm15('canal', 4, status, 'Тарифы на водоотведение(руб./чел.)', True);
 end;
 
 procedure TForm42.Button6Click(Sender: TObject);
 { справочник тарифов на отопление }
 begin
-  CreateTarifFrm15('heat', 5, status, 'Тарифы на отопление(руб./кв.м.)');
+  CreateTarifFrm15('heat', 5, status, 'Тарифы на отопление(руб./кв.м.)', True);
 end;
 
 procedure TForm42.Button7Click(Sender: TObject);
 { справочник  тарифов на газ}
 begin
-  CreateTarifFrm15('gas', 6, status, 'Тарифы на газ(руб./чел.)');
+  CreateTarifFrm15('gas', 6, status, 'Тарифы на газ(руб./чел.)', True);
 end;
 
 procedure TForm42.Button8Click(Sender: TObject);
@@ -131,13 +132,13 @@ end;
 procedure TForm42.Button9Click(Sender: TObject);
 { справочник тарифов на дрова }
 begin
-  CreateTarifFrm15('wood', 12, status, 'Тарифы на дрова(руб./кв.м.)');
+  CreateTarifFrm15('wood', 12, status, 'Тарифы на дрова(руб./кв.м.)', False);
 end;
 
 procedure TForm42.Button10Click(Sender: TObject);
 { справочник тарифов на уголь }
 begin
-  CreateTarifFrm15('coal', 13, status, 'Тарифы на уголь(руб./кв.м.)');
+  CreateTarifFrm15('coal', 13, status, 'Тарифы на уголь(руб./кв.м.)', False);
 end;
 
 procedure TForm42.FormClose(Sender: TObject; var Action: TCloseAction);

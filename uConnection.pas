@@ -3,18 +3,8 @@ unit uConnection;
 interface
 
 uses
-  Windows,
-  Messages,
-  SysUtils,
-  Variants,
-  Classes,
-  Graphics,
-  Controls,
-  Forms,
-  Dialogs,
-  StdCtrls,
-  ExtCtrls,
-  Registry;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Registry;
 
 type
   TConMode = (nNone, mBug);
@@ -49,10 +39,7 @@ var
 implementation
 
 uses
-  srvinfo,
-  ODBC_DSN,
-  main,
-  datamodule;
+  srvinfo, ODBC_DSN, main, datamodule;
 
 {$R *.dfm}
 
@@ -98,12 +85,12 @@ begin
   begin
     WriteConnSettings(ComboBox1.Text);
     Form1.curServer := ComboBox1.Text;
-    datamodule1.database1.connected := False;
+    DModule.database1.connected := False;
 
     if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy', '') then
       ShowMessage('Ошибка при создании DSN записи SQLSub!');
 
-    datamodule1.database1.connected := True;
+    DModule.database1.connected := True;
 
     Form1.OnCreate(self);
 

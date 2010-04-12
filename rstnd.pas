@@ -75,7 +75,7 @@ procedure TForm38.SetDefault;
 var
   i: integer;
 begin
-  with DataModule1.qTarif do
+  with DModule.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -87,20 +87,20 @@ begin
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Ст-рт 1', 'Ст-рт 2',
     'Ст-рт 3', 'Ст-рт 4', 'Ст-рт 5', 'Ст-рт 6', 'Ст-рт 7'),
-    TIntArray.Create(25, 170, 50, 50, 50, 50, 50, 50, 50), Datamodule1.qTarif.RecordCount + 1);
+    TIntArray.Create(25, 170, 50, 50, 50, 50, 50, 50, 50), DModule.qTarif.RecordCount + 1);
 
-  for i := 0 to Datamodule1.qTarif.RecordCount - 1 do
+  for i := 0 to DModule.qTarif.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := Datamodule1.qTarif.FieldByName('id_stnd').Value;
-    StringGrid1.Cells[1, i + 1] := Datamodule1.qTarif.FieldByName('namestnd').Value;
-    StringGrid1.Cells[2, i + 1] := Datamodule1.qTarif.FieldByName('value1').Value;
-    StringGrid1.Cells[3, i + 1] := Datamodule1.qTarif.FieldByName('value2').Value;
-    StringGrid1.Cells[4, i + 1] := Datamodule1.qTarif.FieldByName('value3').Value;
-    StringGrid1.Cells[5, i + 1] := Datamodule1.qTarif.FieldByName('value4').Value;
-    StringGrid1.Cells[6, i + 1] := Datamodule1.qTarif.FieldByName('value5').Value;
-    StringGrid1.Cells[7, i + 1] := Datamodule1.qTarif.FieldByName('value6').Value;
-    StringGrid1.Cells[8, i + 1] := Datamodule1.qTarif.FieldByName('value7').Value;
-    Datamodule1.qTarif.Next;
+    StringGrid1.Cells[0, i + 1] := DModule.qTarif.FieldByName('id_stnd').Value;
+    StringGrid1.Cells[1, i + 1] := DModule.qTarif.FieldByName('namestnd').Value;
+    StringGrid1.Cells[2, i + 1] := DModule.qTarif.FieldByName('value1').Value;
+    StringGrid1.Cells[3, i + 1] := DModule.qTarif.FieldByName('value2').Value;
+    StringGrid1.Cells[4, i + 1] := DModule.qTarif.FieldByName('value3').Value;
+    StringGrid1.Cells[5, i + 1] := DModule.qTarif.FieldByName('value4').Value;
+    StringGrid1.Cells[6, i + 1] := DModule.qTarif.FieldByName('value5').Value;
+    StringGrid1.Cells[7, i + 1] := DModule.qTarif.FieldByName('value6').Value;
+    StringGrid1.Cells[8, i + 1] := DModule.qTarif.FieldByName('value7').Value;
+    DModule.qTarif.Next;
   end;
 
 end;
@@ -138,7 +138,7 @@ begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and
     (Edit3.Text <> '') and (Edit4.Text <> '') and (Edit5.Text <> '') then
   begin
-    with DataModule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -206,7 +206,7 @@ begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and
     (Edit3.Text <> '') and (Edit4.Text <> '') and (Edit5.Text <> '') then
   begin
-    with DataModule1.Query1 do
+    with DModule.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -288,7 +288,7 @@ end;
 procedure TForm38.Button3Click(Sender: TObject);
 { удалить стандарт }
 begin
-  with DataModule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -321,8 +321,8 @@ end;
 
 procedure TForm38.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  Datamodule1.Query1.Close;
-  Datamodule1.qTarif.Close;
+  DModule.Query1.Close;
+  DModule.qTarif.Close;
 end;
 
 procedure TForm38.Edit4Exit(Sender: TObject);

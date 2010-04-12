@@ -73,7 +73,7 @@ begin
 
   Sheet := ExcelApp.ActiveWorkBook.WorkSheets[1];
 
-  with Datamodule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
