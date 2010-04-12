@@ -46,7 +46,7 @@ procedure TSelectDistFrm.Fill;
 var
   l: integer;
 begin
-  with DModule.Query1 do begin
+  with Datamodule1.Query1 do begin
     l := 0;
     Close;
     SQL.Clear;
@@ -109,7 +109,7 @@ procedure TSelectDistFrm.Button1Click(Sender: TObject);
 {войти}
 begin
   if Combobox1.Text <> '' then
-    with DModule.Query1 do begin
+    with DataModule1.Query1 do begin
       Close;
       SQL.Clear;
       SQL.Add('select *');
@@ -165,7 +165,7 @@ end;
 
 function TSelectDistFrm.SelInsp(n: integer): string;
 begin
-  with DModule.Query1 do begin
+  with Datamodule1.Query1 do begin
     Close;
     SQL.Clear;
     SQL.Add('select nameinsp');
@@ -183,7 +183,7 @@ procedure TSelectDistFrm.ComboBox2Change(Sender: TObject);
 var
   l: integer;
 begin
-  with DModule.Query1 do begin
+  with Datamodule1.Query1 do begin
     l := 0;
     Close;
     SQL.Clear;

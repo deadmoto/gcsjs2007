@@ -181,7 +181,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -235,7 +235,7 @@ end;
 procedure TGenRefBookFrm.mCertificationDelete(Sender: TObject);
 { удалить тип аттестации}
 begin
-  with DModule.Query1 do
+  with DataModule1.Query1 do
   begin
     if not IsEmpty then
     begin
@@ -257,7 +257,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -317,7 +317,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -370,7 +370,7 @@ end;
 
 procedure TGenRefBookFrm.mControlDelete(Sender: TObject);
 begin
-  with DModule.Query1 do
+  with DataModule1.Query1 do
   begin
     if not IsEmpty then
     begin
@@ -392,7 +392,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -453,7 +453,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -507,7 +507,7 @@ end;
 procedure TGenRefBookFrm.mOwnTypeDelete(Sender: TObject);
 { удалить тип владения }
 begin
-  with DModule.Query1 do
+  with DataModule1.Query1 do
   begin
     if not IsEmpty then
     begin
@@ -529,7 +529,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -590,7 +590,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -645,7 +645,7 @@ procedure TGenRefBookFrm.mRelationDelete(Sender: TObject);
 { удалить отношение }
 begin
   if Edit2.Text <> 'клиент' then
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       if not IsEmpty then
       begin
@@ -669,7 +669,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -729,7 +729,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -786,7 +786,7 @@ procedure TGenRefBookFrm.mSettlingTypeDelete(Sender: TObject);
   удаляется запись, которая соответствует текущему id.
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DataModule1.Query1 do
   begin
     if not IsEmpty then
     begin
@@ -817,7 +817,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -878,7 +878,7 @@ begin
   case mode of
     mOwnType:
     begin
-      with DModule.Query1 do
+      with Datamodule1.Query1 do
       begin
         Close;
         SQL.Clear;
@@ -890,22 +890,22 @@ begin
       end;
 
       FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование'),
-        TIntArray.Create(25, 225), DModule.Query1.RecordCount + 1);
+        TIntArray.Create(25, 225), Datamodule1.Query1.RecordCount + 1);
 
-      for i := 0 to DModule.Query1.RecordCount + 1 do
+      for i := 0 to Datamodule1.Query1.RecordCount + 1 do
       begin
         with StringGrid1 do
         begin
-          Cells[0, i + 1] := DModule.Query1.FieldByName('id_own').AsString;
-          Cells[1, i + 1] := DModule.Query1.FieldByName('nameown').AsString;
+          Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_own').AsString;
+          Cells[1, i + 1] := Datamodule1.Query1.FieldByName('nameown').AsString;
         end;
-        DModule.Query1.Next;
+        Datamodule1.Query1.Next;
       end;
     end;
     {******************************************************************************}
     mCertification:
     begin
-      with DModule.Query1 do
+      with Datamodule1.Query1 do
       begin
         Close;
         SQL.Clear;
@@ -917,22 +917,22 @@ begin
       end;
 
       FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование'),
-        TIntArray.Create(25, 225), DModule.Query1.RecordCount + 1);
+        TIntArray.Create(25, 225), Datamodule1.Query1.RecordCount + 1);
 
-      for i := 0 to DModule.Query1.RecordCount + 1 do
+      for i := 0 to Datamodule1.Query1.RecordCount + 1 do
       begin
         with StringGrid1 do
         begin
-          Cells[0, i + 1] := DModule.Query1.FieldByName('id_cert').AsString;
-          Cells[1, i + 1] := DModule.Query1.FieldByName('namecert').AsString;
+          Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_cert').AsString;
+          Cells[1, i + 1] := Datamodule1.Query1.FieldByName('namecert').AsString;
         end;
-        DModule.Query1.Next;
+        Datamodule1.Query1.Next;
       end;
     end;
     {******************************************************************************}
     mSettlingType:
     begin
-      with DModule.Query1 do
+      with Datamodule1.Query1 do
       begin
         Close;
         SQL.Clear;
@@ -944,22 +944,22 @@ begin
       end;
 
       FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование'),
-        TIntArray.Create(25, 225), DModule.Query1.RecordCount + 1);
+        TIntArray.Create(25, 225), Datamodule1.Query1.RecordCount + 1);
 
-      for i := 0 to DModule.Query1.RecordCount + 1 do
+      for i := 0 to Datamodule1.Query1.RecordCount + 1 do
       begin
         with StringGrid1 do
         begin
-          Cells[0, i + 1] := DModule.Query1.FieldByName('id_settl').AsString;
-          Cells[1, i + 1] := DModule.Query1.FieldByName('namesettl').AsString;
+          Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_settl').AsString;
+          Cells[1, i + 1] := Datamodule1.Query1.FieldByName('namesettl').AsString;
         end;
-        DModule.Query1.Next;
+        Datamodule1.Query1.Next;
       end;
     end;
     {******************************************************************************}
     mControl:
     begin
-      with DModule.Query1 do
+      with Datamodule1.Query1 do
       begin
         Close;
         SQL.Clear;
@@ -971,22 +971,22 @@ begin
       end;
 
       FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование'),
-        TIntArray.Create(25, 225), DModule.Query1.RecordCount + 1);
+        TIntArray.Create(25, 225), Datamodule1.Query1.RecordCount + 1);
 
-      for i := 0 to DModule.Query1.RecordCount + 1 do
+      for i := 0 to Datamodule1.Query1.RecordCount + 1 do
       begin
         with StringGrid1 do
         begin
-          Cells[0, i + 1] := DModule.Query1.FieldByName('id_cntrl').AsString;
-          Cells[1, i + 1] := DModule.Query1.FieldByName('namecntrl').AsString;
+          Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_cntrl').AsString;
+          Cells[1, i + 1] := Datamodule1.Query1.FieldByName('namecntrl').AsString;
         end;
-        DModule.Query1.Next;
+        Datamodule1.Query1.Next;
       end;
     end;
     {******************************************************************************}
     mRelation:
     begin
-      with DModule.Query1 do
+      with Datamodule1.Query1 do
       begin
         Close;
         SQL.Clear;
@@ -998,16 +998,16 @@ begin
       end;
 
       FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование'),
-        TIntArray.Create(25, 225), DModule.Query1.RecordCount + 1);
+        TIntArray.Create(25, 225), Datamodule1.Query1.RecordCount + 1);
 
-      for i := 0 to DModule.Query1.RecordCount + 1 do
+      for i := 0 to Datamodule1.Query1.RecordCount + 1 do
       begin
         with StringGrid1 do
         begin
-          Cells[0, i + 1] := DModule.Query1.FieldByName('id_rel').AsString;
-          Cells[1, i + 1] := DModule.Query1.FieldByName('namerel').AsString;
+          Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_rel').AsString;
+          Cells[1, i + 1] := Datamodule1.Query1.FieldByName('namerel').AsString;
         end;
-        DModule.Query1.Next;
+        Datamodule1.Query1.Next;
       end;
     end;
   end;

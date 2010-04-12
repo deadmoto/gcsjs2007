@@ -76,7 +76,7 @@ procedure TForm23.SetDefault;
 var
   i: integer;
 begin
-  with DModule.qTarif do
+  with DataModule1.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -87,16 +87,16 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Тип плиты', 'Семья 1 чел.', 'Семья 2 чел.', 'Семья >2 чел.'),
-    TIntArray.Create(30, 146, 74, 74, 74), DModule.qTarif.RecordCount + 1);
+    TIntArray.Create(30, 146, 74, 74, 74), DataModule1.qTarif.RecordCount + 1);
 
-  for i := 0 to DModule.qTarif.RecordCount - 1 do
+  for i := 0 to DataModule1.qTarif.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DModule.qTarif.FieldByName('id_el').Value;
-    StringGrid1.Cells[1, i + 1] := DModule.qTarif.FieldByName('plate').Value;
-    StringGrid1.Cells[2, i + 1] := DModule.qTarif.FieldByName('tarifel1').Value;
-    StringGrid1.Cells[3, i + 1] := DModule.qTarif.FieldByName('tarifel2').Value;
-    StringGrid1.Cells[4, i + 1] := DModule.qTarif.FieldByName('tarifel3').Value;
-    DModule.qTarif.Next;
+    StringGrid1.Cells[0, i + 1] := DataModule1.qTarif.FieldByName('id_el').Value;
+    StringGrid1.Cells[1, i + 1] := DataModule1.qTarif.FieldByName('plate').Value;
+    StringGrid1.Cells[2, i + 1] := DataModule1.qTarif.FieldByName('tarifel1').Value;
+    StringGrid1.Cells[3, i + 1] := DataModule1.qTarif.FieldByName('tarifel2').Value;
+    StringGrid1.Cells[4, i + 1] := DataModule1.qTarif.FieldByName('tarifel3').Value;
+    DataModule1.qTarif.Next;
   end;
 
 end;
@@ -129,7 +129,7 @@ begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and
     (Edit3.Text <> '') and (Edit4.Text <> '') and (Edit5.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -199,7 +199,7 @@ begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and
     (Edit3.Text <> '') and (Edit4.Text <> '') and (Edit5.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -281,7 +281,7 @@ end;
 procedure TForm23.Button3Click(Sender: TObject);
 { удалить тариф }
 begin
-  with DModule.Query1 do
+  with DataModule1.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -316,8 +316,8 @@ end;
 
 procedure TForm23.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
-  DModule.qTarif.Close;
+  Datamodule1.Query1.Close;
+  Datamodule1.qTarif.Close;
 end;
 
 procedure TForm23.Edit1Enter(Sender: TObject);

@@ -3,8 +3,18 @@ unit tarif;
 interface
 
 uses
-  Classes, Controls, Dialogs, ExtCtrls, Forms, Graphics, Grids, Messages,
-  StdCtrls, SysUtils, Variants, Windows;
+  Classes,
+  Controls,
+  Dialogs,
+  ExtCtrls,
+  Forms,
+  Graphics,
+  Grids,
+  Messages,
+  StdCtrls,
+  SysUtils,
+  Variants,
+  Windows;
 
 type
   TForm15 = class(TForm)
@@ -22,8 +32,6 @@ type
     StringGrid1: TStringGrid;
     FlowPanel1:  TFlowPanel;
     Panel2:      TPanel;
-    Label4: TLabel;
-    Edit4: TEdit;
     procedure Button4Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -46,7 +54,6 @@ type
     status: integer;//статус открытия формы: 0 - только для чтения, 1 - запись
     nam:    string;//название услуги, для которой открывается форма
     num:    integer;//номер услуги
-    isNorm : boolean;
   end;
 
 var
@@ -55,7 +62,10 @@ var
 implementation
 
 uses
-  datamodule, service, main, progress;
+  datamodule,
+  service,
+  main,
+  progress;
 
 {$R *.dfm}
 
@@ -67,7 +77,7 @@ procedure TForm15.SetDefault;
 var
   i: integer;
 begin
-  with DModule.qTarif do
+  with DataModule1.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -77,21 +87,15 @@ begin
     First;
   end;
 
-  if isNorm then
-    FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Тариф', 'Норм.'),
-      TIntArray.Create(30, 305, 45, 45), DModule.qTarif.RecordCount + 1)
-  else
-    FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Тариф'),
-      TIntArray.Create(30, 305, 45), DModule.qTarif.RecordCount + 1);
+  FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Тариф'),
+    TIntArray.Create(30, 305, 45), DataModule1.qTarif.RecordCount + 1);
 
-  for i := 0 to DModule.qTarif.RecordCount - 1 do
+  for i := 0 to DataModule1.qTarif.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DModule.qTarif.FieldByName('id_' + nam).Value;
-    StringGrid1.Cells[1, i + 1] := DModule.qTarif.FieldByName('name' + nam).Value;
-    StringGrid1.Cells[2, i + 1] := DModule.qTarif.FieldByName('tarif' + nam).Value;
-    if isNorm then
-      StringGrid1.Cells[3, i + 1] := DModule.qTarif.FieldByName('norm' + nam).Value;
-    DModule.qTarif.Next;
+    StringGrid1.Cells[0, i + 1] := DataModule1.qTarif.FieldByName('id_' + nam).Value;
+    StringGrid1.Cells[1, i + 1] := DataModule1.qTarif.FieldByName('name' + nam).Value;
+    StringGrid1.Cells[2, i + 1] := DataModule1.qTarif.FieldByName('tarif' + nam).Value;
+    DataModule1.qTarif.Next;
   end;
 end;
 
@@ -113,8 +117,6 @@ begin
     Edit1.Text := StringGrid1.Cells[1, ARow];
     Edit2.Text := StringGrid1.Cells[2, ARow];
     Edit3.Text := StringGrid1.Cells[0, ARow];
-    if isNorm then
-      Edit4.Text := StringGrid1.Cells[3, ARow];
     if Edit3.Text <> '' then
       oldid := StrToInt(Edit3.Text);
   end;
@@ -144,7 +146,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -180,17 +182,12 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('insert into ' + nam);
-        if isNorm then
-          SQL.Add('values (:idd,Convert(smalldatetime,:d,104), :id, :name, :tarif, :norm)')
-        else
-          SQL.Add('values (:idd,Convert(smalldatetime,:d,104), :id, :name, :tarif)');
+        SQL.Add('values (:idd,Convert(smalldatetime,:d,104), :id, :name, :tarif)');
         ParamByName('idd').AsInteger := Form1.dist;
         ParamByName('d').AsString := Form1.rdt;
         ParamByName('id').AsInteger := StrToInt(Edit3.Text);
         ParamByName('name').AsString := Edit1.Text;
         ParamByName('tarif').AsFloat := StrToFloat(Edit2.Text);
-        if isNorm then
-          ParamByName('norm').AsFloat := StrToFloat(Edit4.Text);
         ExecSQL;
         FillTarif(Form1.bpath, nam, Form1.rdt, Form1.dist, Form1.codedbf);
         oldid := StrToInt(Edit3.Text);
@@ -222,7 +219,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -268,10 +265,7 @@ begin
             Close;
             SQL.Clear;
             SQL.Add('insert into ' + nam);
-            if isNorm then
-              SQL.Add('values (:idd,Convert(smalldatetime,:d,104), :id, :name, :tarif, :norm)')
-            else
-              SQL.Add('values (:idd,Convert(smalldatetime,:d,104), :id, :name, :tarif)');
+            SQL.Add('values (:idd,Convert(smalldatetime,:d,104), :id, :name, :tarif)');
             ParamByName('id').AsInteger := StrToInt(Edit3.Text);
           end
           else
@@ -280,8 +274,6 @@ begin
             SQL.Clear;
             SQL.Add('update ' + nam);
             SQL.Add('set name' + nam + ' = :name, tarif' + nam + ' = :tarif');
-            if isNorm then
-              SQL.Add(', ' + 'norm' + nam + ' = :norm');
             SQL.Add('where (id_' + nam + ' = :id)and(sdate=Convert(smalldatetime,:d,104))and(id_dist=:idd)');
             ParamByName('id').AsInteger := oldid;
           end;
@@ -289,8 +281,6 @@ begin
           ParamByName('d').AsString := Form1.rdt;
           ParamByName('name').AsString := Edit1.Text;
           ParamByName('tarif').AsFloat := StrToFloat(Edit2.Text);
-          if isNorm then
-            ParamByName('norm').AsFloat := StrToFloat(Edit4.Text);
           ExecSQL;
           FillTarif(Form1.bpath, nam, Form1.rdt, Form1.dist, Form1.codedbf);
           oldid := StrToInt(Edit3.Text);
@@ -319,7 +309,7 @@ procedure TForm15.Button3Click(Sender: TObject);
   по данной услуге.
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DataModule1.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -356,13 +346,6 @@ begin
     Button2.Enabled := True;
     Button3.Enabled := True;
   end;
-
-  if isNorm then
-  begin
-    Form15.Width := 478;
-    Label4.Visible := True;
-    Edit4.Visible := True;
-  end;
 end;
 
 procedure TForm15.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -371,8 +354,8 @@ procedure TForm15.FormClose(Sender: TObject; var Action: TCloseAction);
   в этом unit.
 *******************************************************************************}
 begin
-  DModule.Query1.Close;
-  DModule.qTarif.Close;
+  Datamodule1.Query1.Close;
+  Datamodule1.qTarif.Close;
 end;
 
 procedure TForm15.Edit3Exit(Sender: TObject);

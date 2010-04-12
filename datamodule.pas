@@ -6,7 +6,7 @@ uses
   SysUtils, Classes, DB, DBTables, Dialogs, Registry, ADODB, dbf;
 
 type
-  TDModule = class(TDataModule)
+  TDataModule1 = class(TDataModule)
     Query1:      TQuery;
     Query2:      TQuery;
     Database1:   TDatabase;
@@ -27,7 +27,7 @@ type
   end;
 
 var
-  DModule: TDModule;
+  DataModule1: TDataModule1;
 
 implementation
 
@@ -39,7 +39,7 @@ uses
 
 {******************************************************************************}
 
-procedure TDModule.FormCreate(Sender: TObject);
+procedure TDataModule1.FormCreate(Sender: TObject);
 begin
   with TRegistry.Create do
     try
@@ -91,7 +91,7 @@ begin
   norm1 := TQuery.Create(Self);
 end;
 
-function TDModule.SetConnectStr(path: string): string;
+function TDataModule1.SetConnectStr(path: string): string;
 begin
   Result := 'Provider=MSDASQL.1; Persist Security Info=False; '+ #13 +
     'Extended Properties="Driver={Microsoft dBASE Driver (*.dbf)};'+ #13 +

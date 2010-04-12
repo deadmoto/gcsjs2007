@@ -5,7 +5,7 @@ object Form15: TForm15
   BorderStyle = bsDialog
   Caption = #1058#1072#1088#1080#1092#1099' '
   ClientHeight = 428
-  ClientWidth = 424
+  ClientWidth = 423
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -22,7 +22,7 @@ object Form15: TForm15
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 418
+    Width = 417
     Height = 289
     Margins.Bottom = 0
     Align = alTop
@@ -31,7 +31,7 @@ object Form15: TForm15
     object StringGrid1: TStringGrid
       Left = 2
       Top = 2
-      Width = 414
+      Width = 413
       Height = 285
       Align = alClient
       BorderStyle = bsNone
@@ -48,7 +48,7 @@ object Form15: TForm15
     AlignWithMargins = True
     Left = 3
     Top = 394
-    Width = 418
+    Width = 417
     Height = 31
     Align = alTop
     AutoWrap = False
@@ -57,7 +57,7 @@ object Form15: TForm15
     TabOrder = 2
     object Button4: TButton
       AlignWithMargins = True
-      Left = 340
+      Left = 339
       Top = 3
       Width = 75
       Height = 25
@@ -67,7 +67,7 @@ object Form15: TForm15
     end
     object Button3: TButton
       AlignWithMargins = True
-      Left = 259
+      Left = 258
       Top = 3
       Width = 75
       Height = 25
@@ -77,7 +77,7 @@ object Form15: TForm15
     end
     object Button2: TButton
       AlignWithMargins = True
-      Left = 178
+      Left = 177
       Top = 3
       Width = 75
       Height = 25
@@ -87,7 +87,7 @@ object Form15: TForm15
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 97
+      Left = 96
       Top = 3
       Width = 75
       Height = 25
@@ -100,7 +100,7 @@ object Form15: TForm15
     AlignWithMargins = True
     Left = 3
     Top = 295
-    Width = 418
+    Width = 417
     Height = 96
     Margins.Bottom = 0
     Align = alTop
@@ -126,14 +126,6 @@ object Form15: TForm15
       Width = 22
       Height = 13
       Caption = #1050#1086#1076':'
-    end
-    object Label4: TLabel
-      Left = 160
-      Top = 50
-      Width = 54
-      Height = 13
-      Caption = #1053#1086#1088#1084#1072#1090#1080#1074':'
-      Visible = False
     end
     object Edit1: TEdit
       Left = 15
@@ -171,14 +163,6 @@ object Form15: TForm15
       TabOrder = 0
       OnExit = Edit3Exit
       OnKeyDown = Edit3KeyDown
-    end
-    object Edit4: TEdit
-      Left = 160
-      Top = 66
-      Width = 78
-      Height = 21
-      TabOrder = 3
-      Visible = False
     end
   end
 end

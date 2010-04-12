@@ -473,7 +473,7 @@ function GetPrec(fld: TField): byte;
 begin
   case fld.DataType of
     ftFloat, ftCurrency:
-      Result := 4;
+      Result := 2;
     else
       Result := 0;
   end;
@@ -490,7 +490,7 @@ begin
   if FileExists(path + nam + '.dbf') then
     DeleteFile(PAnsiChar(path + nam + '.dbf'));
 
-  with DModule do
+  with Datamodule1 do
   begin
     if Dbf1.Active then
       Dbf1.Close;
@@ -522,7 +522,7 @@ var
   v1: string;
   j:  integer;
 begin
-  with DModule do
+  with Datamodule1 do
   begin
     SetLength(v1, Length(f));
     //необходимо для кодировки OEM
@@ -566,14 +566,11 @@ procedure FillTarif(path, nam, rdt: string; dis: integer; code: TCodePage);
   Процедура FillTarif заполняет таблицу текущих значений тарифов без бойлера
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with Datamodule1.Query1 do
   begin
     Close;
     SQL.Clear;
-    if (nam <> 'cont') and (nam <> 'rep') and (nam <> 'wood') and (nam <> 'coal') then
-      SQL.add('select ' + nam + '.id_' + nam + ',' + nam + '.name' + nam + ',' + nam + '.tarif' + nam + ', ' + nam +'.norm' + nam + ' from')
-    else
-      SQL.add('select ' + nam + '.id_' + nam + ',' + nam + '.name' + nam + ',' + nam + '.tarif' + nam + ' from');
+    SQL.add('select ' + nam + '.id_' + nam + ',' + nam + '.name' + nam + ',' + nam + '.tarif' + nam + ' from');
     SQL.add('(select max(sdate) as sdate,id_' + nam + ' from ' + nam);
     SQL.add('where sdate<=convert(smalldatetime,:d,104) and (id_dist=:idd)');
     SQL.add('group by id_' + nam + ') sb inner join');
@@ -591,11 +588,11 @@ procedure FillTarifb(path, nam, rdt: string; dis: integer; code: TCodePage);
   Процедура FillTarifb заполняет таблицу текущих значений тарифов с бойлером
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with Datamodule1.Query1 do
   begin
     Close;
     SQL.Clear;
-    SQL.add('select ' + nam + '.id_' + nam + ',' + nam + '.name' + nam + ',' + nam + '.tarif1,' + nam + '.tarif2,'+ nam+'.norm'+ nam +' from');
+    SQL.add('select ' + nam + '.id_' + nam + ',' + nam + '.name' + nam + ',' + nam + '.tarif1,' + nam + '.tarif2 from');
     SQL.add('(select max(sdate) as sdate,id_' + nam + ' from ' + nam);
     SQL.add('where sdate<=convert(smalldatetime,:d,104) and (id_dist=:idd)');
     SQL.add('group by id_' + nam + ') sb inner join');
@@ -613,7 +610,7 @@ procedure FillEl(path, rdt: string; dis: integer; code: TCodePage);
   Процедура Fillel заполняет таблицу текущих значений тарифов на э/э
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with Datamodule1.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -635,7 +632,7 @@ procedure FillMin(path, rdt: string; code: TCodePage);
   Процедура FillMin заполняет таблицу текущих значений прожиточных минимумов
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with Datamodule1.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -656,7 +653,7 @@ procedure FillMdd(path, rdt: string; code: TCodePage);
   Процедура FillMdd заполняет таблицу текущих значений мдд
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with Datamodule1.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -677,7 +674,7 @@ procedure FillStnd(path, rdt: string; code: TCodePage);
   Процедура FillStnd заполняет таблицу текущих значений региональных стандартов
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with Datamodule1.Query1 do
   begin
     Close;
     SQL.Clear;

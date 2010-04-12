@@ -82,7 +82,7 @@ end;
 procedure TForm11.FormClose(Sender: TObject; var Action: TCloseAction);
 { закрытие формы }
 begin
-  DModule.Query1.Close;
+  Datamodule1.Query1.Close;
 end;
 
 procedure TForm11.Button4Click(Sender: TObject);
@@ -123,7 +123,7 @@ procedure TForm11.SetDefault;
 var
   i: integer;
 begin
-  with DModule.Query1 do
+  with Datamodule1.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -133,18 +133,18 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'с/н', 'фед/у', '%обслуж', '%коммун', '%тв.топл.'),
-    TIntArray.Create(25, 330, 25, 35, 60, 60, 60), DModule.Query1.RecordCount + 1);
+    TIntArray.Create(25, 330, 25, 35, 60, 60, 60), Datamodule1.Query1.RecordCount + 1);
 
-  for i := 0 to DModule.Query1.RecordCount - 1 do
+  for i := 0 to Datamodule1.Query1.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('id_priv').Value;
-    StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('namepriv').Value;
-    StringGrid1.Cells[2, i + 1] := DModule.Query1.FieldByName('square').Value;
-    StringGrid1.Cells[3, i + 1] := DModule.Query1.FieldByName('levelp').Value;
-    StringGrid1.Cells[4, i + 1] := DModule.Query1.FieldByName('p1').Value;
-    StringGrid1.Cells[5, i + 1] := DModule.Query1.FieldByName('p2').Value;
-    StringGrid1.Cells[6, i + 1] := DModule.Query1.FieldByName('p3').Value;
-    DModule.Query1.Next;
+    StringGrid1.Cells[0, i + 1] := Datamodule1.Query1.FieldByName('id_priv').Value;
+    StringGrid1.Cells[1, i + 1] := Datamodule1.Query1.FieldByName('namepriv').Value;
+    StringGrid1.Cells[2, i + 1] := Datamodule1.Query1.FieldByName('square').Value;
+    StringGrid1.Cells[3, i + 1] := Datamodule1.Query1.FieldByName('levelp').Value;
+    StringGrid1.Cells[4, i + 1] := Datamodule1.Query1.FieldByName('p1').Value;
+    StringGrid1.Cells[5, i + 1] := Datamodule1.Query1.FieldByName('p2').Value;
+    StringGrid1.Cells[6, i + 1] := Datamodule1.Query1.FieldByName('p3').Value;
+    Datamodule1.Query1.Next;
   end;
 end;
 

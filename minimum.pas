@@ -72,7 +72,7 @@ procedure TForm13.SetDefault;
 var
   i: integer;
 begin
-  with DModule.qTarif do
+  with DataModule1.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -83,14 +83,14 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Минимум'),
-    TIntArray.Create(25, 200, 65), DModule.qTarif.RecordCount + 1);
+    TIntArray.Create(25, 200, 65), Datamodule1.qTarif.RecordCount + 1);
 
-  for i := 0 to DModule.qTarif.RecordCount - 1 do
+  for i := 0 to Datamodule1.qTarif.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DModule.qTarif.FieldByName('id_min').Value;
-    StringGrid1.Cells[1, i + 1] := DModule.qTarif.FieldByName('namemin').Value;
-    StringGrid1.Cells[2, i + 1] := DModule.qTarif.FieldByName('minim').Value;
-    DModule.qTarif.Next;
+    StringGrid1.Cells[0, i + 1] := Datamodule1.qTarif.FieldByName('id_min').Value;
+    StringGrid1.Cells[1, i + 1] := Datamodule1.qTarif.FieldByName('namemin').Value;
+    StringGrid1.Cells[2, i + 1] := Datamodule1.qTarif.FieldByName('minim').Value;
+    Datamodule1.qTarif.Next;
   end;
 end;
 
@@ -120,7 +120,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -179,7 +179,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DataModule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -255,7 +255,7 @@ end;
 procedure TForm13.Button3Click(Sender: TObject);
 { удалить минимум }
 begin
-  with DModule.Query1 do
+  with DataModule1.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -298,8 +298,8 @@ end;
 
 procedure TForm13.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
-  DModule.qTarif.Close;
+  Datamodule1.Query1.Close;
+  Datamodule1.qTarif.Close;
 end;
 
 procedure TForm13.Edit1Exit(Sender: TObject);

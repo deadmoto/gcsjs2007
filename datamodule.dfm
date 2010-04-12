@@ -1,4 +1,4 @@
-object DModule: TDModule
+object DataModule1: TDataModule1
   OldCreateOrder = True
   OnCreate = FormCreate
   Height = 236

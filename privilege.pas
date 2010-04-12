@@ -143,7 +143,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') and (Edit4.Text <> '') and (Edit5.Text <> '') and (Edit6.Text <> '') and (Edit7.Text <> '') and (Edit8.Text <> '') and (Edit9.Text <> '') and (Edit10.Text <> '') and (Edit11.Text <> '') and (Edit12.Text <> '') then
   begin
-    with DModule.Query1 do
+    with Datamodule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -260,7 +260,7 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') and (Edit4.Text <> '') and (Edit5.Text <> '') and (Edit6.Text <> '') and (Edit7.Text <> '') and (Edit8.Text <> '') and (Edit9.Text <> '') and (Edit10.Text <> '') and (Edit11.Text <> '') and (Edit12.Text <> '') then
   begin
-    with DModule.Query1 do
+    with Datamodule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -378,7 +378,7 @@ end;
 procedure TForm12.Del;
 { удалить льготу }
 begin
-  with DModule.Query1 do
+  with DataModule1.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -452,7 +452,7 @@ begin
         Form12.Caption  := 'Удалить льготу';
         Button2.Caption := 'Удалить';
       end;
-      with DModule.Query1 do
+      with Datamodule1.Query1 do
       begin
         Close;
         SQL.Clear;

@@ -26,6 +26,7 @@ object Form17: TForm17
     Align = alTop
     Caption = #1042#1099#1073#1086#1088' '#1080#1085#1089#1087#1077#1082#1090#1086#1088#1072':'
     TabOrder = 0
+    ExplicitWidth = 250
     object ComboBox1: TComboBox
       Left = 8
       Top = 25

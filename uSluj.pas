@@ -56,7 +56,7 @@ var
   i: integer;
 begin
   Button1.Enabled := True;
-  with DModule do
+  with DataModule1 do
   begin
     Query1.Close;
     case mode of
@@ -89,18 +89,19 @@ begin
     Query1.First;
   end;
 
-  if DModule.Query1.RecordCount > 0 then
+  if DataModule1.Query1.RecordCount > 0 then
   begin
     case mode of
       mDetail:
       begin
         SlujFrm.Width := 670;
+        //SlujGrid.ColCount := DataModule1.Query1.FieldCount;
 
         FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
           'ФИО', 'Сумм. служ.', 'Субсидия', 'Услуга'),
-          TIntArray.Create(64, 75, 240, 65, 65, 115), DModule.Query1.RecordCount + 1);
+          TIntArray.Create(64, 75, 240, 65, 65, 115), Datamodule1.Query1.RecordCount + 1);
 
-        with DModule.Query1 do
+        with DataModule1.Query1 do
           for i := 0 to RecordCount do
           begin
             SlujGrid.Cells[0, i + 1] := FieldByName('sdate').Value;
@@ -109,7 +110,7 @@ begin
             SlujGrid.Cells[3, i + 1] := FieldByName('sluj_sum').Value;
             SlujGrid.Cells[4, i + 1] := FieldByName('Expr1').Value;
             SlujGrid.Cells[5, i + 1] := FieldByName('nameserv').Value;
-            DModule.Query1.Next;
+            DataModule1.Query1.Next;
           end;
 
         GroupBox1.Caption := 'Подробно по тарифам:';
@@ -118,12 +119,13 @@ begin
       mSum:
       begin
         SlujFrm.Width := 580;
+        //SlujGrid.ColCount := DataModule1.Query1.FieldCount;
 
         FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
           'ФИО', 'Сумм. служ.', 'Субсидия'),
-          TIntArray.Create(64, 75, 255, 75, 75), DModule.Query1.RecordCount + 1);
+          TIntArray.Create(64, 75, 255, 75, 75), Datamodule1.Query1.RecordCount + 1);
 
-        with DModule.Query1 do
+        with DataModule1.Query1 do
           for i := 0 to RecordCount do
           begin
             SlujGrid.Cells[0, i + 1] := FieldByName('sdate').Value;
@@ -131,7 +133,7 @@ begin
             SlujGrid.Cells[2, i + 1] := FieldByName('fio').Value;
             SlujGrid.Cells[3, i + 1] := FieldByName('sluj_sum').Value;
             SlujGrid.Cells[4, i + 1] := FieldByName('Expr1').Value;
-            DModule.Query1.Next;
+            DataModule1.Query1.Next;
           end;
         GroupBox1.Caption := 'Общая сумма за месяц:';
       end;
@@ -184,11 +186,11 @@ procedure TSlujFrm.Button1Click(Sender: TObject);
 begin
   if MessageDlg('Удалить выбранный период?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
   begin
-    DModule.Query1.Close;
-    DModule.Query1.SQL.Text := 'DELETE FROM Sluj' + #13 +
+    DataModule1.Query1.Close;
+    DataModule1.Query1.SQL.Text := 'DELETE FROM Sluj' + #13 +
       'WHERE (sdate = CONVERT(smalldatetime, :rdt, 104)) AND (regn = ' + cl_regn + ')';
-    DModule.Query1.ParamByName('rdt').Value := form1.rdt;
-    DModule.Query1.ExecSQL;
+    DataModule1.Query1.ParamByName('rdt').Value := form1.rdt;
+    DataModule1.Query1.ExecSQL;
     FillSlujGrid;
   end;
 end;

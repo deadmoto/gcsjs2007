@@ -73,7 +73,7 @@ var
   i: integer;
 begin
   Edit6.Text := '0';
-  with DModule.qTarif do
+  with Datamodule1.qTarif do
   begin
     Close;
     SQL.Clear;
@@ -122,10 +122,10 @@ var
   path: string;
   i: integer;
 begin
-  DModule.Query1.Close;
+  Datamodule1.Query1.Close;
   //  lcl.Clear;
   path := ExtractFilePath(Application.ExeName) + 'database\';
-  with DModule.DBF1 do
+  with Datamodule1.DBF1 do
   begin
     if Active then
       Close;
@@ -150,7 +150,7 @@ begin
     end;
     Close;
   end;
-  with DModule.norm1 do
+  with Datamodule1.norm1 do
   begin
     Close;
     SQL.Clear;
@@ -184,8 +184,8 @@ begin
   val := 0;
   lcl.Clear;
   try
-    DModule.Database1.StartTransaction;
-    with DModule.Query1 do
+    DataModule1.Database1.StartTransaction;
+    with Datamodule1.Query1 do
     begin
       Close;
       SQL.Clear;
@@ -227,10 +227,10 @@ begin
         Close;
       end;
     end;
-    DModule.Database1.Commit;
+    Datamodule1.Database1.Commit;
     Result := ncl;
   except
-    DModule.Database1.Rollback;
+    Datamodule1.Database1.Rollback;
     Result := -1;
   end;
   pr.Close;
@@ -249,7 +249,7 @@ begin
   if StrToInt(Edit6.Text) <> 0 then
   begin
     path := ExtractFilePath(Application.ExeName) + 'out\';
-    with DModule do
+    with Datamodule1 do
     begin
       if Dbf1.Active then
         Dbf1.Close;
@@ -262,25 +262,25 @@ begin
       Dbf1.TableName := path + 'nullsublm.dbf';
       Dbf1.CreateTable;
       Dbf1.CodePage := Form1.codedbf;
-      DModule.Query1.Close;
-      DModule.Query1.SQL.Clear;
-      DModule.Query1.SQL.Add('select sum(sub) as ex from sub where sdate =:d and regn =:r');
-      DModule.Query1.ParamByName('d').AsDateTime := StrToDate(Form1.rdt);
+      datamodule1.Query1.Close;
+      datamodule1.Query1.SQL.Clear;
+      datamodule1.Query1.SQL.Add('select sum(sub) as ex from sub where sdate =:d and regn =:r');
+      datamodule1.Query1.ParamByName('d').AsDateTime := StrToDate(Form1.rdt);
       if lcl.Count <> 0 then
       begin
         for i := 1 to lcl.Count do
         begin
           dbf1.Append;
-          DModule.Query1.ParamByName('r').AsInteger := (TClient(lcl.Items[i - 1]).Data.regn);
-          DModule.Query1.Open;
+          datamodule1.Query1.ParamByName('r').AsInteger := (TClient(lcl.Items[i - 1]).Data.regn);
+          datamodule1.Query1.Open;
           EditField(TClient(lcl.Items[i - 1]).Data.fio, DBF1.CodePage, 1);
           EditField(DateToStr(TClient(lcl.Items[i - 1]).cdata.begindate), DBF1.CodePage, 2);
           EditField(DateToStr(TClient(lcl.Items[i - 1]).cdata.enddate), DBF1.CodePage, 3);
           EditField(IntToStr(TClient(lcl.Items[i - 1]).cdata.mcount), DBF1.CodePage, 4);
           EditField(IntToStr(TClient(lcl.Items[i - 1]).cdata.calc), DBF1.CodePage, 5);
-          EditField(DModule.Query1.FieldByName('ex').AsString, DBF1.CodePage, 6);
+          EditField(datamodule1.Query1.FieldByName('ex').AsString, DBF1.CodePage, 6);
           Dbf1.Post;
-          DModule.Query1.Close;
+          datamodule1.Query1.Close;
         end;
       end;
       dbf1.Close;
@@ -298,7 +298,7 @@ var
   path: string;
 begin
   path := ExtractFilePath(Application.ExeName) + 'database\';
-  with DModule.DBF1 do
+  with Datamodule1.DBF1 do
   begin
     if Active then
       Close;
@@ -383,7 +383,7 @@ end;
 
 procedure TForm40.Button2Click(Sender: TObject);
 begin
-  with DModule.norm1 do
+  with DataModule1.norm1 do
   begin
     Close;
     SQL.Clear;

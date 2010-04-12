@@ -4,7 +4,7 @@ object Form2: TForm2
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   ClientHeight = 433
-  ClientWidth = 616
+  ClientWidth = 593
   Color = clBtnFace
   DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
@@ -22,9 +22,9 @@ object Form2: TForm2
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 610
+    Width = 587
     Height = 427
-    ActivePage = TabSheet3
+    ActivePage = TabSheet2
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
@@ -961,6 +961,34 @@ object Form2: TForm2
     object TabSheet3: TTabSheet
       Caption = #1058#1072#1088#1080#1092#1099
       ImageIndex = 2
+      object Label24: TLabel
+        Left = 12
+        Top = 95
+        Width = 101
+        Height = 13
+        Caption = #1057#1086#1076#1077#1088#1078#1072#1085#1080#1077' '#1078#1080#1083#1100#1103':'
+      end
+      object Label25: TLabel
+        Left = 12
+        Top = 119
+        Width = 90
+        Height = 13
+        Caption = #1054#1089#1074#1077#1097#1077#1085#1080#1077' '#1052#1054#1055':'
+      end
+      object Label26: TLabel
+        Left = 12
+        Top = 143
+        Width = 79
+        Height = 13
+        Caption = #1061#1086#1083#1086#1076#1085#1072#1103' '#1074#1086#1076#1072':'
+      end
+      object Label27: TLabel
+        Left = 12
+        Top = 167
+        Width = 71
+        Height = 13
+        Caption = #1043#1086#1088#1103#1095#1072#1103' '#1074#1086#1076#1072':'
+      end
       object Label43: TLabel
         Left = 12
         Top = 64
@@ -968,26 +996,47 @@ object Form2: TForm2
         Height = 13
         Caption = #1056#1077#1075#1080#1086#1085'. '#1089#1090#1072#1085#1076#1072#1088#1090':'
       end
+      object Label65: TLabel
+        Left = 12
+        Top = 191
+        Width = 81
+        Height = 13
+        Caption = #1042#1086#1076#1086#1086#1090#1074#1077#1076#1077#1085#1080#1077':'
+      end
+      object Label29: TLabel
+        Left = 12
+        Top = 215
+        Width = 58
+        Height = 13
+        Caption = #1054#1090#1086#1087#1083#1077#1085#1080#1077':'
+      end
+      object Label30: TLabel
+        Left = 12
+        Top = 239
+        Width = 21
+        Height = 13
+        Caption = #1043#1072#1079':'
+      end
+      object Label60: TLabel
+        Left = 12
+        Top = 288
+        Width = 36
+        Height = 13
+        Caption = #1044#1088#1086#1074#1072':'
+      end
+      object Label72: TLabel
+        Left = 12
+        Top = 312
+        Width = 34
+        Height = 13
+        Caption = #1059#1075#1086#1083#1100':'
+      end
       object Bevel1: TBevel
         Left = 321
         Top = 4
         Width = 16
         Height = 50
         Shape = bsLeftLine
-      end
-      object Label87: TLabel
-        Left = 12
-        Top = 263
-        Width = 86
-        Height = 13
-        Caption = #1069#1083#1077#1082#1090#1088#1086#1101#1085#1077#1088#1075#1080#1103':'
-      end
-      object Bevel6: TBevel
-        Left = 115
-        Top = 272
-        Width = 334
-        Height = 2
-        Shape = bsTopLine
       end
       object ComboBox1: TComboBox
         Left = 115
@@ -1160,23 +1209,123 @@ object Form2: TForm2
       end
       object Edit9: TEdit
         Left = 458
-        Top = 61
+        Top = 64
         Width = 71
         Height = 21
         TabStop = False
         Color = clBtnFace
         ReadOnly = True
-        TabOrder = 1
+        TabOrder = 18
+      end
+      object ComboBox20: TComboBox
+        Left = 115
+        Top = 191
+        Width = 334
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 5
+        OnChange = ComboBox20Change
+      end
+      object Edit2: TEdit
+        Left = 488
+        Top = 191
+        Width = 41
+        Height = 21
+        TabStop = False
+        Color = clBtnFace
+        ReadOnly = True
+        TabOrder = 19
       end
       object CheckBox2: TCheckBox
         Left = 12
-        Top = 36
+        Top = 25
         Width = 57
         Height = 17
         TabStop = False
         Caption = #1041#1086#1081#1083#1077#1088
-        TabOrder = 2
+        TabOrder = 20
         OnClick = CheckBox2Click
+      end
+      object Button10: TButton
+        Left = 458
+        Top = 95
+        Width = 25
+        Height = 20
+        Caption = '...'
+        TabOrder = 21
+        OnClick = Button10Click
+      end
+      object Button11: TButton
+        Left = 458
+        Top = 119
+        Width = 25
+        Height = 20
+        Caption = '...'
+        TabOrder = 22
+        OnClick = Button10Click
+      end
+      object Button12: TButton
+        Left = 458
+        Top = 143
+        Width = 25
+        Height = 20
+        Caption = '...'
+        TabOrder = 23
+        OnClick = Button10Click
+      end
+      object Button13: TButton
+        Left = 458
+        Top = 167
+        Width = 25
+        Height = 20
+        Caption = '...'
+        TabOrder = 24
+        OnClick = Button10Click
+      end
+      object Button14: TButton
+        Left = 458
+        Top = 191
+        Width = 25
+        Height = 20
+        Caption = '...'
+        TabOrder = 25
+        OnClick = Button10Click
+      end
+      object Button15: TButton
+        Left = 458
+        Top = 215
+        Width = 25
+        Height = 20
+        Caption = '...'
+        TabOrder = 26
+        OnClick = Button10Click
+      end
+      object Button16: TButton
+        Left = 458
+        Top = 239
+        Width = 25
+        Height = 20
+        Caption = '...'
+        TabOrder = 27
+        OnClick = Button10Click
+      end
+      object Button17: TButton
+        Left = 458
+        Top = 288
+        Width = 25
+        Height = 20
+        Caption = '...'
+        TabOrder = 28
+        OnClick = Button10Click
+      end
+      object Button18: TButton
+        Left = 458
+        Top = 312
+        Width = 25
+        Height = 20
+        Caption = '...'
+        TabOrder = 29
+        OnClick = Button10Click
       end
       object GroupBox1: TGroupBox
         Left = 115
@@ -1184,7 +1333,7 @@ object Form2: TForm2
         Width = 185
         Height = 50
         Caption = #1058#1080#1087' '#1087#1083#1080#1090#1099
-        TabOrder = 3
+        TabOrder = 30
         object ComboBox21: TComboBox
           AlignWithMargins = True
           Left = 5
@@ -1214,7 +1363,7 @@ object Form2: TForm2
         Width = 185
         Height = 50
         Caption = #1058#1080#1087' '#1086#1090#1086#1087#1083#1077#1085#1080#1103
-        TabOrder = 4
+        TabOrder = 31
         object ComboBox22: TComboBox
           AlignWithMargins = True
           Left = 5
@@ -1234,149 +1383,6 @@ object Form2: TForm2
             #1069#1083#1077#1082#1090#1080#1088#1080#1095#1077#1089#1082#1086#1077)
         end
       end
-      object GroupBox13: TGroupBox
-        Left = 531
-        Top = 81
-        Width = 70
-        Height = 252
-        Caption = 'C'#1095#1077#1090#1095#1080#1082#1080':'
-        TabOrder = 32
-        object Bevel2: TBevel
-          Left = 10
-          Top = 25
-          Width = 50
-          Height = 2
-          Shape = bsTopLine
-        end
-        object Bevel3: TBevel
-          Left = 10
-          Top = 46
-          Width = 50
-          Height = 2
-          Shape = bsTopLine
-        end
-        object Bevel4: TBevel
-          Left = 10
-          Top = 217
-          Width = 50
-          Height = 2
-          Shape = bsTopLine
-        end
-        object Bevel5: TBevel
-          Left = 10
-          Top = 238
-          Width = 50
-          Height = 2
-          Shape = bsTopLine
-        end
-        object CheckBox4: TCheckBox
-          Left = 6
-          Top = 63
-          Width = 15
-          Height = 17
-          TabOrder = 0
-          OnClick = CheckBox4Click
-        end
-        object Edit118: TEdit
-          Left = 24
-          Top = 61
-          Width = 40
-          Height = 21
-          Color = clBtnFace
-          ReadOnly = True
-          TabOrder = 1
-          OnExit = Edit118Exit
-        end
-        object Edit119: TEdit
-          Left = 24
-          Top = 86
-          Width = 40
-          Height = 21
-          Color = clBtnFace
-          ReadOnly = True
-          TabOrder = 2
-          OnExit = Edit118Exit
-        end
-        object CheckBox5: TCheckBox
-          Left = 6
-          Top = 88
-          Width = 15
-          Height = 17
-          TabOrder = 3
-          OnClick = CheckBox4Click
-        end
-        object CheckBox6: TCheckBox
-          Left = 6
-          Top = 111
-          Width = 15
-          Height = 17
-          TabOrder = 4
-          OnClick = CheckBox4Click
-        end
-        object Edit120: TEdit
-          Left = 24
-          Top = 110
-          Width = 40
-          Height = 21
-          Color = clBtnFace
-          ReadOnly = True
-          TabOrder = 5
-          OnExit = Edit118Exit
-        end
-        object Edit121: TEdit
-          Left = 24
-          Top = 134
-          Width = 40
-          Height = 21
-          Color = clBtnFace
-          ReadOnly = True
-          TabOrder = 6
-          OnExit = Edit118Exit
-        end
-        object CheckBox7: TCheckBox
-          Left = 6
-          Top = 136
-          Width = 15
-          Height = 17
-          TabOrder = 7
-          OnClick = CheckBox4Click
-        end
-        object CheckBox8: TCheckBox
-          Left = 6
-          Top = 160
-          Width = 15
-          Height = 17
-          TabOrder = 8
-          OnClick = CheckBox4Click
-        end
-        object Edit122: TEdit
-          Left = 24
-          Top = 158
-          Width = 40
-          Height = 21
-          Color = clBtnFace
-          ReadOnly = True
-          TabOrder = 9
-          OnExit = Edit118Exit
-        end
-        object Edit123: TEdit
-          Left = 24
-          Top = 180
-          Width = 40
-          Height = 21
-          Color = clBtnFace
-          TabOrder = 10
-          OnExit = Edit118Exit
-        end
-        object CheckBox9: TCheckBox
-          Left = 6
-          Top = 182
-          Width = 15
-          Height = 17
-          TabOrder = 11
-          OnClick = CheckBox4Click
-        end
-      end
     end
     object TabSheet4: TTabSheet
       Caption = #1057#1095#1077#1090#1072
@@ -1385,83 +1391,83 @@ object Form2: TForm2
       object GroupBox7: TGroupBox
         Left = 8
         Top = 24
-        Width = 305
-        Height = 273
-        Caption = #1051#1080#1094#1077#1074#1099#1077' '#1089#1095#1077#1090#1072':'
+        Width = 313
+        Height = 297
+        Caption = #1051#1080#1094#1077#1074#1099#1077' '#1089#1095#1077#1090#1072
         TabOrder = 0
         object Label36: TLabel
-          Left = 12
-          Top = 23
+          Left = 24
+          Top = 40
           Width = 101
           Height = 13
           Caption = #1057#1086#1076#1077#1088#1078#1072#1085#1080#1077' '#1078#1080#1083#1100#1103':'
         end
         object Label37: TLabel
-          Left = 12
-          Top = 47
+          Left = 24
+          Top = 64
           Width = 90
           Height = 13
           Caption = #1054#1089#1074#1077#1097#1077#1085#1080#1077' '#1052#1054#1055':'
         end
         object Label38: TLabel
-          Left = 12
-          Top = 71
+          Left = 24
+          Top = 88
           Width = 79
           Height = 13
           Caption = #1061#1086#1083#1086#1076#1085#1072#1103' '#1074#1086#1076#1072':'
         end
         object Label39: TLabel
-          Left = 12
-          Top = 95
+          Left = 24
+          Top = 112
           Width = 71
           Height = 13
           Caption = #1043#1086#1088#1103#1095#1072#1103' '#1074#1086#1076#1072':'
         end
         object Label40: TLabel
-          Left = 12
-          Top = 143
+          Left = 24
+          Top = 160
           Width = 58
           Height = 13
           Caption = #1054#1090#1086#1087#1083#1077#1085#1080#1077':'
         end
         object Label41: TLabel
-          Left = 12
-          Top = 167
+          Left = 24
+          Top = 184
           Width = 21
           Height = 13
           Caption = #1043#1072#1079':'
         end
         object Label42: TLabel
-          Left = 12
-          Top = 191
+          Left = 24
+          Top = 208
           Width = 86
           Height = 13
           Caption = #1069#1083#1077#1082#1090#1088#1086#1101#1085#1077#1088#1075#1080#1103':'
         end
         object Label44: TLabel
-          Left = 12
-          Top = 239
+          Left = 24
+          Top = 256
           Width = 34
           Height = 13
           Caption = #1059#1075#1086#1083#1100':'
         end
         object Label45: TLabel
-          Left = 12
-          Top = 215
+          Left = 24
+          Top = 232
           Width = 36
           Height = 13
           Caption = #1044#1088#1086#1074#1072':'
         end
         object Label66: TLabel
-          Left = 12
-          Top = 119
+          Left = 24
+          Top = 136
           Width = 81
           Height = 13
           Caption = #1042#1086#1076#1086#1086#1090#1074#1077#1076#1077#1085#1080#1077':'
         end
         object Edit74: TEdit
-          Left = 132
-          Top = 23
+          Left = 144
+          Top = 40
           Width = 145
           Height = 21
           Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 11 '#1089#1080#1084#1074#1086#1083#1086#1074
@@ -1473,8 +1479,8 @@ object Form2: TForm2
           OnExit = Edit74Change
         end
         object Edit75: TEdit
-          Left = 132
-          Top = 47
+          Left = 144
+          Top = 64
           Width = 145
           Height = 21
           Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 11 '#1089#1080#1084#1074#1086#1083#1086#1074
@@ -1486,8 +1492,8 @@ object Form2: TForm2
           OnExit = Edit74Change
         end
         object Edit76: TEdit
-          Left = 132
-          Top = 71
+          Left = 144
+          Top = 88
           Width = 145
           Height = 21
           Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 11 '#1089#1080#1084#1074#1086#1083#1086#1074
@@ -1499,8 +1505,8 @@ object Form2: TForm2
           OnExit = Edit74Change
         end
         object Edit77: TEdit
-          Left = 132
-          Top = 95
+          Left = 144
+          Top = 112
           Width = 145
           Height = 21
           Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 11 '#1089#1080#1084#1074#1086#1083#1086#1074
@@ -1512,8 +1518,8 @@ object Form2: TForm2
           OnExit = Edit74Change
         end
         object Edit78: TEdit
-          Left = 132
-          Top = 143
+          Left = 144
+          Top = 160
           Width = 145
           Height = 21
           Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 11 '#1089#1080#1084#1074#1086#1083#1086#1074
@@ -1525,8 +1531,8 @@ object Form2: TForm2
           OnExit = Edit74Change
         end
         object Edit79: TEdit
-          Left = 132
-          Top = 167
+          Left = 144
+          Top = 184
           Width = 145
           Height = 21
           Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 20 '#1089#1080#1084#1074#1086#1083#1086#1074
@@ -1538,8 +1544,8 @@ object Form2: TForm2
           OnExit = Edit74Change
         end
         object Edit80: TEdit
-          Left = 132
-          Top = 191
+          Left = 144
+          Top = 208
           Width = 145
           Height = 21
           Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 11 '#1089#1080#1084#1074#1086#1083#1086#1074
@@ -1551,8 +1557,8 @@ object Form2: TForm2
           OnExit = Edit74Change
         end
         object Edit81: TEdit
-          Left = 132
-          Top = 215
+          Left = 144
+          Top = 232
           Width = 145
           Height = 21
           Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103':  '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 11 '#1089#1080#1084#1074#1086#1083#1086#1074
@@ -1564,8 +1570,8 @@ object Form2: TForm2
           OnExit = Edit74Change
         end
         object Edit82: TEdit
-          Left = 132
-          Top = 239
+          Left = 144
+          Top = 256
           Width = 145
           Height = 21
           Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 11 '#1089#1080#1084#1074#1086#1083#1086#1074
@@ -1577,8 +1583,8 @@ object Form2: TForm2
           OnExit = Edit74Change
         end
         object Button9: TButton
-          Left = 283
-          Top = 8
+          Left = 280
+          Top = 10
           Width = 17
           Height = 17
           Caption = #1084
@@ -1586,8 +1592,8 @@ object Form2: TForm2
           OnClick = Button9Click
         end
         object Edit58: TEdit
-          Left = 132
-          Top = 119
+          Left = 144
+          Top = 136
           Width = 145
           Height = 21
           Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 11 '#1089#1080#1084#1074#1086#1083#1086#1074
@@ -1600,7 +1606,7 @@ object Form2: TForm2
         end
       end
       object GroupBox8: TGroupBox
-        Left = 319
+        Left = 332
         Top = 24
         Width = 241
         Height = 109
@@ -1736,44 +1742,37 @@ object Form2: TForm2
         Caption = #1041#1077#1079' '#1091#1095#1077#1090#1072' '#1083#1100#1075#1086#1090#1099':'
       end
       object GroupBox9: TGroupBox
-        Left = 129
-        Top = 9
+        Left = 128
+        Top = 8
         Width = 209
         Height = 333
-        Caption = #1044#1072#1085#1085#1099#1077' '#1085#1072' '#1085#1072#1095#1072#1083#1086' '#1089#1088#1086#1082#1072':'
+        Caption = #1044#1072#1085#1085#1099#1077' '#1085#1072' '#1085#1072#1095#1072#1083#1086' '#1089#1088#1086#1082#1072
         TabOrder = 0
         object Label55: TLabel
-          Left = 11
+          Left = 8
           Top = 24
-          Width = 34
+          Width = 58
           Height = 13
-          Caption = #1053#1072#1095#1089#1083':'
+          Caption = #1053#1072#1095#1080#1089#1083#1077#1085#1086':'
         end
         object Label56: TLabel
-          Left = 57
+          Left = 72
           Top = 24
-          Width = 41
+          Width = 61
           Height = 13
-          Caption = #1055'.'#1091#1095#1077#1090#1072':'
+          Caption = #1055#1086' '#1089'.'#1085#1086#1088#1084#1077':'
         end
         object Label57: TLabel
-          Left = 165
+          Left = 144
           Top = 24
-          Width = 27
+          Width = 51
           Height = 13
-          Caption = #1057#1091#1073#1089':'
-        end
-        object Label93: TLabel
-          Left = 106
-          Top = 24
-          Width = 53
-          Height = 13
-          Caption = #1057#1091#1073#1089'.'#1089#1090#1085#1076':'
+          Caption = #1057#1091#1073#1089#1080#1076#1080#1103':'
         end
         object Edit12: TEdit
           Left = 8
           Top = 40
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -1789,9 +1788,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit13: TEdit
-          Left = 57
+          Left = 72
           Top = 40
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -1807,9 +1806,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit14: TEdit
-          Left = 156
+          Left = 136
           Top = 40
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -1828,7 +1827,7 @@ object Form2: TForm2
         object Edit15: TEdit
           Left = 8
           Top = 64
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -1844,9 +1843,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit16: TEdit
-          Left = 57
+          Left = 72
           Top = 64
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -1862,9 +1861,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit17: TEdit
-          Left = 156
+          Left = 136
           Top = 64
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -1883,7 +1882,7 @@ object Form2: TForm2
         object Edit18: TEdit
           Left = 8
           Top = 88
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -1899,9 +1898,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit20: TEdit
-          Left = 156
+          Left = 136
           Top = 88
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -1920,7 +1919,7 @@ object Form2: TForm2
         object Edit24: TEdit
           Left = 8
           Top = 160
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -1936,9 +1935,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit25: TEdit
-          Left = 57
+          Left = 72
           Top = 160
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -1954,9 +1953,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit26: TEdit
-          Left = 156
+          Left = 136
           Top = 160
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -1975,7 +1974,7 @@ object Form2: TForm2
         object Edit27: TEdit
           Left = 8
           Top = 184
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -1991,9 +1990,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit28: TEdit
-          Left = 57
+          Left = 72
           Top = 184
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2009,9 +2008,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit29: TEdit
-          Left = 156
+          Left = 136
           Top = 184
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2028,9 +2027,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit19: TEdit
-          Left = 57
+          Left = 72
           Top = 88
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2048,7 +2047,7 @@ object Form2: TForm2
         object Edit30: TEdit
           Left = 8
           Top = 208
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2064,9 +2063,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit31: TEdit
-          Left = 57
+          Left = 72
           Top = 208
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2082,9 +2081,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit32: TEdit
-          Left = 156
+          Left = 136
           Top = 208
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2103,7 +2102,7 @@ object Form2: TForm2
         object Edit33: TEdit
           Left = 8
           Top = 232
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2119,9 +2118,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit34: TEdit
-          Left = 57
+          Left = 72
           Top = 232
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2137,9 +2136,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit35: TEdit
-          Left = 156
+          Left = 136
           Top = 232
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2160,7 +2159,7 @@ object Form2: TForm2
         object Edit36: TEdit
           Left = 8
           Top = 256
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2176,9 +2175,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit37: TEdit
-          Left = 57
+          Left = 72
           Top = 256
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2194,9 +2193,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit38: TEdit
-          Left = 156
+          Left = 136
           Top = 256
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2217,7 +2216,7 @@ object Form2: TForm2
         object Edit89: TEdit
           Left = 8
           Top = 280
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2232,9 +2231,9 @@ object Form2: TForm2
           Text = '0'
         end
         object Edit90: TEdit
-          Left = 57
+          Left = 72
           Top = 280
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2249,9 +2248,9 @@ object Form2: TForm2
           Text = '0'
         end
         object Edit91: TEdit
-          Left = 156
+          Left = 136
           Top = 280
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2268,7 +2267,7 @@ object Form2: TForm2
         object Edit59: TEdit
           Left = 8
           Top = 136
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2284,9 +2283,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit62: TEdit
-          Left = 57
+          Left = 72
           Top = 136
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2302,9 +2301,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit67: TEdit
-          Left = 156
+          Left = 136
           Top = 136
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2323,7 +2322,7 @@ object Form2: TForm2
         object Edit21: TEdit
           Left = 8
           Top = 112
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2339,9 +2338,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit22: TEdit
-          Left = 57
+          Left = 72
           Top = 112
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2357,9 +2356,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit23: TEdit
-          Left = 156
+          Left = 136
           Top = 112
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2378,7 +2377,7 @@ object Form2: TForm2
         object Edit65: TEdit
           Left = 8
           Top = 304
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2393,255 +2392,39 @@ object Form2: TForm2
           OnExit = Edit66Exit
           OnKeyDown = Edit66KeyDown
         end
-        object Edit129: TEdit
-          Left = 106
-          Top = 40
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 34
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit130: TEdit
-          Left = 106
-          Top = 64
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 35
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit131: TEdit
-          Left = 106
-          Top = 88
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 36
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit132: TEdit
-          Left = 106
-          Top = 112
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 37
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit133: TEdit
-          Left = 106
-          Top = 136
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 38
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit134: TEdit
-          Left = 106
-          Top = 160
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 39
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit135: TEdit
-          Left = 106
-          Top = 184
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 40
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit136: TEdit
-          Left = 106
-          Top = 208
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 41
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit137: TEdit
-          Left = 106
-          Top = 232
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 42
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit138: TEdit
-          Left = 106
-          Top = 256
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 43
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit139: TEdit
-          Left = 106
-          Top = 280
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 44
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
       end
       object GroupBox10: TGroupBox
         Left = 368
         Top = 8
         Width = 209
         Height = 333
-        Caption = #1058#1077#1082#1091#1097#1080#1077' '#1076#1072#1085#1085#1099#1077':'
+        Caption = #1058#1077#1082#1091#1097#1080#1077' '#1076#1072#1085#1085#1099#1077
         TabOrder = 1
         object Label58: TLabel
-          Left = 11
+          Left = 72
           Top = 24
-          Width = 34
+          Width = 61
           Height = 13
-          Caption = #1053#1072#1095#1089#1083':'
+          Caption = #1055#1086' '#1089'.'#1085#1086#1088#1084#1077':'
         end
         object Label59: TLabel
-          Left = 57
+          Left = 142
           Top = 24
-          Width = 41
+          Width = 51
           Height = 13
-          Caption = #1055'.'#1091#1095#1077#1090#1072':'
+          Caption = #1057#1091#1073#1089#1080#1076#1080#1103':'
         end
         object Label68: TLabel
-          Left = 165
+          Left = 8
           Top = 24
-          Width = 27
+          Width = 58
           Height = 13
-          Caption = #1057#1091#1073#1089':'
-        end
-        object Label94: TLabel
-          Left = 106
-          Top = 24
-          Width = 53
-          Height = 13
-          Caption = #1057#1091#1073#1089'.'#1089#1090#1085#1076':'
+          Caption = #1053#1072#1095#1080#1089#1083#1077#1085#1086':'
         end
         object Edit39: TEdit
-          Left = 57
+          Left = 72
           Top = 40
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2657,9 +2440,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit40: TEdit
-          Left = 156
+          Left = 136
           Top = 40
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2676,9 +2459,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit41: TEdit
-          Left = 57
+          Left = 72
           Top = 64
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2694,9 +2477,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit42: TEdit
-          Left = 156
+          Left = 136
           Top = 64
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2713,9 +2496,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit43: TEdit
-          Left = 57
+          Left = 72
           Top = 88
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2731,9 +2514,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit44: TEdit
-          Left = 156
+          Left = 136
           Top = 88
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2750,9 +2533,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit45: TEdit
-          Left = 57
+          Left = 72
           Top = 112
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2768,9 +2551,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit46: TEdit
-          Left = 156
+          Left = 136
           Top = 112
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2787,9 +2570,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit47: TEdit
-          Left = 57
+          Left = 72
           Top = 160
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2805,9 +2588,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit48: TEdit
-          Left = 156
+          Left = 136
           Top = 160
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2824,9 +2607,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit49: TEdit
-          Left = 57
+          Left = 72
           Top = 184
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2842,9 +2625,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit50: TEdit
-          Left = 156
+          Left = 136
           Top = 184
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2861,9 +2644,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit51: TEdit
-          Left = 57
+          Left = 72
           Top = 208
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2879,9 +2662,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit52: TEdit
-          Left = 156
+          Left = 136
           Top = 208
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2898,9 +2681,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit53: TEdit
-          Left = 57
+          Left = 72
           Top = 232
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2916,9 +2699,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit54: TEdit
-          Left = 156
+          Left = 136
           Top = 232
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2935,9 +2718,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit55: TEdit
-          Left = 57
+          Left = 72
           Top = 256
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -2953,9 +2736,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit56: TEdit
-          Left = 156
+          Left = 136
           Top = 256
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2972,9 +2755,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit92: TEdit
-          Left = 57
+          Left = 72
           Top = 280
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -2989,9 +2772,9 @@ object Form2: TForm2
           Text = '0'
         end
         object Edit93: TEdit
-          Left = 156
+          Left = 136
           Top = 280
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -3006,9 +2789,9 @@ object Form2: TForm2
           Text = '0'
         end
         object Edit70: TEdit
-          Left = 57
+          Left = 72
           Top = 136
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -3024,9 +2807,9 @@ object Form2: TForm2
           OnKeyDown = Edit66KeyDown
         end
         object Edit71: TEdit
-          Left = 156
+          Left = 136
           Top = 136
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -3045,7 +2828,7 @@ object Form2: TForm2
         object Edit96: TEdit
           Left = 8
           Top = 40
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -3063,7 +2846,7 @@ object Form2: TForm2
         object Edit97: TEdit
           Left = 8
           Top = 64
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -3081,7 +2864,7 @@ object Form2: TForm2
         object Edit98: TEdit
           Left = 8
           Top = 88
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -3099,7 +2882,7 @@ object Form2: TForm2
         object Edit99: TEdit
           Left = 8
           Top = 112
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -3117,7 +2900,7 @@ object Form2: TForm2
         object Edit100: TEdit
           Left = 8
           Top = 136
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -3135,7 +2918,7 @@ object Form2: TForm2
         object Edit101: TEdit
           Left = 8
           Top = 160
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -3153,7 +2936,7 @@ object Form2: TForm2
         object Edit102: TEdit
           Left = 8
           Top = 184
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -3171,7 +2954,7 @@ object Form2: TForm2
         object Edit103: TEdit
           Left = 8
           Top = 208
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -3189,7 +2972,7 @@ object Form2: TForm2
         object Edit104: TEdit
           Left = 8
           Top = 232
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -3207,7 +2990,7 @@ object Form2: TForm2
         object Edit105: TEdit
           Left = 8
           Top = 256
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -3225,7 +3008,7 @@ object Form2: TForm2
         object Edit106: TEdit
           Left = 8
           Top = 280
-          Width = 50
+          Width = 65
           Height = 21
           TabStop = False
           Color = clBtnFace
@@ -3242,7 +3025,7 @@ object Form2: TForm2
         object Edit84: TEdit
           Left = 8
           Top = 304
-          Width = 50
+          Width = 65
           Height = 21
           Color = clBtnFace
           Font.Charset = DEFAULT_CHARSET
@@ -3257,219 +3040,10 @@ object Form2: TForm2
           OnExit = Edit66Exit
           OnKeyDown = Edit66KeyDown
         end
-        object Edit140: TEdit
-          Left = 106
-          Top = 40
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 34
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit141: TEdit
-          Left = 106
-          Top = 64
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 35
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit142: TEdit
-          Left = 106
-          Top = 88
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 36
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit143: TEdit
-          Left = 106
-          Top = 112
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 37
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit144: TEdit
-          Left = 106
-          Top = 136
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 38
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit145: TEdit
-          Left = 106
-          Top = 160
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 39
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit146: TEdit
-          Left = 106
-          Top = 184
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 40
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit147: TEdit
-          Left = 106
-          Top = 208
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 41
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit148: TEdit
-          Left = 106
-          Top = 232
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 42
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit149: TEdit
-          Left = 106
-          Top = 256
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 43
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
-        object Edit150: TEdit
-          Left = 106
-          Top = 280
-          Width = 50
-          Height = 21
-          TabStop = False
-          Color = clBtnFace
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 44
-          Text = '0'
-          OnExit = Edit66Exit
-          OnKeyDown = Edit66KeyDown
-        end
       end
       object Button8: TButton
         Left = 344
-        Top = 15
+        Top = 24
         Width = 17
         Height = 105
         Hint = #1056#1072#1089#1095#1077#1090' '#1090#1077#1082#1091#1097#1080#1093' '#1076#1072#1085#1085#1099#1093
@@ -3483,8 +3057,8 @@ object Form2: TForm2
         OnClick = Button8Click
       end
       object CheckBox1: TCheckBox
-        Left = 17
-        Top = 15
+        Left = 8
+        Top = 16
         Width = 105
         Height = 17
         TabStop = False
@@ -3499,7 +3073,7 @@ object Form2: TForm2
       object TabControl1: TTabControl
         Left = 0
         Top = 0
-        Width = 602
+        Width = 579
         Height = 399
         Align = alClient
         Style = tsFlatButtons
@@ -3525,7 +3099,7 @@ object Form2: TForm2
         object Panel1: TPanel
           Left = 4
           Top = 27
-          Width = 594
+          Width = 571
           Height = 54
           Align = alTop
           BevelOuter = bvNone
@@ -3572,7 +3146,7 @@ object Form2: TForm2
           Left = 4
           Top = 81
           Width = 265
-          Height = 316
+          Height = 314
           Align = alLeft
           Caption = #1044#1072#1085#1085#1099#1077' '#1079#1072' '#1087#1077#1088#1080#1086#1076':'
           TabOrder = 1
@@ -3580,7 +3154,7 @@ object Form2: TForm2
             Left = 2
             Top = 15
             Width = 261
-            Height = 264
+            Height = 262
             Align = alClient
             BorderStyle = bsNone
             ColCount = 4
@@ -3596,7 +3170,7 @@ object Form2: TForm2
           end
           object Panel2: TPanel
             Left = 2
-            Top = 279
+            Top = 277
             Width = 261
             Height = 35
             Align = alBottom
@@ -3697,8 +3271,8 @@ object Form2: TForm2
     end
   end
   object Button2: TButton
-    Left = 395
-    Top = -1
+    Left = 396
+    Top = 0
     Width = 107
     Height = 22
     Enabled = False
