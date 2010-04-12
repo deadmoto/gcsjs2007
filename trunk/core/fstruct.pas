@@ -831,7 +831,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO sub');
-    SQL.Add('VALUES (CONVERT(smalldatetime,:d,104),:id,:serv,:idserv,:ac,:pm,:snp,:sub,:sp,:stp)');
+    SQL.Add('VALUES (CONVERT(smalldatetime,:d,104),:id,:serv,:idserv,:ac,:pm,:snp,:sub,:sp,:stp,:stndsub)');
   end;
   if FileExists(path+'sub'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'sub'+IntToStr(dis)+'.dbf',f);
@@ -856,6 +856,7 @@ begin
         Query1.ParamByName('sub').AsFloat := StrToFloat(f[i][7]);
         Query1.ParamByName('sp').AsFloat := StrToFloat(f[i][8]);
         Query1.ParamByName('stp').AsString := f[i][9];
+        Query1.ParamByName('stndsub').AsFloat := StrToFloat(f[i][10]);
         Query1.ExecSQL;
       end;
       Query1.Close;
@@ -864,6 +865,49 @@ begin
   end
   else
     ShowMessage('Файл '+path+'sub'+IntToStr(dis)+'.dbf не найден!');
+end;
+
+procedure ImportCounters(path: string;dis: integer);
+{ процедура импорта счетчиков }
+var
+  f: T2DString;
+  i: integer;
+begin
+  with DModule.Query1 do begin
+    Close;
+    SQL.Clear;
+    SQL.Add('INSERT INTO Counters');
+    SQL.Add('VALUES (CONVERT(smalldatetime,:d,104),:id,:serv,:count,:countdata,:countserv)');
+  end;
+  if FileExists(path+'counters'+IntToStr(dis)+'.dbf') then begin
+    GetData(path+'counters'+IntToStr(dis)+'.dbf',f);
+    With DModule do
+    begin
+      for i:=0 to high(f) do
+      begin
+        Query2.Close;
+        Query2.SQL.Clear;
+        Query2.SQL.Add('DELETE FROM Counters');
+        Query2.SQL.Add('WHERE (regn =:id)and(sdate=convert(smalldatetime,:d,104))');
+        Query2.SQL.Add('and(service=:serv)');
+        Query2.ParamByName('id').AsString := f[i][1];
+        Query2.ParamByName('d').AsString := f[i][0];
+        Query2.ParamByName('serv').AsString := f[i][2];
+        Query2.ExecSQL;
+        Query1.ParamByName('d').AsString := f[i][0];
+        Query1.ParamByName('id').AsString := f[i][1];
+        Query1.ParamByName('serv').AsString := f[i][2];
+        Query1.ParamByName('count').AsString := f[i][3];
+        Query1.ParamByName('countdata').AsString := f[i][4];
+        Query1.ParamByName('countserv').AsString := f[i][5];
+        Query1.ExecSQL;
+      end;
+      Query1.Close;
+      Query2.Close;
+    end;
+  end
+  else
+    ShowMessage('Файл '+path+'counters'+IntToStr(dis)+'.dbf не найден!');
 end;
 
 procedure ImportSluj(path: string;dis: integer);

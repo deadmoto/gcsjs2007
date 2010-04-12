@@ -6,7 +6,7 @@ uses
   Buttons, Classes, ComCtrls, comobj, Controls, DB, DBTables, Dialogs, Windows,
   ExtCtrls, Forms, frxClass, frxDBSet, Graphics, Grids, ImgList, Menus,
   Messages, Registry, StdCtrls, SysUtils, Variants, dbf, ActnList, XPStyleActnCtrls,
-  ActnMan, ActnCtrls, ActnMenus, ToolWin, SevenZipVCL, Math, StrUtils;
+  ActnMan, ActnCtrls, ActnMenus, ToolWin, SevenZipVCL, Math, StrUtils, frxExportXLS;
 
 type
   PAdditionRepData = ^TAdditionRepData;
@@ -171,6 +171,7 @@ type
     Action18: TAction;
     Action19: TAction;
     Action20: TAction;
+    Action21: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SGClDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
@@ -264,6 +265,7 @@ type
     procedure Action18Execute(Sender: TObject);
     procedure Action19Execute(Sender: TObject);
     procedure Action20Execute(Sender: TObject);
+    procedure Action21Execute(Sender: TObject);
   private
     FShaderForm: TForm;
     ccl, acl:     integer;//количество всех и активных клиентов в базе
@@ -703,6 +705,36 @@ procedure TForm1.Action20Execute(Sender: TObject);
 *******************************************************************************}
 begin
   FillCurr(bpath, rdt, dist, Form1.codedbf);
+end;
+
+procedure TForm1.Action21Execute(Sender: TObject);
+var
+  y1: string;
+  xlsExport: TfrxXLSExport;
+begin
+  with DModule do
+  begin
+    Query1.Close;
+    Query1.SQL.Text := 'EXEC mintrudmounth ' + quotedstr(rdt);
+    Query1.Open;
+  end;
+
+  frxData.DataSource := DModule.DataSource1;
+  frxReport1.LoadFromFile(PChar(reports_path + 'mintrudmount.fr3'));
+
+  frxReport1.Variables.Variables['month'] := quotedstr(LongMonthNames[StrToInt(FormatDateTime('m', StrToDate(rdt)))]);
+  frxReport1.Variables.Variables['rdt']  := quotedstr(rdt);
+
+  frxReport1.PrepareReport;
+
+  if MessageBox(Form1.Handle, PChar('Экспортировать в Excel ?'),
+    PChar('Экспорт в Excel'), MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
+  begin
+    xlsExport :=  TfrxXLSExport.Create(frxReport1);
+    frxReport1.Export(xlsExport);
+  end;
+
+  frxReport1.ShowPreparedReport;
 end;
 
 procedure TForm1.Action2Execute(Sender: TObject);
@@ -1331,7 +1363,6 @@ begin
   c.SetCalc(client, s1);
   c.Calc(getstatus(c.cdata.begindate, c.cdata.enddate));
   mdd := c.GetMdd;
-  pm  := c.CalcFull;
 
   if c.cdata.calc = 1 then
   begin
@@ -1350,6 +1381,7 @@ begin
       CalcServWC(13);
     end;
   end;
+  pm  := c.CalcFull(c.cdata.fpm);
 
   ppm := 0;
   for i := 0 to numbtarif - 1 do
