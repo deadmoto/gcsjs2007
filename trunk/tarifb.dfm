@@ -4,7 +4,7 @@ object Form19: TForm19
   BorderStyle = bsDialog
   Caption = #1058#1072#1088#1080#1092#1099' '#1073#1077#1079' '#1073#1086#1081#1083#1077#1088#1072' / '#1089' '#1073#1086#1081#1083#1077#1088#1086#1084
   ClientHeight = 413
-  ClientWidth = 447
+  ClientWidth = 476
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -21,16 +21,17 @@ object Form19: TForm19
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 441
+    Width = 470
     Height = 274
     Margins.Bottom = 0
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 0
+    ExplicitWidth = 441
     object StringGrid1: TStringGrid
       Left = 2
       Top = 2
-      Width = 437
+      Width = 466
       Height = 270
       Align = alClient
       BorderStyle = bsNone
@@ -41,18 +42,20 @@ object Form19: TForm19
       TabOrder = 0
       OnDrawCell = StringGrid1DrawCell
       OnSelectCell = StringGrid1SelectCell
+      ExplicitWidth = 437
     end
   end
   object Panel2: TPanel
     AlignWithMargins = True
     Left = 3
     Top = 280
-    Width = 441
+    Width = 470
     Height = 96
     Margins.Bottom = 0
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 1
+    ExplicitWidth = 441
     object Label3: TLabel
       Left = 15
       Top = 50
@@ -81,6 +84,13 @@ object Form19: TForm19
       Height = 13
       Caption = #1047#1072#1082#1088'.'#1074'/'#1088':'
     end
+    object Label5: TLabel
+      Left = 253
+      Top = 50
+      Width = 54
+      Height = 13
+      Caption = #1053#1086#1088#1084#1072#1090#1080#1074':'
+    end
     object Edit3: TEdit
       Left = 15
       Top = 66
@@ -96,7 +106,7 @@ object Form19: TForm19
     object Edit1: TEdit
       Left = 15
       Top = 23
-      Width = 412
+      Width = 442
       Height = 21
       Hint = 
         #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1091#1085#1080#1082#1072#1083#1100#1085#1086#1077' '#1079#1085#1072#1095#1077#1085#1080#1077' '#1087#1086#1083#1103', '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 51 ' +
@@ -130,21 +140,29 @@ object Form19: TForm19
       OnExit = Edit2Exit
       OnKeyDown = Edit2KeyDown
     end
+    object Edit5: TEdit
+      Left = 253
+      Top = 66
+      Width = 78
+      Height = 21
+      TabOrder = 4
+    end
   end
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
     Top = 379
-    Width = 441
+    Width = 470
     Height = 31
     Align = alTop
     AutoWrap = False
     BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 2
+    ExplicitWidth = 441
     object Button4: TButton
       AlignWithMargins = True
-      Left = 363
+      Left = 392
       Top = 3
       Width = 75
       Height = 25
@@ -154,7 +172,7 @@ object Form19: TForm19
     end
     object Button3: TButton
       AlignWithMargins = True
-      Left = 282
+      Left = 311
       Top = 3
       Width = 75
       Height = 25
@@ -164,7 +182,7 @@ object Form19: TForm19
     end
     object Button2: TButton
       AlignWithMargins = True
-      Left = 201
+      Left = 230
       Top = 3
       Width = 75
       Height = 25
@@ -174,7 +192,7 @@ object Form19: TForm19
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 120
+      Left = 149
       Top = 3
       Width = 75
       Height = 25

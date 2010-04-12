@@ -50,7 +50,7 @@ uses
 procedure TForm22.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Edit3.Text := '0';
-  Datamodule1.Query1.Close;
+  DModule.Query1.Close;
 end;
 
 
@@ -59,7 +59,7 @@ procedure TForm22.Button1Click(Sender: TObject);
   Поиск и расчет количества людей с возрастом в указанном диапазоне
 *******************************************************************************}
 begin
-  with DataModule1.Query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Add('select sb.fio,sb.age,strt.namestreet,cl.nhouse,cl.corp,cl.apart,cl.tel');
@@ -86,7 +86,7 @@ begin
   if StrToInt(Edit3.Text) <> 0 then
   begin
     path := ExtractFilePath(Application.ExeName) + 'out\';
-    Datamodule1.Query1.First;
+    DModule.Query1.First;
     FillTable(path, 'age' + Edit1.Text + '-' + Edit2.Text, Form1.codedbf);
   end;
 end;
