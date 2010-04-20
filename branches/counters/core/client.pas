@@ -8,7 +8,7 @@ type
   T2DInt = array of array of integer;
   
   TNumbTarifReal = array[0..(numbtarif-1)] of real;
-  TNumbTarifInt = array[0..(numbtarif-1)] of integer;
+  TNumbTarifInt = array[0..(numbtarif-1)] of smallint;
   TNumbTarifString = array[0..(numbtarif-1)] of string;
   TNumbTarifBool = array[0..(numbtarif-1)] of boolean;
 
@@ -73,7 +73,7 @@ type
     fpm: TNumbTarifReal;//платежи без учета льготы
 
     stop: integer; //сведения по приостановке
-    heating: integer; //тип отопления
+    heating: smallint; //тип отопления
   end;
 
   TData = packed record
@@ -1650,7 +1650,6 @@ begin
     if cdata.counter[service] then
     begin
       cost := cdata.countercost[service] * cdata.counterdata[service];
-      //cdata.fpm[service] := rnd(cost);
       for i:=0 to cdata.mcount-1 do
       begin
         if cdata.pc[i][service]<>0 then//если ненулевая льгота
@@ -1666,9 +1665,7 @@ begin
             cost := cost - ((cdata.counterdata[service]/cdata.rmcount) * cdata.pc[i][service]/100 * cdata.countercost[service]);
         end;
       end;
-      //cdata.pm[service] := rnd(cost);
       cdata.snpm[service] := rnd(cost);
-      //Exit;
     end
     else
       cost := cdata.countercost[service] * cdata.counternorm[service];

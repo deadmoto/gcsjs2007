@@ -24,7 +24,7 @@ object Form2: TForm2
     Top = 3
     Width = 598
     Height = 429
-    ActivePage = TabSheet5
+    ActivePage = TabSheet1
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
@@ -1065,7 +1065,7 @@ object Form2: TForm2
         Top = 88
         Width = 541
         Height = 249
-        ActivePage = TabSheet7
+        ActivePage = TabSheet8
         MultiLine = True
         TabOrder = 5
         TabPosition = tpBottom
@@ -1463,6 +1463,7 @@ object Form2: TForm2
             Height = 20
             Caption = '...'
             TabOrder = 1
+            OnClick = btnColdCounterClick
           end
           object Edit124: TEdit
             Left = 423
@@ -1491,6 +1492,7 @@ object Form2: TForm2
             Height = 20
             Caption = '...'
             TabOrder = 4
+            OnClick = btnColdCounterClick
           end
           object comboBoxHotCounter: TComboBox
             Left = 110
@@ -1517,6 +1519,7 @@ object Form2: TForm2
             Height = 20
             Caption = '...'
             TabOrder = 7
+            OnClick = btnColdCounterClick
           end
           object Edit126: TEdit
             Left = 422
@@ -1545,6 +1548,7 @@ object Form2: TForm2
             Height = 20
             Caption = '...'
             TabOrder = 10
+            OnClick = btnColdCounterClick
           end
           object comboBoxHeatCounter: TComboBox
             Left = 110
@@ -1579,6 +1583,7 @@ object Form2: TForm2
             Height = 20
             Caption = '...'
             TabOrder = 13
+            OnClick = btnColdCounterClick
           end
           object Edit128: TEdit
             Left = 422
