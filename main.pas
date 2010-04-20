@@ -727,7 +727,6 @@ end;
 
 procedure TForm1.Action21Execute(Sender: TObject);
 var
-  y1: string;
   xlsExport: TfrxXLSExport;
 begin
   with DModule do
@@ -860,23 +859,33 @@ begin
       with DModule.Query1 do
       begin
         Close;
-        SQL.Clear;
-        SQL.Add('update hist');
-        SQL.Add('set edate=CONVERT(smalldatetime, :d, 104)');
-        SQL.Add('where regn = :id and bdate<=convert(smalldatetime,:d,104)');
-        SQL.Add('and edate>convert(smalldatetime,:d,104)');
+        SQL.Text :=
+          'update hist' + #13 +
+          'set edate=CONVERT(smalldatetime, :d, 104)' + #13 +
+          'where regn = :id and bdate<=convert(smalldatetime,:d,104)' + #13 +
+          'and edate>convert(smalldatetime,:d,104)';
+        ParamByName('id').AsInteger := client;
+        ParamByName('d').AsString := rdt;
+        ExecSQL;
+
+        Close;
+        SQL.Text :=
+          'update cl' + #13 +
+          'set change=CONVERT(smalldatetime, :change, 104)' + #13 +
+          'where regn = :id';
+        ParamByName('id').AsInteger := client;
+        ParamByName('change').AsString := DateToStr(Date);
+        ExecSQL;
+
+        Close;
+        SQL.Text :=
+          'delete from sub' + #13 +
+          'where (regn=:id)and(sdate>=convert(smalldatetime,:d,104))';
         ParamByName('id').AsInteger := client;
         ParamByName('d').AsString := rdt;
         ExecSQL;
         Close;
-        Close;
-        SQL.Clear;
-        SQL.Add('delete from sub');
-        SQL.Add('where (regn=:id)and(sdate>=convert(smalldatetime,:d,104))');
-        ParamByName('id').AsInteger := client;
-        ParamByName('d').AsString := rdt;
-        ExecSQL;
-        Close;
+
         s := Copy(SGCl.Cells[2, i + 1], 1, 10);
         st[i] := GetStatus(StrToDate(s), StrToDate(rdt));
         status := st[i];
@@ -884,7 +893,7 @@ begin
         if (rdt = '01.' + Copy(dt, 3, 2) + '.20' + Copy(dt, 1, 2)) then
           sub[i] := 0;
         SGCl.Cells[2, i + 1] := Copy(SGCl.Cells[2, i + 1], 1, 13) + rdt;
-        SGCl.Cells[4, i + 1] := '0.00';
+        SGCl.Cells[4, i + 1] := '0,00';
         SGCl.Repaint;
         Edit4.Text := FlToStr(ASub);
       end;
