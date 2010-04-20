@@ -445,6 +445,7 @@ type
     procedure comboBoxCanalCounterChange(Sender: TObject);
     procedure comboBoxHeatCounterChange(Sender: TObject);
     procedure comboBoxGasCounterChange(Sender: TObject);
+    procedure btnColdCounterClick(Sender: TObject);
   private
     { Private declarations }
     load, fam: boolean;
@@ -1652,6 +1653,7 @@ begin
       Edit30.Text := FlToStr(Cl.cdata.bpm[7]);
       Edit33.Text := FlToStr(Cl.cdata.bpm[12]);
       Edit36.Text := FlToStr(Cl.cdata.bpm[13]);
+      
       Edit13.Text := FlToStr(Cl.cdata.bsnpm[0]);
       Edit16.Text := FlToStr(Cl.cdata.bsnpm[1]);
       Edit19.Text := FlToStr(Cl.cdata.bsnpm[2]);
@@ -1697,6 +1699,7 @@ begin
     Edit103.Text := FlToStr(Cl.cdata.pm[7]);
     Edit104.Text := FlToStr(Cl.cdata.pm[12]);
     Edit105.Text := FlToStr(Cl.cdata.pm[13]);
+
     Edit39.Text  := FlToStr(Cl.cdata.snpm[0]);
     Edit41.Text  := FlToStr(Cl.cdata.snpm[1]);
     Edit43.Text  := FlToStr(Cl.cdata.snpm[2]);
@@ -1707,6 +1710,7 @@ begin
     Edit51.Text  := FlToStr(Cl.cdata.snpm[7]);
     Edit53.Text  := FlToStr(Cl.cdata.snpm[12]);
     Edit55.Text  := FlToStr(Cl.cdata.snpm[13]);
+
     Edit40.Text  := FlToStr(Cl.cdata.sub[0]);
     Edit42.Text  := FlToStr(Cl.cdata.sub[1]);
     Edit44.Text  := FlToStr(Cl.cdata.sub[2]);
@@ -3311,10 +3315,10 @@ begin
   MaskEdit5.Text := DateToStr(Cl.cdata.prevbegindate);
   MaskEdit6.Text := DateToStr(Cl.cdata.prevenddate);
 
-  Cl.CalcSub(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
-  Cl.CalcFinal(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
-  SetVCalc;
-  SumV;
+  //Cl.CalcSub(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+  //Cl.CalcFinal(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+  //SetVCalc;
+  //SumV;
 end;
 
 function TForm2.IsAPeriod: boolean;
@@ -3944,6 +3948,91 @@ begin
     Cl.Calc(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
     SetVCalc;
     SumV;
+  end;
+end;
+
+procedure TForm2.btnColdCounterClick(Sender: TObject);
+var
+  nam, namet, capt: string;
+begin
+  if Sender = btnColdCounter then
+  begin
+    capt := 'Тарифы на водопотребление с откр/закр водоразбором(руб./чел.)';
+    nam  := 'cold';
+    namet := comboBoxColdCounter.Text;
+  end;
+  if Sender = btnHotCounter then
+  begin
+    capt := 'Тарифы на го.воду с откр/закр водоразбором(руб./чел.)';
+    nam  := 'hot';
+    namet := comboBoxHotCounter.Text;
+  end;
+  if Sender = btnCanalCounter then
+  begin
+    capt := 'Тарифы на водоотведение(руб./чел.)';
+    nam  := 'canal';
+    namet := comboBoxCanalCounter.Text;
+  end;
+  if Sender = btnHeatCounter then
+  begin
+    capt := 'Тарифы на отопление(руб./кв.м.)';
+    nam  := 'heat';
+    namet := comboBoxHeatCounter.Text;
+  end;
+  if Sender = btnGasCounter then
+  begin
+    capt := 'Тарифы на газ(руб./чел.)';
+    nam  := 'gas';
+    namet := comboBoxGasCounter.Text;
+  end;
+  if (Sender = btnColdCounter) or (Sender = btnHotCounter) then
+  begin
+    Form39 := TForm39.Create(Form2);
+    Form39.Caption := capt;
+    Form39.nam := nam;
+    Form39.namet := namet;
+    Form39.ShowModal;
+    if Form39.ac then
+    begin
+      if Sender = btnColdCounter then
+      begin
+        comboBoxColdCounter.Text := Form39.namet;
+        comboBoxColdCounter.OnChange(comboBoxColdCounter);
+      end
+      else
+      begin
+        comboBoxHotCounter.Text := Form39.namet;
+        comboBoxHotCounter.OnChange(comboBoxHotCounter);
+      end;
+    end;
+    Form39.Free;
+  end;
+  if (Sender = btnCanalCounter) or (Sender = btnHeatCounter) or (Sender = btnGasCounter)  then
+  begin
+    Form37 := TForm37.Create(Form2);
+    Form37.Caption := capt;
+    Form37.nam := nam;
+    Form37.namet := namet;
+    Form37.ShowModal;
+    if Form37.ac then
+    begin
+      if Sender = btnCanalCounter then
+      begin
+        comboBoxCanalCounter.Text := Form37.namet;
+        comboBoxCanalCounter.OnChange(comboBoxCanalCounter);
+      end;
+      if Sender = btnHeatCounter then
+      begin
+        comboBoxHeatCounter.Text := Form37.namet;
+        comboBoxHeatCounter.OnChange(comboBoxHeatCounter);
+      end;
+      if Sender = btnGasCounter then
+      begin
+        comboBoxGasCounter.Text := Form37.namet;
+        comboBoxGasCounter.OnChange(comboBoxGasCounter);
+      end;
+    end;
+    Form37.Free;
   end;
 end;
 
