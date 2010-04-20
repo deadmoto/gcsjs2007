@@ -66,7 +66,7 @@ procedure EditField(f: string; code: TCodePage; n: integer);
 
 function GetMonthsCount(BeginDate, EndDate: TDateTime): integer;
 function WithoutDoubleSpaces(str: string): string;
-function GetShortName(FIO: string): string;
+function GetShortName(FIO: string): string; //возвращает фамилию + инициалы
 function ReplacePoint(str: string): string; //заминить , на .
 
 {******************************************************************************}
