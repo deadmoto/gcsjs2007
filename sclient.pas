@@ -1810,9 +1810,8 @@ begin
     //оплата без учета льготы
     pm  := Cl.CalcFull(Cl.cdata.fpm);
     //оплата c учетом льготы
-    ppm := 0;
-    for i := 0 to numbtarif - 1 do
-      ppm := ppm + Cl.cdata.pm[i];
+    ppm := Cl.CalcFull(Cl.cdata.pm);
+
     if (pm <> 0) and (ppm <> 0) then
       Edit108.Text := FlToStr(rnd(ppm / pm))
     else
@@ -4571,7 +4570,7 @@ begin
     if (sts = 0) then
     begin
       {if Cl.cdata.rstnd <> 0 then
-      begin
+      begin}
         Edit12.ReadOnly := False; Edit12.Color := clWindow;
         Edit15.ReadOnly := False; Edit15.Color := clWindow;
         Edit18.ReadOnly := False; Edit18.Color := clWindow;
@@ -4583,9 +4582,9 @@ begin
         Edit36.ReadOnly := False; Edit36.Color := clWindow;
         Edit59.ReadOnly := False; Edit59.Color := clWindow;
         Edit65.ReadOnly := False; Edit65.Color := clWindow;
-      end
+      {end
       else
-      begin }
+      begin
         Edit13.ReadOnly := False; Edit13.Color := clWindow;
         Edit16.ReadOnly := False; Edit16.Color := clWindow;
         Edit19.ReadOnly := False; Edit19.Color := clWindow;
@@ -4595,13 +4594,13 @@ begin
         Edit31.ReadOnly := False; Edit31.Color := clWindow;
         Edit34.ReadOnly := False; Edit34.Color := clWindow;
         Edit37.ReadOnly := False; Edit37.Color := clWindow;
-        Edit62.ReadOnly := False; Edit62.Color := clWindow;
+        Edit62.ReadOnly := False; Edit62.Color := clWindow;}
       //end;
     end
     else
     begin
       {if Cl.cdata.rstnd <> 0 then
-      begin
+      begin }
         Edit96.ReadOnly := False; Edit96.Color  := clWindow;
         Edit97.ReadOnly := False; Edit97.Color  := clWindow;
         Edit98.ReadOnly := False; Edit98.Color  := clWindow;
@@ -4613,9 +4612,9 @@ begin
         Edit104.ReadOnly := False; Edit104.Color := clWindow;
         Edit105.ReadOnly := False; Edit105.Color := clWindow;
         Edit84.ReadOnly := False; Edit84.Color  := clWindow;
-      end
+      {end
       else
-      begin }
+      begin
         Edit39.ReadOnly := False; Edit39.Color := clWindow;
         Edit41.ReadOnly := False; Edit41.Color := clWindow;
         Edit43.ReadOnly := False; Edit43.Color := clWindow;
@@ -4625,7 +4624,7 @@ begin
         Edit51.ReadOnly := False; Edit51.Color := clWindow;
         Edit53.ReadOnly := False; Edit53.Color := clWindow;
         Edit55.ReadOnly := False; Edit55.Color := clWindow;
-        Edit70.ReadOnly := False; Edit70.Color := clWindow;
+        Edit70.ReadOnly := False; Edit70.Color := clWindow;}
       //end;
     end;
     comboBoxCont.Enabled  := False;
@@ -4645,7 +4644,7 @@ begin
     if (sts = 0) then
     begin
       {if Cl.cdata.rstnd <> 0 then
-      begin
+      begin }
         Edit12.ReadOnly := True; Edit12.Color := clBtnFace;
         Edit15.ReadOnly := True; Edit15.Color := clBtnFace;
         Edit18.ReadOnly := True; Edit18.Color := clBtnFace;
@@ -4657,9 +4656,9 @@ begin
         Edit36.ReadOnly := True; Edit36.Color := clBtnFace;
         Edit59.ReadOnly := True; Edit59.Color := clBtnFace;
         Edit65.ReadOnly := True; Edit65.Color := clBtnFace;
-      end
+      {end
       else
-      begin}
+      begin
         Edit13.ReadOnly := True; Edit13.Color := clBtnFace;
         Edit16.ReadOnly := True; Edit16.Color := clBtnFace;
         Edit19.ReadOnly := True; Edit19.Color := clBtnFace;
@@ -4669,13 +4668,12 @@ begin
         Edit31.ReadOnly := True; Edit31.Color := clBtnFace;
         Edit34.ReadOnly := True; Edit34.Color := clBtnFace;
         Edit37.ReadOnly := True; Edit37.Color := clBtnFace;
-        Edit62.ReadOnly := True; Edit62.Color := clBtnFace;
-      //end;
+        Edit62.ReadOnly := True; Edit62.Color := clBtnFace;}
     end
     else
     begin
       {if Cl.cdata.rstnd <> 0 then
-      begin
+      begin   }
         Edit96.ReadOnly := True; Edit96.Color  := clBtnFace;
         Edit97.ReadOnly := True; Edit97.Color  := clBtnFace;
         Edit98.ReadOnly := True; Edit98.Color  := clBtnFace;
@@ -4687,9 +4685,9 @@ begin
         Edit104.ReadOnly := True; Edit104.Color := clBtnFace;
         Edit105.ReadOnly := True; Edit105.Color := clBtnFace;
         Edit84.ReadOnly := True; Edit84.Color  := clBtnFace;
-      end
+      {end
       else
-      begin}
+      begin
         Edit39.ReadOnly := True; Edit39.Color := clBtnFace;
         Edit41.ReadOnly := True; Edit41.Color := clBtnFace;
         Edit43.ReadOnly := True; Edit43.Color := clBtnFace;
@@ -4699,7 +4697,7 @@ begin
         Edit51.ReadOnly := True; Edit51.Color := clBtnFace;
         Edit53.ReadOnly := True; Edit53.Color := clBtnFace;
         Edit55.ReadOnly := True; Edit55.Color := clBtnFace;
-        Edit70.ReadOnly := True; Edit70.Color := clBtnFace;
+        Edit70.ReadOnly := True; Edit70.Color := clBtnFace;}
       //end;
     end;
     comboBoxCont.Enabled  := True;
@@ -5798,7 +5796,11 @@ begin
   if Sender = CheckBox6 then SetCounter(Sender as TCheckBox, Edit120, 4);
   if Sender = CheckBox7 then SetCounter(Sender as TCheckBox, Edit121, 5);
   if Sender = CheckBox8 then SetCounter(Sender as TCheckBox, Edit122, 6);
-  if Sender = CheckBox9 then SetCounter(Sender as TCheckBox, Edit123, 7);
+  if Sender = CheckBox9 then
+  begin
+    SetCounter(Sender as TCheckBox, Edit123, 7);
+    Cl.cdata.counternorm[7] := GetNormTarif(7, cl.cdata.tarifs[7], cl.cdata.begindate, cl.cdata.boiler, cl.cdata.rmcount, cl.cdata.settl);
+  end;
 
   Edit118.OnExit(self);
 end;

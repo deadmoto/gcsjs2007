@@ -24,7 +24,7 @@ object Form2: TForm2
     Top = 3
     Width = 598
     Height = 429
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
@@ -1565,7 +1565,7 @@ object Form2: TForm2
             OnChange = comboBoxHeatCounterChange
           end
           object comboBoxGasCounter: TComboBox
-            Left = 110
+            Left = 105
             Top = 108
             Width = 283
             Height = 21
@@ -1687,7 +1687,7 @@ object Form2: TForm2
           end
           object CheckBox9: TCheckBox
             Left = 467
-            Top = 131
+            Top = 132
             Width = 15
             Height = 17
             TabOrder = 25
