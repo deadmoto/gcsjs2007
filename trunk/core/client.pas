@@ -482,8 +482,11 @@ begin
       if cdata.counter[i] then
       begin
         cdata.countercost[i] := GetCostTarif(i,cdata.countertarifs[i],cdata.begindate,cdata.boiler,cdata.rmcount,cdata.settl);
-        if i in [2..7] then
-          cdata.counternorm[i] := GetNormTarif(i,cdata.countertarifs[i],cdata.begindate,cdata.boiler,cdata.rmcount,cdata.settl);
+        if i in [2..6] then
+          cdata.counternorm[i] := GetNormTarif(i,cdata.countertarifs[i],cdata.begindate,cdata.boiler,cdata.rmcount,cdata.settl)
+        else
+        if (i = 7) then 
+          cdata.counternorm[i] := GetNormTarif(i,cdata.tarifs[i],cdata.begindate,cdata.boiler,cdata.rmcount,cdata.settl);
       end;
     end;
 end;
@@ -1177,6 +1180,16 @@ begin
       begin//первый месяц
         cdata.bfpm[0] := CalcFull(cdata.fpm);
         cdata.fpm[0] := cdata.bfpm[0];
+
+              CalcPriv;
+      for i := 0 to numbtarif - 1 do
+        if i in [2..4,6,7] then
+          if cdata.counter[i] then
+            CalcServ(i);
+      if cdata.counter[5] then
+        CalcServSq(5,StrToInt(System.Copy(Form1.rdt,4,2))); 
+
+        
         for i:=0 to numbtarif-1 do
         begin
           cdata.pm[i] := cdata.bpm[i];
@@ -1186,8 +1199,18 @@ begin
         end;
       end
       else
-      begin
+      begin       
         cdata.fpm[0] := CalcFull(cdata.fpm);
+
+              CalcPriv;
+      for i := 0 to numbtarif - 1 do
+        if i in [2..4,6,7] then
+          if cdata.counter[i] then
+            CalcServ(i);
+      if cdata.counter[5] then
+        CalcServSq(5,StrToInt(System.Copy(Form1.rdt,4,2))); 
+
+        
         cdata.pm[12] := cdata.bpm[12];
         cdata.pm[13] := cdata.bpm[13];
         cdata.snpm[12] := cdata.bsnpm[12];
@@ -1220,8 +1243,8 @@ begin
     //------с учетом стандарта
     begin
       pm := CalcFull(cdata.fpm);//полная оплата без учета льготы
-      //оплата c учетом льготы
-      ppm := CalcFull(cdata.pm);
+      ppm := CalcFull(cdata.pm);//начисления по нормативам
+
       //% соответственно услугам
       if (ppm <> 0) then
       begin
@@ -1241,21 +1264,6 @@ begin
     begin
       ShowMessage(format('Не установлен региональный стандарт для клиента %s', [IntToStr(data.regn)]));
       exit;
-      {pm := 0;
-      for i:=0 to numbtarif-1 do
-        pm := pm + cdata.snpm[i];
-      //% соответственно услугам
-      if (pm <> 0) then
-      begin
-        for i:=0 to numbtarif-1 do
-          p[i] := cdata.snpm[i]/pm;
-      end
-      else
-      begin
-        for i:=0 to numbtarif-1 do
-          p[i] := 0;
-      end;
-      ppm := pm;}
     end;
 
     //------определение размера субсидии
@@ -1267,11 +1275,7 @@ begin
 
     if cdata.rstnd=0 then
     begin
-    //------типовой расчет
-      {if cdata.income/cdata.mcount >= cdata.pmin then
-        subs := rnd(pm - (mdd*cdata.income)/100)
-      else
-        subs := rnd(pm - (mdd*cdata.income*rnd(cdata.koef))/100) }
+      //------типовой расчет
       ShowMessage(format('Не установлен региональный стандарт для клиента %s', [IntToStr(data.regn)]));
       exit;
     end
@@ -1319,8 +1323,6 @@ begin
 
     if subs>0 then
     begin
-      //if (subs<ppm) then
-      //if (subs<pm) then
       begin
         cnt := 0;
         for i:=0 to numbtarif-1 do
@@ -1548,6 +1550,8 @@ begin
 
     //cdata.pm[s] := Rnd(valtarif);
     cdata.snpm[s] := Rnd(valtarif);
+    if Form1.GetStatus(cdata.begindate, cdata.enddate) = 0 then  cdata.bsnpm[s] := Rnd(valtarif);
+    
     //Exit;
   end;
 end;
@@ -1666,6 +1670,7 @@ begin
         end;
       end;
       cdata.snpm[service] := rnd(cost);
+      if Form1.GetStatus(cdata.begindate, cdata.enddate) = 0 then  cdata.bsnpm[service] := Rnd(cost);
     end
     else
       cost := cdata.countercost[service] * cdata.counternorm[service];
