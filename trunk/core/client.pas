@@ -112,6 +112,7 @@ type
     function Copy: TClient;
     function GetStandard: real;
     function GetMdd: integer;
+    function HaveCounters: boolean;
     procedure Calc(sts: integer);//расчет за месяц
     procedure CalcSub(sts: integer);//расчет субсидии по рег. стандарту
     procedure CalcFinal(sts: integer);
@@ -182,6 +183,16 @@ end;
 function TClient.Copy: TClient;
 begin
   Result := TClient.Create(data,cdata);
+end;
+
+function TClient.HaveCounters: boolean;
+var
+  i: integer;
+begin
+  Result := false;
+  for i := 0 to numbtarif - 1 do
+    if cdata.counter[i] then
+      Result := true;
 end;
 
 procedure TClient.SetClient(cl: integer;s: string);//Забирает данные клиента из SQLSub
@@ -1181,15 +1192,6 @@ begin
         cdata.bfpm[0] := CalcFull(cdata.fpm);
         cdata.fpm[0] := cdata.bfpm[0];
 
-              CalcPriv;
-      for i := 0 to numbtarif - 1 do
-        if i in [2..4,6,7] then
-          if cdata.counter[i] then
-            CalcServ(i);
-      if cdata.counter[5] then
-        CalcServSq(5,StrToInt(System.Copy(Form1.rdt,4,2))); 
-
-        
         for i:=0 to numbtarif-1 do
         begin
           cdata.pm[i] := cdata.bpm[i];
@@ -1197,20 +1199,35 @@ begin
           if i<>0 then
             cdata.bfpm[i] := 0;
         end;
+
+        CalcPriv;
+        for i := 0 to numbtarif - 1 do
+        if cdata.counter[i] then
+        begin
+          if i in [2..4,6,7] then
+            CalcServ(i);
+          if cdata.counter[5] then
+            CalcServSq(5,StrToInt(System.Copy(Form1.rdt,4,2)));
+        end
+        else
+          cdata.snpm[i] := cdata.pm[i];
       end
       else
-      begin       
+      begin
         cdata.fpm[0] := CalcFull(cdata.fpm);
 
-              CalcPriv;
-      for i := 0 to numbtarif - 1 do
-        if i in [2..4,6,7] then
-          if cdata.counter[i] then
+        CalcPriv;
+        for i := 0 to numbtarif - 1 do
+        if cdata.counter[i] then
+        begin
+          if i in [2..4,6,7] then
             CalcServ(i);
-      if cdata.counter[5] then
-        CalcServSq(5,StrToInt(System.Copy(Form1.rdt,4,2))); 
-
-        
+          if cdata.counter[5] then
+            CalcServSq(5,StrToInt(System.Copy(Form1.rdt,4,2)));
+        end
+        else
+          cdata.snpm[i] := cdata.pm[i];
+          
         cdata.pm[12] := cdata.bpm[12];
         cdata.pm[13] := cdata.bpm[13];
         cdata.snpm[12] := cdata.bsnpm[12];
@@ -1348,11 +1365,12 @@ end;
 
 procedure TClient.CalcFinal(sts: integer);
 var
-  fstndsub, fsnpm, tmpsubs, cnt: real;
+  fstndsub, fsnpm, tmpsubs, cnt, ppm: real;
   i : integer;
 begin
   fstndsub := CalcFull(cdata.stndsub);
   fsnpm := CalcFull(cdata.snpm);
+  ppm := CalcFull(cdata.pm);
 
   if (fstndsub >= fsnpm) then
   begin
@@ -1364,6 +1382,22 @@ begin
   else
   for i:=0 to numbtarif-1 do
     cdata.sub[i] := cdata.stndsub[i];
+
+  if ((HaveCounters = false) and (cdata.calc=1)) then
+  begin
+    if fstndsub >= ppm then
+    begin
+      for i:=0 to numbtarif-1 do
+        cdata.sub[i] := cdata.pm[i];
+    end
+    else
+    begin
+      for i:=0 to numbtarif-1 do
+        cdata.sub[i] := cdata.stndsub[i];
+    end;
+    for i:=0 to numbtarif-1 do
+      cdata.snpm[i] := cdata.pm[i];
+  end;
 
   //обрезаем по факту (если он больше 0)
   if getConfValue('0.AverageFactMinus') then
@@ -1451,6 +1485,8 @@ var
   i, tval, canalServ: integer;
   canalCold, canalHot: boolean;
 begin
+  if cdata.calc <> 1 then
+  begin
   if s <> 7 then
     valtarif := cdata.cost[s] * cdata.tarifnorm[s]
   else
@@ -1478,7 +1514,7 @@ begin
     cdata.pm[s] := 0;
     cdata.snpm[s] := 0;
   end;
-
+  end;
   //счетчик
   if cdata.counter[s] then
   begin
@@ -1520,7 +1556,7 @@ begin
 
     if (canalCold) or (canalHot) then //canal
     begin
-      counterData := counterData * cdata.rmcount;
+      counterData := counterData * cdata.mcount;
       normData := cdata.counterdata[canalServ];
       valtarif := cost * normData + counterData;
     end
@@ -1534,23 +1570,23 @@ begin
         if (canalCold) or (canalHot) then //canal
         begin
           if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
-            valtarif := valtarif - ((math.min(rnd(normData/cdata.rmcount), cdata.counternorm[canalServ]) * cost + counterData / cdata.rmcount) * cdata.pc[i][s]/100) //* math.min(valtarif, cost * (cdata.tarifnorm[2] + cdata.tarifnorm[3])) * cdata.pc[i][s]/100
+            valtarif := valtarif - ((math.min(rnd(normData/cdata.mcount), cdata.counternorm[canalServ]) * cost + counterData / cdata.mcount) * cdata.pc[i][s]/100) //* math.min(valtarif, cost * (cdata.tarifnorm[2] + cdata.tarifnorm[3])) * cdata.pc[i][s]/100
           else
-            valtarif := valtarif - ((normData/cdata.rmcount * cost + (counterData/cdata.rmcount)) * cdata.pc[i][s]/100);
+            valtarif := valtarif - ((normData/cdata.mcount * cost + (counterData/cdata.mcount)) * cdata.pc[i][s]/100);
         end
         else//другие услуги
         begin
           if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
-            valtarif := valtarif - (math.min(normData, rnd(counterData/cdata.rmcount)) * cost * cdata.pc[i][s]/100)
+            valtarif := valtarif - (math.min(normData, rnd(counterData/cdata.mcount)) * cost * cdata.pc[i][s]/100)
           else
-            valtarif := valtarif - (cost * (counterData/cdata.rmcount) * cdata.pc[i][s]/100);
+            valtarif := valtarif - (cost * (counterData/cdata.mcount) * cdata.pc[i][s]/100);
         end;
       end;
     end;
 
     //cdata.pm[s] := Rnd(valtarif);
     cdata.snpm[s] := Rnd(valtarif);
-    if Form1.GetStatus(cdata.begindate, cdata.enddate) = 0 then  cdata.bsnpm[s] := Rnd(valtarif);
+    if Form1.GetStatus(cdata.begindate, cdata.enddate) = 0 then cdata.bsnpm[s] := Rnd(valtarif);
     
     //Exit;
   end;
@@ -1569,6 +1605,8 @@ var
   ab: Real;
   norm: Real;
 begin
+  if cdata.calc <> 1 then
+  begin
   //расчет содержания жилья и отопления по тарифам
   cost := cdata.cost[service];//получаем стоимость услуги @service
   quan:=0;
@@ -1647,6 +1685,7 @@ begin
   end;
 
   cdata.square:=squareold;
+  end;
 
   //расчет отопления по счетчику
   if (service = 5) then
@@ -1722,8 +1761,6 @@ begin
   valtarif := cdata.cost[s];
   if valtarif<>0 then
   begin
-{    if s = 12 then norm := Form1.normw
-      else norm := Form1.normc;}
     norm := 0;
     case s of
       12 : norm := Form1.normw;
