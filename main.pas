@@ -1383,6 +1383,7 @@ var
   s1: string;
   i, mdd: integer;
   tmpfpm: array of variant;
+  procc: TNumbTarifReal;
 begin
   s1 := (Copy(SGCl.Cells[2, SGCl.row], 1, 10));
   c := TClient.Create(Empty, EmptyC);
@@ -1390,29 +1391,21 @@ begin
   c.SetCalc(client, s1);
   c.Calc(getstatus(c.cdata.begindate, c.cdata.enddate));
   mdd := c.GetMdd;
+  ppm := c.CalcFull(c.cdata.pm);
+  pm  := c.CalcFull(c.cdata.fpm);
 
   if c.cdata.calc = 1 then
   begin
     with c do
     begin
-      CalcPriv;
-      CalcServSq(0);
-      CalcServe(1);
-      CalcServ(2);
-      CalcServ(3);
-      CalcServ(4);
-      CalcServSq(5,StrToInt(System.Copy(Form1.rdt,4,2)));
-      CalcServ(6);
-      CalcServ(7);
-      CalcServWC(12);
-      CalcServWC(13);
+      for i := 0 to numbtarif - 1 do
+      begin
+        procc[i] := cdata.pm[i] / ppm;
+        cdata.fpm[i] := rnd(pm * procc[i]);
+      end;
     end;
   end;
-  pm  := c.CalcFull(c.cdata.fpm);
 
-  ppm := 0;
-  for i := 0 to numbtarif - 1 do
-    ppm := ppm + c.cdata.pm[i];
   if (pm <> 0) and (ppm <> 0) then
     frxReport1.Variables.Variables['lkoef'] := quotedstr(FlToStr(ppm / pm))
   else
@@ -2875,7 +2868,7 @@ begin
       pr.Update;
       SendMessage(pr.Handle, wm_paint, 0, 0);
       pr.ProgressBar1.Step := 1;
-      c := TClient.Create(Empty, EmptyC);
+
       cnt := 0;
       try
         DModule.Database1.StartTransaction;
@@ -2910,6 +2903,7 @@ begin
               begin
                 Application.ProcessMessages();
                 curregn := t[j];
+                c := TClient.Create(Empty, EmptyC);
                 c.SetClient(curregn, Form1.rdt);
                 c.SetCalc(curregn, Form1.rdt);
                 c.Calc(getstatus(c.cdata.begindate, c.cdata.enddate));
@@ -2932,7 +2926,7 @@ begin
                 Close;
                 SQL.Clear;
                 SQL.Add('update sub');
-                SQL.Add('set pm=:pm,snpm=:snp,sub=:sub,spfree=:sp,stop=:st');
+                SQL.Add('set pm=:pm,snpm=:snp,sub=:sub,spfree=:sp,stop=:st, stndsub=:stndsub');
                 SQL.Add('where sdate=CONVERT(smalldatetime,:s,104) and regn=:r');
                 SQL.Add('and service=:serv');
                 ParamByName('s').AsString  := rdt;
@@ -2946,6 +2940,7 @@ begin
                     ParamByName('snp').AsFloat := c.cdata.snpm[i];
                     ParamByName('sub').AsFloat := c.cdata.sub[i];
                     ParamByName('sp').AsFloat  := c.cdata.fpm[i];
+                    ParamByName('stndsub').AsFloat  := c.cdata.stndsub[i];
                     ParamByName('st').AsInteger := c.cdata.stop;
                     ExecSQL;
                   end;
