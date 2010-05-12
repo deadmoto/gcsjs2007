@@ -24,7 +24,7 @@ object Form2: TForm2
     Top = 3
     Width = 598
     Height = 429
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
@@ -327,8 +327,8 @@ object Form2: TForm2
         Top = 24
         Width = 345
         Height = 21
-        Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 41 '#1082#1080#1088#1080#1083#1083#1080#1095#1077#1089#1082#1086#1075#1086' '#1089#1080#1084#1074#1086#1083#1072
-        MaxLength = 41
+        Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1076#1083#1080#1085#1072' '#1089#1090#1088#1086#1082#1080' '#1085#1077' '#1073#1086#1083#1077#1077' 43 '#1082#1080#1088#1080#1083#1083#1080#1095#1077#1089#1082#1086#1075#1086' '#1089#1080#1084#1074#1086#1083#1072
+        MaxLength = 43
         ParentShowHint = False
         ShowHint = True
         TabOrder = 0
@@ -1565,7 +1565,7 @@ object Form2: TForm2
             OnChange = comboBoxHeatCounterChange
           end
           object comboBoxGasCounter: TComboBox
-            Left = 105
+            Left = 110
             Top = 108
             Width = 283
             Height = 21
