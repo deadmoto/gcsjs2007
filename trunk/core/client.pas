@@ -1569,14 +1569,14 @@ begin
       begin//если ненулевая льгота
         if (canalCold) or (canalHot) then //canal
         begin
-          if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
+          if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11, 10, 26]) then
             valtarif := valtarif - ((math.min(rnd(normData/cdata.mcount), cdata.counternorm[canalServ]) * cost + counterData / cdata.mcount) * cdata.pc[i][s]/100) //* math.min(valtarif, cost * (cdata.tarifnorm[2] + cdata.tarifnorm[3])) * cdata.pc[i][s]/100
           else
             valtarif := valtarif - ((normData/cdata.mcount * cost + (counterData/cdata.mcount)) * cdata.pc[i][s]/100);
         end
         else//другие услуги
         begin
-          if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
+          if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11, 10, 26]) then
             valtarif := valtarif - (math.min(normData, rnd(counterData/cdata.mcount)) * cost * cdata.pc[i][s]/100)
           else
             valtarif := valtarif - (cost * (counterData/cdata.mcount) * cdata.pc[i][s]/100);
@@ -1645,7 +1645,7 @@ begin
         end
         else
         begin
-          if ((cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) or
+          if ((cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11, 10, 26]) or
             ((cdata.priv[i] = 30) and (service = 0))) then
           begin
             squarenp:=squarenp - math.min(cdata.square/cdata.rmcount,cdata.psnorm) *(cdata.pc[i][service]/100);
@@ -1697,7 +1697,7 @@ begin
       begin
         if cdata.pc[i][service]<>0 then//если ненулевая льгота
         begin
-        if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11]) then
+        if (cdata.priv[i] in [3, {12,} 13, 22, 25, 1, 11, 10, 26]) then
           begin
             norm := math.min(cdata.square/cdata.rmcount, cdata.psnorm);
             ab := math.min(cdata.counterdata[service]/cdata.rmcount, norm * cdata.counternorm[service]);

@@ -45,7 +45,7 @@ begin
   path := 'arc\';//путь по умолчанию
   MaskEdit1.Text := Form1.rdt;
   ProgressBar1.Position := 0;
-  ProgressBar1.Max := 7;
+  ProgressBar1.Max := 8;
   ProgressBar1.Step := 1;
 end;
 
@@ -105,6 +105,9 @@ begin
     ExportSub(path, dt, Form1.dist);
     SevenZip.Files.AddString(path + 'sub' + ext2);
     ProgressBar1.StepIt;
+    ExportCounters(path, dt, Form1.dist);
+    SevenZip.Files.AddString(path + 'counters' + ext2);
+    ProgressBar1.StepIt;
     ExportInsp(path, Form1.dist, False);
     SevenZip.Files.AddString(path + 'insp' + ext2);
     SevenZip.Add;
@@ -155,6 +158,8 @@ begin
       ImportSluj(path, Form1.dist);
       ProgressBar1.StepIt;
       ImportFact(path, Form1.dist);
+      ProgressBar1.StepIt;
+      ImportCounters(path, Form1.dist);
       DModule.Database1.Commit;
       ProgressBar1.StepIt;
       ShowMessage('Импорт найденных файлов успешно завершен!');
