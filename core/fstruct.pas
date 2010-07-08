@@ -926,7 +926,7 @@ begin
         Query1.ParamByName('id').AsString := f[i][1];
         Query1.ParamByName('serv').AsString := f[i][2];
         Query1.ParamByName('count').AsString := f[i][3];
-        Query1.ParamByName('countdata').AsString := f[i][4];
+        Query1.ParamByName('countdata').AsFloat := StrToFloat(f[i][4]);
         Query1.ParamByName('countserv').AsString := f[i][5];
         Query1.ExecSQL;
       end;
