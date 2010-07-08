@@ -2506,6 +2506,8 @@ begin
   SevenZip.Files.AddString(path + 'factbalance' + ext2);
   ExportSub(path, rdt, dist);
   SevenZip.Files.AddString(path + 'sub' + ext2);
+  ExportCounters(path, rdt, dist);
+  SevenZip.Files.AddString(path + 'counters' + ext2);
   ExportMin(path, rdt);
   SevenZip.Files.AddString(path + 'lmin' + ext1);
   ExportRStnd(path, rdt);
@@ -2593,6 +2595,8 @@ begin
     SevenZip.Files.AddString(path + 'factbalance' + ext2);
     ExportSub(path, dt, dist);
     SevenZip.Files.AddString(path + 'sub' + ext2);
+    ExportCounters(path, rdt, dist);
+    SevenZip.Files.AddString(path + 'counters' + ext2);
     ExportTarif(path, dt, 'cont', dist);
     SevenZip.Files.AddString(path + 'cont' + ext2);
     ExportTarif(path, dt, 'rep', dist);
