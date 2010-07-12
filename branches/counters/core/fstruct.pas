@@ -745,7 +745,7 @@ begin
     SQL.Add('VALUES (:id,CONVERT(smalldatetime,:bdate,104),');
     SQL.Add('CONVERT(smalldatetime,:edate,104),:mcount,:quanpriv,:pmin,:income,');
     SQL.Add(':insp,:dist,:control,:reason,:own,:manager,:fond,:cert,:bank,:acbank,');
-    SQL.Add(':calc,:mdd,:heating,:rmcount)');
+    SQL.Add(':calc,:mdd,:heating,:rmcount,:indrstnd,:indrstndval)');
   end;
   if FileExists(path+'hist'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'hist'+IntToStr(dis)+'.dbf',f);
@@ -780,6 +780,8 @@ begin
         Query1.ParamByName('mdd').AsString := f[i][18];
         Query1.ParamByName('heating').AsString := f[i][19];
         Query1.ParamByName('rmcount').AsString := f[i][20];
+        Query1.ParamByName('indrstnd').AsString := f[i][21];
+        Query1.ParamByName('indrstndval').AsString := f[i][22];
         Query1.ExecSQL;
       end;
       Query1.Close;
