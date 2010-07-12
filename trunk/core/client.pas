@@ -30,6 +30,8 @@ type
     pmin: real;//прожиточный минимум семьи
     koef: real;//коэффициент СД/ПМ
     rstnd: integer;//региональный стандарт
+    indrstnd: boolean;//индивидуальный региональьный стандарт
+    indrstndval: real;//значение индивудуального стандарта
     begindate: TDate;//дата начала действия субсидии
     enddate: TDate;//дата окончания действия субсидии
     //------
@@ -307,7 +309,8 @@ begin
     else
       cdata.period := MonthOf(cdata.enddate)+12-MonthOf(cdata.begindate);
     cdata.heating:= FieldByName('id_heating').AsInteger;
-
+    cdata.indrstnd := FieldByName('indrstnd').Value;
+    cdata.indrstndval := FieldByName('indrstndval').Value;
     //------
     Close;
     SQL.Clear;
@@ -1114,6 +1117,12 @@ begin
     exit;
   end;
 
+  if (cdata.indrstnd) then
+  begin
+    Result := cdata.indrstndval;
+    exit;
+  end;
+
   if cdata.rmcount = 1 then nv := '1';
   if cdata.rmcount = 2 then nv := '2';
   if (cdata.rmcount = 3) or ((cdata.rmcount > 4)
@@ -1912,6 +1921,8 @@ begin
   d.mcount := s.mcount;
   d.rmcount := s.rmcount;
   d.rstnd := s.rstnd;
+  d.indrstnd := s.indrstnd;
+  d.indrstndval := s.indrstndval;
   d.dist := s.dist;
   d.begindate := s.begindate;
   d.enddate := s.enddate;
@@ -2017,6 +2028,8 @@ begin
   Result.mcount := 0;
   Result.rmcount := 0;
   Result.rstnd := 0;
+  Result.indrstnd := False;
+  Result.indrstndval := 0;
   Result.begindate := 0;
   Result.enddate := 0;
   //------

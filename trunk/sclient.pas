@@ -360,6 +360,7 @@ type
     Label59: TLabel;
     Label68: TLabel;
     Label94: TLabel;
+    CheckBox10: TCheckBox;
     procedure Button2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure comboBoxContChange(Sender: TObject);
@@ -446,6 +447,8 @@ type
     procedure comboBoxHeatCounterChange(Sender: TObject);
     procedure comboBoxGasCounterChange(Sender: TObject);
     procedure btnColdCounterClick(Sender: TObject);
+    procedure CheckBox10Click(Sender: TObject);
+    procedure Edit9Exit(Sender: TObject);
   private
     { Private declarations }
     load, fam: boolean;
@@ -602,6 +605,8 @@ begin
     Cl.Data.declar := Date;
     Cl.Data.str := str[Combobox12.ItemIndex];
     Cl.cdata.rstnd := stnd[Combobox10.ItemIndex];
+    Cl.cdata.indrstnd := False;
+    Cl.cdata.indrstndval := 0;
     Cl.Data.control := cntrl[Combobox11.ItemIndex];
     Cl.Data.settl := settl[Combobox14.ItemIndex];
 
@@ -718,6 +723,7 @@ end;
 
 procedure TForm2.Clear;//очистить нужные поля
 begin
+  Edit9.Text := '0';
   Edit12.Text  := '0';
   Edit13.Text  := '0';
   Edit14.Text  := '0';
@@ -884,6 +890,7 @@ begin
   CheckBox1.Checked := False;
   CheckBox2.Checked := False;
   CheckBox3.Checked := False;
+  CheckBox10.Checked := False;
 end;
 
 procedure TForm2.ClearFactGrids;
@@ -1164,7 +1171,7 @@ begin
       Next;
     end;
     RadioGroup3.ItemIndex := 0;
-    
+
     l := 0;
     Close;
     SQL.Clear;
@@ -1479,12 +1486,20 @@ begin
   comboBoxWood.Text  := SelWood(Cl.cdata.tarifs[12]);
   comboBoxCoal.Text  := SelCoal(Cl.cdata.tarifs[13]);
   Combobox10.Text := SelStnd(Cl.cdata.rstnd);
+
+  CheckBox10.Checked := Cl.cdata.indrstnd;
+  if (Cl.cdata.indrstnd) then
+  begin
+    Edit9.Text := FloatToStr(Cl.cdata.indrstndval);
+    Edit9.ReadOnly := False;
+    Edit9.Color := clWindow;
+  end;
+
   Combobox19.Text := SelBank(Cl.Data.bank);
   if Cl.cdata.tarifs[7] > 0 then
     ComboBox21.ItemIndex := Cl.cdata.tarifs[7] - 1
   else
     ComboBox21.ItemIndex := 0;
-
   ComboBox22.ItemIndex := Cl.cdata.heating - 1;
   Edit74.Text  := Cl.cdata.accounts[0];
   Edit75.Text  := Cl.cdata.accounts[1];
@@ -2823,7 +2838,7 @@ begin
           SQL.Add('insert into hist');
           SQL.Add('values (:id,CONVERT(smalldatetime,:bdate,104),CONVERT(smalldatetime,:edate,104),');
           SQL.Add(':mcount,:quanpriv,:pmin,:income,:insp,:dist,:control,:reason,');
-          SQL.Add(':own, :manager, :fond, :cert, :bank, :acbank,:calc,:mdd,:heating,:rmcount)');
+          SQL.Add(':own, :manager, :fond, :cert, :bank, :acbank,:calc,:mdd,:heating,:rmcount,:indrstnd,:indrstndval)');
           ParamByName('id').AsInteger  := Cl.Data.regn;
           ParamByName('mcount').AsInteger := Cl.cdata.mcount;
           ParamByName('quanpriv').AsInteger := Cl.cdata.quanpriv;
@@ -2845,6 +2860,8 @@ begin
           ParamByName('mdd').AsInteger := Cl.cdata.mdd;
           ParamByName('heating').AsInteger := Cl.cdata.heating;
           ParamByName('rmcount').AsInteger := Cl.cdata.rmcount;
+          ParamByName('indrstnd').Value := Cl.cdata.indrstnd;
+          ParamByName('indrstndval').AsFloat := Cl.cdata.indrstndval;
           ExecSQL;
           Close;
           SQL.Clear;
@@ -3060,7 +3077,7 @@ begin
               SQL.Add('insert into hist');
               SQL.Add('values (:id,CONVERT(smalldatetime,:bdate,104),');
               SQL.Add('CONVERT(smalldatetime,:edate,104),:mcount,:quanpriv,:pmin,:income,:insp,');
-              SQL.Add(':idd,:control,:reason,:own, :manager, :fond,:cert,:bank,:acbank,:calc,:mdd,:heating,:rmcount)');
+              SQL.Add(':idd,:control,:reason,:own, :manager, :fond,:cert,:bank,:acbank,:calc,:mdd,:heating,:rmcount,:indrstnd,:indrstndval)');
             end
             else
             begin
@@ -3070,7 +3087,7 @@ begin
               SQL.Add('set edate=CONVERT(smalldatetime,:edate,104),mcount=:mcount,');
               SQL.Add('quanpriv=:quanpriv,pmin=:pmin,income=:income,id_insp=:insp,id_dist=:idd,');
               SQL.Add('id_cntrl=:control,reason=:reason,id_own=:own,id_mng=:manager,');
-              SQL.Add('id_fond=:fond,id_cert=:cert,id_bank=:bank,acbank=:acbank,calc=:calc,mdd=:mdd, id_heating=:heating, rmcount=:rmcount');
+              SQL.Add('id_fond=:fond,id_cert=:cert,id_bank=:bank,acbank=:acbank,calc=:calc,mdd=:mdd, id_heating=:heating, rmcount=:rmcount,indrstnd=:indrstnd,indrstndval=:indrstndval');
               SQL.Add('where regn=:id and bdate=CONVERT(smalldatetime,:bdate,104)');
             end;
             ParamByName('id').AsInteger  := Cl.Data.regn;
@@ -3094,6 +3111,8 @@ begin
             ParamByName('mdd').AsInteger := Cl.cdata.mdd;
             ParamByName('heating').AsInteger := Cl.cdata.heating;
             ParamByName('rmcount').AsInteger := Cl.cdata.rmcount;
+            ParamByName('indrstnd').Value := Cl.cdata.indrstnd;
+            ParamByName('indrstndval').AsFloat := Cl.cdata.indrstndval;
             ExecSQL;
             Close;
             SQL.Clear;
@@ -4462,6 +4481,23 @@ begin
   end;
 end;
 
+procedure TForm2.CheckBox10Click(Sender: TObject);
+begin
+  if (CheckBox10.Checked) then
+  begin
+    Edit9.Color := clWindow;
+    Edit9.ReadOnly := False;
+    Cl.cdata.indrstnd := True;
+    Edit9.Text := FloatToStr(Cl.cdata.indrstndval);
+  end
+  else
+  begin
+    Edit9.Color := clBtnFace;
+    Edit9.ReadOnly := True;
+    Cl.cdata.indrstnd := False;
+  end;
+end;
+
 procedure TForm2.CheckBox1Click(Sender: TObject);
 var
   sts: integer;
@@ -5748,6 +5784,12 @@ begin
       Cl.Data.acbank := '';
     end;
   end;
+end;
+
+procedure TForm2.Edit9Exit(Sender: TObject);
+begin
+  if (Cl.cdata.indrstnd) then
+    Cl.cdata.indrstndval := StrToFloat(Edit9.Text);
 end;
 
 procedure TForm2.CheckBox3Click(Sender: TObject);
