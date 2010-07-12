@@ -24,7 +24,7 @@ object Form2: TForm2
     Top = 3
     Width = 598
     Height = 429
-    ActivePage = TabSheet5
+    ActivePage = TabSheet3
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
@@ -993,6 +993,7 @@ object Form2: TForm2
         Color = clBtnFace
         ReadOnly = True
         TabOrder = 1
+        OnExit = Edit9Exit
       end
       object CheckBox2: TCheckBox
         Left = 12
@@ -1065,7 +1066,7 @@ object Form2: TForm2
         Top = 88
         Width = 541
         Height = 249
-        ActivePage = TabSheet8
+        ActivePage = TabSheet7
         MultiLine = True
         TabOrder = 5
         TabPosition = tpBottom
@@ -1703,6 +1704,15 @@ object Form2: TForm2
             OnExit = Edit118Exit
           end
         end
+      end
+      object CheckBox10: TCheckBox
+        Left = 535
+        Top = 65
+        Width = 42
+        Height = 17
+        Caption = #1048#1085#1076'.'
+        TabOrder = 6
+        OnClick = CheckBox10Click
       end
     end
     object TabSheet4: TTabSheet
