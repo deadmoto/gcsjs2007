@@ -1133,7 +1133,7 @@ begin
   //Многодетные
   manychild := true;
   for i:= 0 to cdata.mcount - 1 do
-    if (cdata.priv[i] <> 10) and (cdata.priv[i] <> 26) then
+    if (cdata.priv[i] in [10, 26, 33, 34]) = false then
       manychild := False;
   if (cdata.rmcount >= 4) and (cdata.quanpriv  = cdata.rmcount) and manychild then
     nv := '3';
@@ -1788,6 +1788,12 @@ begin
     begin
       if cdata.pc[i][s] <> 0 then//если ненулевая льгота
       begin
+        if cdata.priv[i] in [10, 26] then//многодетные
+        begin
+          value1 := value1 - Math.min(cdata.square / cdata.mcount, cdata.psnorm) * (cdata.pc[i][s] / 100);
+          value2 := value2 - Math.min(cdata.square, cdata.snorm) / cdata.mcount * (cdata.pc[i][s] / 100);
+        end
+        else
         if cdata.sq[i][s] = 0 then
         begin//льгота распространяется на всю площадь
           value1 := value1 - cdata.square / cdata.mcount * (cdata.pc[i][s] / 100);
@@ -1812,13 +1818,11 @@ begin
               value2 := value2 - math.min(cdata.square/cdata.rmcount,cdata.psnorm) * (cdata.pc[i][s] / 100);
             end;
           end;
-//          value1 := Math.max(value1, cdata.snorm / 2);
-//          value2 := Math.max(value2, Math.min(cdata.snorm / 2, cdata.square / 2));
         end;
       end;
     end;
     cdata.pm[s] := Rnd((valtarif * value1 * norm)/12);
-    cdata.snpm[s] := Rnd((valtarif * value2 * norm))/12;
+    cdata.snpm[s] := Rnd((valtarif * value2 * norm)/12);
   end
   else
   begin

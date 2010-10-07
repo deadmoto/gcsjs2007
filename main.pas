@@ -1407,7 +1407,7 @@ begin
   end;
 
   if (pm <> 0) and (ppm <> 0) then
-    frxReport1.Variables.Variables['lkoef'] := quotedstr(FlToStr(ppm / pm))
+    frxReport1.Variables.Variables['lkoef'] := quotedstr(FlToStr(rnd(ppm / pm)))
   else
     frxReport1.Variables.Variables['lkoef'] := '';
 
