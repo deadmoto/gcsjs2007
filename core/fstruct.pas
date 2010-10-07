@@ -781,7 +781,7 @@ begin
         Query1.ParamByName('heating').AsString := f[i][19];
         Query1.ParamByName('rmcount').AsString := f[i][20];
         Query1.ParamByName('indrstnd').AsString := f[i][21];
-        Query1.ParamByName('indrstndval').AsString := f[i][22];
+        Query1.ParamByName('indrstndval').AsFloat := StrToFloat(f[i][22]);
         Query1.ExecSQL;
       end;
       Query1.Close;
