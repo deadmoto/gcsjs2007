@@ -16,6 +16,7 @@ type
     FlowPanel1: TFlowPanel;
     Button2: TButton;
     Button1: TButton;
+    LabeledEdit1: TLabeledEdit;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -38,7 +39,7 @@ var
 
 implementation
 
-uses datamodule, main, service;
+uses datamodule, main, service, md5, connection_module;
 
 {$R *.dfm}
 
@@ -107,7 +108,22 @@ end;
 
 procedure TSelectDistFrm.Button1Click(Sender: TObject);
 {войти}
+var
+  i: integer;
+  tmp_pass: string;
 begin
+  with DModule.Query1 do begin
+    SQL.Clear;
+    SQL.Text := 'SELECT password FROM Insp' + #13 +
+      'WHERE (id_insp = :idinsp)';
+    ParamByName('idinsp').AsInteger := insp[ComboBox1.ItemIndex];
+    Open;
+  end;
+
+  tmp_pass :=  DModule.Query1.FieldByName('password').Value;
+
+  if GenMD5Password(LabeledEdit1.Text) = tmp_pass then
+  begin
   if Combobox1.Text <> '' then
     with DModule.Query1 do begin
       Close;
@@ -121,6 +137,7 @@ begin
       if not IsEmpty then begin
         Form1.insp := insp[Combobox1.ItemIndex];
         Form1.dist := dist[Combobox2.ItemIndex];
+        Form1.LoginMode := lInsp;
         SelectDistFrm.Close;
       end
       else
@@ -128,6 +145,12 @@ begin
     end
   else
     ShowMessage('Поле ФИО должно быть заполнено!');
+  end
+  else
+  begin
+    MessageDlg('Error! Password incorrect!', mtError, [mbOK], 0);
+    exit;
+  end;
 end;
 
 procedure TSelectDistFrm.FormShow(Sender: TObject);

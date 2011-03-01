@@ -33,6 +33,7 @@ type
     Button2:     TButton;
     Button3:     TButton;
     Button4:     TButton;
+    Button5: TButton;
     procedure Button4Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -44,6 +45,7 @@ type
     procedure Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
+    procedure Button5Click(Sender: TObject);
   private
     { Private declarations }
     oldid: integer;//последний номер, который использовался
@@ -60,9 +62,7 @@ var
 implementation
 
 uses
-  datamodule,
-  main,
-  service;
+  datamodule, main, service, md5, connection_module, wincontrols;
 
 {$R *.dfm}
 
@@ -140,6 +140,22 @@ procedure TForm3.Button4Click(Sender: TObject);
 { выйти }
 begin
   Form3.Close;
+end;
+
+procedure TForm3.Button5Click(Sender: TObject);
+var
+  tmp_pass: string;
+begin
+  tmp_pass := InputPassword('Введите пароль!', 'Пароль:', '');
+  with DModule.Query1 do
+    begin
+      Close;
+      SQL.Text := 'UPDATE Insp SET password=:pwd' + #13 +
+      'WHERE id_insp=:id';
+      ParamByName('pwd').Value := GenMD5Password(tmp_pass);
+      ParamByName('id').Value := oldid;
+      ExecSQL;
+    end;
 end;
 
 procedure TForm3.Button1Click(Sender: TObject);
@@ -312,13 +328,20 @@ begin
     Button1.Enabled := False;
     Button2.Enabled := False;
     Button3.Enabled := False;
+    //Button5.Enabled := False;
   end
   else
   begin
     Button1.Enabled := True;
     Button2.Enabled := True;
     Button3.Enabled := True;
+    //Button5.Enabled := True;
   end;
+
+  if Form1.LoginMode = lAdmin then
+    Button5.Visible := True
+  else
+    Button5.Visible := False;
 end;
 
 procedure TForm3.Edit2Exit(Sender: TObject);

@@ -62,7 +62,11 @@ uses
   padegFIO in 'data\padegFIO.pas',
   client in 'core\client.pas',
   service in 'core\service.pas',
-  fstruct in 'core\fstruct.pas';
+  fstruct in 'core\fstruct.pas',
+  connection_module in 'core\connection_module.pas',
+  md5 in 'data\md5.pas',
+  VBScript_RegExp_55_TLB in 'data\VBScript_RegExp_55_TLB.pas',
+  wincontrols in 'data\wincontrols.pas';
 
 {$R *.res}
 //{$R myRes.RES}
@@ -88,6 +92,7 @@ begin
         Application.CreateForm(TForm20, Form20);
         Application.CreateForm(TAboutBox, AboutBox);
         Application.CreateForm(TForm21, Form21);
+        Application.CreateForm(TSelectDistFrm, SelectDistFrm);
         Form1.Show;
         Form1.Update;
         Form1.Reload;
@@ -102,7 +107,6 @@ begin
         Application.CreateForm(TForm14, Form14);
         Application.CreateForm(TForm23, Form23);
         Application.CreateForm(TForm24, Form24);
-        Application.CreateForm(TSelectDistFrm, SelectDistFrm);
         Application.CreateForm(TForm27, Form27);
         Application.CreateForm(TForm11, Form11);
         Application.CreateForm(TForm30, Form30);
