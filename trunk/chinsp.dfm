@@ -2,7 +2,7 @@ object Form17: TForm17
   Left = 324
   Top = 180
   BorderStyle = bsToolWindow
-  ClientHeight = 102
+  ClientHeight = 134
   ClientWidth = 251
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -21,7 +21,7 @@ object Form17: TForm17
     Left = 3
     Top = 3
     Width = 245
-    Height = 62
+    Height = 94
     Margins.Bottom = 0
     Align = alTop
     Caption = #1042#1099#1073#1086#1088' '#1080#1085#1089#1087#1077#1082#1090#1086#1088#1072':'
@@ -31,14 +31,27 @@ object Form17: TForm17
       Top = 25
       Width = 229
       Height = 21
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 0
+    end
+    object LabeledEdit1: TLabeledEdit
+      Left = 8
+      Top = 64
+      Width = 229
+      Height = 21
+      EditLabel.Width = 41
+      EditLabel.Height = 13
+      EditLabel.BiDiMode = bdLeftToRight
+      EditLabel.Caption = #1055#1072#1088#1086#1083#1100':'
+      EditLabel.ParentBiDiMode = False
+      PasswordChar = '|'
+      TabOrder = 1
     end
   end
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 68
+    Top = 100
     Width = 245
     Height = 31
     Align = alTop
@@ -46,7 +59,6 @@ object Form17: TForm17
     BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 1
-    ExplicitWidth = 250
     object Button2: TButton
       AlignWithMargins = True
       Left = 167
