@@ -25,6 +25,8 @@ type
     parval:  array of string;
   end;
 
+  TLoginMode = (lNone, lInsp, lAdmin);
+
   TForm1 = class(TForm)
     StatusBar1:   TStatusBar;
     ImageList1:   TImageList;
@@ -172,6 +174,7 @@ type
     Action19: TAction;
     Action20: TAction;
     Action21: TAction;
+    aAdminMode: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SGClDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
@@ -266,6 +269,7 @@ type
     procedure Action19Execute(Sender: TObject);
     procedure Action20Execute(Sender: TObject);
     procedure Action21Execute(Sender: TObject);
+    procedure aAdminModeExecute(Sender: TObject);
   private
     FShaderForm: TForm;
     ccl, acl:     integer;//количество всех и активных клиентов в базе
@@ -311,6 +315,7 @@ type
     reports_path: string;//путь к папке с отчетами
     curServer : string;//текущей сервер с базой
     ARepData:     PAdditionRepData; //данные для отчета(№ решения, № исходящего)
+    LoginMode: TLoginMode;//текущие права пользователя
     procedure AddCl(id: integer);
     procedure ModCl(id: integer);
     procedure DelCl(id: integer);
@@ -343,7 +348,7 @@ uses
   datamodule, search, service, fstruct, imexp, SQL, progress, Contnrs, DateUtils,
   rstnd, loop, tarifb, chinsp, curhist, chserv, Client, merge, mdd, statage,
   statlm, codedbf, chtarifs, rrecalc, stat, padegFIO, uSluj, uConnection,
-  uSettings, uReportData, uGenRefBook, uReportEdit, uShade;
+  uSettings, uReportData, uGenRefBook, uReportEdit, uShade, wincontrols, md5, connection_module;
 
 {$R *.dfm}
 {$I Revision.inc}
@@ -2425,6 +2430,28 @@ begin
   Reload;
 end;
 
+procedure TForm1.aAdminModeExecute(Sender: TObject);
+var
+  adm_pass: string;
+begin
+  if Form1.LoginMode = lAdmin then
+  begin
+    Form1.LoginMode := lInsp;
+    aAdminMode.Checked := False;
+    exit;
+  end;
+  
+  adm_pass := InputPassword('Введите пароль администратора!', 'Пароль:', '');
+  adm_pass := GenMD5Password(adm_pass);
+  adm_pass := GetConnectionPass(adm_pass);
+  if GetConnectionPass(ReadRegProperty('Password')) = adm_pass then
+  begin
+    Form1.LoginMode := lAdmin;
+    aAdminMode.Checked := True;
+  end;
+  
+end;
+
 procedure TForm1.aBackupExecute(Sender: TObject);
 { архивация всех данных за текущий день}
 var
@@ -3311,6 +3338,7 @@ var
   Layouts: array[0..7] of THandle;
   y, m, d: word;
 begin
+  LoginMode := lNone;
   IDate := EncodeDate(2006, 6, 1);//дата запуска программы в использование
 
   //путь для папки с базами DBF
@@ -3702,7 +3730,7 @@ begin
   pr.Release;
 {  for i := 0 to MainMenu1.Items.Count - 1 do
     MainMenu1.Items.Items[i].Enabled := True;}
-  Form1{.ActionToolBar1}.Enabled := True;
+  Form1.Enabled := True;
   ccl := c;
   acl := ACount;
   Edit1.Text := IntToStr(ccl);
@@ -3713,6 +3741,13 @@ begin
     Statusbar1.Panels[0].Text := 'Клиент: ' + f + '/' + FlToStr(subs)
   else
     Statusbar1.Panels[0].Text := 'Клиент: ' + f + '/?';
+
+  if LoginMode = lNone then
+  begin
+    SelectDistFrm.ShowModal;
+  end;
+  if LoginMode = lNone then
+    halt;
 end;
 
 procedure TForm1.ReloadConfig;

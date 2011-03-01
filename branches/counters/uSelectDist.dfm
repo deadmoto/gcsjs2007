@@ -3,7 +3,7 @@ object SelectDistFrm: TSelectDistFrm
   Top = 212
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsToolWindow
-  ClientHeight = 137
+  ClientHeight = 171
   ClientWidth = 256
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -21,7 +21,7 @@ object SelectDistFrm: TSelectDistFrm
     Left = 3
     Top = 3
     Width = 250
-    Height = 97
+    Height = 131
     Margins.Bottom = 0
     Align = alTop
     Caption = #1042#1099#1073#1086#1088' '#1086#1082#1088#1091#1075#1072':'
@@ -60,11 +60,22 @@ object SelectDistFrm: TSelectDistFrm
       OnChange = ComboBox1Change
       OnExit = ComboBox1Change
     end
+    object LabeledEdit1: TLabeledEdit
+      Left = 8
+      Top = 104
+      Width = 237
+      Height = 21
+      EditLabel.Width = 41
+      EditLabel.Height = 13
+      EditLabel.Caption = #1055#1072#1088#1086#1083#1100':'
+      PasswordChar = '|'
+      TabOrder = 2
+    end
   end
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 103
+    Top = 137
     Width = 250
     Height = 31
     Align = alTop

@@ -992,7 +992,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO insp');
-    SQL.Add('VALUES (:id,:idd,:insp,:st,:l)');
+    SQL.Add('VALUES (:id,:idd,:insp,:st,:l,:pwd)');
   end;
   if FileExists(path+'insp'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'insp'+IntToStr(dis)+'.dbf',f);
@@ -1010,6 +1010,7 @@ begin
         Query1.ParamByName('insp').AsString := f[i][2];
         Query1.ParamByName('st').AsString := f[i][3];
         Query1.ParamByName('l').AsString := f[i][4];
+        Query1.ParamByName('pwd').AsString := f[i][5];
         Query1.ExecSQL;
       end;
       Query1.Close;
