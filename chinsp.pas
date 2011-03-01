@@ -13,6 +13,7 @@ type
     FlowPanel1: TFlowPanel;
     Button2: TButton;
     Button1: TButton;
+    LabeledEdit1: TLabeledEdit;
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button1Click(Sender: TObject);
@@ -31,7 +32,7 @@ var
 
 implementation
 
-uses datamodule, main;
+uses datamodule, main, md5, connection_module;
 
 {$R *.dfm}
 
@@ -40,7 +41,6 @@ var
   l: integer;
 begin
   ComboBox1.Clear;
-//  ListBox1.Clear;
   l:=0;
   With DModule.Query1 do begin
     Close;
@@ -55,20 +55,19 @@ begin
     First;
     while not EOF do begin
       SetLength(insp, Length(insp)+1);
-//      ListBox1.Items.Add(FieldByName('nameinsp').AsString);
       ComboBox1.Items.Add(FieldByName('nameinsp').AsString);
       insp[l] := FieldByName('id_insp').AsInteger;
       if insp[l]=Form1.insp then
-        ComboBox1.ItemIndex := l// Listbox1.ItemIndex := l
+        ComboBox1.ItemIndex := l
       else
-        ComboBox1.ItemIndex := 0;//Listbox1.ItemIndex := 0;
+        ComboBox1.ItemIndex := 0;
       Next;
       inc(l);
     end;
     Close;
   end;
   ac := false;
-  nameinsp := ComboBox1.Items[ComboBox1.ItemIndex];//ListBox1.Items[Listbox1.ItemIndex];
+  nameinsp := ComboBox1.Items[ComboBox1.ItemIndex];
 end;
 
 procedure TForm17.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -77,12 +76,34 @@ begin
 end;
 
 procedure TForm17.Button1Click(Sender: TObject);
+var
+  i: integer;
+  tmp_pass: string;
 begin
-  Form1.insp := insp[ComboBox1.ItemIndex]; //insp[ListBox1.ItemIndex];
-  ac := true;
-  nameinsp := ComboBox1.Items[ComboBox1.ItemIndex]; //ListBox1.Items[Listbox1.ItemIndex];
-  Form1.Statusbar1.Panels[1].Text := 'Инспектор: '+ ComboBox1.Items[ComboBox1.ItemIndex];//ListBox1.Items[Listbox1.ItemIndex];
-  Close;
+  with DModule.Query1 do begin
+    SQL.Clear;
+    SQL.Text := 'SELECT password FROM Insp' + #13 +
+      'WHERE (id_insp = :idinsp)';
+    ParamByName('idinsp').AsInteger := insp[ComboBox1.ItemIndex];
+    Open;
+  end;
+
+  tmp_pass :=  DModule.Query1.FieldByName('password').Value;
+
+  if GenMD5Password(LabeledEdit1.Text) = tmp_pass then
+  begin
+    Form1.insp := insp[ComboBox1.ItemIndex];
+    ac := true;
+    nameinsp := ComboBox1.Items[ComboBox1.ItemIndex];
+    Form1.Statusbar1.Panels[1].Text := 'Инспектор: '+ ComboBox1.Items[ComboBox1.ItemIndex];
+    Form1.LoginMode := lInsp;
+    Close;
+  end
+  else
+  begin
+    MessageDlg('Error! Password incorrect!', mtError, [mbOK], 0);
+    exit;
+  end;
 end;
 
 procedure TForm17.Button2Click(Sender: TObject);

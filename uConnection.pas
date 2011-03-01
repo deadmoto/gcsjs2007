@@ -16,13 +16,14 @@ type
     FlowPanel1: TFlowPanel;
     Button2:    TButton;
     Button1:    TButton;
+    LabeledEdit1: TLabeledEdit;
+    LabeledEdit2: TLabeledEdit;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ComboBox1KeyPress(Sender: TObject; var Key: char);
   private
     { Private declarations }
-    procedure WriteConnSettings(Server: string);
   public
     { Public declarations }
     mode: TConMode;//string;
@@ -39,7 +40,7 @@ var
 implementation
 
 uses
-  srvinfo, ODBC_DSN, main, datamodule;
+  srvinfo, ODBC_DSN, main, datamodule, md5, connection_module;
 
 {$R *.dfm}
 
@@ -50,50 +51,46 @@ begin
   WinExec(PChar(ParamStr(0)), SW_SHOW);
 end;
 
-
-procedure TConnectionFrm.WriteConnSettings(Server: string);
-begin
-  with TRegistry.Create do
-    try
-      RootKey := HKEY_CURRENT_USER;
-      if OpenKey('\Software\Subsidy\Connection', True) then
-      begin
-        WriteString('Server', Server);
-      end;
-    finally
-      CloseKey;
-      Free;
-    end;
-end;
-
 procedure TConnectionFrm.Button1Click(Sender: TObject);
 var
   tt: TMyThread;
 begin
+  if trim(LabeledEdit2.Text) = '' then
+  begin
+    MessageDlg('Error! Password can not empty!', mtError, [mbOK], 0);
+    exit;
+  end;
+
+  WriteRegProperty('User', LabeledEdit1.Text);
+  WriteRegProperty('Password', GenMD5Password(LabeledEdit2.Text));
+  WriteRegProperty('Server', ComboBox1.Text);
+  
   if mode = mBug then
   begin
-    WriteConnSettings(ComboBox1.Text);
-
     tt := TMyThread.Create(True);
     tt.FreeOnTerminate := True;
     tt.Resume;
 
     sleep(100);
+
+    DModule.Database1.Connected := False;
+    DModule.dbfConnection.Connected := False;
+    sleep(1000);
+    
     halt;
   end
   else
   begin
-    WriteConnSettings(ComboBox1.Text);
     Form1.curServer := ComboBox1.Text;
     DModule.database1.connected := False;
 
-    if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy', '') then
+    if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy', ReadRegProperty('User'), ReadRegProperty('Password'), 'База данных программы Subsidy') then
       ShowMessage('Ошибка при создании DSN записи SQLSub!');
 
     DModule.database1.connected := True;
 
     Form1.OnCreate(self);
-
+    Form1.LoginMode := lNone;
     Form1.Show;
     Form1.Update;
     Form1.Reload;
@@ -121,17 +118,8 @@ procedure TConnectionFrm.FormShow(Sender: TObject);
 var
   i: integer;
 begin
-  with TRegistry.Create do
-    try
-      RootKey := HKEY_CURRENT_USER;
-      if OpenKey('\Software\Subsidy\Connection', True) then
-      begin
-        ComboBox1.Text := ReadString('Server');
-      end;
-    finally
-      CloseKey;
-      Free;
-    end;
+  ComboBox1.Text := ReadRegProperty('Server');
+  LabeledEdit1.Text := ReadRegProperty('User');
   ComboBox1.Items.Clear;
   listsqlservers;
   for i := 0 to length(srvlist) - 1 do

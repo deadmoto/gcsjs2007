@@ -2,7 +2,7 @@ object ConnectionFrm: TConnectionFrm
   Left = 0
   Top = 0
   BorderStyle = bsToolWindow
-  ClientHeight = 95
+  ClientHeight = 134
   ClientWidth = 285
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -21,7 +21,7 @@ object ConnectionFrm: TConnectionFrm
     Left = 3
     Top = 3
     Width = 279
-    Height = 55
+    Height = 94
     Margins.Bottom = 0
     Align = alTop
     Caption = #1042#1099#1073#1086#1088' '#1089#1077#1088#1074#1077#1088#1072':'
@@ -31,15 +31,36 @@ object ConnectionFrm: TConnectionFrm
       Top = 22
       Width = 265
       Height = 21
-      ItemHeight = 0
+      ItemHeight = 13
       TabOrder = 0
       OnKeyPress = ComboBox1KeyPress
+    end
+    object LabeledEdit1: TLabeledEdit
+      Left = 8
+      Top = 64
+      Width = 130
+      Height = 21
+      EditLabel.Width = 26
+      EditLabel.Height = 13
+      EditLabel.Caption = 'User:'
+      TabOrder = 1
+    end
+    object LabeledEdit2: TLabeledEdit
+      Left = 143
+      Top = 64
+      Width = 130
+      Height = 21
+      EditLabel.Width = 50
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Password:'
+      PasswordChar = '|'
+      TabOrder = 2
     end
   end
   object FlowPanel1: TFlowPanel
     AlignWithMargins = True
     Left = 3
-    Top = 61
+    Top = 100
     Width = 279
     Height = 31
     Align = alTop

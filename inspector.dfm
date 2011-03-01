@@ -175,5 +175,15 @@ object Form3: TForm3
       TabOrder = 0
       OnClick = Button1Click
     end
+    object Button5: TButton
+      AlignWithMargins = True
+      Left = 10
+      Top = 3
+      Width = 87
+      Height = 25
+      Caption = #1053#1086#1074#1099#1081' '#1087#1072#1088#1086#1083#1100
+      TabOrder = 4
+      OnClick = Button5Click
+    end
   end
 end

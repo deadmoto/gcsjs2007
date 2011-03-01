@@ -7,12 +7,12 @@ object DModule: TDModule
     DatabaseName = 'Subsidy'
     SQL.Strings = (
       '')
-    Left = 136
+    Left = 152
     Top = 8
   end
   object Query2: TQuery
     DatabaseName = 'Subsidy'
-    Left = 192
+    Left = 208
     Top = 8
   end
   object Database1: TDatabase
@@ -21,8 +21,8 @@ object DModule: TDModule
     LoginPrompt = False
     Params.Strings = (
       'DATABASE NAME=Subsidy'
-      'USER NAME=sa'
-      'ODBC DSN=SQLSUB'
+      'USER NAME='
+      'ODBC DSN=SQLSub'
       'OPEN MODE=READ/WRITE'
       'BATCH COUNT=200'
       'LANGDRIVER='
@@ -39,17 +39,17 @@ object DModule: TDModule
       'BLOB SIZE=32'
       'PASSWORD=')
     SessionName = 'Default'
-    Left = 16
+    Left = 32
     Top = 8
   end
   object Query3: TQuery
     DatabaseName = 'Subsidy'
-    Left = 248
+    Left = 264
     Top = 8
   end
   object DataSource1: TDataSource
     DataSet = Query1
-    Left = 80
+    Left = 96
     Top = 8
   end
   object qTarif: TADOQuery

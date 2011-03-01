@@ -32,7 +32,7 @@ var
 implementation
 
 uses
-  uConnection, service, ODBC_DSN;
+  uConnection, service, ODBC_DSN, connection_module, md5;
 
 
 {$R *.dfm}
@@ -40,27 +40,30 @@ uses
 {******************************************************************************}
 
 procedure TDModule.FormCreate(Sender: TObject);
+var
+  _user, _password: string;
 begin
-  with TRegistry.Create do
-    try
-      RootKey := System.cardinal($80000001);//HKEY_CURRENT_USER
-      if OpenKey('\Software\Subsidy\Connection', True) then
-        if not ValueExists('Server') then
-        begin
-          ConnectionFrm := TConnectionFrm.Create(nil);
-          ConnectionFrm.mode := mBug;
-          ConnectionFrm.ShowModal;
-          ConnectionFrm.Free;
-        end
-        else
-        begin
-          if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ReadString('Server'), 'Subsidy', '') then
-            ShowMessage('Ошибка при создании DSN записи SQLSub!');
-        end;
-    finally
-      CloseKey;
-      Free;
-    end;
+  if CheckRegProperty('User', True) then
+    _user := ReadRegProperty('User');
+
+  //if CheckRegProperty('Password', True) then
+    _password := ReadRegProperty('Password');
+
+  Database1.Params.Values['USER NAME'] := _user;
+  Database1.Params.Values['PASSWORD'] := GetConnectionPass(_password);
+
+  if not CheckRegProperty('Server') then
+  begin
+    ConnectionFrm := TConnectionFrm.Create(nil);
+    ConnectionFrm.mode := mBug;
+    ConnectionFrm.ShowModal;
+    ConnectionFrm.Free;
+  end
+  else
+  begin
+    if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ReadRegProperty('Server'), 'Subsidy', ReadRegProperty('User'), ReadRegProperty('Password'), 'База данных программы Subsidy') then
+      ShowMessage('Ошибка при создании DSN записи SQLSub!');
+  end;
 
   //назначение директории для файлов _QSQL*.dbf
 {  if getConfValue('0.UseTempDir') then

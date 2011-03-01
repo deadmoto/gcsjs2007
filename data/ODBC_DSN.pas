@@ -30,7 +30,7 @@ uses
   Windows;
 
 //function AddDSNdBaseSource(const ADSNName, DefaultDir, ADescription: string): Boolean;
-function AddDSNMSSQLSource(const ADSNName, AServer, ADataBase: string; ADescription: string = ''): boolean;
+function AddDSNMSSQLSource(const ADSNName, AServer, ADataBase, AUserName, APassword: string; ADescription: string = ''): boolean;
 
 function SQLConfigDataSource(hwndParent: HWND; // Указатель на окно вызвавшее функцию
   fRequest: word;       // Тип запроса
@@ -60,7 +60,7 @@ implementation
  * Выход: TRUE - в случае успеха, FALSE - в противном случае
  ******************************************************************************}
 
-function AddDSNMSSQLSource(const ADSNName, AServer, ADataBase: string; ADescription: string = ''): boolean;
+function AddDSNMSSQLSource(const ADSNName, AServer, ADataBase, AUserName, APassword: string; ADescription: string = ''): boolean;
 const
   driver = 'SQL Server';
 var
@@ -80,7 +80,7 @@ var
           WriteString('Database', ADataBase);
           WriteString('Description', ADescription);
           WriteString('Driver', GetSystemDir + '\SQLSRV32.dll');
-          WriteString('LastUser', 'sa');
+          WriteString('LastUser', AUserName);
           WriteString('Server', AServer);
           Result := True;
         end;
@@ -92,7 +92,7 @@ var
 
 begin
   params := 'DSN=' + ADSNName + #0'Server=' + AServer + #0'DataBase= ' +
-    ADataBase + #0'Description=' + ADescription + #0#0;
+    ADataBase + #0'Description=' + ADescription + #0;
   Result := SQLConfigDataSource(0, ODBC_ADD_DSN, PChar(driver), PChar(params));
   Result := Result and AddODBCiniRecord;
 end;
