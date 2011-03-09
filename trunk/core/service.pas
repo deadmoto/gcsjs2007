@@ -30,6 +30,11 @@ type
   TStringArray = array of string;
   TIntArray = array of integer;
 
+  TMyThread = class(TThread)
+  protected
+    procedure Execute; override;
+  end;
+
 procedure SetPoint(edt: TEdit);//установить запятую с учетом копеек
 
 function CheckNumb(edt: TEdit): boolean;
@@ -64,7 +69,7 @@ function GetPrec(fld: TField): byte;
 procedure FillTable(path, nam: string; code: TCodePage);
 procedure EditField(f: string; code: TCodePage; n: integer);
 
-function GetMonthsCount(BeginDate, EndDate: TDateTime): integer;
+function GetMonthsCount(BeginDate, EndDate: TDateTime): integer;//разника между месяцами
 function WithoutDoubleSpaces(str: string): string;
 function GetShortName(FIO: string): string; //возвращает фамилию + инициалы
 function ReplacePoint(str: string): string; //заминить , на .
@@ -99,6 +104,13 @@ implementation
 
 uses
   datamodule, main;
+
+{ TMyThread }
+
+procedure TMyThread.Execute;
+begin
+  WinExec(PChar(ParamStr(0)), SW_SHOW);
+end;
 
 procedure SetPoint(edt: TEdit);
 {*******************************************************************************

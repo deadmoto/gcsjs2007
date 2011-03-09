@@ -175,6 +175,9 @@ type
     Action20: TAction;
     Action21: TAction;
     aAdminMode: TAction;
+    aFactSumRpt: TAction;
+    aFactSumRptCounter: TAction;
+    aChangeAdminPasswd: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SGClDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
@@ -270,6 +273,8 @@ type
     procedure Action20Execute(Sender: TObject);
     procedure Action21Execute(Sender: TObject);
     procedure aAdminModeExecute(Sender: TObject);
+    procedure aFactSumRptExecute(Sender: TObject);
+    procedure aChangeAdminPasswdExecute(Sender: TObject);
   private
     FShaderForm: TForm;
     ccl, acl:     integer;//количество всех и активных клиентов в базе
@@ -452,6 +457,42 @@ end;
 procedure TForm1.aAboutExecute(Sender: TObject);
 begin
   AboutBox.ShowModal;
+end;
+
+procedure TForm1.aChangeAdminPasswdExecute(Sender: TObject);
+var
+  old_passwd, new_passwd: String;
+begin
+  old_passwd := InputPassword('Введите старый пароль администратора!', 'Пароль:', '');
+  old_passwd := GetConnectionPass(GenMD5Password(old_passwd));
+
+  if GetConnectionPass(ReadRegProperty('Password')) <> old_passwd then
+  begin
+    MessageDlg('Error! Введенный пароль не совпадает со старым!', mtError, [mbOK], 0);
+    exit;
+  end;
+
+  new_passwd := InputPassword('Введите новый пароль администратора!', 'Пароль:', '');
+  try
+    new_passwd := GenMD5Password(new_passwd);
+    with Dmodule.Query1 do begin
+      Close;
+      SQL.Text := 'ALTER LOGIN subuser WITH PASSWORD = ' + QuotedStr(GetConnectionPass(new_passwd)) + ' OLD_PASSWORD = ' + QuotedStr(old_passwd);//:oldpass;';
+    end;
+
+    Dmodule.Query1.ExecSQL;
+    
+    WriteRegProperty('Password', new_passwd);
+    MessageDlg('Сейчас произойдет автоматический перезапуск программы', mtConfirmation, [mbOk], 0);
+    with TMyThread.Create(True) do begin
+      FreeOnTerminate := True;
+      Resume;
+    end;
+    halt;
+  except
+    WriteRegProperty('Password', old_passwd);
+    MessageDlg('Ошибка при обновлении пароля', mtError, [mbOk], 0);
+  end;
 end;
 
 procedure TForm1.aClAddExecute(Sender: TObject);
@@ -2438,9 +2479,10 @@ begin
   begin
     Form1.LoginMode := lInsp;
     aAdminMode.Checked := False;
+    aChangeAdminPasswd.Visible := False;
     exit;
   end;
-  
+
   adm_pass := InputPassword('Введите пароль администратора!', 'Пароль:', '');
   adm_pass := GenMD5Password(adm_pass);
   adm_pass := GetConnectionPass(adm_pass);
@@ -2448,8 +2490,11 @@ begin
   begin
     Form1.LoginMode := lAdmin;
     aAdminMode.Checked := True;
+    aChangeAdminPasswd.Visible := True;
   end;
   
+  ActionMainMenuBar1.Repaint;
+  ActionMainMenuBar1.Refresh;
 end;
 
 procedure TForm1.aBackupExecute(Sender: TObject);
@@ -2674,6 +2719,74 @@ begin
   end
   else
     ShowMessage('База пуста!');
+end;
+
+procedure TForm1.aFactSumRptExecute(Sender: TObject);
+const
+  val: array[1..6] of string = ('H','G','F','E','D','C');
+var
+  ExcelApp, Sheet: OleVariant;
+  c: TClient;
+  i: integer;
+begin
+  c := TClient.Create(Empty, EmptyC);
+  c.SetClient(client, Form1.rdt);
+  c.setcalc(client, Form1.rdt);
+
+  with DModule.Query2 do
+  begin
+    Close;
+    SQL.Text := 'SELECT  sdate, SUM(sub) as subsum FROM Sub'#13+
+      'WHERE (regn = :rgn) and (sdate >= convert(smalldatetime,:bd,104)) and (sdate < convert(smalldatetime,:ed,104))'#13+
+      'GROUP BY sdate'#13+
+      'ORDER BY sdate desc';
+    ParamByName('rgn').Value := client;
+    ParamByName('bd').Value := DateToStr(c.cdata.prevbegindate);
+    ParamByName('ed').Value := DateToStr(c.cdata.prevenddate);
+    Open;
+    First;
+  end;
+
+  try
+    ExcelApp := CreateOleObject('Excel.Application');
+    ExcelApp.Visible := False;
+  except
+    on E: Exception do
+      raise Exception.Create('Ошибка создания объекта Excel: ' + E.Message);
+  end;
+
+  if Sender = aFactSumRpt then
+    ExcelApp.WorkBooks.Open(Form1.reports_path + 'u4et_month.xlt')
+  else
+    ExcelApp.WorkBooks.Open(Form1.reports_path + 'u4et_month_cnt.xlt');
+
+  Sheet :=  ExcelApp.ActiveWorkBook.WorkSheets[1];
+
+  Sheet.Range['A5','A5'] := format('Номер дела:  %d',[client]);
+  Sheet.Range['A6','A6'] := 'ФИО:            '+SGCl.Cells[0, SGCl.row];
+  Sheet.Range['A7','A7'] := 'Адрес:           '+SGCl.Cells[1, SGCl.row];
+
+  if ( c.cdata.prevbegindate = c.cdata.begindate) then
+  begin
+    ShowMessage('У клиента не хватает сроков для автоматического заполнения таблицы. Введите суммы вручную.');
+    ExcelApp.Visible := True;
+    exit;
+  end;
+
+  try
+    for i := 1 to GetMonthsCount(c.cdata.prevbegindate,c.cdata.prevenddate) do
+    begin
+      Sheet.Range[val[i]+'24', val[i]+'24'] := DModule.Query2.FieldByName('subsum').Value;
+      Sheet.Range[val[i]+'10', val[i]+'10'] := LongMonthNames[StrToInt(FormatDateTime('m', DModule.Query2.FieldByName('sdate').Value))];
+      DModule.Query2.Next;
+    end;
+
+    Sheet.Range['A3','A3'] := format('о сравнении размера субсидии с фактическими расходами на оплату жилищно-коммунальных услуг за период %s - %s %d года',
+      [Sheet.Range['C10','C10'], Sheet.Range['H10','H10'], YearOf(DModule.Query2.FieldByName('sdate').Value)]);//'123123123123'+' - '+'987654'+' '+YearOf(DModule.Query2.FieldByName('subsum').Value)+' года';
+    ExcelApp.Visible := True;
+  finally
+    c.Free;
+  end;
 end;
 
 procedure TForm1.aFilterExecute(Sender: TObject);

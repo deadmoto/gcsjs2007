@@ -46,6 +46,90 @@
       
       
       
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       <Excluded_Packages Name="$(BDS)\bin\dcltee7100.bpl">TeeChart Components</Excluded_Packages>
       <Excluded_Packages Name="$(BDS)\Bin\dclIndyCore100.bpl">Indy 10 Core Design Time</Excluded_Packages>
       <Excluded_Packages Name="$(BDS)\Bin\dclIndyProtocols100.bpl">Indy 10 Protocols Design Time</Excluded_Packages>
@@ -85,28 +169,8 @@
       <Form>Form41</Form>
     </DCCReference>
     <DCCReference Include="core" />
-    <DCCReference Include="core\" />
-    <DCCReference Include="core\c" />
     <DCCReference Include="core\client.pas" />
-    <DCCReference Include="core\co" />
-    <DCCReference Include="core\conn" />
-    <DCCReference Include="core\conne" />
-    <DCCReference Include="core\connec" />
-    <DCCReference Include="core\connect" />
-    <DCCReference Include="core\connecti" />
-    <DCCReference Include="core\connectio" />
-    <DCCReference Include="core\connection" />
-    <DCCReference Include="core\connection_" />
-    <DCCReference Include="core\connection_m" />
-    <DCCReference Include="core\connection_mo" />
-    <DCCReference Include="core\connection_mod" />
-    <DCCReference Include="core\connection_modu" />
-    <DCCReference Include="core\connection_modul" />
-    <DCCReference Include="core\connection_module" />
     <DCCReference Include="core\connection_module.pas" />
-    <DCCReference Include="core\connection_modulep" />
-    <DCCReference Include="core\connection_modulepa" />
-    <DCCReference Include="core\connection_modulepas" />
     <DCCReference Include="core\fstruct.pas" />
     <DCCReference Include="core\service.pas" />
     <DCCReference Include="curhist.pas">

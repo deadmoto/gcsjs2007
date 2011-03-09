@@ -29,10 +29,7 @@ type
     mode: TConMode;//string;
   end;
 
-  TMyThread = class(TThread)
-  protected
-    procedure Execute; override;
-  end;
+
 
 var
   ConnectionFrm: TConnectionFrm;
@@ -40,16 +37,9 @@ var
 implementation
 
 uses
-  srvinfo, ODBC_DSN, main, datamodule, md5, connection_module;
+  srvinfo, ODBC_DSN, main, datamodule, md5, connection_module, service;
 
 {$R *.dfm}
-
-{ TMyThread }
-
-procedure TMyThread.Execute;
-begin
-  WinExec(PChar(ParamStr(0)), SW_SHOW);
-end;
 
 procedure TConnectionFrm.Button1Click(Sender: TObject);
 var
