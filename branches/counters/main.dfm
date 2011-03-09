@@ -4193,6 +4193,16 @@ object Form1: TForm1
                 Caption = '-'
               end
               item
+                Action = aFactSumRpt
+                Caption = #1060#1072#1082#1090'. '#1086#1087#1083'. '#1079#1072' &6 '#1084#1077#1089'.'
+              end
+              item
+                Action = aFactSumRptCounter
+              end
+              item
+                Caption = '-'
+              end
+              item
                 Action = aClPause
               end
               item
@@ -4383,6 +4393,10 @@ object Form1: TForm1
               item
                 Action = aSQLQuery
                 Caption = '&SQL-'#1079#1072#1087#1088#1086#1089'...'
+              end
+              item
+                Visible = False
+                Action = aChangeAdminPasswd
               end
               item
                 Action = aRepEditor
@@ -4943,6 +4957,21 @@ object Form1: TForm1
       Hint = #1056#1077#1078#1080#1084' '#1040#1076#1084#1080#1085#1080#1089#1090#1088#1072#1090#1086#1088#1072
       ImageIndex = 19
       OnExecute = aAdminModeExecute
+    end
+    object aFactSumRpt: TAction
+      Category = #1050#1083#1080#1077#1085#1090
+      Caption = #1060#1072#1082#1090'. '#1086#1087#1083'. '#1079#1072' 6 '#1084#1077#1089'.'
+      OnExecute = aFactSumRptExecute
+    end
+    object aFactSumRptCounter: TAction
+      Category = #1050#1083#1080#1077#1085#1090
+      Caption = #1060#1072#1082#1090'. '#1086#1087#1083'. '#1079#1072' 6 '#1084#1077#1089'. '#1089#1086' '#1089#1095#1077#1090'.'
+      OnExecute = aFactSumRptExecute
+    end
+    object aChangeAdminPasswd: TAction
+      Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1087#1072#1088#1086#1083#1100' '#1072#1076#1084#1080#1085#1080#1089#1090#1088#1072#1090#1086#1088#1072' '#1041#1044
+      Visible = False
+      OnExecute = aChangeAdminPasswdExecute
     end
   end
 end

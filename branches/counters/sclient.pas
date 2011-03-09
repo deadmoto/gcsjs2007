@@ -3624,8 +3624,8 @@ end;
 
 procedure TForm2.ComboBox23Change(Sender: TObject);
 begin
-  fbegindate:= StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex],1,10));
-  fenddate:= StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex],14,23));
+  fbegindate := StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex],1,10));
+  fenddate := StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex],14,23));
 
   ChangeFactPeriod(fbegindate, fenddate);
   UpdateFactInfo();
