@@ -59,7 +59,7 @@ uses
   Math,
   service,
   main,
-  dateutils;
+  dateutils, MyTypes;
 
 {$R *.dfm}
 
@@ -81,10 +81,10 @@ var
 begin
   cl.sub[SGH.Row - 1] := s;
   sum := 0;
-  SGH.Cells[2, SGH.Row] := FlToStr(s);
+  SGH.Cells[2, SGH.Row] := FormatFloat('0.00', (s));
   for i := 0 to Length(cl.reg) - 1 do
     sum := sum + cl.sub[i];
-  StatusBar1.Panels[1].Text := 'Сумма субсидий: ' + FlToStr(sum);
+  StatusBar1.Panels[1].Text := 'Сумма субсидий: ' + FormatFloat('0.00', (sum));
 end;
 
 procedure TForm18.Clear;
@@ -170,13 +170,13 @@ begin
   begin
     SGH.Cells[0, i + 1] := cl.fio[i];
     SGH.Cells[1, i + 1] := IntToStr(cl.reg[i]);
-    SGH.Cells[2, i + 1] := FlToStr(cl.sub[i]);
+    SGH.Cells[2, i + 1] := FormatFloat('0.00', (cl.sub[i]));
     sum := sum + cl.sub[i];
   end;
 
   changes := False;
 
-  StatusBar1.Panels[1].Text := 'Сумма субсидий: ' + FlToStr(sum);
+  StatusBar1.Panels[1].Text := 'Сумма субсидий: ' + FormatFloat('0.00', (sum));
   StatusBar1.Panels[0].Text := 'Клиентов: ' + IntToStr(Length(cl.reg));
 end;
 

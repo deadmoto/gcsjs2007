@@ -58,9 +58,7 @@ var
 implementation
 
 uses
-  service,
-  main,
-  datamodule;
+  service, main, datamodule, MyTypes;
 
 {$R *.dfm}
 

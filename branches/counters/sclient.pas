@@ -553,7 +553,7 @@ var
 implementation
 
 uses
-  main, service, datamodule, shtarif, shtarifb, chpriv, chinsp;
+  main, service, datamodule, shtarif, shtarifb, chpriv, chinsp, MyTypes;
 
 {$R *.dfm}
 
@@ -1402,8 +1402,8 @@ begin
     item := LVFam.Items.Add;
     item.Caption := TMan(Cl.cdata.family.Items[i]).fio;
     item.SubItems.Add(DateToStr(TMan(Cl.cdata.family.Items[i]).birth));
-    item.SubItems.Add(FlToStr(Cl.cdata.mid[i]));
-    item.SubItems.Add(FlToStr(SelMin(Cl.cdata.min[i])));
+    item.SubItems.Add(FormatFloat('0.00', Cl.cdata.mid[i]));
+    item.SubItems.Add(FormatFloat('0.00', SelMin(Cl.cdata.min[i])));
     item.SubItems.Add(SelRel(TMan(Cl.cdata.family.Items[i]).rel));
   end;
   if Cl.cdata.family.Count <> 0 then
@@ -1447,8 +1447,8 @@ begin
   Combobox13.Text := SelFnd(Cl.Data.fond);
   Combobox14.Text := SelSettl(Cl.Data.settl);
   Combobox16.Text := SelOwn(Cl.Data.own);
-  Edit110.Text := FlToStr(Cl.cdata.lsquare);
-  Edit66.Text := FlToStr(Cl.cdata.square);
+  Edit110.Text := FormatFloat('0.00', Cl.cdata.lsquare);
+  Edit66.Text := FormatFloat('0.00', Cl.cdata.square);
   RadioGroup3.ItemIndex := Cl.cdata.mdd;
   Edit68.Text := IntToStr(Cl.cdata.mcount);
   Edit117.Text := IntToStr(Cl.cdata.rmcount);
@@ -1464,8 +1464,8 @@ begin
   Edit109.Text := IntToStr(Cl.cdata.period);
   Combobox11.Text := SelCntrl(Cl.Data.control);
   Memo1.Text  := Cl.Data.reason;
-  Edit73.Text := FlToStr(Cl.cdata.income);
-  Edit94.Text := FlToStr(Cl.cdata.pmin);
+  Edit73.Text := FormatFloat('0.00', Cl.cdata.income);
+  Edit94.Text := FormatFloat('0.00', Cl.cdata.pmin);
   if Cl.cdata.family.Count > 0 then
   begin
     Edit69.Text := TMan(Cl.cdata.family[curman]).fio;
@@ -1473,7 +1473,7 @@ begin
     Combobox7.Text := SelRel(TMan(Cl.cdata.family[curman]).rel);
     Combobox17.Text := SelSt(TMan(Cl.cdata.family[curman]).status);
     Combobox18.Text := SelPriv(TMan(Cl.cdata.family[curman]).priv);
-    Edit72.Text := FlToStr(TMan(Cl.cdata.family[curman]).mid);
+    Edit72.Text := FormatFloat('0.00', TMan(Cl.cdata.family[curman]).mid);
   end;
   CheckBox2.Checked := (Cl.cdata.boiler = 1);
   comboBoxCont.Text  := SelCont(Cl.cdata.tarifs[0]);
@@ -1514,89 +1514,89 @@ begin
   Edit83.Text  := Cl.Data.acbank;
   CheckBox1.Checked := (Cl.cdata.calc = 1);
   //1 мес€ц
-  Edit12.Text  := FlToStr(Cl.cdata.bpm[0]);
-  Edit13.Text  := FlToStr(Cl.cdata.bsnpm[0]);
-  Edit14.Text  := FlToStr(Cl.cdata.bsub[0]);
-  Edit15.Text  := FlToStr(Cl.cdata.bpm[1]);
-  Edit16.Text  := FlToStr(Cl.cdata.bsnpm[1]);
-  Edit17.Text  := FlToStr(Cl.cdata.bsub[1]);
-  Edit18.Text  := FlToStr(Cl.cdata.bpm[2]);
-  Edit19.Text  := FlToStr(Cl.cdata.bsnpm[2]);
-  Edit20.Text  := FlToStr(Cl.cdata.bsub[2]);
-  Edit21.Text  := FlToStr(Cl.cdata.bpm[3]);
-  Edit22.Text  := FlToStr(Cl.cdata.bsnpm[3]);
-  Edit23.Text  := FlToStr(Cl.cdata.bsub[3]);
-  Edit59.Text  := FlToStr(Cl.cdata.bpm[4]);
-  Edit62.Text  := FlToStr(Cl.cdata.bsnpm[4]);
-  Edit67.Text  := FlToStr(Cl.cdata.bsub[4]);
-  Edit24.Text  := FlToStr(Cl.cdata.bpm[5]);
-  Edit25.Text  := FlToStr(Cl.cdata.bsnpm[5]);
-  Edit26.Text  := FlToStr(Cl.cdata.bsub[5]);
-  Edit27.Text  := FlToStr(Cl.cdata.bpm[6]);
-  Edit28.Text  := FlToStr(Cl.cdata.bsnpm[6]);
-  Edit29.Text  := FlToStr(Cl.cdata.bsub[6]);
-  Edit30.Text  := FlToStr(Cl.cdata.bpm[7]);
-  Edit31.Text  := FlToStr(Cl.cdata.bsnpm[7]);
-  Edit32.Text  := FlToStr(Cl.cdata.bsub[7]);
-  Edit33.Text  := FlToStr(Cl.cdata.bpm[12]);
-  Edit34.Text  := FlToStr(Cl.cdata.bsnpm[12]);
-  Edit35.Text  := FlToStr(Cl.cdata.bsub[12]);
-  Edit36.Text  := FlToStr(Cl.cdata.bpm[13]);
-  Edit37.Text  := FlToStr(Cl.cdata.bsnpm[13]);
-  Edit38.Text  := FlToStr(Cl.cdata.bsub[13]);
-  Edit129.Text  := FlToStr(Cl.cdata.bstndsub[0]);
-  Edit130.Text  := FlToStr(Cl.cdata.bstndsub[1]);
-  Edit131.Text  := FlToStr(Cl.cdata.bstndsub[2]);
-  Edit132.Text  := FlToStr(Cl.cdata.bstndsub[3]);
-  Edit133.Text  := FlToStr(Cl.cdata.bstndsub[4]);
-  Edit134.Text  := FlToStr(Cl.cdata.bstndsub[5]);
-  Edit135.Text  := FlToStr(Cl.cdata.bstndsub[6]);
-  Edit136.Text  := FlToStr(Cl.cdata.bstndsub[7]);
-  Edit137.Text  := FlToStr(Cl.cdata.bstndsub[12]);
-  Edit138.Text  := FlToStr(Cl.cdata.bstndsub[13]);
+  Edit12.Text  := FormatFloat('0.00', Cl.cdata.bpm[0]);
+  Edit13.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[0]);
+  Edit14.Text  := FormatFloat('0.00', Cl.cdata.bsub[0]);
+  Edit15.Text  := FormatFloat('0.00', Cl.cdata.bpm[1]);
+  Edit16.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[1]);
+  Edit17.Text  := FormatFloat('0.00', Cl.cdata.bsub[1]);
+  Edit18.Text  := FormatFloat('0.00', Cl.cdata.bpm[2]);
+  Edit19.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[2]);
+  Edit20.Text  := FormatFloat('0.00', Cl.cdata.bsub[2]);
+  Edit21.Text  := FormatFloat('0.00', Cl.cdata.bpm[3]);
+  Edit22.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[3]);
+  Edit23.Text  := FormatFloat('0.00', Cl.cdata.bsub[3]);
+  Edit59.Text  := FormatFloat('0.00', Cl.cdata.bpm[4]);
+  Edit62.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[4]);
+  Edit67.Text  := FormatFloat('0.00', Cl.cdata.bsub[4]);
+  Edit24.Text  := FormatFloat('0.00', Cl.cdata.bpm[5]);
+  Edit25.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[5]);
+  Edit26.Text  := FormatFloat('0.00', Cl.cdata.bsub[5]);
+  Edit27.Text  := FormatFloat('0.00', Cl.cdata.bpm[6]);
+  Edit28.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[6]);
+  Edit29.Text  := FormatFloat('0.00', Cl.cdata.bsub[6]);
+  Edit30.Text  := FormatFloat('0.00', Cl.cdata.bpm[7]);
+  Edit31.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[7]);
+  Edit32.Text  := FormatFloat('0.00', Cl.cdata.bsub[7]);
+  Edit33.Text  := FormatFloat('0.00', Cl.cdata.bpm[12]);
+  Edit34.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[12]);
+  Edit35.Text  := FormatFloat('0.00', Cl.cdata.bsub[12]);
+  Edit36.Text  := FormatFloat('0.00', Cl.cdata.bpm[13]);
+  Edit37.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[13]);
+  Edit38.Text  := FormatFloat('0.00', Cl.cdata.bsub[13]);
+  Edit129.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[0]);
+  Edit130.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[1]);
+  Edit131.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[2]);
+  Edit132.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[3]);
+  Edit133.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[4]);
+  Edit134.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[5]);
+  Edit135.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[6]);
+  Edit136.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[7]);
+  Edit137.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[12]);
+  Edit138.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[13]);
 
   //
-  Edit96.Text  := FlToStr(Cl.cdata.pm[0]);
-  Edit39.Text  := FlToStr(Cl.cdata.snpm[0]);
-  Edit40.Text  := FlToStr(Cl.cdata.sub[0]);
-  Edit97.Text  := FlToStr(Cl.cdata.pm[1]);
-  Edit41.Text  := FlToStr(Cl.cdata.snpm[1]);
-  Edit42.Text  := FlToStr(Cl.cdata.sub[1]);
-  Edit98.Text  := FlToStr(Cl.cdata.pm[2]);
-  Edit43.Text  := FlToStr(Cl.cdata.snpm[2]);
-  Edit44.Text  := FlToStr(Cl.cdata.sub[2]);
-  Edit99.Text  := FlToStr(Cl.cdata.pm[3]);
-  Edit45.Text  := FlToStr(Cl.cdata.snpm[3]);
-  Edit46.Text  := FlToStr(Cl.cdata.sub[3]);
-  Edit100.Text := FlToStr(Cl.cdata.pm[4]);
-  Edit70.Text  := FlToStr(Cl.cdata.snpm[4]);
-  Edit71.Text  := FlToStr(Cl.cdata.sub[4]);
-  Edit101.Text := FlToStr(Cl.cdata.pm[5]);
-  Edit47.Text  := FlToStr(Cl.cdata.snpm[5]);
-  Edit48.Text  := FlToStr(Cl.cdata.sub[5]);
-  Edit102.Text := FlToStr(Cl.cdata.pm[6]);
-  Edit49.Text  := FlToStr(Cl.cdata.snpm[6]);
-  Edit50.Text  := FlToStr(Cl.cdata.sub[6]);
-  Edit103.Text := FlToStr(Cl.cdata.pm[7]);
-  Edit51.Text  := FlToStr(Cl.cdata.snpm[7]);
-  Edit52.Text  := FlToStr(Cl.cdata.sub[7]);
-  Edit104.Text := FlToStr(Cl.cdata.pm[12]);
-  Edit53.Text  := FlToStr(Cl.cdata.snpm[12]);
-  Edit105.Text := FlToStr(Cl.cdata.pm[13]);
-  Edit55.Text  := FlToStr(Cl.cdata.snpm[13]);
-  Edit54.Text  := FlToStr(Cl.cdata.sub[12]);
-  Edit56.Text  := FlToStr(Cl.cdata.sub[13]);
+  Edit96.Text  := FormatFloat('0.00', Cl.cdata.pm[0]);
+  Edit39.Text  := FormatFloat('0.00', Cl.cdata.snpm[0]);
+  Edit40.Text  := FormatFloat('0.00', Cl.cdata.sub[0]);
+  Edit97.Text  := FormatFloat('0.00', Cl.cdata.pm[1]);
+  Edit41.Text  := FormatFloat('0.00', Cl.cdata.snpm[1]);
+  Edit42.Text  := FormatFloat('0.00', Cl.cdata.sub[1]);
+  Edit98.Text  := FormatFloat('0.00', Cl.cdata.pm[2]);
+  Edit43.Text  := FormatFloat('0.00', Cl.cdata.snpm[2]);
+  Edit44.Text  := FormatFloat('0.00', Cl.cdata.sub[2]);
+  Edit99.Text  := FormatFloat('0.00', Cl.cdata.pm[3]);
+  Edit45.Text  := FormatFloat('0.00', Cl.cdata.snpm[3]);
+  Edit46.Text  := FormatFloat('0.00', Cl.cdata.sub[3]);
+  Edit100.Text := FormatFloat('0.00', Cl.cdata.pm[4]);
+  Edit70.Text  := FormatFloat('0.00', Cl.cdata.snpm[4]);
+  Edit71.Text  := FormatFloat('0.00', Cl.cdata.sub[4]);
+  Edit101.Text := FormatFloat('0.00', Cl.cdata.pm[5]);
+  Edit47.Text  := FormatFloat('0.00', Cl.cdata.snpm[5]);
+  Edit48.Text  := FormatFloat('0.00', Cl.cdata.sub[5]);
+  Edit102.Text := FormatFloat('0.00', Cl.cdata.pm[6]);
+  Edit49.Text  := FormatFloat('0.00', Cl.cdata.snpm[6]);
+  Edit50.Text  := FormatFloat('0.00', Cl.cdata.sub[6]);
+  Edit103.Text := FormatFloat('0.00', Cl.cdata.pm[7]);
+  Edit51.Text  := FormatFloat('0.00', Cl.cdata.snpm[7]);
+  Edit52.Text  := FormatFloat('0.00', Cl.cdata.sub[7]);
+  Edit104.Text := FormatFloat('0.00', Cl.cdata.pm[12]);
+  Edit53.Text  := FormatFloat('0.00', Cl.cdata.snpm[12]);
+  Edit105.Text := FormatFloat('0.00', Cl.cdata.pm[13]);
+  Edit55.Text  := FormatFloat('0.00', Cl.cdata.snpm[13]);
+  Edit54.Text  := FormatFloat('0.00', Cl.cdata.sub[12]);
+  Edit56.Text  := FormatFloat('0.00', Cl.cdata.sub[13]);
 
-  Edit140.Text := FlToStr(Cl.cdata.stndsub[0]);
-  Edit141.Text := FlToStr(Cl.cdata.stndsub[1]);
-  Edit142.Text := FlToStr(Cl.cdata.stndsub[2]);
-  Edit143.Text := FlToStr(Cl.cdata.stndsub[3]);
-  Edit144.Text := FlToStr(Cl.cdata.stndsub[4]);
-  Edit145.Text := FlToStr(Cl.cdata.stndsub[5]);
-  Edit146.Text := FlToStr(Cl.cdata.stndsub[6]);
-  Edit147.Text := FlToStr(Cl.cdata.stndsub[7]);
-  Edit148.Text := FlToStr(Cl.cdata.stndsub[12]);
-  Edit149.Text := FlToStr(Cl.cdata.stndsub[13]);
+  Edit140.Text := FormatFloat('0.00', Cl.cdata.stndsub[0]);
+  Edit141.Text := FormatFloat('0.00', Cl.cdata.stndsub[1]);
+  Edit142.Text := FormatFloat('0.00', Cl.cdata.stndsub[2]);
+  Edit143.Text := FormatFloat('0.00', Cl.cdata.stndsub[3]);
+  Edit144.Text := FormatFloat('0.00', Cl.cdata.stndsub[4]);
+  Edit145.Text := FormatFloat('0.00', Cl.cdata.stndsub[5]);
+  Edit146.Text := FormatFloat('0.00', Cl.cdata.stndsub[6]);
+  Edit147.Text := FormatFloat('0.00', Cl.cdata.stndsub[7]);
+  Edit148.Text := FormatFloat('0.00', Cl.cdata.stndsub[12]);
+  Edit149.Text := FormatFloat('0.00', Cl.cdata.stndsub[13]);
   Cl.SetNorm;
   FillLV;
   att := Cl.Data.cert - 1;
@@ -1658,95 +1658,95 @@ begin
   begin //первый мес€ц
     if not CheckBox1.Checked then
     begin
-      Edit12.Text := FlToStr(Cl.cdata.bpm[0]);
-      Edit15.Text := FlToStr(Cl.cdata.bpm[1]);
-      Edit18.Text := FlToStr(Cl.cdata.bpm[2]);
-      Edit21.Text := FlToStr(Cl.cdata.bpm[3]);
-      Edit59.Text := FlToStr(Cl.cdata.bpm[4]);
-      Edit24.Text := FlToStr(Cl.cdata.bpm[5]);
-      Edit27.Text := FlToStr(Cl.cdata.bpm[6]);
-      Edit30.Text := FlToStr(Cl.cdata.bpm[7]);
-      Edit33.Text := FlToStr(Cl.cdata.bpm[12]);
-      Edit36.Text := FlToStr(Cl.cdata.bpm[13]);
+      Edit12.Text := FormatFloat('0.00', Cl.cdata.bpm[0]);
+      Edit15.Text := FormatFloat('0.00', Cl.cdata.bpm[1]);
+      Edit18.Text := FormatFloat('0.00', Cl.cdata.bpm[2]);
+      Edit21.Text := FormatFloat('0.00', Cl.cdata.bpm[3]);
+      Edit59.Text := FormatFloat('0.00', Cl.cdata.bpm[4]);
+      Edit24.Text := FormatFloat('0.00', Cl.cdata.bpm[5]);
+      Edit27.Text := FormatFloat('0.00', Cl.cdata.bpm[6]);
+      Edit30.Text := FormatFloat('0.00', Cl.cdata.bpm[7]);
+      Edit33.Text := FormatFloat('0.00', Cl.cdata.bpm[12]);
+      Edit36.Text := FormatFloat('0.00', Cl.cdata.bpm[13]);
       
-      Edit13.Text := FlToStr(Cl.cdata.bsnpm[0]);
-      Edit16.Text := FlToStr(Cl.cdata.bsnpm[1]);
-      Edit19.Text := FlToStr(Cl.cdata.bsnpm[2]);
-      Edit22.Text := FlToStr(Cl.cdata.bsnpm[3]);
-      Edit62.Text := FlToStr(Cl.cdata.bsnpm[4]);
-      Edit25.Text := FlToStr(Cl.cdata.bsnpm[5]);
-      Edit28.Text := FlToStr(Cl.cdata.bsnpm[6]);
-      Edit31.Text := FlToStr(Cl.cdata.bsnpm[7]);
-      Edit34.Text := FlToStr(Cl.cdata.bsnpm[12]);
-      Edit37.Text := FlToStr(Cl.cdata.bsnpm[13]);
+      Edit13.Text := FormatFloat('0.00', Cl.cdata.bsnpm[0]);
+      Edit16.Text := FormatFloat('0.00', Cl.cdata.bsnpm[1]);
+      Edit19.Text := FormatFloat('0.00', Cl.cdata.bsnpm[2]);
+      Edit22.Text := FormatFloat('0.00', Cl.cdata.bsnpm[3]);
+      Edit62.Text := FormatFloat('0.00', Cl.cdata.bsnpm[4]);
+      Edit25.Text := FormatFloat('0.00', Cl.cdata.bsnpm[5]);
+      Edit28.Text := FormatFloat('0.00', Cl.cdata.bsnpm[6]);
+      Edit31.Text := FormatFloat('0.00', Cl.cdata.bsnpm[7]);
+      Edit34.Text := FormatFloat('0.00', Cl.cdata.bsnpm[12]);
+      Edit37.Text := FormatFloat('0.00', Cl.cdata.bsnpm[13]);
     end;
-    Edit14.Text := FlToStr(Cl.cdata.bsub[0]);
-    Edit17.Text := FlToStr(Cl.cdata.bsub[1]);
-    Edit20.Text := FlToStr(Cl.cdata.bsub[2]);
-    Edit23.Text := FlToStr(Cl.cdata.bsub[3]);
-    Edit67.Text := FlToStr(Cl.cdata.bsub[4]);
-    Edit26.Text := FlToStr(Cl.cdata.bsub[5]);
-    Edit29.Text := FlToStr(Cl.cdata.bsub[6]);
-    Edit32.Text := FlToStr(Cl.cdata.bsub[7]);
-    Edit35.Text := FlToStr(Cl.cdata.bsub[12]);
-    Edit38.Text := FlToStr(Cl.cdata.bsub[13]);
+    Edit14.Text := FormatFloat('0.00', Cl.cdata.bsub[0]);
+    Edit17.Text := FormatFloat('0.00', Cl.cdata.bsub[1]);
+    Edit20.Text := FormatFloat('0.00', Cl.cdata.bsub[2]);
+    Edit23.Text := FormatFloat('0.00', Cl.cdata.bsub[3]);
+    Edit67.Text := FormatFloat('0.00', Cl.cdata.bsub[4]);
+    Edit26.Text := FormatFloat('0.00', Cl.cdata.bsub[5]);
+    Edit29.Text := FormatFloat('0.00', Cl.cdata.bsub[6]);
+    Edit32.Text := FormatFloat('0.00', Cl.cdata.bsub[7]);
+    Edit35.Text := FormatFloat('0.00', Cl.cdata.bsub[12]);
+    Edit38.Text := FormatFloat('0.00', Cl.cdata.bsub[13]);
     
-    Edit129.Text  := FlToStr(Cl.cdata.bstndsub[0]);
-    Edit130.Text  := FlToStr(Cl.cdata.bstndsub[1]);
-    Edit131.Text  := FlToStr(Cl.cdata.bstndsub[2]);
-    Edit132.Text  := FlToStr(Cl.cdata.bstndsub[3]);
-    Edit133.Text  := FlToStr(Cl.cdata.bstndsub[4]);
-    Edit134.Text  := FlToStr(Cl.cdata.bstndsub[5]);
-    Edit135.Text  := FlToStr(Cl.cdata.bstndsub[6]);
-    Edit136.Text  := FlToStr(Cl.cdata.bstndsub[7]);
-    Edit137.Text  := FlToStr(Cl.cdata.bstndsub[12]);
-    Edit138.Text  := FlToStr(Cl.cdata.bstndsub[13]);
+    Edit129.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[0]);
+    Edit130.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[1]);
+    Edit131.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[2]);
+    Edit132.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[3]);
+    Edit133.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[4]);
+    Edit134.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[5]);
+    Edit135.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[6]);
+    Edit136.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[7]);
+    Edit137.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[12]);
+    Edit138.Text  := FormatFloat('0.00', Cl.cdata.bstndsub[13]);
   end;
   if (s <> 3) then
   begin//дл€ всех
-    Edit96.Text  := FlToStr(Cl.cdata.pm[0]);
-    Edit97.Text  := FlToStr(Cl.cdata.pm[1]);
-    Edit98.Text  := FlToStr(Cl.cdata.pm[2]);
-    Edit99.Text  := FlToStr(Cl.cdata.pm[3]);
-    Edit100.Text := FlToStr(Cl.cdata.pm[4]);
-    Edit101.Text := FlToStr(Cl.cdata.pm[5]);
-    Edit102.Text := FlToStr(Cl.cdata.pm[6]);
-    Edit103.Text := FlToStr(Cl.cdata.pm[7]);
-    Edit104.Text := FlToStr(Cl.cdata.pm[12]);
-    Edit105.Text := FlToStr(Cl.cdata.pm[13]);
+    Edit96.Text  := FormatFloat('0.00', Cl.cdata.pm[0]);
+    Edit97.Text  := FormatFloat('0.00', Cl.cdata.pm[1]);
+    Edit98.Text  := FormatFloat('0.00', Cl.cdata.pm[2]);
+    Edit99.Text  := FormatFloat('0.00', Cl.cdata.pm[3]);
+    Edit100.Text := FormatFloat('0.00', Cl.cdata.pm[4]);
+    Edit101.Text := FormatFloat('0.00', Cl.cdata.pm[5]);
+    Edit102.Text := FormatFloat('0.00', Cl.cdata.pm[6]);
+    Edit103.Text := FormatFloat('0.00', Cl.cdata.pm[7]);
+    Edit104.Text := FormatFloat('0.00', Cl.cdata.pm[12]);
+    Edit105.Text := FormatFloat('0.00', Cl.cdata.pm[13]);
 
-    Edit39.Text  := FlToStr(Cl.cdata.snpm[0]);
-    Edit41.Text  := FlToStr(Cl.cdata.snpm[1]);
-    Edit43.Text  := FlToStr(Cl.cdata.snpm[2]);
-    Edit45.Text  := FlToStr(Cl.cdata.snpm[3]);
-    Edit70.Text  := FlToStr(Cl.cdata.snpm[4]);
-    Edit47.Text  := FlToStr(Cl.cdata.snpm[5]);
-    Edit49.Text  := FlToStr(Cl.cdata.snpm[6]);
-    Edit51.Text  := FlToStr(Cl.cdata.snpm[7]);
-    Edit53.Text  := FlToStr(Cl.cdata.snpm[12]);
-    Edit55.Text  := FlToStr(Cl.cdata.snpm[13]);
+    Edit39.Text  := FormatFloat('0.00', Cl.cdata.snpm[0]);
+    Edit41.Text  := FormatFloat('0.00', Cl.cdata.snpm[1]);
+    Edit43.Text  := FormatFloat('0.00', Cl.cdata.snpm[2]);
+    Edit45.Text  := FormatFloat('0.00', Cl.cdata.snpm[3]);
+    Edit70.Text  := FormatFloat('0.00', Cl.cdata.snpm[4]);
+    Edit47.Text  := FormatFloat('0.00', Cl.cdata.snpm[5]);
+    Edit49.Text  := FormatFloat('0.00', Cl.cdata.snpm[6]);
+    Edit51.Text  := FormatFloat('0.00', Cl.cdata.snpm[7]);
+    Edit53.Text  := FormatFloat('0.00', Cl.cdata.snpm[12]);
+    Edit55.Text  := FormatFloat('0.00', Cl.cdata.snpm[13]);
 
-    Edit40.Text  := FlToStr(Cl.cdata.sub[0]);
-    Edit42.Text  := FlToStr(Cl.cdata.sub[1]);
-    Edit44.Text  := FlToStr(Cl.cdata.sub[2]);
-    Edit46.Text  := FlToStr(Cl.cdata.sub[3]);
-    Edit71.Text  := FlToStr(Cl.cdata.sub[4]);
-    Edit48.Text  := FlToStr(Cl.cdata.sub[5]);
-    Edit50.Text  := FlToStr(Cl.cdata.sub[6]);
-    Edit52.Text  := FlToStr(Cl.cdata.sub[7]);
-    Edit54.Text  := FlToStr(Cl.cdata.sub[12]);
-    Edit56.Text  := FlToStr(Cl.cdata.sub[13]);
+    Edit40.Text  := FormatFloat('0.00', Cl.cdata.sub[0]);
+    Edit42.Text  := FormatFloat('0.00', Cl.cdata.sub[1]);
+    Edit44.Text  := FormatFloat('0.00', Cl.cdata.sub[2]);
+    Edit46.Text  := FormatFloat('0.00', Cl.cdata.sub[3]);
+    Edit71.Text  := FormatFloat('0.00', Cl.cdata.sub[4]);
+    Edit48.Text  := FormatFloat('0.00', Cl.cdata.sub[5]);
+    Edit50.Text  := FormatFloat('0.00', Cl.cdata.sub[6]);
+    Edit52.Text  := FormatFloat('0.00', Cl.cdata.sub[7]);
+    Edit54.Text  := FormatFloat('0.00', Cl.cdata.sub[12]);
+    Edit56.Text  := FormatFloat('0.00', Cl.cdata.sub[13]);
 
-    Edit140.Text := FlToStr(Cl.cdata.stndsub[0]);
-    Edit141.Text := FlToStr(Cl.cdata.stndsub[1]);
-    Edit142.Text := FlToStr(Cl.cdata.stndsub[2]);
-    Edit143.Text := FlToStr(Cl.cdata.stndsub[3]);
-    Edit144.Text := FlToStr(Cl.cdata.stndsub[4]);
-    Edit145.Text := FlToStr(Cl.cdata.stndsub[5]);
-    Edit146.Text := FlToStr(Cl.cdata.stndsub[6]);
-    Edit147.Text := FlToStr(Cl.cdata.stndsub[7]);
-    Edit148.Text := FlToStr(Cl.cdata.stndsub[12]);
-    Edit149.Text := FlToStr(Cl.cdata.stndsub[13]);
+    Edit140.Text := FormatFloat('0.00', Cl.cdata.stndsub[0]);
+    Edit141.Text := FormatFloat('0.00', Cl.cdata.stndsub[1]);
+    Edit142.Text := FormatFloat('0.00', Cl.cdata.stndsub[2]);
+    Edit143.Text := FormatFloat('0.00', Cl.cdata.stndsub[3]);
+    Edit144.Text := FormatFloat('0.00', Cl.cdata.stndsub[4]);
+    Edit145.Text := FormatFloat('0.00', Cl.cdata.stndsub[5]);
+    Edit146.Text := FormatFloat('0.00', Cl.cdata.stndsub[6]);
+    Edit147.Text := FormatFloat('0.00', Cl.cdata.stndsub[7]);
+    Edit148.Text := FormatFloat('0.00', Cl.cdata.stndsub[12]);
+    Edit149.Text := FormatFloat('0.00', Cl.cdata.stndsub[13]);
   end;
 end;
 
@@ -1755,21 +1755,21 @@ var
   Value: real;
   i: integer;
 begin
-  Edit89.Text := FlToStr(Cl.CalcFull(Cl.cdata.bpm));
+  Edit89.Text := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.bpm));
 
   Value := Cl.cdata.pm[0];
   for i := 1 to numbtarif - 1 do
     Value := Value + {!}roundto(Cl.cdata.pm[i], -2);
-  Edit106.Text := FlToStr(Value);
+  Edit106.Text := FormatFloat('0.00', Value);
   
-  Edit90.Text := FlToStr(Cl.CalcFull(Cl.cdata.bsnpm));
-  Edit91.Text := FlToStr(Cl.CalcFull(Cl.cdata.bsub));
-  Edit92.Text := FlToStr(Cl.CalcFull(Cl.cdata.snpm));
-  Edit93.Text := FlToStr(Cl.CalcFull(Cl.cdata.sub));
-  Edit65.Text := FlToStr(Cl.CalcFull(Cl.cdata.bfpm));
-  Edit84.Text := FlToStr(Cl.CalcFull(Cl.cdata.fpm));
-  Edit139.Text := FlToStr(Cl.CalcFull(Cl.cdata.bstndsub));
-  Edit150.Text := FlToStr(Cl.CalcFull(Cl.cdata.stndsub));
+  Edit90.Text := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.bsnpm));
+  Edit91.Text := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.bsub));
+  Edit92.Text := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.snpm));
+  Edit93.Text := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.sub));
+  Edit65.Text := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.bfpm));
+  Edit84.Text := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.fpm));
+  Edit139.Text := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.bstndsub));
+  Edit150.Text := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.stndsub));
 
   SetKoef;
 end;
@@ -1799,7 +1799,7 @@ begin
   begin
     Cl.cdata.income := Cl.cdata.income + Cl.cdata.mid[i];
   end;
-  Edit73.Text := FlToStr(Cl.cdata.income);
+  Edit73.Text := FormatFloat('0.00', Cl.cdata.income);
 end;
 
 procedure TForm2.SetKoef;
@@ -1811,7 +1811,7 @@ begin
   if (Cl.cdata.pmin <> 0) and (Cl.cdata.mcount <> 0) then
   begin
     Cl.cdata.koef := rnd((Cl.cdata.income / Cl.cdata.mcount) / Cl.cdata.pmin);
-    Edit107.Text  := FlToStr(Cl.cdata.koef);
+    Edit107.Text  := FormatFloat('0.00', Cl.cdata.koef);
   end
   else
   begin
@@ -1828,7 +1828,7 @@ begin
     ppm := Cl.CalcFull(Cl.cdata.pm);
 
     if (pm <> 0) and (ppm <> 0) then
-      Edit108.Text := FlToStr(rnd(ppm / pm))
+      Edit108.Text := FormatFloat('0.00', rnd(ppm / pm))
     else
       Edit108.Text := '';
   end
@@ -3377,7 +3377,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit3.Text := FlToStr(GetCostTarif(0, cont[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit3.Text := FormatFloat('0.00', GetCostTarif(0, cont[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
   end
   else
   begin
@@ -3403,7 +3403,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit4.Text := FlToStr(GetCostTarif(1, rep[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit4.Text := FormatFloat('0.00', GetCostTarif(1, rep[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
   end
   else
   begin
@@ -3433,7 +3433,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit5.Text := FlToStr(GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex]));
+    Edit5.Text := FormatFloat('0.00', GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex]));
   end
   else
   begin
@@ -3464,7 +3464,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit124.Text := FlToStr(GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex]));
+    Edit124.Text := FormatFloat('0.00', GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex]));
   end
   else
   begin
@@ -3495,7 +3495,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit6.Text := FlToStr(GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex]));
+    Edit6.Text := FormatFloat('0.00', GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex]));
   end
   else
   begin
@@ -3526,7 +3526,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit125.Text := FlToStr(GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex]));
+    Edit125.Text := FormatFloat('0.00', GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex]));
   end
   else
   begin
@@ -3553,7 +3553,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit2.Text := FlToStr(GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit2.Text := FormatFloat('0.00', GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
   end
   else
   begin
@@ -3580,7 +3580,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit126.Text := FlToStr(GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit126.Text := FormatFloat('0.00', GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
   end
   else
   begin
@@ -3646,7 +3646,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit7.Text := FlToStr(GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit7.Text := FormatFloat('0.00', GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
   end
   else
   begin
@@ -3673,7 +3673,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit127.Text := FlToStr(GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit127.Text := FormatFloat('0.00', GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
   end
   else
   begin
@@ -3700,7 +3700,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit8.Text := FlToStr(GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit8.Text := FormatFloat('0.00', GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
   end
   else
   begin
@@ -3726,7 +3726,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit128.Text := FlToStr(GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit128.Text := FormatFloat('0.00', GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
   end
   else
   begin
@@ -3753,7 +3753,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit10.Text := FlToStr((GetCostTarif(12, wood[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]) * Form1.normw) / 12);
+    Edit10.Text := FormatFloat('0.00', (GetCostTarif(12, wood[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]) * Form1.normw) / 12);
   end
   else
   begin
@@ -3779,7 +3779,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit11.Text := FlToStr((GetCostTarif(13, coal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]) * Form1.normc) / 12);
+    Edit11.Text := FormatFloat('0.00', (GetCostTarif(13, coal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]) * Form1.normc) / 12);
   end
   else
   begin
@@ -3947,15 +3947,15 @@ begin
   Edit95.Text := IntToStr(cl.cdata.quanpriv);
   Cl.SetNorm;
   Cl.SetMin;
-  Edit94.Text := FlToStr(Cl.cdata.pmin);
+  Edit94.Text := FormatFloat('0.00', Cl.cdata.pmin);
   SetIncome;
   SetKoef;
   SortFam;
   item := LVFam.Items.Insert(curman);
   item.Caption := TMan(Cl.cdata.family.Items[curman]).fio;
   item.SubItems.Add(DateToStr(TMan(Cl.cdata.family.Items[curman]).birth));
-  item.SubItems.Add(FlToStr(Cl.cdata.mid[curman]));
-  item.SubItems.Add(FlToStr(SelMin(Cl.cdata.min[curman])));
+  item.SubItems.Add(FormatFloat('0.00', Cl.cdata.mid[curman]));
+  item.SubItems.Add(FormatFloat('0.00', SelMin(Cl.cdata.min[curman])));
   item.SubItems.Add(SelRel(TMan(Cl.cdata.family.Items[curman]).rel));
   Cl.cdata.tarifs[7] := ComboBox21.ItemIndex + 1;
   Cl.cdata.cost[7] := GetCostTarif(7, ComboBox21.ItemIndex + 1, Cl.cdata.begindate, 0, Cl.cdata.mcount, cl.cdata.settl);
@@ -4082,7 +4082,7 @@ begin
     Inc(Cl.cdata.quanpriv);
   Edit95.Text := IntToStr(cl.cdata.quanpriv);
   Cl.SetMin;
-  Edit94.Text := FlToStr(Cl.cdata.pmin);
+  Edit94.Text := FormatFloat('0.00', Cl.cdata.pmin);
   SetIncome;
   SetKoef;
   Cl.CalcPriv;
@@ -4093,8 +4093,8 @@ begin
   item.Caption := TMan(Cl.cdata.family.Items[curman]).fio;
   item.SubItems.Clear;
   item.SubItems.Add(DateToStr(TMan(Cl.cdata.family.Items[curman]).birth));
-  item.SubItems.Add(FlToStr(Cl.cdata.mid[curman]));
-  item.SubItems.Add(FlToStr(SelMin(Cl.cdata.min[curman])));
+  item.SubItems.Add(FormatFloat('0.00', Cl.cdata.mid[curman]));
+  item.SubItems.Add(FormatFloat('0.00', SelMin(Cl.cdata.min[curman])));
   item.SubItems.Add(SelRel(TMan(Cl.cdata.family.Items[curman]).rel));
   if load and not CalcEmpty then
   begin
@@ -4255,7 +4255,7 @@ begin
   Cl.SetNorm;
   Cl.SetMin;
   Cl.CalcPriv;
-  Edit94.Text := FlToStr(Cl.cdata.pmin);
+  Edit94.Text := FormatFloat('0.00', Cl.cdata.pmin);
   SetIncome;
   SetKoef;
   Cl.cdata.tarifs[7] := ComboBox21.ItemIndex + 1;
@@ -4284,7 +4284,7 @@ begin
       RadioButton7.Checked := True;
     if TMan(Cl.cdata.family[i]).pol = 2 then
       RadioButton8.Checked := True;
-    Edit72.Text := FlToStr(TMan(Cl.cdata.family[i]).mid);
+    Edit72.Text := FormatFloat('0.00', TMan(Cl.cdata.family[i]).mid);
     Combobox17.Text := SelSt(TMan(Cl.cdata.family[i]).status);
     Combobox18.Text := SelPriv(TMan(Cl.cdata.family[i]).priv);
     Combobox7.Text  := SelRel(TMan(Cl.cdata.family[i]).rel);

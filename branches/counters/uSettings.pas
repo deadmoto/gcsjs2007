@@ -49,7 +49,7 @@ type
     confFrame: TFrame;
   public
     { Public declarations }
-    regConf: TregIniFile;
+    regConf: TRegIniFile;
     cGroup: TConfigGroup;
     function CheckChanges: boolean;
   end;

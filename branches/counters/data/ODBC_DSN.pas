@@ -25,9 +25,7 @@ unit ODBC_DSN;
 interface
 
 uses
-  Registry,
-  Service,
-  Windows;
+  Registry, Windows, WinControls, HelpUtils;
 
 //function AddDSNdBaseSource(const ADSNName, DefaultDir, ADescription: string): Boolean;
 function AddDSNMSSQLSource(const ADSNName, AServer, ADataBase, AUserName, APassword: string; ADescription: string = ''): boolean;
@@ -73,9 +71,9 @@ var
       try
         RootKey := HKEY_CURRENT_USER;//HKEY_LOCAL_MACHINE;
         if OpenKey('\Software\ODBC\ODBC.INI\', True) then
-          if not KeyExists('SQLSub') then
-            CreateKey('SQLSub');
-        if OpenKey('SQLSub', True) then
+          if not KeyExists(ADSNName) then
+            CreateKey(ADSNName);
+        if OpenKey(ADSNName, True) then
         begin
           WriteString('Database', ADataBase);
           WriteString('Description', ADescription);

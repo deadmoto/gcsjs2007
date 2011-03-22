@@ -33,5 +33,7 @@
     <Transaction>2010.02.03 15:01:06.937.dfm,D:\.develop\.delphi\work\subsidy\counters\SlujUnit.dfm=D:\.develop\.delphi\work\subsidy\counters\uSluj.dfm</Transaction>
     <Transaction>2011.02.24 18:03:49.289.pas,C:\usr\Администратор\Мои документы\RAD Studio\5.0\Imports\VBScript_RegExp_55_TLB.pas=</Transaction>
     <Transaction>2011.02.24 18:25:03.601.pas,D:\delphi\work\subsidy\counters\Unit1.pas=D:\delphi\work\subsidy\counters\data\wincontrols.pas</Transaction>
+    <Transaction>2011.03.21 09:57:36.373.pas,D:\delphi\work\subsidy\counters\Unit1.pas=D:\delphi\work\subsidy\counters\data\MyTypes.pas</Transaction>
+    <Transaction>2011.03.21 10:33:30.661.pas,D:\delphi\work\subsidy\counters\Unit1.pas=D:\delphi\work\subsidy\counters\data\HelpUtils.pas</Transaction>
   </Transactions>
 </BorlandProject>

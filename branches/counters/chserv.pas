@@ -84,7 +84,7 @@ var
 
 implementation
 
-uses service, main, datamodule;
+uses service, main, datamodule, MyTypes;
 
 {$R *.dfm}
 
@@ -516,7 +516,7 @@ begin
   ind := Combobox5.ItemIndex;
   if ((serv[Combobox4.ItemIndex]=2)or(serv[Combobox4.ItemIndex]=3))and
       CheckBox1.Checked then
-    Edit6.Text := FlToStr(tarifs[serv[Combobox4.ItemIndex]].value2[ind])
+    Edit6.Text := FormatFloat('0.00', tarifs[serv[Combobox4.ItemIndex]].value2[ind])
   else begin
     if (serv[Combobox4.ItemIndex]=7) then begin
       Edit6.Enabled := false;
@@ -524,7 +524,7 @@ begin
     end
     else begin
       Edit6.Enabled := true;
-      Edit6.Text := FlToStr(tarifs[serv[Combobox4.ItemIndex]].value1[ind]);
+      Edit6.Text := FormatFloat('0.00', tarifs[serv[Combobox4.ItemIndex]].value1[ind]);
     end;
   end;
 end;
