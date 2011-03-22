@@ -64,7 +64,7 @@ uses
   main,
   Client,
   progress,
-  dbf;
+  dbf, MyTypes;
 
 {$R *.dfm}
 
@@ -213,7 +213,7 @@ begin
           for i := 0 to numbtarif - 1 do
             if (i < 8) or (i > 11) then
               val := val + c.cdata.sub[i];
-          if (StrToFloat(FlToStr(val)) = 0) and (c.cdata.stop < 2) then
+          if (StrToFloat(FormatFloat('0.00', val)) = 0) and (c.cdata.stop < 2) then
           begin
             Inc(ncl);
             lcl.Add(c.Copy);

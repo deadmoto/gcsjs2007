@@ -31,7 +31,7 @@ object ConnectionFrm: TConnectionFrm
       Top = 22
       Width = 265
       Height = 21
-      ItemHeight = 0
+      ItemHeight = 13
       TabOrder = 0
       OnKeyPress = ComboBox1KeyPress
     end
@@ -44,6 +44,7 @@ object ConnectionFrm: TConnectionFrm
       EditLabel.Height = 13
       EditLabel.Caption = 'User:'
       TabOrder = 1
+      OnKeyPress = LabeledEdit1KeyPress
     end
     object LabeledEdit2: TLabeledEdit
       Left = 143
@@ -55,6 +56,7 @@ object ConnectionFrm: TConnectionFrm
       EditLabel.Caption = 'Password:'
       PasswordChar = '|'
       TabOrder = 2
+      OnKeyPress = LabeledEdit2KeyPress
     end
   end
   object FlowPanel1: TFlowPanel

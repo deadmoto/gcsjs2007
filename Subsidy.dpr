@@ -57,7 +57,6 @@ uses
   ODBC_DSN in 'data\ODBC_DSN.pas',
   srvinfo in 'data\srvinfo.pas',
   SevenZipVCL in 'data\SevenZipVCL.pas',
-  min in 'data\min.pas',
   dbf in 'data\dbf.pas',
   padegFIO in 'data\padegFIO.pas',
   client in 'core\client.pas',
@@ -66,7 +65,9 @@ uses
   connection_module in 'core\connection_module.pas',
   md5 in 'data\md5.pas',
   VBScript_RegExp_55_TLB in 'data\VBScript_RegExp_55_TLB.pas',
-  wincontrols in 'data\wincontrols.pas';
+  WinControls in 'data\wincontrols.pas',
+  MyTypes in 'data\MyTypes.pas',
+  HelpUtils in 'data\HelpUtils.pas';
 
 {$R *.res}
 //{$R myRes.RES}

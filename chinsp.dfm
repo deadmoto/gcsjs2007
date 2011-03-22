@@ -31,7 +31,7 @@ object Form17: TForm17
       Top = 25
       Width = 229
       Height = 21
-      ItemHeight = 0
+      ItemHeight = 13
       TabOrder = 0
     end
     object LabeledEdit1: TLabeledEdit
@@ -46,6 +46,7 @@ object Form17: TForm17
       EditLabel.ParentBiDiMode = False
       PasswordChar = '|'
       TabOrder = 1
+      OnKeyPress = LabeledEdit1KeyPress
     end
   end
   object FlowPanel1: TFlowPanel

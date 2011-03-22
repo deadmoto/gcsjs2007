@@ -1,12 +1,13 @@
-unit wincontrols;
+unit WinControls;
 
 interface
-uses Windows, Messages, SysUtils, CommDlg,
+uses Windows, Messages, SysUtils, CommDlg, FileCtrl,
   Printers, Classes, Graphics, Controls, Forms, StdCtrls, ShlObj, CommCtrl, Consts;
 
 function InputPassword(const ACaption, APrompt, ADefault: string): string;
 function InputQuery2(const ACaption, APrompt: string;
   var Value: string): Boolean;
+function SelectDir: string;
 
 implementation
 
@@ -100,6 +101,21 @@ begin
     finally
       Form.Free;
     end;
+end;
+
+function SelectDir: string;
+var
+  dir: string;
+  bool: boolean;
+begin
+  bool := SelectDirectory('Select directory', '', dir, [sdShowShares, sdNewUI, sdValidateDir, sdNewFolder]);
+  if not bool then exit
+  else
+  begin
+    if dir[length(dir)] <> '\' then
+      dir := dir + '\';
+    Result := dir;
+  end;
 end;
 
 end.

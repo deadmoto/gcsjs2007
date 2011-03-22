@@ -32,7 +32,7 @@ var
 implementation
 
 uses
-  uConnection, service, ODBC_DSN, connection_module, md5;
+  uConnection, service, ODBC_DSN, connection_module, md5, uSettings;
 
 
 {$R *.dfm}

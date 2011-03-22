@@ -28,7 +28,7 @@ var
 
 implementation
 
-uses datamodule, main, progress, service;
+uses datamodule, main, progress, service, MyTypes;
 
 {$R *.dfm}
 
@@ -108,7 +108,7 @@ begin
       Sheet.Range['b'+n,'b'+n] := 'с '+FieldByName('bdate').AsString+
                                     ' по '+FieldByName('edate').AsString;
       inc(k);n := IntToStr(k);
-      Sheet.Range['a'+n,'a'+n] := 'Сумма субсидии с '+Form1.rdt+'г. составляет '+FlToStr(FieldByName('sub').AsFloat)+'руб. в связи с изменением';
+      Sheet.Range['a'+n,'a'+n] := 'Сумма субсидии с '+Form1.rdt+'г. составляет '+FormatFloat('0.00', FieldByName('sub').AsFloat)+'руб. в связи с изменением';
       inc(k);n := IntToStr(k);
       if CheckBox1.Checked then
         Sheet.Range['a'+n,'a'+n] := CheckBox1.Caption;

@@ -4169,6 +4169,9 @@ object Form1: TForm1
                 ImageIndex = 7
               end
               item
+                Action = aInformKarta
+              end
+              item
                 Action = aRepVedomost
               end
               item
@@ -4972,6 +4975,11 @@ object Form1: TForm1
       Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1087#1072#1088#1086#1083#1100' '#1072#1076#1084#1080#1085#1080#1089#1090#1088#1072#1090#1086#1088#1072' '#1041#1044
       Visible = False
       OnExecute = aChangeAdminPasswdExecute
+    end
+    object aInformKarta: TAction
+      Category = #1050#1083#1080#1077#1085#1090
+      Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1086#1085#1085#1072#1103' '#1082#1072#1088#1090#1072
+      OnExecute = aInformKartaExecute
     end
   end
 end

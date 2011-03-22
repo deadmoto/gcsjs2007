@@ -18,6 +18,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure LabeledEdit1KeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     insp: array of integer;
@@ -68,6 +69,11 @@ begin
   end;
   ac := false;
   nameinsp := ComboBox1.Items[ComboBox1.ItemIndex];
+end;
+
+procedure TForm17.LabeledEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then Button1Click(Sender);
 end;
 
 procedure TForm17.FormClose(Sender: TObject; var Action: TCloseAction);

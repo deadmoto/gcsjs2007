@@ -45,7 +45,7 @@ object SelectDistFrm: TSelectDistFrm
       Top = 21
       Width = 173
       Height = 21
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 0
       OnChange = ComboBox2Change
       OnExit = ComboBox2Change
@@ -55,7 +55,7 @@ object SelectDistFrm: TSelectDistFrm
       Top = 61
       Width = 173
       Height = 21
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 1
       OnChange = ComboBox1Change
       OnExit = ComboBox1Change
@@ -70,6 +70,7 @@ object SelectDistFrm: TSelectDistFrm
       EditLabel.Caption = #1055#1072#1088#1086#1083#1100':'
       PasswordChar = '|'
       TabOrder = 2
+      OnKeyPress = LabeledEdit1KeyPress
     end
   end
   object FlowPanel1: TFlowPanel

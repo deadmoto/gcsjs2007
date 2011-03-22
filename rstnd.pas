@@ -67,7 +67,7 @@ var
 implementation
 
 uses
-  datamodule, service, main, elpower;
+  datamodule, service, main, elpower, MyTypes;
 
 {$R *.dfm}
 

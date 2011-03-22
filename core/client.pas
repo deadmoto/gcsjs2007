@@ -159,7 +159,7 @@ type
 
 implementation
 
-uses datamodule, math, main, sclient, min;
+uses datamodule, math, main, sclient;
 
 constructor TClient.Create;
 begin

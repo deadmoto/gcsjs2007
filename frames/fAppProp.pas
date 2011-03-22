@@ -48,7 +48,7 @@ type
 implementation
 
 uses
-  uSettings, service;
+  uSettings, WinControls;
 
 {$R *.dfm}
 

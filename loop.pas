@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls;
+  Dialogs, StdCtrls, Math;
 
 type
   TForm16 = class(TForm)
@@ -85,7 +85,7 @@ var
 
 implementation
 
-uses service, datamodule, main, curhist,math;
+uses service, datamodule, main, curhist, MyTypes;
 
 {$R *.dfm}
 
@@ -102,7 +102,7 @@ begin
         StrToFloat(Edit7.Text)+StrToFloat(Edit9.Text)+StrToFloat(Edit11.Text)+
         StrToFloat(Edit13.Text)+StrToFloat(Edit15.Text)+StrToFloat(Edit17.Text)+
         StrToFloat(Edit19.Text);
-    Edit21.Text := FlToStr(v);
+    Edit21.Text := FormatFloat('0.00', v);
   end
   else
     Edit21.Text := '';
@@ -114,7 +114,7 @@ begin
         StrToFloat(Edit8.Text)+StrToFloat(Edit10.Text)+StrToFloat(Edit12.Text)+
         StrToFloat(Edit14.Text)+StrToFloat(Edit16.Text)+StrToFloat(Edit18.Text)+
         StrToFloat(Edit20.Text);
-    Edit22.Text := FlToStr(v);
+    Edit22.Text := FormatFloat('0.00', v);
   end
   else
     Edit22.Text := '';
@@ -126,7 +126,7 @@ begin
         StrToFloat(Edit26.Text)+StrToFloat(Edit27.Text)+StrToFloat(Edit28.Text)+
         StrToFloat(Edit29.Text)+StrToFloat(Edit30.Text)+StrToFloat(Edit31.Text)+
         StrToFloat(Edit32.Text);
-    Edit33.Text := FlToStr(v);
+    Edit33.Text := FormatFloat('0.00', v);
   end
   else
     Edit33.Text := '';
@@ -308,63 +308,63 @@ begin
       case serv of
       0://содержание жилья
         begin
-          Edit23.Text := FlToStr(pm);
-          Edit1.Text := FlToStr(snpm);
-          Edit2.Text := FlToStr(sub);
+          Edit23.Text := FormatFloat('0.00', pm);
+          Edit1.Text := FormatFloat('0.00', snpm);
+          Edit2.Text := FormatFloat('0.00', sub);
         end;
       1://Освещение МОП
         begin
-          Edit24.Text := FlToStr(pm);
-          Edit3.Text := FlToStr(snpm);
-          Edit4.Text := FlToStr(sub);
+          Edit24.Text := FormatFloat('0.00', pm);
+          Edit3.Text := FormatFloat('0.00', snpm);
+          Edit4.Text := FormatFloat('0.00', sub);
         end;
       2://х.вода
         begin
-          Edit25.Text := FlToStr(pm);
-          Edit5.Text := FlToStr(snpm);
-          Edit6.Text := FlToStr(sub);
+          Edit25.Text := FormatFloat('0.00', pm);
+          Edit5.Text := FormatFloat('0.00', snpm);
+          Edit6.Text := FormatFloat('0.00', sub);
         end;
       3://г.вода
         begin
-          Edit26.Text := FlToStr(pm);
-          Edit7.Text := FlToStr(snpm);
-          Edit8.Text := FlToStr(sub);
+          Edit26.Text := FormatFloat('0.00', pm);
+          Edit7.Text := FormatFloat('0.00', snpm);
+          Edit8.Text := FormatFloat('0.00', sub);
         end;
       4://водоотведение
         begin
-          Edit27.Text := FlToStr(pm);
-          Edit9.Text := FlToStr(snpm);
-          Edit10.Text := FlToStr(sub);
+          Edit27.Text := FormatFloat('0.00', pm);
+          Edit9.Text := FormatFloat('0.00', snpm);
+          Edit10.Text := FormatFloat('0.00', sub);
         end;
       5://отопление
         begin
-          Edit28.Text := FlToStr(pm);
-          Edit11.Text := FlToStr(snpm);
-          Edit12.Text := FlToStr(sub);
+          Edit28.Text := FormatFloat('0.00', pm);
+          Edit11.Text := FormatFloat('0.00', snpm);
+          Edit12.Text := FormatFloat('0.00', sub);
         end;
       6://газ
         begin
-          Edit29.Text := FlToStr(pm);
-          Edit13.Text := FlToStr(snpm);
-          Edit14.Text := FlToStr(sub);
+          Edit29.Text := FormatFloat('0.00', pm);
+          Edit13.Text := FormatFloat('0.00', snpm);
+          Edit14.Text := FormatFloat('0.00', sub);
         end;
       7://э/э
         begin
-          Edit30.Text := FlToStr(pm);
-          Edit15.Text := FlToStr(snpm);
-          Edit16.Text := FlToStr(sub);
+          Edit30.Text := FormatFloat('0.00', pm);
+          Edit15.Text := FormatFloat('0.00', snpm);
+          Edit16.Text := FormatFloat('0.00', sub);
         end;
       12://дрова
         begin
-          Edit31.Text := FlToStr(pm);
-          Edit17.Text := FlToStr(snpm);
-          Edit18.Text := FlToStr(sub);
+          Edit31.Text := FormatFloat('0.00', pm);
+          Edit17.Text := FormatFloat('0.00', snpm);
+          Edit18.Text := FormatFloat('0.00', sub);
         end;
       13://уголь
         begin
-          Edit32.Text := FlToStr(pm);
-          Edit19.Text := FlToStr(snpm);
-          Edit20.Text := FlToStr(sub);
+          Edit32.Text := FormatFloat('0.00', pm);
+          Edit19.Text := FormatFloat('0.00', snpm);
+          Edit20.Text := FormatFloat('0.00', sub);
         end;
       end;
       Next;

@@ -178,6 +178,7 @@ type
     aFactSumRpt: TAction;
     aFactSumRptCounter: TAction;
     aChangeAdminPasswd: TAction;
+    aInformKarta: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SGClDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
@@ -275,6 +276,7 @@ type
     procedure aAdminModeExecute(Sender: TObject);
     procedure aFactSumRptExecute(Sender: TObject);
     procedure aChangeAdminPasswdExecute(Sender: TObject);
+    procedure aInformKartaExecute(Sender: TObject);
   private
     FShaderForm: TForm;
     ccl, acl:     integer;//количество всех и активных клиентов в базе
@@ -353,7 +355,7 @@ uses
   datamodule, search, service, fstruct, imexp, SQL, progress, Contnrs, DateUtils,
   rstnd, loop, tarifb, chinsp, curhist, chserv, Client, merge, mdd, statage,
   statlm, codedbf, chtarifs, rrecalc, stat, padegFIO, uSluj, uConnection,
-  uSettings, uReportData, uGenRefBook, uReportEdit, uShade, wincontrols, md5, connection_module;
+  uSettings, uReportData, uGenRefBook, uReportEdit, uShade, wincontrols, md5, connection_module, MyTypes;
 
 {$R *.dfm}
 {$I Revision.inc}
@@ -941,7 +943,7 @@ begin
         SGCl.Cells[2, i + 1] := Copy(SGCl.Cells[2, i + 1], 1, 13) + rdt;
         SGCl.Cells[4, i + 1] := '0,00';
         SGCl.Repaint;
-        Edit4.Text := FlToStr(ASub);
+        Edit4.Text := FormatFloat('0.00', ASub);
       end;
     end;
   end;
@@ -996,9 +998,9 @@ begin
       client := cl[i];
       subs := subr;
       SGCl.Cells[2, i + 1] := DateToStr(fdate) + ' - ' + DateToStr(ldate);
-      SGCl.Cells[4, i + 1] := FlToStr(subs);
+      SGCl.Cells[4, i + 1] := FormatFloat('0.00', subs);
       SGCl.Row := i + 1;
-      Edit4.Text := FlToStr(ASub);
+      Edit4.Text := FormatFloat('0.00', ASub);
       SGCl.Repaint;
     end;
     //откат произведен, ожидание следующего отказа
@@ -1043,7 +1045,7 @@ begin
     subs := 0;
     sub[SGCl.Row - 1] := 0;
     SGCl.Cells[4, SGCl.Row] := '0.00';
-    Edit4.Text := FlToStr(SetSumSub);
+    Edit4.Text := FormatFloat('0.00', SetSumSub);
     SGCl.Repaint;
   end
   else
@@ -1090,7 +1092,7 @@ begin
     subs := 0;
     sub[SGCl.Row - 1] := 0;
     SGCl.Cells[4, SGCl.Row] := '0.00';
-    Edit4.Text := FlToStr(SetSumSub);
+    Edit4.Text := FormatFloat('0.00', SetSumSub);
     SGCl.Repaint;
   end
   else
@@ -1147,8 +1149,8 @@ begin
     stop[SGCl.Row - 1] := 1;
     subs := s;
     sub[SGCl.Row - 1] := s;
-    SGCl.Cells[4, SGCl.Row] := FlToStr(sub[SGCl.Row - 1]);
-    Edit4.Text := FlToStr(SetSumSub);
+    SGCl.Cells[4, SGCl.Row] := FormatFloat('0.00', sub[SGCl.Row - 1]);
+    Edit4.Text := FormatFloat('0.00', SetSumSub);
     SGCl.Repaint;
   end
   else
@@ -1202,8 +1204,8 @@ begin
     stop[SGCl.Row - 1] := 0;
     subs := s;
     sub[SGCl.Row - 1] := s;
-    SGCl.Cells[4, SGCl.Row] := FlToStr(sub[SGCl.Row - 1]);
-    Edit4.Text := FlToStr(SetSumSub);
+    SGCl.Cells[4, SGCl.Row] := FormatFloat('0.00', sub[SGCl.Row - 1]);
+    Edit4.Text := FormatFloat('0.00', SetSumSub);
     SGCl.Repaint;
   end;
 end;
@@ -1453,7 +1455,7 @@ begin
   end;
 
   if (pm <> 0) and (ppm <> 0) then
-    frxReport1.Variables.Variables['lkoef'] := quotedstr(FlToStr(rnd(ppm / pm)))
+    frxReport1.Variables.Variables['lkoef'] := quotedstr(FormatFloat('0.00', rnd(ppm / pm)))
   else
     frxReport1.Variables.Variables['lkoef'] := '';
 
@@ -2083,7 +2085,7 @@ begin
         Sheet.Range['c' + n, 'c' + n] := FieldByName('num').AsInteger;
         Sheet.Range['d' + n, 'd' + n] := IntToStr(FieldByName('numn').AsInteger) + '(' +
           IntToStr(FieldByName('numo').AsInteger) + ')';
-        Sheet.Range['e' + n, 'e' + n] := FlToStr(FieldByName('sums').AsFloat -
+        Sheet.Range['e' + n, 'e' + n] := FormatFloat('0.00', FieldByName('sums').AsFloat -
           FieldByName('sumsl').AsFloat);
         g[0] := g[0] + FieldByName('num').AsInteger;
         g[1] := g[1] + FieldByName('numn').AsInteger;
@@ -2113,11 +2115,11 @@ begin
   //жск+муниципальный
   Sheet.Range['c' + n, 'c' + n] := s[0];
   Sheet.Range['d' + n, 'd' + n] := IntToStr(s[1]) + '(' + IntToStr(s[2]) + ')';
-  Sheet.Range['e' + n, 'e' + n] := FlToStr(sum);
+  Sheet.Range['e' + n, 'e' + n] := FormatFloat('0.00', sum);
   //всего
   Sheet.Range['c7', 'c7'] := g[0];
   Sheet.Range['d7', 'd7'] := IntToStr(g[1]) + '(' + IntToStr(g[2]) + ')';
-  Sheet.Range['e7', 'e7'] := FlToStr(gen);
+  Sheet.Range['e7', 'e7'] := FormatFloat('0.00', gen);
   if (k < c + 1) then
   begin
     for i := k to c do
@@ -2620,6 +2622,7 @@ var
   SevenZip: TSevenZip;
   i: integer;
 begin
+  SevenZip := TSevenZip.Create(Application);
   path := ExtractFilePath(Application.ExeName) + 'arc\';
   if not DirectoryExists(path) then
     ForceDirectories(path);
@@ -2634,7 +2637,7 @@ begin
   try
     if FileExists(path + Name + '.7z') then
       DeleteFile(PAnsiChar(path + Name + '.7z'));
-    SevenZip := TSevenZip.Create(Application);
+
     SevenZip.SZFileName := path + Name + '.7z';
     with SevenZip do
     begin
@@ -2710,7 +2713,7 @@ begin
     begin
       Form18.status := sec1;
       Form18.ShowModal;
-      Edit4.Text := FlToStr(SetSumSub);
+      Edit4.Text := FormatFloat('0.00', SetSumSub);
       if Form18.changes then
         Form1.Reload;
     end
@@ -2727,11 +2730,23 @@ const
 var
   ExcelApp, Sheet: OleVariant;
   c: TClient;
-  i: integer;
+  status, i: integer;
+  bdate, edate: TDate;
 begin
   c := TClient.Create(Empty, EmptyC);
   c.SetClient(client, Form1.rdt);
   c.setcalc(client, Form1.rdt);
+
+  bdate := c.cdata.prevbegindate;
+  edate := c.cdata.prevenddate;
+
+  if st[SGCl.Row - 1] = 3 then
+  begin
+    bdate := c.cdata.begindate;
+    edate := c.cdata.enddate;
+  end;
+
+  showMessage(DateToStr(bdate)+'-'+DateToStr(edate)) ;
 
   with DModule.Query2 do
   begin
@@ -2741,8 +2756,9 @@ begin
       'GROUP BY sdate'#13+
       'ORDER BY sdate desc';
     ParamByName('rgn').Value := client;
-    ParamByName('bd').Value := DateToStr(c.cdata.prevbegindate);
-    ParamByName('ed').Value := DateToStr(c.cdata.prevenddate);
+    ParamByName('bd').Value := DateToStr(bdate);
+    ParamByName('ed').Value := DateToStr(edate);
+    showMessage(SQL.Text) ;
     Open;
     First;
   end;
@@ -2766,7 +2782,7 @@ begin
   Sheet.Range['A6','A6'] := 'ФИО:            '+SGCl.Cells[0, SGCl.row];
   Sheet.Range['A7','A7'] := 'Адрес:           '+SGCl.Cells[1, SGCl.row];
 
-  if ( c.cdata.prevbegindate = c.cdata.begindate) then
+  if ( c.cdata.prevbegindate = bdate) then
   begin
     ShowMessage('У клиента не хватает сроков для автоматического заполнения таблицы. Введите суммы вручную.');
     ExcelApp.Visible := True;
@@ -2774,7 +2790,7 @@ begin
   end;
 
   try
-    for i := 1 to GetMonthsCount(c.cdata.prevbegindate,c.cdata.prevenddate) do
+    for i := 1 to GetMonthsCount(bdate, edate) do
     begin
       Sheet.Range[val[i]+'24', val[i]+'24'] := DModule.Query2.FieldByName('subsum').Value;
       Sheet.Range[val[i]+'10', val[i]+'10'] := LongMonthNames[StrToInt(FormatDateTime('m', DModule.Query2.FieldByName('sdate').Value))];
@@ -2862,6 +2878,48 @@ begin
   Form35.ShowModal;
 end;
 
+procedure TForm1.aInformKartaExecute(Sender: TObject);
+var
+  ExcelApp, Sheet: OleVariant;
+  c: TClient;
+  i: integer;
+begin
+  c := TClient.Create(Empty, EmptyC);
+  c.SetClient(client, Form1.rdt);
+  c.setcalc(client, Form1.rdt);
+
+//  with DModule.Query2 do
+//  begin
+//    Close;
+//    SQL.Text := 'SELECT  sdate, SUM(sub) as subsum FROM Sub'#13+
+//      'WHERE (regn = :rgn) and (sdate >= convert(smalldatetime,:bd,104)) and (sdate < convert(smalldatetime,:ed,104))'#13+
+//      'GROUP BY sdate'#13+
+//      'ORDER BY sdate desc';
+//    ParamByName('rgn').Value := client;
+//    ParamByName('bd').Value := DateToStr(c.cdata.prevbegindate);
+//    ParamByName('ed').Value := DateToStr(c.cdata.prevenddate);
+//    Open;
+//    First;
+//  end;
+
+  try
+    ExcelApp := CreateOleObject('Excel.Application');
+    ExcelApp.Visible := False;
+    ExcelApp.WorkBooks.Open(Form1.reports_path + 'infkarta.xls')
+  except
+    on E: Exception do
+      raise Exception.Create('Ошибка создания объекта Excel: ' + E.Message);
+  end;
+  Sheet :=  ExcelApp.ActiveWorkBook.WorkSheets[1];
+
+  Sheet.Range['B3','B3'] := SGCl.Cells[0, SGCl.row];//fio
+  Sheet.Range['A5','A5'] := SGCl.Cells[1, SGCl.row];//address
+  Sheet.Range['F14','F14'] := c.cdata.quanpriv;
+  Sheet.Range['D12','D12'] := BoolToStr(Boolean(c.cdata.boiler));
+  ExcelApp.Visible := True;
+  c.Free;
+end;
+
 procedure TForm1.aMergeExecute(Sender: TObject);
 {
   Вызов формы обмена данными между филиалом и отделом или между отделом и центром.
@@ -2921,17 +2979,17 @@ begin
   SGCl.Cells[1, pl] := addr;
   SGCl.Cells[2, pl] := per;
   SGCl.Cells[3, pl] := clc;
-  SGCl.Cells[4, pl] := FlToStr(sub[pl - 1]);
+  SGCl.Cells[4, pl] := FormatFloat('0.00', sub[pl - 1]);
   SGCl.Row := pl;
   SGCl.Repaint;
   Inc(ccl);
   if status < 3 then
     Inc(acl);
-  Statusbar1.Panels[0].Text := 'Клиент: ' + SGCl.Cells[0, SGCl.row] + '/' + FlToStr(subs);
+  Statusbar1.Panels[0].Text := 'Клиент: ' + SGCl.Cells[0, SGCl.row] + '/' + FormatFloat('0.00', subs);
   Edit1.Text := IntToStr(ccl);
   Edit2.Text := IntToStr(Acl);
   Edit3.Text := IntToStr(StrToInt(Edit3.Text) + 1);
-  Edit4.Text := FlToStr(StrToFloat(Edit4.Text) + subs);
+  Edit4.Text := FormatFloat('0.00', StrToFloat(Edit4.Text) + subs);
 end;
 
 procedure TForm1.aExitExecute(Sender: TObject);
@@ -3278,10 +3336,10 @@ begin
   SGCl.Cells[1, pl] := Addr;
   SGCl.Cells[2, pl] := Per;
   SGCl.Cells[3, pl] := Clc;
-  SGCl.Cells[4, pl] := FlToStr(sub[pl - 1]);
+  SGCl.Cells[4, pl] := FormatFloat('0.00', sub[pl - 1]);
   SGCl.Row := pl;
   SGCl.Repaint;
-  Statusbar1.Panels[0].Text := 'Клиент: ' + SGCl.Cells[0, SGCl.row] + '/' + FlToStr(subs);
+  Statusbar1.Panels[0].Text := 'Клиент: ' + SGCl.Cells[0, SGCl.row] + '/' + FormatFloat('0.00', subs);
   Edit1.Text := IntToStr(ccl);
   if (sts = 3) and (status <> 3) then
   begin//был не активен, стал активен
@@ -3294,7 +3352,7 @@ begin
     Edit3.Text := IntToStr(StrToInt(Edit3.Text) - 1);
   end;
   Edit2.Text := IntToStr(Acl);
-  Edit4.Text := FlToStr(StrToFloat(Edit4.Text) - s + subs);
+  Edit4.Text := FormatFloat('0.00', StrToFloat(Edit4.Text) - s + subs);
 end;
 
 procedure TForm1.DelCl(id: integer);
@@ -3340,7 +3398,7 @@ begin
     SetLength(st, Length(st) - 1);
     SetLength(sub, Length(sub) - 1);
     SetLength(stop, Length(stop) - 1);
-    Statusbar1.Panels[0].Text := 'Клиент: ' + SGCl.Cells[0, SGCl.row] + '/' + FlToStr(subs);
+    Statusbar1.Panels[0].Text := 'Клиент: ' + SGCl.Cells[0, SGCl.row] + '/' + FormatFloat('0.00', subs);
   end
   else
   begin
@@ -3358,7 +3416,7 @@ begin
   Edit1.Text := IntToStr(ccl);
   Edit2.Text := IntToStr(Acl);
   Edit3.Text := IntToStr(StrToInt(Edit3.Text) - 1);
-  Edit4.Text := FlToStr(ASub);
+  Edit4.Text := FormatFloat('0.00', ASub);
 end;
 
 procedure TForm1.RecalcSelectedRows;
@@ -3828,7 +3886,7 @@ begin
         SGCl.Cells[2, i + 1] := GenPer(FieldByName('bdate').AsDateTime,
           FieldByName('edate').AsDateTime);
         SGCl.Cells[3, i + 1] := GenCalc(FieldByName('calc').AsInteger);
-        SGCl.Cells[4, i + 1] := FlToStr(sub[i]);
+        SGCl.Cells[4, i + 1] := FormatFloat('0.00', sub[i]);
         Next;
         Inc(i);
         pr.ProgressBar1.StepIt;
@@ -3849,9 +3907,9 @@ begin
   Edit1.Text := IntToStr(ccl);
   Edit2.Text := IntToStr(acl);
   Edit3.Text := Edit1.Text;
-  Edit4.Text := FlToStr(SetSumSub);
+  Edit4.Text := FormatFloat('0.00', SetSumSub);
   if c > 0 then
-    Statusbar1.Panels[0].Text := 'Клиент: ' + f + '/' + FlToStr(subs)
+    Statusbar1.Panels[0].Text := 'Клиент: ' + f + '/' + FormatFloat('0.00', subs)
   else
     Statusbar1.Panels[0].Text := 'Клиент: ' + f + '/?';
 
@@ -4017,7 +4075,7 @@ begin
         SGCl.Cells[2, i + 1] := GenPer(FieldByName('bdate').AsDateTime,
           FieldByName('edate').AsDateTime);
         SGCl.Cells[3, i + 1] := GenCalc(FieldByName('calc').AsInteger);
-        SGCl.Cells[4, i + 1] := FlToStr(sub[i]);
+        SGCl.Cells[4, i + 1] := FormatFloat('0.00', sub[i]);
         Next;
         Inc(i);
         pr.ProgressBar1.StepIt;
@@ -4036,8 +4094,8 @@ begin
   Edit3.Text := IntToStr(c);
   if c > 0 then
   begin
-    Edit4.Text := FlToStr(ASub);
-    Statusbar1.Panels[0].Text := 'Клиент: ' + f + '/' + FlToStr(subs);
+    Edit4.Text := FormatFloat('0.00', ASub);
+    Statusbar1.Panels[0].Text := 'Клиент: ' + f + '/' + FormatFloat('0.00', subs);
   end
   else
   begin
@@ -4163,7 +4221,7 @@ begin
     client := cl[arow - 1];
     status := st[arow - 1];
     subs := sub[arow - 1];
-    Statusbar1.Panels[0].Text := 'Клиент: ' + SGCl.Cells[0, arow] + '/' + FlToStr(subs);
+    Statusbar1.Panels[0].Text := 'Клиент: ' + SGCl.Cells[0, arow] + '/' + FormatFloat('0.00', subs);
   end;
 end;
 
@@ -4464,7 +4522,7 @@ begin
     subs := 0;
     sub[SGCl.Row - 1] := 0;
     SGCl.Cells[4, SGCl.Row] := '0.00';
-    Edit4.Text := FlToStr(SetSumSub);
+    Edit4.Text := FormatFloat('0.00', SetSumSub);
     SGCl.Repaint;
   end
   else
@@ -4511,7 +4569,7 @@ begin
     subs := 0;
     sub[SGCl.Row - 1] := 0;
     SGCl.Cells[4, SGCl.Row] := '0.00';
-    Edit4.Text := FlToStr(SetSumSub);
+    Edit4.Text := FormatFloat('0.00', SetSumSub);
     SGCl.Repaint;
   end
   else
@@ -4568,8 +4626,8 @@ begin
     stop[SGCl.Row - 1] := 1;
     subs := s;
     sub[SGCl.Row - 1] := s;
-    SGCl.Cells[4, SGCl.Row] := FlToStr(sub[SGCl.Row - 1]);
-    Edit4.Text := FlToStr(SetSumSub);
+    SGCl.Cells[4, SGCl.Row] := FormatFloat('0.00', sub[SGCl.Row - 1]);
+    Edit4.Text := FormatFloat('0.00', SetSumSub);
     SGCl.Repaint;
   end
   else
@@ -4623,8 +4681,8 @@ begin
     stop[SGCl.Row - 1] := 0;
     subs := s;
     sub[SGCl.Row - 1] := s;
-    SGCl.Cells[4, SGCl.Row] := FlToStr(sub[SGCl.Row - 1]);
-    Edit4.Text := FlToStr(SetSumSub);
+    SGCl.Cells[4, SGCl.Row] := FormatFloat('0.00', sub[SGCl.Row - 1]);
+    Edit4.Text := FormatFloat('0.00', SetSumSub);
     SGCl.Repaint;
   end;
 end;

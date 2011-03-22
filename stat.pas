@@ -62,9 +62,7 @@ implementation
 {$R *.dfm}
 
 uses
-  DataModule,
-  main,
-  service;
+  DataModule, main, service, MyTypes;
 
 procedure TStats.Button1Click(Sender: TObject);
 var
