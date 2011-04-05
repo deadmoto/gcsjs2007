@@ -1,11 +1,11 @@
-object Form34: TForm34
+object SQLExecForm: TSQLExecForm
   Left = 319
   Top = 169
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = 'SQL-'#1079#1072#1087#1088#1086#1089
   ClientHeight = 465
-  ClientWidth = 546
+  ClientWidth = 537
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -22,11 +22,11 @@ object Form34: TForm34
     AlignWithMargins = True
     Left = 3
     Top = 239
-    Width = 540
+    Width = 531
     Height = 223
     Hint = #1056#1077#1079#1091#1083#1100#1090#1072#1090' SQL-'#1079#1072#1087#1088#1086#1089#1072
     Align = alClient
-    DataSource = DataModule1.DataSource1
+    DataSource = DModule.DataSource1
     ParentShowHint = False
     ReadOnly = True
     ShowHint = True
@@ -41,7 +41,7 @@ object Form34: TForm34
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 540
+    Width = 531
     Height = 230
     Align = alTop
     TabOrder = 1
@@ -53,13 +53,13 @@ object Form34: TForm34
     object GroupBox1: TGroupBox
       Left = 4
       Top = 24
-      Width = 532
+      Width = 523
       Height = 201
       Align = alTop
       Caption = #1058#1077#1082#1091#1097#1080#1081' '#1079#1072#1087#1088#1086#1089':'
       TabOrder = 0
       object Memo1: TMemo
-        Left = 8
+        Left = 7
         Top = 16
         Width = 405
         Height = 177
@@ -69,8 +69,8 @@ object Form34: TForm34
         TabOrder = 0
       end
       object Button1: TButton
-        Left = 424
-        Top = 28
+        Left = 418
+        Top = 16
         Width = 97
         Height = 25
         Caption = #1042#1099#1087#1086#1083#1085#1080#1090#1100
@@ -78,8 +78,8 @@ object Form34: TForm34
         OnClick = Button1Click
       end
       object Button2: TButton
-        Left = 424
-        Top = 59
+        Left = 418
+        Top = 47
         Width = 97
         Height = 25
         Caption = #1054#1095#1080#1089#1090#1080#1090#1100
@@ -87,8 +87,8 @@ object Form34: TForm34
         OnClick = Button2Click
       end
       object Button4: TButton
-        Left = 424
-        Top = 155
+        Left = 418
+        Top = 140
         Width = 97
         Height = 25
         Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090' '#1074' DBF'
@@ -96,8 +96,8 @@ object Form34: TForm34
         OnClick = Button4Click
       end
       object Button3: TButton
-        Left = 424
-        Top = 123
+        Left = 418
+        Top = 109
         Width = 97
         Height = 25
         Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
@@ -105,8 +105,8 @@ object Form34: TForm34
         OnClick = Button3Click
       end
       object Button5: TButton
-        Left = 424
-        Top = 91
+        Left = 418
+        Top = 78
         Width = 97
         Height = 25
         Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100

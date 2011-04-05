@@ -573,8 +573,9 @@ object Form1: TForm1
         Top = 0
         Width = 75
         Height = 19
-        Action = aClDel
+        Action = aFactSumRpt
         Anchors = []
+        Caption = #1060#1072#1082#1090'. '#1086#1087#1083#1072#1090#1072
         ParentShowHint = False
         ShowHint = True
         TabOrder = 2
@@ -4169,6 +4170,7 @@ object Form1: TForm1
                 ImageIndex = 7
               end
               item
+                Visible = False
                 Action = aInformKarta
               end
               item
@@ -4184,6 +4186,9 @@ object Form1: TForm1
                 Action = aRepStop
               end
               item
+                Action = aFactSumRpt
+              end
+              item
                 Caption = '-'
               end
               item
@@ -4191,16 +4196,6 @@ object Form1: TForm1
               end
               item
                 Action = aClCancelStop
-              end
-              item
-                Caption = '-'
-              end
-              item
-                Action = aFactSumRpt
-                Caption = #1060#1072#1082#1090'. '#1086#1087#1083'. '#1079#1072' &6 '#1084#1077#1089'.'
-              end
-              item
-                Action = aFactSumRptCounter
               end
               item
                 Caption = '-'
@@ -4381,12 +4376,15 @@ object Form1: TForm1
                 Caption = '-'
               end
               item
+                Visible = False
                 Action = aSetActiveAllInsp
               end
               item
+                Visible = False
                 Action = aSetActiveAllStrt
               end
               item
+                Visible = False
                 Action = aSetActiveUseStrt
                 Caption = '&C'#1076#1077#1083#1072#1090#1100' '#1072#1082#1090#1080#1074#1085#1099#1084#1080' '#1080#1089#1087#1086#1083#1100#1079#1091#1077#1084#1099#1077' '#1091#1083#1080#1094#1099
               end
@@ -4394,6 +4392,7 @@ object Form1: TForm1
                 Caption = '-'
               end
               item
+                Visible = False
                 Action = aSQLQuery
                 Caption = '&SQL-'#1079#1072#1087#1088#1086#1089'...'
               end
@@ -4402,6 +4401,7 @@ object Form1: TForm1
                 Action = aChangeAdminPasswd
               end
               item
+                Visible = False
                 Action = aRepEditor
                 ImageIndex = 17
               end>
@@ -4425,6 +4425,7 @@ object Form1: TForm1
                 Caption = '-'
               end
               item
+                Visible = False
                 Action = aConf
                 ImageIndex = 15
               end>
@@ -4676,6 +4677,7 @@ object Form1: TForm1
       Category = #1054#1087#1094#1080#1080
       Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080'...'
       ImageIndex = 15
+      Visible = False
       OnExecute = aConfExecute
     end
     object aEditClCert: TAction
@@ -4691,27 +4693,32 @@ object Form1: TForm1
     object aSetActiveAllInsp: TAction
       Category = #1059#1090#1080#1083#1080#1090#1099
       Caption = #1057#1076#1077#1083#1072#1090#1100' '#1072#1082#1090#1080#1074#1085#1099#1084#1080' '#1074#1089#1077#1093' '#1080#1085#1089#1087#1077#1082#1090#1086#1088#1086#1074
+      Visible = False
       OnExecute = aSetActiveAllInspExecute
     end
     object aSetActiveAllStrt: TAction
       Category = #1059#1090#1080#1083#1080#1090#1099
       Caption = #1057#1076#1077#1083#1072#1090#1100' '#1072#1082#1090#1080#1074#1085#1099#1084#1080' '#1074#1089#1077' '#1091#1083#1080#1094#1099
+      Visible = False
       OnExecute = aSetActiveAllStrtExecute
     end
     object aSetActiveUseStrt: TAction
       Category = #1059#1090#1080#1083#1080#1090#1099
       Caption = 'C'#1076#1077#1083#1072#1090#1100' '#1072#1082#1090#1080#1074#1085#1099#1084#1080' '#1080#1089#1087#1086#1083#1100#1079#1091#1077#1084#1099#1077' '#1091#1083#1080#1094#1099
+      Visible = False
       OnExecute = aSetActiveUseStrtExecute
     end
     object aSQLQuery: TAction
       Category = #1059#1090#1080#1083#1080#1090#1099
       Caption = 'SQL-'#1079#1072#1087#1088#1086#1089'...'
+      Visible = False
       OnExecute = aSQLQueryExecute
     end
     object aRepEditor: TAction
       Category = #1059#1090#1080#1083#1080#1090#1099
       Caption = #1056#1077#1076#1072#1082#1090#1086#1088' '#1086#1090#1095#1077#1090#1086#1074'...'
       ImageIndex = 17
+      Visible = False
       OnExecute = aRepEditorExecute
     end
     object aShowLegend: TAction
@@ -4963,15 +4970,11 @@ object Form1: TForm1
     end
     object aFactSumRpt: TAction
       Category = #1050#1083#1080#1077#1085#1090
-      Caption = #1060#1072#1082#1090'. '#1086#1087#1083'. '#1079#1072' 6 '#1084#1077#1089'.'
-      OnExecute = aFactSumRptExecute
-    end
-    object aFactSumRptCounter: TAction
-      Category = #1050#1083#1080#1077#1085#1090
-      Caption = #1060#1072#1082#1090'. '#1086#1087#1083'. '#1079#1072' 6 '#1084#1077#1089'. '#1089#1086' '#1089#1095#1077#1090'.'
+      Caption = #1057#1087#1088#1072#1074#1082#1072' '#1087#1086' '#1092#1072#1082#1090#1080#1095'. '#1086#1087#1083#1072#1090#1077
       OnExecute = aFactSumRptExecute
     end
     object aChangeAdminPasswd: TAction
+      Category = #1059#1090#1080#1083#1080#1090#1099
       Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1087#1072#1088#1086#1083#1100' '#1072#1076#1084#1080#1085#1080#1089#1090#1088#1072#1090#1086#1088#1072' '#1041#1044
       Visible = False
       OnExecute = aChangeAdminPasswdExecute
@@ -4979,6 +4982,7 @@ object Form1: TForm1
     object aInformKarta: TAction
       Category = #1050#1083#1080#1077#1085#1090
       Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1086#1085#1085#1072#1103' '#1082#1072#1088#1090#1072
+      Visible = False
       OnExecute = aInformKartaExecute
     end
   end

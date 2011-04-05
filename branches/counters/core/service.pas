@@ -41,8 +41,8 @@ function IsDate(str: string): boolean;
 function FindReg(RegNumber, b: integer; buffer: array of integer): integer;//найти рег номер
 function FindCl(RegNumber: integer; buffer: array of integer): integer;    //найти рег номер
 
-function Rnd(n: real): real;
-procedure ToRowF(n: real; var numb: array of integer);
+function Rnd(n: real): real; //функция округления
+procedure ToRowF(n: real; var numb: array of integer);//разложение в ряд дробной части числа
 
 procedure FillCurr(path, rdt: string; dis: integer; code: TCodePage);
 procedure FillTarif(path, nam, rdt: string; dis: integer; code: TCodePage);
@@ -59,15 +59,16 @@ function GetPrec(fld: TField): byte;
 procedure FillTable(path, nam: string; code: TCodePage);
 procedure EditField(f: string; code: TCodePage; n: integer);
 
-function GetMonthsCount(BeginDate, EndDate: TDateTime): integer;//разника между месяцами
-function WithoutDoubleSpaces(str: string): string;
+function DateDiff(BeginDate, EndDate: TDateTime): integer;
+function MounthDiff(BeginDate, EndDate: TDateTime): integer;//разница месяцов
+function NormalizeSpaces(str: string): string;
 function ReplacePoint(str: string): string; //заминить , на .
-
+function StringDate(date: TDate): string;//возвращает дату в виде "mounth-name yyyy"
+function RegExpString(source,filter: string): string;
 {******************************************************************************}
 function RefToCell(ARow, ACol: integer): string;
 function ExportGridToExcel(AGrid: TStringGrid; AFileName: string): boolean;
 {******************************************************************************}
-function getConfValue(str: string): variant;
 
 procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidths: TIntArray; RecCount: integer);
 
@@ -82,25 +83,30 @@ function getmin(query:tquery;id_min:integer):real;
 implementation
 
 uses
-  datamodule, main;
+  datamodule, main, VBScript_RegExp_55_TLB;
 
-function getConfValue(str: string): variant;
-{*******************************************************************************
-    Функция getConfValue возвращает значение переменной в реестре, которое
-    соответсвует определенному свойству компонента.
-*******************************************************************************}
+
+function StringDate(date: TDate): string;
 begin
-  with TRegistry.Create do
-  begin
-    RootKey := HKEY_CURRENT_USER;
-    if OpenKey('Software\Subsidy\Config', True) then
-      if ValueExists(str) then
-        Result := ReadString(str)
-      else
-        WriteString(str, '0');
-  end;
+  Result :=
+    format('%s %d', [LongMonthNames[StrToInt(FormatDateTime('m',date))], YearOf(date)]);
 end;
 
+function RegExpString(source,filter: string): string;
+var
+  re:  TRegExp;
+  tmp: string;
+begin
+//  re := TRegExp.Create(nil);
+//  try
+//    re.Pattern := filter; //записываем регулярное выражение
+//    re.Global := True;
+//    tmp := re. (pass, '');
+//    Result := tmp;
+//  finally
+//    re.Free;
+//  end;
+end;
 procedure SetPoint(edt: TEdit);
 {*******************************************************************************
   Процедура SetPoint установливает запятую с учетом копеек
@@ -675,7 +681,7 @@ begin
   end;
 end;
 
-function GetMonthsCount(BeginDate, EndDate: TDateTime): integer;
+function DateDiff(BeginDate, EndDate: TDateTime): integer;
 {*******************************************************************************
  Функция, которая возвращает разницу между двумя датами в месяцах.
  Исходные данные: BeginDate, EndDate - начальная и конечная даты;
@@ -685,11 +691,11 @@ function GetMonthsCount(BeginDate, EndDate: TDateTime): integer;
 *******************************************************************************}
 
 var
-//  Days1, Days2,             // количество дней начальной и конечной дат
+  Days1, Days2,             // количество дней начальной и конечной дат
   Months1, Months2,         // количество месяцев начальной и конечной дат
   Years1, Years2: integer;  // количество лет начальной и конечной дат
   BufferDate: TDateTime;    // буфер для обмена значениями
-//  DaysCount: byte;
+  DaysCount: byte;
 begin
   if BeginDate > EndDate then  // сравниваем даты, если начальная позднее
   begin                        // конечной, то меняем даты между собой
@@ -697,8 +703,8 @@ begin
     BeginDate := EndDate;
     EndDate := BufferDate;
   end;
-//  Days1  := StrToInt(FormatDateTime('dd', BeginDate));     // считываем количе-
-//  Days2  := StrToInt(FormatDateTime('dd', EndDate));       // ство дней, месяцев
+  Days1  := StrToInt(FormatDateTime('dd', BeginDate));     // считываем количе-
+  Days2  := StrToInt(FormatDateTime('dd', EndDate));       // ство дней, месяцев
   Months1 := StrToInt(FormatDateTime('mm', BeginDate));    // и лет каждой из дат
   Months2 := StrToInt(FormatDateTime('mm', EndDate));      // и заносим в соот-
   Years1 := StrToInt(FormatDateTime('yyyy', BeginDate));   // ветствующие пере-
@@ -707,7 +713,7 @@ begin
   Result := (Years2 - Years1) * 12 + (Months2 - Months1);
   // Учитываем влияние разницы в днях на количество месяцев + остаток в днях в
   // переменной DaysCount
-{  if (Days2 - Days1) < 0 then
+  if (Days2 - Days1) < 0 then
   begin  // если разница отрицательна, то
     Result := Result - 1;  // производим заем месяца из имеющихся
     // В зависимости от месяца в "меньшей" дате, вычисляем остаток в днях
@@ -725,7 +731,36 @@ begin
     end;
   end  // конец действий при отрицательной разнице дней
   else  // при положительной или нулевой разнице дней
-    DaysCount := Days2 - Days1;  // банальная разность}
+    DaysCount := Days2 - Days1;  // банальная разность
+end;
+
+function MounthDiff(BeginDate, EndDate: TDateTime): integer;
+{*******************************************************************************
+ Функция, которая возвращает разницу между двумя датами в месяцах.
+ Исходные данные: BeginDate, EndDate - начальная и конечная даты;
+                  DaysCount - остаток разницы в днях (хотя скорее она исходная
+                              данная, а выходная).
+ Выходные данные: возвращает разницу между датами в месяцах.
+*******************************************************************************}
+
+var
+  Months1, Months2,         // количество месяцев начальной и конечной дат
+  Years1, Years2: integer;  // количество лет начальной и конечной дат
+  BufferDate: TDateTime;    // буфер для обмена значениями
+begin
+  if BeginDate > EndDate then  // сравниваем даты, если начальная позднее
+  begin                        // конечной, то меняем даты между собой
+    BufferDate := BeginDate;
+    BeginDate := EndDate;
+    EndDate := BufferDate;
+  end;
+
+  Months1 := StrToInt(FormatDateTime('mm', BeginDate));    // и лет каждой из дат
+  Months2 := StrToInt(FormatDateTime('mm', EndDate));      // и заносим в соот-
+  Years1 := StrToInt(FormatDateTime('yyyy', BeginDate));   // ветствующие пере-
+  Years2 := StrToInt(FormatDateTime('yyyy', EndDate));     // менные
+  // Вычисляем суммарную разницу между датами по разницам в годах*12 и месяцах
+  Result := (Years2 - Years1) * 12 + (Months2 - Months1);
 end;
 
 {******************************************************************************}
@@ -749,7 +784,8 @@ begin
 
   try
     ExcelApp.WorkBooks.Open(aFileName);
-  finally
+  except
+    ExcelApp.WorkBooks.Add($FFFFEFB9);
   end;
 
   // Prepare Data
@@ -787,12 +823,13 @@ begin
   end;
 end;
 
-function WithoutDoubleSpaces(str: string): string;
+function NormalizeSpaces(str: string): string;
 var
   i: integer;
 begin
-  for i := 0 to 2 do
-    str := Trim(StringReplace(str, '  ', ' ', [rfReplaceAll]));
+  str := Trim(str);
+  while pos('  ',str) <> 0 do
+    str := StringReplace(str,'  ',' ',[rfreplaceall]);
   Result := str;
 end;
 

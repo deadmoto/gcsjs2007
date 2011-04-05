@@ -6,7 +6,7 @@ uses
   Windows,
   main in 'main.pas' {Form1},
   datamodule in 'datamodule.pas' {DModule: TDModule},
-  sclient in 'sclient.pas' {Form2},
+  sclient in 'sclient.pas' {EditClForm},
   inspector in 'inspector.pas' {Form3},
   district in 'district.pas' {Form4},
   Street in 'Street.pas' {Form5},
@@ -24,7 +24,7 @@ uses
   bank in 'bank.pas' {Form31},
   search in 'search.pas' {Form33},
   opend in 'opend.pas' {Form26},
-  sql in 'sql.pas' {Form34},
+  sql in 'sql.pas' {SQLExecForm},
   imexp in 'imexp.pas' {Form35},
   progress in 'progress.pas' {AboutBox1},
   chserv in 'chserv.pas' {Form29},
@@ -35,7 +35,7 @@ uses
   curhist in 'curhist.pas' {Form18},
   tarifb in 'tarifb.pas' {Form19},
   about in 'about.pas' {AboutBox},
-  merge in 'merge.pas' {Form21},
+  merge in 'merge.pas' {MergeForm},
   shtarif in 'shtarif.pas' {Form37},
   shtarifb in 'shtarifb.pas' {Form39},
   mdd in 'mdd.pas' {Form20},
@@ -47,27 +47,28 @@ uses
   stat in 'stat.pas' {Stats},
   uSluj in 'uSluj.pas' {SlujFrm},
   uConnection in 'uConnection.pas' {ConnectionFrm},
-  uSettings in 'uSettings.pas' {SettingsFrm},
+  uReportEdit in 'uReportEdit.pas' {ReportEditFrm},
   uReportData in 'uReportData.pas' {ReportDataFrm},
   uGenRefBook in 'uGenRefBook.pas' {GenRefBookFrm},
-  uReportEdit in 'uReportEdit.pas' {ReportEditFrm},
   uShade in 'uShade.pas' {ShadeForm},
+  uSettings in 'uSettings.pas' {SettingsFrm},
   fAppProp in 'frames\fAppProp.pas' {fAppProp: TFrame},
   fAppUpdate in 'frames\fAppUpdate.pas' {fAppUpdate: TFrame},
+  client in 'core\client.pas',
+  service in 'core\service.pas',
+  fstruct in 'core\fstruct.pas',
+  appregistry in 'core\appregistry.pas',
   ODBC_DSN in 'data\ODBC_DSN.pas',
   srvinfo in 'data\srvinfo.pas',
   SevenZipVCL in 'data\SevenZipVCL.pas',
   dbf in 'data\dbf.pas',
   padegFIO in 'data\padegFIO.pas',
-  client in 'core\client.pas',
-  service in 'core\service.pas',
-  fstruct in 'core\fstruct.pas',
-  connection_module in 'core\connection_module.pas',
   md5 in 'data\md5.pas',
-  VBScript_RegExp_55_TLB in 'data\VBScript_RegExp_55_TLB.pas',
-  WinControls in 'data\wincontrols.pas',
+  wincontrols in 'data\wincontrols.pas',
   MyTypes in 'data\MyTypes.pas',
-  HelpUtils in 'data\HelpUtils.pas';
+  HelpUtils in 'data\HelpUtils.pas',
+  VBScript_RegExp_55_TLB in 'data\VBScript_RegExp_55_TLB.pas',
+  service2 in 'core\service2.pas';
 
 {$R *.res}
 //{$R myRes.RES}
@@ -79,10 +80,17 @@ begin
   application.title := 'Субсидии';
   Application.CreateForm(TDModule, DModule);
   try//Подключение к SQLSub - ODBC alias for Subsidy (MS SQL)
-    DModule.database1.connected := True;
+    DModule.DataBase1.Connected := True;
     try//Подключение к DBFSub - BDE alias for DBASE driver (BDE)
-      DModule.dbfConnection.connected := True;
+      DModule.dbfConnection.Connected := True;
       try
+        if (ParamCount = 1) and (ParamStr(1) = '-sql') then
+        begin
+          Application.CreateForm(TSQLExecForm, SQLExecForm);
+          Application.Run;
+          Exit;
+        end;
+        
         Application.CreateForm(TForm1, Form1);
         Application.CreateForm(TAboutBox1, AboutBox1);
         Application.CreateForm(TForm29, Form29);
@@ -92,12 +100,12 @@ begin
         Application.CreateForm(TForm18, Form18);
         Application.CreateForm(TForm20, Form20);
         Application.CreateForm(TAboutBox, AboutBox);
-        Application.CreateForm(TForm21, Form21);
+        Application.CreateForm(TMergeForm, MergeForm);
         Application.CreateForm(TSelectDistFrm, SelectDistFrm);
         Form1.Show;
         Form1.Update;
         Form1.Reload;
-        Application.CreateForm(TForm2, Form2);
+        Application.CreateForm(TEditClForm, EditClForm);
         Application.CreateForm(TForm3, Form3);
         Application.CreateForm(TForm4, Form4);
         Application.CreateForm(TForm5, Form5);
@@ -115,7 +123,7 @@ begin
         Application.CreateForm(TAboutBox, AboutBox);
         Application.CreateForm(TForm33, Form33);
         Application.CreateForm(TForm26, Form26);
-        Application.CreateForm(TForm34, Form34);
+        //Application.CreateForm(TSQLExecForm, SQLExecForm);
         Application.CreateForm(TForm35, Form35);
         Application.CreateForm(TForm22, Form22);
         Application.CreateForm(TForm40, Form40);
