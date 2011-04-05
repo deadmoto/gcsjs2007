@@ -39,7 +39,7 @@ var
 implementation
 
 uses
-  srvinfo, ODBC_DSN, main, datamodule, md5, connection_module, service, MyTypes;
+  srvinfo, ODBC_DSN, main, datamodule, md5, appregistry, service, MyTypes;
 
 {$R *.dfm}
 
@@ -65,11 +65,12 @@ begin
 
     sleep(100);
 
-    DModule.Database1.Connected := False;
     DModule.dbfConnection.Connected := False;
+    DModule.Database1.Connected := False;
+
     sleep(1000);
 
-    halt;
+    Application.Terminate;
   end
   else
   begin
@@ -79,7 +80,7 @@ begin
     if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy', ReadRegProperty('User'), ReadRegProperty('Password'), 'База данных программы Subsidy') then
       ShowMessage('Ошибка при создании DSN записи SQLSub!');
 
-    DModule.database1.connected := True;
+    DModule.Database1.Connected := True;
 
     Form1.OnCreate(self);
     Form1.LoginMode := lNone;
@@ -89,15 +90,12 @@ begin
 
     Close;
   end;
-
-  Form1.LoginMode := lNone;
 end;
-
 
 procedure TConnectionFrm.Button2Click(Sender: TObject);
 begin
   if mode = mBug then
-    halt
+    Application.Terminate
   else
     Close;
 end;

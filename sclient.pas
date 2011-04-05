@@ -11,7 +11,7 @@ type
   TViewMode = (vEdit, vAdd);
   TCalcMode = (cServ, cServe, cServSq, cServWC);
 
-  TForm2 = class(TForm)
+  TEditClForm = class(TForm)
     PageControl1: TPageControl;
     TabSheet1:    TTabSheet;
     Label1:       TLabel;
@@ -361,6 +361,9 @@ type
     Label68: TLabel;
     Label94: TLabel;
     CheckBox10: TCheckBox;
+    elevatorCheckBox: TCheckBox;
+    Label95: TLabel;
+    npssEdit: TEdit;
     procedure Button2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure comboBoxContChange(Sender: TObject);
@@ -496,28 +499,6 @@ type
     function SearchServIndex(comboBox: TComboBox): integer; overload;
     function SearchServIndex(comboBox: TComboBox; s:string): integer; overload;
 
-    function SelInsp(n: integer): string; //выбрать инспектора
-    function SelStr(n: integer): string;  //выбрать улицу
-    function SelMng(n: integer): string;  //выбрать распорядителя
-    function SelFnd(n: integer): string;  //выбрать фонд
-    function SelSettl(n: integer): string;//выбрать тип заселения
-    function SelOwn(n: integer): string;  //выбрать тип владения
-    function SelCntrl(n: integer): string;//выбрать тип контроля
-    function SelSt(n: integer): string;   //выбрать тип статуса
-    function SelPriv(n: integer): string; //выбрать льготу
-    function SelCont(n: integer): string; //выбрать тариф
-    function SelRep(n: integer): string;  //выбрать тариф
-    function SelCold(n: integer): string; //выбрать тариф
-    function SelCanal(n: integer): string;//выбрать тариф
-    function SelHot(n: integer): string;  //выбрать тариф
-    function SelHeat(n: integer): string; //выбрать тариф
-    function SelGas(n: integer): string;  //выбрать тариф
-    function SelWood(n: integer): string; //выбрать тариф
-    function SelCoal(n: integer): string; //выбрать тариф
-    function SelBank(n: integer): string; //выбрать банк
-    function SelRel(n: integer): string;
-    function SelStnd(n: integer): string;
-    function SelMin(n: integer): real;
     function CheckPers: boolean;
     function CheckLS(s: string): boolean; overload;
     function CheckLS: boolean; overload;
@@ -547,17 +528,17 @@ type
   end;
 
 var
-  Form2: TForm2;
+  EditClForm: TEditClForm;
   Cl:    TClient;
 
 implementation
 
 uses
-  main, service, datamodule, shtarif, shtarifb, chpriv, chinsp, MyTypes;
+  main, service, service2, datamodule, shtarif, shtarifb, chpriv, chinsp, MyTypes;
 
 {$R *.dfm}
 
-function TForm2.ErrorMessage: boolean;
+function TEditClForm.ErrorMessage: boolean;
 var
   s, s1: string;
 begin
@@ -591,7 +572,7 @@ begin
   end;
 end;
 
-procedure TForm2.SetDefault;
+procedure TEditClForm.SetDefault;
 var
   i:integer;
 begin
@@ -676,7 +657,7 @@ begin
   end;
 end;
 
-function TForm2.CalcEmpty: bool;
+function TEditClForm.CalcEmpty: bool;
 var
   sts: integer;
 begin
@@ -696,7 +677,7 @@ begin
     Result := False;
 end;
 
-function TForm2.calcMDiff(sub, fact: string): string;
+function TEditClForm.calcMDiff(sub, fact: string): string;
 var
   mountDiff: double;
 begin
@@ -706,7 +687,7 @@ begin
   Result := FloatToStr(mountDiff);
 end;
 
-function TForm2.CardEmpty: bool;//пусты ключевые поля?
+function TEditClForm.CardEmpty: bool;//пусты ключевые поля?
 begin
   if (Edit110.Text = '') or (Edit66.Text = '') or (Edit68.Text = '') or (Edit95.Text = '') or
     (Edit73.Text = '') or (Edit94.Text = '') or
@@ -721,7 +702,7 @@ begin
     Result := False;
 end;
 
-procedure TForm2.Clear;//очистить нужные поля
+procedure TEditClForm.Clear;//очистить нужные поля
 begin
   Edit9.Text := '0';
   Edit12.Text  := '0';
@@ -836,6 +817,7 @@ begin
   //------
   Edit115.Text := '0';
   Edit116.Text := '0';
+  npssEdit.Text := '';
   MaskEdit5.Text := '';
   MaskEdit6.Text := '';
   MaskEdit4.Text := '';
@@ -893,7 +875,7 @@ begin
   CheckBox10.Checked := False;
 end;
 
-procedure TForm2.ClearFactGrids;
+procedure TEditClForm.ClearFactGrids;
 var
   i: integer;
 begin
@@ -921,7 +903,7 @@ begin
   Edit114.Text := '0';
 end;
 
-procedure TForm2.Fill;
+procedure TEditClForm.Fill;
 {
   заполнить списки у combobox, выбрать radiobutton
   создать массивы, содержащие соответствующие combobox id
@@ -1391,7 +1373,7 @@ begin
   combobox19.OnChange(combobox19);
 end;
 
-procedure TForm2.FillLV;//заполнить List View
+procedure TEditClForm.FillLV;//заполнить List View
 var
   i: integer;
   item: TListItem;
@@ -1410,7 +1392,7 @@ begin
     LVFam.ItemIndex := curman;
 end;
 
-procedure TForm2.SetData;
+procedure TEditClForm.SetData;
 {
   установить все данные
   используется единожды при активации формы
@@ -1469,6 +1451,7 @@ begin
   if Cl.cdata.family.Count > 0 then
   begin
     Edit69.Text := TMan(Cl.cdata.family[curman]).fio;
+    npssEdit.Text := TMan(Cl.cdata.family[curman]).npss;
     MaskEdit1.Text := DateToStr(TMan(Cl.cdata.family[curman]).birth);
     Combobox7.Text := SelRel(TMan(Cl.cdata.family[curman]).rel);
     Combobox17.Text := SelSt(TMan(Cl.cdata.family[curman]).status);
@@ -1649,7 +1632,7 @@ begin
   combobox19.OnChange(combobox19);
 end;
 
-procedure TForm2.SetVCalc;//расчет субсидии
+procedure TEditClForm.SetVCalc;//расчет субсидии
 var
   s: integer;
 begin
@@ -1750,7 +1733,7 @@ begin
   end;
 end;
 
-procedure TForm2.SumV;//суммировать начисления
+procedure TEditClForm.SumV;//суммировать начисления
 var
   Value: real;
   i: integer;
@@ -1774,23 +1757,7 @@ begin
   SetKoef;
 end;
 
-function TForm2.SelMin(n: integer): real;//найти min
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.minim');
-    SQL.Add('from "curlmin.dbf" sbros');
-    SQL.Add('where sbros.id_min = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('minim').AsFloat;
-    Close;
-  end;
-end;
-
-procedure TForm2.SetIncome;
+procedure TEditClForm.SetIncome;
 var
   i: integer;
 begin
@@ -1802,10 +1769,10 @@ begin
   Edit73.Text := FormatFloat('0.00', Cl.cdata.income);
 end;
 
-procedure TForm2.SetKoef;
+procedure TEditClForm.SetKoef;
 var
   pm, ppm: real;
-  i: integer;
+//  i: integer;
 begin
   //сд/пм
   if (Cl.cdata.pmin <> 0) and (Cl.cdata.mcount <> 0) then
@@ -1836,7 +1803,7 @@ begin
     Edit108.Text := '';
 end;
 
-procedure TForm2.SetHouse(s: integer; n, c: string);
+procedure TEditClForm.SetHouse(s: integer; n, c: string);
 begin
   Combobox12.Text := SelStr(s);
   Combobox12.OnChange(combobox12);
@@ -1844,7 +1811,7 @@ begin
   Edit60.Text := n;
 end;
 
-function TForm2.SearchStreet(s: string): integer;
+function TEditClForm.SearchStreet(s: string): integer;
 var
   i:  integer;
   s1: string;
@@ -1861,7 +1828,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchMng(s: string): integer;
+function TEditClForm.SearchMng(s: string): integer;
 var
   i: integer;
 begin
@@ -1876,7 +1843,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchFnd(s: string): integer;
+function TEditClForm.SearchFnd(s: string): integer;
 var
   i: integer;
 begin
@@ -1891,7 +1858,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchSettl(s: string): integer;
+function TEditClForm.SearchSettl(s: string): integer;
 var
   i: integer;
 begin
@@ -1906,7 +1873,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchOwn(s: string): integer;
+function TEditClForm.SearchOwn(s: string): integer;
 var
   i: integer;
 begin
@@ -1921,7 +1888,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchCntrl(s: string): integer;
+function TEditClForm.SearchCntrl(s: string): integer;
 var
   i: integer;
 begin
@@ -1936,7 +1903,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchSt(s: string): integer;
+function TEditClForm.SearchSt(s: string): integer;
 var
   i: integer;
 begin
@@ -1951,7 +1918,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchStnd(s: string): integer;
+function TEditClForm.SearchStnd(s: string): integer;
 var
   i: integer;
 begin
@@ -1966,7 +1933,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchPriv(s: string): integer;
+function TEditClForm.SearchPriv(s: string): integer;
 var
   i: integer;
 begin
@@ -1981,7 +1948,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchRel(s: string): integer;
+function TEditClForm.SearchRel(s: string): integer;
 var
   i: integer;
 begin
@@ -1996,7 +1963,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchServIndex(comboBox: TComboBox): integer;
+function TEditClForm.SearchServIndex(comboBox: TComboBox): integer;
 var
   i: integer;
 begin
@@ -2011,7 +1978,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchServIndex(comboBox: TComboBox; s:string): integer;
+function TEditClForm.SearchServIndex(comboBox: TComboBox; s:string): integer;
 var
   i: integer;
 begin
@@ -2026,7 +1993,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchBank(s: string): integer;
+function TEditClForm.SearchBank(s: string): integer;
 var
   i: integer;
 begin
@@ -2041,346 +2008,9 @@ begin
     Result := -1;
 end;
 
-function TForm2.SelInsp(n: integer): string;//выбрать инспектора
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select nameinsp');
-    SQL.Add('from insp');
-    SQL.Add('where (id_insp = :id)and(id_dist=:dist)');
-    ParamByName('id').AsInteger := n;
-    ParamByName('dist').AsInteger := Form1.dist;
-    Open;
-    Result := FieldByName('nameinsp').AsString;
-    Close;
-  end;
-end;
 
 
-function TForm2.SelStr(n: integer): string;//выбрать улицу
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namestreet');
-    SQL.Add('from strt');
-    SQL.Add('where id_street = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namestreet').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelMng(n: integer): string;//выбрать распорядителя
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namemng');
-    SQL.Add('from mng');
-    SQL.Add('where (id_mng = :id)and(id_dist=:dist)');
-    ParamByName('id').AsInteger := n;
-    ParamByName('dist').AsInteger := Form1.dist;
-    Open;
-    Result := FieldByName('namemng').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelFnd(n: integer): string;//выбрать фонд
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namefond');
-    SQL.Add('from fond');
-    SQL.Add('where id_fond = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namefond').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelSettl(n: integer): string;//выбрать тип заселения
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namesettl');
-    SQL.Add('from settl');
-    SQL.Add('where id_settl = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namesettl').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelOwn(n: integer): string;//выбрать тип владения
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select nameown');
-    SQL.Add('from own');
-    SQL.Add('where id_own = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('nameown').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelCntrl(n: integer): string;//выбрать тип контроля
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namecntrl');
-    SQL.Add('from cntrl');
-    SQL.Add('where id_cntrl = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namecntrl').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelSt(n: integer): string;//выбрать тип статуса
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namestatus');
-    SQL.Add('from stat');
-    SQL.Add('where id_status = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namestatus').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelPriv(n: integer): string;//выбрать льготу
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namepriv');
-    SQL.Add('from priv');
-    SQL.Add('where id_priv = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namepriv').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelRel(n: integer): string;
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namerel');
-    SQL.Add('from rel');
-    SQL.Add('where id_rel = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namerel').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelStnd(n: integer): string;//выбрать стандарт
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namestnd');
-    SQL.Add('from "currstnd.dbf" sbros');
-    SQL.Add('where sbros.id_stnd = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namestnd').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelCont(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namecont');
-    SQL.Add('from "curcont.dbf" sbros');
-    SQL.Add('where sbros.id_cont = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namecont').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelRep(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namerep');
-    SQL.Add('from "currep.dbf" sbros');
-    SQL.Add('where sbros.id_rep = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namerep').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelCold(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namecold');
-    SQL.Add('from "curcold.dbf" sbros');
-    SQL.Add('where sbros.id_cold = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namecold').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelCanal(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namecanal');
-    SQL.Add('from "curcanal.dbf" sbros');
-    SQL.Add('where sbros.id_canal = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namecanal').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelHot(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namehot');
-    SQL.Add('from "curhot.dbf" sbros');
-    SQL.Add('where sbros.id_hot = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namehot').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelHeat(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.nameheat');
-    SQL.Add('from "curheat.dbf" sbros');
-    SQL.Add('where sbros.id_heat = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('nameheat').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelGas(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namegas');
-    SQL.Add('from "curgas.dbf" sbros');
-    SQL.Add('where sbros.id_gas = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namegas').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelWood(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namewood');
-    SQL.Add('from "curwood.dbf" sbros');
-    SQL.Add('where sbros.id_wood = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namewood').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelCoal(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namecoal');
-    SQL.Add('from "curcoal.dbf" sbros');
-    SQL.Add('where sbros.id_coal = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namecoal').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelBank(n: integer): string;//выбрать банк
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namebank');
-    SQL.Add('from bank');
-    SQL.Add('where id_bank = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namebank').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.ExistHouse(var n: integer): bool;//существует дом?
+function TEditClForm.ExistHouse(var n: integer): bool;//существует дом?
 begin
   with DModule.Query1 do
   begin
@@ -2406,7 +2036,7 @@ begin
   end;
 end;
 
-function TForm2.ExistClient(var n: integer): bool;
+function TEditClForm.ExistClient(var n: integer): bool;
 begin
   with DModule.Query1 do
   begin
@@ -2432,7 +2062,7 @@ begin
   end;
 end;
 
-function tform2.existmem: bool;
+function TEditClForm.existmem: bool;
 var
   i: integer;
 begin
@@ -2445,7 +2075,7 @@ begin
     end;
 end;
 
-function TForm2.ExistMemEx(var n: integer): bool;
+function TEditClForm.ExistMemEx(var n: integer): bool;
 var
   i: integer;
   flag1: bool;
@@ -2478,7 +2108,7 @@ begin
     Result := False;
 end;
 
-procedure TForm2.SortFam;
+procedure TEditClForm.SortFam;
 var
   m: TMan;
   mas1, mas2, i, compare: integer;
@@ -2510,7 +2140,7 @@ begin
   end;
 end;
 
-procedure TForm2.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
+procedure TEditClForm.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
   Rect: TRect; State: TGridDrawState);
 {var
   Buf: array[byte] of char;}
@@ -2527,7 +2157,7 @@ begin
       end;}
 end;
 
-procedure TForm2.StringGrid1MouseLeave(Sender: TObject);
+procedure TEditClForm.StringGrid1MouseLeave(Sender: TObject);
 var
   i: integer;
 begin
@@ -2536,7 +2166,7 @@ begin
   UpdateFactInfo();
 end;
 
-procedure TForm2.StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
+procedure TEditClForm.StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
   var CanSelect: Boolean);
 {var
   i: integer;}
@@ -2569,7 +2199,7 @@ begin
     StringGrid1.Options := StringGrid1.Options + [goEditing, goAlwaysShowEditor];}
 end;
 
-procedure TForm2.StringGrid1SetEditText(Sender: TObject; ACol, ARow: Integer;
+procedure TEditClForm.StringGrid1SetEditText(Sender: TObject; ACol, ARow: Integer;
   const Value: string);
 begin
   if ARow <> 0 then
@@ -2580,7 +2210,7 @@ begin
     end;
 end;
 
-procedure TForm2.Button20Click(Sender: TObject);
+procedure TEditClForm.Button20Click(Sender: TObject);
 var
   i: integer;
 begin
@@ -2701,7 +2331,7 @@ begin
   TabControl1.OnChange(self);
 end;
 
-procedure TForm2.Button21Click(Sender: TObject);
+procedure TEditClForm.Button21Click(Sender: TObject);
 begin
   if ComboBox23.Text='' then
     showmessage('Не выбран период для удаления')
@@ -2740,7 +2370,7 @@ begin
   end;
 end;
 
-procedure TForm2.Button2Click(Sender: TObject);
+procedure TEditClForm.Button2Click(Sender: TObject);
 { применить изменения }
 begin
   case mode of
@@ -2757,7 +2387,7 @@ begin
   end;
 end;
 
-procedure TForm2.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TEditClForm.FormClose(Sender: TObject; var Action: TCloseAction);
 { закрытие формы }
 begin
   DModule.Query1.Close;
@@ -2765,7 +2395,7 @@ begin
   DModule.qTarif.Close;
 end;
 
-function TForm2.AddAnyMonth(BD, ED: TDateTime): TStringList;
+function TEditClForm.AddAnyMonth(BD, ED: TDateTime): TStringList;
 var tmpDate: TDateTime;
     StrList: TStringList;
     i: integer;
@@ -2774,7 +2404,7 @@ begin
   StrList:= TStringList.Create;
   tmpDate:= BD;
       StrList.Add(DateToStr(tmpdate));
-      for i:=1 to GetMonthsCount(BD,ED)-1 do
+      for i:=1 to MounthDiff(BD,ED)-1 do
         begin
           tmpdate:=IncMonth(tmpdate,1);
           StrList.Add(DateToStr(tmpdate));
@@ -2782,7 +2412,7 @@ begin
   result:= StrList;
 end;
 
-function TForm2.AddClient: integer;
+function TEditClForm.AddClient: integer;
   { добавить клиента }
 var
   mem, i, n, maxid: integer;
@@ -2941,9 +2571,10 @@ begin
             SQL.Clear;
             SQL.Add('insert into fam');
             SQL.Add('values (:id, :cl, :fio,convert(smalldatetime,:birth,104),');
-            SQL.Add(':pol, :st, :priv,:mid, :rel)');
+            SQL.Add(':pol, :st, :priv,:mid, :rel,:npss)');
             ParamByName('id').AsInteger := StrToInt(IntToStr(Cl.Data.regn) + IntToStr(mem));
             ParamByName('cl').AsInteger := Cl.Data.regn;
+            ParamByName('npss').AsString := TMan(Cl.cdata.family[i]).npss;
             ParamByName('fio').AsString := TMan(Cl.cdata.family[i]).fio;
             ParamByName('birth').AsString := DateToStr(TMan(Cl.cdata.family[i]).birth);
             ParamByName('pol').AsInteger := TMan(Cl.cdata.family[i]).pol;
@@ -2989,7 +2620,7 @@ begin
   end;
 end;
 
-function TForm2.ModifyClient: integer;
+function TEditClForm.ModifyClient: integer;
   { изменить клиента }
 var
   n, i, mem, maxid: integer;
@@ -3194,9 +2825,10 @@ begin
               //          if mem > 9 then mem := 9;
               SQL.Add('insert into fam');
               SQL.Add('values (:id, :cl, :fio,convert(smalldatetime,:birth,104),');
-              SQL.Add(':pol, :st, :priv,:mid, :rel)');
+              SQL.Add(':pol, :st, :priv,:mid, :rel, :npss)');
               ParamByName('id').AsCurrency := StrToCurr(IntToStr(Cl.Data.regn) + IntToStr(mem));
               ParamByName('cl').AsInteger := Form1.client;
+              ParamByName('npss').AsString := TMan(Cl.cdata.family[i]).npss;
               ParamByName('fio').AsString := TMan(Cl.cdata.family[i]).fio;
               ParamByName('birth').AsString := DateToStr(TMan(Cl.cdata.family[i]).birth);
               ParamByName('pol').AsInteger := TMan(Cl.cdata.family[i]).pol;
@@ -3250,7 +2882,7 @@ begin
     ShowMessage('Выберите новый срок субсидии, чтобы сохранить изменения!');
 end;
 
-procedure TForm2.SetRegn;
+procedure TEditClForm.SetRegn;
 var
   num: integer;
 begin
@@ -3275,13 +2907,13 @@ begin
   Cl.Data.regn := num;
 end;
 
-procedure TForm2.SetRegDate;
+procedure TEditClForm.SetRegDate;
 begin
   Edit87.Text := DateToStr(Date);
   Cl.Data.regdate := StrToDate(Edit87.Text);
 end;
 
-procedure TForm2.SetPeriod;
+procedure TEditClForm.SetPeriod;
 begin
   MaskEdit2.Text := Form1.rdt;
   MaskEdit3.Text := DateToStr(IncMonth(StrToDate(Form1.rdt), StrToInt(Edit109.Text)));
@@ -3291,7 +2923,7 @@ begin
   Cl.cdata.enddate := StrToDate(MaskEdit3.Text);
 end;
 
-procedure TForm2.NewPeriod;
+procedure TEditClForm.NewPeriod;
 begin
   SetPeriod;
   Edit86.Text  := SelInsp(Form1.insp);
@@ -3308,13 +2940,15 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Text := 'SELECT *' + #13 +
-      'FROM hist INNER JOIN' + #13 +
-  	    '(SELECT regn, max(bdate) as bdate' + #13 +
-          'FROM hist' + #13 +
-	        'WHERE bdate < convert(smalldatetime,:bdate,104)' + #13 +
-        	'GROUP BY regn) sb on hist.regn = sb.regn AND hist.bdate = sb.bdate' + #13 +
-      'WHERE hist.regn = :regn';
+    SQL.Text := 'SELECT *'#13#10 +
+      'FROM dbo.getcurhist(:bdate)'#13#10 +
+      'WHERE regn = :regn';
+//      'FROM hist INNER JOIN' + #13 +
+//  	    '(SELECT regn, max(bdate) as bdate' + #13 +
+//          'FROM hist' + #13 +
+//	        'WHERE bdate < convert(smalldatetime,:bdate,104)' + #13 +
+//        	'GROUP BY regn) sb on hist.regn = sb.regn AND hist.bdate = sb.bdate' + #13 +
+//      'WHERE hist.regn = :regn';
     ParamByName('regn').AsInteger := cl.data.regn;
     ParamByName('bdate').AsString := DateToStr(cl.cdata.begindate);
     Open;
@@ -3339,7 +2973,7 @@ begin
   //SumV;
 end;
 
-function TForm2.IsAPeriod: boolean;
+function TEditClForm.IsAPeriod: boolean;
 begin
   if (Cl.cdata.begindate <= StrToDate(Form1.rdt)) and
     (Cl.cdata.enddate >= StrToDate(Form1.rdt)) then
@@ -3348,7 +2982,7 @@ begin
     Result := False;
 end;
 
-procedure TForm2.SetCert;
+procedure TEditClForm.SetCert;
 var
   c:  integer;
   p1: TDate;
@@ -3368,7 +3002,7 @@ begin
   end;
 end;
 
-procedure TForm2.comboBoxContChange(Sender: TObject);
+procedure TEditClForm.comboBoxContChange(Sender: TObject);
 { выбрали тариф на содержание жилья }
 var
   ind: integer;
@@ -3394,7 +3028,7 @@ begin
   RecalcOneServ(0, cServSq);
 end;
 
-procedure TForm2.comboBoxRepChange(Sender: TObject);
+procedure TEditClForm.comboBoxRepChange(Sender: TObject);
 { выбрали тариф на МОП }
 var
   ind: integer;
@@ -3420,7 +3054,7 @@ begin
   RecalcOneServ(1, cServe);
 end;
 
-procedure TForm2.comboBoxColdChange(Sender: TObject);
+procedure TEditClForm.comboBoxColdChange(Sender: TObject);
 { выбрали тариф на холодную воду }
 var
   ind, b: integer;
@@ -3451,7 +3085,7 @@ begin
   RecalcOneServ(2, cServ);
 end;
 
-procedure TForm2.comboBoxColdCounterChange(Sender: TObject);
+procedure TEditClForm.comboBoxColdCounterChange(Sender: TObject);
 { выбрали тариф на холодную воду }
 var
   ind, b: integer;
@@ -3482,7 +3116,7 @@ begin
   RecalcOneServ(2, cServ);
 end;
 
-procedure TForm2.comboBoxHotChange(Sender: TObject);
+procedure TEditClForm.comboBoxHotChange(Sender: TObject);
 { выбрали тариф на горячую воду }
 var
   ind, b: integer;
@@ -3513,7 +3147,7 @@ begin
   RecalcOneServ(3, cServ);
 end;
 
-procedure TForm2.comboBoxHotCounterChange(Sender: TObject);
+procedure TEditClForm.comboBoxHotCounterChange(Sender: TObject);
 { выбрали тариф на горячую воду }
 var
   ind, b: integer;
@@ -3544,7 +3178,7 @@ begin
   RecalcOneServ(3, cServ);
 end;
 
-procedure TForm2.comboBoxCanalChange(Sender: TObject);
+procedure TEditClForm.comboBoxCanalChange(Sender: TObject);
 { выбрали тариф на водоотведение }
 var
   ind: integer;
@@ -3571,7 +3205,7 @@ begin
   RecalcOneServ(4, cServ);
 end;
 
-procedure TForm2.comboBoxCanalCounterChange(Sender: TObject);
+procedure TEditClForm.comboBoxCanalCounterChange(Sender: TObject);
 { выбрали тариф на водоотведение }
 var
   ind: integer;
@@ -3598,7 +3232,7 @@ begin
   RecalcOneServ(4, cServ);
 end;
 
-procedure TForm2.ComboBox21Change(Sender: TObject);
+procedure TEditClForm.ComboBox21Change(Sender: TObject);
 begin
   if load then
   begin
@@ -3616,13 +3250,13 @@ begin
   //2:прочие
 end;
 
-procedure TForm2.ComboBox22Change(Sender: TObject);
+procedure TEditClForm.ComboBox22Change(Sender: TObject);
 begin
   if load then
     cl.cdata.heating := ComboBox22.ItemIndex + 1;
 end;
 
-procedure TForm2.ComboBox23Change(Sender: TObject);
+procedure TEditClForm.ComboBox23Change(Sender: TObject);
 begin
   fbegindate := StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex],1,10));
   fenddate := StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex],14,23));
@@ -3632,12 +3266,12 @@ begin
   CheckDifferenceFactSum;
 end;
 
-procedure TForm2.ComboBox23KeyPress(Sender: TObject; var Key: Char);
+procedure TEditClForm.ComboBox23KeyPress(Sender: TObject; var Key: Char);
 begin
   key:= #0;
 end;
 
-procedure TForm2.comboBoxHeatChange(Sender: TObject);
+procedure TEditClForm.comboBoxHeatChange(Sender: TObject);
 { выбрали тариф на отопление  }
 var
   ind: integer;
@@ -3664,7 +3298,7 @@ begin
   RecalcOneServ(5, cServSq);
 end;
 
-procedure TForm2.comboBoxHeatCounterChange(Sender: TObject);
+procedure TEditClForm.comboBoxHeatCounterChange(Sender: TObject);
 { выбрали тариф на отопление  }
 var
   ind: integer;
@@ -3691,7 +3325,7 @@ begin
   RecalcOneServ(5, cServSq);
 end;
 
-procedure TForm2.comboBoxGasChange(Sender: TObject);
+procedure TEditClForm.comboBoxGasChange(Sender: TObject);
 { выбрали тариф на газ }
 var
   ind: integer;
@@ -3718,7 +3352,7 @@ begin
   RecalcOneServ(6, cServ);
 end;
 
-procedure TForm2.comboBoxGasCounterChange(Sender: TObject);
+procedure TEditClForm.comboBoxGasCounterChange(Sender: TObject);
 var
   ind: integer;
 begin
@@ -3744,7 +3378,7 @@ begin
   RecalcOneServ(6, cServ);
 end;
 
-procedure TForm2.comboBoxWoodChange(Sender: TObject);
+procedure TEditClForm.comboBoxWoodChange(Sender: TObject);
 { выбрали тариф на дрова }
 var
   ind: integer;
@@ -3770,7 +3404,7 @@ begin
   RecalcOneServ(12, cServWC);
 end;
 
-procedure TForm2.comboBoxCoalChange(Sender: TObject);
+procedure TEditClForm.comboBoxCoalChange(Sender: TObject);
 { выбрали тариф на уголь }
 var
   ind: integer;
@@ -3796,7 +3430,7 @@ begin
   RecalcOneServ(13, cServWC);
 end;
 
-procedure TForm2.ComboBox10Change(Sender: TObject);
+procedure TEditClForm.ComboBox10Change(Sender: TObject);
  { выбрали региональный стандарт}
 var
   ind: integer;
@@ -3825,7 +3459,7 @@ begin
   end; }
 end;
 
-procedure TForm2.ComboBox12Change(Sender: TObject);
+procedure TEditClForm.ComboBox12Change(Sender: TObject);
 { выбрали улицу }
 var
   ind: integer;
@@ -3842,7 +3476,7 @@ begin
     Cl.Data.str := str[Combobox12.ItemIndex];
 end;
 
-procedure TForm2.Edit60Change(Sender: TObject);
+procedure TEditClForm.Edit60Change(Sender: TObject);
 { выбрали дом }
 var
   b: integer;
@@ -3909,7 +3543,7 @@ begin
     end;
 end;
 
-procedure TForm2.AddFamMan;
+procedure TEditClForm.AddFamMan;
 var
   man: TMan;
   item: TListItem;
@@ -3920,7 +3554,7 @@ begin
     s := 1;
   if RadioButton8.Checked then
     s := 2;
-  man := TMan.Create(Edit69.Text, StrToDate(MaskEdit1.Text), s,
+  man := TMan.Create(Edit69.Text, npssEdit.Text, StrToDate(MaskEdit1.Text), s,
     st[Combobox17.ItemIndex], p[Combobox18.ItemIndex],
     StrToFloat(Edit72.Text), rel[Combobox7.ItemIndex]);
   Cl.cdata.family.Add(man);
@@ -3969,7 +3603,7 @@ begin
   end;
 end;
 
-procedure TForm2.btnColdCounterClick(Sender: TObject);
+procedure TEditClForm.btnColdCounterClick(Sender: TObject);
 var
   nam, namet, capt: string;
 begin
@@ -4005,7 +3639,7 @@ begin
   end;
   if (Sender = btnColdCounter) or (Sender = btnHotCounter) then
   begin
-    Form39 := TForm39.Create(Form2);
+    Form39 := TForm39.Create(EditClForm);
     Form39.Caption := capt;
     Form39.nam := nam;
     Form39.namet := namet;
@@ -4027,7 +3661,7 @@ begin
   end;
   if (Sender = btnCanalCounter) or (Sender = btnHeatCounter) or (Sender = btnGasCounter)  then
   begin
-    Form37 := TForm37.Create(Form2);
+    Form37 := TForm37.Create(EditClForm);
     Form37.Caption := capt;
     Form37.nam := nam;
     Form37.namet := namet;
@@ -4054,7 +3688,7 @@ begin
   end;
 end;
 
-procedure TForm2.ModFamMan;
+procedure TEditClForm.ModFamMan;
 var
   man:  TMan;
   s, pr: integer;
@@ -4065,7 +3699,7 @@ begin
     s := 1;
   if RadioButton8.Checked then
     s := 2;
-  man := TMan.Create(Edit69.Text, StrToDate(MaskEdit1.Text), s,
+  man := TMan.Create(Edit69.Text, npssEdit.Text, StrToDate(MaskEdit1.Text), s,
     st[Combobox17.ItemIndex], p[Combobox18.ItemIndex],
     StrToFloat(Edit72.Text), rel[Combobox7.ItemIndex]);
   pr := TMan(Cl.cdata.family[curman]).priv;//старая льгота
@@ -4104,7 +3738,7 @@ begin
   end;
 end;
 
-procedure TForm2.Button3Click(Sender: TObject);
+procedure TEditClForm.Button3Click(Sender: TObject);
 { добавить члена семьи }
 var
   y, yc, m, mc, d, dc: word;
@@ -4136,7 +3770,7 @@ begin
       AddFamMan
     else
     begin
-      if MessageBox(Form2.Handle, PChar('Выбранный социальный статус не соответствует указанному возрасту.' + #13 +
+      if MessageBox(EditClForm.Handle, PChar('Выбранный социальный статус не соответствует указанному возрасту.' + #13 +
         'Вы настаиваете на нем?'), PChar('Несоответствие'),
         MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
         AddFamMan
@@ -4151,7 +3785,7 @@ begin
     ShowMessage('Введите другие данные!');
 end;
 
-procedure TForm2.Button4Click(Sender: TObject);
+procedure TEditClForm.Button4Click(Sender: TObject);
 { изменить сведения о члене семьи }
 var
   y, yc, m, mc, d, dc: word;
@@ -4185,7 +3819,7 @@ begin
       ModFamMan
     else
     begin
-      if MessageBox(Form2.Handle, PChar('Выбранный социальный статус не соответствует указанному возрасту.' + #13 +
+      if MessageBox(EditClForm.Handle, PChar('Выбранный социальный статус не соответствует указанному возрасту.' + #13 +
         'Вы настаиваете на нем?'), PChar('Несоответствие'),
         MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
         ModFamMan
@@ -4200,7 +3834,7 @@ begin
     ShowMessage('Введите другие данные!');
 end;
 
-procedure TForm2.Button5Click(Sender: TObject);
+procedure TEditClForm.Button5Click(Sender: TObject);
 { удалить сведения о члене семьи }
 var
   i, pr: integer;
@@ -4270,7 +3904,7 @@ begin
   end;
 end;
 
-procedure TForm2.LVFamSelectItem(Sender: TObject; Item: TListItem; Selected: boolean);
+procedure TEditClForm.LVFamSelectItem(Sender: TObject; Item: TListItem; Selected: boolean);
 var
   i: integer;
 begin
@@ -4279,6 +3913,7 @@ begin
     i := LVFam.ItemIndex;
     curman := i;
     Edit69.Text := TMan(Cl.cdata.family[i]).fio;
+    npssEdit.Text := TMan(Cl.cdata.family[i]).npss;
     MaskEdit1.Text := DateToStr(TMan(Cl.cdata.family[i]).birth);
     if TMan(Cl.cdata.family[i]).pol = 1 then
       RadioButton7.Checked := True;
@@ -4294,7 +3929,7 @@ begin
   end;
 end;
 
-procedure TForm2.ComboBox15Change(Sender: TObject);
+procedure TEditClForm.ComboBox15Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4310,7 +3945,7 @@ begin
     Cl.Data.manager := mng[Combobox15.ItemIndex];
 end;
 
-procedure TForm2.ComboBox13Change(Sender: TObject);
+procedure TEditClForm.ComboBox13Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4326,7 +3961,7 @@ begin
     Cl.Data.fond := fnd[Combobox13.ItemIndex];
 end;
 
-procedure TForm2.ComboBox14Change(Sender: TObject);
+procedure TEditClForm.ComboBox14Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4345,7 +3980,7 @@ begin
   end;
 end;
 
-procedure TForm2.ComboBox16Change(Sender: TObject);
+procedure TEditClForm.ComboBox16Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4361,7 +3996,7 @@ begin
     Cl.Data.own := own[Combobox16.ItemIndex];
 end;
 
-procedure TForm2.ComboBox11Change(Sender: TObject);
+procedure TEditClForm.ComboBox11Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4377,7 +4012,7 @@ begin
     Cl.Data.control := cntrl[Combobox11.ItemIndex];
 end;
 
-procedure TForm2.ComboBox17Change(Sender: TObject);
+procedure TEditClForm.ComboBox17Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4391,7 +4026,7 @@ begin
   end;
 end;
 
-procedure TForm2.ComboBox18Change(Sender: TObject);
+procedure TEditClForm.ComboBox18Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4405,7 +4040,7 @@ begin
   end;
 end;
 
-procedure TForm2.ComboBox19Change(Sender: TObject);
+procedure TEditClForm.ComboBox19Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4421,11 +4056,11 @@ begin
     Cl.Data.bank := bank[Combobox19.ItemIndex];
 end;
 
-procedure TForm2.ChangeFactPeriod(BD, ED: TDateTime);
+procedure TEditClForm.ChangeFactPeriod(BD, ED: TDateTime);
 var
   i,j: integer;
 begin
-  StringGrid1.RowCount:= GetMonthsCount(BD,ED)+1;
+  StringGrid1.RowCount:= MounthDiff(BD,ED)+1;
   for i:=0 to (AddAnyMonth(BD,ED)).Count-1 do begin
     StringGrid1.Cells[0,i+1]:= AddAnyMonth(BD,ED)[i];
     StringGrid1.Cells[1,i+1]:= '0';
@@ -4481,7 +4116,7 @@ begin
   end;
 end;
 
-procedure TForm2.CheckBox10Click(Sender: TObject);
+procedure TEditClForm.CheckBox10Click(Sender: TObject);
 begin
   if (CheckBox10.Checked) then
   begin
@@ -4498,7 +4133,7 @@ begin
   end;
 end;
 
-procedure TForm2.CheckBox1Click(Sender: TObject);
+procedure TEditClForm.CheckBox1Click(Sender: TObject);
 var
   sts: integer;
 begin
@@ -4764,7 +4399,7 @@ begin
   end;
 end;
 
-procedure TForm2.FormShow(Sender: TObject);
+procedure TEditClForm.FormShow(Sender: TObject);
 begin
   curmonth := StrToInt(Copy(Form1.rdt, 4, 2));
   PageControl1.TabIndex := 0;
@@ -4779,7 +4414,7 @@ begin
     vAdd://добавить клиента
     begin
       load := True;
-      Form2.Caption := 'Добавить клиента';
+      EditClForm.Caption := 'Добавить клиента';
       Button2.Caption := 'Добавить клиента';
       SetDefault;
       Edit86.Text := SelInsp(Cl.Data.insp);
@@ -4788,7 +4423,7 @@ begin
     end;
     vEdit://изменить/просмотр клиента
     begin
-      Form2.Caption := 'Изменить/Просмотр клиента';
+      EditClForm.Caption := 'Изменить/Просмотр клиента';
       Button2.Caption := 'Изменить клиента';
       Cl.SetClient(Form1.client, Form1.rdt);
       Cl.SetCalc(Form1.client, Form1.rdt);
@@ -4801,7 +4436,7 @@ begin
   end;
 end;
 
-function TForm2.GetColSum(StrGrid: TStringGrid; Col: integer): string;
+function TEditClForm.GetColSum(StrGrid: TStringGrid; Col: integer): string;
 var
   i:integer;
   tmp: double;
@@ -4813,7 +4448,7 @@ begin
   Result := FloatToStr(tmp);
 end;
 
-procedure TForm2.Button8Click(Sender: TObject);
+procedure TEditClForm.Button8Click(Sender: TObject);
 begin
   if load and not CalcEmpty then
   begin
@@ -4823,7 +4458,7 @@ begin
   end;
 end;
 
-procedure TForm2.ComboBox7Change(Sender: TObject);
+procedure TEditClForm.ComboBox7Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4837,12 +4472,12 @@ begin
   end;
 end;
 
-procedure TForm2.Button6Click(Sender: TObject);
+procedure TEditClForm.Button6Click(Sender: TObject);
 begin
   NewPeriod;
 end;
 
-procedure TForm2.PageControl1Change(Sender: TObject);
+procedure TEditClForm.PageControl1Change(Sender: TObject);
 begin
   if Edit57.Text = '' then
     PageControl1.TabIndex := 0
@@ -4891,7 +4526,7 @@ begin
   end;
 end;
 
-procedure TForm2.PageControl1DrawTab(Control: TCustomTabControl;
+procedure TEditClForm.PageControl1DrawTab(Control: TCustomTabControl;
   TabIndex: Integer; const Rect: TRect; Active: Boolean);
 begin
   case TabIndex of
@@ -4913,7 +4548,7 @@ begin
   Control.Canvas.TextOut(Rect.left+5,Rect.top+3,PageControl1.Pages[tabindex].Caption);
 end;
 
-function TForm2.CheckPers: boolean;
+function TEditClForm.CheckPers: boolean;
 var
   v: array[0..19] of integer;
   koef: array[0..19] of integer;
@@ -4959,7 +4594,7 @@ begin
   end;
 end;
 
-function TForm2.CheckLS(s: string): boolean;
+function TEditClForm.CheckLS(s: string): boolean;
 var
   v: array[0..10] of integer;
   koef: array[0..9] of integer;
@@ -4996,7 +4631,7 @@ begin
     Result := False;
 end;
 
-function TForm2.CheckLS: boolean;
+function TEditClForm.CheckLS: boolean;
 var
   res: boolean;
 begin
@@ -5013,7 +4648,7 @@ begin
     Result := False;
 end;
 
-procedure TForm2.Button9Click(Sender: TObject);
+procedure TEditClForm.Button9Click(Sender: TObject);
 begin
   if (Edit74.Text <> '') then
   begin
@@ -5038,27 +4673,27 @@ begin
   end;
 end;
 
-procedure TForm2.TabSheet4Exit(Sender: TObject);
+procedure TEditClForm.TabSheet4Exit(Sender: TObject);
 begin
   if Edit83.Font.Color = clRed then
     Pagecontrol1.TabIndex := 3;
 end;
 
-procedure TForm2.UpdateFactInfo;
+procedure TEditClForm.UpdateFactInfo;
 begin
   if ComboBox23.ItemIndex <> -1 then
   begin
     Edit111.Text := GetColSum(StringGrid1,1);
     Edit112.Text := GetColSum(StringGrid1,2);
     Edit113.Text := GetColSum(StringGrid1,3);
-    if GetMonthsCount(fbegindate,fenddate) <> 0 then
-      Edit114.Text := FloatToStr(rnd(StrToFloat(Edit112.Text) / GetMonthsCount(fbegindate,fenddate)))
+    if MounthDiff(fbegindate,fenddate) <> 0 then
+      Edit114.Text := FloatToStr(rnd(StrToFloat(Edit112.Text) / MounthDiff(fbegindate,fenddate)))
     else
       Edit114.Text := '0'
   end;
 end;
 
-procedure TForm2.TabControl1Change(Sender: TObject);
+procedure TEditClForm.TabControl1Change(Sender: TObject);
 var
   recCount: integer;
 begin
@@ -5146,19 +4781,19 @@ begin
   end;
 end;
 
-procedure TForm2.TabSheet1Exit(Sender: TObject);
+procedure TEditClForm.TabSheet1Exit(Sender: TObject);
 begin
   if Edit57.Text = '' then
     Pagecontrol1.TabIndex := 0;
 end;
 
-procedure TForm2.RadioGroup1Click(Sender: TObject);
+procedure TEditClForm.RadioGroup1Click(Sender: TObject);
 begin
   if load then
     RadioGroup1.ItemIndex := Cl.Data.cert - 1;
 end;
 
-procedure TForm2.Edit74Change(Sender: TObject);
+procedure TEditClForm.Edit74Change(Sender: TObject);
 begin
   with Sender as TEdit do
   begin
@@ -5201,12 +4836,12 @@ begin
   end;
 end;
 
-function TForm2.CheckCountMem: boolean;
+function TEditClForm.CheckCountMem: boolean;
 begin
   Result := (Cl.cdata.mcount = Cl.cdata.family.Count);
 end;
 
-procedure TForm2.CheckDifferenceFactSum;
+procedure TEditClForm.CheckDifferenceFactSum;
 begin
   if TabControl1.TabIndex=1 then
   begin
@@ -5218,7 +4853,7 @@ begin
   end;
 end;
 
-procedure TForm2.CheckBox2Click(Sender: TObject);
+procedure TEditClForm.CheckBox2Click(Sender: TObject);
 begin
   if Checkbox2.Checked then
   begin
@@ -5237,12 +4872,12 @@ begin
   end;
 end;
 
-procedure TForm2.Button1Click(Sender: TObject);
+procedure TEditClForm.Button1Click(Sender: TObject);
 begin
   Close;
 end;
 
-procedure TForm2.Memo1Change(Sender: TObject);
+procedure TEditClForm.Memo1Change(Sender: TObject);
 begin
   if IsRus(Memo1.Text) then
   begin
@@ -5257,7 +4892,7 @@ begin
   end;
 end;
 
-procedure TForm2.Button10Click(Sender: TObject);
+procedure TEditClForm.Button10Click(Sender: TObject);
 var
   nam, namet, capt: string;
 begin
@@ -5317,7 +4952,7 @@ begin
   end;
   if (Sender = Button12) or (Sender = Button13) then
   begin
-    Form39 := TForm39.Create(Form2);
+    Form39 := TForm39.Create(EditClForm);
     Form39.Caption := capt;
     Form39.nam := nam;
     Form39.namet := namet;
@@ -5341,7 +4976,7 @@ begin
     (Sender = Button15) or (Sender = Button16) or (Sender = Button17) or
     (Sender = Button18) then
   begin
-    Form37 := TForm37.Create(Form2);
+    Form37 := TForm37.Create(EditClForm);
     Form37.Caption := capt;
     Form37.nam := nam;
     Form37.namet := namet;
@@ -5388,13 +5023,13 @@ begin
   end;
 end;
 
-procedure TForm2.Button7Click(Sender: TObject);
+procedure TEditClForm.Button7Click(Sender: TObject);
 begin
   Form11.status := 0;
   Form11.ShowModal;
 end;
 
-procedure TForm2.Button19Click(Sender: TObject);
+procedure TEditClForm.Button19Click(Sender: TObject);
 //сменить текущего инспектора
 begin
   Form17.ShowModal;
@@ -5407,7 +5042,7 @@ begin
   end;
 end;
 
-procedure TForm2.RadioGroup3Click(Sender: TObject);
+procedure TEditClForm.RadioGroup3Click(Sender: TObject);
 begin
   if load then
     Cl.cdata.mdd := RadioGroup3.ItemIndex;
@@ -5420,7 +5055,7 @@ begin
   end;
 end;
 
-procedure TForm2.RecalcOneServ(s: integer; mode:TCalcMode);
+procedure TEditClForm.RecalcOneServ(s: integer; mode:TCalcMode);
 begin
   if load and not CalcEmpty then
   begin
@@ -5442,14 +5077,14 @@ begin
   end;
 end;
 
-procedure TForm2.Edit57Exit(Sender: TObject);
+procedure TEditClForm.Edit57Exit(Sender: TObject);
 begin
   if CheckRus(Edit57) and load then
     Cl.Data.fio := Edit57.Text;
-  Edit57.Text := WithoutDoubleSpaces(Edit57.Text);
+  Edit57.Text := NormalizeSpaces(Edit57.Text);
 end;
 
-procedure TForm2.Edit57KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.Edit57KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
   begin
@@ -5458,13 +5093,13 @@ begin
   end;
 end;
 
-procedure TForm2.Edit63Exit(Sender: TObject);
+procedure TEditClForm.Edit63Exit(Sender: TObject);
 begin
   if CheckRus(edit63) and load then
     Cl.Data.apart := Edit63.Text;
 end;
 
-procedure TForm2.Edit63KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.Edit63KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
   begin
@@ -5473,13 +5108,13 @@ begin
   end;
 end;
 
-procedure TForm2.Edit64Exit(Sender: TObject);
+procedure TEditClForm.Edit64Exit(Sender: TObject);
 begin
   if CheckInt(edit64) and load then
     Cl.Data.tel := Edit64.Text;
 end;
 
-procedure TForm2.Edit64KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.Edit64KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
   begin
@@ -5488,7 +5123,7 @@ begin
   end;
 end;
 
-procedure TForm2.Edit66Exit(Sender: TObject);
+procedure TEditClForm.Edit66Exit(Sender: TObject);
 var
   i: Integer;
 begin
@@ -5609,7 +5244,7 @@ begin
   end;
 end;
 
-procedure TForm2.Edit66KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.Edit66KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
   begin
@@ -5726,41 +5361,41 @@ begin
   end;
 end;
 
-procedure TForm2.Edit69Exit(Sender: TObject);
+procedure TEditClForm.Edit69Exit(Sender: TObject);
 begin
   CheckRus(Edit69);
-  Edit69.Text := WithoutDoubleSpaces(Edit69.Text);
+  Edit69.Text := NormalizeSpaces(Edit69.Text);
 end;
 
-procedure TForm2.Edit69KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.Edit69KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
     CheckRus(Edit69);
 end;
 
-procedure TForm2.MaskEdit1Exit(Sender: TObject);
+procedure TEditClForm.MaskEdit1Exit(Sender: TObject);
 begin
   CheckDate(maskedit1);
 end;
 
-procedure TForm2.MaskEdit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.MaskEdit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
     CheckDate(maskedit1);
 end;
 
-procedure TForm2.Edit72Exit(Sender: TObject);
+procedure TEditClForm.Edit72Exit(Sender: TObject);
 begin
   SetPoint(TEdit(Sender));
 end;
 
-procedure TForm2.Edit72KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.Edit72KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
     SetPoint(TEdit(Sender));
 end;
 
-procedure TForm2.Edit83Change(Sender: TObject);
+procedure TEditClForm.Edit83Change(Sender: TObject);
 begin
   if load then
   begin
@@ -5786,13 +5421,13 @@ begin
   end;
 end;
 
-procedure TForm2.Edit9Exit(Sender: TObject);
+procedure TEditClForm.Edit9Exit(Sender: TObject);
 begin
   if (Cl.cdata.indrstnd) then
     Cl.cdata.indrstndval := StrToFloat(Edit9.Text);
 end;
 
-procedure TForm2.CheckBox3Click(Sender: TObject);
+procedure TEditClForm.CheckBox3Click(Sender: TObject);
 begin
   if Checkbox3.Checked then
   begin
@@ -5806,7 +5441,7 @@ begin
   end;
 end;
 
-procedure TForm2.CheckBox4Click(Sender: TObject);
+procedure TEditClForm.CheckBox4Click(Sender: TObject);
   procedure SetCounter(checkBox:TCheckBox; edit: TEdit; service: Integer);
   begin
     if (Sender as TCheckBox).Checked then
@@ -5847,7 +5482,7 @@ begin
   Edit118.OnExit(self);
 end;
 
-procedure TForm2.Edit111Exit(Sender: TObject);
+procedure TEditClForm.Edit111Exit(Sender: TObject);
 begin
   if StrToDate(MaskEdit4.Text) < Form1.Idate then
   begin
@@ -5856,7 +5491,7 @@ begin
   end;
 end;
 
-procedure TForm2.Edit117Exit(Sender: TObject);
+procedure TEditClForm.Edit117Exit(Sender: TObject);
 var
   i: integer;
 begin
@@ -5870,7 +5505,7 @@ begin
       cl.cdata.cost[i] := GetCostTarif(i,cl.cdata.tarifs[i],cl.cdata.begindate,cl.cdata.boiler,cl.cdata.rmcount,cl.cdata.settl);
 end;
 
-procedure TForm2.Edit118Exit(Sender: TObject);
+procedure TEditClForm.Edit118Exit(Sender: TObject);
 begin
   if Sender = Edit118 then
   begin

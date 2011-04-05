@@ -60,7 +60,7 @@ var
 implementation
 
 uses
-  fAppProp, fAppUpdate, service;
+  fAppProp, fAppUpdate, appregistry;
 
 {$R *.dfm}
 
@@ -153,14 +153,14 @@ begin
   if Assigned(confFrame) then
     FreeAndNil(confFrame);
 
-  regConf := TRegIniFile.Create('Software\Subsidy');
+  regConf := TRegIniFile.Create(SUB_ROOT_KEY);
 
   list := TStringList.Create;
 
   with TRegistry.Create do
   begin
     RootKey := HKEY_CURRENT_USER;
-    if OpenKey('Software\Subsidy\Config', True) then
+    if OpenKey(SUB_CONF_KEY, True) then
     begin
       GetValueNames(list);//GetKeyNames(list);
       ListBox1.Clear;

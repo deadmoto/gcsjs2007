@@ -33,7 +33,7 @@ var
 
 implementation
 
-uses datamodule, main, md5, connection_module;
+uses datamodule, main, md5, appregistry;
 
 {$R *.dfm}
 

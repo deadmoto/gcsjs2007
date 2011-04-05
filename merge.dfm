@@ -1,4 +1,4 @@
-object Form21: TForm21
+object MergeForm: TMergeForm
   Left = 273
   Top = 192
   BorderStyle = bsToolWindow

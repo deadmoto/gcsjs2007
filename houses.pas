@@ -879,12 +879,12 @@ begin
     begin
       if status = 1 then
       begin
-        Form2.Caption := 'Изменить/Просмотр дом';
+        EditClForm.Caption := 'Изменить/Просмотр дом';
         Button1.Caption := 'Изменить';
       end
       else
       begin
-        Form2.Caption := 'Удалить дом';
+        EditClForm.Caption := 'Удалить дом';
         Button1.Caption := 'Удалить';
       end;
       SetHouse(Form30.house);

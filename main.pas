@@ -6,7 +6,8 @@ uses
   Buttons, Classes, ComCtrls, comobj, Controls, DB, DBTables, Dialogs, Windows,
   ExtCtrls, Forms, frxClass, frxDBSet, Graphics, Grids, ImgList, Menus,
   Messages, Registry, StdCtrls, SysUtils, Variants, dbf, ActnList, XPStyleActnCtrls,
-  ActnMan, ActnCtrls, ActnMenus, ToolWin, SevenZipVCL, Math, StrUtils, frxExportXLS;
+  ActnMan, ActnCtrls, ActnMenus, ToolWin, SevenZipVCL, Math, StrUtils, frxExportXLS,
+  OleServer, ExcelXP;
 
 type
   PAdditionRepData = ^TAdditionRepData;
@@ -176,7 +177,6 @@ type
     Action21: TAction;
     aAdminMode: TAction;
     aFactSumRpt: TAction;
-    aFactSumRptCounter: TAction;
     aChangeAdminPasswd: TAction;
     aInformKarta: TAction;
     procedure FormCreate(Sender: TObject);
@@ -342,7 +342,7 @@ type
 
 var
   Form1:     TForm1;
-  searchbuf: string;//содержит набор букв, который используется для поиска фио клиента
+  searchbuf: string; //содержит набор букв, который используется для поиска фио клиента
   LastTime:  TTime;  //время последнего нажатия клавиши
   ItemIndex: integer;//используются для поиска фио клиента
   curregn:   integer;
@@ -352,10 +352,10 @@ implementation
 uses
   sclient, inspector, district, street, fond, manager, privilege, minimum, status,
   tarif, elpower, uSelectDist, opend, houses, norm, chpriv, chhouse, bank, about,
-  datamodule, search, service, fstruct, imexp, SQL, progress, Contnrs, DateUtils,
+  datamodule, search, service, service2, fstruct, imexp, SQL, progress, Contnrs, DateUtils,
   rstnd, loop, tarifb, chinsp, curhist, chserv, Client, merge, mdd, statage,
   statlm, codedbf, chtarifs, rrecalc, stat, padegFIO, uSluj, uConnection,
-  uSettings, uReportData, uGenRefBook, uReportEdit, uShade, wincontrols, md5, connection_module, MyTypes;
+  uSettings, uReportData, uGenRefBook, uReportEdit, uShade, wincontrols, md5, appregistry, MyTypes;
 
 {$R *.dfm}
 {$I Revision.inc}
@@ -508,8 +508,8 @@ procedure TForm1.aClAddExecute(Sender: TObject);
 begin
   if CheckP2 then
   begin
-    Form2.mode := vAdd;
-    Form2.ShowModal;
+    EditClForm.mode := vAdd;
+    EditClForm.ShowModal;
   end
   else
     ShowMessage('Добавить клиента можно только в текущий по календарю или следующий за ним отчетный период!');
@@ -618,8 +618,8 @@ begin
   begin
     if (stop[SGCl.Row - 1] < 2) or (stop[SGCl.Row - 1] > 1) and (status = 3) then
     begin
-      Form2.mode := vEdit;
-      Form2.ShowModal;
+      EditClForm.mode := vEdit;
+      EditClForm.ShowModal;
     end
     else
       ShowMessage('Карта клиента заблокирована для изменения!' + #13 +
@@ -2139,7 +2139,12 @@ end;
 procedure TForm1.aSQLQueryExecute(Sender: TObject);
 { Вызов формы SQL-запроса }
 begin
-  Form34.ShowModal;
+  with TSQLExecForm.Create(Application) do
+  begin
+    ShowModal;
+    Free;
+  end;
+  //Form34.ShowModal;
 end;
 
 procedure TForm1.aRepFactExecute(Sender: TObject);
@@ -2482,6 +2487,14 @@ begin
     Form1.LoginMode := lInsp;
     aAdminMode.Checked := False;
     aChangeAdminPasswd.Visible := False;
+    aSQLQuery.Visible := False;
+    aRepEditor.Visible := False;
+    aSetActiveAllInsp.Visible := False;
+    aSetActiveAllStrt.Visible := False;
+    aSetActiveUseStrt.Visible := False;
+    aConf.Visible := False;
+    aMerge.Visible := False;
+    aImport.Visible := False;
     exit;
   end;
 
@@ -2493,6 +2506,14 @@ begin
     Form1.LoginMode := lAdmin;
     aAdminMode.Checked := True;
     aChangeAdminPasswd.Visible := True;
+    aSQLQuery.Visible := True;
+    aRepEditor.Visible := True;
+    aSetActiveAllInsp.Visible := True;
+    aSetActiveAllStrt.Visible := True;
+    aSetActiveUseStrt.Visible := True;
+    aConf.Visible := True;
+    aMerge.Visible := True;
+    aImport.Visible := True;
   end;
   
   ActionMainMenuBar1.Repaint;
@@ -2506,6 +2527,8 @@ var
   d, i: integer;
   SevenZip: TSevenZip;
 begin
+  SevenZip := TSevenZip.Create(Application);
+
   path := ExtractFilePath(Application.ExeName) + 'arc\';
   if not DirectoryExists(path) then
     ForceDirectories(path);
@@ -2523,7 +2546,7 @@ begin
   try
     if FileExists(path + Name + '.7z') then
       DeleteFile(PAnsiChar(path + Name + '.7z'));
-    SevenZip := TSevenZip.Create(Application);
+
     SevenZip.SZFileName := path + Name + '.7z';
     with SevenZip do
     begin
@@ -2725,18 +2748,20 @@ begin
 end;
 
 procedure TForm1.aFactSumRptExecute(Sender: TObject);
+{
+  формирование справки о сравнении размера субсидии с фактическими расходами;
+}
 const
   val: array[1..6] of string = ('H','G','F','E','D','C');
 var
   ExcelApp, Sheet: OleVariant;
   c: TClient;
-  status, i: integer;
+  i: integer;
   bdate, edate: TDate;
 begin
   c := TClient.Create(Empty, EmptyC);
   c.SetClient(client, Form1.rdt);
   c.setcalc(client, Form1.rdt);
-
   bdate := c.cdata.prevbegindate;
   edate := c.cdata.prevenddate;
 
@@ -2745,8 +2770,6 @@ begin
     bdate := c.cdata.begindate;
     edate := c.cdata.enddate;
   end;
-
-  showMessage(DateToStr(bdate)+'-'+DateToStr(edate)) ;
 
   with DModule.Query2 do
   begin
@@ -2758,7 +2781,6 @@ begin
     ParamByName('rgn').Value := client;
     ParamByName('bd').Value := DateToStr(bdate);
     ParamByName('ed').Value := DateToStr(edate);
-    showMessage(SQL.Text) ;
     Open;
     First;
   end;
@@ -2771,34 +2793,37 @@ begin
       raise Exception.Create('Ошибка создания объекта Excel: ' + E.Message);
   end;
 
-  if Sender = aFactSumRpt then
-    ExcelApp.WorkBooks.Open(Form1.reports_path + 'u4et_month.xlt')
-  else
-    ExcelApp.WorkBooks.Open(Form1.reports_path + 'u4et_month_cnt.xlt');
+  ExcelApp.WorkBooks.Open(Form1.reports_path + 'u4et_month.xlt');
 
   Sheet :=  ExcelApp.ActiveWorkBook.WorkSheets[1];
 
-  Sheet.Range['A5','A5'] := format('Номер дела:  %d',[client]);
-  Sheet.Range['A6','A6'] := 'ФИО:            '+SGCl.Cells[0, SGCl.row];
-  Sheet.Range['A7','A7'] := 'Адрес:           '+SGCl.Cells[1, SGCl.row];
+  Sheet.Range['B5','B5'] := format('%d', [client]);
+  Sheet.Range['B6','B6'] := SGCl.Cells[0, SGCl.row];
+  Sheet.Range['B7','B7'] := SGCl.Cells[1, SGCl.row];
+
+  Sheet.Cells.Replace(':bdate:', StringDate(bdate), xlPart, xlByRows, False, False, False);
+  Sheet.Cells.Replace(':edate:', StringDate(edate), xlPart, xlByRows, False, False, False);
+  Sheet.Cells.Replace(':fio:', GetShortName(SGCl.Cells[0, SGCl.row]), xlPart, xlByRows, False, False, False);
+  Sheet.Cells.Replace(':insp:', SelInsp(c.data.insp), xlPart, xlByRows, False, False, False);
 
   if ( c.cdata.prevbegindate = bdate) then
   begin
     ShowMessage('У клиента не хватает сроков для автоматического заполнения таблицы. Введите суммы вручную.');
     ExcelApp.Visible := True;
-    exit;
+//    ExcelApp.DisplayAlerts := False;
+//    ExcelApp.Quit;
+//    ExcelApp:=Unassigned;
+    Exit;
   end;
 
   try
-    for i := 1 to GetMonthsCount(bdate, edate) do
+    for i := 1 to MounthDiff(bdate, edate) do
     begin
       Sheet.Range[val[i]+'24', val[i]+'24'] := DModule.Query2.FieldByName('subsum').Value;
-      Sheet.Range[val[i]+'10', val[i]+'10'] := LongMonthNames[StrToInt(FormatDateTime('m', DModule.Query2.FieldByName('sdate').Value))];
+      Sheet.Range[val[i]+'10', val[i]+'10'] := StringDate(DModule.Query2.FieldByName('sdate').Value);
       DModule.Query2.Next;
     end;
 
-    Sheet.Range['A3','A3'] := format('о сравнении размера субсидии с фактическими расходами на оплату жилищно-коммунальных услуг за период %s - %s %d года',
-      [Sheet.Range['C10','C10'], Sheet.Range['H10','H10'], YearOf(DModule.Query2.FieldByName('sdate').Value)]);//'123123123123'+' - '+'987654'+' '+YearOf(DModule.Query2.FieldByName('subsum').Value)+' года';
     ExcelApp.Visible := True;
   finally
     c.Free;
@@ -2882,7 +2907,7 @@ procedure TForm1.aInformKartaExecute(Sender: TObject);
 var
   ExcelApp, Sheet: OleVariant;
   c: TClient;
-  i: integer;
+//  i: integer;
 begin
   c := TClient.Create(Empty, EmptyC);
   c.SetClient(client, Form1.rdt);
@@ -2905,15 +2930,23 @@ begin
   try
     ExcelApp := CreateOleObject('Excel.Application');
     ExcelApp.Visible := False;
-    ExcelApp.WorkBooks.Open(Form1.reports_path + 'infkarta.xls')
+    ExcelApp.WorkBooks.Open(Form1.reports_path + 'infkarta.xlt')
   except
     on E: Exception do
       raise Exception.Create('Ошибка создания объекта Excel: ' + E.Message);
   end;
   Sheet :=  ExcelApp.ActiveWorkBook.WorkSheets[1];
 
-  Sheet.Range['B3','B3'] := SGCl.Cells[0, SGCl.row];//fio
-  Sheet.Range['A5','A5'] := SGCl.Cells[1, SGCl.row];//address
+  Sheet.Range['B3','B3'] := SGCl.Cells[0, SGCl.row];//заявитель
+  Sheet.Range['B5','B5'] := SGCl.Cells[1, SGCl.row];//address
+  Sheet.Range['B6','B6'] := SelCert(c.data.cert);
+  Sheet.Range['B8','B8'] := SelOwn(c.data.own);
+  Sheet.Range['E8','E8'] := SelHeating(c.cdata.heating);
+  Sheet.Range['B9','B9'] := SelFnd(c.data.fond);
+  Sheet.Range['B10','B10'] :=  FloatToStr(c.cdata.square) + ' кв.м.';
+  Sheet.Range['F10','F10'] :=  SelSettl(c.data.settl);
+  Sheet.Range['E11','E11'] :=  GetNameTafif(7, c.cdata.tarifs[7]);
+  Sheet.Range['B14','B14'] := c.cdata.quanpriv;
   Sheet.Range['F14','F14'] := c.cdata.quanpriv;
   Sheet.Range['D12','D12'] := BoolToStr(Boolean(c.cdata.boiler));
   ExcelApp.Visible := True;
@@ -2925,7 +2958,7 @@ procedure TForm1.aMergeExecute(Sender: TObject);
   Вызов формы обмена данными между филиалом и отделом или между отделом и центром.
 }
 begin
-  Form21.ShowModal;
+  MergeForm.ShowModal;
 end;
 
 procedure TForm1.AddCl(id: integer);
@@ -3043,7 +3076,7 @@ end;
 procedure TForm1.aOpenExcelExecute(Sender: TObject);
 { Согласно шаблону MSExcel заполняются данные и открывается MSExcel }
 begin
-  ExportGridToExcel(SGCL, Form1.reports_path + 'filter.xlt');
+  ExportGridToExcel(SGCL, Form1.reports_path + 'filter.xlt'); 
 end;
 
 procedure TForm1.aRecalcSubsidyExecute(Sender: TObject);
@@ -3284,8 +3317,7 @@ procedure TForm1.aSelServerExecute(Sender: TObject);
 begin
   ConnectionFrm.ShowModal;
   Form1.Caption := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ' +
-    LongMonthNames[StrToInt(FormatDateTime('m', StrToDate(rdt)))] + ' ' +
-    IntToStr(YearOf(StrToDate(rdt))) + 'г.' + ' [' + Revision + ']' + ' - ' + curServer;
+    StringDate(StrToDate(rdt)) + 'г.' + ' [' + Revision + ']' + ' - ' + curServer;
 end;
 
 procedure TForm1.ModCl(id: integer);
@@ -3527,7 +3559,7 @@ begin
   with TRegistry.Create do
     try
       RootKey := HKEY_CURRENT_USER;
-      if OpenKey('Software\Subsidy', True) then
+      if OpenKey(SUB_ROOT_KEY, True) then
       begin
         if ValueExists('dist') then
           dist := ReadInteger('dist'{,2})
@@ -3576,28 +3608,29 @@ begin
     dt := dt + IntToStr(m);
   SetPer(dt, rdt);
 
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select nameinsp, namedist');
-    SQL.Add('from insp inner join dist on insp.id_dist = dist.id_dist');
-    SQL.Add('where (insp.id_insp = :idi) and (dist.id_dist = :idd)');
-    SQL.Add('order by nameinsp');
-    ParamByName('idi').AsInteger := insp;
-    ParamByName('idd').AsInteger := dist;
-    Open;
-    Statusbar1.Panels[1].Text := 'Инспектор: ' + FieldByName('nameinsp').AsString;
-    Statusbar1.Panels[2].Text := 'Округ: ' + FieldByName('namedist').AsString;
-    Close;
-  end;
+  Statusbar1.Panels[1].Text := 'Инспектор: ' + SelInsp(insp);
+  Statusbar1.Panels[2].Text := 'Округ: ' + SelDist(dist);
+//  with DModule.Query1 do
+//  begin
+//    Close;
+//    SQL.Clear;
+//    SQL.Add('select nameinsp, namedist');
+//    SQL.Add('from insp inner join dist on insp.id_dist = dist.id_dist');
+//    SQL.Add('where (insp.id_insp = :idi) and (dist.id_dist = :idd)');
+//    SQL.Add('order by nameinsp');
+//    ParamByName('idi').AsInteger := insp;
+//    ParamByName('idd').AsInteger := dist;
+//    Open;
+//    Statusbar1.Panels[1].Text := 'Инспектор: ' + FieldByName('nameinsp').AsString;
+//    Statusbar1.Panels[2].Text := 'Округ: ' + FieldByName('namedist').AsString;
+//    Close;
+//  end;
 
   FormerStringGrid(SGCL, TStringArray.Create('ФИО', 'Адрес', 'Срок субсидии',
     'Расчет','Субсидия'), TIntArray.Create(200, 170, 128, 40, 55), 2);
 
   Form1.Caption := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ' +
-    LongMonthNames[StrToInt(FormatDateTime('m', StrToDate(rdt)))] + ' ' +
-    IntToStr(YearOf(StrToDate(rdt))) + 'г.' + ' [' + Revision + ']' + ' - ' + curServer;
+    StringDate(StrToDate(rdt)) + 'г.' + ' [' + Revision + ']' + ' - ' + curServer;
 
   //русская расладка
   c := GetKeyboardLayoutList(High(Layouts) + 1, Layouts);
@@ -3915,7 +3948,7 @@ begin
 
   if LoginMode = lNone then
   begin
-    SelectDistFrm.ShowModal;
+    aSelDist.Execute;
   end;
   if LoginMode = lNone then
     halt;
@@ -3924,7 +3957,6 @@ end;
 procedure TForm1.ReloadConfig;
 begin
   GroupBox1.Visible := getConfValue('0.ShowLegend');
-  Button3.Visible := getConfValue('0.ShowDeleteButton');
   getConfValue('1.Server');
   //в переменной хранится путь папки с отчетами
   if getConfValue('0.OtherRepPath') = True then
@@ -4231,7 +4263,7 @@ begin
   with TRegistry.Create do
     try
       RootKey := HKEY_CURRENT_USER;
-      if OpenKey('Software\Subsidy', True) then
+      if OpenKey(SUB_ROOT_KEY, True) then
       begin
         WriteInteger('dist', dist);
         WriteInteger('insp', insp);
@@ -4378,8 +4410,8 @@ begin
     sec1 := 0;
     if (stop[SGCl.Row - 1] < 2) or (stop[SGCl.Row - 1] > 1) and (status = 3) then
     begin
-      Form2.mode := vEdit;
-      Form2.ShowModal;
+      EditClForm.mode := vEdit;
+      EditClForm.ShowModal;
     end
     else
       ShowMessage('Карта клиента заблокирована для изменения!' + #13 +
@@ -4397,8 +4429,8 @@ begin
   begin
     if CheckP2 then
     begin
-      Form2.mode := vAdd;
-      Form2.ShowModal;
+      EditClForm.mode := vAdd;
+      EditClForm.ShowModal;
     end
     else
       ShowMessage('Добавить клиента можно только в текущий отчетный период!');
@@ -4409,8 +4441,8 @@ begin
     begin
       if (stop[SGCl.Row - 1] < 2) or (stop[SGCl.Row - 1] > 1) and (status = 3) then
       begin
-        Form2.mode := vEdit;
-        Form2.ShowModal;
+        EditClForm.mode := vEdit;
+        EditClForm.ShowModal;
       end
       else
         ShowMessage('Карта клиента заблокирована для изменения!' + #13 +
@@ -4455,7 +4487,7 @@ end;
 procedure TForm1.SGClMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-  SGCL.Row := SGCL.MouseCoord(x,y ).Y;
+  //SGCL.Row := SGCL.MouseCoord(x, y).Y;
 end;
 
 procedure TForm1.FormResize(Sender: TObject);

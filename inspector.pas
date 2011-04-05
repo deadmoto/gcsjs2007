@@ -62,7 +62,7 @@ var
 implementation
 
 uses
-  datamodule, main, service, md5, connection_module, wincontrols, MyTypes;
+  datamodule, main, service, md5, appregistry, wincontrols, MyTypes;
 
 {$R *.dfm}
 

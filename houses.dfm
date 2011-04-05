@@ -154,7 +154,7 @@ object Form24: TForm24
     Top = 16
     Width = 233
     Height = 21
-    ItemHeight = 13
+    ItemHeight = 0
     MaxLength = 40
     TabOrder = 1
     OnChange = ComboBox1Change
@@ -185,7 +185,7 @@ object Form24: TForm24
     Top = 160
     Width = 289
     Height = 21
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 8
     OnChange = ComboBox2Change
     OnExit = ComboBox2Change
@@ -206,7 +206,7 @@ object Form24: TForm24
     Width = 289
     Height = 21
     Color = clBtnFace
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 9
     OnChange = ComboBox3Change
     OnExit = ComboBox3Change
@@ -216,7 +216,7 @@ object Form24: TForm24
     Top = 208
     Width = 289
     Height = 21
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 10
     OnChange = ComboBox4Change
     OnExit = ComboBox4Change
@@ -226,7 +226,7 @@ object Form24: TForm24
     Top = 232
     Width = 289
     Height = 21
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 11
     OnChange = ComboBox5Change
     OnExit = ComboBox5Change
@@ -236,7 +236,7 @@ object Form24: TForm24
     Top = 280
     Width = 289
     Height = 21
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 13
     OnChange = ComboBox6Change
     OnExit = ComboBox6Change
@@ -246,7 +246,7 @@ object Form24: TForm24
     Top = 304
     Width = 289
     Height = 21
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 14
     OnChange = ComboBox7Change
     OnExit = ComboBox7Change
@@ -256,7 +256,7 @@ object Form24: TForm24
     Top = 328
     Width = 289
     Height = 21
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 15
     OnChange = ComboBox9Change
     OnExit = ComboBox9Change
@@ -266,7 +266,7 @@ object Form24: TForm24
     Top = 352
     Width = 289
     Height = 21
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 16
     OnChange = ComboBox10Change
     OnExit = ComboBox10Change
@@ -346,7 +346,7 @@ object Form24: TForm24
     Top = 48
     Width = 289
     Height = 21
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 4
     OnChange = ComboBox11Change
     OnExit = ComboBox11Change
@@ -356,7 +356,7 @@ object Form24: TForm24
     Top = 72
     Width = 289
     Height = 21
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 5
     OnChange = ComboBox12Change
     OnExit = ComboBox12Change
@@ -366,7 +366,7 @@ object Form24: TForm24
     Top = 136
     Width = 289
     Height = 21
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 7
     OnChange = ComboBox8Change
     OnExit = ComboBox8Change
@@ -376,7 +376,7 @@ object Form24: TForm24
     Top = 104
     Width = 289
     Height = 21
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 6
     OnChange = ComboBox13Change
     OnExit = ComboBox13Change
@@ -386,7 +386,7 @@ object Form24: TForm24
     Top = 256
     Width = 289
     Height = 21
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 12
     OnChange = ComboBox14Change
     OnExit = ComboBox14Change

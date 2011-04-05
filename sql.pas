@@ -21,7 +21,7 @@ uses
   ComCtrls;
 
 type
-  TForm34 = class(TForm)
+  TSQLExecForm = class(TForm)
     DBGrid1:     TDBGrid;
     SaveDialog1: TSaveDialog;
     OpenDialog1: TOpenDialog;
@@ -49,7 +49,7 @@ type
   end;
 
 var
-  Form34: TForm34;
+  SQLExecForm: TSQLExecForm;
 
 implementation
 
@@ -61,22 +61,17 @@ uses
 
 {$R *.dfm}
 
-procedure TForm34.Button1Click(Sender: TObject);
+procedure TSQLExecForm.Button1Click(Sender: TObject);
 {*******************************************************************************
   Процедура Button1Click выполняет запрос, который введен пользователем в Memo1.
   Если запрос пуст или содержит некоторую ошибку, то выдается предупреждение.
 *******************************************************************************}
-//var
-//  i: integer;
 begin
   if Memo1.Lines.Count <> 0 then
     try
       with DModule.Query1 do
       begin
         Close;
-        SQL.Clear;
-        {for i:=0 to Memo1.Lines.Count-1 do
-          SQL.Add(Memo1.Lines[i]);}
         SQL.Text := Memo1.Text;
 
         case TabControl1.TabIndex of
@@ -86,7 +81,6 @@ begin
           end;
           1:
           begin
-            Close;
             ExecSQL;
             ShowMessage('Запрос выполнен');
           end;
@@ -100,7 +94,7 @@ begin
     ShowMessage('Введите запрос!');
 end;
 
-procedure TForm34.Button2Click(Sender: TObject);
+procedure TSQLExecForm.Button2Click(Sender: TObject);
 {*******************************************************************************
   Процедура Button2Click очищает Memo1 и стирает результат запроса.
 ********************************************************************************}
@@ -109,7 +103,7 @@ begin
   DModule.Query1.Close;
 end;
 
-procedure TForm34.Button4Click(Sender: TObject);
+procedure TSQLExecForm.Button4Click(Sender: TObject);
 {*******************************************************************************
   Процедура Button4Click совершает экспорт результата запроса в файл DBase 4.0
   untitled1.dbf с указанной кодировкой ANSI или OEM, по умолчанию ANSI.
@@ -118,17 +112,23 @@ procedure TForm34.Button4Click(Sender: TObject);
 var
   i: integer;
 begin
+  SaveDialog1.Filter := 'dBase files(*.dbf)|*.dbf|Все файлы(*.*)|*.*';
+
+  if not SaveDialog1.Execute then Exit;
+
   with DModule do
   begin
     if Dbf1.Active then
       Dbf1.Close;
     if not Query1.IsEmpty then
     begin
+      //DBGrid1.DataSource := '';
+      
       //создание таблицы
       for i := 0 to Query1.FieldCount - 1 do
         Dbf1.AddFieldDefs(GetName(Query1.Fields[i]), GetType(Query1.Fields[i]),
           GetSize(Query1.Fields[i]), GetPrec(Query1.Fields[i]));
-      Dbf1.TableName := path + 'untitled1.dbf';
+      Dbf1.TableName := SaveDialog1.FileName;// path + 'untitled1.dbf';
       Dbf1.CreateTable;
       Dbf1.CodePage := Form1.codedbf;
       //запись в нее данных
@@ -142,13 +142,14 @@ begin
       end;
       Dbf1.Close;
       Query1.Close;
+      //DBGrid1.DataSource := DataSource1;
     end
     else
       ShowMessage('Для экспорта в dbf необходим ненулевой результат запроса!');
   end;
 end;
 
-procedure TForm34.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TSQLExecForm.FormClose(Sender: TObject; var Action: TCloseAction);
 {*******************************************************************************
   Процедура FormClose закрывает Query1, которые используются при работе
   в этом unit. Также устанавливается русская раскладка для ввода.
@@ -170,9 +171,16 @@ begin
   if rl <> 0 then
     ActivateKeyboardLayout(rl, 0);
   DModule.Query1.Close;
+
+  if not Assigned(Form1) then
+  begin
+    DModule.dbfConnection.Connected := False;
+    DModule.DataBase1.Connected := False;
+    Application.Terminate;
+  end;
 end;
 
-procedure TForm34.FormShow(Sender: TObject);
+procedure TSQLExecForm.FormShow(Sender: TObject);
 {*******************************************************************************
   Процедура FormShow обрабатывает событие OnShow формы. Устанавливается английская
   раскладка для ввода запроса, путь по умолчанию, куда можно сохранять текст
@@ -202,7 +210,7 @@ begin
   path := ExtractFilePath(Application.ExeName) + 'out\';
 end;
 
-procedure TForm34.TabControl1Change(Sender: TObject);
+procedure TSQLExecForm.TabControl1Change(Sender: TObject);
 begin
   case TabControl1.TabIndex of
     0:
@@ -216,17 +224,18 @@ begin
   end;
 end;
 
-procedure TForm34.Button3Click(Sender: TObject);
+procedure TSQLExecForm.Button3Click(Sender: TObject);
 {*******************************************************************************
   Процедура Button3Click сохраняет текст запроса в файл с именем, выбранным в
   появившемся диалоге.
 *******************************************************************************}
 begin
+  SaveDialog1.Filter := 'Файлы запросов(*.sql)|*.sql|Текстовые файлы(*.txt)|*.txt|Все файлы(*.*)|*.*';
   if SaveDialog1.Execute then
     Memo1.Lines.SaveToFile(SaveDialog1.FileName);
 end;
 
-procedure TForm34.Button5Click(Sender: TObject);
+procedure TSQLExecForm.Button5Click(Sender: TObject);
 {*******************************************************************************
   Процедура Button3Click загружает текст запроса из файл с именем, выбранным в
   появившемся диалоге.
