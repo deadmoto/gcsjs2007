@@ -1068,7 +1068,7 @@ begin
     SQL.Add('INSERT INTO house');
     SQL.Add('VALUES (:id, :idd, :str, :nh,:cp,:stnd,');
     SQL.Add(':cont, :rep, :cold, :hot,:canal, :heat, :gas,');
-    SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil)');
+    SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil,:elevator)');
   end;
   if FileExists(path+'house'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'house'+IntToStr(dis)+'.dbf',f);
@@ -1100,6 +1100,7 @@ begin
         Query1.ParamByName('mng').AsString := f[i][16];
         Query1.ParamByName('fnd').AsString := f[i][17];
         Query1.ParamByName('boil').AsString := f[i][18];
+        Query1.ParamByName('elevator').AsString := f[i][19];
         Query1.ExecSQL;
       end;
       Query1.Close;

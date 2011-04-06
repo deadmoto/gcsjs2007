@@ -1983,13 +1983,6 @@ begin
     Query1.SQL.Clear;
     Query1.SQL.Add('EXEC nachnew ' + quotedstr(rdt) + ',' + IntToStr(dist));
     Query1.Open;
-
-    Query2.Close;
-    Query2.SQL.Clear;
-    Query2.SQL.Text := ('SELECT boss ' + #13 +
-      'FROM Dist ' + #13 +
-      'WHERE id_dist = ' + IntToStr(dist));
-    Query2.Open;
   end;
 
   frxData.DataSource := DModule.DataSource1;
@@ -1997,7 +1990,7 @@ begin
   frxReport1.Script.Variables['id_dist'] := (dist);
   frxReport1.Variables.Variables['mont'] := quotedstr(LongMonthNames[StrToInt(FormatDateTime('m', StrToDate(rdt)))]);
   frxReport1.Variables.Variables['year'] := IntToStr(yearof(strtodate(rdt)));
-  frxReport1.Variables.Variables['boss'] := quotedstr(DModule.Query2.FieldValues['boss']);
+  frxReport1.Variables.Variables['boss'] := quotedstr(SelBoss(dist));
 
   frxReport1.PrepareReport;
   frxReport1.ShowPreparedReport;
@@ -2156,13 +2149,6 @@ begin
     Query1.Close;
     Query1.SQL.Text := 'EXEC getclfactsum ' + quotedstr(rdt) + ', ' + IntToStr(dist);
     Query1.Open;
-
-    Query2.Close;
-    Query2.SQL.Clear;
-    Query2.SQL.Text := ('SELECT boss ' + #13 +
-      'FROM Dist ' + #13 +
-      'WHERE id_dist = ' + IntToStr(dist));
-    Query2.Open;
   end;
 
   frxData.DataSource := DModule.DataSource1;
@@ -2173,7 +2159,7 @@ begin
   frxReport1.Variables.Variables['month'] := quotedstr(LongMonthNames[StrToInt(FormatDateTime('m', StrToDate(rdt)))]);//quotedstr(ReturnMountStr);
   frxReport1.Variables.Variables['year']  := quotedstr(y1);
   frxReport1.Script.Variables['id_dist']  := (dist);
-  frxReport1.Variables.Variables['boss']  := quotedstr(DModule.Query2.FieldValues['boss']);
+  frxReport1.Variables.Variables['boss']  := quotedstr(SelBoss(dist));
 
   frxReport1.PrepareReport;
   frxReport1.ShowPreparedReport;
@@ -2805,7 +2791,7 @@ begin
   Sheet.Cells.Replace(':edate:', StringDate(edate), xlPart, xlByRows, False, False, False);
   Sheet.Cells.Replace(':fio:', GetShortName(SGCl.Cells[0, SGCl.row]), xlPart, xlByRows, False, False, False);
   Sheet.Cells.Replace(':insp:', SelInsp(c.data.insp), xlPart, xlByRows, False, False, False);
-
+  Sheet.Cells.Replace(':boss:', SelBoss(dist), xlPart, xlByRows, False, False, False);
   if ( c.cdata.prevbegindate = bdate) then
   begin
     ShowMessage('У клиента не хватает сроков для автоматического заполнения таблицы. Введите суммы вручную.');
@@ -2826,8 +2812,9 @@ begin
 
     ExcelApp.Visible := True;
   finally
-    c.Free;
   end;
+  
+  c.Free;
 end;
 
 procedure TForm1.aFilterExecute(Sender: TObject);
@@ -4344,12 +4331,6 @@ begin
   DModule.Query1.SQL.Add('EXEC vedomost "' + rdt + '", "' + IntToStr(client) + '"');
   DModule.Query1.Open;
 
-  DModule.Query2.SQL.Clear;
-  DModule.Query2.SQL.Text := ('SELECT boss ' + #13 +
-    'FROM Dist ' + #13 +
-    'WHERE id_dist = ' + IntToStr(dist));
-  DModule.Query2.Open;
-
   frxData.DataSource := DModule.DataSource1;
   frxReport1.LoadFromFile(PChar(reports_path + 'vedomost.fr3'));
   //  frxReport1.Title := 'Ведомость субсидий';
@@ -4364,7 +4345,7 @@ begin
   frxReport1.Variables.Variables['rd'] := quotedstr(rd);
   frxReport1.Variables.Variables['mng'] := quotedstr(mng);
   frxReport1.Script.Variables['dist'] := (IntToStr(dist));
-  frxReport1.Variables.Variables['boss'] := quotedstr(DModule.Query2.FieldValues['boss']);
+  frxReport1.Variables.Variables['boss'] := quotedstr(SelBoss(dist));
   frxReport1.PrepareReport;
   frxReport1.ShowPreparedReport;
 end;

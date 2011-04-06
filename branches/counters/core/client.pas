@@ -52,6 +52,7 @@ type
     //------
     period:      integer;//срок субсидии
     boiler:      integer;//бойлер 0 - нет, 1 - есть
+    elevator:    integer;//лифт
     family:      TObjectList;//семья
     priv:        array of integer;//льготы членов семьи
     //данные по льготам семьи
@@ -137,7 +138,7 @@ type
     procedure CalcHNorm(m: integer; var sq1, sq2: real);//вычислить норматив потребления тепла в ч/д
     function SearchOne(m: T2DInt; serv: integer): integer;//выяснить есть ли единица
     procedure SetClient(cl: integer; s: string);          //взять данные на клиента
-    procedure setcalc(regn: integer; date: string);
+    procedure SetCalc(regn: integer; date: string);
     procedure SetNorm;//установить норму
     procedure SetMin; //установить min
   end;
@@ -165,8 +166,8 @@ function Empty: TData;
 function EmptyC: TCData;
 function FromSt(s: integer): integer;
 function GetNameTafif(s, id: integer): string; //s-тариф,id-тип плиты
-function GetCostTarif(s, id: integer; bdate: TDate; b, c, se: integer): real; //s-тариф,id-тип плиты,b-бойлер,c-mcount,se-тип заселения(settl)
-function GetNormTarif(s, id: integer; bdate: TDate; b, c, se: integer): real; //s-тариф,id-тип плиты,b-бойлер,c-mcount,se-тип заселения(settl)
+function GetCostTarif(s, id: integer; bdate: TDate; b, c, se, elevator, mop: integer): real; //s-тариф,id-тип плиты,b-бойлер,c-mcount,se-тип заселения(settl),elevator-лифт,mop-места общ.пользованя
+function GetNormTarif(s, id: integer; bdate: TDate; b, c, se, elevator, mop: integer): real; //s-тариф,id-тип плиты,b-бойлер,c-mcount,se-тип заселения(settl),elevator-лифт,mop-места общ.пользованя
 
 implementation
 
@@ -268,7 +269,7 @@ begin
   end;
 end;
 
-procedure tclient.setcalc(regn: integer; date: string);
+procedure TClient.SetCalc(regn: integer; date: string);
 {*******************************************************************************
 Загружает данные клиента из базы данных. regn - № клиента, date - учётный период
 *******************************************************************************}
@@ -488,6 +489,25 @@ begin
       cdata.countertarifs[serv] := FieldByName('counter_serv').Value;
       Next;
     end;
+    //Лифт
+    Close;
+    SQL.Clear;
+    SQL.Add('select elevator');
+    SQL.Add('from house inner join');
+    SQL.Add('strt on house.id_street=strt.id_street inner join');
+    SQL.Add('mng on house.id_mng=mng.id_mng and house.id_dist=mng.id_dist inner join');
+    SQL.Add('fond on house.id_fond=fond.id_fond');
+    SQL.Add('where (strt.id_street = :str) and(house.nhouse = :numb)');
+    SQL.Add('and(house.corp=:cp)and(house.id_dist=:dist)');
+    ParamByName('str').AsInteger := data.str;// str[Combobox12.ItemIndex];
+    ParamByName('numb').AsString := data.nh;// Edit60.Text;
+    ParamByName('cp').AsString := data.corp;
+    ParamByName('dist').AsInteger := data.dist;
+    Open;
+    if not EOF then
+    begin
+        cdata.elevator := FieldByName('elevator').AsInteger;
+    end;
     //------
     Close;
   end;
@@ -508,18 +528,18 @@ begin
   for i := 0 to numbtarif - 1 do
     if (i < 8) or (i > 11) then
     begin
-      cdata.cost[i] := GetCostTarif(i, cdata.tarifs[i], cdata.begindate, cdata.boiler, cdata.rmcount, cdata.settl);
+      cdata.cost[i] := GetCostTarif(i, cdata.tarifs[i], cdata.begindate, cdata.boiler, cdata.rmcount, cdata.settl, cdata.elevator, cdata.tarifs[1]);
       if i in [2..7] then
-        cdata.tarifnorm[i] := GetNormTarif(i, cdata.tarifs[i], cdata.begindate, cdata.boiler, cdata.rmcount, cdata.settl);
+        cdata.tarifnorm[i] := GetNormTarif(i, cdata.tarifs[i], cdata.begindate, cdata.boiler, cdata.rmcount, cdata.settl, cdata.elevator, cdata.tarifs[1]);
       //тарифы по счетчику
       if cdata.counter[i] then
       begin
-        cdata.countercost[i] := GetCostTarif(i, cdata.countertarifs[i], cdata.begindate, cdata.boiler, cdata.rmcount, cdata.settl);
+        cdata.countercost[i] := GetCostTarif(i, cdata.countertarifs[i], cdata.begindate, cdata.boiler, cdata.rmcount, cdata.settl, cdata.elevator, cdata.tarifs[1]);
         if i in [2..6] then
-          cdata.counternorm[i] := GetNormTarif(i, cdata.countertarifs[i], cdata.begindate, cdata.boiler, cdata.rmcount, cdata.settl)
+          cdata.counternorm[i] := GetNormTarif(i, cdata.countertarifs[i], cdata.begindate, cdata.boiler, cdata.rmcount, cdata.settl, cdata.elevator, cdata.tarifs[1])
         else
         if (i = 7) then
-          cdata.counternorm[i] := GetNormTarif(i, cdata.tarifs[i], cdata.begindate, cdata.boiler, cdata.rmcount, cdata.settl);
+          cdata.counternorm[i] := GetNormTarif(i, cdata.tarifs[i], cdata.begindate, cdata.boiler, cdata.rmcount, cdata.settl, cdata.elevator, cdata.tarifs[1]);
       end;
     end;
 end;
@@ -704,7 +724,7 @@ begin
 end;
 
 //s-тариф,id-тип плиты,b-бойлер,c-mcount,se-тип заселения(settl)
-function GetCostTarif(s, id: integer; bdate: TDate; b, c, se: integer): real;
+function GetCostTarif(s, id: integer; bdate: TDate; b, c, se, elevator, mop: integer): real;
 var
   nam, strf: string;
   cgas, cel: real;
@@ -790,7 +810,7 @@ begin
       if s <> 7 then
       begin
         if (s = 2) or (s = 3) then
-          Result := tc.Fields[2 + b].AsCurrency  //
+          Result := tc.Fields[2 + b].AsCurrency
         else
           Result := tc.Fields[2].AsCurrency;
       end;
@@ -806,17 +826,17 @@ begin
       case id of
         1: //газовая
         begin
-          Result := GetNormTarif(s, id, bdate, b, c, se) * cgas;
+          Result := GetNormTarif(s, id, bdate, b, c, se, elevator, mop) * cgas;
         end;
 
         2://электрическая
         begin
-          Result := GetNormTarif(s, id, bdate, b, c, se) * cel;
+          Result := GetNormTarif(s, id, bdate, b, c, se, elevator, mop) * cel;
         end;
 
         3://прочие ???
         begin
-          GetNormTarif(s, id, bdate, b, c, se);
+          Result := GetNormTarif(s, id, bdate, b, c, se, elevator, mop);
         end;
       end;
     end;
@@ -843,7 +863,7 @@ begin
 end;
 
 //s-тариф,id-тип плиты,b-бойлер,c-mcount,se-тип заселения(settl)
-function GetNormTarif(s, id: integer; bdate: TDate; b, c, se: integer): real;
+function GetNormTarif(s, id: integer; bdate: TDate; b, c, se, elevator, mop: integer): real;
 var
   nam: string;
 begin
@@ -932,52 +952,103 @@ begin
 
       if s = 7 then // Э/энергия
       begin
+        if mop <> 0 then //если есть тариф на места общего пользования
+
+
         case id of
           1://газовые плиты
           begin
+            if elevator = 0 then//нет лифта газовые плиты
             case se of//ко-во комнат
               1:
               begin
                 case c of
-                  0..1: Result := 84;
-                  2: Result := 52;
-                  3: Result := 40;
-                  4: Result := 33;
+                  0..1: Result := 95;
+                  2: Result := 62;
+                  3: Result := 49;
+                  4: Result := 42;
                   else
-                    Result := 28;
+                    Result := 36;
                 end;
               end;
               2:
               begin
                 case c of
-                  0..1: Result := 108;
-                  2: Result := 67;
-                  3: Result := 52;
-                  4: Result := 42;
+                  0..1: Result := 120;
+                  2: Result := 77;
+                  3: Result := 62;
+                  4: Result := 51;
                   else
-                    Result := 37;
+                    Result := 46;
                 end;
               end;
               3:
               begin
                 case c of
-                  0..1: Result := 122;
-                  2: Result := 76;
-                  3: Result := 59;
-                  4: Result := 48;
+                  0..1: Result := 135;
+                  2: Result := 87;
+                  3: Result := 69;
+                  4: Result := 57;
                   else
-                    Result := 42;
+                    Result := 51;
                 end;
               end;
               4..7:
               begin
                 case c of
-                  0..1: Result := 132;
-                  2: Result := 82;
-                  3: Result := 63;
-                  4: Result := 52;
+                  0..1: Result := 146;
+                  2: Result := 93;
+                  3: Result := 73;
+                  4: Result := 62;
                   else
-                    Result := 45;
+                    Result := 54;
+                end;
+              end;
+            end
+          else//есть лифт газовые плиты
+            case se of//ко-во комнат
+              1:
+              begin
+                case c of
+                  0..1: Result := 102;
+                  2: Result := 69;
+                  3: Result := 56;
+                  4: Result := 49;
+                  else
+                    Result := 43;
+                end;
+              end;
+              2:
+              begin
+                case c of
+                  0..1: Result := 127;
+                  2: Result := 84;
+                  3: Result := 69;
+                  4: Result := 58;
+                  else
+                    Result := 53;
+                end;
+              end;
+              3:
+              begin
+                case c of
+                  0..1: Result := 142;
+                  2: Result := 94;
+                  3: Result := 76;
+                  4: Result := 64;
+                  else
+                    Result := 58;
+                end;
+              end;
+              4..7:
+              begin
+                case c of
+                  0..1: Result := 153;
+                  2: Result := 100;
+                  3: Result := 80;
+                  4: Result := 69;
+                  else
+                    Result := 61;
                 end;
               end;
             end;
@@ -985,55 +1056,223 @@ begin
 
           2://электрические плиты
           begin
+            if elevator = 0 then//нет лифта электрические плиты
             case se of
               1:
               begin
                 case c of
-                  0..1: Result := 134;
-                  2: Result := 83;
-                  3: Result := 64;
-                  4: Result := 52;
-                  else
-                    Result := 45;
-                end;
-              end;
-              2:
-              begin
-                case c of
-                  0..1: Result := 158;
-                  2: Result := 98;
-                  3: Result := 76;
+                  0..1: Result := 148;
+                  2: Result := 94;
+                  3: Result := 74;
                   4: Result := 62;
                   else
                     Result := 54;
                 end;
               end;
+              2:
+              begin
+                case c of
+                  0..1: Result := 173;
+                  2: Result := 110;
+                  3: Result := 87;
+                  4: Result := 72;
+                  else
+                    Result := 64;
+                end;
+              end;
               3:
               begin
                 case c of
-                  0..1: Result := 172;
-                  2: Result := 107;
-                  3: Result := 83;
-                  4: Result := 67;
+                  0..1: Result := 188;
+                  2: Result := 119;
+                  3: Result := 94;
+                  4: Result := 77;
                   else
-                    Result := 59;
+                    Result := 69;
                 end;
               end;
               4..7:
               begin
                 case c of
-                  0..1: Result := 183;
-                  2: Result := 114;
-                  3: Result := 88;
-                  4: Result := 71;
+                  0..1: Result := 199;
+                  2: Result := 127;
+                  3: Result := 99;
+                  4: Result := 82;
                   else
-                    Result := 62;
+                    Result := 72;
+                end;
+              end;
+            end
+            else//есть лифт электрические плиты
+            case se of
+              1:
+              begin
+                case c of
+                  0..1: Result := 155;
+                  2: Result := 101;
+                  3: Result := 81;
+                  4: Result := 69;
+                  else
+                    Result := 61;
+                end;
+              end;
+              2:
+              begin
+                case c of
+                  0..1: Result := 180;
+                  2: Result := 117;
+                  3: Result := 94;
+                  4: Result := 79;
+                  else
+                    Result := 71;
+                end;
+              end;
+              3:
+              begin
+                case c of
+                  0..1: Result := 195;
+                  2: Result := 126;
+                  3: Result := 101;
+                  4: Result := 84;
+                  else
+                    Result := 76;
+                end;
+              end;
+              4..7:
+              begin
+                case c of
+                  0..1: Result := 206;
+                  2: Result := 134;
+                  3: Result := 106;
+                  4: Result := 89;
+                  else
+                    Result := 79;
                 end;
               end;
             end;
           end;
 
           3: //прочие ???
+          begin
+            with DModule do
+            begin
+              if c > 0 then
+              begin
+                if (c < 3) then
+                  Result := tc.Fields[2 + (c - 1)].AsCurrency
+                else
+                  Result := tc.Fields[4].AsCurrency;
+              end
+              else
+                Result := tc.Fields[2].AsCurrency;
+            end;
+          end;
+        end
+
+
+        else // нет тарифа (mop=0)
+        if (mop = 0) and (elevator = 0) then
+        
+        case id of
+          1://газовые плиты
+          begin
+            case se of//ко-во комнат
+              1:
+              begin
+                case c of
+                  0..1: Result := 88;
+                  2: Result := 55;
+                  3: Result := 42;
+                  4: Result := 35;
+                  else
+                    Result := 29;
+                end;
+              end;
+              2:
+              begin
+                case c of
+                  0..1: Result := 113;
+                  2: Result := 70;
+                  3: Result := 55;
+                  4: Result := 44;
+                  else
+                    Result := 39;
+                end;
+              end;
+              3:
+              begin
+                case c of
+                  0..1: Result := 128;
+                  2: Result := 80;
+                  3: Result := 62;
+                  4: Result := 50;
+                  else
+                    Result := 44;
+                end;
+              end;
+              4..7:
+              begin
+                case c of
+                  0..1: Result := 139;
+                  2: Result := 86;
+                  3: Result := 66;
+                  4: Result := 55;
+                  else
+                    Result := 47;
+                end;
+              end;
+            end;
+          end;
+          2://электрические плиты
+          begin
+            case se of//ко-во комнат
+              1:
+              begin
+                case c of
+                  0..1: Result := 141;
+                  2: Result := 87;
+                  3: Result := 67;
+                  4: Result := 55;
+                  else
+                    Result := 47;
+                end;
+              end;
+              2:
+              begin
+                case c of
+                  0..1: Result := 166;
+                  2: Result := 103;
+                  3: Result := 80;
+                  4: Result := 65;
+                  else
+                    Result := 57;
+                end;
+              end;
+              3:
+              begin
+                case c of
+                  0..1: Result := 181;
+                  2: Result := 112;
+                  3: Result := 87;
+                  4: Result := 70;
+                  else
+                    Result := 62;
+                end;
+              end;
+              4..7:
+              begin
+                case c of
+                  0..1: Result := 192;
+                  2: Result := 120;
+                  3: Result := 92;
+                  4: Result := 75;
+                  else
+                    Result := 65;
+                end;
+              end;
+            end;
+          end;
+          3:
           begin
             with DModule do
             begin
@@ -1981,6 +2220,7 @@ begin
   d.phnorm := s.phnorm;
   d.hnorm := s.hnorm;
   d.boiler := s.boiler;
+  d.elevator := s.elevator;
   d.stop  := s.stop;
   for i := 0 to numbtarif - 1 do
   begin
@@ -2087,6 +2327,7 @@ begin
   Result.phnorm := 0;
   Result.hnorm := 0;
   Result.boiler := 0;
+  Result.elevator := 0;
   Result.stop := 0;
   for i := 0 to numbtarif - 1 do
   begin
