@@ -22,6 +22,8 @@ type
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ComboBox1KeyPress(Sender: TObject; var Key: char);
+    procedure LabeledEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure LabeledEdit2KeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -37,7 +39,7 @@ var
 implementation
 
 uses
-  srvinfo, ODBC_DSN, main, datamodule, md5, connection_module, service;
+  srvinfo, ODBC_DSN, main, datamodule, md5, appregistry, service, MyTypes;
 
 {$R *.dfm}
 
@@ -45,11 +47,11 @@ procedure TConnectionFrm.Button1Click(Sender: TObject);
 var
   tt: TMyThread;
 begin
-  if trim(LabeledEdit2.Text) = '' then
-  begin
-    MessageDlg('Error! Password can not empty!', mtError, [mbOK], 0);
-    exit;
-  end;
+//  if trim(LabeledEdit2.Text) = '' then
+//  begin
+//    MessageDlg('Error! Password can not empty!', mtError, [mbOK], 0);
+//    exit;
+//  end;
 
   WriteRegProperty('User', LabeledEdit1.Text);
   WriteRegProperty('Password', GenMD5Password(LabeledEdit2.Text));
@@ -63,21 +65,22 @@ begin
 
     sleep(100);
 
-    DModule.Database1.Connected := False;
     DModule.dbfConnection.Connected := False;
+    DModule.Database1.Connected := False;
+
     sleep(1000);
-    
-    halt;
+
+    Application.Terminate;
   end
   else
   begin
     Form1.curServer := ComboBox1.Text;
-    DModule.database1.connected := False;
+    DModule.Database1.Connected := False;
 
     if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy', ReadRegProperty('User'), ReadRegProperty('Password'), 'База данных программы Subsidy') then
       ShowMessage('Ошибка при создании DSN записи SQLSub!');
 
-    DModule.database1.connected := True;
+    DModule.Database1.Connected := True;
 
     Form1.OnCreate(self);
     Form1.LoginMode := lNone;
@@ -89,11 +92,10 @@ begin
   end;
 end;
 
-
 procedure TConnectionFrm.Button2Click(Sender: TObject);
 begin
   if mode = mBug then
-    halt
+    Application.Terminate
   else
     Close;
 end;
@@ -114,6 +116,16 @@ begin
   listsqlservers;
   for i := 0 to length(srvlist) - 1 do
     ComboBox1.Items.Add(srvlist[i].srv_name);
+end;
+
+procedure TConnectionFrm.LabeledEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key = #13 then LabeledEdit2.SetFocus;
+end;
+
+procedure TConnectionFrm.LabeledEdit2KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key = #13 then Button1Click(Sender);
 end;
 
 end.

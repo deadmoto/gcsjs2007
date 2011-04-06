@@ -55,7 +55,7 @@ var
 implementation
 
 uses
-  datamodule, service, main, progress;
+  datamodule, service, main, progress, MyTypes;
 
 {$R *.dfm}
 

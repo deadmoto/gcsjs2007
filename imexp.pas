@@ -82,7 +82,7 @@ var
 implementation
 
 uses
-  fstruct, datamodule, main, service, progress;
+  fstruct, datamodule, main, service, progress, WinControls;
 
 {$R *.dfm}
 

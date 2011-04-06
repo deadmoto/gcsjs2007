@@ -3,368 +3,388 @@ unit sclient;
 interface
 
 uses
-  Buttons, Classes, client, ComCtrls, contnrs, Controls, Dialogs, ExtCtrls,
-  Forms, Graphics, Grids, Mask, Menus, Messages, StdCtrls, SysUtils, Variants,
-  Windows, DateUtils, Math;
+  Buttons,
+  Classes,
+  client,
+  ComCtrls,
+  contnrs,
+  Controls,
+  DateUtils,
+  Dialogs,
+  ExtCtrls,
+  Forms,
+  Graphics,
+  Grids,
+  Mask,
+  Math,
+  Menus,
+  Messages,
+  StdCtrls,
+  SysUtils,
+  Variants,
+  Windows;
 
 type
   TViewMode = (vEdit, vAdd);
   TCalcMode = (cServ, cServe, cServSq, cServWC);
 
-  TForm2 = class(TForm)
-    PageControl1: TPageControl;
-    TabSheet1:    TTabSheet;
-    Label1:       TLabel;
-    Label2:       TLabel;
-    Label3:       TLabel;
-    Label5:       TLabel;
-    Label6:       TLabel;
-    Label7:       TLabel;
-    Label8:       TLabel;
-    Label11:      TLabel;
-    Label9:       TLabel;
-    Label10:      TLabel;
-    Label12:      TLabel;
-    Label13:      TLabel;
-    Label14:      TLabel;
-    Label15:      TLabel;
-    Label16:      TLabel;
-    Label17:      TLabel;
-    GroupBox2:    TGroupBox;
-    Label4:       TLabel;
-    Edit1:        TEdit;
-    GroupBox6:    TGroupBox;
-    Label32:      TLabel;
-    Label33:      TLabel;
-    TabSheet2:    TTabSheet;
-    Label21:      TLabel;
-    TabSheet3:    TTabSheet;
-    TabSheet4:    TTabSheet;
-    TabSheet5:    TTabSheet;
-    GroupBox7:    TGroupBox;
-    Label36:      TLabel;
-    Label37:      TLabel;
-    Label38:      TLabel;
-    Label39:      TLabel;
-    Label40:      TLabel;
-    Label41:      TLabel;
-    Label42:      TLabel;
-    Label44:      TLabel;
-    Label45:      TLabel;
-    GroupBox8:    TGroupBox;
-    Label35:      TLabel;
-    Label34:      TLabel;
-    Label46:      TLabel;
-    Label47:      TLabel;
-    Label48:      TLabel;
-    Label49:      TLabel;
-    Label50:      TLabel;
-    Label51:      TLabel;
-    Label52:      TLabel;
-    Label53:      TLabel;
-    Label54:      TLabel;
-    GroupBox9:    TGroupBox;
-    Label55:      TLabel;
-    Label56:      TLabel;
-    Label57:      TLabel;
-    GroupBox10:   TGroupBox;
-    Button2:      TButton;
-    Button3:      TButton;
-    Button4:      TButton;
-    Button5:      TButton;
-    Button8:      TButton;
-    Edit12:       TEdit;
-    Edit13:       TEdit;
-    Edit14:       TEdit;
-    Edit15:       TEdit;
-    Edit16:       TEdit;
-    Edit17:       TEdit;
-    Edit18:       TEdit;
-    Edit20:       TEdit;
-    Edit24:       TEdit;
-    Edit25:       TEdit;
-    Edit26:       TEdit;
-    Edit27:       TEdit;
-    Edit28:       TEdit;
-    Edit29:       TEdit;
-    Edit19:       TEdit;
-    Edit30:       TEdit;
-    Edit31:       TEdit;
-    Edit32:       TEdit;
-    Edit33:       TEdit;
-    Edit34:       TEdit;
-    Edit35:       TEdit;
-    Edit36:       TEdit;
-    Edit37:       TEdit;
-    Edit38:       TEdit;
-    Edit39:       TEdit;
-    Edit40:       TEdit;
-    Edit41:       TEdit;
-    Edit42:       TEdit;
-    Edit43:       TEdit;
-    Edit44:       TEdit;
-    Edit45:       TEdit;
-    Edit46:       TEdit;
-    Edit47:       TEdit;
-    Edit48:       TEdit;
-    Edit49:       TEdit;
-    Edit50:       TEdit;
-    Edit51:       TEdit;
-    Edit52:       TEdit;
-    Edit53:       TEdit;
-    Edit54:       TEdit;
-    Edit55:       TEdit;
-    Edit56:       TEdit;
-    Edit57:       TEdit;
-    ComboBox11:   TComboBox;
-    ComboBox12:   TComboBox;
-    Edit60:       TEdit;
-    Edit61:       TEdit;
-    Edit63:       TEdit;
-    Edit64:       TEdit;
-    ComboBox13:   TComboBox;
-    ComboBox14:   TComboBox;
-    Edit66:       TEdit;
-    Edit68:       TEdit;
-    ComboBox15:   TComboBox;
-    Edit73:       TEdit;
-    Edit74:       TEdit;
-    Edit75:       TEdit;
-    Edit76:       TEdit;
-    Edit77:       TEdit;
-    Edit78:       TEdit;
-    Edit79:       TEdit;
-    Edit80:       TEdit;
-    Edit81:       TEdit;
-    Edit82:       TEdit;
-    Edit83:       TEdit;
-    ComboBox19:   TComboBox;
-    Edit85:       TEdit;
-    Edit86:       TEdit;
-    Edit87:       TEdit;
-    Edit88:       TEdit;
-    ComboBox16:   TComboBox;
-    Label62:      TLabel;
-    Edit89:       TEdit;
-    Edit90:       TEdit;
-    Edit91:       TEdit;
-    Edit92:       TEdit;
-    Edit93:       TEdit;
-    Label63:      TLabel;
-    Label64:      TLabel;
-    Edit94:       TEdit;
-    Edit95:       TEdit;
-    MaskEdit2:    TMaskEdit;
-    CheckBox1:    TCheckBox;
-    Button9:      TButton;
-    RadioGroup1:  TRadioGroup;
-    LVFam:        TListView;
-    Label43:      TLabel;
-    ComboBox10:   TComboBox;
-    Edit9:        TEdit;
-    Button6:      TButton;
-    Label66:      TLabel;
-    Edit58:       TEdit;
-    Edit59:       TEdit;
-    Edit62:       TEdit;
-    Edit67:       TEdit;
-    Label67:      TLabel;
-    Edit21:       TEdit;
-    Edit22:       TEdit;
-    Edit23:       TEdit;
-    Edit70:       TEdit;
-    Edit71:       TEdit;
-    CheckBox2:    TCheckBox;
-    MaskEdit3:    TMaskEdit;
-    Memo1:        TMemo;
-    Edit96:       TEdit;
-    Edit97:       TEdit;
-    Edit98:       TEdit;
-    Edit99:       TEdit;
-    Edit100:      TEdit;
-    Edit101:      TEdit;
-    Edit102:      TEdit;
-    Edit103:      TEdit;
-    Edit104:      TEdit;
-    Edit105:      TEdit;
-    Edit106:      TEdit;
-    Label69:      TLabel;
-    Edit65:       TEdit;
-    Edit84:       TEdit;
-    Button1:      TButton;
-    Label70:      TLabel;
-    Edit107:      TEdit;
-    Label71:      TLabel;
-    Edit108:      TEdit;
-    Label18:      TLabel;
-    Label20:      TLabel;
-    Label61:      TLabel;
-    Label23:      TLabel;
-    Edit69:       TEdit;
-    ComboBox17:   TComboBox;
-    ComboBox18:   TComboBox;
-    ComboBox7:    TComboBox;
-    Label19:      TLabel;
-    Label22:      TLabel;
-    Label31:      TLabel;
-    MaskEdit1:    TMaskEdit;
-    Edit72:       TEdit;
-    RadioButton7: TRadioButton;
-    RadioButton8: TRadioButton;
-    Button7:      TButton;
-    Button19:     TButton;
-    RadioGroup3:  TRadioGroup;
-    UpDown1:      TUpDown;
-    Edit109:      TEdit;
-    Label28:      TLabel;
-    Label73:      TLabel;
-    Edit110:      TEdit;
-    Label74:      TLabel;
-    Label75:      TLabel;
-    CheckBox3:    TCheckBox;
-    Label76:      TLabel;
-    MaskEdit4:    TMaskEdit;
-    GroupBox1:    TGroupBox;
-    ComboBox21:   TComboBox;
-    GroupBox3:    TGroupBox;
-    ComboBox22:   TComboBox;
-    Bevel1:       TBevel;
-    TabSheet6:    TTabSheet;
-    TabControl1:  TTabControl;
-    Panel1:       TPanel;
-    GroupBox4:    TGroupBox;
-    ComboBox23:   TComboBox;
-    GroupBox5:    TGroupBox;
-    StringGrid1:  TStringGrid;
-    Panel2:       TPanel;
-    Label77:      TLabel;
-    Button20:     TButton;
-    Button21:     TButton;
-    Label78: TLabel;
-    Label80: TLabel;
-    Label79: TLabel;
-    Label81: TLabel;
-    Edit111: TEdit;
-    Edit112: TEdit;
-    Edit113: TEdit;
-    Edit114: TEdit;
-    Label82: TLabel;
-    GroupBox11: TGroupBox;
-    GroupBox12: TGroupBox;
-    MaskEdit5: TMaskEdit;
-    MaskEdit6: TMaskEdit;
-    Label85: TLabel;
-    Label83: TLabel;
-    Label86: TLabel;
-    Edit115: TEdit;
-    Edit116: TEdit;
-    Label84: TLabel;
-    Edit117: TEdit;
-    PageControl2: TPageControl;
-    TabSheet7: TTabSheet;
-    TabSheet8: TTabSheet;
-    comboBoxCont: TComboBox;
-    Label24: TLabel;
-    Button10: TButton;
-    Edit3: TEdit;
-    Label25: TLabel;
-    comboBoxRep: TComboBox;
-    Button11: TButton;
-    Edit4: TEdit;
-    Label26: TLabel;
-    comboBoxCold: TComboBox;
-    Button12: TButton;
-    Edit5: TEdit;
-    Label27: TLabel;
-    comboBoxHot: TComboBox;
-    Button13: TButton;
-    Edit6: TEdit;
-    Bevel6: TBevel;
-    Label87: TLabel;
-    Label65: TLabel;
-    comboBoxCanal: TComboBox;
-    Button14: TButton;
-    Edit2: TEdit;
-    Label29: TLabel;
-    comboBoxHeat: TComboBox;
-    Button15: TButton;
-    Edit7: TEdit;
-    Label30: TLabel;
-    comboBoxGas: TComboBox;
-    Button16: TButton;
-    Edit8: TEdit;
-    Label60: TLabel;
-    comboBoxWood: TComboBox;
-    Button17: TButton;
-    Edit10: TEdit;
-    Label72: TLabel;
-    comboBoxCoal: TComboBox;
-    Button18: TButton;
-    Edit11: TEdit;
-    Label88: TLabel;
+  TEditClForm = class(TForm)
+    PageControl1:    TPageControl;
+    TabSheet1:       TTabSheet;
+    Label1:          TLabel;
+    Label2:          TLabel;
+    Label3:          TLabel;
+    Label5:          TLabel;
+    Label6:          TLabel;
+    Label7:          TLabel;
+    Label8:          TLabel;
+    Label11:         TLabel;
+    Label9:          TLabel;
+    Label10:         TLabel;
+    Label12:         TLabel;
+    Label13:         TLabel;
+    Label14:         TLabel;
+    Label15:         TLabel;
+    Label16:         TLabel;
+    Label17:         TLabel;
+    GroupBox2:       TGroupBox;
+    Label4:          TLabel;
+    Edit1:           TEdit;
+    GroupBox6:       TGroupBox;
+    Label32:         TLabel;
+    Label33:         TLabel;
+    TabSheet2:       TTabSheet;
+    Label21:         TLabel;
+    TabSheet3:       TTabSheet;
+    TabSheet4:       TTabSheet;
+    TabSheet5:       TTabSheet;
+    GroupBox7:       TGroupBox;
+    Label36:         TLabel;
+    Label37:         TLabel;
+    Label38:         TLabel;
+    Label39:         TLabel;
+    Label40:         TLabel;
+    Label41:         TLabel;
+    Label42:         TLabel;
+    Label44:         TLabel;
+    Label45:         TLabel;
+    GroupBox8:       TGroupBox;
+    Label35:         TLabel;
+    Label34:         TLabel;
+    Label46:         TLabel;
+    Label47:         TLabel;
+    Label48:         TLabel;
+    Label49:         TLabel;
+    Label50:         TLabel;
+    Label51:         TLabel;
+    Label52:         TLabel;
+    Label53:         TLabel;
+    Label54:         TLabel;
+    GroupBox9:       TGroupBox;
+    Label55:         TLabel;
+    Label56:         TLabel;
+    Label57:         TLabel;
+    GroupBox10:      TGroupBox;
+    Button2:         TButton;
+    Button3:         TButton;
+    Button4:         TButton;
+    Button5:         TButton;
+    Button8:         TButton;
+    Edit12:          TEdit;
+    Edit13:          TEdit;
+    Edit14:          TEdit;
+    Edit15:          TEdit;
+    Edit16:          TEdit;
+    Edit17:          TEdit;
+    Edit18:          TEdit;
+    Edit20:          TEdit;
+    Edit24:          TEdit;
+    Edit25:          TEdit;
+    Edit26:          TEdit;
+    Edit27:          TEdit;
+    Edit28:          TEdit;
+    Edit29:          TEdit;
+    Edit19:          TEdit;
+    Edit30:          TEdit;
+    Edit31:          TEdit;
+    Edit32:          TEdit;
+    Edit33:          TEdit;
+    Edit34:          TEdit;
+    Edit35:          TEdit;
+    Edit36:          TEdit;
+    Edit37:          TEdit;
+    Edit38:          TEdit;
+    Edit39:          TEdit;
+    Edit40:          TEdit;
+    Edit41:          TEdit;
+    Edit42:          TEdit;
+    Edit43:          TEdit;
+    Edit44:          TEdit;
+    Edit45:          TEdit;
+    Edit46:          TEdit;
+    Edit47:          TEdit;
+    Edit48:          TEdit;
+    Edit49:          TEdit;
+    Edit50:          TEdit;
+    Edit51:          TEdit;
+    Edit52:          TEdit;
+    Edit53:          TEdit;
+    Edit54:          TEdit;
+    Edit55:          TEdit;
+    Edit56:          TEdit;
+    Edit57:          TEdit;
+    ComboBox11:      TComboBox;
+    ComboBox12:      TComboBox;
+    Edit60:          TEdit;
+    Edit61:          TEdit;
+    Edit63:          TEdit;
+    Edit64:          TEdit;
+    ComboBox13:      TComboBox;
+    ComboBox14:      TComboBox;
+    Edit66:          TEdit;
+    Edit68:          TEdit;
+    ComboBox15:      TComboBox;
+    Edit73:          TEdit;
+    Edit74:          TEdit;
+    Edit75:          TEdit;
+    Edit76:          TEdit;
+    Edit77:          TEdit;
+    Edit78:          TEdit;
+    Edit79:          TEdit;
+    Edit80:          TEdit;
+    Edit81:          TEdit;
+    Edit82:          TEdit;
+    Edit83:          TEdit;
+    ComboBox19:      TComboBox;
+    Edit85:          TEdit;
+    Edit86:          TEdit;
+    Edit87:          TEdit;
+    Edit88:          TEdit;
+    ComboBox16:      TComboBox;
+    Label62:         TLabel;
+    Edit89:          TEdit;
+    Edit90:          TEdit;
+    Edit91:          TEdit;
+    Edit92:          TEdit;
+    Edit93:          TEdit;
+    Label63:         TLabel;
+    Label64:         TLabel;
+    Edit94:          TEdit;
+    Edit95:          TEdit;
+    MaskEdit2:       TMaskEdit;
+    CheckBox1:       TCheckBox;
+    Button9:         TButton;
+    RadioGroup1:     TRadioGroup;
+    LVFam:           TListView;
+    Label43:         TLabel;
+    ComboBox10:      TComboBox;
+    Edit9:           TEdit;
+    Button6:         TButton;
+    Label66:         TLabel;
+    Edit58:          TEdit;
+    Edit59:          TEdit;
+    Edit62:          TEdit;
+    Edit67:          TEdit;
+    Label67:         TLabel;
+    Edit21:          TEdit;
+    Edit22:          TEdit;
+    Edit23:          TEdit;
+    Edit70:          TEdit;
+    Edit71:          TEdit;
+    CheckBox2:       TCheckBox;
+    MaskEdit3:       TMaskEdit;
+    Memo1:           TMemo;
+    Edit96:          TEdit;
+    Edit97:          TEdit;
+    Edit98:          TEdit;
+    Edit99:          TEdit;
+    Edit100:         TEdit;
+    Edit101:         TEdit;
+    Edit102:         TEdit;
+    Edit103:         TEdit;
+    Edit104:         TEdit;
+    Edit105:         TEdit;
+    Edit106:         TEdit;
+    Label69:         TLabel;
+    Edit65:          TEdit;
+    Edit84:          TEdit;
+    Button1:         TButton;
+    Label70:         TLabel;
+    Edit107:         TEdit;
+    Label71:         TLabel;
+    Edit108:         TEdit;
+    Label18:         TLabel;
+    Label20:         TLabel;
+    Label61:         TLabel;
+    Label23:         TLabel;
+    Edit69:          TEdit;
+    ComboBox17:      TComboBox;
+    ComboBox18:      TComboBox;
+    ComboBox7:       TComboBox;
+    Label19:         TLabel;
+    Label22:         TLabel;
+    Label31:         TLabel;
+    MaskEdit1:       TMaskEdit;
+    Edit72:          TEdit;
+    RadioButton7:    TRadioButton;
+    RadioButton8:    TRadioButton;
+    Button7:         TButton;
+    Button19:        TButton;
+    RadioGroup3:     TRadioGroup;
+    UpDown1:         TUpDown;
+    Edit109:         TEdit;
+    Label28:         TLabel;
+    Label73:         TLabel;
+    Edit110:         TEdit;
+    Label74:         TLabel;
+    Label75:         TLabel;
+    CheckBox3:       TCheckBox;
+    Label76:         TLabel;
+    MaskEdit4:       TMaskEdit;
+    GroupBox1:       TGroupBox;
+    ComboBox21:      TComboBox;
+    GroupBox3:       TGroupBox;
+    ComboBox22:      TComboBox;
+    Bevel1:          TBevel;
+    TabSheet6:       TTabSheet;
+    TabControl1:     TTabControl;
+    Panel1:          TPanel;
+    GroupBox4:       TGroupBox;
+    ComboBox23:      TComboBox;
+    GroupBox5:       TGroupBox;
+    StringGrid1:     TStringGrid;
+    Panel2:          TPanel;
+    Label77:         TLabel;
+    Button20:        TButton;
+    Button21:        TButton;
+    Label78:         TLabel;
+    Label80:         TLabel;
+    Label79:         TLabel;
+    Label81:         TLabel;
+    Edit111:         TEdit;
+    Edit112:         TEdit;
+    Edit113:         TEdit;
+    Edit114:         TEdit;
+    Label82:         TLabel;
+    GroupBox11:      TGroupBox;
+    GroupBox12:      TGroupBox;
+    MaskEdit5:       TMaskEdit;
+    MaskEdit6:       TMaskEdit;
+    Label85:         TLabel;
+    Label83:         TLabel;
+    Label86:         TLabel;
+    Edit115:         TEdit;
+    Edit116:         TEdit;
+    Label84:         TLabel;
+    Edit117:         TEdit;
+    PageControl2:    TPageControl;
+    TabSheet7:       TTabSheet;
+    TabSheet8:       TTabSheet;
+    comboBoxCont:    TComboBox;
+    Label24:         TLabel;
+    Button10:        TButton;
+    Edit3:           TEdit;
+    Label25:         TLabel;
+    comboBoxMOP: TComboBox;
+    Button11:        TButton;
+    Edit4:           TEdit;
+    Label26:         TLabel;
+    comboBoxCold:    TComboBox;
+    Button12:        TButton;
+    Edit5:           TEdit;
+    Label27:         TLabel;
+    comboBoxHot:     TComboBox;
+    Button13:        TButton;
+    Edit6:           TEdit;
+    Bevel6:          TBevel;
+    Label87:         TLabel;
+    Label65:         TLabel;
+    comboBoxCanal:   TComboBox;
+    Button14:        TButton;
+    Edit2:           TEdit;
+    Label29:         TLabel;
+    comboBoxHeat:    TComboBox;
+    Button15:        TButton;
+    Edit7:           TEdit;
+    Label30:         TLabel;
+    comboBoxGas:     TComboBox;
+    Button16:        TButton;
+    Edit8:           TEdit;
+    Label60:         TLabel;
+    comboBoxWood:    TComboBox;
+    Button17:        TButton;
+    Edit10:          TEdit;
+    Label72:         TLabel;
+    comboBoxCoal:    TComboBox;
+    Button18:        TButton;
+    Edit11:          TEdit;
+    Label88:         TLabel;
     comboBoxColdCounter: TComboBox;
-    btnColdCounter: TButton;
-    Edit124: TEdit;
-    Edit125: TEdit;
-    btnHotCounter: TButton;
+    btnColdCounter:  TButton;
+    Edit124:         TEdit;
+    Edit125:         TEdit;
+    btnHotCounter:   TButton;
     comboBoxHotCounter: TComboBox;
-    Label89: TLabel;
-    Label90: TLabel;
+    Label89:         TLabel;
+    Label90:         TLabel;
     comboBoxCanalCounter: TComboBox;
     btnCanalCounter: TButton;
-    Edit126: TEdit;
-    Edit127: TEdit;
-    btnHeatCounter: TButton;
+    Edit126:         TEdit;
+    Edit127:         TEdit;
+    btnHeatCounter:  TButton;
     comboBoxHeatCounter: TComboBox;
-    Label91: TLabel;
-    Label92: TLabel;
+    Label91:         TLabel;
+    Label92:         TLabel;
     comboBoxGasCounter: TComboBox;
-    btnGasCounter: TButton;
-    Edit128: TEdit;
-    CheckBox4: TCheckBox;
-    Edit118: TEdit;
-    CheckBox5: TCheckBox;
-    Edit119: TEdit;
-    CheckBox6: TCheckBox;
-    Edit120: TEdit;
-    CheckBox7: TCheckBox;
-    Edit121: TEdit;
-    CheckBox8: TCheckBox;
-    Edit122: TEdit;
-    CheckBox9: TCheckBox;
-    Edit123: TEdit;
-    Edit129: TEdit;
-    Edit130: TEdit;
-    Edit131: TEdit;
-    Edit132: TEdit;
-    Edit133: TEdit;
-    Edit134: TEdit;
-    Edit135: TEdit;
-    Edit136: TEdit;
-    Edit137: TEdit;
-    Edit138: TEdit;
-    Edit139: TEdit;
-    Edit140: TEdit;
-    Edit141: TEdit;
-    Edit142: TEdit;
-    Edit143: TEdit;
-    Edit144: TEdit;
-    Edit145: TEdit;
-    Edit146: TEdit;
-    Edit147: TEdit;
-    Edit148: TEdit;
-    Edit149: TEdit;
-    Edit150: TEdit;
-    Label93: TLabel;
-    Label58: TLabel;
-    Label59: TLabel;
-    Label68: TLabel;
-    Label94: TLabel;
-    CheckBox10: TCheckBox;
+    btnGasCounter:   TButton;
+    Edit128:         TEdit;
+    CheckBox4:       TCheckBox;
+    Edit118:         TEdit;
+    CheckBox5:       TCheckBox;
+    Edit119:         TEdit;
+    CheckBox6:       TCheckBox;
+    Edit120:         TEdit;
+    CheckBox7:       TCheckBox;
+    Edit121:         TEdit;
+    CheckBox8:       TCheckBox;
+    Edit122:         TEdit;
+    CheckBox9:       TCheckBox;
+    Edit123:         TEdit;
+    Edit129:         TEdit;
+    Edit130:         TEdit;
+    Edit131:         TEdit;
+    Edit132:         TEdit;
+    Edit133:         TEdit;
+    Edit134:         TEdit;
+    Edit135:         TEdit;
+    Edit136:         TEdit;
+    Edit137:         TEdit;
+    Edit138:         TEdit;
+    Edit139:         TEdit;
+    Edit140:         TEdit;
+    Edit141:         TEdit;
+    Edit142:         TEdit;
+    Edit143:         TEdit;
+    Edit144:         TEdit;
+    Edit145:         TEdit;
+    Edit146:         TEdit;
+    Edit147:         TEdit;
+    Edit148:         TEdit;
+    Edit149:         TEdit;
+    Edit150:         TEdit;
+    Label93:         TLabel;
+    Label58:         TLabel;
+    Label59:         TLabel;
+    Label68:         TLabel;
+    Label94:         TLabel;
+    CheckBox10:      TCheckBox;
+    elevatorCheckBox: TCheckBox;
+    Label95:         TLabel;
+    npssEdit:        TEdit;
     procedure Button2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure comboBoxContChange(Sender: TObject);
-    procedure comboBoxRepChange(Sender: TObject);
+    procedure comboBoxMOPChange(Sender: TObject);
     procedure comboBoxColdChange(Sender: TObject);
     procedure comboBoxHotChange(Sender: TObject);
     procedure comboBoxHeatChange(Sender: TObject);
@@ -425,20 +445,16 @@ type
     procedure ComboBox21Change(Sender: TObject);
     procedure ComboBox22Change(Sender: TObject);
     procedure TabControl1Change(Sender: TObject);
-    procedure ComboBox23KeyPress(Sender: TObject; var Key: Char);
+    procedure ComboBox23KeyPress(Sender: TObject; var Key: char);
     procedure ComboBox23Change(Sender: TObject);
     procedure Button21Click(Sender: TObject);
     procedure Button20Click(Sender: TObject);
-    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
-      var CanSelect: Boolean);
-    procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
-      Rect: TRect; State: TGridDrawState);
-    procedure PageControl1DrawTab(Control: TCustomTabControl; TabIndex: Integer;
-      const Rect: TRect; Active: Boolean);
+    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
+    procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
+    procedure PageControl1DrawTab(Control: TCustomTabControl; TabIndex: integer; const Rect: TRect; Active: boolean);
     procedure StringGrid1MouseLeave(Sender: TObject);
     procedure Edit117Exit(Sender: TObject);
-    procedure StringGrid1SetEditText(Sender: TObject; ACol, ARow: Integer;
-      const Value: string);
+    procedure StringGrid1SetEditText(Sender: TObject; ACol, ARow: integer; const Value: string);
     procedure CheckBox4Click(Sender: TObject);
     procedure Edit118Exit(Sender: TObject);
     procedure comboBoxColdCounterChange(Sender: TObject);
@@ -457,7 +473,7 @@ type
     curprc:    integer;//текущий процент расхода тепла
     curman:    integer;//текущий член семьи
     str, mng, fnd, cntrl, settl, own, st, p, rel, bank: array of integer;
-    cont, rep, cold, canal, hot, heat, gas, wood, coal, stnd: array of integer;
+    cont, mop, cold, canal, hot, heat, gas, wood, coal, stnd: array of integer;
 
     fbegindate, fenddate: TDateTime;
     function AddClient: integer;  //добавить клиента
@@ -493,31 +509,9 @@ type
     function SearchBank(s: string): integer;
     function SearchRel(s: string): integer;
     function SearchStnd(s: string): integer;
-    function SearchServIndex(comboBox: TComboBox): integer; overload;
-    function SearchServIndex(comboBox: TComboBox; s:string): integer; overload;
+    function SearchServIndex(ComboBox: TComboBox): integer; overload;
+    function SearchServIndex(ComboBox: TComboBox; s: string): integer; overload;
 
-    function SelInsp(n: integer): string; //выбрать инспектора
-    function SelStr(n: integer): string;  //выбрать улицу
-    function SelMng(n: integer): string;  //выбрать распорядителя
-    function SelFnd(n: integer): string;  //выбрать фонд
-    function SelSettl(n: integer): string;//выбрать тип заселения
-    function SelOwn(n: integer): string;  //выбрать тип владения
-    function SelCntrl(n: integer): string;//выбрать тип контроля
-    function SelSt(n: integer): string;   //выбрать тип статуса
-    function SelPriv(n: integer): string; //выбрать льготу
-    function SelCont(n: integer): string; //выбрать тариф
-    function SelRep(n: integer): string;  //выбрать тариф
-    function SelCold(n: integer): string; //выбрать тариф
-    function SelCanal(n: integer): string;//выбрать тариф
-    function SelHot(n: integer): string;  //выбрать тариф
-    function SelHeat(n: integer): string; //выбрать тариф
-    function SelGas(n: integer): string;  //выбрать тариф
-    function SelWood(n: integer): string; //выбрать тариф
-    function SelCoal(n: integer): string; //выбрать тариф
-    function SelBank(n: integer): string; //выбрать банк
-    function SelRel(n: integer): string;
-    function SelStnd(n: integer): string;
-    function SelMin(n: integer): real;
     function CheckPers: boolean;
     function CheckLS(s: string): boolean; overload;
     function CheckLS: boolean; overload;
@@ -531,14 +525,14 @@ type
     procedure AddFamMan;
     procedure ModFamMan;
 
-    procedure RecalcOneServ(s: integer; mode:TCalcMode);
+    procedure RecalcOneServ(s: integer; mode: TCalcMode);
 
     procedure ClearFactGrids;
     procedure ChangeFactPeriod(BD, ED: TDateTime);
     procedure CheckDifferenceFactSum;
     procedure UpdateFactInfo();
-    function AddAnyMonth(BD, ED: TDateTime):TStringList;
-    function GetColSum(StrGrid: TStringGrid; Col:integer): string;
+    function AddAnyMonth(BD, ED: TDateTime): TStringList;
+    function GetColSum(StrGrid: TStringGrid; Col: integer): string;
     function calcMDiff(sub, fact: string): string;
     //procedure ChangePeriod(BD, ED: TDateTime);
   public
@@ -547,17 +541,25 @@ type
   end;
 
 var
-  Form2: TForm2;
-  Cl:    TClient;
+  EditClForm: TEditClForm;
+  Cl:         TClient;
 
 implementation
 
 uses
-  main, service, datamodule, shtarif, shtarifb, chpriv, chinsp;
+  main,
+  service,
+  service2,
+  datamodule,
+  shtarif,
+  shtarifb,
+  chpriv,
+  chinsp,
+  MyTypes;
 
 {$R *.dfm}
 
-function TForm2.ErrorMessage: boolean;
+function TEditClForm.ErrorMessage: boolean;
 var
   s, s1: string;
 begin
@@ -591,9 +593,9 @@ begin
   end;
 end;
 
-procedure TForm2.SetDefault;
+procedure TEditClForm.SetDefault;
 var
-  i:integer;
+  i: integer;
 begin
   if load then
   begin
@@ -629,7 +631,7 @@ begin
     //------
     Cl.cdata.settl := settl[Combobox14.ItemIndex];
     Cl.cdata.tarifs[0] := cont[comboBoxCont.ItemIndex];
-    Cl.cdata.tarifs[1] := rep[comboBoxRep.ItemIndex];
+    Cl.cdata.tarifs[1] := mop[comboBoxMOP.ItemIndex];
     Cl.cdata.tarifs[2] := cold[comboBoxCold.ItemIndex];
     Cl.cdata.tarifs[3] := hot[comboBoxHot.ItemIndex];
     Cl.cdata.tarifs[4] := canal[comboBoxCanal.ItemIndex];
@@ -641,9 +643,9 @@ begin
 
     for i := 0 to numbtarif - 1 do
     begin
-      Cl.cdata.cost[i]  := GetCostTarif(i, Cl.cdata.tarifs[i], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
+      Cl.cdata.cost[i] := GetCostTarif(i, Cl.cdata.tarifs[i], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
       if i in [2..6] then
-        Cl.cdata.tarifnorm[i]  := GetNormTarif(i, Cl.cdata.tarifs[i], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
+        Cl.cdata.tarifnorm[i] := GetNormTarif(i, Cl.cdata.tarifs[i], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
     end;
     //счетчики
     Edit118.Text := '0';
@@ -669,14 +671,14 @@ begin
     for i := 0 to numbtarif - 1 do
       if Cl.cdata.counter[i] then
       begin
-        Cl.cdata.countercost[i]  := GetCostTarif(i, Cl.cdata.countertarifs[i], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
+        Cl.cdata.countercost[i] := GetCostTarif(i, Cl.cdata.countertarifs[i], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
         if i in [2..6] then
-          Cl.cdata.counternorm[i]  := GetNormTarif(i, Cl.cdata.countertarifs[i], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl);
+          Cl.cdata.counternorm[i] := GetNormTarif(i, Cl.cdata.countertarifs[i], Cl.cdata.begindate, Cl.cdata.boiler, 0, Cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
       end;
   end;
 end;
 
-function TForm2.CalcEmpty: bool;
+function TEditClForm.CalcEmpty: bool;
 var
   sts: integer;
 begin
@@ -696,7 +698,7 @@ begin
     Result := False;
 end;
 
-function TForm2.calcMDiff(sub, fact: string): string;
+function TEditClForm.calcMDiff(sub, fact: string): string;
 var
   mountDiff: double;
 begin
@@ -706,11 +708,11 @@ begin
   Result := FloatToStr(mountDiff);
 end;
 
-function TForm2.CardEmpty: bool;//пусты ключевые поля?
+function TEditClForm.CardEmpty: bool;//пусты ключевые поля?
 begin
   if (Edit110.Text = '') or (Edit66.Text = '') or (Edit68.Text = '') or (Edit95.Text = '') or
     (Edit73.Text = '') or (Edit94.Text = '') or
-    (comboBoxCont.Text = '') or (comboBoxRep.Text = '') or
+    (comboBoxCont.Text = '') or (comboBoxMOP.Text = '') or
     (comboBoxCold.Text = '') or (comboBoxHot.Text = '') or
     (comboBoxHeat.Text = '') or (comboBoxGas.Text = '') or
     (comboBoxWood.Text = '') or (comboBoxCoal.Text = '') or
@@ -721,99 +723,99 @@ begin
     Result := False;
 end;
 
-procedure TForm2.Clear;//очистить нужные поля
+procedure TEditClForm.Clear;//очистить нужные поля
 begin
-  Edit9.Text := '0';
-  Edit12.Text  := '0';
-  Edit13.Text  := '0';
-  Edit14.Text  := '0';
-  Edit15.Text  := '0';
-  Edit16.Text  := '0';
-  Edit17.Text  := '0';
-  Edit18.Text  := '0';
-  Edit19.Text  := '0';
-  Edit20.Text  := '0';
-  Edit21.Text  := '0';
-  Edit22.Text  := '0';
-  Edit23.Text  := '0';
-  Edit24.Text  := '0';
-  Edit25.Text  := '0';
-  Edit26.Text  := '0';
-  Edit27.Text  := '0';
-  Edit28.Text  := '0';
-  Edit29.Text  := '0';
-  Edit30.Text  := '0';
-  Edit31.Text  := '0';
-  Edit32.Text  := '0';
-  Edit33.Text  := '0';
-  Edit34.Text  := '0';
-  Edit35.Text  := '0';
-  Edit36.Text  := '0';
-  Edit37.Text  := '0';
-  Edit38.Text  := '0';
-  Edit39.Text  := '0';
-  Edit40.Text  := '0';
-  Edit41.Text  := '0';
-  Edit42.Text  := '0';
-  Edit43.Text  := '0';
-  Edit44.Text  := '0';
-  Edit45.Text  := '0';
-  Edit46.Text  := '0';
-  Edit47.Text  := '0';
-  Edit48.Text  := '0';
-  Edit49.Text  := '0';
-  Edit50.Text  := '0';
-  Edit51.Text  := '0';
-  Edit52.Text  := '0';
-  Edit53.Text  := '0';
-  Edit54.Text  := '0';
-  Edit55.Text  := '0';
-  Edit56.Text  := '0';
-  Edit59.Text  := '0';
-  Edit62.Text  := '0';
-  Edit67.Text  := '0';
-  Edit70.Text  := '0';
-  Edit71.Text  := '0';
-  Edit57.Text  := '';
-  Edit58.Text  := '';
-  Edit60.Text  := '';
-  Edit61.Text  := '';
-  Edit63.Text  := '';
-  Edit64.Text  := '';
-  Edit65.Text  := '0';
-  Edit66.Text  := '0';
+  Edit9.Text  := '0';
+  Edit12.Text := '0';
+  Edit13.Text := '0';
+  Edit14.Text := '0';
+  Edit15.Text := '0';
+  Edit16.Text := '0';
+  Edit17.Text := '0';
+  Edit18.Text := '0';
+  Edit19.Text := '0';
+  Edit20.Text := '0';
+  Edit21.Text := '0';
+  Edit22.Text := '0';
+  Edit23.Text := '0';
+  Edit24.Text := '0';
+  Edit25.Text := '0';
+  Edit26.Text := '0';
+  Edit27.Text := '0';
+  Edit28.Text := '0';
+  Edit29.Text := '0';
+  Edit30.Text := '0';
+  Edit31.Text := '0';
+  Edit32.Text := '0';
+  Edit33.Text := '0';
+  Edit34.Text := '0';
+  Edit35.Text := '0';
+  Edit36.Text := '0';
+  Edit37.Text := '0';
+  Edit38.Text := '0';
+  Edit39.Text := '0';
+  Edit40.Text := '0';
+  Edit41.Text := '0';
+  Edit42.Text := '0';
+  Edit43.Text := '0';
+  Edit44.Text := '0';
+  Edit45.Text := '0';
+  Edit46.Text := '0';
+  Edit47.Text := '0';
+  Edit48.Text := '0';
+  Edit49.Text := '0';
+  Edit50.Text := '0';
+  Edit51.Text := '0';
+  Edit52.Text := '0';
+  Edit53.Text := '0';
+  Edit54.Text := '0';
+  Edit55.Text := '0';
+  Edit56.Text := '0';
+  Edit59.Text := '0';
+  Edit62.Text := '0';
+  Edit67.Text := '0';
+  Edit70.Text := '0';
+  Edit71.Text := '0';
+  Edit57.Text := '';
+  Edit58.Text := '';
+  Edit60.Text := '';
+  Edit61.Text := '';
+  Edit63.Text := '';
+  Edit64.Text := '';
+  Edit65.Text := '0';
+  Edit66.Text := '0';
   Edit110.Text := '0';
-  Edit68.Text  := '0';
+  Edit68.Text := '0';
   Edit117.Text := '0';
-  Edit69.Text  := '';
-  Edit72.Text  := '0';
-  Edit73.Text  := '0';
-  Edit74.Text  := '';
-  Edit75.Text  := '';
-  Edit76.Text  := '';
-  Edit77.Text  := '';
-  Edit78.Text  := '';
-  Edit79.Text  := '';
-  Edit80.Text  := '';
-  Edit81.Text  := '';
-  Edit82.Text  := '';
-  Edit83.Text  := '';
-  Edit84.Text  := '0';
-  Edit85.Text  := '0';
-  Edit86.Text  := '';
-  Edit87.Text  := '';
-  Edit88.Text  := '';
-  Edit89.Text  := '0';
-  Edit90.Text  := '0';
-  Edit91.Text  := '0';
-  Edit92.Text  := '0';
-  Edit93.Text  := '0';
-  Edit94.Text  := '0';
-  Edit95.Text  := '0';
-  Edit96.Text  := '0';
-  Edit97.Text  := '0';
-  Edit98.Text  := '0';
-  Edit99.Text  := '0';
+  Edit69.Text := '';
+  Edit72.Text := '0';
+  Edit73.Text := '0';
+  Edit74.Text := '';
+  Edit75.Text := '';
+  Edit76.Text := '';
+  Edit77.Text := '';
+  Edit78.Text := '';
+  Edit79.Text := '';
+  Edit80.Text := '';
+  Edit81.Text := '';
+  Edit82.Text := '';
+  Edit83.Text := '';
+  Edit84.Text := '0';
+  Edit85.Text := '0';
+  Edit86.Text := '';
+  Edit87.Text := '';
+  Edit88.Text := '';
+  Edit89.Text := '0';
+  Edit90.Text := '0';
+  Edit91.Text := '0';
+  Edit92.Text := '0';
+  Edit93.Text := '0';
+  Edit94.Text := '0';
+  Edit95.Text := '0';
+  Edit96.Text := '0';
+  Edit97.Text := '0';
+  Edit98.Text := '0';
+  Edit99.Text := '0';
   Edit100.Text := '0';
   Edit101.Text := '0';
   Edit102.Text := '0';
@@ -822,31 +824,48 @@ begin
   Edit105.Text := '0';
   Edit106.Text := '0';
   //------
-  Edit129.Text := '0'; Edit140.Text := '0';
-  Edit130.Text := '0'; Edit141.Text := '0';
-  Edit131.Text := '0'; Edit142.Text := '0';
-  Edit132.Text := '0'; Edit143.Text := '0';
-  Edit133.Text := '0'; Edit144.Text := '0';
-  Edit134.Text := '0'; Edit145.Text := '0';
-  Edit135.Text := '0'; Edit146.Text := '0';
-  Edit136.Text := '0'; Edit147.Text := '0';
-  Edit137.Text := '0'; Edit148.Text := '0';
-  Edit138.Text := '0'; Edit149.Text := '0';
-  Edit139.Text := '0'; Edit150.Text := '0';
+  Edit129.Text := '0';
+  Edit140.Text := '0';
+  Edit130.Text := '0';
+  Edit141.Text := '0';
+  Edit131.Text := '0';
+  Edit142.Text := '0';
+  Edit132.Text := '0';
+  Edit143.Text := '0';
+  Edit133.Text := '0';
+  Edit144.Text := '0';
+  Edit134.Text := '0';
+  Edit145.Text := '0';
+  Edit135.Text := '0';
+  Edit146.Text := '0';
+  Edit136.Text := '0';
+  Edit147.Text := '0';
+  Edit137.Text := '0';
+  Edit148.Text := '0';
+  Edit138.Text := '0';
+  Edit149.Text := '0';
+  Edit139.Text := '0';
+  Edit150.Text := '0';
   //------
   Edit115.Text := '0';
   Edit116.Text := '0';
+  npssEdit.Text := '';
   MaskEdit5.Text := '';
   MaskEdit6.Text := '';
   MaskEdit4.Text := '';
   //------
   comboBoxCont.Clear;
-  comboBoxRep.Clear;
-  comboBoxCold.Clear;  comboBoxColdCounter.Clear;
-  comboBoxHot.Clear;   comboBoxHotCounter.Clear;
-  comboBoxCanal.Clear; comboBoxCanalCounter.Clear;
-  comboBoxHeat.Clear;  comboBoxHeatCounter.Clear;
-  comboBoxGas.Clear;   comboBoxGasCounter.Clear;
+  comboBoxMOP.Clear;
+  comboBoxCold.Clear;
+  comboBoxColdCounter.Clear;
+  comboBoxHot.Clear;
+  comboBoxHotCounter.Clear;
+  comboBoxCanal.Clear;
+  comboBoxCanalCounter.Clear;
+  comboBoxHeat.Clear;
+  comboBoxHeatCounter.Clear;
+  comboBoxGas.Clear;
+  comboBoxGasCounter.Clear;
   comboBoxWood.Clear;
   comboBoxCoal.Clear;
 
@@ -878,7 +897,7 @@ begin
   SetLength(rel, 0);
   SetLength(bank, 0);
   SetLength(cont, 0);
-  SetLength(rep, 0);
+  SetLength(mop, 0);
   SetLength(cold, 0);
   SetLength(hot, 0);
   SetLength(heat, 0);
@@ -887,29 +906,30 @@ begin
   SetLength(coal, 0);
   SetLength(stnd, 0);
   SetLength(canal, 0);
-  CheckBox1.Checked := False;
-  CheckBox2.Checked := False;
-  CheckBox3.Checked := False;
+  CheckBox1.Checked  := False;
+  CheckBox2.Checked  := False;
+  elevatorCheckBox.Checked := False;
+  CheckBox3.Checked  := False;
   CheckBox10.Checked := False;
 end;
 
-procedure TForm2.ClearFactGrids;
+procedure TEditClForm.ClearFactGrids;
 var
   i: integer;
 begin
   with StringGrid1 do
   begin
-    for i := 0 to RowCount-1 do
+    for i := 0 to RowCount - 1 do
       Rows[i].Clear;
-    cells[0,0]:='Месяц';
-    cells[1,0]:='Субсидия';
-    cells[2,0]:='Ф. расход';
-    cells[3,0]:='М. разница';
-    cells[0,1]:='';
-    cells[1,1]:='0';
-    cells[2,1]:='0';
-    cells[3,1]:='0';
-    RowCount:=2;
+    Cells[0, 0] := 'Месяц';
+    Cells[1, 0] := 'Субсидия';
+    Cells[2, 0] := 'Ф. расход';
+    Cells[3, 0] := 'М. разница';
+    Cells[0, 1] := '';
+    Cells[1, 1] := '0';
+    Cells[2, 1] := '0';
+    Cells[3, 1] := '0';
+    RowCount := 2;
     Repaint;
   end;
 
@@ -921,7 +941,7 @@ begin
   Edit114.Text := '0';
 end;
 
-procedure TForm2.Fill;
+procedure TEditClForm.Fill;
 {
   заполнить списки у combobox, выбрать radiobutton
   создать массивы, содержащие соответствующие combobox id
@@ -1219,13 +1239,13 @@ begin
     First;
     while not EOF do
     begin
-      SetLength(rep, Length(rep) + 1);
-      comboBoxRep.Items.Add(FieldByName('namerep').AsString);
-      rep[l] := FieldByName('id_rep').AsInteger;
+      SetLength(mop, Length(mop) + 1);
+      comboBoxMOP.Items.Add(FieldByName('namerep').AsString);
+      mop[l] := FieldByName('id_rep').AsInteger;
       Next;
       Inc(l);
     end;
-    comboBoxRep.ItemIndex := SearchServIndex(comboBoxRep, SelRep(0));
+    comboBoxMOP.ItemIndex := SearchServIndex(comboBoxMOP, SelRep(0));
 
     l := 0;
     Close;
@@ -1371,7 +1391,7 @@ begin
   end;
 
   comboBoxCont.OnChange(comboBoxCont);
-  comboBoxRep.OnChange(comboBoxRep);
+  comboBoxMOP.OnChange(comboBoxMOP);
   comboBoxCold.OnChange(comboBoxCold);
   comboBoxHot.OnChange(comboBoxHot);
   comboBoxHeat.OnChange(comboBoxHeat);
@@ -1391,7 +1411,7 @@ begin
   combobox19.OnChange(combobox19);
 end;
 
-procedure TForm2.FillLV;//заполнить List View
+procedure TEditClForm.FillLV;//заполнить List View
 var
   i: integer;
   item: TListItem;
@@ -1402,15 +1422,15 @@ begin
     item := LVFam.Items.Add;
     item.Caption := TMan(Cl.cdata.family.Items[i]).fio;
     item.SubItems.Add(DateToStr(TMan(Cl.cdata.family.Items[i]).birth));
-    item.SubItems.Add(FlToStr(Cl.cdata.mid[i]));
-    item.SubItems.Add(FlToStr(SelMin(Cl.cdata.min[i])));
+    item.SubItems.Add(FormatFloat('0.00', Cl.cdata.mid[i]));
+    item.SubItems.Add(FormatFloat('0.00', SelMin(Cl.cdata.min[i])));
     item.SubItems.Add(SelRel(TMan(Cl.cdata.family.Items[i]).rel));
   end;
   if Cl.cdata.family.Count <> 0 then
     LVFam.ItemIndex := curman;
 end;
 
-procedure TForm2.SetData;
+procedure TEditClForm.SetData;
 {
   установить все данные
   используется единожды при активации формы
@@ -1447,8 +1467,8 @@ begin
   Combobox13.Text := SelFnd(Cl.Data.fond);
   Combobox14.Text := SelSettl(Cl.Data.settl);
   Combobox16.Text := SelOwn(Cl.Data.own);
-  Edit110.Text := FlToStr(Cl.cdata.lsquare);
-  Edit66.Text := FlToStr(Cl.cdata.square);
+  Edit110.Text := FormatFloat('0.00', Cl.cdata.lsquare);
+  Edit66.Text := FormatFloat('0.00', Cl.cdata.square);
   RadioGroup3.ItemIndex := Cl.cdata.mdd;
   Edit68.Text := IntToStr(Cl.cdata.mcount);
   Edit117.Text := IntToStr(Cl.cdata.rmcount);
@@ -1464,33 +1484,35 @@ begin
   Edit109.Text := IntToStr(Cl.cdata.period);
   Combobox11.Text := SelCntrl(Cl.Data.control);
   Memo1.Text  := Cl.Data.reason;
-  Edit73.Text := FlToStr(Cl.cdata.income);
-  Edit94.Text := FlToStr(Cl.cdata.pmin);
+  Edit73.Text := FormatFloat('0.00', Cl.cdata.income);
+  Edit94.Text := FormatFloat('0.00', Cl.cdata.pmin);
   if Cl.cdata.family.Count > 0 then
   begin
     Edit69.Text := TMan(Cl.cdata.family[curman]).fio;
+    npssEdit.Text := TMan(Cl.cdata.family[curman]).npss;
     MaskEdit1.Text := DateToStr(TMan(Cl.cdata.family[curman]).birth);
     Combobox7.Text := SelRel(TMan(Cl.cdata.family[curman]).rel);
     Combobox17.Text := SelSt(TMan(Cl.cdata.family[curman]).status);
     Combobox18.Text := SelPriv(TMan(Cl.cdata.family[curman]).priv);
-    Edit72.Text := FlToStr(TMan(Cl.cdata.family[curman]).mid);
+    Edit72.Text := FormatFloat('0.00', TMan(Cl.cdata.family[curman]).mid);
   end;
   CheckBox2.Checked := (Cl.cdata.boiler = 1);
-  comboBoxCont.Text  := SelCont(Cl.cdata.tarifs[0]);
-  comboBoxRep.Text  := SelRep(Cl.cdata.tarifs[1]);
-  comboBoxCold.Text  := SelCold(Cl.cdata.tarifs[2]);
-  comboBoxHot.Text  := SelHot(Cl.cdata.tarifs[3]);
+  elevatorCheckBox.Checked := (Cl.cdata.elevator = 1);
+  comboBoxCont.Text := SelCont(Cl.cdata.tarifs[0]);
+  comboBoxMOP.Text := SelRep(Cl.cdata.tarifs[1]);
+  comboBoxCold.Text := SelCold(Cl.cdata.tarifs[2]);
+  comboBoxHot.Text := SelHot(Cl.cdata.tarifs[3]);
   comboBoxCanal.Text := SelCanal(Cl.cdata.tarifs[4]);
-  comboBoxHeat.Text  := SelHeat(Cl.cdata.tarifs[5]);
-  comboBoxGas.Text  := SelGas(Cl.cdata.tarifs[6]);
-  comboBoxWood.Text  := SelWood(Cl.cdata.tarifs[12]);
-  comboBoxCoal.Text  := SelCoal(Cl.cdata.tarifs[13]);
+  comboBoxHeat.Text := SelHeat(Cl.cdata.tarifs[5]);
+  comboBoxGas.Text := SelGas(Cl.cdata.tarifs[6]);
+  comboBoxWood.Text := SelWood(Cl.cdata.tarifs[12]);
+  comboBoxCoal.Text := SelCoal(Cl.cdata.tarifs[13]);
   Combobox10.Text := SelStnd(Cl.cdata.rstnd);
 
   CheckBox10.Checked := Cl.cdata.indrstnd;
   if (Cl.cdata.indrstnd) then
   begin
-    Edit9.Text := FloatToStr(Cl.cdata.indrstndval);
+    Edit9.Text  := FloatToStr(Cl.cdata.indrstndval);
     Edit9.ReadOnly := False;
     Edit9.Color := clWindow;
   end;
@@ -1514,89 +1536,89 @@ begin
   Edit83.Text  := Cl.Data.acbank;
   CheckBox1.Checked := (Cl.cdata.calc = 1);
   //1 месяц
-  Edit12.Text  := FlToStr(Cl.cdata.bpm[0]);
-  Edit13.Text  := FlToStr(Cl.cdata.bsnpm[0]);
-  Edit14.Text  := FlToStr(Cl.cdata.bsub[0]);
-  Edit15.Text  := FlToStr(Cl.cdata.bpm[1]);
-  Edit16.Text  := FlToStr(Cl.cdata.bsnpm[1]);
-  Edit17.Text  := FlToStr(Cl.cdata.bsub[1]);
-  Edit18.Text  := FlToStr(Cl.cdata.bpm[2]);
-  Edit19.Text  := FlToStr(Cl.cdata.bsnpm[2]);
-  Edit20.Text  := FlToStr(Cl.cdata.bsub[2]);
-  Edit21.Text  := FlToStr(Cl.cdata.bpm[3]);
-  Edit22.Text  := FlToStr(Cl.cdata.bsnpm[3]);
-  Edit23.Text  := FlToStr(Cl.cdata.bsub[3]);
-  Edit59.Text  := FlToStr(Cl.cdata.bpm[4]);
-  Edit62.Text  := FlToStr(Cl.cdata.bsnpm[4]);
-  Edit67.Text  := FlToStr(Cl.cdata.bsub[4]);
-  Edit24.Text  := FlToStr(Cl.cdata.bpm[5]);
-  Edit25.Text  := FlToStr(Cl.cdata.bsnpm[5]);
-  Edit26.Text  := FlToStr(Cl.cdata.bsub[5]);
-  Edit27.Text  := FlToStr(Cl.cdata.bpm[6]);
-  Edit28.Text  := FlToStr(Cl.cdata.bsnpm[6]);
-  Edit29.Text  := FlToStr(Cl.cdata.bsub[6]);
-  Edit30.Text  := FlToStr(Cl.cdata.bpm[7]);
-  Edit31.Text  := FlToStr(Cl.cdata.bsnpm[7]);
-  Edit32.Text  := FlToStr(Cl.cdata.bsub[7]);
-  Edit33.Text  := FlToStr(Cl.cdata.bpm[12]);
-  Edit34.Text  := FlToStr(Cl.cdata.bsnpm[12]);
-  Edit35.Text  := FlToStr(Cl.cdata.bsub[12]);
-  Edit36.Text  := FlToStr(Cl.cdata.bpm[13]);
-  Edit37.Text  := FlToStr(Cl.cdata.bsnpm[13]);
-  Edit38.Text  := FlToStr(Cl.cdata.bsub[13]);
-  Edit129.Text  := FlToStr(Cl.cdata.bstndsub[0]);
-  Edit130.Text  := FlToStr(Cl.cdata.bstndsub[1]);
-  Edit131.Text  := FlToStr(Cl.cdata.bstndsub[2]);
-  Edit132.Text  := FlToStr(Cl.cdata.bstndsub[3]);
-  Edit133.Text  := FlToStr(Cl.cdata.bstndsub[4]);
-  Edit134.Text  := FlToStr(Cl.cdata.bstndsub[5]);
-  Edit135.Text  := FlToStr(Cl.cdata.bstndsub[6]);
-  Edit136.Text  := FlToStr(Cl.cdata.bstndsub[7]);
-  Edit137.Text  := FlToStr(Cl.cdata.bstndsub[12]);
-  Edit138.Text  := FlToStr(Cl.cdata.bstndsub[13]);
+  Edit12.Text  := FormatFloat('0.00', Cl.cdata.bpm[0]);
+  Edit13.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[0]);
+  Edit14.Text  := FormatFloat('0.00', Cl.cdata.bsub[0]);
+  Edit15.Text  := FormatFloat('0.00', Cl.cdata.bpm[1]);
+  Edit16.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[1]);
+  Edit17.Text  := FormatFloat('0.00', Cl.cdata.bsub[1]);
+  Edit18.Text  := FormatFloat('0.00', Cl.cdata.bpm[2]);
+  Edit19.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[2]);
+  Edit20.Text  := FormatFloat('0.00', Cl.cdata.bsub[2]);
+  Edit21.Text  := FormatFloat('0.00', Cl.cdata.bpm[3]);
+  Edit22.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[3]);
+  Edit23.Text  := FormatFloat('0.00', Cl.cdata.bsub[3]);
+  Edit59.Text  := FormatFloat('0.00', Cl.cdata.bpm[4]);
+  Edit62.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[4]);
+  Edit67.Text  := FormatFloat('0.00', Cl.cdata.bsub[4]);
+  Edit24.Text  := FormatFloat('0.00', Cl.cdata.bpm[5]);
+  Edit25.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[5]);
+  Edit26.Text  := FormatFloat('0.00', Cl.cdata.bsub[5]);
+  Edit27.Text  := FormatFloat('0.00', Cl.cdata.bpm[6]);
+  Edit28.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[6]);
+  Edit29.Text  := FormatFloat('0.00', Cl.cdata.bsub[6]);
+  Edit30.Text  := FormatFloat('0.00', Cl.cdata.bpm[7]);
+  Edit31.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[7]);
+  Edit32.Text  := FormatFloat('0.00', Cl.cdata.bsub[7]);
+  Edit33.Text  := FormatFloat('0.00', Cl.cdata.bpm[12]);
+  Edit34.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[12]);
+  Edit35.Text  := FormatFloat('0.00', Cl.cdata.bsub[12]);
+  Edit36.Text  := FormatFloat('0.00', Cl.cdata.bpm[13]);
+  Edit37.Text  := FormatFloat('0.00', Cl.cdata.bsnpm[13]);
+  Edit38.Text  := FormatFloat('0.00', Cl.cdata.bsub[13]);
+  Edit129.Text := FormatFloat('0.00', Cl.cdata.bstndsub[0]);
+  Edit130.Text := FormatFloat('0.00', Cl.cdata.bstndsub[1]);
+  Edit131.Text := FormatFloat('0.00', Cl.cdata.bstndsub[2]);
+  Edit132.Text := FormatFloat('0.00', Cl.cdata.bstndsub[3]);
+  Edit133.Text := FormatFloat('0.00', Cl.cdata.bstndsub[4]);
+  Edit134.Text := FormatFloat('0.00', Cl.cdata.bstndsub[5]);
+  Edit135.Text := FormatFloat('0.00', Cl.cdata.bstndsub[6]);
+  Edit136.Text := FormatFloat('0.00', Cl.cdata.bstndsub[7]);
+  Edit137.Text := FormatFloat('0.00', Cl.cdata.bstndsub[12]);
+  Edit138.Text := FormatFloat('0.00', Cl.cdata.bstndsub[13]);
 
   //
-  Edit96.Text  := FlToStr(Cl.cdata.pm[0]);
-  Edit39.Text  := FlToStr(Cl.cdata.snpm[0]);
-  Edit40.Text  := FlToStr(Cl.cdata.sub[0]);
-  Edit97.Text  := FlToStr(Cl.cdata.pm[1]);
-  Edit41.Text  := FlToStr(Cl.cdata.snpm[1]);
-  Edit42.Text  := FlToStr(Cl.cdata.sub[1]);
-  Edit98.Text  := FlToStr(Cl.cdata.pm[2]);
-  Edit43.Text  := FlToStr(Cl.cdata.snpm[2]);
-  Edit44.Text  := FlToStr(Cl.cdata.sub[2]);
-  Edit99.Text  := FlToStr(Cl.cdata.pm[3]);
-  Edit45.Text  := FlToStr(Cl.cdata.snpm[3]);
-  Edit46.Text  := FlToStr(Cl.cdata.sub[3]);
-  Edit100.Text := FlToStr(Cl.cdata.pm[4]);
-  Edit70.Text  := FlToStr(Cl.cdata.snpm[4]);
-  Edit71.Text  := FlToStr(Cl.cdata.sub[4]);
-  Edit101.Text := FlToStr(Cl.cdata.pm[5]);
-  Edit47.Text  := FlToStr(Cl.cdata.snpm[5]);
-  Edit48.Text  := FlToStr(Cl.cdata.sub[5]);
-  Edit102.Text := FlToStr(Cl.cdata.pm[6]);
-  Edit49.Text  := FlToStr(Cl.cdata.snpm[6]);
-  Edit50.Text  := FlToStr(Cl.cdata.sub[6]);
-  Edit103.Text := FlToStr(Cl.cdata.pm[7]);
-  Edit51.Text  := FlToStr(Cl.cdata.snpm[7]);
-  Edit52.Text  := FlToStr(Cl.cdata.sub[7]);
-  Edit104.Text := FlToStr(Cl.cdata.pm[12]);
-  Edit53.Text  := FlToStr(Cl.cdata.snpm[12]);
-  Edit105.Text := FlToStr(Cl.cdata.pm[13]);
-  Edit55.Text  := FlToStr(Cl.cdata.snpm[13]);
-  Edit54.Text  := FlToStr(Cl.cdata.sub[12]);
-  Edit56.Text  := FlToStr(Cl.cdata.sub[13]);
+  Edit96.Text  := FormatFloat('0.00', Cl.cdata.pm[0]);
+  Edit39.Text  := FormatFloat('0.00', Cl.cdata.snpm[0]);
+  Edit40.Text  := FormatFloat('0.00', Cl.cdata.sub[0]);
+  Edit97.Text  := FormatFloat('0.00', Cl.cdata.pm[1]);
+  Edit41.Text  := FormatFloat('0.00', Cl.cdata.snpm[1]);
+  Edit42.Text  := FormatFloat('0.00', Cl.cdata.sub[1]);
+  Edit98.Text  := FormatFloat('0.00', Cl.cdata.pm[2]);
+  Edit43.Text  := FormatFloat('0.00', Cl.cdata.snpm[2]);
+  Edit44.Text  := FormatFloat('0.00', Cl.cdata.sub[2]);
+  Edit99.Text  := FormatFloat('0.00', Cl.cdata.pm[3]);
+  Edit45.Text  := FormatFloat('0.00', Cl.cdata.snpm[3]);
+  Edit46.Text  := FormatFloat('0.00', Cl.cdata.sub[3]);
+  Edit100.Text := FormatFloat('0.00', Cl.cdata.pm[4]);
+  Edit70.Text  := FormatFloat('0.00', Cl.cdata.snpm[4]);
+  Edit71.Text  := FormatFloat('0.00', Cl.cdata.sub[4]);
+  Edit101.Text := FormatFloat('0.00', Cl.cdata.pm[5]);
+  Edit47.Text  := FormatFloat('0.00', Cl.cdata.snpm[5]);
+  Edit48.Text  := FormatFloat('0.00', Cl.cdata.sub[5]);
+  Edit102.Text := FormatFloat('0.00', Cl.cdata.pm[6]);
+  Edit49.Text  := FormatFloat('0.00', Cl.cdata.snpm[6]);
+  Edit50.Text  := FormatFloat('0.00', Cl.cdata.sub[6]);
+  Edit103.Text := FormatFloat('0.00', Cl.cdata.pm[7]);
+  Edit51.Text  := FormatFloat('0.00', Cl.cdata.snpm[7]);
+  Edit52.Text  := FormatFloat('0.00', Cl.cdata.sub[7]);
+  Edit104.Text := FormatFloat('0.00', Cl.cdata.pm[12]);
+  Edit53.Text  := FormatFloat('0.00', Cl.cdata.snpm[12]);
+  Edit105.Text := FormatFloat('0.00', Cl.cdata.pm[13]);
+  Edit55.Text  := FormatFloat('0.00', Cl.cdata.snpm[13]);
+  Edit54.Text  := FormatFloat('0.00', Cl.cdata.sub[12]);
+  Edit56.Text  := FormatFloat('0.00', Cl.cdata.sub[13]);
 
-  Edit140.Text := FlToStr(Cl.cdata.stndsub[0]);
-  Edit141.Text := FlToStr(Cl.cdata.stndsub[1]);
-  Edit142.Text := FlToStr(Cl.cdata.stndsub[2]);
-  Edit143.Text := FlToStr(Cl.cdata.stndsub[3]);
-  Edit144.Text := FlToStr(Cl.cdata.stndsub[4]);
-  Edit145.Text := FlToStr(Cl.cdata.stndsub[5]);
-  Edit146.Text := FlToStr(Cl.cdata.stndsub[6]);
-  Edit147.Text := FlToStr(Cl.cdata.stndsub[7]);
-  Edit148.Text := FlToStr(Cl.cdata.stndsub[12]);
-  Edit149.Text := FlToStr(Cl.cdata.stndsub[13]);
+  Edit140.Text := FormatFloat('0.00', Cl.cdata.stndsub[0]);
+  Edit141.Text := FormatFloat('0.00', Cl.cdata.stndsub[1]);
+  Edit142.Text := FormatFloat('0.00', Cl.cdata.stndsub[2]);
+  Edit143.Text := FormatFloat('0.00', Cl.cdata.stndsub[3]);
+  Edit144.Text := FormatFloat('0.00', Cl.cdata.stndsub[4]);
+  Edit145.Text := FormatFloat('0.00', Cl.cdata.stndsub[5]);
+  Edit146.Text := FormatFloat('0.00', Cl.cdata.stndsub[6]);
+  Edit147.Text := FormatFloat('0.00', Cl.cdata.stndsub[7]);
+  Edit148.Text := FormatFloat('0.00', Cl.cdata.stndsub[12]);
+  Edit149.Text := FormatFloat('0.00', Cl.cdata.stndsub[13]);
   Cl.SetNorm;
   FillLV;
   att := Cl.Data.cert - 1;
@@ -1620,19 +1642,24 @@ begin
   CheckBox9.Checked := cl.cdata.counter[7];
 
 
-  comboBoxColdCounter.Text  := SelCold(Cl.cdata.countertarifs[2]);
+  comboBoxColdCounter.Text := SelCold(Cl.cdata.countertarifs[2]);
   comboBoxHotCounter.Text  := SelHot(Cl.cdata.countertarifs[3]);
   comboBoxCanalCounter.Text := SelCanal(Cl.cdata.countertarifs[4]);
-  comboBoxHeatCounter.Text  := SelHeat(Cl.cdata.countertarifs[5]);
+  comboBoxHeatCounter.Text := SelHeat(Cl.cdata.countertarifs[5]);
   comboBoxGasCounter.Text  := SelGas(Cl.cdata.countertarifs[6]);
   //------
   comboBoxCont.OnChange(comboBoxCont);
-  comboBoxRep.OnChange(comboBoxRep);
-  comboBoxCold.OnChange(comboBoxCold); comboBoxColdCounter.OnChange(comboBoxColdCounter);
-  comboBoxHot.OnChange(comboBoxHot); comboBoxHotCounter.OnChange(comboBoxHotCounter);
-  comboBoxCanal.OnChange(comboBoxCanal); comboBoxCanalCounter.OnChange(comboBoxCanalCounter);
-  comboBoxHeat.OnChange(comboBoxHeat); comboBoxHeatCounter.OnChange(comboBoxHeatCounter);
-  comboBoxGas.OnChange(comboBoxGas); comboBoxGasCounter.OnChange(comboBoxGasCounter);
+  comboBoxMOP.OnChange(comboBoxMOP);
+  comboBoxCold.OnChange(comboBoxCold);
+  comboBoxColdCounter.OnChange(comboBoxColdCounter);
+  comboBoxHot.OnChange(comboBoxHot);
+  comboBoxHotCounter.OnChange(comboBoxHotCounter);
+  comboBoxCanal.OnChange(comboBoxCanal);
+  comboBoxCanalCounter.OnChange(comboBoxCanalCounter);
+  comboBoxHeat.OnChange(comboBoxHeat);
+  comboBoxHeatCounter.OnChange(comboBoxHeatCounter);
+  comboBoxGas.OnChange(comboBoxGas);
+  comboBoxGasCounter.OnChange(comboBoxGasCounter);
 
   comboBoxWood.OnChange(comboBoxWood);
   comboBoxCoal.OnChange(comboBoxCoal);
@@ -1649,7 +1676,7 @@ begin
   combobox19.OnChange(combobox19);
 end;
 
-procedure TForm2.SetVCalc;//расчет субсидии
+procedure TEditClForm.SetVCalc;//расчет субсидии
 var
   s: integer;
 begin
@@ -1658,139 +1685,123 @@ begin
   begin //первый месяц
     if not CheckBox1.Checked then
     begin
-      Edit12.Text := FlToStr(Cl.cdata.bpm[0]);
-      Edit15.Text := FlToStr(Cl.cdata.bpm[1]);
-      Edit18.Text := FlToStr(Cl.cdata.bpm[2]);
-      Edit21.Text := FlToStr(Cl.cdata.bpm[3]);
-      Edit59.Text := FlToStr(Cl.cdata.bpm[4]);
-      Edit24.Text := FlToStr(Cl.cdata.bpm[5]);
-      Edit27.Text := FlToStr(Cl.cdata.bpm[6]);
-      Edit30.Text := FlToStr(Cl.cdata.bpm[7]);
-      Edit33.Text := FlToStr(Cl.cdata.bpm[12]);
-      Edit36.Text := FlToStr(Cl.cdata.bpm[13]);
-      
-      Edit13.Text := FlToStr(Cl.cdata.bsnpm[0]);
-      Edit16.Text := FlToStr(Cl.cdata.bsnpm[1]);
-      Edit19.Text := FlToStr(Cl.cdata.bsnpm[2]);
-      Edit22.Text := FlToStr(Cl.cdata.bsnpm[3]);
-      Edit62.Text := FlToStr(Cl.cdata.bsnpm[4]);
-      Edit25.Text := FlToStr(Cl.cdata.bsnpm[5]);
-      Edit28.Text := FlToStr(Cl.cdata.bsnpm[6]);
-      Edit31.Text := FlToStr(Cl.cdata.bsnpm[7]);
-      Edit34.Text := FlToStr(Cl.cdata.bsnpm[12]);
-      Edit37.Text := FlToStr(Cl.cdata.bsnpm[13]);
+      Edit12.Text := FormatFloat('0.00', Cl.cdata.bpm[0]);
+      Edit15.Text := FormatFloat('0.00', Cl.cdata.bpm[1]);
+      Edit18.Text := FormatFloat('0.00', Cl.cdata.bpm[2]);
+      Edit21.Text := FormatFloat('0.00', Cl.cdata.bpm[3]);
+      Edit59.Text := FormatFloat('0.00', Cl.cdata.bpm[4]);
+      Edit24.Text := FormatFloat('0.00', Cl.cdata.bpm[5]);
+      Edit27.Text := FormatFloat('0.00', Cl.cdata.bpm[6]);
+      Edit30.Text := FormatFloat('0.00', Cl.cdata.bpm[7]);
+      Edit33.Text := FormatFloat('0.00', Cl.cdata.bpm[12]);
+      Edit36.Text := FormatFloat('0.00', Cl.cdata.bpm[13]);
+
+      Edit13.Text := FormatFloat('0.00', Cl.cdata.bsnpm[0]);
+      Edit16.Text := FormatFloat('0.00', Cl.cdata.bsnpm[1]);
+      Edit19.Text := FormatFloat('0.00', Cl.cdata.bsnpm[2]);
+      Edit22.Text := FormatFloat('0.00', Cl.cdata.bsnpm[3]);
+      Edit62.Text := FormatFloat('0.00', Cl.cdata.bsnpm[4]);
+      Edit25.Text := FormatFloat('0.00', Cl.cdata.bsnpm[5]);
+      Edit28.Text := FormatFloat('0.00', Cl.cdata.bsnpm[6]);
+      Edit31.Text := FormatFloat('0.00', Cl.cdata.bsnpm[7]);
+      Edit34.Text := FormatFloat('0.00', Cl.cdata.bsnpm[12]);
+      Edit37.Text := FormatFloat('0.00', Cl.cdata.bsnpm[13]);
     end;
-    Edit14.Text := FlToStr(Cl.cdata.bsub[0]);
-    Edit17.Text := FlToStr(Cl.cdata.bsub[1]);
-    Edit20.Text := FlToStr(Cl.cdata.bsub[2]);
-    Edit23.Text := FlToStr(Cl.cdata.bsub[3]);
-    Edit67.Text := FlToStr(Cl.cdata.bsub[4]);
-    Edit26.Text := FlToStr(Cl.cdata.bsub[5]);
-    Edit29.Text := FlToStr(Cl.cdata.bsub[6]);
-    Edit32.Text := FlToStr(Cl.cdata.bsub[7]);
-    Edit35.Text := FlToStr(Cl.cdata.bsub[12]);
-    Edit38.Text := FlToStr(Cl.cdata.bsub[13]);
-    
-    Edit129.Text  := FlToStr(Cl.cdata.bstndsub[0]);
-    Edit130.Text  := FlToStr(Cl.cdata.bstndsub[1]);
-    Edit131.Text  := FlToStr(Cl.cdata.bstndsub[2]);
-    Edit132.Text  := FlToStr(Cl.cdata.bstndsub[3]);
-    Edit133.Text  := FlToStr(Cl.cdata.bstndsub[4]);
-    Edit134.Text  := FlToStr(Cl.cdata.bstndsub[5]);
-    Edit135.Text  := FlToStr(Cl.cdata.bstndsub[6]);
-    Edit136.Text  := FlToStr(Cl.cdata.bstndsub[7]);
-    Edit137.Text  := FlToStr(Cl.cdata.bstndsub[12]);
-    Edit138.Text  := FlToStr(Cl.cdata.bstndsub[13]);
+    Edit14.Text := FormatFloat('0.00', Cl.cdata.bsub[0]);
+    Edit17.Text := FormatFloat('0.00', Cl.cdata.bsub[1]);
+    Edit20.Text := FormatFloat('0.00', Cl.cdata.bsub[2]);
+    Edit23.Text := FormatFloat('0.00', Cl.cdata.bsub[3]);
+    Edit67.Text := FormatFloat('0.00', Cl.cdata.bsub[4]);
+    Edit26.Text := FormatFloat('0.00', Cl.cdata.bsub[5]);
+    Edit29.Text := FormatFloat('0.00', Cl.cdata.bsub[6]);
+    Edit32.Text := FormatFloat('0.00', Cl.cdata.bsub[7]);
+    Edit35.Text := FormatFloat('0.00', Cl.cdata.bsub[12]);
+    Edit38.Text := FormatFloat('0.00', Cl.cdata.bsub[13]);
+
+    Edit129.Text := FormatFloat('0.00', Cl.cdata.bstndsub[0]);
+    Edit130.Text := FormatFloat('0.00', Cl.cdata.bstndsub[1]);
+    Edit131.Text := FormatFloat('0.00', Cl.cdata.bstndsub[2]);
+    Edit132.Text := FormatFloat('0.00', Cl.cdata.bstndsub[3]);
+    Edit133.Text := FormatFloat('0.00', Cl.cdata.bstndsub[4]);
+    Edit134.Text := FormatFloat('0.00', Cl.cdata.bstndsub[5]);
+    Edit135.Text := FormatFloat('0.00', Cl.cdata.bstndsub[6]);
+    Edit136.Text := FormatFloat('0.00', Cl.cdata.bstndsub[7]);
+    Edit137.Text := FormatFloat('0.00', Cl.cdata.bstndsub[12]);
+    Edit138.Text := FormatFloat('0.00', Cl.cdata.bstndsub[13]);
   end;
   if (s <> 3) then
   begin//для всех
-    Edit96.Text  := FlToStr(Cl.cdata.pm[0]);
-    Edit97.Text  := FlToStr(Cl.cdata.pm[1]);
-    Edit98.Text  := FlToStr(Cl.cdata.pm[2]);
-    Edit99.Text  := FlToStr(Cl.cdata.pm[3]);
-    Edit100.Text := FlToStr(Cl.cdata.pm[4]);
-    Edit101.Text := FlToStr(Cl.cdata.pm[5]);
-    Edit102.Text := FlToStr(Cl.cdata.pm[6]);
-    Edit103.Text := FlToStr(Cl.cdata.pm[7]);
-    Edit104.Text := FlToStr(Cl.cdata.pm[12]);
-    Edit105.Text := FlToStr(Cl.cdata.pm[13]);
+    Edit96.Text  := FormatFloat('0.00', Cl.cdata.pm[0]);
+    Edit97.Text  := FormatFloat('0.00', Cl.cdata.pm[1]);
+    Edit98.Text  := FormatFloat('0.00', Cl.cdata.pm[2]);
+    Edit99.Text  := FormatFloat('0.00', Cl.cdata.pm[3]);
+    Edit100.Text := FormatFloat('0.00', Cl.cdata.pm[4]);
+    Edit101.Text := FormatFloat('0.00', Cl.cdata.pm[5]);
+    Edit102.Text := FormatFloat('0.00', Cl.cdata.pm[6]);
+    Edit103.Text := FormatFloat('0.00', Cl.cdata.pm[7]);
+    Edit104.Text := FormatFloat('0.00', Cl.cdata.pm[12]);
+    Edit105.Text := FormatFloat('0.00', Cl.cdata.pm[13]);
 
-    Edit39.Text  := FlToStr(Cl.cdata.snpm[0]);
-    Edit41.Text  := FlToStr(Cl.cdata.snpm[1]);
-    Edit43.Text  := FlToStr(Cl.cdata.snpm[2]);
-    Edit45.Text  := FlToStr(Cl.cdata.snpm[3]);
-    Edit70.Text  := FlToStr(Cl.cdata.snpm[4]);
-    Edit47.Text  := FlToStr(Cl.cdata.snpm[5]);
-    Edit49.Text  := FlToStr(Cl.cdata.snpm[6]);
-    Edit51.Text  := FlToStr(Cl.cdata.snpm[7]);
-    Edit53.Text  := FlToStr(Cl.cdata.snpm[12]);
-    Edit55.Text  := FlToStr(Cl.cdata.snpm[13]);
+    Edit39.Text := FormatFloat('0.00', Cl.cdata.snpm[0]);
+    Edit41.Text := FormatFloat('0.00', Cl.cdata.snpm[1]);
+    Edit43.Text := FormatFloat('0.00', Cl.cdata.snpm[2]);
+    Edit45.Text := FormatFloat('0.00', Cl.cdata.snpm[3]);
+    Edit70.Text := FormatFloat('0.00', Cl.cdata.snpm[4]);
+    Edit47.Text := FormatFloat('0.00', Cl.cdata.snpm[5]);
+    Edit49.Text := FormatFloat('0.00', Cl.cdata.snpm[6]);
+    Edit51.Text := FormatFloat('0.00', Cl.cdata.snpm[7]);
+    Edit53.Text := FormatFloat('0.00', Cl.cdata.snpm[12]);
+    Edit55.Text := FormatFloat('0.00', Cl.cdata.snpm[13]);
 
-    Edit40.Text  := FlToStr(Cl.cdata.sub[0]);
-    Edit42.Text  := FlToStr(Cl.cdata.sub[1]);
-    Edit44.Text  := FlToStr(Cl.cdata.sub[2]);
-    Edit46.Text  := FlToStr(Cl.cdata.sub[3]);
-    Edit71.Text  := FlToStr(Cl.cdata.sub[4]);
-    Edit48.Text  := FlToStr(Cl.cdata.sub[5]);
-    Edit50.Text  := FlToStr(Cl.cdata.sub[6]);
-    Edit52.Text  := FlToStr(Cl.cdata.sub[7]);
-    Edit54.Text  := FlToStr(Cl.cdata.sub[12]);
-    Edit56.Text  := FlToStr(Cl.cdata.sub[13]);
+    Edit40.Text := FormatFloat('0.00', Cl.cdata.sub[0]);
+    Edit42.Text := FormatFloat('0.00', Cl.cdata.sub[1]);
+    Edit44.Text := FormatFloat('0.00', Cl.cdata.sub[2]);
+    Edit46.Text := FormatFloat('0.00', Cl.cdata.sub[3]);
+    Edit71.Text := FormatFloat('0.00', Cl.cdata.sub[4]);
+    Edit48.Text := FormatFloat('0.00', Cl.cdata.sub[5]);
+    Edit50.Text := FormatFloat('0.00', Cl.cdata.sub[6]);
+    Edit52.Text := FormatFloat('0.00', Cl.cdata.sub[7]);
+    Edit54.Text := FormatFloat('0.00', Cl.cdata.sub[12]);
+    Edit56.Text := FormatFloat('0.00', Cl.cdata.sub[13]);
 
-    Edit140.Text := FlToStr(Cl.cdata.stndsub[0]);
-    Edit141.Text := FlToStr(Cl.cdata.stndsub[1]);
-    Edit142.Text := FlToStr(Cl.cdata.stndsub[2]);
-    Edit143.Text := FlToStr(Cl.cdata.stndsub[3]);
-    Edit144.Text := FlToStr(Cl.cdata.stndsub[4]);
-    Edit145.Text := FlToStr(Cl.cdata.stndsub[5]);
-    Edit146.Text := FlToStr(Cl.cdata.stndsub[6]);
-    Edit147.Text := FlToStr(Cl.cdata.stndsub[7]);
-    Edit148.Text := FlToStr(Cl.cdata.stndsub[12]);
-    Edit149.Text := FlToStr(Cl.cdata.stndsub[13]);
+    Edit140.Text := FormatFloat('0.00', Cl.cdata.stndsub[0]);
+    Edit141.Text := FormatFloat('0.00', Cl.cdata.stndsub[1]);
+    Edit142.Text := FormatFloat('0.00', Cl.cdata.stndsub[2]);
+    Edit143.Text := FormatFloat('0.00', Cl.cdata.stndsub[3]);
+    Edit144.Text := FormatFloat('0.00', Cl.cdata.stndsub[4]);
+    Edit145.Text := FormatFloat('0.00', Cl.cdata.stndsub[5]);
+    Edit146.Text := FormatFloat('0.00', Cl.cdata.stndsub[6]);
+    Edit147.Text := FormatFloat('0.00', Cl.cdata.stndsub[7]);
+    Edit148.Text := FormatFloat('0.00', Cl.cdata.stndsub[12]);
+    Edit149.Text := FormatFloat('0.00', Cl.cdata.stndsub[13]);
   end;
 end;
 
-procedure TForm2.SumV;//суммировать начисления
+procedure TEditClForm.SumV;//суммировать начисления
 var
   Value: real;
   i: integer;
 begin
-  Edit89.Text := FlToStr(Cl.CalcFull(Cl.cdata.bpm));
+  Edit89.Text := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.bpm));
 
   Value := Cl.cdata.pm[0];
   for i := 1 to numbtarif - 1 do
     Value := Value + {!}roundto(Cl.cdata.pm[i], -2);
-  Edit106.Text := FlToStr(Value);
-  
-  Edit90.Text := FlToStr(Cl.CalcFull(Cl.cdata.bsnpm));
-  Edit91.Text := FlToStr(Cl.CalcFull(Cl.cdata.bsub));
-  Edit92.Text := FlToStr(Cl.CalcFull(Cl.cdata.snpm));
-  Edit93.Text := FlToStr(Cl.CalcFull(Cl.cdata.sub));
-  Edit65.Text := FlToStr(Cl.CalcFull(Cl.cdata.bfpm));
-  Edit84.Text := FlToStr(Cl.CalcFull(Cl.cdata.fpm));
-  Edit139.Text := FlToStr(Cl.CalcFull(Cl.cdata.bstndsub));
-  Edit150.Text := FlToStr(Cl.CalcFull(Cl.cdata.stndsub));
+  Edit106.Text := FormatFloat('0.00', Value);
+
+  Edit90.Text  := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.bsnpm));
+  Edit91.Text  := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.bsub));
+  Edit92.Text  := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.snpm));
+  Edit93.Text  := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.sub));
+  Edit65.Text  := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.bfpm));
+  Edit84.Text  := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.fpm));
+  Edit139.Text := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.bstndsub));
+  Edit150.Text := FormatFloat('0.00', Cl.CalcFull(Cl.cdata.stndsub));
 
   SetKoef;
 end;
 
-function TForm2.SelMin(n: integer): real;//найти min
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.minim');
-    SQL.Add('from "curlmin.dbf" sbros');
-    SQL.Add('where sbros.id_min = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('minim').AsFloat;
-    Close;
-  end;
-end;
-
-procedure TForm2.SetIncome;
+procedure TEditClForm.SetIncome;
 var
   i: integer;
 begin
@@ -1799,19 +1810,19 @@ begin
   begin
     Cl.cdata.income := Cl.cdata.income + Cl.cdata.mid[i];
   end;
-  Edit73.Text := FlToStr(Cl.cdata.income);
+  Edit73.Text := FormatFloat('0.00', Cl.cdata.income);
 end;
 
-procedure TForm2.SetKoef;
+procedure TEditClForm.SetKoef;
 var
   pm, ppm: real;
-  i: integer;
+  //  i: integer;
 begin
   //сд/пм
   if (Cl.cdata.pmin <> 0) and (Cl.cdata.mcount <> 0) then
   begin
     Cl.cdata.koef := rnd((Cl.cdata.income / Cl.cdata.mcount) / Cl.cdata.pmin);
-    Edit107.Text  := FlToStr(Cl.cdata.koef);
+    Edit107.Text  := FormatFloat('0.00', Cl.cdata.koef);
   end
   else
   begin
@@ -1828,7 +1839,7 @@ begin
     ppm := Cl.CalcFull(Cl.cdata.pm);
 
     if (pm <> 0) and (ppm <> 0) then
-      Edit108.Text := FlToStr(rnd(ppm / pm))
+      Edit108.Text := FormatFloat('0.00', rnd(ppm / pm))
     else
       Edit108.Text := '';
   end
@@ -1836,7 +1847,7 @@ begin
     Edit108.Text := '';
 end;
 
-procedure TForm2.SetHouse(s: integer; n, c: string);
+procedure TEditClForm.SetHouse(s: integer; n, c: string);
 begin
   Combobox12.Text := SelStr(s);
   Combobox12.OnChange(combobox12);
@@ -1844,7 +1855,7 @@ begin
   Edit60.Text := n;
 end;
 
-function TForm2.SearchStreet(s: string): integer;
+function TEditClForm.SearchStreet(s: string): integer;
 var
   i:  integer;
   s1: string;
@@ -1861,7 +1872,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchMng(s: string): integer;
+function TEditClForm.SearchMng(s: string): integer;
 var
   i: integer;
 begin
@@ -1876,7 +1887,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchFnd(s: string): integer;
+function TEditClForm.SearchFnd(s: string): integer;
 var
   i: integer;
 begin
@@ -1891,7 +1902,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchSettl(s: string): integer;
+function TEditClForm.SearchSettl(s: string): integer;
 var
   i: integer;
 begin
@@ -1906,7 +1917,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchOwn(s: string): integer;
+function TEditClForm.SearchOwn(s: string): integer;
 var
   i: integer;
 begin
@@ -1921,7 +1932,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchCntrl(s: string): integer;
+function TEditClForm.SearchCntrl(s: string): integer;
 var
   i: integer;
 begin
@@ -1936,7 +1947,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchSt(s: string): integer;
+function TEditClForm.SearchSt(s: string): integer;
 var
   i: integer;
 begin
@@ -1951,7 +1962,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchStnd(s: string): integer;
+function TEditClForm.SearchStnd(s: string): integer;
 var
   i: integer;
 begin
@@ -1966,7 +1977,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchPriv(s: string): integer;
+function TEditClForm.SearchPriv(s: string): integer;
 var
   i: integer;
 begin
@@ -1981,7 +1992,7 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchRel(s: string): integer;
+function TEditClForm.SearchRel(s: string): integer;
 var
   i: integer;
 begin
@@ -1996,37 +2007,37 @@ begin
     Result := -1;
 end;
 
-function TForm2.SearchServIndex(comboBox: TComboBox): integer;
+function TEditClForm.SearchServIndex(ComboBox: TComboBox): integer;
 var
   i: integer;
 begin
-  for i := 0 to comboBox.Items.Count - 1 do
+  for i := 0 to ComboBox.Items.Count - 1 do
   begin
-    if AnsiLowerCase(comboBox.Items.Strings[i]) = AnsiLowerCase(comboBox.Text) then
+    if AnsiLowerCase(ComboBox.Items.Strings[i]) = AnsiLowerCase(ComboBox.Text) then
       break;
   end;
-  if i < comboBox.Items.Count then
+  if i < ComboBox.Items.Count then
     Result := i
   else
     Result := -1;
 end;
 
-function TForm2.SearchServIndex(comboBox: TComboBox; s:string): integer;
+function TEditClForm.SearchServIndex(ComboBox: TComboBox; s: string): integer;
 var
   i: integer;
 begin
-  for i := 0 to comboBox.Items.Count - 1 do
+  for i := 0 to ComboBox.Items.Count - 1 do
   begin
-    if AnsiLowerCase(comboBox.Items.Strings[i]) = AnsiLowerCase(s) then
+    if AnsiLowerCase(ComboBox.Items.Strings[i]) = AnsiLowerCase(s) then
       break;
   end;
-  if i < comboBox.Items.Count then
+  if i < ComboBox.Items.Count then
     Result := i
   else
     Result := -1;
 end;
 
-function TForm2.SearchBank(s: string): integer;
+function TEditClForm.SearchBank(s: string): integer;
 var
   i: integer;
 begin
@@ -2041,346 +2052,9 @@ begin
     Result := -1;
 end;
 
-function TForm2.SelInsp(n: integer): string;//выбрать инспектора
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select nameinsp');
-    SQL.Add('from insp');
-    SQL.Add('where (id_insp = :id)and(id_dist=:dist)');
-    ParamByName('id').AsInteger := n;
-    ParamByName('dist').AsInteger := Form1.dist;
-    Open;
-    Result := FieldByName('nameinsp').AsString;
-    Close;
-  end;
-end;
 
 
-function TForm2.SelStr(n: integer): string;//выбрать улицу
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namestreet');
-    SQL.Add('from strt');
-    SQL.Add('where id_street = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namestreet').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelMng(n: integer): string;//выбрать распорядителя
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namemng');
-    SQL.Add('from mng');
-    SQL.Add('where (id_mng = :id)and(id_dist=:dist)');
-    ParamByName('id').AsInteger := n;
-    ParamByName('dist').AsInteger := Form1.dist;
-    Open;
-    Result := FieldByName('namemng').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelFnd(n: integer): string;//выбрать фонд
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namefond');
-    SQL.Add('from fond');
-    SQL.Add('where id_fond = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namefond').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelSettl(n: integer): string;//выбрать тип заселения
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namesettl');
-    SQL.Add('from settl');
-    SQL.Add('where id_settl = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namesettl').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelOwn(n: integer): string;//выбрать тип владения
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select nameown');
-    SQL.Add('from own');
-    SQL.Add('where id_own = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('nameown').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelCntrl(n: integer): string;//выбрать тип контроля
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namecntrl');
-    SQL.Add('from cntrl');
-    SQL.Add('where id_cntrl = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namecntrl').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelSt(n: integer): string;//выбрать тип статуса
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namestatus');
-    SQL.Add('from stat');
-    SQL.Add('where id_status = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namestatus').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelPriv(n: integer): string;//выбрать льготу
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namepriv');
-    SQL.Add('from priv');
-    SQL.Add('where id_priv = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namepriv').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelRel(n: integer): string;
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namerel');
-    SQL.Add('from rel');
-    SQL.Add('where id_rel = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namerel').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelStnd(n: integer): string;//выбрать стандарт
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namestnd');
-    SQL.Add('from "currstnd.dbf" sbros');
-    SQL.Add('where sbros.id_stnd = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namestnd').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelCont(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namecont');
-    SQL.Add('from "curcont.dbf" sbros');
-    SQL.Add('where sbros.id_cont = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namecont').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelRep(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namerep');
-    SQL.Add('from "currep.dbf" sbros');
-    SQL.Add('where sbros.id_rep = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namerep').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelCold(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namecold');
-    SQL.Add('from "curcold.dbf" sbros');
-    SQL.Add('where sbros.id_cold = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namecold').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelCanal(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namecanal');
-    SQL.Add('from "curcanal.dbf" sbros');
-    SQL.Add('where sbros.id_canal = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namecanal').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelHot(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namehot');
-    SQL.Add('from "curhot.dbf" sbros');
-    SQL.Add('where sbros.id_hot = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namehot').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelHeat(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.nameheat');
-    SQL.Add('from "curheat.dbf" sbros');
-    SQL.Add('where sbros.id_heat = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('nameheat').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelGas(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namegas');
-    SQL.Add('from "curgas.dbf" sbros');
-    SQL.Add('where sbros.id_gas = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namegas').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelWood(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namewood');
-    SQL.Add('from "curwood.dbf" sbros');
-    SQL.Add('where sbros.id_wood = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namewood').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelCoal(n: integer): string;//выбрать тариф
-begin
-  with DModule.qTarif do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select sbros.namecoal');
-    SQL.Add('from "curcoal.dbf" sbros');
-    SQL.Add('where sbros.id_coal = :id');
-    Parameters.ParamByName('id').Value := integer(n);
-    Open;
-    Result := FieldByName('namecoal').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.SelBank(n: integer): string;//выбрать банк
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select namebank');
-    SQL.Add('from bank');
-    SQL.Add('where id_bank = :id');
-    ParamByName('id').AsInteger := n;
-    Open;
-    Result := FieldByName('namebank').AsString;
-    Close;
-  end;
-end;
-
-function TForm2.ExistHouse(var n: integer): bool;//существует дом?
+function TEditClForm.ExistHouse(var n: integer): bool;//существует дом?
 begin
   with DModule.Query1 do
   begin
@@ -2406,7 +2080,7 @@ begin
   end;
 end;
 
-function TForm2.ExistClient(var n: integer): bool;
+function TEditClForm.ExistClient(var n: integer): bool;
 begin
   with DModule.Query1 do
   begin
@@ -2432,7 +2106,7 @@ begin
   end;
 end;
 
-function tform2.existmem: bool;
+function TEditClForm.existmem: bool;
 var
   i: integer;
 begin
@@ -2445,7 +2119,7 @@ begin
     end;
 end;
 
-function TForm2.ExistMemEx(var n: integer): bool;
+function TEditClForm.ExistMemEx(var n: integer): bool;
 var
   i: integer;
   flag1: bool;
@@ -2478,7 +2152,7 @@ begin
     Result := False;
 end;
 
-procedure TForm2.SortFam;
+procedure TEditClForm.SortFam;
 var
   m: TMan;
   mas1, mas2, i, compare: integer;
@@ -2510,8 +2184,7 @@ begin
   end;
 end;
 
-procedure TForm2.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
-  Rect: TRect; State: TGridDrawState);
+procedure TEditClForm.StringGrid1DrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
 {var
   Buf: array[byte] of char;}
 begin
@@ -2527,31 +2200,30 @@ begin
       end;}
 end;
 
-procedure TForm2.StringGrid1MouseLeave(Sender: TObject);
+procedure TEditClForm.StringGrid1MouseLeave(Sender: TObject);
 var
   i: integer;
 begin
   for i := 0 to StringGrid1.RowCount - 2 do
-    StringGrid1.Cells[3,i+1] := calcMDiff(StringGrid1.Cells[1,i+1], StringGrid1.Cells[2,i+1]);
+    StringGrid1.Cells[3, i + 1] := calcMDiff(StringGrid1.Cells[1, i + 1], StringGrid1.Cells[2, i + 1]);
   UpdateFactInfo();
 end;
 
-procedure TForm2.StringGrid1SelectCell(Sender: TObject; ACol, ARow: Integer;
-  var CanSelect: Boolean);
+procedure TEditClForm.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
 {var
   i: integer;}
 begin
-    if (ACol = 0)  then
-      StringGrid1.Options := StringGrid1.Options - [goEditing, goAlwaysShowEditor]
-    else
-      StringGrid1.Options := StringGrid1.Options + [goEditing, goAlwaysShowEditor];
+  if (ACol = 0) then
+    StringGrid1.Options := StringGrid1.Options - [goEditing, goAlwaysShowEditor]
+  else
+    StringGrid1.Options := StringGrid1.Options + [goEditing, goAlwaysShowEditor];
 
-    if ARow <> 0 then
-      StringGrid1.Cells[3,ARow] := calcMDiff(StringGrid1.Cells[1,ARow], StringGrid1.Cells[2,ARow]);
-    UpdateFactInfo();
+  if ARow <> 0 then
+    StringGrid1.Cells[3, ARow] := calcMDiff(StringGrid1.Cells[1, ARow], StringGrid1.Cells[2, ARow]);
+  UpdateFactInfo();
 
-    if TabControl1.TabIndex = 1 then
-      CheckDifferenceFactSum;
+  if TabControl1.TabIndex = 1 then
+    CheckDifferenceFactSum;
 
 {  if TabControl1.TabIndex=1 then
   begin
@@ -2569,28 +2241,28 @@ begin
     StringGrid1.Options := StringGrid1.Options + [goEditing, goAlwaysShowEditor];}
 end;
 
-procedure TForm2.StringGrid1SetEditText(Sender: TObject; ACol, ARow: Integer;
-  const Value: string);
+procedure TEditClForm.StringGrid1SetEditText(Sender: TObject; ACol, ARow: integer; const Value: string);
 begin
   if ARow <> 0 then
     if Value <> '' then
     begin
-      StringGrid1.Cells[3,ARow] := calcMDiff(StringGrid1.Cells[1,ARow], StringGrid1.Cells[2,ARow]);
+      StringGrid1.Cells[3, ARow] := calcMDiff(StringGrid1.Cells[1, ARow], StringGrid1.Cells[2, ARow]);
       UpdateFactInfo();
     end;
 end;
 
-procedure TForm2.Button20Click(Sender: TObject);
+procedure TEditClForm.Button20Click(Sender: TObject);
 var
   i: integer;
 begin
   case TabControl1.TabIndex of
     0:
     begin
-      if (ComboBox23.Items.Count=0) and (not CheckBox1.Checked) then showmessage('Нет доступных периодов для добавления')
+      if (ComboBox23.Items.Count = 0) and (not CheckBox1.Checked) then
+        ShowMessage('Нет доступных периодов для добавления')
       else
-      if ComboBox23.Text='' then
-        showmessage('Не выбран период для добавления')
+      if ComboBox23.Text = '' then
+        ShowMessage('Не выбран период для добавления')
       else
         with DModule do
         begin
@@ -2598,36 +2270,36 @@ begin
           begin
             try
               Query1.Close;
-              Query1.SQL.Text:= 'INSERT INTO FactSale'+#13+
-                                'VALUES (convert(smalldatetime,:sdate,104),:regn,'+
-                                'convert(smalldatetime,:bdate,104),convert(smalldatetime,:edate,104),:sub,:factsum,:dis)';
-              Query1.ParamByName('sdate').Value:=StringGrid1.Cells[0,i+1];
-              Query1.ParamByName('regn').Value:=cl.data.regn;
-              Query1.ParamByName('bdate').Value:=DateToStr(fbegindate);
-              Query1.ParamByName('edate').Value:=DateToStr(fenddate);
-              Query1.ParamByName('sub').Value:=StrToFloat(StringGrid1.Cells[1,i+1]);
-              Query1.ParamByName('factsum').Value:=StrToFloat(StringGrid1.Cells[2,i+1]);
-              Query1.ParamByName('dis').Value:=Form1.dist;
-              Query1.ExecSQL;
-             except
-              showmessage('Ошибка при добавлении! Проверьте правильность ввода данных.')
-            end;
-          end;
-            try
-              Query1.Close;
-              Query1.SQL.Text:= 'INSERT INTO FactBalance'+#13+
-                                'VALUES (:regn,'+
-                                'convert(smalldatetime,:bdate,104),convert(smalldatetime,:edate,104),:balance,:dolg,:dist)';
-              Query1.ParamByName('regn').Value := cl.data.regn;
+              Query1.SQL.Text := 'INSERT INTO FactSale' + #13 +
+                'VALUES (convert(smalldatetime,:sdate,104),:regn,' +
+                'convert(smalldatetime,:bdate,104),convert(smalldatetime,:edate,104),:sub,:factsum,:dis)';
+              Query1.ParamByName('sdate').Value := StringGrid1.Cells[0, i + 1];
+              Query1.ParamByName('regn').Value := cl.Data.regn;
               Query1.ParamByName('bdate').Value := DateToStr(fbegindate);
               Query1.ParamByName('edate').Value := DateToStr(fenddate);
-              Query1.ParamByName('balance').Value := StrToFloat(Edit114.Text);
-              Query1.ParamByName('dolg').Value := StrToFloat(Edit113.Text);
-              Query1.ParamByName('dist').Value := cl.data.dist;
+              Query1.ParamByName('sub').Value := StrToFloat(StringGrid1.Cells[1, i + 1]);
+              Query1.ParamByName('factsum').Value := StrToFloat(StringGrid1.Cells[2, i + 1]);
+              Query1.ParamByName('dis').Value := Form1.dist;
               Query1.ExecSQL;
             except
-              showmessage('Ошибка при добавлении! Проверьте правильность ввода данных.')
+              ShowMessage('Ошибка при добавлении! Проверьте правильность ввода данных.')
             end;
+          end;
+          try
+            Query1.Close;
+            Query1.SQL.Text := 'INSERT INTO FactBalance' + #13 +
+              'VALUES (:regn,' +
+              'convert(smalldatetime,:bdate,104),convert(smalldatetime,:edate,104),:balance,:dolg,:dist)';
+            Query1.ParamByName('regn').Value := cl.Data.regn;
+            Query1.ParamByName('bdate').Value := DateToStr(fbegindate);
+            Query1.ParamByName('edate').Value := DateToStr(fenddate);
+            Query1.ParamByName('balance').Value := StrToFloat(Edit114.Text);
+            Query1.ParamByName('dolg').Value := StrToFloat(Edit113.Text);
+            Query1.ParamByName('dist').Value := cl.Data.dist;
+            Query1.ExecSQL;
+          except
+            ShowMessage('Ошибка при добавлении! Проверьте правильность ввода данных.')
+          end;
         end;
     end;
 
@@ -2635,40 +2307,40 @@ begin
     begin
       with DModule do
       begin
-        if comboBoxCont.Text='' then
-          showmessage('Не выбран период для изменения')
+        if comboBoxCont.Text = '' then
+          ShowMessage('Не выбран период для изменения')
         else
-        for i:=0 to StringGrid1.RowCount-2 do
-        begin
-          try
-            Query1.Close;
-            Query1.SQL.Text:= 'UPDATE FactSale'+#13+
-                              'SET factsum = :factsum, sub=:sub'+#13+
-                              'WHERE (regn = :regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104)) '+
-                              'AND (sdate = CONVERT(smalldatetime, :sdate, 104))';
-            Query1.ParamByName('factsum').Value:=StrToFloat(StringGrid1.Cells[2,i+1]);
-            Query1.ParamByName('sub').Value:=StrToFloat(StringGrid1.Cells[1,i+1]);
-            Query1.ParamByName('regn').Value:=cl.data.regn;
-            Query1.ParamByName('bdate').Value:=DateToStr(fbegindate);
-            Query1.ParamByName('sdate').Value:=StringGrid1.Cells[0,i+1];
-            Query1.ExecSQL;
-          except
-            showmessage('Ошибка при изменении! Проверьте правильность ввода данных.')
+          for i := 0 to StringGrid1.RowCount - 2 do
+          begin
+            try
+              Query1.Close;
+              Query1.SQL.Text := 'UPDATE FactSale' + #13 +
+                'SET factsum = :factsum, sub=:sub' + #13 +
+                'WHERE (regn = :regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104)) ' +
+                'AND (sdate = CONVERT(smalldatetime, :sdate, 104))';
+              Query1.ParamByName('factsum').Value := StrToFloat(StringGrid1.Cells[2, i + 1]);
+              Query1.ParamByName('sub').Value := StrToFloat(StringGrid1.Cells[1, i + 1]);
+              Query1.ParamByName('regn').Value := cl.Data.regn;
+              Query1.ParamByName('bdate').Value := DateToStr(fbegindate);
+              Query1.ParamByName('sdate').Value := StringGrid1.Cells[0, i + 1];
+              Query1.ExecSQL;
+            except
+              ShowMessage('Ошибка при изменении! Проверьте правильность ввода данных.')
+            end;
+            try
+              Query1.Close;
+              Query1.SQL.Text := 'UPDATE FactBalance' + #13 +
+                'SET balance = :balance, dolg=:dolg' + #13 +
+                'WHERE (regn = :regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104))';
+              Query1.ParamByName('balance').Value := StrToFloat(Edit114.Text);
+              Query1.ParamByName('dolg').Value := StrToFloat(Edit113.Text);
+              Query1.ParamByName('regn').Value := cl.Data.regn;
+              Query1.ParamByName('bdate').Value := DateToStr(fbegindate);
+              Query1.ExecSQL;
+            except
+              ShowMessage('Ошибка при изменении! Проверьте правильность ввода данных.')
+            end;
           end;
-          try
-            Query1.Close;
-            Query1.SQL.Text:= 'UPDATE FactBalance'+#13+
-                              'SET balance = :balance, dolg=:dolg'+#13+
-                              'WHERE (regn = :regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104))';
-            Query1.ParamByName('balance').Value:=StrToFloat(Edit114.Text);
-            Query1.ParamByName('dolg').Value:=StrToFloat(Edit113.Text);
-            Query1.ParamByName('regn').Value:=cl.data.regn;
-            Query1.ParamByName('bdate').Value:=DateToStr(fbegindate);
-            Query1.ExecSQL;
-          except
-            showmessage('Ошибка при изменении! Проверьте правильность ввода данных.')
-          end;
-        end;
       end;
     end;
   end;
@@ -2687,11 +2359,11 @@ begin
           'FROM Sluj' + #13 +
           'WHERE (regn = :regn) AND (factminus = 1) AND (sdate >= convert(smalldatetime,:bdate,104))' + #13 +
           'AND (sdate < convert(smalldatetime,:edate,104))';
-        ParamByName('regn').AsInteger := Cl.data.regn;
+        ParamByName('regn').AsInteger := Cl.Data.regn;
         ParamByName('bdate').AsString := DateToStr(Cl.cdata.begindate);
         ParamByName('edate').AsString := DateToStr(Cl.cdata.enddate);
         Open;
-        Cl.cdata.dolgFact := Cl.cdata.dolgFact - FieldByName('sumsub').AsFloat
+        Cl.cdata.dolgFact := Cl.cdata.dolgFact - FieldByName('sumsub').AsFloat;
       end;
     end;
     Edit115.Text := FloatToStr(Cl.cdata.dolgFact);
@@ -2701,31 +2373,32 @@ begin
   TabControl1.OnChange(self);
 end;
 
-procedure TForm2.Button21Click(Sender: TObject);
+procedure TEditClForm.Button21Click(Sender: TObject);
 begin
-  if ComboBox23.Text='' then
-    showmessage('Не выбран период для удаления')
+  if ComboBox23.Text = '' then
+    ShowMessage('Не выбран период для удаления')
   else
-  if MessageDlg('Удалить выбранный период?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+  if MessageDlg('Удалить выбранный период?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
     try
       with DModule do
       begin
         Query1.Close;
-        Query1.SQL.Text:= 'DELETE FROM FactBalance'+#13+
-                          'WHERE (regn=:regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104))';
-        Query1.ParamByName('regn').Value:= cl.data.regn;
-        Query1.ParamByName('bdate').Value:= DateToStr(fbegindate);
+        Query1.SQL.Text := 'DELETE FROM FactBalance' + #13 +
+          'WHERE (regn=:regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104))';
+        Query1.ParamByName('regn').Value := cl.Data.regn;
+        Query1.ParamByName('bdate').Value := DateToStr(fbegindate);
         Query1.ExecSQL;
         //-----------------
         Query1.Close;
-        Query1.SQL.Text:= 'DELETE FROM FactSale'+#13+
-                          'WHERE (regn=:regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104))';
-        Query1.ParamByName('regn').Value:= cl.data.regn;
-        Query1.ParamByName('bdate').Value:= DateToStr(fbegindate);
+        Query1.SQL.Text := 'DELETE FROM FactSale' + #13 +
+          'WHERE (regn=:regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104))';
+        Query1.ParamByName('regn').Value := cl.Data.regn;
+        Query1.ParamByName('bdate').Value := DateToStr(fbegindate);
         Query1.ExecSQL;
       end;
     except
-      showmessage('Ошибка при удалении');
+      ShowMessage('Ошибка при удалении');
     end;
     if fbegindate = Cl.cdata.prevbegindate then
     begin
@@ -2740,7 +2413,7 @@ begin
   end;
 end;
 
-procedure TForm2.Button2Click(Sender: TObject);
+procedure TEditClForm.Button2Click(Sender: TObject);
 { применить изменения }
 begin
   case mode of
@@ -2757,7 +2430,7 @@ begin
   end;
 end;
 
-procedure TForm2.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TEditClForm.FormClose(Sender: TObject; var Action: TCloseAction);
 { закрытие формы }
 begin
   DModule.Query1.Close;
@@ -2765,24 +2438,25 @@ begin
   DModule.qTarif.Close;
 end;
 
-function TForm2.AddAnyMonth(BD, ED: TDateTime): TStringList;
-var tmpDate: TDateTime;
-    StrList: TStringList;
-    i: integer;
-//    tmp: byte;
+function TEditClForm.AddAnyMonth(BD, ED: TDateTime): TStringList;
+var
+  tmpDate: TDateTime;
+  StrList: TStringList;
+  i: integer;
+  //    tmp: byte;
 begin
-  StrList:= TStringList.Create;
-  tmpDate:= BD;
-      StrList.Add(DateToStr(tmpdate));
-      for i:=1 to GetMonthsCount(BD,ED)-1 do
-        begin
-          tmpdate:=IncMonth(tmpdate,1);
-          StrList.Add(DateToStr(tmpdate));
-        end;
-  result:= StrList;
+  StrList := TStringList.Create;
+  tmpDate := BD;
+  StrList.Add(DateToStr(tmpdate));
+  for i := 1 to MounthDiff(BD, ED) - 1 do
+  begin
+    tmpdate := IncMonth(tmpdate, 1);
+    StrList.Add(DateToStr(tmpdate));
+  end;
+  Result := StrList;
 end;
 
-function TForm2.AddClient: integer;
+function TEditClForm.AddClient: integer;
   { добавить клиента }
 var
   mem, i, n, maxid: integer;
@@ -2909,7 +2583,7 @@ begin
               ParamByName('snp').AsFloat := Cl.cdata.snpm[i];
               ParamByName('sub').AsFloat := Cl.cdata.sub[i];
               ParamByName('sp').AsFloat  := Cl.cdata.fpm[i];
-              ParamByName('stndsub').AsFloat  := Cl.cdata.stndsub[i];
+              ParamByName('stndsub').AsFloat := Cl.cdata.stndsub[i];
               ExecSQL;
             end;
           end;
@@ -2927,7 +2601,7 @@ begin
             begin
               ParamByName('serv').AsInteger := i;
               ParamByName('count').Value := Cl.cdata.counter[i];
-              ParamByName('countdata').AsFloat  := Cl.cdata.counterdata[i];
+              ParamByName('countdata').AsFloat := Cl.cdata.counterdata[i];
               ParamByName('countserv').AsInteger := Cl.cdata.countertarifs[i];
               ExecSQL;
             end;
@@ -2941,9 +2615,10 @@ begin
             SQL.Clear;
             SQL.Add('insert into fam');
             SQL.Add('values (:id, :cl, :fio,convert(smalldatetime,:birth,104),');
-            SQL.Add(':pol, :st, :priv,:mid, :rel)');
+            SQL.Add(':pol, :st, :priv,:mid, :rel,:npss)');
             ParamByName('id').AsInteger := StrToInt(IntToStr(Cl.Data.regn) + IntToStr(mem));
             ParamByName('cl').AsInteger := Cl.Data.regn;
+            ParamByName('npss').AsString := TMan(Cl.cdata.family[i]).npss;
             ParamByName('fio').AsString := TMan(Cl.cdata.family[i]).fio;
             ParamByName('birth').AsString := DateToStr(TMan(Cl.cdata.family[i]).birth);
             ParamByName('pol').AsInteger := TMan(Cl.cdata.family[i]).pol;
@@ -2989,7 +2664,7 @@ begin
   end;
 end;
 
-function TForm2.ModifyClient: integer;
+function TEditClForm.ModifyClient: integer;
   { изменить клиента }
 var
   n, i, mem, maxid: integer;
@@ -3164,7 +2839,7 @@ begin
                 ParamByName('snp').AsFloat := Cl.cdata.snpm[i];
                 ParamByName('sub').AsFloat := Cl.cdata.sub[i];
                 ParamByName('sp').AsFloat  := Cl.cdata.fpm[i];
-                ParamByName('stndsub').AsFloat  := Cl.cdata.stndsub[i];
+                ParamByName('stndsub').AsFloat := Cl.cdata.stndsub[i];
 
                 try
                   ExecSQL;
@@ -3194,9 +2869,10 @@ begin
               //          if mem > 9 then mem := 9;
               SQL.Add('insert into fam');
               SQL.Add('values (:id, :cl, :fio,convert(smalldatetime,:birth,104),');
-              SQL.Add(':pol, :st, :priv,:mid, :rel)');
+              SQL.Add(':pol, :st, :priv,:mid, :rel, :npss)');
               ParamByName('id').AsCurrency := StrToCurr(IntToStr(Cl.Data.regn) + IntToStr(mem));
               ParamByName('cl').AsInteger := Form1.client;
+              ParamByName('npss').AsString := TMan(Cl.cdata.family[i]).npss;
               ParamByName('fio').AsString := TMan(Cl.cdata.family[i]).fio;
               ParamByName('birth').AsString := DateToStr(TMan(Cl.cdata.family[i]).birth);
               ParamByName('pol').AsInteger := TMan(Cl.cdata.family[i]).pol;
@@ -3211,7 +2887,7 @@ begin
             Close;
             SQL.Text := 'delete from Counters' + #13 +
               'where (regn=:r)and(sdate>=CONVERT(smalldatetime,:s,104))';
-            ParamByName('s').AsString  := DateToStr(Cl.cdata.begindate); //Form1.rdt;
+            ParamByName('s').AsString := DateToStr(Cl.cdata.begindate); //Form1.rdt;
             ParamByName('r').AsInteger := Form1.client;
             ExecSQL;
             Close;
@@ -3220,15 +2896,15 @@ begin
             for i := 0 to numbtarif - 1 do
               if (i in [2..7]) and (cl.cdata.counter[i]) then
               begin
-                  Close;
-                  ParamByName('r').AsInteger := Form1.client;
-                  ParamByName('d').AsString := DateToStr(Cl.cdata.begindate); //Form1.rdt;
-                  ParamByName('serv').AsInteger := i;
-                  ParamByName('count').Value := Cl.cdata.counter[i];
-                  ParamByName('countdata').AsFloat  := Cl.cdata.counterdata[i];
-                  ParamByName('countserv').AsInteger := Cl.cdata.countertarifs[i];
-                  ExecSQL;
-                end;
+                Close;
+                ParamByName('r').AsInteger := Form1.client;
+                ParamByName('d').AsString  := DateToStr(Cl.cdata.begindate); //Form1.rdt;
+                ParamByName('serv').AsInteger := i;
+                ParamByName('count').Value := Cl.cdata.counter[i];
+                ParamByName('countdata').AsFloat := Cl.cdata.counterdata[i];
+                ParamByName('countserv').AsInteger := Cl.cdata.countertarifs[i];
+                ExecSQL;
+              end;
             //------
             Close;
           end;
@@ -3250,7 +2926,7 @@ begin
     ShowMessage('Выберите новый срок субсидии, чтобы сохранить изменения!');
 end;
 
-procedure TForm2.SetRegn;
+procedure TEditClForm.SetRegn;
 var
   num: integer;
 begin
@@ -3275,13 +2951,13 @@ begin
   Cl.Data.regn := num;
 end;
 
-procedure TForm2.SetRegDate;
+procedure TEditClForm.SetRegDate;
 begin
   Edit87.Text := DateToStr(Date);
   Cl.Data.regdate := StrToDate(Edit87.Text);
 end;
 
-procedure TForm2.SetPeriod;
+procedure TEditClForm.SetPeriod;
 begin
   MaskEdit2.Text := Form1.rdt;
   MaskEdit3.Text := DateToStr(IncMonth(StrToDate(Form1.rdt), StrToInt(Edit109.Text)));
@@ -3291,7 +2967,7 @@ begin
   Cl.cdata.enddate := StrToDate(MaskEdit3.Text);
 end;
 
-procedure TForm2.NewPeriod;
+procedure TEditClForm.NewPeriod;
 begin
   SetPeriod;
   Edit86.Text  := SelInsp(Form1.insp);
@@ -3308,14 +2984,16 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Text := 'SELECT *' + #13 +
-      'FROM hist INNER JOIN' + #13 +
-  	    '(SELECT regn, max(bdate) as bdate' + #13 +
-          'FROM hist' + #13 +
-	        'WHERE bdate < convert(smalldatetime,:bdate,104)' + #13 +
-        	'GROUP BY regn) sb on hist.regn = sb.regn AND hist.bdate = sb.bdate' + #13 +
-      'WHERE hist.regn = :regn';
-    ParamByName('regn').AsInteger := cl.data.regn;
+    SQL.Text := 'SELECT *'#13#10 +
+      'FROM dbo.getcurhist(:bdate)'#13#10 +
+      'WHERE regn = :regn';
+    //      'FROM hist INNER JOIN' + #13 +
+    //        '(SELECT regn, max(bdate) as bdate' + #13 +
+    //          'FROM hist' + #13 +
+    //          'WHERE bdate < convert(smalldatetime,:bdate,104)' + #13 +
+    //          'GROUP BY regn) sb on hist.regn = sb.regn AND hist.bdate = sb.bdate' + #13 +
+    //      'WHERE hist.regn = :regn';
+    ParamByName('regn').AsInteger := cl.Data.regn;
     ParamByName('bdate').AsString := DateToStr(cl.cdata.begindate);
     Open;
     //если запись в базе нет (нет прошлого периода)
@@ -3339,7 +3017,7 @@ begin
   //SumV;
 end;
 
-function TForm2.IsAPeriod: boolean;
+function TEditClForm.IsAPeriod: boolean;
 begin
   if (Cl.cdata.begindate <= StrToDate(Form1.rdt)) and
     (Cl.cdata.enddate >= StrToDate(Form1.rdt)) then
@@ -3348,7 +3026,7 @@ begin
     Result := False;
 end;
 
-procedure TForm2.SetCert;
+procedure TEditClForm.SetCert;
 var
   c:  integer;
   p1: TDate;
@@ -3368,7 +3046,7 @@ begin
   end;
 end;
 
-procedure TForm2.comboBoxContChange(Sender: TObject);
+procedure TEditClForm.comboBoxContChange(Sender: TObject);
 { выбрали тариф на содержание жилья }
 var
   ind: integer;
@@ -3377,7 +3055,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit3.Text := FlToStr(GetCostTarif(0, cont[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit3.Text := FormatFloat('0.00', GetCostTarif(0, cont[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3388,13 +3066,13 @@ begin
   if load then
   begin
     Cl.cdata.tarifs[0] := cont[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.cost[0] := GetCostTarif(0, cont[(Sender as TComboBox).ItemIndex], Cl.cdata.begindate, 0, 0, Cl.cdata.settl);
+    Cl.cdata.cost[0] := GetCostTarif(0, cont[(Sender as TComboBox).ItemIndex], Cl.cdata.begindate, 0, 0, Cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(0, cServSq);
 end;
 
-procedure TForm2.comboBoxRepChange(Sender: TObject);
+procedure TEditClForm.comboBoxMOPChange(Sender: TObject);
 { выбрали тариф на МОП }
 var
   ind: integer;
@@ -3403,24 +3081,24 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit4.Text := FlToStr(GetCostTarif(1, rep[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit4.Text := FormatFloat('0.00', GetCostTarif(1, mop[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
     (Sender as TComboBox).ItemIndex := 0;
-    (Sender as TComboBox).Text := SelRep(rep[0]);
+    (Sender as TComboBox).Text := SelRep(mop[0]);
     (Sender as TComboBox).OnChange((Sender as TComboBox));
   end;
   if load then
   begin
-    Cl.cdata.tarifs[1] := rep[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.cost[1] := GetCostTarif(1, rep[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
+    Cl.cdata.tarifs[1] := mop[(Sender as TComboBox).ItemIndex];
+    Cl.cdata.cost[1] := GetCostTarif(1, mop[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(1, cServe);
 end;
 
-procedure TForm2.comboBoxColdChange(Sender: TObject);
+procedure TEditClForm.comboBoxColdChange(Sender: TObject);
 { выбрали тариф на холодную воду }
 var
   ind, b: integer;
@@ -3429,11 +3107,12 @@ begin
     b := 0
   else
     b := 1;
-  ind := SearchServIndex(comboBoxCold);;
+  ind := SearchServIndex(comboBoxCold);
+  ;
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit5.Text := FlToStr(GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex]));
+    Edit5.Text := FormatFloat('0.00', GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3444,14 +3123,14 @@ begin
   if load then
   begin
     Cl.cdata.tarifs[2] := cold[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.cost[2] := GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl);
-    Cl.cdata.tarifnorm[2] := GetNormTarif(2, cold[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl);
+    Cl.cdata.cost[2] := GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
+    Cl.cdata.tarifnorm[2] := GetNormTarif(2, cold[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(2, cServ);
 end;
 
-procedure TForm2.comboBoxColdCounterChange(Sender: TObject);
+procedure TEditClForm.comboBoxColdCounterChange(Sender: TObject);
 { выбрали тариф на холодную воду }
 var
   ind, b: integer;
@@ -3460,11 +3139,12 @@ begin
     b := 0
   else
     b := 1;
-  ind := SearchServIndex(comboBoxColdCounter);;
+  ind := SearchServIndex(comboBoxColdCounter);
+  ;
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit124.Text := FlToStr(GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex]));
+    Edit124.Text := FormatFloat('0.00', GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3475,14 +3155,14 @@ begin
   if load then
   begin
     Cl.cdata.countertarifs[2] := cold[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.countercost[2] := GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl);
-    Cl.cdata.counternorm[2] := GetNormTarif(2, cold[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl);
+    Cl.cdata.countercost[2] := GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
+    Cl.cdata.counternorm[2] := GetNormTarif(2, cold[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(2, cServ);
 end;
 
-procedure TForm2.comboBoxHotChange(Sender: TObject);
+procedure TEditClForm.comboBoxHotChange(Sender: TObject);
 { выбрали тариф на горячую воду }
 var
   ind, b: integer;
@@ -3495,7 +3175,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit6.Text := FlToStr(GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex]));
+    Edit6.Text := FormatFloat('0.00', GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3506,14 +3186,14 @@ begin
   if load then
   begin
     Cl.cdata.tarifs[3] := hot[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.cost[3] := GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl);
-    Cl.cdata.tarifnorm[3] := GetNormTarif(3, hot[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl);
+    Cl.cdata.cost[3] := GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
+    Cl.cdata.tarifnorm[3] := GetNormTarif(3, hot[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(3, cServ);
 end;
 
-procedure TForm2.comboBoxHotCounterChange(Sender: TObject);
+procedure TEditClForm.comboBoxHotCounterChange(Sender: TObject);
 { выбрали тариф на горячую воду }
 var
   ind, b: integer;
@@ -3526,7 +3206,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit125.Text := FlToStr(GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex]));
+    Edit125.Text := FormatFloat('0.00', GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3537,14 +3217,14 @@ begin
   if load then
   begin
     Cl.cdata.countertarifs[3] := hot[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.countercost[3] := GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl);
-    Cl.cdata.counternorm[3] := GetNormTarif(3, hot[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl);
+    Cl.cdata.countercost[3] := GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
+    Cl.cdata.counternorm[3] := GetNormTarif(3, hot[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, b, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(3, cServ);
 end;
 
-procedure TForm2.comboBoxCanalChange(Sender: TObject);
+procedure TEditClForm.comboBoxCanalChange(Sender: TObject);
 { выбрали тариф на водоотведение }
 var
   ind: integer;
@@ -3553,7 +3233,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit2.Text := FlToStr(GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit2.Text := FormatFloat('0.00', GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3564,14 +3244,14 @@ begin
   if load then
   begin
     Cl.cdata.tarifs[4] := canal[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.cost[4] := GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
-    Cl.cdata.tarifnorm[4] := GetNormTarif(4, canal[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
+    Cl.cdata.cost[4] := GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
+    Cl.cdata.tarifnorm[4] := GetNormTarif(4, canal[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(4, cServ);
 end;
 
-procedure TForm2.comboBoxCanalCounterChange(Sender: TObject);
+procedure TEditClForm.comboBoxCanalCounterChange(Sender: TObject);
 { выбрали тариф на водоотведение }
 var
   ind: integer;
@@ -3580,7 +3260,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit126.Text := FlToStr(GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit126.Text := FormatFloat('0.00', GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3591,53 +3271,53 @@ begin
   if load then
   begin
     Cl.cdata.countertarifs[4] := canal[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.countercost[4] := GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
-    Cl.cdata.counternorm[4] := GetNormTarif(4, canal[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
+    Cl.cdata.countercost[4] := GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
+    Cl.cdata.counternorm[4] := GetNormTarif(4, canal[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(4, cServ);
 end;
 
-procedure TForm2.ComboBox21Change(Sender: TObject);
+procedure TEditClForm.ComboBox21Change(Sender: TObject);
 begin
   if load then
   begin
     Cl.cdata.tarifs[7] := ComboBox21.ItemIndex + 1;
-    Cl.cdata.cost[7] := GetCostTarif(7, ComboBox21.ItemIndex + 1, Cl.cdata.begindate, 0, Cl.cdata.mcount, cl.cdata.settl);
+    Cl.cdata.cost[7] := GetCostTarif(7, ComboBox21.ItemIndex + 1, Cl.cdata.begindate, 0, Cl.cdata.mcount, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
     Cl.cdata.countertarifs[7] := Cl.cdata.tarifs[7];
     Cl.cdata.countercost[7] := Cl.cdata.cost[7];
   end;
 
   if ComboBox21.ItemIndex <> -1 then
-    RecalcOneServ(7,cServ);
-    
+    RecalcOneServ(7, cServ);
+
   //0:газовая
   //1:электрическая
   //2:прочие
 end;
 
-procedure TForm2.ComboBox22Change(Sender: TObject);
+procedure TEditClForm.ComboBox22Change(Sender: TObject);
 begin
   if load then
     cl.cdata.heating := ComboBox22.ItemIndex + 1;
 end;
 
-procedure TForm2.ComboBox23Change(Sender: TObject);
+procedure TEditClForm.ComboBox23Change(Sender: TObject);
 begin
-  fbegindate := StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex],1,10));
-  fenddate := StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex],14,23));
+  fbegindate := StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex], 1, 10));
+  fenddate := StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex], 14, 23));
 
   ChangeFactPeriod(fbegindate, fenddate);
   UpdateFactInfo();
   CheckDifferenceFactSum;
 end;
 
-procedure TForm2.ComboBox23KeyPress(Sender: TObject; var Key: Char);
+procedure TEditClForm.ComboBox23KeyPress(Sender: TObject; var Key: char);
 begin
-  key:= #0;
+  key := #0;
 end;
 
-procedure TForm2.comboBoxHeatChange(Sender: TObject);
+procedure TEditClForm.comboBoxHeatChange(Sender: TObject);
 { выбрали тариф на отопление  }
 var
   ind: integer;
@@ -3646,7 +3326,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit7.Text := FlToStr(GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit7.Text := FormatFloat('0.00', GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3657,14 +3337,14 @@ begin
   if load then
   begin
     Cl.cdata.tarifs[5] := heat[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.cost[5] := GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
-    Cl.cdata.tarifnorm[5] := GetNormTarif(5, heat[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
+    Cl.cdata.cost[5] := GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
+    Cl.cdata.tarifnorm[5] := GetNormTarif(5, heat[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(5, cServSq);
 end;
 
-procedure TForm2.comboBoxHeatCounterChange(Sender: TObject);
+procedure TEditClForm.comboBoxHeatCounterChange(Sender: TObject);
 { выбрали тариф на отопление  }
 var
   ind: integer;
@@ -3673,7 +3353,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit127.Text := FlToStr(GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit127.Text := FormatFloat('0.00', GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3684,14 +3364,14 @@ begin
   if load then
   begin
     Cl.cdata.countertarifs[5] := heat[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.countercost[5] := GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
-    Cl.cdata.counternorm[5] := GetNormTarif(5, heat[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
+    Cl.cdata.countercost[5] := GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
+    Cl.cdata.counternorm[5] := GetNormTarif(5, heat[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(5, cServSq);
 end;
 
-procedure TForm2.comboBoxGasChange(Sender: TObject);
+procedure TEditClForm.comboBoxGasChange(Sender: TObject);
 { выбрали тариф на газ }
 var
   ind: integer;
@@ -3700,7 +3380,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit8.Text := FlToStr(GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit8.Text := FormatFloat('0.00', GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3711,14 +3391,14 @@ begin
   if load then
   begin
     Cl.cdata.tarifs[6] := gas[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.cost[6] := GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
-    Cl.cdata.tarifnorm[6] := GetNormTarif(6, gas[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
+    Cl.cdata.cost[6] := GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
+    Cl.cdata.tarifnorm[6] := GetNormTarif(6, gas[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(6, cServ);
 end;
 
-procedure TForm2.comboBoxGasCounterChange(Sender: TObject);
+procedure TEditClForm.comboBoxGasCounterChange(Sender: TObject);
 var
   ind: integer;
 begin
@@ -3726,7 +3406,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit128.Text := FlToStr(GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]));
+    Edit128.Text := FormatFloat('0.00', GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3737,14 +3417,14 @@ begin
   if load then
   begin
     Cl.cdata.countertarifs[6] := gas[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.countercost[6] := GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
-    Cl.cdata.counternorm[6] := GetNormTarif(6, gas[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
+    Cl.cdata.countercost[6] := GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
+    Cl.cdata.counternorm[6] := GetNormTarif(6, gas[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(6, cServ);
 end;
 
-procedure TForm2.comboBoxWoodChange(Sender: TObject);
+procedure TEditClForm.comboBoxWoodChange(Sender: TObject);
 { выбрали тариф на дрова }
 var
   ind: integer;
@@ -3753,7 +3433,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit10.Text := FlToStr((GetCostTarif(12, wood[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]) * Form1.normw) / 12);
+    Edit10.Text := FormatFloat('0.00', (GetCostTarif(12, wood[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]) * Form1.normw) / 12);
   end
   else
   begin
@@ -3764,13 +3444,13 @@ begin
   if load then
   begin
     Cl.cdata.tarifs[12] := wood[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.cost[12] := GetCostTarif(12, wood[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
+    Cl.cdata.cost[12] := GetCostTarif(12, wood[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(12, cServWC);
 end;
 
-procedure TForm2.comboBoxCoalChange(Sender: TObject);
+procedure TEditClForm.comboBoxCoalChange(Sender: TObject);
 { выбрали тариф на уголь }
 var
   ind: integer;
@@ -3779,7 +3459,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit11.Text := FlToStr((GetCostTarif(13, coal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex]) * Form1.normc) / 12);
+    Edit11.Text := FormatFloat('0.00', (GetCostTarif(13, coal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]) * Form1.normc) / 12);
   end
   else
   begin
@@ -3790,14 +3470,14 @@ begin
   if load then
   begin
     Cl.cdata.tarifs[13] := coal[(Sender as TComboBox).ItemIndex];
-    Cl.cdata.cost[13] := GetCostTarif(13, coal[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl);
+    Cl.cdata.cost[13] := GetCostTarif(13, coal[(Sender as TComboBox).ItemIndex], cl.cdata.begindate, 0, 0, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   RecalcOneServ(13, cServWC);
 end;
 
-procedure TForm2.ComboBox10Change(Sender: TObject);
- { выбрали региональный стандарт}
+procedure TEditClForm.ComboBox10Change(Sender: TObject);
+{ выбрали региональный стандарт}
 var
   ind: integer;
 begin
@@ -3825,7 +3505,7 @@ begin
   end; }
 end;
 
-procedure TForm2.ComboBox12Change(Sender: TObject);
+procedure TEditClForm.ComboBox12Change(Sender: TObject);
 { выбрали улицу }
 var
   ind: integer;
@@ -3842,7 +3522,7 @@ begin
     Cl.Data.str := str[Combobox12.ItemIndex];
 end;
 
-procedure TForm2.Edit60Change(Sender: TObject);
+procedure TEditClForm.Edit60Change(Sender: TObject);
 { выбрали дом }
 var
   b: integer;
@@ -3876,7 +3556,7 @@ begin
         Combobox13.Text := FieldByName('namefond').AsString;
         Combobox10.Text := SelStnd(FieldByName('id_stnd').AsInteger);
         comboBoxCont.Text := SelCont(FieldByName('id_cont').AsInteger);
-        comboBoxRep.Text := SelRep(FieldByName('id_rep').AsInteger);
+        comboBoxMOP.Text := SelRep(FieldByName('id_rep').AsInteger);
         comboBoxCold.Text := SelCold(FieldByName('id_cold').AsInteger);
         comboBoxHot.Text := SelHot(FieldByName('id_hot').AsInteger);
         comboBoxCanal.Text := SelCanal(FieldByName('id_canal').AsInteger);
@@ -3887,6 +3567,7 @@ begin
         if load then
         begin
           Cl.cdata.boiler := b;
+          Cl.cdata.elevator := FieldByName('elevator').AsInteger; //!
           Cl.cdata.tarifs[7] := FieldByName('id_el').AsInteger;
           Cl.cdata.countertarifs[7] := Cl.cdata.tarifs[7];
         end;
@@ -3894,8 +3575,9 @@ begin
         //RadioGroup2.ItemIndex := FieldByName('id_el').AsInteger-1;
         Close;
         CheckBox2.Checked := (b = 1);
+        elevatorCheckBox.Checked := (Cl.cdata.elevator = 1);
         comboBoxCont.OnChange(comboBoxCont);
-        comboBoxRep.OnChange(comboBoxRep);
+        comboBoxMOP.OnChange(comboBoxMOP);
         comboBoxCold.OnChange(comboBoxCold);
         comboBoxHot.OnChange(comboBoxHot);
         comboBoxHeat.OnChange(comboBoxHeat);
@@ -3909,7 +3591,7 @@ begin
     end;
 end;
 
-procedure TForm2.AddFamMan;
+procedure TEditClForm.AddFamMan;
 var
   man: TMan;
   item: TListItem;
@@ -3920,7 +3602,7 @@ begin
     s := 1;
   if RadioButton8.Checked then
     s := 2;
-  man := TMan.Create(Edit69.Text, StrToDate(MaskEdit1.Text), s,
+  man := TMan.Create(Edit69.Text, npssEdit.Text, StrToDate(MaskEdit1.Text), s,
     st[Combobox17.ItemIndex], p[Combobox18.ItemIndex],
     StrToFloat(Edit72.Text), rel[Combobox7.ItemIndex]);
   Cl.cdata.family.Add(man);
@@ -3947,18 +3629,18 @@ begin
   Edit95.Text := IntToStr(cl.cdata.quanpriv);
   Cl.SetNorm;
   Cl.SetMin;
-  Edit94.Text := FlToStr(Cl.cdata.pmin);
+  Edit94.Text := FormatFloat('0.00', Cl.cdata.pmin);
   SetIncome;
   SetKoef;
   SortFam;
   item := LVFam.Items.Insert(curman);
   item.Caption := TMan(Cl.cdata.family.Items[curman]).fio;
   item.SubItems.Add(DateToStr(TMan(Cl.cdata.family.Items[curman]).birth));
-  item.SubItems.Add(FlToStr(Cl.cdata.mid[curman]));
-  item.SubItems.Add(FlToStr(SelMin(Cl.cdata.min[curman])));
+  item.SubItems.Add(FormatFloat('0.00', Cl.cdata.mid[curman]));
+  item.SubItems.Add(FormatFloat('0.00', SelMin(Cl.cdata.min[curman])));
   item.SubItems.Add(SelRel(TMan(Cl.cdata.family.Items[curman]).rel));
   Cl.cdata.tarifs[7] := ComboBox21.ItemIndex + 1;
-  Cl.cdata.cost[7] := GetCostTarif(7, ComboBox21.ItemIndex + 1, Cl.cdata.begindate, 0, Cl.cdata.mcount, cl.cdata.settl);
+  Cl.cdata.cost[7] := GetCostTarif(7, ComboBox21.ItemIndex + 1, Cl.cdata.begindate, 0, Cl.cdata.mcount, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   Cl.cdata.countertarifs[7] := Cl.cdata.tarifs[7];
   Cl.cdata.countercost[7] := Cl.cdata.cost[7];
   if load and not CalcEmpty then
@@ -3969,7 +3651,7 @@ begin
   end;
 end;
 
-procedure TForm2.btnColdCounterClick(Sender: TObject);
+procedure TEditClForm.btnColdCounterClick(Sender: TObject);
 var
   nam, namet, capt: string;
 begin
@@ -4005,7 +3687,7 @@ begin
   end;
   if (Sender = btnColdCounter) or (Sender = btnHotCounter) then
   begin
-    Form39 := TForm39.Create(Form2);
+    Form39 := TForm39.Create(EditClForm);
     Form39.Caption := capt;
     Form39.nam := nam;
     Form39.namet := namet;
@@ -4025,9 +3707,9 @@ begin
     end;
     Form39.Free;
   end;
-  if (Sender = btnCanalCounter) or (Sender = btnHeatCounter) or (Sender = btnGasCounter)  then
+  if (Sender = btnCanalCounter) or (Sender = btnHeatCounter) or (Sender = btnGasCounter) then
   begin
-    Form37 := TForm37.Create(Form2);
+    Form37 := TForm37.Create(EditClForm);
     Form37.Caption := capt;
     Form37.nam := nam;
     Form37.namet := namet;
@@ -4054,7 +3736,7 @@ begin
   end;
 end;
 
-procedure TForm2.ModFamMan;
+procedure TEditClForm.ModFamMan;
 var
   man:  TMan;
   s, pr: integer;
@@ -4065,7 +3747,7 @@ begin
     s := 1;
   if RadioButton8.Checked then
     s := 2;
-  man := TMan.Create(Edit69.Text, StrToDate(MaskEdit1.Text), s,
+  man := TMan.Create(Edit69.Text, npssEdit.Text, StrToDate(MaskEdit1.Text), s,
     st[Combobox17.ItemIndex], p[Combobox18.ItemIndex],
     StrToFloat(Edit72.Text), rel[Combobox7.ItemIndex]);
   pr := TMan(Cl.cdata.family[curman]).priv;//старая льгота
@@ -4082,7 +3764,7 @@ begin
     Inc(Cl.cdata.quanpriv);
   Edit95.Text := IntToStr(cl.cdata.quanpriv);
   Cl.SetMin;
-  Edit94.Text := FlToStr(Cl.cdata.pmin);
+  Edit94.Text := FormatFloat('0.00', Cl.cdata.pmin);
   SetIncome;
   SetKoef;
   Cl.CalcPriv;
@@ -4093,8 +3775,8 @@ begin
   item.Caption := TMan(Cl.cdata.family.Items[curman]).fio;
   item.SubItems.Clear;
   item.SubItems.Add(DateToStr(TMan(Cl.cdata.family.Items[curman]).birth));
-  item.SubItems.Add(FlToStr(Cl.cdata.mid[curman]));
-  item.SubItems.Add(FlToStr(SelMin(Cl.cdata.min[curman])));
+  item.SubItems.Add(FormatFloat('0.00', Cl.cdata.mid[curman]));
+  item.SubItems.Add(FormatFloat('0.00', SelMin(Cl.cdata.min[curman])));
   item.SubItems.Add(SelRel(TMan(Cl.cdata.family.Items[curman]).rel));
   if load and not CalcEmpty then
   begin
@@ -4104,7 +3786,7 @@ begin
   end;
 end;
 
-procedure TForm2.Button3Click(Sender: TObject);
+procedure TEditClForm.Button3Click(Sender: TObject);
 { добавить члена семьи }
 var
   y, yc, m, mc, d, dc: word;
@@ -4136,7 +3818,7 @@ begin
       AddFamMan
     else
     begin
-      if MessageBox(Form2.Handle, PChar('Выбранный социальный статус не соответствует указанному возрасту.' + #13 +
+      if MessageBox(EditClForm.Handle, PChar('Выбранный социальный статус не соответствует указанному возрасту.' + #13 +
         'Вы настаиваете на нем?'), PChar('Несоответствие'),
         MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
         AddFamMan
@@ -4151,7 +3833,7 @@ begin
     ShowMessage('Введите другие данные!');
 end;
 
-procedure TForm2.Button4Click(Sender: TObject);
+procedure TEditClForm.Button4Click(Sender: TObject);
 { изменить сведения о члене семьи }
 var
   y, yc, m, mc, d, dc: word;
@@ -4185,7 +3867,7 @@ begin
       ModFamMan
     else
     begin
-      if MessageBox(Form2.Handle, PChar('Выбранный социальный статус не соответствует указанному возрасту.' + #13 +
+      if MessageBox(EditClForm.Handle, PChar('Выбранный социальный статус не соответствует указанному возрасту.' + #13 +
         'Вы настаиваете на нем?'), PChar('Несоответствие'),
         MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
         ModFamMan
@@ -4200,7 +3882,7 @@ begin
     ShowMessage('Введите другие данные!');
 end;
 
-procedure TForm2.Button5Click(Sender: TObject);
+procedure TEditClForm.Button5Click(Sender: TObject);
 { удалить сведения о члене семьи }
 var
   i, pr: integer;
@@ -4255,12 +3937,12 @@ begin
   Cl.SetNorm;
   Cl.SetMin;
   Cl.CalcPriv;
-  Edit94.Text := FlToStr(Cl.cdata.pmin);
+  Edit94.Text := FormatFloat('0.00', Cl.cdata.pmin);
   SetIncome;
   SetKoef;
   Cl.cdata.tarifs[7] := ComboBox21.ItemIndex + 1;
-  Cl.cdata.cost[7] := GetCostTarif(7, ComboBox21.ItemIndex + 1, Cl.cdata.begindate, 0, Cl.cdata.mcount, cl.cdata.settl);
-  Cl.cdata.countertarifs[7]:= Cl.cdata.tarifs[7];
+  Cl.cdata.cost[7] := GetCostTarif(7, ComboBox21.ItemIndex + 1, Cl.cdata.begindate, 0, Cl.cdata.mcount, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
+  Cl.cdata.countertarifs[7] := Cl.cdata.tarifs[7];
   Cl.cdata.countercost[7] := Cl.cdata.cost[7];
   if load and not CalcEmpty then
   begin
@@ -4270,7 +3952,7 @@ begin
   end;
 end;
 
-procedure TForm2.LVFamSelectItem(Sender: TObject; Item: TListItem; Selected: boolean);
+procedure TEditClForm.LVFamSelectItem(Sender: TObject; Item: TListItem; Selected: boolean);
 var
   i: integer;
 begin
@@ -4279,12 +3961,13 @@ begin
     i := LVFam.ItemIndex;
     curman := i;
     Edit69.Text := TMan(Cl.cdata.family[i]).fio;
+    npssEdit.Text := TMan(Cl.cdata.family[i]).npss;
     MaskEdit1.Text := DateToStr(TMan(Cl.cdata.family[i]).birth);
     if TMan(Cl.cdata.family[i]).pol = 1 then
       RadioButton7.Checked := True;
     if TMan(Cl.cdata.family[i]).pol = 2 then
       RadioButton8.Checked := True;
-    Edit72.Text := FlToStr(TMan(Cl.cdata.family[i]).mid);
+    Edit72.Text := FormatFloat('0.00', TMan(Cl.cdata.family[i]).mid);
     Combobox17.Text := SelSt(TMan(Cl.cdata.family[i]).status);
     Combobox18.Text := SelPriv(TMan(Cl.cdata.family[i]).priv);
     Combobox7.Text  := SelRel(TMan(Cl.cdata.family[i]).rel);
@@ -4294,7 +3977,7 @@ begin
   end;
 end;
 
-procedure TForm2.ComboBox15Change(Sender: TObject);
+procedure TEditClForm.ComboBox15Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4310,7 +3993,7 @@ begin
     Cl.Data.manager := mng[Combobox15.ItemIndex];
 end;
 
-procedure TForm2.ComboBox13Change(Sender: TObject);
+procedure TEditClForm.ComboBox13Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4326,7 +4009,7 @@ begin
     Cl.Data.fond := fnd[Combobox13.ItemIndex];
 end;
 
-procedure TForm2.ComboBox14Change(Sender: TObject);
+procedure TEditClForm.ComboBox14Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4345,7 +4028,7 @@ begin
   end;
 end;
 
-procedure TForm2.ComboBox16Change(Sender: TObject);
+procedure TEditClForm.ComboBox16Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4361,7 +4044,7 @@ begin
     Cl.Data.own := own[Combobox16.ItemIndex];
 end;
 
-procedure TForm2.ComboBox11Change(Sender: TObject);
+procedure TEditClForm.ComboBox11Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4377,7 +4060,7 @@ begin
     Cl.Data.control := cntrl[Combobox11.ItemIndex];
 end;
 
-procedure TForm2.ComboBox17Change(Sender: TObject);
+procedure TEditClForm.ComboBox17Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4391,7 +4074,7 @@ begin
   end;
 end;
 
-procedure TForm2.ComboBox18Change(Sender: TObject);
+procedure TEditClForm.ComboBox18Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4405,7 +4088,7 @@ begin
   end;
 end;
 
-procedure TForm2.ComboBox19Change(Sender: TObject);
+procedure TEditClForm.ComboBox19Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4421,16 +4104,17 @@ begin
     Cl.Data.bank := bank[Combobox19.ItemIndex];
 end;
 
-procedure TForm2.ChangeFactPeriod(BD, ED: TDateTime);
+procedure TEditClForm.ChangeFactPeriod(BD, ED: TDateTime);
 var
-  i,j: integer;
+  i, j: integer;
 begin
-  StringGrid1.RowCount:= GetMonthsCount(BD,ED)+1;
-  for i:=0 to (AddAnyMonth(BD,ED)).Count-1 do begin
-    StringGrid1.Cells[0,i+1]:= AddAnyMonth(BD,ED)[i];
-    StringGrid1.Cells[1,i+1]:= '0';
-    StringGrid1.Cells[2,i+1]:= '0';
-    StringGrid1.Cells[3,i+1]:= '0';
+  StringGrid1.RowCount := MounthDiff(BD, ED) + 1;
+  for i := 0 to (AddAnyMonth(BD, ED)).Count - 1 do
+  begin
+    StringGrid1.Cells[0, i + 1] := AddAnyMonth(BD, ED)[i];
+    StringGrid1.Cells[1, i + 1] := '0';
+    StringGrid1.Cells[2, i + 1] := '0';
+    StringGrid1.Cells[3, i + 1] := '0';
   end;
 
   //-------------
@@ -4438,57 +4122,57 @@ begin
   with DModule do
   begin
     Query1.Close;
-    Query1.SQL.Text:= 'exec factSum :bdate, :edate, :regn';
-    Query1.ParamByName('bdate').Value:= DateToStr(BD);
-    Query1.ParamByName('edate').Value:= DateToStr(ED);
-    Query1.ParamByName('regn').Value:= cl.data.regn;
+    Query1.SQL.Text := 'exec factSum :bdate, :edate, :regn';
+    Query1.ParamByName('bdate').Value := DateToStr(BD);
+    Query1.ParamByName('edate').Value := DateToStr(ED);
+    Query1.ParamByName('regn').Value := cl.Data.regn;
     Query1.Open;
   end;
 
   DModule.Query1.First;
-  for i:=0 to DModule.Query1.RecordCount-1 do
+  for i := 0 to DModule.Query1.RecordCount - 1 do
   begin
-    for j:=0 to StringGrid1.RowCount-1 do
-      if StringGrid1.Cells[0,j+1]=DModule.Query1.FieldByName('sd').asString then
-        StringGrid1.Cells[1,j+1]:=DModule.Query1.FieldByName('sum_sub').asString;//.FieldValues['sum_sub'];
+    for j := 0 to StringGrid1.RowCount - 1 do
+      if StringGrid1.Cells[0, j + 1] = DModule.Query1.FieldByName('sd').AsString then
+        StringGrid1.Cells[1, j + 1] := DModule.Query1.FieldByName('sum_sub').AsString;//.FieldValues['sum_sub'];
     DModule.Query1.Next;
   end;
 
   //-------------
 
-  if TabControl1.TabIndex=1 then
+  if TabControl1.TabIndex = 1 then
   begin
     with DModule do
     begin
       Query1.Close;
-      Query1.SQL.Text:= 'SELECT sdate, regn, bdate, sub, factsum'+#13+
-                        'FROM FactSale'+#13+
-                        'WHERE (regn = :regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104))'+#13+
-                        'ORDER BY sdate';
-      Query1.ParamByName('regn').Value:= cl.data.regn;
-      Query1.ParamByName('bdate').Value:= DateToStr(BD);
+      Query1.SQL.Text := 'SELECT sdate, regn, bdate, sub, factsum' + #13 +
+        'FROM FactSale' + #13 +
+        'WHERE (regn = :regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104))' + #13 +
+        'ORDER BY sdate';
+      Query1.ParamByName('regn').Value := cl.Data.regn;
+      Query1.ParamByName('bdate').Value := DateToStr(BD);
       Query1.Open;
       Query1.First;
 
-      for i:=0 to Query1.RecordCount-1 do
+      for i := 0 to Query1.RecordCount - 1 do
       begin
-        StringGrid1.Cells[1,i+1]:= Query1.FieldValues['sub'];
-        StringGrid1.Cells[2,i+1]:= Query1.FieldValues['factsum'];
-        StringGrid1.Cells[3,i+1]:= calcMDiff(StringGrid1.Cells[1,i+1],StringGrid1.Cells[2,i+1]);
+        StringGrid1.Cells[1, i + 1] := Query1.FieldValues['sub'];
+        StringGrid1.Cells[2, i + 1] := Query1.FieldValues['factsum'];
+        StringGrid1.Cells[3, i + 1] := calcMDiff(StringGrid1.Cells[1, i + 1], StringGrid1.Cells[2, i + 1]);
         Query1.Next;
       end;
     end;
   end;
 end;
 
-procedure TForm2.CheckBox10Click(Sender: TObject);
+procedure TEditClForm.CheckBox10Click(Sender: TObject);
 begin
   if (CheckBox10.Checked) then
   begin
     Edit9.Color := clWindow;
     Edit9.ReadOnly := False;
     Cl.cdata.indrstnd := True;
-    Edit9.Text := FloatToStr(Cl.cdata.indrstndval);
+    Edit9.Text  := FloatToStr(Cl.cdata.indrstndval);
   end
   else
   begin
@@ -4498,7 +4182,7 @@ begin
   end;
 end;
 
-procedure TForm2.CheckBox1Click(Sender: TObject);
+procedure TEditClForm.CheckBox1Click(Sender: TObject);
 var
   sts: integer;
 begin
@@ -4590,7 +4274,7 @@ begin
     Edit55.Color  := clBtnFace;
     Edit70.Color  := clBtnFace;
     comboBoxCont.Enabled := True;
-    comboBoxRep.Enabled := True;
+    comboBoxMOP.Enabled := True;
     comboBoxCold.Enabled := True;
     comboBoxHot.Enabled := True;
     comboBoxHeat.Enabled := True;
@@ -4607,17 +4291,28 @@ begin
     begin
       {if Cl.cdata.rstnd <> 0 then
       begin}
-        Edit12.ReadOnly := False; Edit12.Color := clWindow;
-        Edit15.ReadOnly := False; Edit15.Color := clWindow;
-        Edit18.ReadOnly := False; Edit18.Color := clWindow;
-        Edit21.ReadOnly := False; Edit21.Color := clWindow;
-        Edit24.ReadOnly := False; Edit24.Color := clWindow;
-        Edit27.ReadOnly := False; Edit27.Color := clWindow;
-        Edit30.ReadOnly := False; Edit30.Color := clWindow;
-        Edit33.ReadOnly := False; Edit33.Color := clWindow;
-        Edit36.ReadOnly := False; Edit36.Color := clWindow;
-        Edit59.ReadOnly := False; Edit59.Color := clWindow;
-        Edit65.ReadOnly := False; Edit65.Color := clWindow;
+      Edit12.ReadOnly := False;
+      Edit12.Color := clWindow;
+      Edit15.ReadOnly := False;
+      Edit15.Color := clWindow;
+      Edit18.ReadOnly := False;
+      Edit18.Color := clWindow;
+      Edit21.ReadOnly := False;
+      Edit21.Color := clWindow;
+      Edit24.ReadOnly := False;
+      Edit24.Color := clWindow;
+      Edit27.ReadOnly := False;
+      Edit27.Color := clWindow;
+      Edit30.ReadOnly := False;
+      Edit30.Color := clWindow;
+      Edit33.ReadOnly := False;
+      Edit33.Color := clWindow;
+      Edit36.ReadOnly := False;
+      Edit36.Color := clWindow;
+      Edit59.ReadOnly := False;
+      Edit59.Color := clWindow;
+      Edit65.ReadOnly := False;
+      Edit65.Color := clWindow;
       {end
       else
       begin
@@ -4637,17 +4332,28 @@ begin
     begin
       {if Cl.cdata.rstnd <> 0 then
       begin }
-        Edit96.ReadOnly := False; Edit96.Color  := clWindow;
-        Edit97.ReadOnly := False; Edit97.Color  := clWindow;
-        Edit98.ReadOnly := False; Edit98.Color  := clWindow;
-        Edit99.ReadOnly := False; Edit99.Color  := clWindow;
-        Edit100.ReadOnly := False; Edit100.Color := clWindow;
-        Edit101.ReadOnly := False; Edit101.Color := clWindow;
-        Edit102.ReadOnly := False; Edit102.Color := clWindow;
-        Edit103.ReadOnly := False; Edit103.Color := clWindow;
-        Edit104.ReadOnly := False; Edit104.Color := clWindow;
-        Edit105.ReadOnly := False; Edit105.Color := clWindow;
-        Edit84.ReadOnly := False; Edit84.Color  := clWindow;
+      Edit96.ReadOnly := False;
+      Edit96.Color  := clWindow;
+      Edit97.ReadOnly := False;
+      Edit97.Color  := clWindow;
+      Edit98.ReadOnly := False;
+      Edit98.Color  := clWindow;
+      Edit99.ReadOnly := False;
+      Edit99.Color  := clWindow;
+      Edit100.ReadOnly := False;
+      Edit100.Color := clWindow;
+      Edit101.ReadOnly := False;
+      Edit101.Color := clWindow;
+      Edit102.ReadOnly := False;
+      Edit102.Color := clWindow;
+      Edit103.ReadOnly := False;
+      Edit103.Color := clWindow;
+      Edit104.ReadOnly := False;
+      Edit104.Color := clWindow;
+      Edit105.ReadOnly := False;
+      Edit105.Color := clWindow;
+      Edit84.ReadOnly := False;
+      Edit84.Color  := clWindow;
       {end
       else
       begin
@@ -4663,16 +4369,16 @@ begin
         Edit70.ReadOnly := False; Edit70.Color := clWindow;}
       //end;
     end;
-    comboBoxCont.Enabled  := False;
-    comboBoxRep.Enabled  := False;
-    comboBoxCold.Enabled  := False;
-    comboBoxHot.Enabled  := False;
-    comboBoxHeat.Enabled  := False;
-    comboBoxGas.Enabled  := False;
-    comboBoxWood.Enabled  := False;
-    comboBoxCoal.Enabled  := False;
+    comboBoxCont.Enabled := False;
+    comboBoxMOP.Enabled := False;
+    comboBoxCold.Enabled := False;
+    comboBoxHot.Enabled := False;
+    comboBoxHeat.Enabled := False;
+    comboBoxGas.Enabled := False;
+    comboBoxWood.Enabled := False;
+    comboBoxCoal.Enabled := False;
     comboBoxCanal.Enabled := False;
-    Combobox21.Enabled := False;
+    Combobox21.Enabled  := False;
     RadioGroup3.Enabled := False;
   end
   else
@@ -4681,17 +4387,28 @@ begin
     begin
       {if Cl.cdata.rstnd <> 0 then
       begin }
-        Edit12.ReadOnly := True; Edit12.Color := clBtnFace;
-        Edit15.ReadOnly := True; Edit15.Color := clBtnFace;
-        Edit18.ReadOnly := True; Edit18.Color := clBtnFace;
-        Edit21.ReadOnly := True; Edit21.Color := clBtnFace;
-        Edit24.ReadOnly := True; Edit24.Color := clBtnFace;
-        Edit27.ReadOnly := True; Edit27.Color := clBtnFace;
-        Edit30.ReadOnly := True; Edit30.Color := clBtnFace;
-        Edit33.ReadOnly := True; Edit33.Color := clBtnFace;
-        Edit36.ReadOnly := True; Edit36.Color := clBtnFace;
-        Edit59.ReadOnly := True; Edit59.Color := clBtnFace;
-        Edit65.ReadOnly := True; Edit65.Color := clBtnFace;
+      Edit12.ReadOnly := True;
+      Edit12.Color := clBtnFace;
+      Edit15.ReadOnly := True;
+      Edit15.Color := clBtnFace;
+      Edit18.ReadOnly := True;
+      Edit18.Color := clBtnFace;
+      Edit21.ReadOnly := True;
+      Edit21.Color := clBtnFace;
+      Edit24.ReadOnly := True;
+      Edit24.Color := clBtnFace;
+      Edit27.ReadOnly := True;
+      Edit27.Color := clBtnFace;
+      Edit30.ReadOnly := True;
+      Edit30.Color := clBtnFace;
+      Edit33.ReadOnly := True;
+      Edit33.Color := clBtnFace;
+      Edit36.ReadOnly := True;
+      Edit36.Color := clBtnFace;
+      Edit59.ReadOnly := True;
+      Edit59.Color := clBtnFace;
+      Edit65.ReadOnly := True;
+      Edit65.Color := clBtnFace;
       {end
       else
       begin
@@ -4710,17 +4427,28 @@ begin
     begin
       {if Cl.cdata.rstnd <> 0 then
       begin   }
-        Edit96.ReadOnly := True; Edit96.Color  := clBtnFace;
-        Edit97.ReadOnly := True; Edit97.Color  := clBtnFace;
-        Edit98.ReadOnly := True; Edit98.Color  := clBtnFace;
-        Edit99.ReadOnly := True; Edit99.Color  := clBtnFace;
-        Edit100.ReadOnly := True; Edit100.Color := clBtnFace;
-        Edit101.ReadOnly := True; Edit101.Color := clBtnFace;
-        Edit102.ReadOnly := True; Edit102.Color := clBtnFace;
-        Edit103.ReadOnly := True; Edit103.Color := clBtnFace;
-        Edit104.ReadOnly := True; Edit104.Color := clBtnFace;
-        Edit105.ReadOnly := True; Edit105.Color := clBtnFace;
-        Edit84.ReadOnly := True; Edit84.Color  := clBtnFace;
+      Edit96.ReadOnly := True;
+      Edit96.Color  := clBtnFace;
+      Edit97.ReadOnly := True;
+      Edit97.Color  := clBtnFace;
+      Edit98.ReadOnly := True;
+      Edit98.Color  := clBtnFace;
+      Edit99.ReadOnly := True;
+      Edit99.Color  := clBtnFace;
+      Edit100.ReadOnly := True;
+      Edit100.Color := clBtnFace;
+      Edit101.ReadOnly := True;
+      Edit101.Color := clBtnFace;
+      Edit102.ReadOnly := True;
+      Edit102.Color := clBtnFace;
+      Edit103.ReadOnly := True;
+      Edit103.Color := clBtnFace;
+      Edit104.ReadOnly := True;
+      Edit104.Color := clBtnFace;
+      Edit105.ReadOnly := True;
+      Edit105.Color := clBtnFace;
+      Edit84.ReadOnly := True;
+      Edit84.Color  := clBtnFace;
       {end
       else
       begin
@@ -4736,16 +4464,16 @@ begin
         Edit70.ReadOnly := True; Edit70.Color := clBtnFace;}
       //end;
     end;
-    comboBoxCont.Enabled  := True;
-    comboBoxRep.Enabled  := True;
-    comboBoxCold.Enabled  := True;
-    comboBoxHot.Enabled  := True;
-    comboBoxHeat.Enabled  := True;
-    comboBoxGas.Enabled  := True;
-    comboBoxWood.Enabled  := True;
-    comboBoxCoal.Enabled  := True;
+    comboBoxCont.Enabled := True;
+    comboBoxMOP.Enabled := True;
+    comboBoxCold.Enabled := True;
+    comboBoxHot.Enabled := True;
+    comboBoxHeat.Enabled := True;
+    comboBoxGas.Enabled := True;
+    comboBoxWood.Enabled := True;
+    comboBoxCoal.Enabled := True;
     comboBoxCanal.Enabled := True;
-    Combobox21.Enabled := True;
+    Combobox21.Enabled  := True;
     RadioGroup3.Enabled := True;
   end;
 
@@ -4764,7 +4492,7 @@ begin
   end;
 end;
 
-procedure TForm2.FormShow(Sender: TObject);
+procedure TEditClForm.FormShow(Sender: TObject);
 begin
   curmonth := StrToInt(Copy(Form1.rdt, 4, 2));
   PageControl1.TabIndex := 0;
@@ -4779,7 +4507,7 @@ begin
     vAdd://добавить клиента
     begin
       load := True;
-      Form2.Caption := 'Добавить клиента';
+      EditClForm.Caption := 'Добавить клиента';
       Button2.Caption := 'Добавить клиента';
       SetDefault;
       Edit86.Text := SelInsp(Cl.Data.insp);
@@ -4788,7 +4516,7 @@ begin
     end;
     vEdit://изменить/просмотр клиента
     begin
-      Form2.Caption := 'Изменить/Просмотр клиента';
+      EditClForm.Caption := 'Изменить/Просмотр клиента';
       Button2.Caption := 'Изменить клиента';
       Cl.SetClient(Form1.client, Form1.rdt);
       Cl.SetCalc(Form1.client, Form1.rdt);
@@ -4801,19 +4529,19 @@ begin
   end;
 end;
 
-function TForm2.GetColSum(StrGrid: TStringGrid; Col: integer): string;
+function TEditClForm.GetColSum(StrGrid: TStringGrid; Col: integer): string;
 var
-  i:integer;
+  i: integer;
   tmp: double;
 begin
-  tmp:=0;
-  for i:=0 to StrGrid.RowCount-1 do
-    if StrGrid.Cells[Col,i+1] <> '' then
-      tmp:= tmp + StrToFloat(StrGrid.Cells[Col,i+1]);
+  tmp := 0;
+  for i := 0 to StrGrid.RowCount - 1 do
+    if StrGrid.Cells[Col, i + 1] <> '' then
+      tmp := tmp + StrToFloat(StrGrid.Cells[Col, i + 1]);
   Result := FloatToStr(tmp);
 end;
 
-procedure TForm2.Button8Click(Sender: TObject);
+procedure TEditClForm.Button8Click(Sender: TObject);
 begin
   if load and not CalcEmpty then
   begin
@@ -4823,7 +4551,7 @@ begin
   end;
 end;
 
-procedure TForm2.ComboBox7Change(Sender: TObject);
+procedure TEditClForm.ComboBox7Change(Sender: TObject);
 var
   ind: integer;
 begin
@@ -4837,12 +4565,12 @@ begin
   end;
 end;
 
-procedure TForm2.Button6Click(Sender: TObject);
+procedure TEditClForm.Button6Click(Sender: TObject);
 begin
   NewPeriod;
 end;
 
-procedure TForm2.PageControl1Change(Sender: TObject);
+procedure TEditClForm.PageControl1Change(Sender: TObject);
 begin
   if Edit57.Text = '' then
     PageControl1.TabIndex := 0
@@ -4886,19 +4614,18 @@ begin
         Cl.cdata.rstnd := stnd[Combobox10.ItemIndex];
         ComboBox10.OnChange(Self);
       end;
-      
+
     end;
   end;
 end;
 
-procedure TForm2.PageControl1DrawTab(Control: TCustomTabControl;
-  TabIndex: Integer; const Rect: TRect; Active: Boolean);
+procedure TEditClForm.PageControl1DrawTab(Control: TCustomTabControl; TabIndex: integer; const Rect: TRect; Active: boolean);
 begin
   case TabIndex of
-    0:;
-    1:;
-    2:;
-    3:;
+    0: ;
+    1: ;
+    2: ;
+    3: ;
     4:
     begin
       Control.Canvas.Brush.Color := clSkyBlue;
@@ -4910,10 +4637,10 @@ begin
   end;
   Control.Canvas.Pen.Color := clBlack;
   Control.Canvas.FillRect(Rect);
-  Control.Canvas.TextOut(Rect.left+5,Rect.top+3,PageControl1.Pages[tabindex].Caption);
+  Control.Canvas.TextOut(Rect.left + 5, Rect.top + 3, PageControl1.Pages[tabindex].Caption);
 end;
 
-function TForm2.CheckPers: boolean;
+function TEditClForm.CheckPers: boolean;
 var
   v: array[0..19] of integer;
   koef: array[0..19] of integer;
@@ -4959,7 +4686,7 @@ begin
   end;
 end;
 
-function TForm2.CheckLS(s: string): boolean;
+function TEditClForm.CheckLS(s: string): boolean;
 var
   v: array[0..10] of integer;
   koef: array[0..9] of integer;
@@ -4996,7 +4723,7 @@ begin
     Result := False;
 end;
 
-function TForm2.CheckLS: boolean;
+function TEditClForm.CheckLS: boolean;
 var
   res: boolean;
 begin
@@ -5013,7 +4740,7 @@ begin
     Result := False;
 end;
 
-procedure TForm2.Button9Click(Sender: TObject);
+procedure TEditClForm.Button9Click(Sender: TObject);
 begin
   if (Edit74.Text <> '') then
   begin
@@ -5038,27 +4765,27 @@ begin
   end;
 end;
 
-procedure TForm2.TabSheet4Exit(Sender: TObject);
+procedure TEditClForm.TabSheet4Exit(Sender: TObject);
 begin
   if Edit83.Font.Color = clRed then
     Pagecontrol1.TabIndex := 3;
 end;
 
-procedure TForm2.UpdateFactInfo;
+procedure TEditClForm.UpdateFactInfo;
 begin
   if ComboBox23.ItemIndex <> -1 then
   begin
-    Edit111.Text := GetColSum(StringGrid1,1);
-    Edit112.Text := GetColSum(StringGrid1,2);
-    Edit113.Text := GetColSum(StringGrid1,3);
-    if GetMonthsCount(fbegindate,fenddate) <> 0 then
-      Edit114.Text := FloatToStr(rnd(StrToFloat(Edit112.Text) / GetMonthsCount(fbegindate,fenddate)))
+    Edit111.Text := GetColSum(StringGrid1, 1);
+    Edit112.Text := GetColSum(StringGrid1, 2);
+    Edit113.Text := GetColSum(StringGrid1, 3);
+    if MounthDiff(fbegindate, fenddate) <> 0 then
+      Edit114.Text := FloatToStr(rnd(StrToFloat(Edit112.Text) / MounthDiff(fbegindate, fenddate)))
     else
-      Edit114.Text := '0'
+      Edit114.Text := '0';
   end;
 end;
 
-procedure TForm2.TabControl1Change(Sender: TObject);
+procedure TEditClForm.TabControl1Change(Sender: TObject);
 var
   recCount: integer;
 begin
@@ -5146,19 +4873,19 @@ begin
   end;
 end;
 
-procedure TForm2.TabSheet1Exit(Sender: TObject);
+procedure TEditClForm.TabSheet1Exit(Sender: TObject);
 begin
   if Edit57.Text = '' then
     Pagecontrol1.TabIndex := 0;
 end;
 
-procedure TForm2.RadioGroup1Click(Sender: TObject);
+procedure TEditClForm.RadioGroup1Click(Sender: TObject);
 begin
   if load then
     RadioGroup1.ItemIndex := Cl.Data.cert - 1;
 end;
 
-procedure TForm2.Edit74Change(Sender: TObject);
+procedure TEditClForm.Edit74Change(Sender: TObject);
 begin
   with Sender as TEdit do
   begin
@@ -5201,24 +4928,24 @@ begin
   end;
 end;
 
-function TForm2.CheckCountMem: boolean;
+function TEditClForm.CheckCountMem: boolean;
 begin
   Result := (Cl.cdata.mcount = Cl.cdata.family.Count);
 end;
 
-procedure TForm2.CheckDifferenceFactSum;
+procedure TEditClForm.CheckDifferenceFactSum;
 begin
-  if TabControl1.TabIndex=1 then
+  if TabControl1.TabIndex = 1 then
   begin
-  if StrToFloat(Edit111.Text) <= StrToFloat(Edit113.Text) then
-    label77.Caption:= 'Размер субсидии не превышает фактических расходов'
-  else
-    label77.Caption:= 'Размер субсидии превышает фактические расходы на +'+
-      Edit113.Text;
+    if StrToFloat(Edit111.Text) <= StrToFloat(Edit113.Text) then
+      label77.Caption := 'Размер субсидии не превышает фактических расходов'
+    else
+      label77.Caption := 'Размер субсидии превышает фактические расходы на +' +
+        Edit113.Text;
   end;
 end;
 
-procedure TForm2.CheckBox2Click(Sender: TObject);
+procedure TEditClForm.CheckBox2Click(Sender: TObject);
 begin
   if Checkbox2.Checked then
   begin
@@ -5237,12 +4964,12 @@ begin
   end;
 end;
 
-procedure TForm2.Button1Click(Sender: TObject);
+procedure TEditClForm.Button1Click(Sender: TObject);
 begin
   Close;
 end;
 
-procedure TForm2.Memo1Change(Sender: TObject);
+procedure TEditClForm.Memo1Change(Sender: TObject);
 begin
   if IsRus(Memo1.Text) then
   begin
@@ -5257,7 +4984,7 @@ begin
   end;
 end;
 
-procedure TForm2.Button10Click(Sender: TObject);
+procedure TEditClForm.Button10Click(Sender: TObject);
 var
   nam, namet, capt: string;
 begin
@@ -5271,7 +4998,7 @@ begin
   begin
     capt := 'Тарифы на ремонт жилья(руб./кв.м.)';
     nam  := 'rep';
-    namet := comboBoxRep.Text;
+    namet := comboBoxMOP.Text;
   end;
   if Sender = Button12 then
   begin
@@ -5317,7 +5044,7 @@ begin
   end;
   if (Sender = Button12) or (Sender = Button13) then
   begin
-    Form39 := TForm39.Create(Form2);
+    Form39 := TForm39.Create(EditClForm);
     Form39.Caption := capt;
     Form39.nam := nam;
     Form39.namet := namet;
@@ -5341,7 +5068,7 @@ begin
     (Sender = Button15) or (Sender = Button16) or (Sender = Button17) or
     (Sender = Button18) then
   begin
-    Form37 := TForm37.Create(Form2);
+    Form37 := TForm37.Create(EditClForm);
     Form37.Caption := capt;
     Form37.nam := nam;
     Form37.namet := namet;
@@ -5355,8 +5082,8 @@ begin
       end;
       if Sender = Button11 then
       begin
-        comboBoxRep.Text := Form37.namet;
-        comboBoxRep.OnChange(comboBoxRep);
+        comboBoxMOP.Text := Form37.namet;
+        comboBoxMOP.OnChange(comboBoxMOP);
       end;
       if Sender = Button14 then
       begin
@@ -5388,13 +5115,13 @@ begin
   end;
 end;
 
-procedure TForm2.Button7Click(Sender: TObject);
+procedure TEditClForm.Button7Click(Sender: TObject);
 begin
   Form11.status := 0;
   Form11.ShowModal;
 end;
 
-procedure TForm2.Button19Click(Sender: TObject);
+procedure TEditClForm.Button19Click(Sender: TObject);
 //сменить текущего инспектора
 begin
   Form17.ShowModal;
@@ -5407,7 +5134,7 @@ begin
   end;
 end;
 
-procedure TForm2.RadioGroup3Click(Sender: TObject);
+procedure TEditClForm.RadioGroup3Click(Sender: TObject);
 begin
   if load then
     Cl.cdata.mdd := RadioGroup3.ItemIndex;
@@ -5420,7 +5147,7 @@ begin
   end;
 end;
 
-procedure TForm2.RecalcOneServ(s: integer; mode:TCalcMode);
+procedure TEditClForm.RecalcOneServ(s: integer; mode: TCalcMode);
 begin
   if load and not CalcEmpty then
   begin
@@ -5442,14 +5169,14 @@ begin
   end;
 end;
 
-procedure TForm2.Edit57Exit(Sender: TObject);
+procedure TEditClForm.Edit57Exit(Sender: TObject);
 begin
   if CheckRus(Edit57) and load then
     Cl.Data.fio := Edit57.Text;
-  Edit57.Text := WithoutDoubleSpaces(Edit57.Text);
+  Edit57.Text := NormalizeSpaces(Edit57.Text);
 end;
 
-procedure TForm2.Edit57KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.Edit57KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
   begin
@@ -5458,13 +5185,13 @@ begin
   end;
 end;
 
-procedure TForm2.Edit63Exit(Sender: TObject);
+procedure TEditClForm.Edit63Exit(Sender: TObject);
 begin
   if CheckRus(edit63) and load then
     Cl.Data.apart := Edit63.Text;
 end;
 
-procedure TForm2.Edit63KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.Edit63KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
   begin
@@ -5473,13 +5200,13 @@ begin
   end;
 end;
 
-procedure TForm2.Edit64Exit(Sender: TObject);
+procedure TEditClForm.Edit64Exit(Sender: TObject);
 begin
   if CheckInt(edit64) and load then
     Cl.Data.tel := Edit64.Text;
 end;
 
-procedure TForm2.Edit64KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.Edit64KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
   begin
@@ -5488,9 +5215,9 @@ begin
   end;
 end;
 
-procedure TForm2.Edit66Exit(Sender: TObject);
+procedure TEditClForm.Edit66Exit(Sender: TObject);
 var
-  i: Integer;
+  i: integer;
 begin
   if CheckNumb(TEdit(Sender)) and load then
   begin
@@ -5591,12 +5318,12 @@ begin
       if Sender = Edit55 then
         Cl.cdata.snpm[13] := StrToFloat(Edit55.Text);
       if Sender = Edit65 then//!
-        begin
-          for i := 1 to numbtarif - 1 do
-            Cl.cdata.fpm[i] := 0;
-          Cl.cdata.fpm[0] := StrToFloat(Edit65.Text);
-          //Cl.cdata.bfpm[0] := StrToFloat(Edit65.Text);
-        end;
+      begin
+        for i := 1 to numbtarif - 1 do
+          Cl.cdata.fpm[i] := 0;
+        Cl.cdata.fpm[0] := StrToFloat(Edit65.Text);
+        //Cl.cdata.bfpm[0] := StrToFloat(Edit65.Text);
+      end;
       if Sender = Edit84 then
         Cl.cdata.fpm[0] := StrToFloat(Edit84.Text);
     end;
@@ -5609,7 +5336,7 @@ begin
   end;
 end;
 
-procedure TForm2.Edit66KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.Edit66KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
   begin
@@ -5726,41 +5453,41 @@ begin
   end;
 end;
 
-procedure TForm2.Edit69Exit(Sender: TObject);
+procedure TEditClForm.Edit69Exit(Sender: TObject);
 begin
   CheckRus(Edit69);
-  Edit69.Text := WithoutDoubleSpaces(Edit69.Text);
+  Edit69.Text := NormalizeSpaces(Edit69.Text);
 end;
 
-procedure TForm2.Edit69KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.Edit69KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
     CheckRus(Edit69);
 end;
 
-procedure TForm2.MaskEdit1Exit(Sender: TObject);
+procedure TEditClForm.MaskEdit1Exit(Sender: TObject);
 begin
   CheckDate(maskedit1);
 end;
 
-procedure TForm2.MaskEdit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.MaskEdit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
     CheckDate(maskedit1);
 end;
 
-procedure TForm2.Edit72Exit(Sender: TObject);
+procedure TEditClForm.Edit72Exit(Sender: TObject);
 begin
   SetPoint(TEdit(Sender));
 end;
 
-procedure TForm2.Edit72KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TEditClForm.Edit72KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
     SetPoint(TEdit(Sender));
 end;
 
-procedure TForm2.Edit83Change(Sender: TObject);
+procedure TEditClForm.Edit83Change(Sender: TObject);
 begin
   if load then
   begin
@@ -5786,13 +5513,13 @@ begin
   end;
 end;
 
-procedure TForm2.Edit9Exit(Sender: TObject);
+procedure TEditClForm.Edit9Exit(Sender: TObject);
 begin
   if (Cl.cdata.indrstnd) then
     Cl.cdata.indrstndval := StrToFloat(Edit9.Text);
 end;
 
-procedure TForm2.CheckBox3Click(Sender: TObject);
+procedure TEditClForm.CheckBox3Click(Sender: TObject);
 begin
   if Checkbox3.Checked then
   begin
@@ -5806,48 +5533,54 @@ begin
   end;
 end;
 
-procedure TForm2.CheckBox4Click(Sender: TObject);
-  procedure SetCounter(checkBox:TCheckBox; edit: TEdit; service: Integer);
+procedure TEditClForm.CheckBox4Click(Sender: TObject);
+
+  procedure SetCounter(checkBox: TCheckBox; edit: TEdit; service: integer);
   begin
     if (Sender as TCheckBox).Checked then
-      begin
-        edit.Color := clWindow;
-        edit.ReadOnly := False;
-        Cl.cdata.counter[service] := True;
-      end
+    begin
+      edit.Color := clWindow;
+      edit.ReadOnly := False;
+      Cl.cdata.counter[service] := True;
+    end
     else
     begin
-        edit.Color := clBtnFace;
-        edit.ReadOnly := True;
-        Cl.cdata.counter[service] := False;
+      edit.Color := clBtnFace;
+      edit.ReadOnly := True;
+      Cl.cdata.counter[service] := False;
     end;
   end;
 
 begin
-  if Sender = CheckBox4 then SetCounter(Sender as TCheckBox, Edit118, 2);
-  if Sender = CheckBox5 then SetCounter(Sender as TCheckBox, Edit119, 3);
+  if Sender = CheckBox4 then
+    SetCounter(Sender as TCheckBox, Edit118, 2);
+  if Sender = CheckBox5 then
+    SetCounter(Sender as TCheckBox, Edit119, 3);
 
   //canal = (cold + hot)
   if ((CheckBox4.Checked) and (CheckBox5.Checked)) then
   begin
-    CheckBox6.Checked := true;
-    Edit120.Text := FloatToStr(StrToFloat(Edit118.Text)+StrToFloat(Edit119.Text));
+    CheckBox6.Checked := True;
+    Edit120.Text := FloatToStr(StrToFloat(Edit118.Text) + StrToFloat(Edit119.Text));
     Cl.cdata.counter[4] := True;
   end;
 
-  if Sender = CheckBox6 then SetCounter(Sender as TCheckBox, Edit120, 4);
-  if Sender = CheckBox7 then SetCounter(Sender as TCheckBox, Edit121, 5);
-  if Sender = CheckBox8 then SetCounter(Sender as TCheckBox, Edit122, 6);
+  if Sender = CheckBox6 then
+    SetCounter(Sender as TCheckBox, Edit120, 4);
+  if Sender = CheckBox7 then
+    SetCounter(Sender as TCheckBox, Edit121, 5);
+  if Sender = CheckBox8 then
+    SetCounter(Sender as TCheckBox, Edit122, 6);
   if Sender = CheckBox9 then
   begin
     SetCounter(Sender as TCheckBox, Edit123, 7);
-    Cl.cdata.counternorm[7] := GetNormTarif(7, cl.cdata.tarifs[7], cl.cdata.begindate, cl.cdata.boiler, cl.cdata.rmcount, cl.cdata.settl);
+    Cl.cdata.counternorm[7] := GetNormTarif(7, cl.cdata.tarifs[7], cl.cdata.begindate, cl.cdata.boiler, cl.cdata.rmcount, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
   end;
 
   Edit118.OnExit(self);
 end;
 
-procedure TForm2.Edit111Exit(Sender: TObject);
+procedure TEditClForm.Edit111Exit(Sender: TObject);
 begin
   if StrToDate(MaskEdit4.Text) < Form1.Idate then
   begin
@@ -5856,7 +5589,7 @@ begin
   end;
 end;
 
-procedure TForm2.Edit117Exit(Sender: TObject);
+procedure TEditClForm.Edit117Exit(Sender: TObject);
 var
   i: integer;
 begin
@@ -5865,12 +5598,12 @@ begin
   Edit9.Text := FloatToStr(Cl.GetStandard);
   Cl.SetNorm;
 
-  for i:=0 to numbtarif-1 do
-    if (i<8)or(i>11) then
-      cl.cdata.cost[i] := GetCostTarif(i,cl.cdata.tarifs[i],cl.cdata.begindate,cl.cdata.boiler,cl.cdata.rmcount,cl.cdata.settl);
+  for i := 0 to numbtarif - 1 do
+    if (i < 8) or (i > 11) then
+      cl.cdata.cost[i] := GetCostTarif(i, cl.cdata.tarifs[i], cl.cdata.begindate, cl.cdata.boiler, cl.cdata.rmcount, cl.cdata.settl, Cl.cdata.elevator, Cl.cdata.tarifs[1]);
 end;
 
-procedure TForm2.Edit118Exit(Sender: TObject);
+procedure TEditClForm.Edit118Exit(Sender: TObject);
 begin
   if Sender = Edit118 then
   begin

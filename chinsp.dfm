@@ -46,6 +46,7 @@ object Form17: TForm17
       EditLabel.ParentBiDiMode = False
       PasswordChar = '|'
       TabOrder = 1
+      OnKeyPress = LabeledEdit1KeyPress
     end
   end
   object FlowPanel1: TFlowPanel

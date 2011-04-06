@@ -62,6 +62,7 @@ type
     ComboBox14: TComboBox;
     Edit2:      TEdit;
     CheckBox1:  TCheckBox;
+    elevatorCheckBox: TCheckBox;
     procedure Button4Click(Sender: TObject);
     procedure ComboBox2Change(Sender: TObject);
     procedure ComboBox3Change(Sender: TObject);
@@ -164,6 +165,8 @@ begin
     Combobox12.Text := FieldByName('namefond').AsString;
     Combobox13.Text := SelStnd(FieldByName('id_stnd').AsInteger);
     boiler := FieldByName('boiler').AsInteger;
+    CheckBox1.Checked := (boiler = 1);
+    elevatorCheckBox.Checked := (FieldByName('elevator').AsInteger = 1) ;
     Close;
     Combobox1.OnChange(combobox1);
     Combobox2.OnChange(combobox2);
@@ -879,12 +882,12 @@ begin
     begin
       if status = 1 then
       begin
-        Form2.Caption := 'Изменить/Просмотр дом';
+        EditClForm.Caption := 'Изменить/Просмотр дом';
         Button1.Caption := 'Изменить';
       end
       else
       begin
-        Form2.Caption := 'Удалить дом';
+        EditClForm.Caption := 'Удалить дом';
         Button1.Caption := 'Удалить';
       end;
       SetHouse(Form30.house);
@@ -917,7 +920,7 @@ begin
           SQL.Add('insert into house');
           SQL.Add('values (:id, :dist,:str,:nh,:cp,:stnd,');
           SQL.Add(':cont, :rep, :cold, :hot,:canal, :heat, :gas,');
-          SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil)');
+          SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil,:elevator)');
           ParamByName('id').AsInteger := maxid;
           ParamByName('dist').AsInteger := Form1.dist;
           ParamByName('str').AsInteger := str[Combobox1.ItemIndex];
@@ -937,6 +940,7 @@ begin
           ParamByName('mng').AsInteger := mng[Combobox11.ItemIndex];
           ParamByName('fnd').AsInteger := fnd[Combobox12.ItemIndex];
           ParamByName('boil').AsInteger := boiler;
+          ParamByName('elevator').AsBoolean := elevatorCheckBox.Checked;
           ExecSQL;
           Close;
         end;
@@ -978,7 +982,7 @@ begin
           SQL.Add('id_cont = :cont, id_rep = :rep, id_cold = :cold,');
           SQL.Add('id_hot = :hot,id_canal=:canal,id_heat = :heat, id_gas = :gas,');
           SQL.Add('id_el=:el, id_wood = :wood, id_coal = :coal,');
-          SQL.Add('id_mng = :mng, id_fond = :fnd, boiler = :boil');
+          SQL.Add('id_mng = :mng, id_fond = :fnd, boiler = :boil, elevator = :elevator');
           SQL.Add('where (id_house = :id)and(id_dist = :dist)');
           ParamByName('id').AsInteger := Form30.house;
           ParamByName('dist').AsInteger := Form1.dist;
@@ -999,6 +1003,7 @@ begin
           ParamByName('mng').AsInteger := mng[Combobox11.ItemIndex];
           ParamByName('fnd').AsInteger := fnd[Combobox12.ItemIndex];
           ParamByName('boil').AsInteger := boiler;
+          ParamByName('elevator').AsBoolean := elevatorCheckBox.Checked;
           ExecSQL;
           Close;
         end;

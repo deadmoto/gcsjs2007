@@ -38,70 +38,7 @@
     <Borland.Personality>Delphi.Personality</Borland.Personality>
     <Borland.ProjectType>VCLApplication</Borland.ProjectType>
     <BorlandProject>
-<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">2</VersionInfo><VersionInfo Name="Release">1</VersionInfo><VersionInfo Name="Build">0</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">True</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">БУ ОО ОЦЖССВиЛ г.Омск</VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.2.1.0</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName">Subsidy</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments">Учет предоставления субсидий на оплату ЖКУ населению г.Омска</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">Subsidy.dpr</Source></Source><Excluded_Packages>
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">3</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">71</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">True</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1049</VersionInfo><VersionInfo Name="CodePage">1251</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">БУ ОО ОЦЖССВиЛ г.Омск</VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.3.0.71</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName">Subsidy</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments">Учет предоставления субсидий на оплату ЖКУ населению г.Омска</VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">Subsidy.dpr</Source></Source><Excluded_Packages>
       
       
       
@@ -169,10 +106,11 @@
       <Form>Form41</Form>
     </DCCReference>
     <DCCReference Include="core" />
+    <DCCReference Include="core\appregistry.pas" />
     <DCCReference Include="core\client.pas" />
-    <DCCReference Include="core\connection_module.pas" />
     <DCCReference Include="core\fstruct.pas" />
     <DCCReference Include="core\service.pas" />
+    <DCCReference Include="core\service2.pas" />
     <DCCReference Include="curhist.pas">
       <Form>Form18</Form>
     </DCCReference>
@@ -182,8 +120,9 @@
       <DesignClass>TDModule</DesignClass>
     </DCCReference>
     <DCCReference Include="data\dbf.pas" />
+    <DCCReference Include="data\HelpUtils.pas" />
     <DCCReference Include="data\md5.pas" />
-    <DCCReference Include="data\min.pas" />
+    <DCCReference Include="data\MyTypes.pas" />
     <DCCReference Include="data\ODBC_DSN.pas" />
     <DCCReference Include="data\padegFIO.pas" />
     <DCCReference Include="data\SevenZipVCL.pas" />
@@ -229,7 +168,7 @@
       <Form>Form20</Form>
     </DCCReference>
     <DCCReference Include="merge.pas">
-      <Form>Form21</Form>
+      <Form>MergeForm</Form>
     </DCCReference>
     <DCCReference Include="minimum.pas">
       <Form>Form13</Form>
@@ -253,7 +192,7 @@
       <Form>Form38</Form>
     </DCCReference>
     <DCCReference Include="sclient.pas">
-      <Form>Form2</Form>
+      <Form>EditClForm</Form>
     </DCCReference>
     <DCCReference Include="search.pas">
       <Form>Form33</Form>
@@ -265,7 +204,7 @@
       <Form>Form39</Form>
     </DCCReference>
     <DCCReference Include="sql.pas">
-      <Form>Form34</Form>
+      <Form>SQLExecForm</Form>
     </DCCReference>
     <DCCReference Include="stat.pas">
       <Form>Stats</Form>

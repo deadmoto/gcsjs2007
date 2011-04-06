@@ -61,6 +61,8 @@ function UpdateExceptions: Boolean; stdcall;
 
 function SetDictionary(FileName: String): Boolean; stdcall;
 
+function GetShortName(FIO: string): string; //возвращает фамилию + инициалы
+
 implementation
 
 uses Windows, Dialogs;
@@ -478,6 +480,21 @@ begin
     raise Exception.Create('Функция ''SetDictionary'' в библиотеке PADEG.DLL не найдена');
   end;
   Result:=pSetDictionary(PChar(FileName));
+end;
+
+function GetShortName(FIO: string): string;
+var
+  FIOParts: TFIOParts;
+begin
+  FIOParts := GetFIOParts(FIO);
+
+  if Trim(FIOParts.MiddleName) <> '' then
+    Result := Trim(FIOParts.LastName) + ' ' +
+      Trim(FIOParts.FirstName)[1] + '. ' +
+      Trim(FIOParts.MiddleName)[1] + '.'
+  else
+    Result := Trim(FIOParts.LastName) + ' ' +
+      Trim(FIOParts.FirstName)[1] + '. ';
 end;
 
 initialization
