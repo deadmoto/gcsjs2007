@@ -22,6 +22,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
     procedure ComboBox2Change(Sender: TObject);
+    procedure LabeledEdit1KeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     insp: array of integer;//список id_insp
@@ -39,7 +40,7 @@ var
 
 implementation
 
-uses datamodule, main, service, md5, connection_module;
+uses datamodule, main, service, md5, appregistry;
 
 {$R *.dfm}
 
@@ -109,7 +110,6 @@ end;
 procedure TSelectDistFrm.Button1Click(Sender: TObject);
 {войти}
 var
-  i: integer;
   tmp_pass: string;
 begin
   with DModule.Query1 do begin
@@ -157,6 +157,11 @@ procedure TSelectDistFrm.FormShow(Sender: TObject);
 begin
   Clear;
   Fill;
+end;
+
+procedure TSelectDistFrm.LabeledEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key = #13 then Button1Click(Sender);
 end;
 
 procedure TSelectDistFrm.ComboBox1Change(Sender: TObject);

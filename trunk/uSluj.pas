@@ -47,7 +47,7 @@ var
 implementation
 
 uses
-  datamodule, main, service;
+  datamodule, main, service, MyTypes;
 
 {$R *.dfm}
 
@@ -155,11 +155,11 @@ begin
         TIntArray.Create(64, 75, 255, 75, 75), 2);
       end;
     end;
-    SlujGrid.Cells[0, 1] := '';
-    SlujGrid.Cells[1, 1] := '';
-    SlujGrid.Cells[2, 1] := '';
-    SlujGrid.Cells[3, 1] := '';
-    SlujGrid.Cells[4, 1] := '';
+
+    for i := 0 to 4 do
+    begin
+      SlujGrid.Cells[i, 1] := '';
+    end;
     Button1.Enabled := False;
     ShowMessage('В текушем месяце нет подобных записей.');
   end;

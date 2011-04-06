@@ -62,7 +62,7 @@ var
 implementation
 
 uses
-  datamodule, main, service, md5, connection_module, wincontrols;
+  datamodule, main, service, md5, appregistry, wincontrols, MyTypes;
 
 {$R *.dfm}
 
@@ -203,10 +203,11 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('insert into insp');
-        SQL.Add('values (:id, :dist,:name, :st, :num)');
+        SQL.Add('values (:id, :dist,:name, :st, :num,:pas)');
         ParamByName('id').AsInteger  := StrToInt(Edit2.Text);
         ParamByName('name').AsString := Edit1.Text;
         ParamByName('dist').AsInteger := Form1.dist;
+        ParamByName('pas').AsString := GenMD5Password( InputPassword('¬ведите пароль!', 'ѕароль:', '') );
         if CheckBox1.Checked = False then
           st := 0
         else

@@ -27,7 +27,7 @@ var
 
 implementation
 
-uses service;
+uses HelpUtils;
 
 {$R *.dfm}
 

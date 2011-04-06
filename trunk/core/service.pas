@@ -10,8 +10,8 @@ interface
 
 
 uses
-  Controls, DB, dbf, Dialogs, FileCtrl, Grids, Mask, padegFIO, Registry, dateutils, Math,
-  StdCtrls, SysUtils, Variants, Windows, ExtCtrls, Graphics, Classes, jpeg, ComObj;
+  Controls, DB, DBTables, dbf, Dialogs, Grids, Mask, padegFIO, Registry, dateutils, Math,
+  StdCtrls, SysUtils, Variants, Windows, ExtCtrls, Graphics, Classes, ComObj, MyTypes;
 
 const
   numbtarif = 14;
@@ -25,15 +25,6 @@ const
     '>=',
     '<='
     );
-
-type
-  TStringArray = array of string;
-  TIntArray = array of integer;
-
-  TMyThread = class(TThread)
-  protected
-    procedure Execute; override;
-  end;
 
 procedure SetPoint(edt: TEdit);//установить запятую с учетом копеек
 
@@ -50,9 +41,8 @@ function IsDate(str: string): boolean;
 function FindReg(RegNumber, b: integer; buffer: array of integer): integer;//найти рег номер
 function FindCl(RegNumber: integer; buffer: array of integer): integer;    //найти рег номер
 
-function Rnd(n: real): real;
-function FlToStr(n: real): string;
-procedure ToRowF(n: real; var numb: array of integer);
+function Rnd(n: real): real; //функция округления
+procedure ToRowF(n: real; var numb: array of integer);//разложение в ряд дробной части числа
 
 procedure FillCurr(path, rdt: string; dis: integer; code: TCodePage);
 procedure FillTarif(path, nam, rdt: string; dis: integer; code: TCodePage);
@@ -69,49 +59,54 @@ function GetPrec(fld: TField): byte;
 procedure FillTable(path, nam: string; code: TCodePage);
 procedure EditField(f: string; code: TCodePage; n: integer);
 
-function GetMonthsCount(BeginDate, EndDate: TDateTime): integer;//разника между месяцами
-function WithoutDoubleSpaces(str: string): string;
-function GetShortName(FIO: string): string; //возвращает фамилию + инициалы
+function DateDiff(BeginDate, EndDate: TDateTime): integer;
+function MounthDiff(BeginDate, EndDate: TDateTime): integer;//разница месяцов
+function NormalizeSpaces(str: string): string;
 function ReplacePoint(str: string): string; //заминить , на .
-
+function StringDate(date: TDate): string;//возвращает дату в виде "mounth-name yyyy"
+function RegExpString(source,filter: string): string;
 {******************************************************************************}
 function RefToCell(ARow, ACol: integer): string;
 function ExportGridToExcel(AGrid: TStringGrid; AFileName: string): boolean;
 {******************************************************************************}
-
-//Возвращает версию exe по имени файла
-function FileVersion(AFileName: string): string;
-
-function GetTempDir: string;
-function GetSystemDir: string;
-function SelectDir: string;
-
-function getConfValue(str: string): variant;
 
 procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidths: TIntArray; RecCount: integer);
 
 //Процеду отрисовки TStringGrig, разбивает текст в ячейк на несколько строк
 procedure SGDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 //Размещаем содержимое компонента в области прямоугольника ячейки
-procedure FixObjPosn(SG:TStringGrid; vCol, vRow: LongInt);
+//procedure FixObjPosn(SG:TStringGrid; vCol, vRow: LongInt);
 //Процеду отрисовки TComboBox, разбивает текст в items на несколько строк
 //procedure CBMeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
 //procedure CBDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
-
-procedure LoadJPEGFromRes(TheJPEG : string; ThePicture : TPicture);
-
+function getmin(query:tquery;id_min:integer):real;
 implementation
 
 uses
-  datamodule, main;
+  datamodule, main, VBScript_RegExp_55_TLB;
 
-{ TMyThread }
 
-procedure TMyThread.Execute;
+function StringDate(date: TDate): string;
 begin
-  WinExec(PChar(ParamStr(0)), SW_SHOW);
+  Result :=
+    format('%s %d', [LongMonthNames[StrToInt(FormatDateTime('m',date))], YearOf(date)]);
 end;
 
+function RegExpString(source,filter: string): string;
+var
+  re:  TRegExp;
+  tmp: string;
+begin
+//  re := TRegExp.Create(nil);
+//  try
+//    re.Pattern := filter; //записываем регулярное выражение
+//    re.Global := True;
+//    tmp := re. (pass, '');
+//    Result := tmp;
+//  finally
+//    re.Free;
+//  end;
+end;
 procedure SetPoint(edt: TEdit);
 {*******************************************************************************
   Процедура SetPoint установливает запятую с учетом копеек
@@ -173,25 +168,6 @@ begin
       end;
   end;
   Result := flag;
-end;
-
-function FlToStr(n: real): string;
-{*******************************************************************************
-  Функция FlToStr переводит число в строку. Число, представленное строкой, должно
-  содержать не более 2 знаков после запятой.
-*******************************************************************************}
-var
-  p: integer;
-begin
-  Result := FloatToStr(roundto(n, -2));
-  p := Pos(',', Result);
-  if p <> 0 then
-  begin
-    if p = Length(Result) - 1 then//125.2
-      Result := Result + '0';
-  end
-  else//125
-    Result := Result + ',00';
 end;
 
 procedure ToRowF(n: real; var numb: array of integer);
@@ -705,7 +681,7 @@ begin
   end;
 end;
 
-function GetMonthsCount(BeginDate, EndDate: TDateTime): integer;
+function DateDiff(BeginDate, EndDate: TDateTime): integer;
 {*******************************************************************************
  Функция, которая возвращает разницу между двумя датами в месяцах.
  Исходные данные: BeginDate, EndDate - начальная и конечная даты;
@@ -715,11 +691,11 @@ function GetMonthsCount(BeginDate, EndDate: TDateTime): integer;
 *******************************************************************************}
 
 var
-//  Days1, Days2,             // количество дней начальной и конечной дат
+  Days1, Days2,             // количество дней начальной и конечной дат
   Months1, Months2,         // количество месяцев начальной и конечной дат
   Years1, Years2: integer;  // количество лет начальной и конечной дат
   BufferDate: TDateTime;    // буфер для обмена значениями
-//  DaysCount: byte;
+  DaysCount: byte;
 begin
   if BeginDate > EndDate then  // сравниваем даты, если начальная позднее
   begin                        // конечной, то меняем даты между собой
@@ -727,8 +703,8 @@ begin
     BeginDate := EndDate;
     EndDate := BufferDate;
   end;
-//  Days1  := StrToInt(FormatDateTime('dd', BeginDate));     // считываем количе-
-//  Days2  := StrToInt(FormatDateTime('dd', EndDate));       // ство дней, месяцев
+  Days1  := StrToInt(FormatDateTime('dd', BeginDate));     // считываем количе-
+  Days2  := StrToInt(FormatDateTime('dd', EndDate));       // ство дней, месяцев
   Months1 := StrToInt(FormatDateTime('mm', BeginDate));    // и лет каждой из дат
   Months2 := StrToInt(FormatDateTime('mm', EndDate));      // и заносим в соот-
   Years1 := StrToInt(FormatDateTime('yyyy', BeginDate));   // ветствующие пере-
@@ -737,7 +713,7 @@ begin
   Result := (Years2 - Years1) * 12 + (Months2 - Months1);
   // Учитываем влияние разницы в днях на количество месяцев + остаток в днях в
   // переменной DaysCount
-{  if (Days2 - Days1) < 0 then
+  if (Days2 - Days1) < 0 then
   begin  // если разница отрицательна, то
     Result := Result - 1;  // производим заем месяца из имеющихся
     // В зависимости от месяца в "меньшей" дате, вычисляем остаток в днях
@@ -755,7 +731,36 @@ begin
     end;
   end  // конец действий при отрицательной разнице дней
   else  // при положительной или нулевой разнице дней
-    DaysCount := Days2 - Days1;  // банальная разность}
+    DaysCount := Days2 - Days1;  // банальная разность
+end;
+
+function MounthDiff(BeginDate, EndDate: TDateTime): integer;
+{*******************************************************************************
+ Функция, которая возвращает разницу между двумя датами в месяцах.
+ Исходные данные: BeginDate, EndDate - начальная и конечная даты;
+                  DaysCount - остаток разницы в днях (хотя скорее она исходная
+                              данная, а выходная).
+ Выходные данные: возвращает разницу между датами в месяцах.
+*******************************************************************************}
+
+var
+  Months1, Months2,         // количество месяцев начальной и конечной дат
+  Years1, Years2: integer;  // количество лет начальной и конечной дат
+  BufferDate: TDateTime;    // буфер для обмена значениями
+begin
+  if BeginDate > EndDate then  // сравниваем даты, если начальная позднее
+  begin                        // конечной, то меняем даты между собой
+    BufferDate := BeginDate;
+    BeginDate := EndDate;
+    EndDate := BufferDate;
+  end;
+
+  Months1 := StrToInt(FormatDateTime('mm', BeginDate));    // и лет каждой из дат
+  Months2 := StrToInt(FormatDateTime('mm', EndDate));      // и заносим в соот-
+  Years1 := StrToInt(FormatDateTime('yyyy', BeginDate));   // ветствующие пере-
+  Years2 := StrToInt(FormatDateTime('yyyy', EndDate));     // менные
+  // Вычисляем суммарную разницу между датами по разницам в годах*12 и месяцах
+  Result := (Years2 - Years1) * 12 + (Months2 - Months1);
 end;
 
 {******************************************************************************}
@@ -779,7 +784,8 @@ begin
 
   try
     ExcelApp.WorkBooks.Open(aFileName);
-  finally
+  except
+    ExcelApp.WorkBooks.Add($FFFFEFB9);
   end;
 
   // Prepare Data
@@ -803,115 +809,6 @@ begin
 end;
 {******************************************************************************}
 
-function FileVersion(AFileName: string): string;
-{*******************************************************************************
-    Функция возвращает версию файла
-*******************************************************************************}
-var
-  szName: array[0..255] of char;
-  P: Pointer;
-  Value: Pointer;
-  Len: UINT;
-  GetTranslationString: string;
-  FFileName: PChar;
-  FValid: boolean;
-  FSize: DWORD;
-  FHandle: DWORD;
-  FBuffer: PChar;
-begin
-  try
-    FFileName := StrPCopy(StrAlloc(Length(AFileName) + 1), AFileName);
-    FValid := False;
-    FSize  := GetFileVersionInfoSize(FFileName, FHandle);
-    if FSize > 0 then
-      try
-        GetMem(FBuffer, FSize);
-        FValid := GetFileVersionInfo(FFileName, FHandle, FSize, FBuffer);
-      except
-        FValid := False;
-        raise;
-      end;
-    Result := '';
-    if FValid then
-      VerQueryValue(FBuffer, '\VarFileInfo\Translation', p, Len)
-    else
-      p := nil;
-    if P <> nil then
-      GetTranslationString := IntToHex(MakeLong(HiWord(longint(P^)),
-        LoWord(longint(P^))), 8);
-    if FValid then
-    begin
-      StrPCopy(szName, '\StringFileInfo\' + GetTranslationString +
-        '\FileVersion');
-      if VerQueryValue(FBuffer, szName, Value, Len) then
-        Result := StrPas(PChar(Value));
-    end;
-  finally
-    try
-      if FBuffer <> nil then
-        FreeMem(FBuffer, FSize);
-    except
-    end;
-    try
-      StrDispose(FFileName);
-    except
-    end;
-  end;
-end;
-
-function GetTempDir: string;
-{*******************************************************************************
-    Функция возвращает путь к папки %TEMP%
-*******************************************************************************}
-var
-  Buf: array[0..1023] of char;
-begin
-  SetString(Result, Buf, GetTempPath(Sizeof(Buf) - 1, Buf));
-end;
-
-function GetSystemDir: string;
-{*******************************************************************************
-    Функция возвращает путь к папки %WINDIR%\system32
-*******************************************************************************}
-var
-  Buf: array[0..1023] of char;
-begin
-  SetString(Result, Buf, GetSystemDirectory(Buf,Sizeof(Buf) - 1));
-end;
-
-
-function getConfValue(str: string): variant;
-{*******************************************************************************
-    Функция getConfValue возвращает значение переменной в реестре, которое
-    соответсвует определенному свойству компонента.
-*******************************************************************************}
-begin
-  with TRegistry.Create do
-  begin
-    RootKey := HKEY_CURRENT_USER;
-    if OpenKey('Software\Subsidy\Config', True) then
-      if ValueExists(str) then
-        Result := ReadString(str)
-      else
-        WriteString(str, '0');
-  end;
-end;
-
-function SelectDir: string;
-var
-  dir: string;
-  bool: boolean;
-begin
-  bool := SelectDirectory('Select directory', '', dir, [sdShowShares, sdNewUI, sdValidateDir, sdNewFolder]);
-  if not bool then exit
-  else
-  begin
-    if dir[length(dir)] <> '\' then
-      dir := dir + '\';
-    Result := dir;
-  end;
-end;
-
 procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidths: TIntArray; RecCount: integer);
 var
   i: integer;
@@ -926,28 +823,14 @@ begin
   end;
 end;
 
-function WithoutDoubleSpaces(str: string): string;
+function NormalizeSpaces(str: string): string;
 var
   i: integer;
 begin
-  for i := 0 to 2 do
-    str := Trim(StringReplace(str, '  ', ' ', [rfReplaceAll]));
+  str := Trim(str);
+  while pos('  ',str) <> 0 do
+    str := StringReplace(str,'  ',' ',[rfreplaceall]);
   Result := str;
-end;
-
-function GetShortName(FIO: string): string;
-var
-  FIOParts: TFIOParts;
-begin
-  FIOParts := GetFIOParts(FIO);
-
-  if Trim(FIOParts.MiddleName) <> '' then
-    Result := Trim(FIOParts.LastName) + ' ' +
-      Trim(FIOParts.FirstName)[1] + '. ' +
-      Trim(FIOParts.MiddleName)[1] + '.'
-  else
-    Result := Trim(FIOParts.LastName) + ' ' +
-      Trim(FIOParts.FirstName)[1] + '. ';
 end;
 
 function ReplacePoint(str: string): string;
@@ -982,23 +865,23 @@ begin
     end;
 end;
 
-procedure FixObjPosn(SG:TStringGrid; vCol, vRow: LongInt);
-var
-  R: TRect;
-begin
-  R := SG.CellRect(vCol, vRow);
-  if SG.Objects[vCol, vRow] is TControl then
-    with TControl(SG.Objects[vCol, vRow]) do
-      if R.Right = R.Left then {прямоугольник ячейки невидим}
-        Visible := False
-      else
-      begin
-        InflateRect(R, 0, 0);//-1
-        OffsetRect(R, SG.Left + 0, SG.Top + 0);//+1
-        BoundsRect := R;
-        Visible := True;
-      end;
-end;
+//procedure FixObjPosn(SG:TStringGrid; vCol, vRow: LongInt);
+//var
+//  R: TRect;
+//begin
+//  R := SG.CellRect(vCol, vRow);
+//  if SG.Objects[vCol, vRow] is TControl then
+//    with TControl(SG.Objects[vCol, vRow]) do
+//      if R.Right = R.Left then {прямоугольник ячейки невидим}
+//        Visible := False
+//      else
+//      begin
+//        InflateRect(R, 0, 0);//-1
+//        OffsetRect(R, SG.Left + 0, SG.Top + 0);//+1
+//        BoundsRect := R;
+//        Visible := True;
+//      end;
+//end;
 
 
 {procedure CBMeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
@@ -1037,30 +920,18 @@ begin
   DrawText(TComboBox(Control).Canvas.Handle, PChar(ItemString), length(ItemString), Rect, DT_WORDBREAK);
 end;}
 
-
-procedure LoadJPEGFromRes(TheJPEG : string; ThePicture : TPicture);
-var
-        ResHandle : THandle;
-        MemHandle : THandle;
-        MemStream : TMemoryStream;
-        ResPtr    : PByte;
-        ResSize   : Longint;
-        JPEGImage : TJPEGImage;
+function getmin(query:tquery;id_min:integer):real;
 begin
-        ResHandle := FindResource(hInstance, PChar(TheJPEG), 'JPEG');
-        MemHandle := LoadResource(hInstance, ResHandle);
-        ResPtr    := LockResource(MemHandle);
-        MemStream := TMemoryStream.Create;
-        JPEGImage := TJPEGImage.Create;
-        ResSize := SizeOfResource(hInstance, ResHandle);
-        MemStream.SetSize(ResSize);
-        MemStream.Write(ResPtr^, ResSize);
-        FreeResource(MemHandle);
-        MemStream.Seek(0, 0);
-        JPEGImage.LoadFromStream(MemStream);
-        ThePicture.Assign(JPEGImage);
-        JPEGImage.Free;
-        MemStream.Free;
+  result:=0;
+  if id_min<>0 then
+    begin
+      query.sql.text:='SELECT * FROM LMin'+#13+
+                      'WHERE (sdate=(SELECT MAX(sdate) FROM LMin'+#13+
+                      'WHERE id_min=:id_min)) AND (id_min=:id_min)';
+      query.parambyname('id_min').value:=id_min;
+      query.open;
+      result:=query.fieldbyname('minim').value;
+    end;      
 end;
 
 end.

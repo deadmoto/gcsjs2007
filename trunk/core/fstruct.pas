@@ -52,7 +52,7 @@ type
   procedure ImportFact(path: string;dis: integer);
 
   function GetData(nam: string;var f: T2DString): boolean;
-  function ConvertChar(s: array of char): string;
+  //function ConvertChar(s: array of char): string;
 
 implementation
 
@@ -802,9 +802,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO fam');
-    SQL.Add('VALUES (:id, :cl, :fio,');
-    SQL.Add('convert(smalldatetime,:birth,104), :pol, :st, :priv,');
-    SQL.Add(':mid, :rel)');
+    SQL.Add('VALUES (:id, :cl, :fio, convert(smalldatetime,:birth,104), :pol, :st, :priv, :mid, :rel, :npss)');
   end;
 
   if FileExists(path+'fam'+IntToStr(dis)+'.dbf') then begin
@@ -841,6 +839,7 @@ begin
         Query1.ParamByName('priv').AsString := f[i][6];
         Query1.ParamByName('mid').AsFloat := StrToFloat(f[i][7]);
         Query1.ParamByName('rel').AsString := f[i][8];
+        Query1.ParamByName('npss').AsString := f[i][9];
         Query1.ExecSQL;
       end;
       Query1.Close;
@@ -1069,7 +1068,7 @@ begin
     SQL.Add('INSERT INTO house');
     SQL.Add('VALUES (:id, :idd, :str, :nh,:cp,:stnd,');
     SQL.Add(':cont, :rep, :cold, :hot,:canal, :heat, :gas,');
-    SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil)');
+    SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil,:elevator)');
   end;
   if FileExists(path+'house'+IntToStr(dis)+'.dbf') then begin
     GetData(path+'house'+IntToStr(dis)+'.dbf',f);
@@ -1101,6 +1100,7 @@ begin
         Query1.ParamByName('mng').AsString := f[i][16];
         Query1.ParamByName('fnd').AsString := f[i][17];
         Query1.ParamByName('boil').AsString := f[i][18];
+        Query1.ParamByName('elevator').AsString := f[i][19];
         Query1.ExecSQL;
       end;
       Query1.Close;
@@ -1451,18 +1451,18 @@ begin
     ShowMessage('Файл '+path+'bank.dbf не найден!');
 end;
 
-function ConvertChar(s: array of char): string;
-{ процедура преобразования массива символов в строку }
-var
-  i: integer;
-begin
-  i:=0;
-  result := '';
-  while (s[i]<>#0)and(i<Length(s)) do begin
-    result := result + s[i];
-    inc(i);
-  end;
-end;
+//function ConvertChar(s: array of char): string;
+//{ процедура преобразования массива символов в строку }
+//var
+//  i: integer;
+//begin
+//  i:=0;
+//  result := '';
+//  while (s[i]<>#0)and(i<Length(s)) do begin
+//    result := result + s[i];
+//    inc(i);
+//  end;
+//end;
 
 function GetData(nam: string;var f: T2DString): boolean;
 var

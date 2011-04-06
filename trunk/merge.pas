@@ -7,7 +7,7 @@ uses
   StdCtrls, Mask, ComCtrls, SevenZipVCL;
 
 type
-  TForm21 = class(TForm)
+  TMergeForm = class(TForm)
     ProgressBar1: TProgressBar;
     Button1:      TButton;
     Button2:      TButton;
@@ -28,7 +28,7 @@ type
   end;
 
 var
-  Form21: TForm21;
+  MergeForm: TMergeForm;
 
 implementation
 
@@ -40,7 +40,7 @@ uses
 
 {$R *.dfm}
 
-procedure TForm21.FormShow(Sender: TObject);
+procedure TMergeForm.FormShow(Sender: TObject);
 begin
   path := 'arc\';//путь по умолчанию
   MaskEdit1.Text := Form1.rdt;
@@ -49,12 +49,12 @@ begin
   ProgressBar1.Step := 1;
 end;
 
-procedure TForm21.MaskEdit1Exit(Sender: TObject);
+procedure TMergeForm.MaskEdit1Exit(Sender: TObject);
 begin
   CheckDate(MaskEdit1);
 end;
 
-procedure TForm21.Button1Click(Sender: TObject);
+procedure TMergeForm.Button1Click(Sender: TObject);
 { архивация базы для сброса по дате}
 var
   ext1, ext2, Name, dt: string;
@@ -121,7 +121,7 @@ begin
   end;
 end;
 
-procedure TForm21.Button2Click(Sender: TObject);
+procedure TMergeForm.Button2Click(Sender: TObject);
 { автоматический импорт данных из филиала или отдела }
 var
   SevenZip: TSevenZip;
@@ -174,12 +174,12 @@ begin
   Close;
 end;
 
-procedure TForm21.Button3Click(Sender: TObject);
+procedure TMergeForm.Button3Click(Sender: TObject);
 begin
   Close;
 end;
 
-procedure TForm21.MaskEdit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TMergeForm.MaskEdit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if key = vk_return then
     CheckDate(MaskEdit1);

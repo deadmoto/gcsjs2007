@@ -52,10 +52,7 @@ var
 implementation
 
 uses
-  datamodule,
-  privilege,
-  main,
-  service;
+  datamodule, privilege, main, service, MyTypes;
 
 {$R *.dfm}
 

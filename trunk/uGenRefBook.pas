@@ -81,8 +81,7 @@ var
 implementation
 
 uses
-  DataModule,
-  service;
+  DataModule, service, MyTypes;
 
 {$R *.dfm}
 

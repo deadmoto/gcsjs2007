@@ -60,7 +60,6 @@ type
     { Private declarations }
     serv, str, mng, fnd, stnd, curt: array of integer;
     tarifs: array of TTarif;
-//    procedure SetHouse(s: integer;n,c: string);//установить дом
     procedure Fill;
     procedure FillTarif(n: string;num: integer);
     procedure FillTarifb(n: string;num: integer);
@@ -84,7 +83,7 @@ var
 
 implementation
 
-uses service, main, datamodule;
+uses service, main, datamodule, MyTypes;
 
 {$R *.dfm}
 
@@ -220,14 +219,6 @@ begin
   else
     Result := -1;
 end;
-
-{procedure TForm29.SetHouse(s: integer;n,c: string);
-begin
-  //Combobox1.Text := SelStr(s);
-  Combobox1.OnChange(combobox1);
-  Edit2.Text := n;
-  Edit3.Text := c;
-end;}
 
 procedure TForm29.FillTarif(n: string;num: integer);
 var
@@ -516,7 +507,7 @@ begin
   ind := Combobox5.ItemIndex;
   if ((serv[Combobox4.ItemIndex]=2)or(serv[Combobox4.ItemIndex]=3))and
       CheckBox1.Checked then
-    Edit6.Text := FlToStr(tarifs[serv[Combobox4.ItemIndex]].value2[ind])
+    Edit6.Text := FormatFloat('0.00', tarifs[serv[Combobox4.ItemIndex]].value2[ind])
   else begin
     if (serv[Combobox4.ItemIndex]=7) then begin
       Edit6.Enabled := false;
@@ -524,7 +515,7 @@ begin
     end
     else begin
       Edit6.Enabled := true;
-      Edit6.Text := FlToStr(tarifs[serv[Combobox4.ItemIndex]].value1[ind]);
+      Edit6.Text := FormatFloat('0.00', tarifs[serv[Combobox4.ItemIndex]].value1[ind]);
     end;
   end;
 end;

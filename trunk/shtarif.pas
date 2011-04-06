@@ -35,7 +35,7 @@ var
 
 implementation
 
-uses datamodule, service;
+uses datamodule, service, MyTypes;
 
 {$R *.dfm}
 

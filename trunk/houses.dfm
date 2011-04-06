@@ -133,16 +133,16 @@ object Form24: TForm24
     Text = ' /'
   end
   object Button1: TButton
-    Left = 256
-    Top = 384
+    Left = 368
+    Top = 383
     Width = 75
     Height = 25
     TabOrder = 18
     OnClick = Button1Click
   end
   object Button4: TButton
-    Left = 175
-    Top = 384
+    Left = 287
+    Top = 383
     Width = 75
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1072
@@ -409,5 +409,13 @@ object Form24: TForm24
     Caption = #1041#1086#1081#1083#1077#1088
     TabOrder = 17
     OnClick = CheckBox1Click
+  end
+  object elevatorCheckBox: TCheckBox
+    Left = 112
+    Top = 391
+    Width = 57
+    Height = 17
+    Caption = #1051#1080#1092#1090
+    TabOrder = 29
   end
 end
