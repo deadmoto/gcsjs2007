@@ -24,9 +24,10 @@ function SelBank(n: integer): string;    //выбрать банк
 function SelRel(n: integer): string;
 function SelStnd(n: integer): string;
 function SelMin(n: integer): real;
-function SelInsp(n: integer): string; //выбрать инспектора
-function SelCert(n: integer): string; //выбрать аттестацию
-function SelDist(n: integer): string; // выбрать округ
+function SelInsp(n: integer): string;    //выбрать инспектора
+function SelCert(n: integer): string;    //выбрать аттестацию
+function SelDist(n: integer): string;    //выбрать округ
+function SelBoss(n: integer): string;    //
 
 implementation
 
@@ -434,5 +435,21 @@ begin
     Close;
   end;
 end;
+
+function SelBoss(n: integer): string;
+begin
+  with DModule.Query2 do
+  begin
+    Close;
+    SQL.Text := 'SELECT boss '#13#10 +
+      'FROM Dist '#13#10 +
+      'WHERE id_dist = :id';
+    ParamByName('id').AsInteger := n;
+    Open;
+    Result := FieldByName('boss').AsString;
+    Close;
+  end;
+end;
+
 
 end.

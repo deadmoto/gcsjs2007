@@ -18,25 +18,6 @@ object SQLExecForm: TSQLExecForm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object DBGrid1: TDBGrid
-    AlignWithMargins = True
-    Left = 3
-    Top = 239
-    Width = 531
-    Height = 223
-    Hint = #1056#1077#1079#1091#1083#1100#1090#1072#1090' SQL-'#1079#1072#1087#1088#1086#1089#1072
-    Align = alClient
-    DataSource = DModule.DataSource1
-    ParentShowHint = False
-    ReadOnly = True
-    ShowHint = True
-    TabOrder = 0
-    TitleFont.Charset = DEFAULT_CHARSET
-    TitleFont.Color = clWindowText
-    TitleFont.Height = -11
-    TitleFont.Name = 'MS Sans Serif'
-    TitleFont.Style = []
-  end
   object TabControl1: TTabControl
     AlignWithMargins = True
     Left = 3
@@ -44,10 +25,11 @@ object SQLExecForm: TSQLExecForm
     Width = 531
     Height = 230
     Align = alTop
-    TabOrder = 1
+    TabOrder = 0
     Tabs.Strings = (
-      #1054#1073#1097#1080#1081
-      #1048#1089#1087#1086#1083#1085#1103#1077#1084#1099#1081)
+      #1054#1073#1097#1080#1081'(Open)'
+      #1048#1089#1087#1086#1083#1085#1103#1077#1084#1099#1081'(ExecSQL)'
+      #1053#1072' '#1089#1090#1086#1088#1086#1085#1077' '#1089#1077#1088#1074#1077#1088#1072'(SQLCMD)')
     TabIndex = 0
     OnChange = TabControl1Change
     object GroupBox1: TGroupBox
@@ -115,6 +97,43 @@ object SQLExecForm: TSQLExecForm
       end
     end
   end
+  object Panel1: TPanel
+    Left = 0
+    Top = 236
+    Width = 537
+    Height = 229
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 1
+    object DBGrid1: TDBGrid
+      AlignWithMargins = True
+      Left = 3
+      Top = 3
+      Width = 531
+      Height = 223
+      Hint = #1056#1077#1079#1091#1083#1100#1090#1072#1090' SQL-'#1079#1072#1087#1088#1086#1089#1072
+      Align = alClient
+      DataSource = DModule.DataSource1
+      ParentShowHint = False
+      ReadOnly = True
+      ShowHint = True
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+    end
+    object Memo2: TMemo
+      AlignWithMargins = True
+      Left = 3
+      Top = 3
+      Width = 531
+      Height = 223
+      Align = alClient
+      TabOrder = 1
+    end
+  end
   object SaveDialog1: TSaveDialog
     DefaultExt = 'sql'
     FileName = 'untitled1'
@@ -123,7 +142,7 @@ object SQLExecForm: TSQLExecForm
       #1083#1099'(*.*)|*.*'
     InitialDir = 'querys'
     Left = 40
-    Top = 296
+    Top = 424
   end
   object OpenDialog1: TOpenDialog
     DefaultExt = 'sql'
@@ -132,6 +151,6 @@ object SQLExecForm: TSQLExecForm
       #1083#1099'(*.*)|*.*'
     InitialDir = 'querys'
     Left = 8
-    Top = 296
+    Top = 424
   end
 end

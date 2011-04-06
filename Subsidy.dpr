@@ -90,7 +90,6 @@ begin
           Application.Run;
           Exit;
         end;
-        
         Application.CreateForm(TForm1, Form1);
         Application.CreateForm(TAboutBox1, AboutBox1);
         Application.CreateForm(TForm29, Form29);
@@ -123,7 +122,6 @@ begin
         Application.CreateForm(TAboutBox, AboutBox);
         Application.CreateForm(TForm33, Form33);
         Application.CreateForm(TForm26, Form26);
-        //Application.CreateForm(TSQLExecForm, SQLExecForm);
         Application.CreateForm(TForm35, Form35);
         Application.CreateForm(TForm22, Form22);
         Application.CreateForm(TForm40, Form40);
@@ -142,11 +140,11 @@ begin
       ShowMessage('ѕроизошел сбой при попытке назначени€ директории дл€ временных баз: возможно данна€ директори€ не существует!');
     end;
   except
-    ShowMessage('ѕроизошел сбой при попытке соединени€ с сервером!' + #13 +
-      'ѕроверьте:' + #13 +
-      '1.—осто€ние сервера баз данных MSSQLServer: возможно он не установлен или не запущен;' + #13 +
-      '2.—осто€ние ODBC-соединени€ SQLSub с сервером: возможно оно отстутствует или неверно настроено;' + #13 +
-      '3.—осто€ние базы данных Subsidy: возможно файлы базы данных отсутствуют;' + #13 +
+    ShowMessage('ѕроизошел сбой при попытке соединени€ с сервером!'#13 +
+      'ѕроверьте:'#13#10 +
+      '1.—осто€ние сервера баз данных MSSQLServer: возможно он не установлен или не запущен;'#13#10 +
+      '2.—осто€ние ODBC-соединени€ SQLSub с сервером: возможно оно отстутствует или неверно настроено;'#13#10 +
+      '3.—осто€ние базы данных Subsidy: возможно файлы базы данных отсутствуют;'#13#10 +
       '4.—осто€ние сети(в случае сетевого соединени€): возможно нет сетевого доступа к серверу.');
     Application.CreateForm(TConnectionFrm, ConnectionFrm);
     ConnectionFrm.mode := mBug;
