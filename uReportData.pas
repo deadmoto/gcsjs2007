@@ -94,30 +94,30 @@ uses
 
 procedure TReportDataFrm.Button1Click(Sender: TObject);
 begin
-  //  Form1.ARepData:=allocmem(sizeof(PAdditionRepData));
+  //  MainForm.ARepData:=allocmem(sizeof(PAdditionRepData));
   if (Edit1.Text <> '') then
-    Form1.ARepData.Num1 := Edit1.Text;
+    MainForm.ARepData.Num1 := Edit1.Text;
   if (Edit2.Text <> '') then
-    Form1.ARepData.Num2 := Edit2.Text;
+    MainForm.ARepData.Num2 := Edit2.Text;
   if (Edit3.Text <> '') then
-    Form1.ARepData.toNum := Edit3.Text;
+    MainForm.ARepData.toNum := Edit3.Text;
   if (Edit4.Text <> '') then
-    Form1.ARepData.soluteNum := Edit4.Text;
+    MainForm.ARepData.soluteNum := Edit4.Text;
   if (Edit6.Text <> '') then
-    Form1.ARepData.zipCode := Edit6.Text;
+    MainForm.ARepData.zipCode := Edit6.Text;
   if (Edit7.Text <> '') then
-    Form1.ARepData.StartDate := Edit7.Text;
+    MainForm.ARepData.StartDate := Edit7.Text;
   if (Edit8.Text <> '') then
-    Form1.ARepData.sumBeg := Edit8.Text;
+    MainForm.ARepData.sumBeg := Edit8.Text;
 
   if CheckBox1.Checked = False then
     if (Edit5.Text <> '') then
-      Form1.ARepData.spec2 := Edit5.Text;
+      MainForm.ARepData.spec2 := Edit5.Text;
 
   if ReturnCheckedRow <> -1 then
-    Form1.ARepData.basetext := StringGrid1.Cells[1,ReturnCheckedRow];
+    MainForm.ARepData.basetext := StringGrid1.Cells[1,ReturnCheckedRow];
   
-  Form1.ARepData.insp := CheckBox1.Checked;
+  MainForm.ARepData.insp := CheckBox1.Checked;
   Close;
 end;
 

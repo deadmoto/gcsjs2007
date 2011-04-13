@@ -1,7 +1,9 @@
 unit service2;
 
 interface
-
+uses
+  Client;
+  
 function SelStr(n: integer): string;     //выбрать улицу
 function SelMng(n: integer): string;     //выбрать распорядителя
 function SelFnd(n: integer): string;     //выбрать фонд
@@ -29,6 +31,7 @@ function SelCert(n: integer): string;    //выбрать аттестацию
 function SelDist(n: integer): string;    //выбрать округ
 function SelBoss(n: integer): string;    //
 
+function ExistHouse(var n: integer; cl: TClient): boolean;//существует дом?
 implementation
 
 uses
@@ -61,7 +64,7 @@ begin
     SQL.Add('from mng');
     SQL.Add('where (id_mng = :id)and(id_dist=:dist)');
     ParamByName('id').AsInteger := n;
-    ParamByName('dist').AsInteger := Form1.dist;
+    ParamByName('dist').AsInteger := MainForm.dist;
     Open;
     Result := FieldByName('namemng').AsString;
     Close;
@@ -399,7 +402,7 @@ begin
       'from insp'#13#10 +
       'where (id_insp = :id)and(id_dist=:dist)';
     ParamByName('id').AsInteger := n;
-    ParamByName('dist').AsInteger := Form1.dist;
+    ParamByName('dist').AsInteger := MainForm.dist;
     Open;
     Result := FieldByName('nameinsp').AsString;
     Close;
@@ -438,7 +441,7 @@ end;
 
 function SelBoss(n: integer): string;
 begin
-  with DModule.Query2 do
+  with DModule.Query3 do
   begin
     Close;
     SQL.Text := 'SELECT boss '#13#10 +
@@ -451,5 +454,30 @@ begin
   end;
 end;
 
+function ExistHouse(var n: integer; cl: TClient): boolean;//существует дом?
+begin
+  with DModule.Query1 do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('select id_house');
+    SQL.Add('from house');
+    SQL.Add('where (id_street = :str)and(nhouse = :nh)and(corp=:cp)');
+    SQL.Add('and(id_dist=:dist)');
+    ParamByName('str').AsInteger := Cl.Data.str;
+    ParamByName('nh').AsString := Cl.Data.nh;
+    ParamByName('cp').AsString := Cl.Data.corp;
+    ParamByName('dist').AsInteger := MainForm.dist;
+    Open;
+    if IsEmpty then
+      Result := False
+    else
+    begin
+      n := FieldByName('id_house').AsInteger;
+      Result := True;
+    end;
+    Close;
+  end;
+end;
 
 end.

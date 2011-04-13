@@ -151,7 +151,7 @@ begin
       SQL.Add('select id_' + nam);
       SQL.Add('from ' + nam);
       SQL.Add('where (id_' + nam + '=:id)and(id_dist=:idd)');
-      ParamByName('idd').AsInteger := Form1.dist;
+      ParamByName('idd').AsInteger := MainForm.dist;
       ParamByName('id').AsInteger  := StrToInt(Edit3.Text);
       Open;
       if IsEmpty then
@@ -161,7 +161,7 @@ begin
         SQL.Add('select id_' + nam);
         SQL.Add('from ' + nam);
         SQL.Add('where (name' + nam + '=:name)and(id_dist=:idd)');
-        ParamByName('idd').AsInteger := Form1.dist;
+        ParamByName('idd').AsInteger := MainForm.dist;
         ParamByName('name').AsString := Edit1.Text;
         Open;
         if IsEmpty then
@@ -184,15 +184,15 @@ begin
           SQL.Add('values (:idd,Convert(smalldatetime,:d,104), :id, :name, :tarif, :norm)')
         else
           SQL.Add('values (:idd,Convert(smalldatetime,:d,104), :id, :name, :tarif)');
-        ParamByName('idd').AsInteger := Form1.dist;
-        ParamByName('d').AsString := Form1.rdt;
+        ParamByName('idd').AsInteger := MainForm.dist;
+        ParamByName('d').AsString := MainForm.rdt;
         ParamByName('id').AsInteger := StrToInt(Edit3.Text);
         ParamByName('name').AsString := Edit1.Text;
         ParamByName('tarif').AsFloat := StrToFloat(Edit2.Text);
         if isNorm then
           ParamByName('norm').AsFloat := StrToFloat(Edit4.Text);
         ExecSQL;
-        FillTarif(Form1.bpath, nam, Form1.rdt, Form1.dist, Form1.codedbf);
+        FillTarif(MainForm.bpath, nam, MainForm.rdt, MainForm.dist, MainForm.codedbf);
         oldid := StrToInt(Edit3.Text);
       end
       else
@@ -229,7 +229,7 @@ begin
       SQL.Add('select id_' + nam);
       SQL.Add('from ' + nam);
       SQL.Add('where (id_' + nam + '=:id)and(id_dist=:idd)');
-      ParamByName('idd').AsInteger := Form1.dist;
+      ParamByName('idd').AsInteger := MainForm.dist;
       ParamByName('id').AsInteger  := StrToInt(Edit3.Text);
       Open;
       if IsEmpty or not IsEmpty and (FieldByName('id_' + nam).AsInteger = oldid) then
@@ -243,9 +243,9 @@ begin
           SQL.Add('select id_' + nam);
           SQL.Add('from ' + nam);
           SQL.Add('where (id_' + nam + '=:id)and(id_dist=:idd)and(sdate=Convert(smalldatetime,:d,104))');
-          ParamByName('idd').AsInteger := Form1.dist;
+          ParamByName('idd').AsInteger := MainForm.dist;
           ParamByName('id').AsInteger := StrToInt(Edit3.Text);
-          ParamByName('d').AsString := Form1.rdt;
+          ParamByName('d').AsString := MainForm.rdt;
           Open;
           if IsEmpty then
             flag := False
@@ -257,7 +257,7 @@ begin
         SQL.Add('select id_' + nam);
         SQL.Add('from ' + nam);
         SQL.Add('where (name' + nam + ' = :name)and(id_dist=:idd)');
-        ParamByName('idd').AsInteger := Form1.dist;
+        ParamByName('idd').AsInteger := MainForm.dist;
         ParamByName('name').AsString := Edit1.Text;
         Open;
         if IsEmpty or not IsEmpty and
@@ -285,14 +285,14 @@ begin
             SQL.Add('where (id_' + nam + ' = :id)and(sdate=Convert(smalldatetime,:d,104))and(id_dist=:idd)');
             ParamByName('id').AsInteger := oldid;
           end;
-          ParamByName('idd').AsInteger := Form1.dist;
-          ParamByName('d').AsString := Form1.rdt;
+          ParamByName('idd').AsInteger := MainForm.dist;
+          ParamByName('d').AsString := MainForm.rdt;
           ParamByName('name').AsString := Edit1.Text;
           ParamByName('tarif').AsFloat := StrToFloat(Edit2.Text);
           if isNorm then
             ParamByName('norm').AsFloat := StrToFloat(Edit4.Text);
           ExecSQL;
-          FillTarif(Form1.bpath, nam, Form1.rdt, Form1.dist, Form1.codedbf);
+          FillTarif(MainForm.bpath, nam, MainForm.rdt, MainForm.dist, MainForm.codedbf);
           oldid := StrToInt(Edit3.Text);
         end
         else
@@ -325,11 +325,11 @@ begin
     SQL.Clear;
     SQL.Add('delete from ' + nam);
     SQL.Add('where (id_' + nam + '=:id)and(sdate=Convert(smalldatetime,:d,104))and(id_dist=:idd)');
-    ParamByName('idd').AsInteger := Form1.dist;
-    ParamByName('d').AsString := Form1.rdt;
+    ParamByName('idd').AsInteger := MainForm.dist;
+    ParamByName('d').AsString := MainForm.rdt;
     ParamByName('id').AsInteger := oldid;
     ExecSQL;
-    FillTarif(Form1.bpath, nam, Form1.rdt, Form1.dist, Form1.codedbf);
+    FillTarif(MainForm.bpath, nam, MainForm.rdt, MainForm.dist, MainForm.codedbf);
   end;
   SetDefault;
 end;

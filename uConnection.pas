@@ -47,12 +47,12 @@ procedure TConnectionFrm.Button1Click(Sender: TObject);
 var
   tt: TMyThread;
 begin
-//  if trim(LabeledEdit2.Text) = '' then
-//  begin
-//    MessageDlg('Error! Password can not empty!', mtError, [mbOK], 0);
-//    exit;
-//  end;
-
+  if trim(LabeledEdit2.Text) = '' then
+  begin
+    MessageDlg('Error! Password can not empty!', mtError, [mbOK], 0);
+    Exit;
+  end;
+  
   WriteRegProperty('User', LabeledEdit1.Text);
   WriteRegProperty('Password', GenMD5Password(LabeledEdit2.Text));
   WriteRegProperty('Server', ComboBox1.Text);
@@ -74,7 +74,14 @@ begin
   end
   else
   begin
-    Form1.curServer := ComboBox1.Text;
+
+    if GetConnectionPass(ReadRegProperty('Password')) <> GetConnectionPass(GenMD5Password(LabeledEdit2.Text)) then
+    begin
+      MessageDlg('Error! Неверный пароль администратора!', mtError, [mbOK], 0);
+      Exit;
+    end;
+
+    MainForm.curServer := ComboBox1.Text;
     DModule.Database1.Connected := False;
 
     if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy', ReadRegProperty('User'), ReadRegProperty('Password'), 'База данных программы Subsidy') then
@@ -82,11 +89,11 @@ begin
 
     DModule.Database1.Connected := True;
 
-    Form1.OnCreate(self);
-    Form1.LoginMode := lNone;
-    Form1.Show;
-    Form1.Update;
-    Form1.Reload;
+    MainForm.OnCreate(self);
+    MainForm.LoginMode := lNone;
+    MainForm.Show;
+    MainForm.Update;
+    MainForm.Reload;
 
     Close;
   end;

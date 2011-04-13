@@ -3,31 +3,42 @@ unit shtarif;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Grids, StdCtrls, ExtCtrls;
+  Classes,
+  Controls,
+  DateUtils,
+  Dialogs,
+  ExtCtrls,
+  Forms,
+  Graphics,
+  Grids,
+  Messages,
+  StdCtrls,
+  SysUtils,
+  Variants,
+  Windows;
 
 type
   TForm37 = class(TForm)
-    Panel1: TPanel;
+    Panel1:      TPanel;
     StringGrid1: TStringGrid;
-    FlowPanel1: TFlowPanel;
-    Button2: TButton;
-    Button1: TButton;
+    FlowPanel1:  TFlowPanel;
+    Button2:     TButton;
+    Button1:     TButton;
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
-    procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
-      Rect: TRect; State: TGridDrawState);
+    procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
     procedure StringGrid1DblClick(Sender: TObject);
+    procedure StringGrid1KeyPress(Sender: TObject; var Key: char);
   private
     { Private declarations }
     procedure SetDefault;
   public
     { Public declarations }
-    nam: string;//название услуги
+    nam:   string;//название услуги
     namet: string;//название текущего тарифа
-    ac: boolean;//признак совершения действия: 0 - не было действия, 1 - совершено
+    ac:    boolean;//признак совершения действия: 0 - не было действия, 1 - совершено
   end;
 
 var
@@ -35,7 +46,11 @@ var
 
 implementation
 
-uses datamodule, service, MyTypes;
+uses
+  datamodule,
+  main,
+  service,
+  MyTypes;
 
 {$R *.dfm}
 
@@ -46,7 +61,7 @@ procedure TForm37.FormShow(Sender: TObject);
   появляются значения 1 строки.
 *******************************************************************************}
 begin
-  ac := false;
+  ac := False;
   SetDefault;
 end;
 
@@ -58,8 +73,8 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from "cur'+nam+'.dbf" sbros');
-    SQL.Add('order by sbros.id_'+nam);
+    SQL.Add('select * from "cur' + nam + '.dbf" sbros');
+    SQL.Add('order by sbros.id_' + nam);
     Open;
   end;
 
@@ -80,10 +95,28 @@ begin
   Button1.OnClick(Self);
 end;
 
-procedure TForm37.StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
-  Rect: TRect; State: TGridDrawState);
+procedure TForm37.StringGrid1DrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
 begin
   SGDrawCell(Sender, ACol, ARow, Rect, State);
+end;
+
+procedure TForm37.StringGrid1KeyPress(Sender: TObject; var Key: char);
+var
+  s: word;
+begin
+  s := MilliSecondsBetween(Time, LastTime);
+  if (s > 1000) then//новый поиск
+    searchbuf := Key
+  else
+  begin
+    Dec(ItemIndex);
+    searchbuf := searchbuf + Key;
+  end;
+  LastTime  := Time;
+  ItemIndex := SG_Find(StringGrid1, searchbuf, 2);
+  if (ItemIndex <> -1) then
+    StringGrid1.Row := ItemIndex;
+
 end;
 
 procedure TForm37.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -112,7 +145,7 @@ procedure TForm37.Button1Click(Sender: TObject);
 *******************************************************************************}
 begin
   namet := StringGrid1.Cells[1, StringGrid1.Row];
-  ac := true;
+  ac := True;
   Close;
 end;
 

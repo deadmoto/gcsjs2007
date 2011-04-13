@@ -4,7 +4,7 @@ uses
   Forms,
   Dialogs,
   Windows,
-  main in 'main.pas' {Form1},
+  main in 'main.pas' {MainForm},
   datamodule in 'datamodule.pas' {DModule: TDModule},
   sclient in 'sclient.pas' {EditClForm},
   inspector in 'inspector.pas' {Form3},
@@ -90,7 +90,7 @@ begin
           Application.Run;
           Exit;
         end;
-        Application.CreateForm(TForm1, Form1);
+        Application.CreateForm(TMainForm, MainForm);
         Application.CreateForm(TAboutBox1, AboutBox1);
         Application.CreateForm(TForm29, Form29);
         Application.CreateForm(TForm38, Form38);
@@ -101,9 +101,9 @@ begin
         Application.CreateForm(TAboutBox, AboutBox);
         Application.CreateForm(TMergeForm, MergeForm);
         Application.CreateForm(TSelectDistFrm, SelectDistFrm);
-        Form1.Show;
-        Form1.Update;
-        Form1.Reload;
+        MainForm.Show;
+        MainForm.Update;
+        MainForm.Reload;
         Application.CreateForm(TEditClForm, EditClForm);
         Application.CreateForm(TForm3, Form3);
         Application.CreateForm(TForm4, Form4);

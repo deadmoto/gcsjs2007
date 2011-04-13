@@ -132,6 +132,7 @@ object SQLExecForm: TSQLExecForm
       Height = 223
       Align = alClient
       TabOrder = 1
+      Visible = False
     end
   end
   object SaveDialog1: TSaveDialog

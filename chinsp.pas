@@ -51,14 +51,14 @@ begin
     SQL.Add('where (status = :st) and (id_dist = :id)');
     SQL.Add('order by nameinsp');
     ParamByName('st').AsInteger := 1;//только активные инспекторы
-    ParamByName('id').AsInteger := Form1.dist;
+    ParamByName('id').AsInteger := MainForm.dist;
     Open;
     First;
     while not EOF do begin
       SetLength(insp, Length(insp)+1);
       ComboBox1.Items.Add(FieldByName('nameinsp').AsString);
       insp[l] := FieldByName('id_insp').AsInteger;
-      if insp[l]=Form1.insp then
+      if insp[l]=MainForm.insp then
         ComboBox1.ItemIndex := l
       else
         ComboBox1.ItemIndex := 0;
@@ -83,7 +83,6 @@ end;
 
 procedure TForm17.Button1Click(Sender: TObject);
 var
-  i: integer;
   tmp_pass: string;
 begin
   with DModule.Query1 do begin
@@ -98,11 +97,11 @@ begin
 
   if GenMD5Password(LabeledEdit1.Text) = tmp_pass then
   begin
-    Form1.insp := insp[ComboBox1.ItemIndex];
+    MainForm.insp := insp[ComboBox1.ItemIndex];
     ac := true;
     nameinsp := ComboBox1.Items[ComboBox1.ItemIndex];
-    Form1.Statusbar1.Panels[1].Text := 'Инспектор: '+ ComboBox1.Items[ComboBox1.ItemIndex];
-    Form1.LoginMode := lInsp;
+    MainForm.Statusbar1.Panels[1].Text := 'Инспектор: '+ ComboBox1.Items[ComboBox1.ItemIndex];
+    MainForm.LoginMode := lInsp;
     Close;
   end
   else

@@ -47,7 +47,7 @@ object Form26: TForm26
       Width = 156
       Height = 21
       DropDownCount = 12
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 0
       OnChange = ComboBox2Change
       OnExit = ComboBox2Change
@@ -57,7 +57,7 @@ object Form26: TForm26
       Top = 36
       Width = 68
       Height = 21
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 1
       Text = '2009'
       OnExit = ComboBox1Exit

@@ -6,6 +6,7 @@ uses
   Classes,
   ComCtrls,
   Controls,
+  DateUtils,
   Dialogs,
   ExtCtrls,
   Forms,
@@ -34,10 +35,10 @@ type
     procedure FormShow(Sender: TObject);
     procedure SGHSelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
     procedure SGHDblClick(Sender: TObject);
+    procedure SGHKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     h: array of integer;//список домов
-    //    procedure ClearSG;
     function NewPlace(id: integer; s: string): integer;
     procedure InsertH(i1, i2: integer);
     procedure DelRow(i: integer);
@@ -140,7 +141,7 @@ begin
     SQL.Add('house.id_street=strt.id_street');
     SQL.Add('where (house.id_house=:h)and(house.id_dist=:idd)');
     ParamByName('h').AsInteger := id;
-    ParamByName('idd').AsInteger := Form1.dist;
+    ParamByName('idd').AsInteger := MainForm.dist;
     Open;
     house := id;
     s := GenAddr(FieldByName('namestreet').AsString, FieldByName('nhouse').AsString,
@@ -168,7 +169,7 @@ begin
     SQL.Add('house.id_street=strt.id_street');
     SQL.Add('where (house.id_house=:h)and(house.id_dist=:idd)');
     ParamByName('h').AsInteger := id;
-    ParamByName('idd').AsInteger := Form1.dist;
+    ParamByName('idd').AsInteger := MainForm.dist;
     Open;
     house := id;
     s := GenAddr(FieldByName('namestreet').AsString, FieldByName('nhouse').AsString,
@@ -255,7 +256,7 @@ begin
     SQL.Add('on house.id_street=strt.id_street');
     SQL.Add('where id_dist=:idd');
     SQL.Add('order by namestreet, nhouse, corp');
-    ParamByName('idd').AsInteger := Form1.dist;
+    ParamByName('idd').AsInteger := MainForm.dist;
     Open;
     First;
 
@@ -287,19 +288,24 @@ begin
   end;
 end;
 
-{procedure TForm30.ClearSG;
+procedure TForm30.SGHKeyPress(Sender: TObject; var Key: Char);
+var
+  s: word;
 begin
-  SetLength(h, 0);
-  with SGH do
+  s := MilliSecondsBetween(Time, LastTime);
+  if (s > 1000) then//новый поиск
+    searchbuf := Key
+  else
   begin
-    RowCount := 1;
-    Cells[0, 0] := '';
-    Cells[1, 0] := '';
-    Cells[2, 0] := '';
-    Cells[3, 0] := '';
+    Dec(ItemIndex);
+    searchbuf := searchbuf + Key;
   end;
+  LastTime  := Time;
+  ItemIndex := SG_Find(SGH, searchbuf, 0);
+  if (ItemIndex <> -1) then
+    SGH.Row := ItemIndex;
 end;
-}
+
 function TForm30.NewPlace(id: integer; s: string): integer;
 {
   Ќовое место дл€ записи S в StringGrid.

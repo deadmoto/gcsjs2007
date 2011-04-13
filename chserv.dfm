@@ -62,7 +62,7 @@ object Form29: TForm29
       Height = 21
       Color = clBtnFace
       Enabled = False
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 0
       OnChange = ComboBox4Change
       OnExit = ComboBox4Change
@@ -74,7 +74,7 @@ object Form29: TForm29
       Height = 21
       Color = clBtnFace
       Enabled = False
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 1
       OnChange = ComboBox5Change
       OnExit = ComboBox5Change
@@ -125,7 +125,7 @@ object Form29: TForm29
       Top = 24
       Width = 209
       Height = 21
-      ItemHeight = 13
+      ItemHeight = 0
       MaxLength = 40
       TabOrder = 0
       OnChange = ComboBox1Change
@@ -219,7 +219,7 @@ object Form29: TForm29
       Height = 21
       Color = clBtnFace
       Enabled = False
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 0
       OnChange = ComboBox2Change
       OnExit = ComboBox2Change
@@ -231,7 +231,7 @@ object Form29: TForm29
       Height = 21
       Color = clBtnFace
       Enabled = False
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 1
       OnChange = ComboBox3Change
       OnExit = ComboBox3Change
@@ -243,7 +243,7 @@ object Form29: TForm29
       Height = 21
       Color = clBtnFace
       Enabled = False
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 2
       OnChange = ComboBox6Change
       OnExit = ComboBox6Change

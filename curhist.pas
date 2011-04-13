@@ -3,20 +3,20 @@ unit curhist;
 interface
 
 uses
-  Windows,
-  Messages,
-  SysUtils,
-  Variants,
   Classes,
-  Graphics,
-  Controls,
-  Forms,
-  Dialogs,
-  Grids,
-  StdCtrls,
   Client,
   ComCtrls,
-  ExtCtrls;
+  Controls,
+  Dialogs,
+  ExtCtrls,
+  Forms,
+  Graphics,
+  Grids,
+  Messages,
+  StdCtrls,
+  SysUtils,
+  Variants,
+  Windows;
 
 type
   TCl = record
@@ -41,9 +41,9 @@ type
     procedure Clear;
   public
     { Public declarations }
-    client: integer;
-    fio:    string;
-    status: integer;
+    client:  integer;
+    fio:     string;
+    status:  integer;
     changes: boolean;
     procedure ModSub(n: integer; s: real);
   end;
@@ -59,15 +59,13 @@ uses
   Math,
   service,
   main,
-  dateutils, MyTypes;
+  dateutils,
+  MyTypes;
 
 {$R *.dfm}
 
 var
   cl: TCl;
-  searchbuf: string;//содержит набор букв, который используется для поиска фио клиента
-  LastTime: TTime;//время последнего нажатия клавиши
-  ItemIndex: integer;//используются для поиска фио клиента
 
 procedure TForm18.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
@@ -123,8 +121,8 @@ begin
     SQL.Add('where (sub.sdate=convert(smalldatetime,:d,104)) and (sub.service=0)');
     SQL.Add('and (cl.id_dist=:idd)and(sub.stop<2)');
     SQL.Add('order by cl.fio');
-    ParamByName('d').AsString := Form1.rdt;
-    ParamByName('idd').AsInteger := Form1.dist;
+    ParamByName('d').AsString := MainForm.rdt;
+    ParamByName('idd').AsInteger := MainForm.dist;
     Open;
     i := 0;
     if not EOF then
@@ -146,8 +144,8 @@ begin
       SQL.Add('and sub.service=sluj.service inner join cl on cl.regn=sub.regn');
       SQL.Add('where (sub.sdate=convert(smalldatetime,:d,104))and(cl.id_dist=:idd)and(sub.stop<2)');
       SQL.Add('group by sub.regn');
-      ParamByName('d').AsString := Form1.rdt;
-      ParamByName('idd').AsInteger := Form1.dist;
+      ParamByName('d').AsString := MainForm.rdt;
+      ParamByName('idd').AsInteger := MainForm.dist;
       Open;
       while not EOF do
       begin
@@ -182,16 +180,6 @@ end;
 
 procedure TForm18.FormCreate(Sender: TObject);
 begin
-  {with SGH do
-  begin
-    colcount := 3;
-    ColWidths[0] := 240;
-    ColWidths[1] := 70;
-    ColWidths[2] := 70;
-    SGH.Cells[0, 0] := 'ФИО';
-    SGH.Cells[1, 0] := 'Рег.номер';
-    SGH.Cells[2, 0] := 'Субсидия';
-  end;}
   FormerStringGrid(SGH, TStringArray.Create('ФИО', 'Рег.номер', 'Субсидия'),
     TIntArray.Create(240, 70, 70), 2);
 
@@ -246,7 +234,7 @@ begin
       searchbuf := searchbuf + Key;
     end;
     LastTime  := Time;
-    ItemIndex := Form1.SG_FindCl(SGH, searchbuf);
+    ItemIndex := SG_Find(SGH, searchbuf, 0);
     if (ItemIndex <> -1) then
       SGH.Row := ItemIndex;
   end;

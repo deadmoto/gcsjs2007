@@ -306,7 +306,7 @@ begin
     SQL.Add('from mng');
     SQL.Add('where id_dist = :dist');
     SQL.Add('order by namemng');
-    ParamByName('dist').AsInteger := Form1.dist;
+    ParamByName('dist').AsInteger := MainForm.dist;
     Open;
     First;
     while not EOF do begin
@@ -427,9 +427,9 @@ begin
     Button1.Enabled := false
   else
     Button1.Enabled := true;
-  form1.qr.SQL := '';
-  SetLength(Form1.qr.parname,0);
-  SetLength(Form1.qr.parval,0);
+  MainForm.qr.SQL := '';
+  SetLength(MainForm.qr.parname,0);
+  SetLength(MainForm.qr.parval,0);
 end;
 
 procedure TForm29.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -554,8 +554,8 @@ begin
           ParamByName('str').AsInteger := str[combobox1.ItemIndex];
           ParamByName('n').AsString := Edit2.Text;
           ParamByName('cp').AsString := Edit3.Text;
-          ParamByName('d').AsString := Form1.rdt;
-          ParamByName('idd').AsInteger := Form1.dist;
+          ParamByName('d').AsString := MainForm.rdt;
+          ParamByName('idd').AsInteger := MainForm.dist;
           ExecSQL;
           Close;
           SQL.Clear;
@@ -568,7 +568,7 @@ begin
           ParamByName('str').AsInteger := str[combobox1.ItemIndex];
           ParamByName('n').AsString := Edit2.Text;
           ParamByName('cp').AsString := Edit3.Text;
-          ParamByName('idd').AsInteger := Form1.dist;
+          ParamByName('idd').AsInteger := MainForm.dist;
           if CheckBox1.Checked then
             ParamByName('b').AsInteger := 1
           else
@@ -583,7 +583,7 @@ begin
           ParamByName('str').AsInteger := str[combobox1.ItemIndex];
           ParamByName('n').AsString := Edit2.Text;
           ParamByName('cp').AsString := Edit3.Text;
-          ParamByName('idd').AsInteger := Form1.dist;
+          ParamByName('idd').AsInteger := MainForm.dist;
           ParamByName('mng').AsInteger := mng[combobox2.ItemIndex];
           ParamByName('fnd').AsInteger := fnd[combobox3.ItemIndex];
           if CheckBox1.Checked then
@@ -604,7 +604,7 @@ begin
           ParamByName('str').AsInteger := str[combobox1.ItemIndex];
           ParamByName('n').AsString := Edit2.Text;
           ParamByName('cp').AsString := Edit3.Text;
-          ParamByName('idd').AsInteger := Form1.dist;
+          ParamByName('idd').AsInteger := MainForm.dist;
           if CheckBox1.Checked then
             ParamByName('b').AsInteger := 1
           else
@@ -618,7 +618,7 @@ begin
           ParamByName('str').AsInteger := str[combobox1.ItemIndex];
           ParamByName('n').AsString := Edit2.Text;
           ParamByName('cp').AsString := Edit3.Text;
-          ParamByName('idd').AsInteger := Form1.dist;
+          ParamByName('idd').AsInteger := MainForm.dist;
           if CheckBox1.Checked then
             ParamByName('b').AsInteger := 1
           else
@@ -636,12 +636,12 @@ begin
           SQL.Add('where (id_street=:str)and(nhouse=:n)and(corp=:cp)');
           SQL.Add('and(id_dist=:idd))');
           ParamByName('id').AsInteger := tarifs[serv[combobox4.ItemIndex]].id[Combobox5.ItemIndex];
-          ParamByName('s').AsString := Form1.rdt;
+          ParamByName('s').AsString := MainForm.rdt;
           ParamByName('serv').AsInteger := serv[combobox4.ItemIndex];
           ParamByName('str').AsInteger := str[combobox1.ItemIndex];
           ParamByName('n').AsString := Edit2.Text;
           ParamByName('cp').AsString := Edit3.Text;
-          ParamByName('idd').AsInteger := Form1.dist;
+          ParamByName('idd').AsInteger := MainForm.dist;
           ExecSQL;
           Close;
         end;
@@ -654,7 +654,7 @@ begin
           SQL.Add('and id_dist=:idd)');
           ParamByName('dc').AsDateTime := Date;
           ParamByName('mng').AsInteger := mng[combobox2.ItemIndex];
-          ParamByName('idd').AsInteger := Form1.dist;
+          ParamByName('idd').AsInteger := MainForm.dist;
           if CheckBox1.Checked then
             ParamByName('b').AsInteger := 1
           else
@@ -666,31 +666,31 @@ begin
       end;
       DModule.Database1.Commit;
       ShowMessage('Все в порядке');
-      Form1.qr.SQL := 'select regn from cl where(id_street=:str)and(nhouse=:n)and(corp=:cp)'+
+      MainForm.qr.SQL := 'select regn from cl where(id_street=:str)and(nhouse=:n)and(corp=:cp)'+
                       'and(id_dist=:idd)';
 
-      SetLength(Form1.qr.parname,4);SetLength(Form1.qr.parval,4);
-      Form1.qr.parname[0] := 'str';Form1.qr.parval[0] := IntToStr(str[combobox1.ItemIndex]);
-      Form1.qr.parname[1] := 'n';  Form1.qr.parval[1] := Edit2.Text;
-      Form1.qr.parname[2] := 'cp'; Form1.qr.parval[2] := Edit3.Text;
-      Form1.qr.parname[3] := 'idd'; Form1.qr.parval[3] := IntToStr(Form1.dist);
+      SetLength(MainForm.qr.parname,4);SetLength(MainForm.qr.parval,4);
+      MainForm.qr.parname[0] := 'str';MainForm.qr.parval[0] := IntToStr(str[combobox1.ItemIndex]);
+      MainForm.qr.parname[1] := 'n';  MainForm.qr.parval[1] := Edit2.Text;
+      MainForm.qr.parname[2] := 'cp'; MainForm.qr.parval[2] := Edit3.Text;
+      MainForm.qr.parname[3] := 'idd'; MainForm.qr.parval[3] := IntToStr(MainForm.dist);
 //      ac := true;
       if CheckBox4.Checked then
       begin
-         Form1.qr.SQL := 'select distinct regn from hist where(id_mng=:mng)'+
+         MainForm.qr.SQL := 'select distinct regn from hist where(id_mng=:mng)'+
                       'and(id_dist=:idd)';
 
-         SetLength(Form1.qr.parname,1);SetLength(Form1.qr.parval,1);
-         Form1.qr.parname[0] := 'mng';Form1.qr.parval[0] := IntToStr(str[combobox2.ItemIndex]);
+         SetLength(MainForm.qr.parname,1);SetLength(MainForm.qr.parval,1);
+         MainForm.qr.parname[0] := 'mng';MainForm.qr.parval[0] := IntToStr(str[combobox2.ItemIndex]);
 
       end;
-      Form1.RecalcSelectedRows;
+      MainForm.RecalcSelectedRows;
     except
       DModule.Database1.Rollback;
       ShowMessage('Операция завершилась неудачей!');
-      form1.qr.SQL := '';
-      SetLength(Form1.qr.parname,0);
-      SetLength(Form1.qr.parval,0);
+      MainForm.qr.SQL := '';
+      SetLength(MainForm.qr.parname,0);
+      SetLength(MainForm.qr.parval,0);
 
     end;
   end;
@@ -700,9 +700,9 @@ procedure TForm29.Button2Click(Sender: TObject);
 begin
   DModule.Query1.Close;
   ac := false;
-  form1.qr.SQL := '';
-  SetLength(Form1.qr.parname,0);
-  SetLength(Form1.qr.parval,0);
+  MainForm.qr.SQL := '';
+  SetLength(MainForm.qr.parname,0);
+  SetLength(MainForm.qr.parval,0);
   Close;
 end;
 
@@ -728,7 +728,7 @@ begin
         ParamByName('str').AsInteger := str[Combobox1.ItemIndex];
         ParamByName('numb').AsString := Edit2.Text;
         ParamByName('cp').AsString := Edit3.Text;
-        ParamByName('dist').AsInteger := Form1.dist;
+        ParamByName('dist').AsInteger := MainForm.dist;
         Open;
         if not eof then begin
           b :=FieldByName('boiler').AsInteger;
@@ -779,7 +779,7 @@ begin
         ParamByName('str').AsInteger := str[Combobox1.ItemIndex];
         ParamByName('numb').AsString := Edit2.Text;
         ParamByName('cp').AsString := Edit3.Text;
-        ParamByName('dist').AsInteger := Form1.dist;
+        ParamByName('dist').AsInteger := MainForm.dist;
         Open;
         if not eof then begin
           b :=FieldByName('boiler').AsInteger;

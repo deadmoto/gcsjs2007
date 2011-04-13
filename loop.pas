@@ -160,7 +160,7 @@ begin
       SQL.Add('where (regn=:r)and(sdate=CONVERT(smalldatetime,:s,104))');
       SQL.Add('and(service=:serv)');
       ParamByName('r').AsInteger := Form18.client;
-      ParamByName('s').AsString := Form1.rdt;
+      ParamByName('s').AsString := MainForm.rdt;
       ParamByName('serv').AsInteger := i;
       Open;
       If IsEmpty or not IsEmpty and
@@ -182,7 +182,7 @@ begin
           SQL.Add('where (regn=:r)and(sdate=CONVERT(smalldatetime,:s,104))');
           SQL.Add('and(service=:serv)');
         end;
-        ParamByName('s').AsString := Form1.rdt;
+        ParamByName('s').AsString := MainForm.rdt;
         ParamByName('r').AsInteger := Form18.client;
         ParamByName('fact').AsInteger := isFact;
         ParamByName('serv').AsInteger := i;
@@ -293,7 +293,7 @@ begin
     SQL.Add('and sub.service=sluj.service and sub.sdate=sluj.sdate');
     SQL.Add('where (sub.regn=:id)and(sub.sdate=convert(smalldatetime,:d,104))');
     ParamByName('id').AsInteger := Form18.client;
-    ParamByName('d').AsString := Form1.rdt;
+    ParamByName('d').AsString := MainForm.rdt;
     Open;
     while not eof do
     begin

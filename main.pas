@@ -28,7 +28,7 @@ type
 
   TLoginMode = (lNone, lInsp, lAdmin);
 
-  TForm1 = class(TForm)
+  TMainForm = class(TForm)
     StatusBar1:   TStatusBar;
     ImageList1:   TImageList;
     ImageList2:   TImageList;
@@ -179,6 +179,7 @@ type
     aFactSumRpt: TAction;
     aChangeAdminPasswd: TAction;
     aInformKarta: TAction;
+    aCheckHouse: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SGClDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
@@ -277,6 +278,7 @@ type
     procedure aFactSumRptExecute(Sender: TObject);
     procedure aChangeAdminPasswdExecute(Sender: TObject);
     procedure aInformKartaExecute(Sender: TObject);
+    procedure aCheckHouseExecute(Sender: TObject);
   private
     FShaderForm: TForm;
     ccl, acl:     integer;//количество всех и активных клиентов в базе
@@ -337,11 +339,10 @@ type
     function GenAddr(s, n, c, a: string): string;
     function GetStatus(b, e: TDate): integer;
     function CheckP2: bool;
-    function SG_FindCl(SG: TStringGrid; s: string): integer;
   end;
 
 var
-  Form1:     TForm1;
+  MainForm:     TMainForm;
   searchbuf: string; //содержит набор букв, который используется для поиска фио клиента
   LastTime:  TTime;  //время последнего нажатия клавиши
   ItemIndex: integer;//используются для поиска фио клиента
@@ -360,7 +361,7 @@ uses
 {$R *.dfm}
 {$I Revision.inc}
 
-procedure TForm1.WMEnable(var Message: TWMEnable);
+procedure TMainForm.WMEnable(var Message: TWMEnable);
 begin
   inherited;
   if Message.Enabled then
@@ -369,7 +370,7 @@ begin
     FShaderForm:= TShadeForm.Execute(Self);
 end;
 
-procedure TForm1.SetTarifs;
+procedure TMainForm.SetTarifs;
 begin
   with DModule do
   begin
@@ -417,7 +418,7 @@ begin
   end;
 end;
 
-function TForm1.CheckP1: bool;
+function TMainForm.CheckP1: bool;
 {*******************************************************************************
     Функция CheckP1 проверяет соответствует ли текущий месяц условиям, необходимым
   для формирования субсидий.
@@ -437,7 +438,7 @@ begin
     Result := False;
 end;
 
-function TForm1.CheckP2: bool;
+function TMainForm.CheckP2: bool;
 {*******************************************************************************
     Функция CheckP2 проверяет соответствует ли текущий отчетный период условиям,
   необходимым для изменения справочников и любых других форм, на которых возможны
@@ -456,12 +457,12 @@ begin
     Result := False;
 end;
 
-procedure TForm1.aAboutExecute(Sender: TObject);
+procedure TMainForm.aAboutExecute(Sender: TObject);
 begin
   AboutBox.ShowModal;
 end;
 
-procedure TForm1.aChangeAdminPasswdExecute(Sender: TObject);
+procedure TMainForm.aChangeAdminPasswdExecute(Sender: TObject);
 var
   old_passwd, new_passwd: String;
 begin
@@ -497,7 +498,152 @@ begin
   end;
 end;
 
-procedure TForm1.aClAddExecute(Sender: TObject);
+procedure TMainForm.aCheckHouseExecute(Sender: TObject);
+var
+  C:  TClient;
+  i, j, cnt, n, maxid: integer;
+  pr: TAboutBox1;
+  t, st: array of integer;
+  fix: boolean;
+  fixHouses: TStringList;
+  stringStrt: string;
+begin
+  fix := False;
+  if LoginMode = lAdmin then
+    if MessageDlg('Добавлять дома автоматически?', mtConfirmation, [mbYes, mbNo],0) = mrYes then
+      fix := True;
+  
+  if (Length(cl) <> 0) then
+  begin
+    fixHouses := TStringList.Create;
+    if CheckP1 then
+    begin//расчет за текущий месяц
+      pr := TAboutBox1.Create(Application);
+      pr.Label1.Caption := '';
+      pr.Label2.Caption := 'Обработано записей:';
+      pr.Label3.Caption := '';
+      pr.Show;
+      pr.Update;
+      SendMessage(pr.Handle, wm_paint, 0, 0);
+      pr.ProgressBar1.Step := 1;
+
+      cnt := 0;
+      try
+        DModule.Database1.StartTransaction;
+        with DModule.Query1 do
+        begin
+          Close;
+          SQL.Clear;
+          SQL.Add('execute getncl :idd,:nd');
+          ParamByName('idd').AsInteger := dist;
+          ParamByName('nd').AsString := rdt;
+          Open;
+          if not EOF then
+          begin
+            pr.ProgressBar1.Max := RecordCount;
+            SetLength(t, RecordCount);
+            SetLength(st, RecordCount);
+            for i := 0 to Length(t) - 1 do
+            begin
+              t[i]  := FieldByName('regn').AsInteger;
+              st[i] := FieldByName('st').AsInteger;
+              Next;
+            end;
+            Close;
+            for j := 0 to Length(t) - 1 do
+            begin
+              Application.ProcessMessages();
+              curregn := t[j];
+              c := TClient.Create(Empty, EmptyC);
+              c.SetClient(curregn, MainForm.rdt);
+              c.SetCalc(curregn, MainForm.rdt);
+
+              //если клиент не приостановлен(2) и не прекращен(3), то производится перерасчет, иначе
+              //рассматриваем следующего клиента
+              if (c.cdata.stop = 2) or (c.cdata.stop = 3) then
+                Continue;
+
+              if not ExistHouse(n, c) then
+              begin
+                if not fix then
+                begin
+                  if c.data.corp = '' then
+                    stringStrt := format('%s д.%s',[SelStr(c.data.str), c.data.nh])
+                  else
+                    stringStrt := format('%s д.%s/%s',[SelStr(c.data.str), c.data.nh, c.data.corp]);
+                end;
+                if fixHouses.IndexOf(stringStrt) = -1 then
+                  fixHouses.Add(stringStrt);
+                if fix then
+                begin
+                  Close;
+                  SQL.Clear;
+                  SQL.Add('execute maxhouse :dist');
+                  ParamByName('dist').AsInteger := C.Data.dist;
+                  Open;
+                  maxid := FieldByName('mid').AsInteger;
+                  Inc(maxid);
+                  if c.data.corp = '' then
+                    stringStrt := (format('%d;%s д.%s',[maxid, SelStr(c.data.str), c.data.nh]))
+                  else
+                    stringStrt := (format('%d;%s д.%s/%s',[maxid, SelStr(c.data.str), c.data.nh, c.data.corp]));
+
+                  if fixHouses.IndexOf(stringStrt) = -1 then
+                    fixHouses.Add(stringStrt);
+                  Close;
+                  SQL.Clear;
+                  SQL.Add('insert into house');
+                  SQL.Add('values (:id,:dist,:str,:nh,:cp,:stnd,');
+                  SQL.Add(':cont,:rep,:cold,:hot,:canal,:heat,:gas,');
+                  SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil, :elevator)');
+                  ParamByName('id').AsInteger := maxid;
+                  ParamByName('dist').AsInteger := C.Data.dist;
+                  ParamByName('str').AsInteger := C.Data.str;
+                  ParamByName('nh').AsString  := C.Data.nh;
+                  ParamByName('cp').AsString  := C.Data.corp;
+                  ParamByName('stnd').AsInteger := C.cdata.rstnd;
+                  ParamByName('cont').AsInteger := C.cdata.tarifs[0];
+                  ParamByName('rep').AsInteger := C.cdata.tarifs[1];
+                  ParamByName('cold').AsInteger := C.cdata.tarifs[2];
+                  ParamByName('hot').AsInteger := C.cdata.tarifs[3];
+                  ParamByName('canal').AsInteger := C.cdata.tarifs[4];
+                  ParamByName('heat').AsInteger := C.cdata.tarifs[5];
+                  ParamByName('gas').AsInteger := C.cdata.tarifs[6];
+                  ParamByName('el').AsInteger := C.cdata.tarifs[7];
+                  ParamByName('wood').AsInteger := C.cdata.tarifs[12];
+                  ParamByName('coal').AsInteger := C.cdata.tarifs[13];
+                  ParamByName('mng').AsInteger := C.Data.manager;
+                  ParamByName('fnd').AsInteger := C.Data.fond;
+                  ParamByName('boil').AsInteger := C.cdata.boiler;
+                  ParamByName('elevator').Value := C.cdata.elevator;
+                  ExecSQL;
+                end;
+              end;
+              Inc(cnt);
+              pr.ProgressBar1.StepIt;
+              pr.Label3.Caption := IntToStr(cnt);
+              pr.Update;
+              SendMessage(pr.Handle, wm_paint, 0, 0);
+            end;
+          end;
+        end;
+        DModule.Database1.Commit;
+      except
+        DModule.Database1.Rollback
+      end;
+      pr.Free;
+    end;
+    fixHouses.Sort;
+    with TSaveDialog.Create(MainForm) do
+    begin
+      Filter := 'CSV (Ms-DOS)|*.csv';
+      if Execute then
+        fixHouses.SaveToFile(FileName+'.csv');
+    end;
+  end;
+end;
+
+procedure TMainForm.aClAddExecute(Sender: TObject);
 {*******************************************************************************
     Процедура N15Click обрабатывает нажатие пункта меню и вызывает форму добавления
   нового клиента.
@@ -515,7 +661,7 @@ begin
     ShowMessage('Добавить клиента можно только в текущий по календарю или следующий за ним отчетный период!');
 end;
 
-procedure TForm1.aClDelExecute(Sender: TObject);
+procedure TMainForm.aClDelExecute(Sender: TObject);
 {*******************************************************************************
     Процедура удаляет клиента.
     Перед удалением клиента запрашивается подтверждение действия. После получения
@@ -531,7 +677,7 @@ begin
     if (status = 0) then
     begin
       i := SGCl.Row - 1;
-      if MessageBox(Form1.Handle, PChar('Удаление клиента ' + SGCL.Cells[0, i + 1] + '.' + #13 +
+      if MessageBox(MainForm.Handle, PChar('Удаление клиента ' + SGCL.Cells[0, i + 1] + '.' + #13 +
         'Подтверждаете?'), PChar('Удаление клиента'),
         MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
       begin
@@ -550,7 +696,7 @@ begin
             SQL.Add('delete from hist');
             SQL.Add('where regn = :id and bdate=convert(smalldatetime,:d,104)');
             ParamByName('id').AsInteger := client;
-            ParamByName('d').AsString := Form1.rdt;
+            ParamByName('d').AsString := MainForm.rdt;
             ExecSQL;
             Close;
             SQL.Clear;
@@ -608,7 +754,7 @@ begin
     ShowMessage('База пуста!');
 end;
 
-procedure TForm1.aClEditExecute(Sender: TObject);
+procedure TMainForm.aClEditExecute(Sender: TObject);
 {*******************************************************************************
   Процедура вызывает форму изменить/просмотр клиента.
   Если база пуста, то об этом выдается соответствующее сообщение.
@@ -629,18 +775,18 @@ begin
     ShowMessage('База пуста!');
 end;
 
-procedure TForm1.aCodePageExecute(Sender: TObject);
+procedure TMainForm.aCodePageExecute(Sender: TObject);
 begin
   Form41.ShowModal;
 end;
 
-procedure TForm1.aConfExecute(Sender: TObject);
+procedure TMainForm.aConfExecute(Sender: TObject);
 begin
   SettingsFrm.ShowModal;
   ReloadConfig; //Применить новые настройки
 end;
 
-function TForm1.ACount: integer;
+function TMainForm.ACount: integer;
 {*******************************************************************************
     Функция ACount возвращает количество активных клиентов в отфильтрованном списке
   клиентов. Если фильтр не выбран, то она возвращает количество активных клиентов
@@ -656,7 +802,7 @@ begin
   Result := c;
 end;
 
-procedure TForm1.Action10Execute(Sender: TObject);
+procedure TMainForm.Action10Execute(Sender: TObject);
 { справочник типов заселения }
 begin
   with GenRefBookFrm do
@@ -667,7 +813,7 @@ begin
   end;
 end;
 
-procedure TForm1.Action11Execute(Sender: TObject);
+procedure TMainForm.Action11Execute(Sender: TObject);
 { справочник типов контроля }
 begin
   with GenRefBookFrm do
@@ -678,7 +824,7 @@ begin
   end;
 end;
 
-procedure TForm1.Action12Execute(Sender: TObject);
+procedure TMainForm.Action12Execute(Sender: TObject);
 { справочник отношений }
 begin
   with GenRefBookFrm do
@@ -689,35 +835,35 @@ begin
   end;
 end;
 
-procedure TForm1.Action13Execute(Sender: TObject);
+procedure TMainForm.Action13Execute(Sender: TObject);
 { справочник льгот }
 begin
   Form11.status := sec1;
   Form11.ShowModal;
 end;
 
-procedure TForm1.Action14Execute(Sender: TObject);
+procedure TMainForm.Action14Execute(Sender: TObject);
 { справочник социальных статусов }
 begin
   Form14.status := sec1;
   Form14.ShowModal;
 end;
 
-procedure TForm1.Action15Execute(Sender: TObject);
+procedure TMainForm.Action15Execute(Sender: TObject);
 { справочник соц. норм }
 begin
   Form27.status := sec1;
   Form27.ShowModal;
 end;
 
-procedure TForm1.Action16Execute(Sender: TObject);
+procedure TMainForm.Action16Execute(Sender: TObject);
 { справочник прожиточных минимумов }
 begin
   Form13.status := sec1;
   Form13.ShowModal;
 end;
 
-procedure TForm1.Action17Execute(Sender: TObject);
+procedure TMainForm.Action17Execute(Sender: TObject);
 {*******************************************************************************
   Процедура вызывает справочник региональных cтандартов стоимости ЖКУ.
 *******************************************************************************}
@@ -726,21 +872,21 @@ begin
   Form38.ShowModal;
 end;
 
-procedure TForm1.Action18Execute(Sender: TObject);
+procedure TMainForm.Action18Execute(Sender: TObject);
 {  Вызов формы изменения МДД }
 begin
   Form20.status := sec1;
   Form20.ShowModal;
 end;
 
-procedure TForm1.Action19Execute(Sender: TObject);
+procedure TMainForm.Action19Execute(Sender: TObject);
 { вызов формы со списком услуг }
 begin
   Form42.status := sec1;
   Form42.ShowModal;
 end;
 
-procedure TForm1.Action1Execute(Sender: TObject);
+procedure TMainForm.Action1Execute(Sender: TObject);
 {*******************************************************************************
     Процедура N25Click обрабатывает нажатие пункта меню и вызывает справочник
   инспекторов.
@@ -765,15 +911,15 @@ begin
   end;
 end;
 
-procedure TForm1.Action20Execute(Sender: TObject);
+procedure TMainForm.Action20Execute(Sender: TObject);
 {*******************************************************************************
   Процедура обновляет текущие таблицы тарифов, минимумов и рег.стандартов.
 *******************************************************************************}
 begin
-  FillCurr(bpath, rdt, dist, Form1.codedbf);
+  FillCurr(bpath, rdt, dist, MainForm.codedbf);
 end;
 
-procedure TForm1.Action21Execute(Sender: TObject);
+procedure TMainForm.Action21Execute(Sender: TObject);
 var
   xlsExport: TfrxXLSExport;
 begin
@@ -792,7 +938,7 @@ begin
 
   frxReport1.PrepareReport;
 
-  if MessageBox(Form1.Handle, PChar('Экспортировать в Excel ?'),
+  if MessageBox(MainForm.Handle, PChar('Экспортировать в Excel ?'),
     PChar('Экспорт в Excel'), MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
   begin
     xlsExport :=  TfrxXLSExport.Create(frxReport1);
@@ -802,7 +948,7 @@ begin
   frxReport1.ShowPreparedReport;
 end;
 
-procedure TForm1.Action2Execute(Sender: TObject);
+procedure TMainForm.Action2Execute(Sender: TObject);
 {*******************************************************************************
   Вызов справочника округов. После его закрытия в главной форме перегружается
   текущий округ и инспектор.
@@ -825,42 +971,42 @@ begin
   end;
 end;
 
-procedure TForm1.Action3Execute(Sender: TObject);
+procedure TMainForm.Action3Execute(Sender: TObject);
 { справочник улиц }
 begin
   Form5.status := sec1;
   Form5.ShowModal;
 end;
 
-procedure TForm1.Action4Execute(Sender: TObject);
+procedure TMainForm.Action4Execute(Sender: TObject);
 { справочник домов }
 begin
   Form30.status := sec1;
   Form30.ShowModal;
 end;
 
-procedure TForm1.Action5Execute(Sender: TObject);
+procedure TMainForm.Action5Execute(Sender: TObject);
 { справочник распорядителей жилья }
 begin
   Form7.status := sec1;
   Form7.ShowModal;
 end;
 
-procedure TForm1.Action6Execute(Sender: TObject);
+procedure TMainForm.Action6Execute(Sender: TObject);
 { справочник жилищных фондов }
 begin
   Form6.status := sec1;
   Form6.ShowModal;
 end;
 
-procedure TForm1.Action7Execute(Sender: TObject);
+procedure TMainForm.Action7Execute(Sender: TObject);
 { справочник банков }
 begin
   Form31.status := sec1;
   Form31.ShowModal;
 end;
 
-procedure TForm1.Action8Execute(Sender: TObject);
+procedure TMainForm.Action8Execute(Sender: TObject);
 { справочник типов аттестации }
 begin
   with GenRefBookFrm do
@@ -871,7 +1017,7 @@ begin
   end;
 end;
 
-procedure TForm1.Action9Execute(Sender: TObject);
+procedure TMainForm.Action9Execute(Sender: TObject);
 { справочник типов владения }
 begin
   with GenRefBookFrm do
@@ -882,7 +1028,7 @@ begin
   end;
 end;
 
-procedure TForm1.aClStopSubsidyExecute(Sender: TObject);
+procedure TMainForm.aClStopSubsidyExecute(Sender: TObject);
 {
   Добровольный отказ от субсидии активного клиента. Данные о клиенте, которому
   поставили отказ хранятся, до тех пор пока не появится новый отказ, пока этот
@@ -897,7 +1043,7 @@ begin
   if status <> 3 then
   begin
     i := SGCl.Row - 1;
-    if MessageBox(Form1.Handle, PChar('Добровольный отказ от субсидии клиента ' + SGCL.Cells[0, i + 1] + '.' + #13 + 'Подтверждаете?'), PChar('Отказ от субсидии'),
+    if MessageBox(MainForm.Handle, PChar('Добровольный отказ от субсидии клиента ' + SGCL.Cells[0, i + 1] + '.' + #13 + 'Подтверждаете?'), PChar('Отказ от субсидии'),
       MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
     begin
       reg  := client;
@@ -949,7 +1095,7 @@ begin
   end;
 end;
 
-procedure TForm1.aClCancelStopExecute(Sender: TObject);
+procedure TMainForm.aClCancelStopExecute(Sender: TObject);
 { Откат - восстановление срока субсидии после отказа от субсидии }
 var
   i: integer;
@@ -1011,7 +1157,7 @@ begin
     ShowMessage('Отсутствует текущий отказ!');
 end;
 
-procedure TForm1.aClPauseExecute(Sender: TObject);
+procedure TMainForm.aClPauseExecute(Sender: TObject);
 {*******************************************************************************
   Процедура приостанавливает субсидию в текущем отчетном периоде выбранному клиенту.
   В таблице hist значение поля stop устанавливается в 2, а в таблице субсидий и служебных
@@ -1052,7 +1198,7 @@ begin
     ShowMessage('Приостановить можно только действующую субсидию активного клиента!');
 end;
 
-procedure TForm1.aClStopExecute(Sender: TObject);
+procedure TMainForm.aClStopExecute(Sender: TObject);
 {*******************************************************************************
   Процедура прекращает субсидию выбранному клиенту. В таблице sub значение поля
   stop устанавливается в 3, а в таблице субсидий и служебных
@@ -1099,7 +1245,7 @@ begin
     ShowMessage('Прекратить можно только приостановленную субсидию активного клиента по истечение 1 месяца со дня приостановки!');
 end;
 
-procedure TForm1.aClPlayExecute(Sender: TObject);
+procedure TMainForm.aClPlayExecute(Sender: TObject);
 {*******************************************************************************
   Процедура возобновновляет субсидию в текущем отчетном периоде выбранному клиенту.
   В таблице sub значение поля stop устанавливается в 1, а в таблице субсидий и служебных
@@ -1157,7 +1303,7 @@ begin
     ShowMessage('Возобновить можно только приостановленную или прекращенную субсидию активного клиента по истечение 1 месяца со дня приостановки!');
 end;
 
-procedure TForm1.aClUndoExecute(Sender: TObject);
+procedure TMainForm.aClUndoExecute(Sender: TObject);
 {*******************************************************************************
   Процедура восстанавливает субсидию в текущем отчетном периоде выбранному клиенту,
   у которого была сделана приостановка, прекращение или возобновление, и
@@ -1210,14 +1356,14 @@ begin
   end;
 end;
 
-procedure TForm1.aClAddMountExecute(Sender: TObject);
+procedure TMainForm.aClAddMountExecute(Sender: TObject);
 var
   i: integer;
 begin
   i := SGCl.Row - 1;
   with DModule.Query1 do
   begin
-    if MessageBox(Form1.Handle, PChar('Добавить месяц клиенту ' + SGCL.Cells[0, i + 1] + ' со сроком ' + SGCL.Cells[2, i + 1] + '.' + #13 + 'Подтверждаете?'), PChar('Отказ от субсидии'),
+    if MessageBox(MainForm.Handle, PChar('Добавить месяц клиенту ' + SGCL.Cells[0, i + 1] + ' со сроком ' + SGCL.Cells[2, i + 1] + '.' + #13 + 'Подтверждаете?'), PChar('Отказ от субсидии'),
       MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
     begin
       Close;
@@ -1242,7 +1388,7 @@ begin
   end;
 end;
 
-procedure TForm1.aClDelCurPeriodExecute(Sender: TObject);
+procedure TMainForm.aClDelCurPeriodExecute(Sender: TObject);
 var
   i: integer;
 
@@ -1255,7 +1401,7 @@ begin
     SQL.Text := ('SELECT id_cert FROM hist');
     SQL.Add('WHERE regn = :id and bdate=convert(smalldatetime,:d,104)');
     ParamByName('id').AsInteger := client;
-    ParamByName('d').AsString := Form1.rdt;
+    ParamByName('d').AsString := MainForm.rdt;
     Open;
     First;
   end;
@@ -1268,7 +1414,7 @@ begin
     if (status = 0) and (GetCert(client) = 2) then
     begin
       i := SGCl.Row - 1;
-      if MessageBox(Form1.Handle, PChar('Удаление у клиента "' + SGCL.Cells[0, i + 1] + '" текущего периода.' + #13 +
+      if MessageBox(MainForm.Handle, PChar('Удаление у клиента "' + SGCL.Cells[0, i + 1] + '" текущего периода.' + #13 +
         'Подтверждаете?'), PChar('Удаление у клиента текущего периода'),
         MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
       begin
@@ -1281,21 +1427,21 @@ begin
             SQL.Add('delete from hist');
             SQL.Add('where regn = :id and bdate=convert(smalldatetime,:d,104)');
             ParamByName('id').AsInteger := client;
-            ParamByName('d').AsString := Form1.rdt;
+            ParamByName('d').AsString := MainForm.rdt;
             ExecSQL;
             Close;
             SQL.Clear;
             SQL.Add('delete from sub');
             SQL.Add('where regn = :id and sdate=convert(smalldatetime,:d,104)');
             ParamByName('id').AsInteger := client;
-            ParamByName('d').AsString := Form1.rdt;
+            ParamByName('d').AsString := MainForm.rdt;
             ExecSQL;
             Close;
             SQL.Clear;
             SQL.Add('delete from sluj');
             SQL.Add('where regn = :id and sdate=convert(smalldatetime,:d,104)');
             ParamByName('id').AsInteger := client;
-            ParamByName('d').AsString := Form1.rdt;
+            ParamByName('d').AsString := MainForm.rdt;
             ExecSQL;
             Close;
           end;
@@ -1314,14 +1460,14 @@ begin
     ShowMessage('База пуста!');
 end;
 
-procedure TForm1.aClDelAllNullExecute(Sender: TObject);
+procedure TMainForm.aClDelAllNullExecute(Sender: TObject);
 var
   i: integer;
 begin
   i := SGCl.Row - 1;
   with DModule.Query1 do
   begin
-    if MessageBox(Form1.Handle, PChar('Удалить последнюю запись в истории клиента? ' + SGCL.Cells[0, i + 1] + '.' + #13 + 'Подтверждаете?'), PChar('Отказ от субсидии'),
+    if MessageBox(MainForm.Handle, PChar('Удалить последнюю запись в истории клиента? ' + SGCL.Cells[0, i + 1] + '.' + #13 + 'Подтверждаете?'), PChar('Отказ от субсидии'),
       MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
     begin
       Close;
@@ -1335,7 +1481,7 @@ begin
   end;
 end;
 
-procedure TForm1.aRepUvedomExecute(Sender: TObject);
+procedure TMainForm.aRepUvedomExecute(Sender: TObject);
 {*******************************************************************************
     Процедура формирует уведомление.
     Перед формированием уведомления определяются льготы семьи и тип плиты в их
@@ -1543,7 +1689,7 @@ begin
       frxReport1.Variables.Variables['fio_g'] := Quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 2));
       frxReport1.Variables.Variables['fio_s'] := quotedstr(GetShortName(SGCl.Cells[0, SGCl.row]));
       frxReport1.PrepareReport;
-      if MessageBox(Form1.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
+      if MessageBox(MainForm.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
         PChar('Предварительный просмотр'), MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
         frxReport1.ShowPreparedReport
       else
@@ -1592,7 +1738,7 @@ begin
       ReportsFillDistInfo();
 
       frxReport1.PrepareReport;
-      if MessageBox(Form1.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
+      if MessageBox(MainForm.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
         PChar('Предварительный просмотр'),
         MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
         frxReport1.ShowPreparedReport
@@ -1604,7 +1750,7 @@ begin
     ShowMessage('Уведомление выдается только при оформлении субсидии!');
 end;
 
-procedure TForm1.aRepKartaExecute(Sender: TObject);
+procedure TMainForm.aRepKartaExecute(Sender: TObject);
 {*******************************************************************************
     Процедура формирует учетную карту.
     Перед формированием уведомления определяются льготы семьи и тип плиты в их
@@ -1745,7 +1891,7 @@ begin
       end;
 
       frxReport1.PrepareReport;
-      if MessageBox(Form1.Handle, PChar('Нужен предварительный просмотр учетной карты ' + SGCL.Cells[0, SGCl.Row] + '?'),
+      if MessageBox(MainForm.Handle, PChar('Нужен предварительный просмотр учетной карты ' + SGCL.Cells[0, SGCl.Row] + '?'),
         PChar('Предварительный просмотр'),
         MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
         frxReport1.ShowPreparedReport
@@ -1759,7 +1905,7 @@ begin
     ShowMessage('База пуста!');
 end;
 
-procedure TForm1.aRepVedomostExecute(Sender: TObject);
+procedure TMainForm.aRepVedomostExecute(Sender: TObject);
 { ведомость субсидий клиента с начала года по текущий месяц }
 var
   f, ad, rd, mng: string;
@@ -1768,8 +1914,8 @@ var
   status: integer;
 begin
   c := TClient.Create(Empty, EmptyC);
-  c.SetClient(Form1.client, Form1.rdt);
-  c.SetCalc(Form1.client, Form1.rdt);
+  c.SetClient(MainForm.client, MainForm.rdt);
+  c.SetCalc(MainForm.client, MainForm.rdt);
 
   status := getstatus(c.cdata.begindate, c.cdata.enddate);
 
@@ -1820,7 +1966,7 @@ begin
   PrintVedCr(f, ad, rd, mng);
 end;
 
-procedure TForm1.aRepPauseExecute(Sender: TObject);
+procedure TMainForm.aRepPauseExecute(Sender: TObject);
 var
   s1, s2, s3, s4: string;
   i: integer;
@@ -1867,7 +2013,7 @@ begin
   ReportsFillDistInfo();
 
   frxReport1.PrepareReport;
-  if MessageBox(Form1.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
+  if MessageBox(MainForm.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
     PChar('Предварительный просмотр'),
     MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
     frxReport1.ShowPreparedReport
@@ -1875,7 +2021,7 @@ begin
     frxReport1.Print;
 end;
 
-procedure TForm1.aRepPlayExecute(Sender: TObject);
+procedure TMainForm.aRepPlayExecute(Sender: TObject);
 var
   s1, s2: string;
 begin
@@ -1911,7 +2057,7 @@ begin
   ReportsFillDistInfo();
 
   frxReport1.PrepareReport;
-  if MessageBox(Form1.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
+  if MessageBox(MainForm.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
     PChar('Предварительный просмотр'),
     MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
     frxReport1.ShowPreparedReport
@@ -1919,7 +2065,7 @@ begin
     frxReport1.Print;
 end;
 
-procedure TForm1.aRepStopExecute(Sender: TObject);
+procedure TMainForm.aRepStopExecute(Sender: TObject);
 var
   s1, s2, s3, s4: string;
   //  cd: TDateTime;
@@ -1966,7 +2112,7 @@ begin
 
   frxReport1.PrepareReport;
 
-  if MessageBox(Form1.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
+  if MessageBox(MainForm.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
     PChar('Предварительный просмотр'),
     MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
     frxReport1.ShowPreparedReport
@@ -1974,7 +2120,7 @@ begin
     frxReport1.Print;
 end;
 
-procedure TForm1.aRepNachExecute(Sender: TObject);
+procedure TMainForm.aRepNachExecute(Sender: TObject);
 { отчет о начислении }
 begin
   with DModule do
@@ -1996,7 +2142,7 @@ begin
   frxReport1.ShowPreparedReport;
 end;
 
-procedure TForm1.aRepRealizeExecute(Sender: TObject);
+procedure TMainForm.aRepRealizeExecute(Sender: TObject);
 {
   Процедура формирует отчет о реализации жилищных субсидий.
   Согласно шаблону MSExcel заполняются данные.
@@ -2014,7 +2160,7 @@ begin
   try
     ExcelApp:=CreateOleObject('Excel.Application');
     ExcelApp.Visible:=False;
-    ExcelApp.WorkBooks.Open(Form1.reports_path + 'realize.xlt');
+    ExcelApp.WorkBooks.Open(MainForm.reports_path + 'realize.xlt');
   except
     on E: Exception do
       raise Exception.Create('Ошибка создания объекта Excel: ' + E.Message);
@@ -2129,7 +2275,7 @@ begin
   ExcelApp.Visible := True;
 end;
 
-procedure TForm1.aSQLQueryExecute(Sender: TObject);
+procedure TMainForm.aSQLQueryExecute(Sender: TObject);
 { Вызов формы SQL-запроса }
 begin
   with TSQLExecForm.Create(Application) do
@@ -2140,7 +2286,7 @@ begin
   //Form34.ShowModal;
 end;
 
-procedure TForm1.aRepFactExecute(Sender: TObject);
+procedure TMainForm.aRepFactExecute(Sender: TObject);
 var
   y1: string;
 begin
@@ -2165,7 +2311,7 @@ begin
   frxReport1.ShowPreparedReport;
 end;
 
-procedure TForm1.aSlujSumTarifExecute(Sender: TObject);
+procedure TMainForm.aSlujSumTarifExecute(Sender: TObject);
 { Список служебных по каждому тарифу }
 begin
   SlujFrm.mode := mDetail;
@@ -2174,7 +2320,7 @@ begin
     SlujFrm.ShowModal;
 end;
 
-procedure TForm1.aSlujSumAllExecute(Sender: TObject);
+procedure TMainForm.aSlujSumAllExecute(Sender: TObject);
 { Список служебных, общая сумма за месяц по клиенту }
 begin
   SlujFrm.mode := mSum;
@@ -2183,7 +2329,7 @@ begin
     SlujFrm.ShowModal;
 end;
 
-procedure TForm1.aSvodNachExecute(Sender: TObject);
+procedure TMainForm.aSvodNachExecute(Sender: TObject);
 {
   Сводка начисления субсидий за текущий месяц. Форма, которая передается в отдел
   сводной отчетности.
@@ -2207,7 +2353,7 @@ begin
   frxReport1.ShowPreparedReport;
 end;
 
-procedure TForm1.aStatMinMddExecute(Sender: TObject);
+procedure TMainForm.aStatMinMddExecute(Sender: TObject);
 {*******************************************************************************
   Процедура выполняет поиск и расчет количества людей с нулевой субсидией с
   учетом указанных значений прожиточного минимума и мдд для различных социальных групп.
@@ -2216,7 +2362,7 @@ begin
   Form40.ShowModal;
 end;
 
-procedure TForm1.aStatAgeExecute(Sender: TObject);
+procedure TMainForm.aStatAgeExecute(Sender: TObject);
 {*******************************************************************************
   Процедура выполняет поиск людей, возраст которых колеблется в пределах указанных
   верхней и нижней границ.
@@ -2225,14 +2371,14 @@ begin
   Form22.ShowModal;
 end;
 
-procedure TForm1.aStatPrivExecute(Sender: TObject);
+procedure TMainForm.aStatPrivExecute(Sender: TObject);
 begin
-  Stats := TStats.Create(Form1);
+  Stats := TStats.Create(MainForm);
   Stats.ShowModal;
   Stats.Free;
 end;
 
-procedure TForm1.aEditClCertExecute(Sender: TObject);
+procedure TMainForm.aEditClCertExecute(Sender: TObject);
 {*******************************************************************************
     Процедура вызывает запрос, выполняющий смену аттестации у клиентов, дело
     которых стоит на контроле по переаттестаци или по внеплановой аттестации.
@@ -2249,14 +2395,14 @@ begin
   end;
 end;
 
-procedure TForm1.aEditTrafClExecute(Sender: TObject);
+procedure TMainForm.aEditTrafClExecute(Sender: TObject);
 {  Вызов формы изменения тарифа, распорядителя, стандарта у клиентов }
 begin
   Form29.status := sec1;
   Form29.ShowModal;
 end;
 
-procedure TForm1.aSetActiveAllInspExecute(Sender: TObject);
+procedure TMainForm.aSetActiveAllInspExecute(Sender: TObject);
 {*******************************************************************************
   Процедура делает активными всех инспекторов текущего округа
 *******************************************************************************}
@@ -2274,7 +2420,7 @@ begin
   end;
 end;
 
-procedure TForm1.aSetActiveAllStrtExecute(Sender: TObject);
+procedure TMainForm.aSetActiveAllStrtExecute(Sender: TObject);
 {*******************************************************************************
   Процедура делает активными все улицы.
 *******************************************************************************}
@@ -2290,7 +2436,7 @@ begin
   end;
 end;
 
-procedure TForm1.aSetActiveUseStrtExecute(Sender: TObject);
+procedure TMainForm.aSetActiveUseStrtExecute(Sender: TObject);
 {*******************************************************************************
   Процедура делает активными используемые улицы
 *******************************************************************************}
@@ -2319,7 +2465,7 @@ begin
   end;
 end;
 
-procedure TForm1.aShowLegendExecute(Sender: TObject);
+procedure TMainForm.aShowLegendExecute(Sender: TObject);
 begin
   if GroupBox1.Visible = True then
     GroupBox1.Visible := False
@@ -2328,14 +2474,14 @@ begin
   GridPanel1.Realign;
 end;
 
-procedure TForm1.aRepEditorExecute(Sender: TObject);
+procedure TMainForm.aRepEditorExecute(Sender: TObject);
 begin
   ReportEditFrm := TReportEditFrm.Create(Application);
   ReportEditFrm.ShowModal;
   ReportEditFrm.Free;
 end;
 
-function TForm1.ASub: real;
+function TMainForm.ASub: real;
 {*******************************************************************************
     Функция ASub возвращает сумму субсидий активных клиентов в отфильтрованном
   списке клиентов. Если фильтр не выбран, то она возвращает сумму субсидий активных
@@ -2352,12 +2498,12 @@ begin
    end;
 end;
 
-procedure TForm1.aUpdateExecute(Sender: TObject);
+procedure TMainForm.aUpdateExecute(Sender: TObject);
 begin
   winExec('sUpdater.exe', SW_NORMAL);
 end;
 
-function TForm1.GetStatus(b, e: TDate): integer;
+function TMainForm.GetStatus(b, e: TDate): integer;
 {*******************************************************************************
     Функция GetStatus возвращает порядковый № статуса клиента(первый месяц,активный,
   последний месяц,неактивный), который начинается с 0.
@@ -2390,7 +2536,7 @@ begin
   end;
 end;
 
-function TForm1.GenAddr(s, n, c, a: string): string;
+function TMainForm.GenAddr(s, n, c, a: string): string;
 {*******************************************************************************
     Функция GenAddr возвращает строку, являющуюся адресом.
     Адрес составляется из входных данных. Если корпус присутствует, то он
@@ -2405,7 +2551,7 @@ begin
     Result := Result + ',кв.' + a;
 end;
 
-function TForm1.GenPer(b, e: TDate): string;
+function TMainForm.GenPer(b, e: TDate): string;
 {*******************************************************************************
     Функция GenPer возвращает строку со сроком субсидии.
     Срок субсидии формируется из входных данных начала и окончания срока субсидии.
@@ -2414,7 +2560,7 @@ begin
   Result := DateToStr(b) + ' - ' + DateToStr(e);
 end;
 
-function TForm1.GenCalc(c: integer): string;
+function TMainForm.GenCalc(c: integer): string;
 {*******************************************************************************
     Функция GenCalc возвращает строку с типом расчета.
     В зависимости от входного параметра с будет возвращено значение, означающее
@@ -2427,7 +2573,7 @@ begin
     Result := 'индив.';
 end;
 
-procedure TForm1.aOpenMountExecute(Sender: TObject);
+procedure TMainForm.aOpenMountExecute(Sender: TObject);
 {*******************************************************************************
     Процедура N2Click открывает форму выбора отчетного периода.
     Если выбран отличный от текущего отчетный период, то данные на главной форме
@@ -2446,17 +2592,17 @@ begin
       sec1 := 1
     else
       sec1 := 0;
-    FillCurr(Form1.bpath, rdt, Form1.dist, Form1.codedbf);
+    FillCurr(MainForm.bpath, rdt, MainForm.dist, MainForm.codedbf);
     LastTime := Time;
     Reload;
 
-    form1.Caption := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ' +
+    MainForm.Caption := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ' +
       LongMonthNames[StrToInt(FormatDateTime('m', StrToDate(rdt)))] + ' ' +
       IntToStr(YearOf(StrToDate(rdt))) + 'г.' + ' [' + Revision + ']' + ' - ' + curServer;
   end;
 end;
 
-procedure TForm1.aReloadExecute(Sender: TObject);
+procedure TMainForm.aReloadExecute(Sender: TObject);
 {*******************************************************************************
   Процедура обновляет данные на главной форме.
 *******************************************************************************}
@@ -2464,13 +2610,13 @@ begin
   Reload;
 end;
 
-procedure TForm1.aAdminModeExecute(Sender: TObject);
+procedure TMainForm.aAdminModeExecute(Sender: TObject);
 var
   adm_pass: string;
 begin
-  if Form1.LoginMode = lAdmin then
+  if MainForm.LoginMode = lAdmin then
   begin
-    Form1.LoginMode := lInsp;
+    MainForm.LoginMode := lInsp;
     aAdminMode.Checked := False;
     aChangeAdminPasswd.Visible := False;
     aSQLQuery.Visible := False;
@@ -2489,7 +2635,7 @@ begin
   adm_pass := GetConnectionPass(adm_pass);
   if GetConnectionPass(ReadRegProperty('Password')) = adm_pass then
   begin
-    Form1.LoginMode := lAdmin;
+    MainForm.LoginMode := lAdmin;
     aAdminMode.Checked := True;
     aChangeAdminPasswd.Visible := True;
     aSQLQuery.Visible := True;
@@ -2506,7 +2652,7 @@ begin
   ActionMainMenuBar1.Refresh;
 end;
 
-procedure TForm1.aBackupExecute(Sender: TObject);
+procedure TMainForm.aBackupExecute(Sender: TObject);
 { архивация всех данных за текущий день}
 var
   ext1, ext2, Name, path, dt: string;
@@ -2624,7 +2770,7 @@ begin
   end;
 end;
 
-procedure TForm1.aExportForCentrExecute(Sender: TObject);
+procedure TMainForm.aExportForCentrExecute(Sender: TObject);
 { архивация базы для центра }
 var
   ext1, ext2, Name, path, dt: string;
@@ -2709,7 +2855,7 @@ begin
   end;
 end;
 
-procedure TForm1.aCurHistExecute(Sender: TObject);
+procedure TMainForm.aCurHistExecute(Sender: TObject);
 {
   Процедура вызывает историю текущих субсидий, в которой можно просмотреть
   начисления и субсидию конкретного клиента, а также редактировать данные.
@@ -2724,7 +2870,7 @@ begin
       Form18.ShowModal;
       Edit4.Text := FormatFloat('0.00', SetSumSub);
       if Form18.changes then
-        Form1.Reload;
+        MainForm.Reload;
     end
     else
       ShowMessage('Нет активных клиентов!');
@@ -2733,7 +2879,7 @@ begin
     ShowMessage('База пуста!');
 end;
 
-procedure TForm1.aFactSumRptExecute(Sender: TObject);
+procedure TMainForm.aFactSumRptExecute(Sender: TObject);
 {
   формирование справки о сравнении размера субсидии с фактическими расходами;
 }
@@ -2746,8 +2892,8 @@ var
   bdate, edate: TDate;
 begin
   c := TClient.Create(Empty, EmptyC);
-  c.SetClient(client, Form1.rdt);
-  c.setcalc(client, Form1.rdt);
+  c.SetClient(client, MainForm.rdt);
+  c.setcalc(client, MainForm.rdt);
   bdate := c.cdata.prevbegindate;
   edate := c.cdata.prevenddate;
 
@@ -2779,7 +2925,7 @@ begin
       raise Exception.Create('Ошибка создания объекта Excel: ' + E.Message);
   end;
 
-  ExcelApp.WorkBooks.Open(Form1.reports_path + 'u4et_month.xlt');
+  ExcelApp.WorkBooks.Open(MainForm.reports_path + 'u4et_month.xlt');
 
   Sheet :=  ExcelApp.ActiveWorkBook.WorkSheets[1];
 
@@ -2792,7 +2938,7 @@ begin
   Sheet.Cells.Replace(':fio:', GetShortName(SGCl.Cells[0, SGCl.row]), xlPart, xlByRows, False, False, False);
   Sheet.Cells.Replace(':insp:', SelInsp(c.data.insp), xlPart, xlByRows, False, False, False);
   Sheet.Cells.Replace(':boss:', SelBoss(dist), xlPart, xlByRows, False, False, False);
-  if ( c.cdata.prevbegindate = bdate) then
+  if ( c.cdata.prevbegindate = c.cdata.begindate) then
   begin
     ShowMessage('У клиента не хватает сроков для автоматического заполнения таблицы. Введите суммы вручную.');
     ExcelApp.Visible := True;
@@ -2817,7 +2963,7 @@ begin
   c.Free;
 end;
 
-procedure TForm1.aFilterExecute(Sender: TObject);
+procedure TMainForm.aFilterExecute(Sender: TObject);
 {
   Вызов формы выбора фильтра. Если фильтр не пуст, то выбор клиентов согласно
   критериям фильтра.
@@ -2828,7 +2974,7 @@ begin
     Load(qr, Form33.rsel);
 end;
 
-procedure TForm1.aFormSubsidyExecute(Sender: TObject);
+procedure TMainForm.aFormSubsidyExecute(Sender: TObject);
 {
   формирование субсидий за текущий месяц.
   Перед расчетом проверяется удовлетворяет ли установленный период требованиям(CheckP1).
@@ -2881,7 +3027,7 @@ begin
     ShowMessage('Клиенты отсутствуют!');
 end;
 
-procedure TForm1.aImportExecute(Sender: TObject);
+procedure TMainForm.aImportExecute(Sender: TObject);
 {*******************************************************************************
   Процедура N8Click вызывает форму импорта в программу данных.
 *******************************************************************************}
@@ -2890,15 +3036,15 @@ begin
   Form35.ShowModal;
 end;
 
-procedure TForm1.aInformKartaExecute(Sender: TObject);
+procedure TMainForm.aInformKartaExecute(Sender: TObject);
 var
-  ExcelApp, Sheet: OleVariant;
+  ExcelApp, Sheet, Data: OleVariant;
   c: TClient;
-//  i: integer;
+  i: integer;
 begin
   c := TClient.Create(Empty, EmptyC);
-  c.SetClient(client, Form1.rdt);
-  c.setcalc(client, Form1.rdt);
+  c.SetClient(client, MainForm.rdt);
+  c.setcalc(client, MainForm.rdt);
 
 //  with DModule.Query2 do
 //  begin
@@ -2917,7 +3063,7 @@ begin
   try
     ExcelApp := CreateOleObject('Excel.Application');
     ExcelApp.Visible := False;
-    ExcelApp.WorkBooks.Open(Form1.reports_path + 'infkarta.xlt')
+    ExcelApp.WorkBooks.Open(MainForm.reports_path + 'infkarta.xlt')
   except
     on E: Exception do
       raise Exception.Create('Ошибка создания объекта Excel: ' + E.Message);
@@ -2930,17 +3076,57 @@ begin
   Sheet.Range['B8','B8'] := SelOwn(c.data.own);
   Sheet.Range['E8','E8'] := SelHeating(c.cdata.heating);
   Sheet.Range['B9','B9'] := SelFnd(c.data.fond);
-  Sheet.Range['B10','B10'] :=  FloatToStr(c.cdata.square) + ' кв.м.';
-  Sheet.Range['F10','F10'] :=  SelSettl(c.data.settl);
-  Sheet.Range['E11','E11'] :=  GetNameTafif(7, c.cdata.tarifs[7]);
-  Sheet.Range['B14','B14'] := c.cdata.quanpriv;
+  Sheet.Range['B10','B10'] := c.cdata.square;
+  Sheet.Range['E9','E9'] :=  SelSettl(c.data.settl);
+  Sheet.Range['B11','B11'] :=  BoolToStr(boolean(c.cdata.elevator));
+  Sheet.Range['F11','F11'] :=  GetNameTafif(7, c.cdata.tarifs[7]);//плита
+  Sheet.Range['B14','B14'] := c.GetOwnPriv;
   Sheet.Range['F14','F14'] := c.cdata.quanpriv;
   Sheet.Range['D12','D12'] := BoolToStr(Boolean(c.cdata.boiler));
+  Sheet.Range['C13','C13'] := c.cdata.mcount;
+  Sheet.Range['D13','D13'] := c.cdata.rmcount;
+  Sheet.Range['E15','E15'] := SelStnd(c.cdata.rstnd);
+  Sheet.Range['D44','D44'] := c.GetStandard;
+  //Sheet.Cells.Replace(':mc_rc:', format('%d/%d', [c.cdata.mcount, c.cdata.rmcount]), xlPart, xlByRows, False, False, False);
+
+  Sheet.Range['C20','C20'] := c.cdata.cost[0];
+  Sheet.Range['B42','B42'] := c.cdata.cost[1];
+  Sheet.Range['C22','C22'] := c.cdata.cost[2];
+  Sheet.Range['C25','C25'] := c.cdata.cost[3];
+  Sheet.Range['C28','C28'] := c.cdata.cost[4];
+  Sheet.Range['C31','C31'] := c.cdata.cost[5];
+  Sheet.Range['C34','C34'] := c.cdata.cost[6];
+  Sheet.Range['C40','C40'] := c.cdata.cost[12];
+  Sheet.Range['C41','C41'] := c.cdata.cost[13];
+
+  Sheet.Range['C23','C23'] := c.cdata.countercost[2];
+  Sheet.Range['C26','C26'] := c.cdata.countercost[3];
+  Sheet.Range['C29','C29'] := c.cdata.countercost[4];
+  Sheet.Range['C32','C32'] := c.cdata.countercost[5];
+  Sheet.Range['C35','C35'] := c.cdata.countercost[6];
+
+  Sheet :=  ExcelApp.ActiveWorkBook.WorkSheets[2];
+  Data := VarArrayCreate([1, C.cdata.family.Count, 1, 7], varVariant);
+
+  //загружаем семью
+  for i := 0 to C.cdata.family.Count - 1 do
+  begin
+    Data[i + 1, 1] := TMan(C.cdata.family.Items[i]).fio;
+    Data[i + 1, 2] := DateToStr(TMan(C.cdata.family.Items[i]).birth);
+    Data[i + 1, 3] := C.cdata.mid[i];
+    Data[i + 1, 4] := SelMin(C.cdata.min[i]);
+    Data[i + 1, 5] := SelSt(TMan(C.cdata.family.Items[i]).status);
+    Data[i + 1, 6] := SelRel(TMan(C.cdata.family.Items[i]).rel);
+    Data[i + 1, 7] := SelPriv(TMan(C.cdata.family.Items[i]).priv);
+  end;
+
+  Sheet.Range[RefToCell(6,2), RefToCell(6 + C.cdata.family.Count - 1, 8)] := Data;
+
   ExcelApp.Visible := True;
   c.Free;
 end;
 
-procedure TForm1.aMergeExecute(Sender: TObject);
+procedure TMainForm.aMergeExecute(Sender: TObject);
 {
   Вызов формы обмена данными между филиалом и отделом или между отделом и центром.
 }
@@ -2948,7 +3134,7 @@ begin
   MergeForm.ShowModal;
 end;
 
-procedure TForm1.AddCl(id: integer);
+procedure TMainForm.AddCl(id: integer);
 {*******************************************************************************
     Процедура AddCl позволяет вставить клиента в sgcl.
     Изменяются em и ey - показатели изменения.
@@ -2975,7 +3161,7 @@ begin
     SQL.Clear;
     SQL.Add('execute getinfocl :id,:d');
     ParamByName('id').AsInteger := id;
-    ParamByName('d').AsString := Form1.rdt;
+    ParamByName('d').AsString := MainForm.rdt;
     Open;
     client := id;
     f := FieldByName('fio').AsString;
@@ -3012,7 +3198,7 @@ begin
   Edit4.Text := FormatFloat('0.00', StrToFloat(Edit4.Text) + subs);
 end;
 
-procedure TForm1.aExitExecute(Sender: TObject);
+procedure TMainForm.aExitExecute(Sender: TObject);
 {*******************************************************************************
   Процедура совершает закрытие программы
 *******************************************************************************}
@@ -3020,7 +3206,7 @@ begin
   Close;
 end;
 
-procedure TForm1.aExportDBFExecute(Sender: TObject);
+procedure TMainForm.aExportDBFExecute(Sender: TObject);
 { общий сброс в dbf }
 var
   dt, outdir: string;
@@ -3051,7 +3237,7 @@ begin
   end;
 end;
 
-procedure TForm1.aExportExecute(Sender: TObject);
+procedure TMainForm.aExportExecute(Sender: TObject);
 {*******************************************************************************
   Процедура N7Click вызывает форму экспорта из программы данных.
 *******************************************************************************}
@@ -3060,13 +3246,13 @@ begin
   Form35.ShowModal;
 end;
 
-procedure TForm1.aOpenExcelExecute(Sender: TObject);
+procedure TMainForm.aOpenExcelExecute(Sender: TObject);
 { Согласно шаблону MSExcel заполняются данные и открывается MSExcel }
 begin
-  ExportGridToExcel(SGCL, Form1.reports_path + 'filter.xlt'); 
+  ExportGridToExcel(SGCL, MainForm.reports_path + 'filter.xlt'); 
 end;
 
-procedure TForm1.aRecalcSubsidyExecute(Sender: TObject);
+procedure TMainForm.aRecalcSubsidyExecute(Sender: TObject);
 {*******************************************************************************
   Процедура выполняет перерасчет субсидий уже начисленных в текущем месяце, кроме
   субсидий тех клиентов, которым сделан индивидуальный расчет.
@@ -3126,8 +3312,8 @@ begin
                 Application.ProcessMessages();
                 curregn := t[j];
                 c := TClient.Create(Empty, EmptyC);
-                c.SetClient(curregn, Form1.rdt);
-                c.SetCalc(curregn, Form1.rdt);
+                c.SetClient(curregn, MainForm.rdt);
+                c.SetCalc(curregn, MainForm.rdt);
                 c.Calc(getstatus(c.cdata.begindate, c.cdata.enddate));
                 //если клиент не приостановлен(2) и не прекращен(3), то производится перерасчет, иначе
                 //рассматриваем следующего клиента
@@ -3189,17 +3375,17 @@ begin
     ShowMessage('Клиенты отсутствуют!');
 end;
 
-procedure TForm1.aRepRecalcSubsidyExecute(Sender: TObject);
+procedure TMainForm.aRepRecalcSubsidyExecute(Sender: TObject);
 begin
   Form43.ShowModal;
 end;
 
-procedure TForm1.aRunCalcExecute(Sender: TObject);
+procedure TMainForm.aRunCalcExecute(Sender: TObject);
 begin
   WinExec(PChar('calc'), SW_SHOW);
 end;
 
-procedure TForm1.aSelDistExecute(Sender: TObject);
+procedure TMainForm.aSelDistExecute(Sender: TObject);
 {*******************************************************************************
     Процедура N10Click вызывает форму конфигурации.
     Эта форма позволяет выбрать другой округ и другого инспектора. Если изменился
@@ -3233,7 +3419,7 @@ begin
       sec1 := 1
     else
       sec1 := 0;
-    FillCurr(bpath, rdt, dist, Form1.codedbf);
+    FillCurr(bpath, rdt, dist, MainForm.codedbf);
     SetTarifs;
     Reload;
     Statusbar1.Panels[1].Text := 'Инспектор: ' + ins;
@@ -3259,14 +3445,14 @@ begin
     else
       sec1 := 0;
     Statusbar1.Panels[1].Text := 'Инспектор: ' + ins;
-    FillCurr(bpath, rdt, dist, Form1.codedbf);
+    FillCurr(bpath, rdt, dist, MainForm.codedbf);
     SetTarifs;
   end;
 
   SaveSubsidyCfg;
 end;
 
-procedure TForm1.aSelInspExecute(Sender: TObject);
+procedure TMainForm.aSelInspExecute(Sender: TObject);
 {
   Вызов формы выбора текущего инспектора. Если произошла смена инспектора, то на
   форме изменяется значение строки в StatusBar.
@@ -3299,15 +3485,15 @@ begin
   end;
 end;
 
-procedure TForm1.aSelServerExecute(Sender: TObject);
+procedure TMainForm.aSelServerExecute(Sender: TObject);
 { выбор сервера для подключения}
 begin
   ConnectionFrm.ShowModal;
-  Form1.Caption := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ' +
+  MainForm.Caption := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ' +
     StringDate(StrToDate(rdt)) + 'г.' + ' [' + Revision + ']' + ' - ' + curServer;
 end;
 
-procedure TForm1.ModCl(id: integer);
+procedure TMainForm.ModCl(id: integer);
 {*******************************************************************************
     Процедура ModCl позволяет вставить измененного клиента.
     С сервера берутся данные необходимые для отображения на форме. Вычисляется
@@ -3327,7 +3513,7 @@ begin
     SQL.Clear;
     SQL.Add('execute getinfocl :id, :d');
     ParamByName('id').AsInteger := id;
-    ParamByName('d').AsString := Form1.rdt;
+    ParamByName('d').AsString := MainForm.rdt;
     Open;
     client := id;
     f := FieldByName('fio').AsString;
@@ -3374,7 +3560,7 @@ begin
   Edit4.Text := FormatFloat('0.00', StrToFloat(Edit4.Text) - s + subs);
 end;
 
-procedure TForm1.DelCl(id: integer);
+procedure TMainForm.DelCl(id: integer);
 {*******************************************************************************
     Процедура DelCl позволяет удалить клиента из sgcl.
     Из необходимых массивов и из sgcl удаляется искомый элемент
@@ -3438,7 +3624,7 @@ begin
   Edit4.Text := FormatFloat('0.00', ASub);
 end;
 
-procedure TForm1.RecalcSelectedRows;
+procedure TMainForm.RecalcSelectedRows;
 var
   pr: TAboutBox1;
   c:  TClient;
@@ -3513,7 +3699,7 @@ begin
 
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);
 {
   Создание главной формы. Происходит загрузка последних данных из файла(текущие округ
   и инспектор, мдд, год и месяц запуска программы) и с сервера.
@@ -3616,7 +3802,7 @@ begin
   FormerStringGrid(SGCL, TStringArray.Create('ФИО', 'Адрес', 'Срок субсидии',
     'Расчет','Субсидия'), TIntArray.Create(200, 170, 128, 40, 55), 2);
 
-  Form1.Caption := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ' +
+  MainForm.Caption := 'Учет предоставления субсидий на оплату ЖКУ населению г.Омска за ' +
     StringDate(StrToDate(rdt)) + 'г.' + ' [' + Revision + ']' + ' - ' + curServer;
 
   //русская расладка
@@ -3636,8 +3822,8 @@ begin
   else
     sec1 := 0;
 
-  Form1.codedbf := OEM;
-  FillCurr(bpath, rdt, dist, Form1.codedbf);
+  MainForm.codedbf := OEM;
+  FillCurr(bpath, rdt, dist, MainForm.codedbf);
 
   //для быстрого поиска по фамилии
   ItemIndex := -1;
@@ -3649,7 +3835,7 @@ begin
   SetTarifs;
 end;
 
-function TForm1.NewPlace(id: integer; s1, s2: string): integer;
+function TMainForm.NewPlace(id: integer; s1, s2: string): integer;
 {
   Новое место для записи S в StringGrid.
 }
@@ -3678,7 +3864,7 @@ begin
     Result := 1;
 end;
 
-procedure TForm1.InsertCl(i1, i2: integer);
+procedure TMainForm.InsertCl(i1, i2: integer);
 {
   поместить элемент с номером i1 на место i2, остальные
   элементы сдвинуть
@@ -3712,7 +3898,7 @@ begin
     SGCl.Cells[k, i2 + 1] := cs[k];
 end;
 
-procedure TForm1.FormClose;
+procedure TMainForm.FormClose;
 {
   Выход из программы. Вычисляется последняя дата edate, с которой был произведен
   расчет. Эта дата сравнивается с by и bm, которые соответствуют началу периода
@@ -3796,7 +3982,7 @@ begin
   try
     DModule.Database1.Connected := True;
     if (pdt > rdt) and DModule.Database1.Connected then
-      FillCurr(bpath, pdt, dist, Form1.codedbf);
+      FillCurr(bpath, pdt, dist, MainForm.codedbf);
   except
     ShowMessage('Произошел сбой при попытке соединения с сервером! Обратитесь к ' +
       'администратору для устранения этих неполадок.' + #13 +
@@ -3822,7 +4008,7 @@ begin
   end;
 end;
 
-function TForm1.SetSumSub: real;
+function TMainForm.SetSumSub: real;
   { установить текущие суммы субсидий для клиентов на главной форме }
 var
   i: integer;
@@ -3832,7 +4018,7 @@ begin
     Result := Result + sub[i];
 end;
 
-procedure TForm1.Reload;
+procedure TMainForm.Reload;
 {
   функция перезагрузки базы данных. В момент загрузки поверх окон находится
   окно, в котором отражен прогресс загрузки и количество загруженных записей.
@@ -3846,7 +4032,7 @@ begin
   ClearSG;
 {  for i := 0 to MainMenu1.Items.Count - 1 do
     MainMenu1.Items.Items[i].Enabled := False;}
-  Form1{.ActionToolBar1}.Enabled := False;
+  MainForm{.ActionToolBar1}.Enabled := False;
   pr := TAboutBox1.Create(Application);
   pr.Label1.Caption := 'Загрузка базы данных';
   pr.Label2.Caption := 'Загружено записей:';
@@ -3921,7 +4107,7 @@ begin
   pr.Release;
 {  for i := 0 to MainMenu1.Items.Count - 1 do
     MainMenu1.Items.Items[i].Enabled := True;}
-  Form1.Enabled := True;
+  MainForm.Enabled := True;
   ccl := c;
   acl := ACount;
   Edit1.Text := IntToStr(ccl);
@@ -3941,7 +4127,7 @@ begin
     halt;
 end;
 
-procedure TForm1.ReloadConfig;
+procedure TMainForm.ReloadConfig;
 begin
   GroupBox1.Visible := getConfValue('0.ShowLegend');
   getConfValue('1.Server');
@@ -3952,9 +4138,9 @@ begin
     reports_path := (ExtractFilePath(Application.ExeName) + 'reports\');
 end;
 
-procedure TForm1.ReportsFillAdditionData(nameInsp: string);
+procedure TMainForm.ReportsFillAdditionData(nameInsp: string);
 begin
-  New(Form1.ARepData);
+  New(MainForm.ARepData);
   ARepData.Clear;
   if getConfValue('0.ShowAddReportData') = True then
     ReportDataFrm.ShowModal;
@@ -3977,10 +4163,10 @@ begin
       Variables['spec2'] := quotedstr(ARepData.spec2);
 //      Variables['spec'] := quotedstr('');
   end;
-  Dispose(Form1.ARepData);
+  Dispose(MainForm.ARepData);
 end;
 
-procedure TForm1.ReportsFillDistInfo;
+procedure TMainForm.ReportsFillDistInfo;
 { процедура назначает значение переменных в отчетах для формирования шапки }
 var
   tmp_query: TQuery;
@@ -4002,7 +4188,7 @@ begin
   end;
 end;
 
-procedure TForm1.Load(q: CQuery; rsel: boolean);
+procedure TMainForm.Load(q: CQuery; rsel: boolean);
 {
   функция перезагрузки базы данных в соответствии с запросом q, который был сформирован
   на форме фильтра. В момент загрузки поверх окон находится окно, в котором отражен
@@ -4016,7 +4202,7 @@ begin
   ClearSG;
 {  for i := 0 to MainMenu1.Items.Count - 1 do
     MainMenu1.Items.Items[i].Enabled := False;}
-  Form1.{ActionToolBar1.}Enabled := False;
+  MainForm.{ActionToolBar1.}Enabled := False;
   pr := TAboutBox1.Create(Application);
   pr.Label1.Caption := 'Загрузка результатов поиска';
   pr.Label2.Caption := 'Загружено записей:';
@@ -4109,7 +4295,7 @@ begin
   pr.Release;
 {  for i := 0 to MainMenu1.Items.Count - 1 do
     MainMenu1.Items.Items[i].Enabled := True;}
-  Form1.{ActionToolBar1.}Enabled := True;
+  MainForm.{ActionToolBar1.}Enabled := True;
   Edit3.Text := IntToStr(c);
   if c > 0 then
   begin
@@ -4123,7 +4309,7 @@ begin
   end;
 end;
 
-procedure TForm1.SGClDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
+procedure TMainForm.SGClDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
 {
   Событие прорисовки ячейки. Перепрограммировано для отображения статуса
   клиента и изменения подсветки текущей выбранной строки.
@@ -4190,7 +4376,7 @@ begin
 end;
 
 
-procedure TForm1.ClearSG;
+procedure TMainForm.ClearSG;
 { очистка stringgrid }
 var
   i: integer;
@@ -4214,7 +4400,7 @@ begin
   end;
 end;
 
-procedure TForm1.DelRow(i: integer);
+procedure TMainForm.DelRow(i: integer);
 { удалить строку из string grid }
 var
   j, k: integer;
@@ -4229,7 +4415,7 @@ begin
       SGCl.Cells[k, 1] := '';
 end;
 
-procedure TForm1.SGClSelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
+procedure TMainForm.SGClSelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
 {
   Событие выбора ячейки. Перепрограммировано для вывода фамилии и субсидии в statusbar,
   для определения текущего клиента и его статуса.
@@ -4244,7 +4430,7 @@ begin
   end;
 end;
 
-procedure TForm1.SaveSubsidyCfg;
+procedure TMainForm.SaveSubsidyCfg;
 begin
   //Сохранение в реестр
   with TRegistry.Create do
@@ -4266,7 +4452,7 @@ begin
     end;
 end;
 
-procedure TForm1.SetPer(per1: string; var per2: string);
+procedure TMainForm.SetPer(per1: string; var per2: string);
 { установить дату per2, исходя из per1 - комбинации года и месяца(всего 4 цифры) }
 var
   m, y, d: integer;
@@ -4295,7 +4481,7 @@ begin
   per2 := '01.' + Copy(per, 3, 2) + '.20' + Copy(per, 1, 2);
 end;
 
-procedure TForm1.SetPer2(per1: string; var per2: string);
+procedure TMainForm.SetPer2(per1: string; var per2: string);
 { установить per1 - комбинацию года и месяца(всего 4 цифры), исходя из даты per2 }
 var
   m, y, d: integer;
@@ -4322,7 +4508,7 @@ begin
     per2 := per2 + IntToStr(m);
 end;
 
-procedure TForm1.PrintVedCr(f, ad, rd, mng: string);
+procedure TMainForm.PrintVedCr(f, ad, rd, mng: string);
 { сформировать ведомость субсидий клиента за год }
 var
   y1, dt: string;
@@ -4350,35 +4536,7 @@ begin
   frxReport1.ShowPreparedReport;
 end;
 
-function TForm1.SG_FindCl(SG: TStringGrid; s: string): integer;
-{
-  Процедура используется для поиска ФИО клиента в stringgrid по начальным буквам,
-  находящимся в s. Перебираются последовательно все ячейки SGCL, если ячейка найдена,
-  то возвращается номер строки, если нет, то -1.
-}
-var
-  i, j: integer;
-  s1: string;
-begin
-  Result := -1;
-  i := 1;
-  while i <> SGCL.RowCount - 1 do
-  begin
-    s1 := AnsiLowerCase(SG.Cells[0, i]);
-    j  := Pos(s, s1);
-    if j = 1 then
-    begin
-      Result := i;
-      exit;
-    end;
-    Inc(i);
-  end;
-
-  if i = SG.RowCount then
-    Result := -1;
-end;
-
-procedure TForm1.SGClDblClick(Sender: TObject);
+procedure TMainForm.SGClDblClick(Sender: TObject);
 {
   Перепрограммировано для вызова формы изменения клиента.
 }
@@ -4403,7 +4561,7 @@ begin
     ShowMessage('База пуста!');
 end;
 
-procedure TForm1.SGClKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TMainForm.SGClKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 { обработка нажатия клавиш на клавиатуре }
 begin
   if Key = vk_insert then
@@ -4434,7 +4592,7 @@ begin
   end;
 end;
 
-procedure TForm1.SGClKeyPress(Sender: TObject; var Key: char);
+procedure TMainForm.SGClKeyPress(Sender: TObject; var Key: char);
 {
   Процедура обработки нажатия клавиш на клавиатуре. Используется для быстрого
   поиска ФИО клиента в stringgrid.
@@ -4454,7 +4612,7 @@ begin
       searchbuf := searchbuf + Key;
     end;
     LastTime  := Time;
-    ItemIndex := SG_FindCl(SGCl, searchbuf);
+    ItemIndex := SG_Find(SGCl, searchbuf, 0);
     if (ItemIndex <> -1) then
     begin
       client := cl[ItemIndex - 1];
@@ -4465,13 +4623,13 @@ begin
   end;
 end;
 
-procedure TForm1.SGClMouseDown(Sender: TObject; Button: TMouseButton;
+procedure TMainForm.SGClMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   //SGCL.Row := SGCL.MouseCoord(x, y).Y;
 end;
 
-procedure TForm1.FormResize(Sender: TObject);
+procedure TMainForm.FormResize(Sender: TObject);
 {
   Процедура совершает смещение компонентов на форме в соответствии с изменением
   размеров формы
@@ -4479,7 +4637,7 @@ procedure TForm1.FormResize(Sender: TObject);
 var
   w1: integer;
 begin
-  case Form1.WindowState of
+  case MainForm.WindowState of
     wsMaximized:
     begin
       w1 := Panel1.Width - SGCl.ColWidths[2] - SGCl.ColWidths[3] - SGCl.ColWidths[4];
@@ -4501,7 +4659,7 @@ begin
   GridPanel1.Realign;
 end;
 
-procedure TForm1.N73Click(Sender: TObject);
+procedure TMainForm.N73Click(Sender: TObject);
 {*******************************************************************************
   Процедура приостанавливает субсидию в текущем отчетном периоде выбранному клиенту.
   В таблице hist значение поля stop устанавливается в 2, а в таблице субсидий и служебных
@@ -4542,7 +4700,7 @@ begin
     ShowMessage('Приостановить можно только действующую субсидию активного клиента!');
 end;
 
-procedure TForm1.N75Click(Sender: TObject);
+procedure TMainForm.N75Click(Sender: TObject);
 {*******************************************************************************
   Процедура прекращает субсидию выбранному клиенту. В таблице sub значение поля
   stop устанавливается в 3, а в таблице субсидий и служебных
@@ -4589,7 +4747,7 @@ begin
     ShowMessage('Прекратить можно только приостановленную субсидию активного клиента по истечение 1 месяца со дня приостановки!');
 end;
 
-procedure TForm1.N74Click(Sender: TObject);
+procedure TMainForm.N74Click(Sender: TObject);
 {*******************************************************************************
   Процедура возобновновляет субсидию в текущем отчетном периоде выбранному клиенту.
   В таблице sub значение поля stop устанавливается в 1, а в таблице субсидий и служебных
@@ -4647,7 +4805,7 @@ begin
     ShowMessage('Возобновить можно только прекращенную субсидию активного клиента по истечение 1 месяца со дня приостановки!');
 end;
 
-procedure TForm1.N93Click(Sender: TObject);
+procedure TMainForm.N93Click(Sender: TObject);
 {*******************************************************************************
   Процедура восстанавливает субсидию в текущем отчетном периоде выбранному клиенту,
   у которого была сделана приостановка, прекращение или возобновление, и
@@ -4700,7 +4858,7 @@ begin
   end;
 end;
 
-procedure TForm1.FormShow(Sender: TObject);
+procedure TMainForm.FormShow(Sender: TObject);
 begin
   SGCl.SetFocus;
   GridPanel1.Realign;

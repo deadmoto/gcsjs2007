@@ -143,7 +143,7 @@ end;
 
 procedure TForm42.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  Form1.SetTarifs;
+  MainForm.SetTarifs;
 end;
 
 end.

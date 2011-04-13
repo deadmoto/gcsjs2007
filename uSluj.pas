@@ -32,6 +32,7 @@ type
     procedure SlujGridSelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
     procedure Button1Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure SlujGridKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -83,8 +84,8 @@ begin
           'ORDER BY Cl.fio');
       end;
     end;
-    Query1.ParamByName('rdt').Value := form1.rdt;
-    Query1.ParamByName('dist').Value := form1.dist;
+    Query1.ParamByName('rdt').Value := MainForm.rdt;
+    Query1.ParamByName('dist').Value := MainForm.dist;
     Query1.Open;
     Query1.First;
   end;
@@ -172,7 +173,29 @@ end;
 
 procedure TSlujFrm.Button3Click(Sender: TObject);
 begin
-  ExportGridToExcel(SlujGrid, Form1.reports_path + 'tmp.xls');
+  ExportGridToExcel(SlujGrid, MainForm.reports_path + 'tmp.xls');
+end;
+
+procedure TSlujFrm.SlujGridKeyPress(Sender: TObject; var Key: Char);
+var
+  s: word;
+begin
+  //поиск клиента по набору символов
+  if (Key in ['а'..'я']) or (Key in ['А'..'Я']) then
+  begin
+    s := MilliSecondsBetween(Time, LastTime);
+    if (s > 1000) then//новый поиск
+      searchbuf := Key
+    else
+    begin
+      Dec(ItemIndex);
+      searchbuf := searchbuf + Key;
+    end;
+    LastTime  := Time;
+    ItemIndex := SG_Find(SlujGrid, searchbuf, 2);
+    if (ItemIndex <> -1) then
+      SlujGrid.Row := ItemIndex;
+  end;
 end;
 
 procedure TSlujFrm.SlujGridSelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
@@ -187,7 +210,7 @@ begin
     DModule.Query1.Close;
     DModule.Query1.SQL.Text := 'DELETE FROM Sluj' + #13 +
       'WHERE (sdate = CONVERT(smalldatetime, :rdt, 104)) AND (regn = ' + cl_regn + ')';
-    DModule.Query1.ParamByName('rdt').Value := form1.rdt;
+    DModule.Query1.ParamByName('rdt').Value := MainForm.rdt;
     DModule.Query1.ExecSQL;
     FillSlujGrid;
   end;

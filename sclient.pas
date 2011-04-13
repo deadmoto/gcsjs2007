@@ -484,7 +484,7 @@ type
     procedure SetData;//установить все данные
     function CalcEmpty: bool;
     function CardEmpty: bool;//пусты ключевые поля?
-    function ExistHouse(var n: integer): bool;//существует дом?
+//    function ExistHouse(var n: integer): bool;//существует дом?
     function ExistClient(var n: integer): bool;
     function ExistMem: bool;
     function ExistMemEx(var n: integer): bool;
@@ -601,8 +601,8 @@ begin
   begin
     Cl.cdata.calc := 0;
     Cl.cdata.mdd := RadioGroup3.ItemIndex;
-    Cl.Data.insp := Form1.insp;
-    Cl.Data.dist := Form1.dist;
+    Cl.Data.insp := MainForm.insp;
+    Cl.Data.dist := MainForm.dist;
     Cl.Data.change := Date;
     Cl.Data.declar := Date;
     Cl.Data.str := str[Combobox12.ItemIndex];
@@ -682,7 +682,7 @@ function TEditClForm.CalcEmpty: bool;
 var
   sts: integer;
 begin
-  sts := Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate);
+  sts := MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate);
   if (//индивидуальный расчет
     ((sts = 0) or (sts = 4)) and ((Edit12.Text = '') or (Edit15.Text = '') or//базовые данные
     (Edit18.Text = '') or (Edit21.Text = '') or (Edit24.Text = '') or
@@ -1049,8 +1049,8 @@ begin
     SQL.Add('select nameinsp');
     SQL.Add('from insp');
     SQL.Add('where (id_insp = :id)and(id_dist=:dist)');
-    ParamByName('id').AsInteger := Form1.insp;
-    ParamByName('dist').AsInteger := Form1.dist;
+    ParamByName('id').AsInteger := MainForm.insp;
+    ParamByName('dist').AsInteger := MainForm.dist;
     Open;
     Edit86.Text := FieldByName('nameinsp').AsString;
     l := 0;
@@ -1078,7 +1078,7 @@ begin
     SQL.Add('from mng');
     SQL.Add('where id_dist = :dist');
     SQL.Add('order by namemng');
-    ParamByName('dist').AsInteger := Form1.dist;
+    ParamByName('dist').AsInteger := MainForm.dist;
     Open;
     First;
     while not EOF do
@@ -1680,7 +1680,7 @@ procedure TEditClForm.SetVCalc;//расчет субсидии
 var
   s: integer;
 begin
-  s := Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate);
+  s := MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate);
   if (s = 0) then
   begin //первый месяц
     if not CheckBox1.Checked then
@@ -2052,33 +2052,33 @@ begin
     Result := -1;
 end;
 
-
-
-function TEditClForm.ExistHouse(var n: integer): bool;//существует дом?
-begin
-  with DModule.Query1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('select id_house');
-    SQL.Add('from house');
-    SQL.Add('where (id_street = :str)and(nhouse = :nh)and(corp=:cp)');
-    SQL.Add('and(id_dist=:dist)');
-    ParamByName('str').AsInteger := Cl.Data.str;
-    ParamByName('nh').AsString := Cl.Data.nh;
-    ParamByName('cp').AsString := Cl.Data.corp;
-    ParamByName('dist').AsInteger := Form1.dist;
-    Open;
-    if IsEmpty then
-      Result := False
-    else
-    begin
-      n := FieldByName('id_house').AsInteger;
-      Result := True;
-    end;
-    Close;
-  end;
-end;
+//
+//
+//function TEditClForm.ExistHouse(var n: integer): bool;//существует дом?
+//begin
+//  with DModule.Query1 do
+//  begin
+//    Close;
+//    SQL.Clear;
+//    SQL.Add('select id_house');
+//    SQL.Add('from house');
+//    SQL.Add('where (id_street = :str)and(nhouse = :nh)and(corp=:cp)');
+//    SQL.Add('and(id_dist=:dist)');
+//    ParamByName('str').AsInteger := Cl.Data.str;
+//    ParamByName('nh').AsString := Cl.Data.nh;
+//    ParamByName('cp').AsString := Cl.Data.corp;
+//    ParamByName('dist').AsInteger := MainForm.dist;
+//    Open;
+//    if IsEmpty then
+//      Result := False
+//    else
+//    begin
+//      n := FieldByName('id_house').AsInteger;
+//      Result := True;
+//    end;
+//    Close;
+//  end;
+//end;
 
 function TEditClForm.ExistClient(var n: integer): bool;
 begin
@@ -2279,7 +2279,7 @@ begin
               Query1.ParamByName('edate').Value := DateToStr(fenddate);
               Query1.ParamByName('sub').Value := StrToFloat(StringGrid1.Cells[1, i + 1]);
               Query1.ParamByName('factsum').Value := StrToFloat(StringGrid1.Cells[2, i + 1]);
-              Query1.ParamByName('dis').Value := Form1.dist;
+              Query1.ParamByName('dis').Value := MainForm.dist;
               Query1.ExecSQL;
             except
               ShowMessage('Ошибка при добавлении! Проверьте правильность ввода данных.')
@@ -2471,7 +2471,7 @@ begin
       try
         with DModule.Query1 do
         begin
-          if not ExistHouse(n) then
+          if not ExistHouse(n, Cl) then
           begin//если такого дома в базе нет
             Close;
             SQL.Clear;
@@ -2485,7 +2485,7 @@ begin
             SQL.Add('insert into house');
             SQL.Add('values (:id,:dist,:str,:nh,:cp,:stnd,');
             SQL.Add(':cont,:rep,:cold,:hot,:canal,:heat,:gas,');
-            SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil)');
+            SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil, :elevator)');
             ParamByName('id').AsInteger := maxid;
             ParamByName('dist').AsInteger := Cl.Data.dist;
             ParamByName('str').AsInteger := Cl.Data.str;
@@ -2505,6 +2505,7 @@ begin
             ParamByName('mng').AsInteger := Cl.Data.manager;
             ParamByName('fnd').AsInteger := Cl.Data.fond;
             ParamByName('boil').AsInteger := Cl.cdata.boiler;
+            ParamByName('elevator').Value := Cl.cdata.elevator;
             ExecSQL;
           end;
           Close;
@@ -2657,7 +2658,7 @@ begin
         Result := -1;
       end;
       if Result = 0 then
-        Form1.AddCl(Cl.Data.regn);
+        MainForm.AddCl(Cl.Data.regn);
     end
     else
       ShowMessage('Клиент с указанными данными уже существует!');
@@ -2676,13 +2677,13 @@ begin
     if not ErrorMessage then
     begin
       n := 0;
-      if (not ExistClient(n) or ExistClient(n) and (n = Form1.client)) then
+      if (not ExistClient(n) or ExistClient(n) and (n = MainForm.client)) then
       begin
         DModule.Database1.StartTransaction;
         try
           with DModule.Query1 do
           begin
-            if not ExistHouse(n) then
+            if not ExistHouse(n, Cl) then
             begin//если такого дома в базе нет
               Close;
               SQL.Clear;
@@ -2696,7 +2697,7 @@ begin
               SQL.Add('insert into house');
               SQL.Add('values (:id, :dist,:str, :nh, :cp, :stnd,');
               SQL.Add(':cont, :rep, :cold, :hot,:canal, :heat, :gas,');
-              SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil)');
+              SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil,:elevator)');
               ParamByName('id').AsInteger := maxid;
               ParamByName('dist').AsInteger := Cl.Data.dist;
               ParamByName('str').AsInteger := Cl.Data.str;
@@ -2716,6 +2717,7 @@ begin
               ParamByName('mng').AsInteger := Cl.Data.manager;
               ParamByName('fnd').AsInteger := Cl.Data.fond;
               ParamByName('boil').AsInteger := Cl.cdata.boiler;
+              ParamByName('elevator').Value := Cl.cdata.elevator;
               ExecSQL;
             end;
             if (att <> RadioGroup1.ItemIndex) and (RadioGroup1.ItemIndex = 2) then
@@ -2727,15 +2729,15 @@ begin
               SQL.Add('where regn=:id and bdate<=CONVERT(smalldatetime, :d, 104)');
               SQL.Add('and edate>CONVERT(smalldatetime, :d, 104)');
               ParamByName('id').AsInteger := Cl.Data.regn;
-              ParamByName('d').AsString := Form1.rdt;
-              ParamByName('edate').AsString := Form1.rdt;
+              ParamByName('d').AsString := MainForm.rdt;
+              ParamByName('edate').AsString := MainForm.rdt;
               ExecSQL;
               Close;
               SQL.Clear;
               SQL.Add('delete from sub');
               SQL.Add('where (regn = :id)and(sdate>=CONVERT(smalldatetime, :s, 104))');
               ParamByName('id').AsInteger := cl.Data.regn;
-              ParamByName('s').AsString := Form1.rdt;
+              ParamByName('s').AsString := MainForm.rdt;
               ExecSQL;
             end;
             Close;
@@ -2798,7 +2800,7 @@ begin
             SQL.Add('where regn = :id');
             ParamByName('id').AsInteger := Cl.Data.regn;
             ParamByName('fio').AsString := Cl.Data.fio;
-            Form1.SetPer2(Form1.rdt, dt);
+            MainForm.SetPer2(MainForm.rdt, dt);
             ParamByName('change').AsString := IntToStr(DayOf(Date)) + '.' + Copy(dt, 3, 2) + '.20' + Copy(dt, 1, 2);
             ParamByName('str').AsInteger := Cl.Data.str;
             ParamByName('n').AsString  := Cl.Data.nh;
@@ -2817,15 +2819,15 @@ begin
             SQL.Clear;
             SQL.Add('delete from sub');
             SQL.Add('where (regn=:r)and(sdate>=CONVERT(smalldatetime,:s,104))');
-            ParamByName('s').AsString  := Form1.rdt;
-            ParamByName('r').AsInteger := Form1.client;
+            ParamByName('s').AsString  := MainForm.rdt;
+            ParamByName('r').AsInteger := MainForm.client;
             ExecSQL;
             Close;
             SQL.Clear;
             SQL.Add('insert into  sub');
             SQL.Add('values (CONVERT(smalldatetime,:s,104),:r,:serv,:idserv,:ac,:pm,:snp,:sub,:sp,:stp,:stndsub)');
-            ParamByName('s').AsString  := Form1.rdt;
-            ParamByName('r').AsInteger := Form1.client;
+            ParamByName('s').AsString  := MainForm.rdt;
+            ParamByName('r').AsInteger := MainForm.client;
             ParamByName('stp').AsInteger := Cl.cdata.stop;
             for i := 0 to numbtarif - 1 do
             begin
@@ -2859,7 +2861,7 @@ begin
             SQL.Clear;
             SQL.Add('delete from fam');
             SQL.Add('where regn = :id');
-            ParamByName('id').AsInteger := Form1.client;
+            ParamByName('id').AsInteger := MainForm.client;
             ExecSQL;
             mem := 0;
             for i := 0 to Cl.cdata.family.Count - 1 do
@@ -2871,7 +2873,7 @@ begin
               SQL.Add('values (:id, :cl, :fio,convert(smalldatetime,:birth,104),');
               SQL.Add(':pol, :st, :priv,:mid, :rel, :npss)');
               ParamByName('id').AsCurrency := StrToCurr(IntToStr(Cl.Data.regn) + IntToStr(mem));
-              ParamByName('cl').AsInteger := Form1.client;
+              ParamByName('cl').AsInteger := MainForm.client;
               ParamByName('npss').AsString := TMan(Cl.cdata.family[i]).npss;
               ParamByName('fio').AsString := TMan(Cl.cdata.family[i]).fio;
               ParamByName('birth').AsString := DateToStr(TMan(Cl.cdata.family[i]).birth);
@@ -2887,8 +2889,8 @@ begin
             Close;
             SQL.Text := 'delete from Counters' + #13 +
               'where (regn=:r)and(sdate>=CONVERT(smalldatetime,:s,104))';
-            ParamByName('s').AsString := DateToStr(Cl.cdata.begindate); //Form1.rdt;
-            ParamByName('r').AsInteger := Form1.client;
+            ParamByName('s').AsString := DateToStr(Cl.cdata.begindate); //MainForm.rdt;
+            ParamByName('r').AsInteger := MainForm.client;
             ExecSQL;
             Close;
             SQL.Text := 'insert into Counters' + #13 +
@@ -2897,8 +2899,8 @@ begin
               if (i in [2..7]) and (cl.cdata.counter[i]) then
               begin
                 Close;
-                ParamByName('r').AsInteger := Form1.client;
-                ParamByName('d').AsString  := DateToStr(Cl.cdata.begindate); //Form1.rdt;
+                ParamByName('r').AsInteger := MainForm.client;
+                ParamByName('d').AsString  := DateToStr(Cl.cdata.begindate); //MainForm.rdt;
                 ParamByName('serv').AsInteger := i;
                 ParamByName('count').Value := Cl.cdata.counter[i];
                 ParamByName('countdata').AsFloat := Cl.cdata.counterdata[i];
@@ -2916,7 +2918,7 @@ begin
           Result := -1;
         end;
         if Result = 0 then
-          Form1.ModCl(Form1.client);
+          MainForm.ModCl(MainForm.client);
       end
       else
         ShowMessage('Клиент с указанными данными уже существует!');
@@ -2944,7 +2946,7 @@ begin
     Close;
     Inc(num);
   end;
-  if Form1.dist < 10 then
+  if MainForm.dist < 10 then
     Edit85.Text := '0' + IntToStr(num)
   else
     Edit85.Text := IntToStr(num);
@@ -2959,8 +2961,8 @@ end;
 
 procedure TEditClForm.SetPeriod;
 begin
-  MaskEdit2.Text := Form1.rdt;
-  MaskEdit3.Text := DateToStr(IncMonth(StrToDate(Form1.rdt), StrToInt(Edit109.Text)));
+  MaskEdit2.Text := MainForm.rdt;
+  MaskEdit3.Text := DateToStr(IncMonth(StrToDate(MainForm.rdt), StrToInt(Edit109.Text)));
   SetCert;
   Cl.cdata.period  := StrToInt(Edit109.Text);
   Cl.cdata.begindate := StrToDate(MaskEdit2.Text);
@@ -2970,10 +2972,10 @@ end;
 procedure TEditClForm.NewPeriod;
 begin
   SetPeriod;
-  Edit86.Text  := SelInsp(Form1.insp);
+  Edit86.Text  := SelInsp(MainForm.insp);
   Edit88.Text  := DateToStr(Date);
   Cl.cdata.stop := 0;
-  Cl.Data.insp := Form1.insp;
+  Cl.Data.insp := MainForm.insp;
   Cl.Data.change := Date;
   MaskEdit4.Text := DateToStr(Date);
   CheckBox3.Checked := False;
@@ -3011,16 +3013,16 @@ begin
   MaskEdit5.Text := DateToStr(Cl.cdata.prevbegindate);
   MaskEdit6.Text := DateToStr(Cl.cdata.prevenddate);
 
-  //Cl.CalcSub(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
-  //Cl.CalcFinal(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+  //Cl.CalcSub(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+  //Cl.CalcFinal(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
   //SetVCalc;
   //SumV;
 end;
 
 function TEditClForm.IsAPeriod: boolean;
 begin
-  if (Cl.cdata.begindate <= StrToDate(Form1.rdt)) and
-    (Cl.cdata.enddate >= StrToDate(Form1.rdt)) then
+  if (Cl.cdata.begindate <= StrToDate(MainForm.rdt)) and
+    (Cl.cdata.enddate >= StrToDate(MainForm.rdt)) then
     Result := True
   else
     Result := False;
@@ -3055,7 +3057,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit3.Text := FormatFloat('0.00', GetCostTarif(0, cont[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
+    Edit3.Text := FormatFloat('0.00', GetCostTarif(0, cont[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3081,7 +3083,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit4.Text := FormatFloat('0.00', GetCostTarif(1, mop[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
+    Edit4.Text := FormatFloat('0.00', GetCostTarif(1, mop[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3112,7 +3114,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit5.Text := FormatFloat('0.00', GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
+    Edit5.Text := FormatFloat('0.00', GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), b, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3144,7 +3146,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit124.Text := FormatFloat('0.00', GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
+    Edit124.Text := FormatFloat('0.00', GetCostTarif(2, cold[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), b, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3175,7 +3177,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit6.Text := FormatFloat('0.00', GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
+    Edit6.Text := FormatFloat('0.00', GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), b, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3206,7 +3208,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit125.Text := FormatFloat('0.00', GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), b, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
+    Edit125.Text := FormatFloat('0.00', GetCostTarif(3, hot[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), b, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3233,7 +3235,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit2.Text := FormatFloat('0.00', GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
+    Edit2.Text := FormatFloat('0.00', GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3260,7 +3262,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit126.Text := FormatFloat('0.00', GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
+    Edit126.Text := FormatFloat('0.00', GetCostTarif(4, canal[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3326,7 +3328,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit7.Text := FormatFloat('0.00', GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
+    Edit7.Text := FormatFloat('0.00', GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3353,7 +3355,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit127.Text := FormatFloat('0.00', GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
+    Edit127.Text := FormatFloat('0.00', GetCostTarif(5, heat[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3380,7 +3382,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit8.Text := FormatFloat('0.00', GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
+    Edit8.Text := FormatFloat('0.00', GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3406,7 +3408,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit128.Text := FormatFloat('0.00', GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
+    Edit128.Text := FormatFloat('0.00', GetCostTarif(6, gas[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]));
   end
   else
   begin
@@ -3433,7 +3435,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit10.Text := FormatFloat('0.00', (GetCostTarif(12, wood[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]) * Form1.normw) / 12);
+    Edit10.Text := FormatFloat('0.00', (GetCostTarif(12, wood[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]) * MainForm.normw) / 12);
   end
   else
   begin
@@ -3459,7 +3461,7 @@ begin
   if ind <> -1 then
   begin
     (Sender as TComboBox).ItemIndex := ind;
-    Edit11.Text := FormatFloat('0.00', (GetCostTarif(13, coal[(Sender as TComboBox).ItemIndex], StrToDate(Form1.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]) * Form1.normc) / 12);
+    Edit11.Text := FormatFloat('0.00', (GetCostTarif(13, coal[(Sender as TComboBox).ItemIndex], StrToDate(MainForm.rdt), 0, 0, settl[Combobox14.ItemIndex], ord(elevatorCheckBox.Checked), mop[comboBoxMOP.ItemIndex]) * MainForm.normc) / 12);
   end
   else
   begin
@@ -3498,8 +3500,8 @@ begin
   end;
 {  if load and not CalcEmpty then
   begin
-    Cl.CalcSub(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
-    Cl.CalcFinal(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+    Cl.CalcSub(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+    Cl.CalcFinal(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
     SetVCalc;
     SumV;
   end; }
@@ -3547,7 +3549,7 @@ begin
       ParamByName('str').AsInteger := str[Combobox12.ItemIndex];
       ParamByName('numb').AsString := Edit60.Text;
       ParamByName('cp').AsString := Edit61.Text;
-      ParamByName('dist').AsInteger := Form1.dist;
+      ParamByName('dist').AsInteger := MainForm.dist;
       Open;
       if not EOF then
       begin
@@ -3645,7 +3647,7 @@ begin
   Cl.cdata.countercost[7] := Cl.cdata.cost[7];
   if load and not CalcEmpty then
   begin
-    Cl.Calc(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+    Cl.Calc(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
     SetVCalc;
     SumV;
   end;
@@ -3780,7 +3782,7 @@ begin
   item.SubItems.Add(SelRel(TMan(Cl.cdata.family.Items[curman]).rel));
   if load and not CalcEmpty then
   begin
-    Cl.Calc(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+    Cl.Calc(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
     SetVCalc;
     SumV;
   end;
@@ -3946,7 +3948,7 @@ begin
   Cl.cdata.countercost[7] := Cl.cdata.cost[7];
   if load and not CalcEmpty then
   begin
-    Cl.Calc(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+    Cl.Calc(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
     SetVCalc;
     SumV;
   end;
@@ -4186,7 +4188,7 @@ procedure TEditClForm.CheckBox1Click(Sender: TObject);
 var
   sts: integer;
 begin
-  sts := Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate);
+  sts := MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate);
   if not load then
   begin
     Edit12.ReadOnly := True;
@@ -4486,7 +4488,7 @@ begin
   end;
   if load and not CalcEmpty then
   begin
-    Cl.Calc(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+    Cl.Calc(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
     SetVCalc;
     SumV;
   end;
@@ -4494,7 +4496,7 @@ end;
 
 procedure TEditClForm.FormShow(Sender: TObject);
 begin
-  curmonth := StrToInt(Copy(Form1.rdt, 4, 2));
+  curmonth := StrToInt(Copy(MainForm.rdt, 4, 2));
   PageControl1.TabIndex := 0;
   load := False;
   att  := 0;
@@ -4518,8 +4520,8 @@ begin
     begin
       EditClForm.Caption := 'Изменить/Просмотр клиента';
       Button2.Caption := 'Изменить клиента';
-      Cl.SetClient(Form1.client, Form1.rdt);
-      Cl.SetCalc(Form1.client, Form1.rdt);
+      Cl.SetClient(MainForm.client, MainForm.rdt);
+      Cl.SetCalc(MainForm.client, MainForm.rdt);
       SetData;
       load := True;
       SumV;
@@ -4545,7 +4547,7 @@ procedure TEditClForm.Button8Click(Sender: TObject);
 begin
   if load and not CalcEmpty then
   begin
-    Cl.Calc(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+    Cl.Calc(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
     SetVCalc;
     SumV;
   end;
@@ -4578,7 +4580,7 @@ begin
   begin
     if PageControl1.TabIndex = 4 then
     begin
-      if Form1.CheckP2 then
+      if MainForm.CheckP2 then
         Button2.Enabled := True;
     end
     else
@@ -4800,7 +4802,7 @@ begin
           'FROM FactSale' + #13 +
           'WHERE regn=:regn and bdate < CONVERT(smallDATETIME, :bdate, 104)' + #13 +
           'ORDER BY bdate';
-        Query1.ParamByName('bdate').Value := DateToStr(cl.cdata.begindate);//StrToDate(form1.rdt);
+        Query1.ParamByName('bdate').Value := DateToStr(cl.cdata.begindate);
         Query1.ParamByName('regn').Value := cl.Data.regn;
         Query1.Open;
 
@@ -5125,9 +5127,9 @@ procedure TEditClForm.Button19Click(Sender: TObject);
 //сменить текущего инспектора
 begin
   Form17.ShowModal;
-  if Form17.ac and (Cl.Data.insp <> Form1.insp) then
+  if Form17.ac and (Cl.Data.insp <> MainForm.insp) then
   begin
-    Cl.Data.insp := Form1.insp;
+    Cl.Data.insp := MainForm.insp;
     Edit86.Text  := Form17.nameinsp;
     if (mode = vAdd) then
       SetRegn;
@@ -5140,8 +5142,8 @@ begin
     Cl.cdata.mdd := RadioGroup3.ItemIndex;
   if load and not CalcEmpty then
   begin
-    Cl.CalcSub(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
-    Cl.CalcFinal(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+    Cl.CalcSub(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+    Cl.CalcFinal(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
     SetVCalc;
     SumV;
   end;
@@ -5156,14 +5158,14 @@ begin
       cServe: Cl.CalcServe(s);
       cServSq:
         if s = 5 then
-          Cl.CalcServSq(s, StrToInt(Copy(Form1.rdt, 4, 2)))
+          Cl.CalcServSq(s, StrToInt(Copy(MainForm.rdt, 4, 2)))
         else
           Cl.CalcServSq(s);
       cServWC: Cl.CalcServWC(s);
     end;
 
-    Cl.CalcSub(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
-    Cl.CalcFinal(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+    Cl.CalcSub(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+    Cl.CalcFinal(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
     SetVCalc;
     SumV;
   end;
@@ -5329,7 +5331,7 @@ begin
     end;
     if not CalcEmpty then
     begin
-      Cl.Calc(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+      Cl.Calc(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
       SetVCalc;
       SumV;
     end;
@@ -5445,7 +5447,7 @@ begin
       end;
       if not CalcEmpty then
       begin
-        Cl.Calc(Form1.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
+        Cl.Calc(MainForm.GetStatus(cl.cdata.begindate, cl.cdata.enddate));
         SetVCalc;
         SumV;
       end;
@@ -5582,7 +5584,7 @@ end;
 
 procedure TEditClForm.Edit111Exit(Sender: TObject);
 begin
-  if StrToDate(MaskEdit4.Text) < Form1.Idate then
+  if StrToDate(MaskEdit4.Text) < MainForm.Idate then
   begin
     ShowMessage('Указанная дата выходит за рамки доступного периода!');
     MaskEdit4.Text := Edit87.Text;

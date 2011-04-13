@@ -40,6 +40,7 @@ function IsDate(str: string): boolean;
 
 function FindReg(RegNumber, b: integer; buffer: array of integer): integer;//найти рег номер
 function FindCl(RegNumber: integer; buffer: array of integer): integer;    //найти рег номер
+function SG_Find(SG: TStringGrid; s: string; Col: integer): integer;
 
 function Rnd(n: real): real; //функция округления
 procedure ToRowF(n: real; var numb: array of integer);//разложение в ряд дробной части числа
@@ -296,7 +297,7 @@ begin
   if not IsDate(Edt.Text) then
   begin
     ShowMessage('Неверно введена дата!');
-    Edt.Text := Form1.rdt;
+    Edt.Text := MainForm.rdt;
     Result := False;
   end
   else
@@ -414,6 +415,34 @@ begin
     end;
   end
   else
+    Result := -1;
+end;
+
+function SG_Find(SG: TStringGrid; s: string; Col: integer): integer;
+{
+  Процедура поиска stringgrid значения в определенной колонке по начальным буквам,
+  находящимся в s. Перебираются последовательно все ячейки SG, если ячейка найдена,
+  то возвращается номер строки, если нет, то -1.
+}
+var
+  i, j: integer;
+  s1: string;
+begin
+  Result := -1;
+  i := 1;
+  while i <> SG.RowCount - 1 do
+  begin
+    s1 := AnsiLowerCase(SG.Cells[Col, i]);
+    j  := Pos(s, s1);
+    if j = 1 then
+    begin
+      Result := i;
+      exit;
+    end;
+    Inc(i);
+  end;
+
+  if i = SG.RowCount then
     Result := -1;
 end;
 

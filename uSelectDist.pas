@@ -61,7 +61,7 @@ begin
       SetLength(dist, Length(dist)+1);
       Combobox2.Items.Add(FieldByName('namedist').AsString);
       dist[l] := FieldByName('id_dist').AsInteger;
-      if dist[l]=Form1.dist then begin
+      if dist[l]=MainForm.dist then begin
         Combobox2.ItemIndex := l;
         Combobox2.Text := FieldByName('namedist').AsString;
       end;
@@ -84,7 +84,7 @@ begin
       SetLength(insp, Length(insp)+1);
       Combobox1.Items.Add(FieldByName('nameinsp').AsString);
       insp[l] := FieldByName('id_insp').AsInteger;
-      if insp[l]=Form1.insp then begin
+      if insp[l]=MainForm.insp then begin
         Combobox1.ItemIndex := l;
         Combobox1.Text := FieldByName('nameinsp').AsString;
       end;
@@ -135,9 +135,9 @@ begin
       ParamByName('idd').AsInteger := dist[Combobox2.ItemIndex];
       Open;
       if not IsEmpty then begin
-        Form1.insp := insp[Combobox1.ItemIndex];
-        Form1.dist := dist[Combobox2.ItemIndex];
-        Form1.LoginMode := lInsp;
+        MainForm.insp := insp[Combobox1.ItemIndex];
+        MainForm.dist := dist[Combobox2.ItemIndex];
+        MainForm.LoginMode := lInsp;
         SelectDistFrm.Close;
       end
       else
