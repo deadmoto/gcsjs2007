@@ -173,7 +173,7 @@ begin
         SQL.Clear;
         SQL.Add('insert into rstnd');
         SQL.Add('values (Convert(smalldatetime,:d,104),:id,:name,:v1,:v2,:v3,:v4,:v5,:v6,:v7)');
-        ParamByName('d').AsString := Form1.rdt;
+        ParamByName('d').AsString := MainForm.rdt;
         ParamByName('id').AsInteger := StrToInt(Edit4.Text);
         ParamByName('name').AsString := Edit1.Text;
         ParamByName('v1').AsFloat := StrToFloat(Edit2.Text);
@@ -184,7 +184,7 @@ begin
         ParamByName('v6').AsFloat := StrToFloat(Edit8.Text);
         ParamByName('v7').AsFloat := StrToFloat(Edit9.Text);
         ExecSQL;
-        FillStnd(Form1.bpath, Form1.rdt, Form1.codedbf);
+        FillStnd(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
         SetDefault;
       end
       else
@@ -227,7 +227,7 @@ begin
           SQL.Add('from rstnd');
           SQL.Add('where (id_stnd=:id)and(sdate=Convert(smalldatetime,:d,104))');
           ParamByName('id').AsInteger := StrToInt(Edit4.Text);
-          ParamByName('d').AsString := Form1.rdt;
+          ParamByName('d').AsString := MainForm.rdt;
           Open;
           if IsEmpty then
             flag := False
@@ -260,7 +260,7 @@ begin
             SQL.Add('where (id_stnd = :id)and(sdate=Convert(smalldatetime,:d,104))');
             ParamByName('id').AsInteger := oldid;
           end;
-          ParamByName('d').AsString := Form1.rdt;
+          ParamByName('d').AsString := MainForm.rdt;
           ParamByName('name').AsString := Edit1.Text;
           ParamByName('v1').AsFloat := StrToFloat(Edit2.Text);
           ParamByName('v2').AsFloat := StrToFloat(Edit3.Text);
@@ -270,7 +270,7 @@ begin
           ParamByName('v6').AsFloat := StrToFloat(Edit8.Text);
           ParamByName('v7').AsFloat := StrToFloat(Edit9.Text);
           ExecSQL;
-          FillStnd(Form1.bpath, Form1.rdt, Form1.codedbf);
+          FillStnd(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
           oldid := StrToInt(Edit4.Text);
         end
         else
@@ -294,10 +294,10 @@ begin
     SQL.Clear;
     SQL.Add('delete from rstnd');
     SQL.Add('where (id_stnd=:id)and(sdate=Convert(smalldatetime,:d,104))');
-    ParamByName('d').AsString := Form1.rdt;
+    ParamByName('d').AsString := MainForm.rdt;
     ParamByName('id').AsInteger := oldid;
     ExecSQL;
-    FillStnd(Form1.bpath, Form1.rdt, Form1.codedbf);
+    FillStnd(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
   end;
   SetDefault;
 end;

@@ -14,55 +14,58 @@ uses
   Dialogs,
   StdCtrls,
   Mask,
-  DBCtrls;
+  DBCtrls, ExtCtrls;
 
 type
   TForm24 = class(TForm)
-    Label7:     TLabel;
-    Label8:     TLabel;
-    Edit1:      TEdit;
-    Label24:    TLabel;
-    Label25:    TLabel;
-    Label26:    TLabel;
-    Label27:    TLabel;
-    Label28:    TLabel;
-    Label30:    TLabel;
-    Button1:    TButton;
-    Button4:    TButton;
-    Label1:     TLabel;
-    Label2:     TLabel;
-    ComboBox1:  TComboBox;
-    Edit3:      TEdit;
-    Edit4:      TEdit;
-    ComboBox2:  TComboBox;
-    Edit6:      TEdit;
-    ComboBox3:  TComboBox;
-    ComboBox4:  TComboBox;
-    ComboBox5:  TComboBox;
-    ComboBox6:  TComboBox;
-    ComboBox7:  TComboBox;
-    ComboBox9:  TComboBox;
+    GroupBox1: TGroupBox;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
+    Label30: TLabel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label9: TLabel;
+    Edit1: TEdit;
+    ComboBox1: TComboBox;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    ComboBox2: TComboBox;
+    Edit6: TEdit;
+    ComboBox3: TComboBox;
+    ComboBox4: TComboBox;
+    ComboBox5: TComboBox;
+    ComboBox6: TComboBox;
+    ComboBox7: TComboBox;
+    ComboBox9: TComboBox;
     ComboBox10: TComboBox;
-    Edit7:      TEdit;
-    Edit8:      TEdit;
-    Edit9:      TEdit;
-    Edit10:     TEdit;
-    Edit11:     TEdit;
-    Edit13:     TEdit;
-    Edit14:     TEdit;
-    Label3:     TLabel;
-    Label4:     TLabel;
+    Edit7: TEdit;
+    Edit8: TEdit;
+    Edit9: TEdit;
+    Edit10: TEdit;
+    Edit11: TEdit;
+    Edit13: TEdit;
+    Edit14: TEdit;
     ComboBox11: TComboBox;
     ComboBox12: TComboBox;
-    Label5:     TLabel;
-    ComboBox8:  TComboBox;
-    Label6:     TLabel;
+    ComboBox8: TComboBox;
     ComboBox13: TComboBox;
-    Label9:     TLabel;
     ComboBox14: TComboBox;
-    Edit2:      TEdit;
-    CheckBox1:  TCheckBox;
+    Edit2: TEdit;
+    CheckBox1: TCheckBox;
     elevatorCheckBox: TCheckBox;
+    FlowPanel1: TFlowPanel;
+    Button4: TButton;
+    Button1: TButton;
+    Button2: TButton;
     procedure Button4Click(Sender: TObject);
     procedure ComboBox2Change(Sender: TObject);
     procedure ComboBox3Change(Sender: TObject);
@@ -86,6 +89,7 @@ type
     procedure Edit3KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure Edit4Exit(Sender: TObject);
     procedure Edit4KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
     str, mng, fnd, cont, rep, cold, hot, canal, heat, gas, wood, coal, stnd, el: array of integer;
@@ -127,7 +131,8 @@ uses
   chhouse,
   sclient,
   main,
-  service;
+  service,
+  shtarif;
 
 {$R *.dfm}
 
@@ -145,7 +150,7 @@ begin
     SQL.Add('fond on house.id_fond=fond.id_fond');
     SQL.Add('where (house.id_house = :id) and (house.id_dist = :dist)');
     ParamByName('id').AsInteger := n;
-    ParamByName('dist').AsInteger := Form1.dist;
+    ParamByName('dist').AsInteger := MainForm.dist;
     Open;
     Edit3.Text := FieldByName('nhouse').AsString;
     Edit4.Text := FieldByName('corp').AsString;
@@ -210,7 +215,7 @@ begin
     ParamByName('str').AsInteger := str[Combobox1.ItemIndex];
     ParamByName('nh').AsString := Edit3.Text;
     ParamByName('cp').AsString := Edit4.Text;
-    ParamByName('dist').AsInteger := Form1.dist;
+    ParamByName('dist').AsInteger := MainForm.dist;
     Open;
     if IsEmpty then
       Result := False
@@ -293,7 +298,7 @@ begin
     SQL.Add('select id_mng, namemng');
     SQL.Add('from mng');
     SQL.Add('where id_dist = :dist');
-    ParamByName('dist').AsInteger := Form1.dist;
+    ParamByName('dist').AsInteger := MainForm.dist;
     SQL.Add('order by namemng');
     Open;
     First;
@@ -800,6 +805,26 @@ begin
   Close;
 end;
 
+procedure TForm24.Button2Click(Sender: TObject);
+var
+  nam, namet, capt: string;
+begin
+  capt := 'Тарифы на содержание жилья(руб./кв.м.)';
+  nam  := 'cont';
+  namet := comboBox2.Text;
+
+  Form37 := TForm37.Create(Form24);
+  Form37.Caption := capt;
+  Form37.nam := nam;
+  Form37.namet := namet;
+  Form37.ShowModal;
+  if Form37.ac then
+  begin
+    comboBox2.Text := Form37.namet;
+    comboBox2.OnChange(comboBox2);
+  end;
+end;
+
 procedure TForm24.ComboBox11Change(Sender: TObject);
 var
   ind: integer;
@@ -911,7 +936,7 @@ begin
           Close;
           SQL.Clear;
           SQL.Add('execute maxhouse :dist');
-          ParamByName('dist').AsInteger := Form1.dist;
+          ParamByName('dist').AsInteger := MainForm.dist;
           Open;
           maxid := FieldByName('mid').AsInteger;
           Inc(maxid);
@@ -922,7 +947,7 @@ begin
           SQL.Add(':cont, :rep, :cold, :hot,:canal, :heat, :gas,');
           SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil,:elevator)');
           ParamByName('id').AsInteger := maxid;
-          ParamByName('dist').AsInteger := Form1.dist;
+          ParamByName('dist').AsInteger := MainForm.dist;
           ParamByName('str').AsInteger := str[Combobox1.ItemIndex];
           ParamByName('nh').AsString  := Edit3.Text;
           ParamByName('cp').AsString  := Edit4.Text;
@@ -985,7 +1010,7 @@ begin
           SQL.Add('id_mng = :mng, id_fond = :fnd, boiler = :boil, elevator = :elevator');
           SQL.Add('where (id_house = :id)and(id_dist = :dist)');
           ParamByName('id').AsInteger := Form30.house;
-          ParamByName('dist').AsInteger := Form1.dist;
+          ParamByName('dist').AsInteger := MainForm.dist;
           ParamByName('str').AsInteger := str[Combobox1.ItemIndex];
           ParamByName('nh').AsString  := Edit3.Text;
           ParamByName('cp').AsString  := Edit4.Text;
@@ -1033,7 +1058,7 @@ begin
       SQL.Add('delete from house');
       SQL.Add('where (id_house = :h)and(id_dist = :dist)');
       ParamByName('h').AsInteger := Form30.house;
-      ParamByName('dist').AsInteger := Form1.dist;
+      ParamByName('dist').AsInteger := MainForm.dist;
       ExecSQL;
       Close;
     end;

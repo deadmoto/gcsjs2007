@@ -70,7 +70,7 @@ begin
     SQL.Add('where sb.age>=:f and sb.age<=:s');
     ParamByName('f').AsInteger := StrToInt(Edit1.Text);
     ParamByName('s').AsInteger := StrToInt(Edit2.Text);
-    ParamByName('d').AsString  := Form1.rdt;
+    ParamByName('d').AsString  := MainForm.rdt;
     Open;
     Edit3.Text := IntToStr(RecordCount);
   end;
@@ -87,7 +87,7 @@ begin
   begin
     path := ExtractFilePath(Application.ExeName) + 'out\';
     DModule.Query1.First;
-    FillTable(path, 'age' + Edit1.Text + '-' + Edit2.Text, Form1.codedbf);
+    FillTable(path, 'age' + Edit1.Text + '-' + Edit2.Text, MainForm.codedbf);
   end;
 end;
 

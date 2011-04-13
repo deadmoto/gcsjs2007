@@ -31,7 +31,7 @@ uses main, dbf;
 
 procedure TForm41.FormShow(Sender: TObject);
 begin
-  if Form1.codedbf=OEM then
+  if MainForm.codedbf=OEM then
     RadioButton2.Checked := true
   else
     RadioButton1.Checked := true;
@@ -40,9 +40,9 @@ end;
 procedure TForm41.Button1Click(Sender: TObject);
 begin
   if RadioButton2.Checked then
-    Form1.codedbf := OEM
+    MainForm.codedbf := OEM
   else
-    Form1.codedbf := ANSI;
+    MainForm.codedbf := ANSI;
   Close;
 end;
 

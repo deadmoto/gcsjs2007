@@ -80,7 +80,7 @@ begin
     SQL.Add('on insp.id_dist = dist.id_dist');
     SQL.Add('where insp.id_dist=:id');
     SQL.Add('order by insp.id_insp');
-    ParamByName('id').AsInteger := Form1.dist;
+    ParamByName('id').AsInteger := MainForm.dist;
     Open;
     First;
   end;
@@ -175,7 +175,7 @@ begin
       SQL.Add('from insp');
       SQL.Add('where (id_insp=:id)and(id_dist = :dist)');
       ParamByName('id').AsInteger := StrToInt(Edit2.Text);
-      ParamByName('dist').AsInteger := Form1.dist;
+      ParamByName('dist').AsInteger := MainForm.dist;
       Open;
       if IsEmpty then
       begin
@@ -185,7 +185,7 @@ begin
         SQL.Add('from insp');
         SQL.Add('where (nameinsp = :name)and(id_dist = :dist)');
         ParamByName('name').AsString  := Edit1.Text;
-        ParamByName('dist').AsInteger := Form1.dist;
+        ParamByName('dist').AsInteger := MainForm.dist;
         Open;
         if IsEmpty then
           flag := True
@@ -206,14 +206,14 @@ begin
         SQL.Add('values (:id, :dist,:name, :st, :num,:pas)');
         ParamByName('id').AsInteger  := StrToInt(Edit2.Text);
         ParamByName('name').AsString := Edit1.Text;
-        ParamByName('dist').AsInteger := Form1.dist;
+        ParamByName('dist').AsInteger := MainForm.dist;
         ParamByName('pas').AsString := GenMD5Password( InputPassword('¬ведите пароль!', 'ѕароль:', '') );
         if CheckBox1.Checked = False then
           st := 0
         else
           st := 1;
         ParamByName('st').AsInteger := st;
-        ParamByName('num').AsInteger := SetRegn(Form1.dist, StrToInt(Edit2.Text), 0);
+        ParamByName('num').AsInteger := SetRegn(MainForm.dist, StrToInt(Edit2.Text), 0);
         ExecSQL;
         SetDefault;
       end
@@ -244,7 +244,7 @@ begin
       SQL.Add('from insp');
       SQL.Add('where (id_insp=:id)and(id_dist = :dist)');
       ParamByName('id').AsInteger := StrToInt(Edit2.Text);
-      ParamByName('dist').AsInteger := Form1.dist;
+      ParamByName('dist').AsInteger := MainForm.dist;
       Open;
       if IsEmpty or not IsEmpty and
         (FieldByName('id_insp').AsInteger = oldid) then
@@ -255,7 +255,7 @@ begin
         SQL.Add('from insp');
         SQL.Add('where (nameinsp = :name)and(id_dist = :dist)');
         ParamByName('name').AsString  := Edit1.Text;
-        ParamByName('dist').AsInteger := Form1.dist;
+        ParamByName('dist').AsInteger := MainForm.dist;
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_insp').AsInteger = oldid) then
@@ -278,7 +278,7 @@ begin
         SQL.Add('where (id_insp = :id)and(id_dist = :dist)');
         ParamByName('id').AsInteger  := oldid;
         ParamByName('name').AsString := Edit1.Text;
-        ParamByName('dist').AsInteger := Form1.dist;
+        ParamByName('dist').AsInteger := MainForm.dist;
         if CheckBox1.Checked = False then
           st := 0
         else
@@ -312,7 +312,7 @@ begin
       SQL.Add('delete from insp');
       SQL.Add('where (id_insp = :id)and(id_dist = :dist)');
       ParamByName('id').AsInteger := oldid;
-      ParamByName('dist').AsInteger := Form1.dist;
+      ParamByName('dist').AsInteger := MainForm.dist;
       ExecSQL;
       SetDefault;
     end;
@@ -339,7 +339,7 @@ begin
     //Button5.Enabled := True;
   end;
 
-  if Form1.LoginMode = lAdmin then
+  if MainForm.LoginMode = lAdmin then
     Button5.Visible := True
   else
     Button5.Visible := False;

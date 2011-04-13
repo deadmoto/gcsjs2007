@@ -9,9 +9,8 @@ uses
   DB,
   Dialogs,
   Math,
-  SysUtils,
-
-  service;
+  service,
+  SysUtils;
 
 type
   T2DInt = array of array of integer;
@@ -125,6 +124,7 @@ type
     function GetStandard: real;
     function GetMdd: integer;
     function HaveCounters: boolean;
+    function GetOwnPriv:string;
     procedure Calc(sts: integer);   //расчет за мес€ц
     procedure CalcSub(sts: integer);//расчет субсидии по рег. стандарту
     procedure CalcFinal(sts: integer);
@@ -141,6 +141,7 @@ type
     procedure SetCalc(regn: integer; date: string);
     procedure SetNorm;//установить норму
     procedure SetMin; //установить min
+
   end;
 
   TMan = class
@@ -239,7 +240,7 @@ begin
     Data.mail := FieldByName('mail').AsInteger;
     Close;
     SQL.Clear;
-    if Form1.status <> 3 then
+    if MainForm.status <> 3 then
     begin
       SQL.Add('select *');
       SQL.Add('from hist');
@@ -286,7 +287,7 @@ begin
     SQL.add('where regn = :id');
     parambyname('id').AsInteger := regn;
     Open;
-    cdata.dist  := form1.dist;
+    cdata.dist  := MainForm.dist;
     cdata.lsquare := FieldByName('lsquare').AsFloat;
     cdata.square := FieldByName('square').AsFloat;
     cdata.rstnd := FieldByName('id_stnd').AsInteger;
@@ -295,7 +296,7 @@ begin
     //
     Close;
     SQL.Clear;
-    if Form1.status <> 3 then
+    if MainForm.status <> 3 then
     begin
       SQL.Add('select *');
       SQL.Add('from hist');
@@ -332,14 +333,14 @@ begin
     Close;
     SQL.Clear;
     SQL.Text := 'SELECT *'#13#10 +
-      'FROM dbo.getcurhist(:bdate)'#13#10 +
-      'WHERE regn = :regn';
-    //      'FROM hist INNER JOIN' + #13 +
-    //        '(SELECT regn, max(bdate) as bdate' + #13 +
-    //          'FROM hist' + #13 +
-    //          'WHERE bdate < convert(smalldatetime,:bdate,104)' + #13 +
-    //          'GROUP BY regn) sb on hist.regn = sb.regn AND hist.bdate = sb.bdate' + #13 +
-    //      'WHERE hist.regn = :regn';
+      //      'FROM dbo.getcurhist(:bdate)'#13#10 +
+      //      'WHERE regn = :regn';
+      'FROM hist INNER JOIN' + #13 +
+      '(SELECT regn, max(bdate) as bdate' + #13 +
+      'FROM hist' + #13 +
+      'WHERE bdate < convert(smalldatetime,:bdate,104)' + #13 +
+      'GROUP BY regn) sb on hist.regn = sb.regn AND hist.bdate = sb.bdate' + #13 +
+      'WHERE hist.regn = :regn';
     ParamByName('regn').AsInteger := Data.regn;
     ParamByName('bdate').AsString := DateToStr(cdata.begindate);
     Open;
@@ -387,7 +388,7 @@ begin
       'WHERE (regn = :regn) AND (bdate = convert(smalldatetime,:bdate,104)) AND (sdate = convert(smalldatetime,:sdate,104))';
     ParamByName('regn').AsInteger := data.regn;
     ParamByName('bdate').AsString := DateToStr(cdata.begindate);
-    ParamByName('sdate').AsString := Form1.rdt;
+    ParamByName('sdate').AsString := MainForm.rdt;
     Open;
     cdata.curMinus := FieldByName('curminus').AsFloat;
     }
@@ -499,14 +500,14 @@ begin
     SQL.Add('fond on house.id_fond=fond.id_fond');
     SQL.Add('where (strt.id_street = :str) and(house.nhouse = :numb)');
     SQL.Add('and(house.corp=:cp)and(house.id_dist=:dist)');
-    ParamByName('str').AsInteger := data.str;// str[Combobox12.ItemIndex];
-    ParamByName('numb').AsString := data.nh;// Edit60.Text;
-    ParamByName('cp').AsString := data.corp;
-    ParamByName('dist').AsInteger := data.dist;
+    ParamByName('str').AsInteger := Data.str;// str[Combobox12.ItemIndex];
+    ParamByName('numb').AsString := Data.nh; // Edit60.Text;
+    ParamByName('cp').AsString := Data.corp;
+    ParamByName('dist').AsInteger := Data.dist;
     Open;
     if not EOF then
     begin
-        cdata.elevator := FieldByName('elevator').AsInteger;
+      cdata.elevator := FieldByName('elevator').AsInteger;
     end;
     //------
     Close;
@@ -852,8 +853,8 @@ begin
       SQL.add('where (id_dist=:idd)and(id_' + nam + '=:id)and ');
       SQL.add('sdate in (select max(sdate) from ' + nam);
       SQL.add('where sdate<=convert(smalldatetime,:d,104)and(id_dist=:idd)and(id_' + nam + '=:id))');
-      ParamByName('d').AsString := Form1.rdt;
-      ParamByName('idd').AsInteger := Form1.dist;
+      ParamByName('d').AsString := MainForm.rdt;
+      ParamByName('idd').AsInteger := MainForm.dist;
       ParamByName('id').AsInteger := id;
       Open;
       Result := FieldByName('cost').AsFloat;
@@ -952,342 +953,339 @@ begin
 
       if s = 7 then // Ё/энерги€
       begin
-        if mop <> 0 then //если есть тариф на места общего пользовани€
-
-
-        case id of
-          1://газовые плиты
-          begin
-            if elevator = 0 then//нет лифта газовые плиты
-            case se of//ко-во комнат
-              1:
-              begin
-                case c of
-                  0..1: Result := 95;
-                  2: Result := 62;
-                  3: Result := 49;
-                  4: Result := 42;
-                  else
-                    Result := 36;
-                end;
-              end;
-              2:
-              begin
-                case c of
-                  0..1: Result := 120;
-                  2: Result := 77;
-                  3: Result := 62;
-                  4: Result := 51;
-                  else
-                    Result := 46;
-                end;
-              end;
-              3:
-              begin
-                case c of
-                  0..1: Result := 135;
-                  2: Result := 87;
-                  3: Result := 69;
-                  4: Result := 57;
-                  else
-                    Result := 51;
-                end;
-              end;
-              4..7:
-              begin
-                case c of
-                  0..1: Result := 146;
-                  2: Result := 93;
-                  3: Result := 73;
-                  4: Result := 62;
-                  else
-                    Result := 54;
-                end;
-              end;
-            end
-          else//есть лифт газовые плиты
-            case se of//ко-во комнат
-              1:
-              begin
-                case c of
-                  0..1: Result := 102;
-                  2: Result := 69;
-                  3: Result := 56;
-                  4: Result := 49;
-                  else
-                    Result := 43;
-                end;
-              end;
-              2:
-              begin
-                case c of
-                  0..1: Result := 127;
-                  2: Result := 84;
-                  3: Result := 69;
-                  4: Result := 58;
-                  else
-                    Result := 53;
-                end;
-              end;
-              3:
-              begin
-                case c of
-                  0..1: Result := 142;
-                  2: Result := 94;
-                  3: Result := 76;
-                  4: Result := 64;
-                  else
-                    Result := 58;
-                end;
-              end;
-              4..7:
-              begin
-                case c of
-                  0..1: Result := 153;
-                  2: Result := 100;
-                  3: Result := 80;
-                  4: Result := 69;
-                  else
-                    Result := 61;
-                end;
-              end;
-            end;
-          end;
-
-          2://электрические плиты
-          begin
-            if elevator = 0 then//нет лифта электрические плиты
-            case se of
-              1:
-              begin
-                case c of
-                  0..1: Result := 148;
-                  2: Result := 94;
-                  3: Result := 74;
-                  4: Result := 62;
-                  else
-                    Result := 54;
-                end;
-              end;
-              2:
-              begin
-                case c of
-                  0..1: Result := 173;
-                  2: Result := 110;
-                  3: Result := 87;
-                  4: Result := 72;
-                  else
-                    Result := 64;
-                end;
-              end;
-              3:
-              begin
-                case c of
-                  0..1: Result := 188;
-                  2: Result := 119;
-                  3: Result := 94;
-                  4: Result := 77;
-                  else
-                    Result := 69;
-                end;
-              end;
-              4..7:
-              begin
-                case c of
-                  0..1: Result := 199;
-                  2: Result := 127;
-                  3: Result := 99;
-                  4: Result := 82;
-                  else
-                    Result := 72;
-                end;
-              end;
-            end
-            else//есть лифт электрические плиты
-            case se of
-              1:
-              begin
-                case c of
-                  0..1: Result := 155;
-                  2: Result := 101;
-                  3: Result := 81;
-                  4: Result := 69;
-                  else
-                    Result := 61;
-                end;
-              end;
-              2:
-              begin
-                case c of
-                  0..1: Result := 180;
-                  2: Result := 117;
-                  3: Result := 94;
-                  4: Result := 79;
-                  else
-                    Result := 71;
-                end;
-              end;
-              3:
-              begin
-                case c of
-                  0..1: Result := 195;
-                  2: Result := 126;
-                  3: Result := 101;
-                  4: Result := 84;
-                  else
-                    Result := 76;
-                end;
-              end;
-              4..7:
-              begin
-                case c of
-                  0..1: Result := 206;
-                  2: Result := 134;
-                  3: Result := 106;
-                  4: Result := 89;
-                  else
-                    Result := 79;
-                end;
-              end;
-            end;
-          end;
-
-          3: //прочие ???
-          begin
-            with DModule do
-            begin
-              if c > 0 then
-              begin
-                if (c < 3) then
-                  Result := tc.Fields[2 + (c - 1)].AsCurrency
-                else
-                  Result := tc.Fields[4].AsCurrency;
-              end
-              else
-                Result := tc.Fields[2].AsCurrency;
-            end;
-          end;
-        end
-
-
-        else // нет тарифа (mop=0)
+        //if mop <> 0 then //если есть тариф на места общего пользовани€
         if (mop = 0) and (elevator = 0) then
-        
-        case id of
-          1://газовые плиты
-          begin
-            case se of//ко-во комнат
-              1:
-              begin
-                case c of
-                  0..1: Result := 88;
-                  2: Result := 55;
-                  3: Result := 42;
-                  4: Result := 35;
-                  else
-                    Result := 29;
-                end;
-              end;
-              2:
-              begin
-                case c of
-                  0..1: Result := 113;
-                  2: Result := 70;
-                  3: Result := 55;
-                  4: Result := 44;
-                  else
-                    Result := 39;
-                end;
-              end;
-              3:
-              begin
-                case c of
-                  0..1: Result := 128;
-                  2: Result := 80;
-                  3: Result := 62;
-                  4: Result := 50;
-                  else
-                    Result := 44;
-                end;
-              end;
-              4..7:
-              begin
-                case c of
-                  0..1: Result := 139;
-                  2: Result := 86;
-                  3: Result := 66;
-                  4: Result := 55;
-                  else
-                    Result := 47;
-                end;
-              end;
-            end;
-          end;
-          2://электрические плиты
-          begin
-            case se of//ко-во комнат
-              1:
-              begin
-                case c of
-                  0..1: Result := 141;
-                  2: Result := 87;
-                  3: Result := 67;
-                  4: Result := 55;
-                  else
-                    Result := 47;
-                end;
-              end;
-              2:
-              begin
-                case c of
-                  0..1: Result := 166;
-                  2: Result := 103;
-                  3: Result := 80;
-                  4: Result := 65;
-                  else
-                    Result := 57;
-                end;
-              end;
-              3:
-              begin
-                case c of
-                  0..1: Result := 181;
-                  2: Result := 112;
-                  3: Result := 87;
-                  4: Result := 70;
-                  else
-                    Result := 62;
-                end;
-              end;
-              4..7:
-              begin
-                case c of
-                  0..1: Result := 192;
-                  2: Result := 120;
-                  3: Result := 92;
-                  4: Result := 75;
-                  else
-                    Result := 65;
-                end;
-              end;
-            end;
-          end;
-          3:
-          begin
-            with DModule do
+
+          case id of
+            1://газовые плиты
             begin
-              if c > 0 then
+              case se of//ко-во комнат
+                1:
+                begin
+                  case c of
+                    0..1: Result := 88;
+                    2: Result := 55;
+                    3: Result := 42;
+                    4: Result := 35;
+                    else
+                      Result := 29;
+                  end;
+                end;
+                2:
+                begin
+                  case c of
+                    0..1: Result := 113;
+                    2: Result := 70;
+                    3: Result := 55;
+                    4: Result := 44;
+                    else
+                      Result := 39;
+                  end;
+                end;
+                3:
+                begin
+                  case c of
+                    0..1: Result := 128;
+                    2: Result := 80;
+                    3: Result := 62;
+                    4: Result := 50;
+                    else
+                      Result := 44;
+                  end;
+                end;
+                4..7:
+                begin
+                  case c of
+                    0..1: Result := 139;
+                    2: Result := 86;
+                    3: Result := 66;
+                    4: Result := 55;
+                    else
+                      Result := 47;
+                  end;
+                end;
+              end;
+            end;
+            2://электрические плиты
+            begin
+              case se of//ко-во комнат
+                1:
+                begin
+                  case c of
+                    0..1: Result := 141;
+                    2: Result := 87;
+                    3: Result := 67;
+                    4: Result := 55;
+                    else
+                      Result := 47;
+                  end;
+                end;
+                2:
+                begin
+                  case c of
+                    0..1: Result := 166;
+                    2: Result := 103;
+                    3: Result := 80;
+                    4: Result := 65;
+                    else
+                      Result := 57;
+                  end;
+                end;
+                3:
+                begin
+                  case c of
+                    0..1: Result := 181;
+                    2: Result := 112;
+                    3: Result := 87;
+                    4: Result := 70;
+                    else
+                      Result := 62;
+                  end;
+                end;
+                4..7:
+                begin
+                  case c of
+                    0..1: Result := 192;
+                    2: Result := 120;
+                    3: Result := 92;
+                    4: Result := 75;
+                    else
+                      Result := 65;
+                  end;
+                end;
+              end;
+            end;
+            3:
+            begin
+              with DModule do
               begin
-                if (c < 3) then
-                  Result := tc.Fields[2 + (c - 1)].AsCurrency
+                if c > 0 then
+                begin
+                  if (c < 3) then
+                    Result := tc.Fields[2 + (c - 1)].AsCurrency
+                  else
+                    Result := tc.Fields[4].AsCurrency;
+                end
                 else
-                  Result := tc.Fields[4].AsCurrency;
-              end
-              else
-                Result := tc.Fields[2].AsCurrency;
+                  Result := tc.Fields[2].AsCurrency;
+              end;
+            end;
+          end
+        else
+
+          case id of
+            1://газовые плиты
+            begin
+              if elevator = 0 then//нет лифта газовые плиты
+                case se of//ко-во комнат
+                  1:
+                  begin
+                    case c of
+                      0..1: Result := 95;
+                      2: Result := 62;
+                      3: Result := 49;
+                      4: Result := 42;
+                      else
+                        Result := 36;
+                    end;
+                  end;
+                  2:
+                  begin
+                    case c of
+                      0..1: Result := 120;
+                      2: Result := 77;
+                      3: Result := 62;
+                      4: Result := 51;
+                      else
+                        Result := 46;
+                    end;
+                  end;
+                  3:
+                  begin
+                    case c of
+                      0..1: Result := 135;
+                      2: Result := 87;
+                      3: Result := 69;
+                      4: Result := 57;
+                      else
+                        Result := 51;
+                    end;
+                  end;
+                  4..7:
+                  begin
+                    case c of
+                      0..1: Result := 146;
+                      2: Result := 93;
+                      3: Result := 73;
+                      4: Result := 62;
+                      else
+                        Result := 54;
+                    end;
+                  end;
+                end
+              else//есть лифт газовые плиты
+                case se of//ко-во комнат
+                  1:
+                  begin
+                    case c of
+                      0..1: Result := 102;
+                      2: Result := 69;
+                      3: Result := 56;
+                      4: Result := 49;
+                      else
+                        Result := 43;
+                    end;
+                  end;
+                  2:
+                  begin
+                    case c of
+                      0..1: Result := 127;
+                      2: Result := 84;
+                      3: Result := 69;
+                      4: Result := 58;
+                      else
+                        Result := 53;
+                    end;
+                  end;
+                  3:
+                  begin
+                    case c of
+                      0..1: Result := 142;
+                      2: Result := 94;
+                      3: Result := 76;
+                      4: Result := 64;
+                      else
+                        Result := 58;
+                    end;
+                  end;
+                  4..7:
+                  begin
+                    case c of
+                      0..1: Result := 153;
+                      2: Result := 100;
+                      3: Result := 80;
+                      4: Result := 69;
+                      else
+                        Result := 61;
+                    end;
+                  end;
+                end;
+            end;
+
+            2://электрические плиты
+            begin
+              if elevator = 0 then//нет лифта электрические плиты
+                case se of
+                  1:
+                  begin
+                    case c of
+                      0..1: Result := 148;
+                      2: Result := 94;
+                      3: Result := 74;
+                      4: Result := 62;
+                      else
+                        Result := 54;
+                    end;
+                  end;
+                  2:
+                  begin
+                    case c of
+                      0..1: Result := 173;
+                      2: Result := 110;
+                      3: Result := 87;
+                      4: Result := 72;
+                      else
+                        Result := 64;
+                    end;
+                  end;
+                  3:
+                  begin
+                    case c of
+                      0..1: Result := 188;
+                      2: Result := 119;
+                      3: Result := 94;
+                      4: Result := 77;
+                      else
+                        Result := 69;
+                    end;
+                  end;
+                  4..7:
+                  begin
+                    case c of
+                      0..1: Result := 199;
+                      2: Result := 127;
+                      3: Result := 99;
+                      4: Result := 82;
+                      else
+                        Result := 72;
+                    end;
+                  end;
+                end
+              else//есть лифт электрические плиты
+                case se of
+                  1:
+                  begin
+                    case c of
+                      0..1: Result := 155;
+                      2: Result := 101;
+                      3: Result := 81;
+                      4: Result := 69;
+                      else
+                        Result := 61;
+                    end;
+                  end;
+                  2:
+                  begin
+                    case c of
+                      0..1: Result := 180;
+                      2: Result := 117;
+                      3: Result := 94;
+                      4: Result := 79;
+                      else
+                        Result := 71;
+                    end;
+                  end;
+                  3:
+                  begin
+                    case c of
+                      0..1: Result := 195;
+                      2: Result := 126;
+                      3: Result := 101;
+                      4: Result := 84;
+                      else
+                        Result := 76;
+                    end;
+                  end;
+                  4..7:
+                  begin
+                    case c of
+                      0..1: Result := 206;
+                      2: Result := 134;
+                      3: Result := 106;
+                      4: Result := 89;
+                      else
+                        Result := 79;
+                    end;
+                  end;
+                end;
+            end;
+
+            3: //прочие ???
+            begin
+              with DModule do
+              begin
+                if c > 0 then
+                begin
+                  if (c < 3) then
+                    Result := tc.Fields[2 + (c - 1)].AsCurrency
+                  else
+                    Result := tc.Fields[4].AsCurrency;
+                end
+                else
+                  Result := tc.Fields[2].AsCurrency;
+              end;
             end;
           end;
-        end;
       end;
     end;
   end;
@@ -1445,6 +1443,21 @@ begin
   end;
 end;
 
+function TClient.GetOwnPriv: string;
+begin
+  with DModule.Query1 do
+  begin
+    Close;
+    SQL.Text := 'SELECT Priv.namepriv'#13#13 +
+      'FROM Fam INNER JOIN'#13#10 +
+      'Priv ON Fam.id_priv = Priv.id_priv'#13#10 +
+      'WHERE     (Fam.id_mem = CAST(:rgn AS char(8)) + ' + quotedstr('0') + ')';
+    ParamByName('rgn').Value := data.regn;
+    Open;
+    Result :=  FieldByName('namepriv').AsString;
+  end;
+end;
+
 procedure TClient.Calc(sts: integer);//расчет за мес€ц
 var
   i: integer;
@@ -1461,7 +1474,7 @@ begin
       CalcServ(2);
       CalcServ(3);
       CalcServ(4);
-      CalcServSq(5, StrToInt(System.Copy(Form1.rdt, 4, 2)));
+      CalcServSq(5, StrToInt(System.Copy(MainForm.rdt, 4, 2)));
       CalcServ(6);
       CalcServ(7);
       CalcServWC(12);
@@ -1489,7 +1502,7 @@ begin
             if i in [2..4, 6, 7] then
               CalcServ(i);
             if cdata.counter[5] then
-              CalcServSq(5, StrToInt(System.Copy(Form1.rdt, 4, 2)));
+              CalcServSq(5, StrToInt(System.Copy(MainForm.rdt, 4, 2)));
           end
           else
             cdata.snpm[i] := cdata.pm[i];
@@ -1505,7 +1518,7 @@ begin
             if i in [2..4, 6, 7] then
               CalcServ(i);
             if cdata.counter[5] then
-              CalcServSq(5, StrToInt(System.Copy(Form1.rdt, 4, 2)));
+              CalcServSq(5, StrToInt(System.Copy(MainForm.rdt, 4, 2)));
           end
           else
             cdata.snpm[i] := cdata.pm[i];
@@ -1868,7 +1881,7 @@ begin
 
     //cdata.pm[s] := Rnd(valtarif);
     cdata.snpm[s] := Rnd(valtarif);
-    if Form1.GetStatus(cdata.begindate, cdata.enddate) = 0 then
+    if MainForm.GetStatus(cdata.begindate, cdata.enddate) = 0 then
       cdata.bsnpm[s] := Rnd(valtarif);
 
     //Exit;
@@ -1992,7 +2005,7 @@ begin
         end;
       end;
       cdata.snpm[service] := rnd(cost);
-      if Form1.GetStatus(cdata.begindate, cdata.enddate) = 0 then
+      if MainForm.GetStatus(cdata.begindate, cdata.enddate) = 0 then
         cdata.bsnpm[service] := Rnd(cost);
     end
     else
@@ -2047,8 +2060,8 @@ begin
   begin
     norm := 0;
     case s of
-      12: norm := Form1.normw;
-      13: norm := Form1.normc;
+      12: norm := MainForm.normw;
+      13: norm := MainForm.normc;
     end;
 
     value1 := cdata.square;

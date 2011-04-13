@@ -75,7 +75,7 @@ begin
     SQL.Add('(id_dist = :dist))');
     ParamByName('dist').AsInteger := dis;
     Open;
-    FillTable(path,'cl'+IntToStr(dis),Form1.codedbf);
+    FillTable(path,'cl'+IntToStr(dis),MainForm.codedbf);
   end;
 end;
 
@@ -94,7 +94,7 @@ begin
     end;
     ParamByName('dist').AsInteger := dis;
     Open;
-    FillTable(path,'hist'+IntToStr(dis),Form1.codedbf);
+    FillTable(path,'hist'+IntToStr(dis),MainForm.codedbf);
   end;
 end;
 
@@ -115,7 +115,7 @@ begin
     SQL.Add('(id_dist = :dist))');
     ParamByName('dist').AsInteger := dis;
     Open;
-    FillTable(path,'fam'+IntToStr(dis),Form1.codedbf);
+    FillTable(path,'fam'+IntToStr(dis),MainForm.codedbf);
   end;
 end;
 
@@ -137,7 +137,7 @@ begin
 //    ParamByName('d1').AsString := DateToStr(EncodeDate(YearOf(d),MonthOf(d),15));
     ParamByName('d1').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),20);
     Open;
-    FillTable(path,'cl'+IntToStr(dis),Form1.codedbf);
+    FillTable(path,'cl'+IntToStr(dis),MainForm.codedbf);
   end;
 end;
 
@@ -163,7 +163,7 @@ begin
 //    ParamByName('d1').AsString := DateToStr(EncodeDate(YearOf(d),MonthOf(d),15));
     ParamByName('d1').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),20);
     Open;
-    FillTable(path,'hist'+IntToStr(dis),Form1.codedbf);
+    FillTable(path,'hist'+IntToStr(dis),MainForm.codedbf);
   end;
 end;
 
@@ -186,7 +186,7 @@ begin
 //    ParamByName('d1').AsString := DateToStr(EncodeDate(YearOf(d),MonthOf(d),15));
     ParamByName('d1').AsDateTime := EncodeDate(YearOf(d),MonthOf(d),20);
     Open;
-    FillTable(path,'fam'+IntToStr(dis),Form1.codedbf);
+    FillTable(path,'fam'+IntToStr(dis),MainForm.codedbf);
   end;
 end;
 
@@ -205,7 +205,7 @@ begin
     end;
     ParamByName('dist').AsInteger := dis;
     Open;
-    FillTable(path,'sub'+IntToStr(dis),Form1.codedbf);
+    FillTable(path,'sub'+IntToStr(dis),MainForm.codedbf);
   end;
 end;
 
@@ -224,7 +224,7 @@ begin
     end;
     ParamByName('dist').AsInteger := dis;
     Open;
-    FillTable(path,'counters'+IntToStr(dis),Form1.codedbf);
+    FillTable(path,'counters'+IntToStr(dis),MainForm.codedbf);
   end;
 end;
 
@@ -242,7 +242,7 @@ begin
     end;
     ParamByName('dist').AsInteger := dis;
     Open;
-    FillTable(path,'sluj'+IntToStr(dis),Form1.codedbf);
+    FillTable(path,'sluj'+IntToStr(dis),MainForm.codedbf);
   end;
 end;
 
@@ -260,7 +260,7 @@ begin
     end;
     ParamByName('dist').AsInteger := dis;
     Open;
-    FillTable(path,t+IntToStr(dis),Form1.codedbf);
+    FillTable(path,t+IntToStr(dis),MainForm.codedbf);
   end;
 end;
 
@@ -276,7 +276,7 @@ begin
       ParamByName('d').AsString := dt;
     end;
     Open;
-    FillTable(path,'rstnd',Form1.codedbf);
+    FillTable(path,'rstnd',MainForm.codedbf);
   end;
 end;
 
@@ -292,7 +292,7 @@ begin
       ParamByName('d').AsString := dt;
     end;
     Open;
-    FillTable(path,'lmin',Form1.codedbf);
+    FillTable(path,'lmin',MainForm.codedbf);
   end;
 end;
 
@@ -308,7 +308,7 @@ begin
       SQL.Add('and status=1');
     ParamByName('id').AsInteger := dis;
     Open;
-    FillTable(path,'insp'+IntToStr(dis),Form1.codedbf);
+    FillTable(path,'insp'+IntToStr(dis),MainForm.codedbf);
   end;
 end;
 
@@ -322,7 +322,7 @@ begin
     SQL.Add('WHERE id_dist = :id');
     ParamByName('id').AsInteger := dis;
     Open;
-    FillTable(path,'house'+IntToStr(dis),Form1.codedbf);
+    FillTable(path,'house'+IntToStr(dis),MainForm.codedbf);
   end;
 end;
 
@@ -336,7 +336,7 @@ begin
     SQL.Add('WHERE id_dist = :dist');
     ParamByName('dist').AsInteger := dis;
     Open;
-    FillTable(path,'mng'+IntToStr(dis),Form1.codedbf);
+    FillTable(path,'mng'+IntToStr(dis),MainForm.codedbf);
   end;
 end;
 
@@ -349,7 +349,7 @@ begin
     SQL.Add('SELECT * FROM strt');
     SQL.Add('WHERE status=1');
     Open;
-    FillTable(path,'strt',Form1.codedbf);
+    FillTable(path,'strt',MainForm.codedbf);
   end;
 end;
 
@@ -363,7 +363,7 @@ begin
     SQL.Clear;
     SQL.Add('SELECT * FROM '+t);
     Open;
-    FillTable(path,t,Form1.codedbf);
+    FillTable(path,t,MainForm.codedbf);
   end;
 end;
 
@@ -377,7 +377,7 @@ begin
     SQL.Add('WHERE id_dist=:dist');
     ParamByName('dist').AsInteger := dis;
     Open;
-    FillTable(path, 'factsale'+IntToStr(dis), Form1.codedbf);
+    FillTable(path, 'factsale'+IntToStr(dis), MainForm.codedbf);
   end;
   //-------
   with DModule.Query1 do begin
@@ -387,7 +387,7 @@ begin
     SQL.Add('WHERE id_dist=:dist');
     ParamByName('dist').AsInteger := dis;
     Open;
-    FillTable(path, 'factbalance'+IntToStr(dis), Form1.codedbf);
+    FillTable(path, 'factbalance'+IntToStr(dis), MainForm.codedbf);
   end;
 
 end;

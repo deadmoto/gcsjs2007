@@ -83,14 +83,14 @@ end;
 
 procedure TForm26.Button1Click(Sender: TObject);
 begin
-  if (StrToInt(ComboBox1.Text)=Form1.by) and (m[Combobox2.ItemIndex]>=Form1.bm) or
-    (StrToInt(ComboBox1.Text)>Form1.by) {and
-     (StrToInt(Edit1.Text)<=Form1.ey+1) and
-     (m[Combobox2.ItemIndex]<=Form1.em+1)} then begin
+  if (StrToInt(ComboBox1.Text)=MainForm.by) and (m[Combobox2.ItemIndex]>=MainForm.bm) or
+    (StrToInt(ComboBox1.Text)>MainForm.by) {and
+     (StrToInt(Edit1.Text)<=MainForm.ey+1) and
+     (m[Combobox2.ItemIndex]<=MainForm.em+1)} then begin
     if m[Combobox2.ItemIndex]>=10 then
-      Form1.rdt := '01.'+IntToStr(m[Combobox2.ItemIndex])+'.'+ComboBox1.Text
+      MainForm.rdt := '01.'+IntToStr(m[Combobox2.ItemIndex])+'.'+ComboBox1.Text
     else
-      Form1.rdt := '01.'+'0'+IntToStr(m[Combobox2.ItemIndex])+'.'+ComboBox1.Text;
+      MainForm.rdt := '01.'+'0'+IntToStr(m[Combobox2.ItemIndex])+'.'+ComboBox1.Text;
     Close;
   end
   else
@@ -131,11 +131,11 @@ var
   tmp_by: integer;
 begin
   ComboBox1.Clear;
-  tmp_by:= Form1.by;
-  ii := StrToInt(Copy(Form1.rdt, 4, 2));
-  ComboBox1.Text := Copy(Form1.rdt, 7, 4);
+  tmp_by:= MainForm.by;
+  ii := StrToInt(Copy(MainForm.rdt, 4, 2));
+  ComboBox1.Text := Copy(MainForm.rdt, 7, 4);
 
-  for i:=0 to (YearOf(Date)-Form1.by) do begin
+  for i:=0 to (YearOf(Date)-MainForm.by) do begin
     ComboBox1.Items.Add(IntToStr(tmp_by));
     inc(tmp_by);
   end;

@@ -43,7 +43,7 @@ uses
 procedure TMergeForm.FormShow(Sender: TObject);
 begin
   path := 'arc\';//путь по умолчанию
-  MaskEdit1.Text := Form1.rdt;
+  MaskEdit1.Text := MainForm.rdt;
   ProgressBar1.Position := 0;
   ProgressBar1.Max := 8;
   ProgressBar1.Step := 1;
@@ -61,18 +61,18 @@ var
   SevenZip: TSevenZip;
   i: integer;
 begin
+  SevenZip := TSevenZip.Create(Application);
   ext1 := '.dbf';
-  ext2 := IntToStr(Form1.dist) + ext1;
+  ext2 := IntToStr(MainForm.dist) + ext1;
 
-  Name := '4merge' + IntToStr(Form1.dist);
+  Name := '4merge' + IntToStr(MainForm.dist);
   dt := '01.' + Copy(MaskEdit1.Text, 4, 2) + '.' + Copy(MaskEdit1.Text, 7, 4);
   if MaskEdit1.Text = '' then
-    dt := Form1.rdt;
+    dt := MainForm.rdt;
 
   try
     if FileExists(path + Name + '.7z') then
       DeleteFile(PAnsiChar(path + Name + '.7z'));
-    SevenZip := TSevenZip.Create(Application);
     SevenZip.SZFileName := path + Name + '.7z';
     with SevenZip do
     begin
@@ -84,31 +84,31 @@ begin
     end;
 
     //добавить файлы в архив
-    ExportHouse(path, Form1.dist);
+    ExportHouse(path, MainForm.dist);
     SevenZip.Files.AddString(path + 'house' + ext2);
     ProgressBar1.StepIt;
-    ExportClm(path, dt, Form1.dist);
+    ExportClm(path, dt, MainForm.dist);
     SevenZip.Files.AddString(path + 'cl' + ext2);
     ProgressBar1.StepIt;
-    ExportHistm(path, dt, Form1.dist);
+    ExportHistm(path, dt, MainForm.dist);
     SevenZip.Files.AddString(path + 'hist' + ext2);
     ProgressBar1.StepIt;
-    ExportFamm(path, dt, Form1.dist);
+    ExportFamm(path, dt, MainForm.dist);
     SevenZip.Files.AddString(path + 'fam' + ext2);
     ProgressBar1.StepIt;
-    ExportSluj(path, dt, Form1.dist);
+    ExportSluj(path, dt, MainForm.dist);
     SevenZip.Files.AddString(path + 'sluj' + ext2);
-    ExportFact(path, Form1.dist);
+    ExportFact(path, MainForm.dist);
     SevenZip.Files.AddString(path + 'factsale' + ext2);
     SevenZip.Files.AddString(path + 'factbalance' + ext2);
     ProgressBar1.StepIt;
-    ExportSub(path, dt, Form1.dist);
+    ExportSub(path, dt, MainForm.dist);
     SevenZip.Files.AddString(path + 'sub' + ext2);
     ProgressBar1.StepIt;
-    ExportCounters(path, dt, Form1.dist);
+    ExportCounters(path, dt, MainForm.dist);
     SevenZip.Files.AddString(path + 'counters' + ext2);
     ProgressBar1.StepIt;
-    ExportInsp(path, Form1.dist, False);
+    ExportInsp(path, MainForm.dist, False);
     SevenZip.Files.AddString(path + 'insp' + ext2);
     SevenZip.Add;
     ProgressBar1.StepIt;
@@ -126,9 +126,9 @@ procedure TMergeForm.Button2Click(Sender: TObject);
 var
   SevenZip: TSevenZip;
 begin
-  path := path + '4merge' + IntToStr(Form1.dist) +'.7z';
+  SevenZip := TSevenZip.Create(Application);
+  path := path + '4merge' + IntToStr(MainForm.dist) +'.7z';
   try
-    SevenZip := TSevenZip.Create(Application);
     SevenZip.SZFileName := path;
 
     //извлечь файлы из архива
@@ -143,27 +143,27 @@ begin
     sleep(1000);
     try
       DModule.Database1.StartTransaction;
-      ImportInsp(path, Form1.dist);
+      ImportInsp(path, MainForm.dist);
       ProgressBar1.StepIt;
-      ImportCl(path, Form1.dist);
+      ImportCl(path, MainForm.dist);
       ProgressBar1.StepIt;
-      ImportHist(path, Form1.dist);
+      ImportHist(path, MainForm.dist);
       ProgressBar1.StepIt;
-      ImportFam(path, Form1.dist);
+      ImportFam(path, MainForm.dist);
       ProgressBar1.StepIt;
-      ImportHouse(path, Form1.dist);
+      ImportHouse(path, MainForm.dist);
       ProgressBar1.StepIt;
-      ImportSub(path, Form1.dist);
+      ImportSub(path, MainForm.dist);
       ProgressBar1.StepIt;
-      ImportSluj(path, Form1.dist);
+      ImportSluj(path, MainForm.dist);
       ProgressBar1.StepIt;
-      ImportFact(path, Form1.dist);
+      ImportFact(path, MainForm.dist);
       ProgressBar1.StepIt;
-      ImportCounters(path, Form1.dist);
+      ImportCounters(path, MainForm.dist);
       DModule.Database1.Commit;
       ProgressBar1.StepIt;
       ShowMessage('Импорт найденных файлов успешно завершен!');
-      Form1.Reload;
+      MainForm.Reload;
     except
       DModule.Database1.Rollback;
       ShowMessage('Ошибка импорта!');

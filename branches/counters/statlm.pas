@@ -168,7 +168,7 @@ var
   val: real;
   t:  array of integer;
 begin
-  odt := DateToStr(IncMonth(StrToDate(Form1.rdt), -1));
+  odt := DateToStr(IncMonth(StrToDate(MainForm.rdt), -1));
   pr  := TAboutBox1.Create(Application);
   pr.Label1.Caption := 'Перерасчет субсидий клиентов';
   pr.Label2.Caption := 'Обработано записей:';
@@ -190,8 +190,8 @@ begin
       Close;
       SQL.Clear;
       SQL.Add('execute getfcl :idd,:nd');
-      ParamByName('idd').AsInteger := Form1.dist;
-      ParamByName('nd').AsString := Form1.rdt;
+      ParamByName('idd').AsInteger := MainForm.dist;
+      ParamByName('nd').AsString := MainForm.rdt;
       Open;
       pr.ProgressBar1.Max := RecordCount;
       if not EOF then
@@ -205,8 +205,8 @@ begin
         Close;
         for j := 0 to Length(t) - 1 do
         begin
-          c.SetClient(t[j], Form1.rdt);
-          c.SetCalc(t[j], Form1.rdt);
+          c.SetClient(t[j], MainForm.rdt);
+          c.SetCalc(t[j], MainForm.rdt);
           //c.cdata.rstnd := 0;//!
           c.Calc(0);
           val := 0;
@@ -261,11 +261,11 @@ begin
       Dbf1.AddFieldDefs('sub', bfNumber, 20, 2);
       Dbf1.TableName := path + 'nullsublm.dbf';
       Dbf1.CreateTable;
-      Dbf1.CodePage := Form1.codedbf;
+      Dbf1.CodePage := MainForm.codedbf;
       DModule.Query1.Close;
       DModule.Query1.SQL.Clear;
       DModule.Query1.SQL.Add('select sum(sub) as ex from sub where sdate =:d and regn =:r');
-      DModule.Query1.ParamByName('d').AsDateTime := StrToDate(Form1.rdt);
+      DModule.Query1.ParamByName('d').AsDateTime := StrToDate(MainForm.rdt);
       if lcl.Count <> 0 then
       begin
         for i := 1 to lcl.Count do

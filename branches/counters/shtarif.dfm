@@ -28,9 +28,6 @@ object Form37: TForm37
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 0
-    ExplicitLeft = 8
-    ExplicitTop = 8
-    ExplicitWidth = 417
     object StringGrid1: TStringGrid
       Left = 2
       Top = 2
@@ -44,9 +41,7 @@ object Form37: TForm37
       TabOrder = 0
       OnDblClick = StringGrid1DblClick
       OnDrawCell = StringGrid1DrawCell
-      ExplicitLeft = 18
-      ExplicitTop = 0
-      ExplicitWidth = 413
+      OnKeyPress = StringGrid1KeyPress
     end
   end
   object FlowPanel1: TFlowPanel

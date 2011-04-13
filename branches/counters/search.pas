@@ -262,7 +262,7 @@ begin
     SQL.Add('from insp');
     SQL.Add('where id_dist=:id');
     SQL.Add('order by nameinsp');
-    ParamByName('id').AsInteger := Form1.dist;
+    ParamByName('id').AsInteger := MainForm.dist;
     Open;
     First;
     while not EOF do
@@ -315,7 +315,7 @@ begin
     SQL.Add('select id_mng, namemng');
     SQL.Add('from mng');
     SQL.Add('where id_dist = :dist');
-    ParamByName('dist').AsInteger := Form1.dist;
+    ParamByName('dist').AsInteger := MainForm.dist;
     SQL.Add('order by namemng');
     Open;
     First;
@@ -957,9 +957,9 @@ var
   q: CQuery;
 begin
   j := 0;
-  Form1.qr.SQL := '';
-  SetLength(Form1.qr.parname, 0);
-  SetLength(Form1.qr.parval, 0);
+  MainForm.qr.SQL := '';
+  SetLength(MainForm.qr.parname, 0);
+  SetLength(MainForm.qr.parval, 0);
   q.SQL := '';
   SetLength(q.parname, 0);
   SetLength(q.parval, 0);
@@ -983,12 +983,12 @@ begin
     SetLength(q.parname, Length(q.parname) + 1);
     SetLength(q.parval, Length(q.parval) + 1);
     q.parname[j] := 'd';
-    q.parval[j]  := Form1.rdt;
+    q.parval[j]  := MainForm.rdt;
     Inc(j);
     SetLength(q.parname, Length(q.parname) + 1);
     SetLength(q.parval, Length(q.parval) + 1);
     q.parname[j] := 'idd';
-    q.parval[j]  := IntToStr(Form1.dist);
+    q.parval[j]  := IntToStr(MainForm.dist);
     if Checkbox14.Checked or Checkbox23.Checked then
       q.SQL := q.SQL + 'inner join fam on cl.regn=fam.regn ';
     q.SQL := q.SQL + 'where (cl.id_dist=:idd)';
@@ -1175,7 +1175,7 @@ begin
           SetLength(q.parname, Length(q.parname) + 1);
           SetLength(q.parval, Length(q.parval) + 1);
           q.parname[j] := 'db';
-          q.parval[j]  := DateToStr(IncMonth(StrToDate(Form1.rdt), -1));
+          q.parval[j]  := DateToStr(IncMonth(StrToDate(MainForm.rdt), -1));
         end;
         5://последний
         begin
@@ -1184,7 +1184,7 @@ begin
           SetLength(q.parname, Length(q.parname) + 1);
           SetLength(q.parval, Length(q.parval) + 1);
           q.parname[j] := 'de';
-          q.parval[j]  := DateToStr(IncMonth(StrToDate(Form1.rdt), 1));
+          q.parval[j]  := DateToStr(IncMonth(StrToDate(MainForm.rdt), 1));
         end;
       end;
     end;
@@ -1193,7 +1193,7 @@ begin
     begin
       Inc(j);
       if CheckBox17.Checked then
-        q.SQL := q.SQL + 'and(cl.mail=:mmail) AND (DATEADD([day], 0, cl.declardate) >= CONVERT(smalldatetime, ' + QuotedStr(Form1.rdt) + ', 104))'
+        q.SQL := q.SQL + 'and(cl.mail=:mmail) AND (DATEADD([day], 0, cl.declardate) >= CONVERT(smalldatetime, ' + QuotedStr(MainForm.rdt) + ', 104))'
       else
         q.SQL := q.SQL + 'and(cl.mail=:mmail)';
 
@@ -1260,10 +1260,10 @@ begin
       q.parval[j]  := IntToStr(stat[Combobox15.ItemIndex]);
     end;
     q.SQL := q.SQL + #13+ 'GROUP BY Cl.regn, Hist.bdate, Hist.edate, Hist.calc';
-    Form1.qr := q;
+    MainForm.qr := q;
   end
   else //выбрать всех клиентов
-    Form1.Reload;
+    MainForm.Reload;
   Close;
 end;
 
@@ -1271,9 +1271,9 @@ procedure TForm33.Button2Click(Sender: TObject);
 {*******************************************************************************
 *******************************************************************************}
 begin
-  Form1.qr.SQL := '';
-  SetLength(Form1.qr.parname, 0);
-  SetLength(Form1.qr.parval, 0);
+  MainForm.qr.SQL := '';
+  SetLength(MainForm.qr.parname, 0);
+  SetLength(MainForm.qr.parval, 0);
   Close;
 end;
 
@@ -1520,7 +1520,7 @@ begin
     SQL.Add('from insp');
     SQL.Add('where (id_insp = :id)and(id_dist=:dist)');
     ParamByName('id').AsInteger := n;
-    ParamByName('dist').AsInteger := Form1.dist;
+    ParamByName('dist').AsInteger := MainForm.dist;
     Open;
     Result := FieldByName('nameinsp').AsString;
     Close;
@@ -1588,7 +1588,7 @@ begin
     SQL.Add('select namemng');
     SQL.Add('from mng');
     SQL.Add('where (id_dist = :dist)and(id_mng = :id)');
-    ParamByName('dist').AsInteger := Form1.dist;
+    ParamByName('dist').AsInteger := MainForm.dist;
     ParamByName('id').AsInteger := n;
     Open;
     Result := FieldByName('namemng').AsString;
@@ -1709,17 +1709,17 @@ procedure TForm33.MaskEdit2Exit(Sender: TObject);
 *******************************************************************************}
 begin
   try
-    if StrToDate(MaskEdit2.Text) < Form1.Idate then
+    if StrToDate(MaskEdit2.Text) < MainForm.Idate then
     begin
       ShowMessage('Указанная дата выходит за рамки доступного периода!');
-      MaskEdit2.Text := Form1.rdt;
+      MaskEdit2.Text := MainForm.rdt;
     end;
     MaskEdit3.Text := DateToStr(IncMonth(StrToDate(MaskEdit2.Text), 6));
   except
     on EconvertError do
     begin
       ShowMessage('Неправильно введена дата!');
-      MaskEdit2.Text := Form1.rdt;
+      MaskEdit2.Text := MainForm.rdt;
       MaskEdit3.Text := DateToStr(IncMonth(StrToDate(MaskEdit2.Text), 6));
     end;
   end;
@@ -1732,10 +1732,10 @@ procedure TForm33.MaskEdit3Exit(Sender: TObject);
 *******************************************************************************}
 begin
   try
-    if StrToDate(MaskEdit2.Text) < Form1.Idate then
+    if StrToDate(MaskEdit2.Text) < MainForm.Idate then
     begin
       ShowMessage('Указанная дата выходит за рамки доступного периода!');
-      MaskEdit2.Text := Form1.rdt;
+      MaskEdit2.Text := MainForm.rdt;
       MaskEdit3.Text := DateToStr(IncMonth(StrToDate(MaskEdit2.Text), 6));
     end
     else
@@ -1863,17 +1863,17 @@ begin
   if key = vk_return then
   begin
     try
-      if StrToDate(MaskEdit2.Text) < Form1.Idate then
+      if StrToDate(MaskEdit2.Text) < MainForm.Idate then
       begin
         ShowMessage('Указанная дата выходит за рамки доступного периода!');
-        MaskEdit2.Text := Form1.rdt;
+        MaskEdit2.Text := MainForm.rdt;
       end;
       MaskEdit3.Text := DateToStr(IncMonth(StrToDate(MaskEdit2.Text), 6));
     except
       on EconvertError do
       begin
         ShowMessage('Неправильно введена дата!');
-        MaskEdit2.Text := Form1.rdt;
+        MaskEdit2.Text := MainForm.rdt;
         MaskEdit3.Text := DateToStr(IncMonth(StrToDate(MaskEdit2.Text), 6));
       end;
     end;
@@ -1887,10 +1887,10 @@ begin
   if key = vk_return then
   begin
     try
-      if StrToDate(MaskEdit2.Text) < Form1.Idate then
+      if StrToDate(MaskEdit2.Text) < MainForm.Idate then
       begin
         ShowMessage('Указанная дата выходит за рамки доступного периода!');
-        MaskEdit2.Text := Form1.rdt;
+        MaskEdit2.Text := MainForm.rdt;
         MaskEdit3.Text := DateToStr(IncMonth(StrToDate(MaskEdit2.Text), 6));
       end
       else

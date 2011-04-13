@@ -51,7 +51,7 @@ uses
 
 procedure TReportEditFrm.Button1Click(Sender: TObject);
 begin
-  winExec(PChar('frxdesigner.exe ' + Form1.reports_path + RepFiles.cRepFiles[ComboBox1.ItemIndex]), SW_NORMAL);
+  winExec(PChar('frxdesigner.exe ' + MainForm.reports_path + RepFiles.cRepFiles[ComboBox1.ItemIndex]), SW_NORMAL);
 end;
 
 procedure TReportEditFrm.Button2Click(Sender: TObject);

@@ -153,12 +153,12 @@ begin
         SQL.Clear;
         SQL.Add('insert into lmin');
         SQL.Add('values (convert(smalldatetime,:d,104),:id,:name,:minim)');
-        ParamByName('d').AsString := Form1.rdt;
+        ParamByName('d').AsString := MainForm.rdt;
         ParamByName('id').AsInteger := StrToInt(Edit3.Text);
         ParamByName('name').AsString := Edit1.Text;
         ParamByName('minim').AsFloat := StrToFloat(Edit2.Text);
         ExecSQL;
-        FillMin(Form1.bpath, Form1.rdt, Form1.codedbf);
+        FillMin(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
         oldid := StrToInt(Edit3.Text);
       end
       else
@@ -198,7 +198,7 @@ begin
           SQL.Add('from lmin');
           SQL.Add('where (id_min=:id)and(sdate=Convert(smalldatetime,:d,104))');
           ParamByName('id').AsInteger := StrToInt(Edit3.Text);
-          ParamByName('d').AsString := Form1.rdt;
+          ParamByName('d').AsString := MainForm.rdt;
           Open;
           if IsEmpty then
             flag := False
@@ -231,11 +231,11 @@ begin
             SQL.Add('where (id_min = :id)and(sdate=Convert(smalldatetime,:d,104))');
             ParamByName('id').AsInteger := oldid;
           end;
-          ParamByName('d').AsString := Form1.rdt;
+          ParamByName('d').AsString := MainForm.rdt;
           ParamByName('name').AsString := Edit1.Text;
           ParamByName('minim').AsFloat := StrToFloat(Edit2.Text);
           ExecSQL;
-          FillMin(Form1.bpath, Form1.rdt, Form1.codedbf);
+          FillMin(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
           oldid := StrToInt(Edit3.Text);
         end
         else
@@ -259,10 +259,10 @@ begin
     SQL.Clear;
     SQL.Add('delete from lmin');
     SQL.Add('where (id_min=:id)and(sdate=Convert(smalldatetime,:d,104))');
-    ParamByName('d').AsString := Form1.rdt;
+    ParamByName('d').AsString := MainForm.rdt;
     ParamByName('id').AsInteger := oldid;
     ExecSQL;
-    FillMin(Form1.bpath, Form1.rdt, Form1.codedbf);
+    FillMin(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
   end;
   SetDefault;
 end;

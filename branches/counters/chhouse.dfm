@@ -27,9 +27,6 @@ object Form30: TForm30
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 0
-    ExplicitLeft = 8
-    ExplicitTop = 8
-    ExplicitWidth = 312
     object SGH: TStringGrid
       Left = 2
       Top = 2
@@ -45,10 +42,8 @@ object Form30: TForm30
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowSelect]
       TabOrder = 0
       OnDblClick = SGHDblClick
+      OnKeyPress = SGHKeyPress
       OnSelectCell = SGHSelectCell
-      ExplicitLeft = 0
-      ExplicitTop = -30
-      ExplicitWidth = 308
       ColWidths = (
         288)
     end
@@ -64,7 +59,6 @@ object Form30: TForm30
     BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 1
-    ExplicitTop = 324
     object Button4: TButton
       AlignWithMargins = True
       Left = 251

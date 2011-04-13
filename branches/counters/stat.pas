@@ -73,8 +73,8 @@ begin
     Close;
     SQL.Clear;
     SQL.Text := ('exec statistic :date, :dist, :selmode, :mode');
-    Params.ParamValues['date'] := Form1.rdt;
-    Params.ParamValues['dist'] := Form1.dist;
+    Params.ParamValues['date'] := MainForm.rdt;
+    Params.ParamValues['dist'] := MainForm.dist;
 
     if CheckBox1.Checked then
       Params.ParamValues['mode'] := 2
@@ -122,7 +122,7 @@ end;
 
 procedure TStats.Button2Click(Sender: TObject);
 begin
-  ExportGridToExcel(StringGrid1, Form1.reports_path + 'stats.xlt');
+  ExportGridToExcel(StringGrid1, MainForm.reports_path + 'stats.xlt');
 end;
 
 procedure TStats.Button3Click(Sender: TObject);
@@ -156,8 +156,8 @@ begin
       ') sb1 ON sb1.regn = cl.regn' + #13 +
       'WHERE Cl.id_dist = :idd AND sb1.summa >= :limsub1 AND sb1.summa <= :limsub2'
       );
-    ParamByName('d').AsString := Form1.rdt;
-    ParamByName('idd').Value := Form1.dist;
+    ParamByName('d').AsString := MainForm.rdt;
+    ParamByName('idd').Value := MainForm.dist;
     ParamByName('limsub1').Value := Edit3.Text;
     ParamByName('limsub2').Value := Edit4.Text;
     Open;
@@ -189,8 +189,8 @@ begin
       'AND Hist.edate > convert(smalldatetime, :d, 104)' + #13 +
       'WHERE Cl.id_dist = :idd AND hist.income >= :inclim1 AND hist.income <= :inclim2'
       );
-    ParamByName('d').AsString := Form1.rdt;
-    ParamByName('idd').Value := Form1.dist;
+    ParamByName('d').AsString := MainForm.rdt;
+    ParamByName('idd').Value := MainForm.dist;
     ParamByName('inclim1').Value := Edit1.Text;
     ParamByName('inclim2').Value := Edit2.Text;
     Open;

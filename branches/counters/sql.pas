@@ -47,7 +47,6 @@ type
   private
     { Private declarations }
     path: string;//путь по умолчанию
-    procedure PipeExecute(cmd:string; output: TMemo);
     function GetDosOutput(const CommandLine: string): string;
   public
     { Public declarations }
@@ -74,8 +73,6 @@ procedure TSQLExecForm.Button1Click(Sender: TObject);
   Процедура Button1Click выполняет запрос, который введен пользователем в Memo1.
   Если запрос пуст или содержит некоторую ошибку, то выдается предупреждение.
 *******************************************************************************}
-var
-  scriptResult, scriptError: TStringList;
 begin
   if Memo1.Lines.Count <> 0 then
     if TabControl1.TabIndex <> 2 then
@@ -151,7 +148,7 @@ begin
           GetSize(Query1.Fields[i]), GetPrec(Query1.Fields[i]));
       Dbf1.TableName := SaveDialog1.FileName;// path + 'untitled1.dbf';
       Dbf1.CreateTable;
-      Dbf1.CodePage := Form1.codedbf;
+      Dbf1.CodePage := MainForm.codedbf;
       //запись в нее данных
       while not Query1.EOF do
       begin
@@ -193,7 +190,7 @@ begin
     ActivateKeyboardLayout(rl, 0);
   DModule.Query1.Close;
 
-  if not Assigned(Form1) then
+  if not Assigned(MainForm) then
   begin
     DModule.dbfConnection.Connected := False;
     DModule.DataBase1.Connected := False;
@@ -215,7 +212,7 @@ var
 
   adm_pass: string;
 begin
-  if not Assigned(Form1) then
+  if not Assigned(MainForm) then
   begin
     adm_pass := InputPassword('Введите пароль администратора!', 'Пароль:', '');
     adm_pass := GenMD5Password(adm_pass);
@@ -291,77 +288,6 @@ begin
     begin
       Memo1.Lines.LoadFromFile(OpenDialog1.FileName);
     end;
-end;
-
-procedure TSQLExecForm.PipeExecute(cmd:string; output: TMemo);
-var vSecurityAttr:TSecurityAttributes;
-    hReadIn, hWriteOut:THandle;
-    hReadOut, hWriteIn:THandle;
-    vStartUpInfo:TStartUpInfo;
-    vProcessInfo:TProcessInformation;
-    vReadBuf:PChar;
-    vReadBytes:Cardinal;
-    vBufBytes:Cardinal;
-    vCmd:PAnsiChar;
-const cReadBufSize = 1024;
-begin
-  vCmd:=PAnsiChar(cmd);
-  with vSecurityAttr do
-  begin
-    nLength:=SizeOf(TSecurityAttributes);
-    bInheritHandle:=true;
-    lpSecurityDescriptor:=nil;
-  end;
-
-  hWriteOut := CreateNamedPipe('\\.\PIPE\Out',
-    PIPE_ACCESS_DUPLEX,
-    PIPE_WAIT or
-    PIPE_TYPE_BYTE,
-    100,
-    cReadBufSize,
-    cReadBufSize,
-    5000,
-    @vSecurityAttr);
-
-    hReadOut:=CreateFile('\\.\PIPE\Out',
-    GENERIC_WRITE or
-    GENERIC_READ,
-    FILE_SHARE_READ or
-    FILE_SHARE_WRITE,
-    nil,
-    OPEN_EXISTING,
-    FILE_FLAG_NO_BUFFERING,
-    0);
-
-  GetMem(vReadBuf,cReadBufSize+1);
-
-  GetStartupInfo(vStartUpInfo);
-
-  with vStartUpInfo do
-  begin
-    cb:=SizeOf(vStartUpInfo);
-    hStdOutput:=hWriteOut;
-    hStdError:=hWriteOut;
-    hStdInput:=GetStdHandle(STD_INPUT_HANDLE);
-    dwFlags:=STARTF_USESTDHANDLES+STARTF_USESHOWWINDOW;
-    wShowWindow:=SW_HIDE;
-  end;
-
-  if (CreateProcess(nil, PChar(vCmd), nil, nil, true, CREATE_NEW_CONSOLE, nil, nil, vStartUpInfo, vProcessInfo)) then
-  begin
-    if not ReadFile(hReadOut,vReadBuf^, cReadBufSize, vReadBytes, nil) then
-      ShowMessage(SysErrorMessage(GetLastError));
-    vReadBuf[vReadBytes]:=#0;
-    OemToAnsi(vReadBuf, vReadBuf);
-    output.Lines[output.Lines.Count-1]:=output.Lines[output.Lines.Count-1]+String(vReadBuf);
-    Application.ProcessMessages;
-
-    TerminateProcess(vProcessInfo.hProcess, 1);
-    CloseHandle(vProcessInfo.hThread);
-    CloseHandle(vProcessInfo.hProcess);
-    CloseHandle(hReadOut);
-    FreeMem(vReadBuf);
-  end;
 end;
 
 function TSQLExecForm.GetDosOutput(const CommandLine: string): string;

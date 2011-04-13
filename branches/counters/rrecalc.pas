@@ -54,7 +54,7 @@ begin
   cnt := 0;
   k := 1;
 
-  case Form1.dist of
+  case MainForm.dist of
     2: otdel := 'Ленинскому';
     3: otdel := 'Октябрьскому';
     4: otdel := 'Советскому';
@@ -65,7 +65,7 @@ begin
   try
     ExcelApp:=CreateOleObject('Excel.Application');
     ExcelApp.Visible:=False;
-    ExcelApp.WorkBooks.Open(Form1.reports_path + 'recalc.xlt');
+    ExcelApp.WorkBooks.Open(MainForm.reports_path + 'recalc.xlt');
   except
     on E: Exception do
       raise Exception.Create('Ошибка создания объекта Excel: ' + E.Message);
@@ -78,8 +78,8 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('execute getclinfo :id,:d');
-    ParamByName('id').AsInteger := Form1.dist;
-    ParamByName('d').AsString := Form1.rdt;
+    ParamByName('id').AsInteger := MainForm.dist;
+    ParamByName('d').AsString := MainForm.rdt;
     Open;
     pr.ProgressBar1.Max := RecordCount;
     while not eof do
@@ -96,7 +96,7 @@ begin
       Sheet.Range['b'+n,'b'+n] := FieldByName('fio').AsString;
       inc(k);n := IntToStr(k);
       Sheet.Range['a'+n,'a'+n] := 'Адрес, телефон';
-      Sheet.Range['b'+n,'b'+n] := Form1.GenAddr(FieldByName('namestreet').AsString,
+      Sheet.Range['b'+n,'b'+n] := MainForm.GenAddr(FieldByName('namestreet').AsString,
                                             FieldByName('nhouse').AsString,
                                             FieldByName('corp').AsString,
                                             FieldByName('apart').AsString);
@@ -108,7 +108,7 @@ begin
       Sheet.Range['b'+n,'b'+n] := 'с '+FieldByName('bdate').AsString+
                                     ' по '+FieldByName('edate').AsString;
       inc(k);n := IntToStr(k);
-      Sheet.Range['a'+n,'a'+n] := 'Сумма субсидии с '+Form1.rdt+'г. составляет '+FormatFloat('0.00', FieldByName('sub').AsFloat)+'руб. в связи с изменением';
+      Sheet.Range['a'+n,'a'+n] := 'Сумма субсидии с '+MainForm.rdt+'г. составляет '+FormatFloat('0.00', FieldByName('sub').AsFloat)+'руб. в связи с изменением';
       inc(k);n := IntToStr(k);
       if CheckBox1.Checked then
         Sheet.Range['a'+n,'a'+n] := CheckBox1.Caption;
@@ -122,7 +122,7 @@ begin
       Sheet.Range['a'+n,'a'+n] := 'Заведующий филиалом';
       Sheet.Range['c'+n,'c'+n] := FieldByName('boss').AsString;
       inc(k,2);n := IntToStr(k);
-      Sheet.Range['a'+n,'a'+n] := 'Уведомление получил "   " ____________ '+Copy(Form1.rdt,7,4)+'г.';
+      Sheet.Range['a'+n,'a'+n] := 'Уведомление получил "   " ____________ '+Copy(MainForm.rdt,7,4)+'г.';
       Sheet.Range['c'+n,'c'+n] := '/подпись клиента/';
       inc(cnt);
       if cnt mod 5 = 0 then

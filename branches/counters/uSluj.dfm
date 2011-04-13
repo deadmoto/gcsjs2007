@@ -80,6 +80,7 @@ object SlujFrm: TSlujFrm
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goRowSelect]
       ParentCtl3D = False
       TabOrder = 0
+      OnKeyPress = SlujGridKeyPress
       OnSelectCell = SlujGridSelectCell
       ColWidths = (
         64

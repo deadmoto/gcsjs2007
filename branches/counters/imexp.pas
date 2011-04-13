@@ -114,7 +114,7 @@ var
   i:  integer;
 begin
   ext1 := '.dbf';
-  ext2 := IntToStr(Form1.dist) + ext1;
+  ext2 := IntToStr(MainForm.dist) + ext1;
   if CheckBox29.Checked then
     dt := '01.' + Copy(MaskEdit1.Text, 4, 2) + '.' + copy(MaskEdit1.Text, 7, 4)
   else
@@ -135,7 +135,7 @@ begin
       try
         if CheckBox8.Checked then
         begin
-          ExportCl(path, dt, Form1.dist);
+          ExportCl(path, dt, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -144,7 +144,7 @@ begin
         end;
         if CheckBox30.Checked then
         begin
-          ExportHist(path, dt, Form1.dist);
+          ExportHist(path, dt, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -153,7 +153,7 @@ begin
         end;
         if CheckBox9.Checked then
         begin
-          ExportFam(path, dt, Form1.dist);
+          ExportFam(path, dt, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -162,7 +162,7 @@ begin
         end;
         if CheckBox10.Checked then
         begin
-          ExportSub(path, dt, Form1.dist);
+          ExportSub(path, dt, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -171,7 +171,7 @@ begin
         end;
         if CheckBox13.Checked then
         begin
-          ExportInsp(path, Form1.dist, True);
+          ExportInsp(path, MainForm.dist, True);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -180,7 +180,7 @@ begin
         end;
         if CheckBox11.Checked then
         begin
-          ExportMng(path, Form1.dist);
+          ExportMng(path, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -189,7 +189,7 @@ begin
         end;
         if CheckBox28.Checked then
         begin
-          ExportSluj(path, dt, Form1.dist);
+          ExportSluj(path, dt, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -198,7 +198,7 @@ begin
         end;
         if CheckBox7.Checked then
         begin
-          ExportHouse(path, Form1.dist);
+          ExportHouse(path, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -207,7 +207,7 @@ begin
         end;
         if CheckBox31.Checked then
         begin
-          ExportFact(path, Form1.dist);
+          ExportFact(path, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -216,7 +216,7 @@ begin
         end;
         if CheckBox33.Checked then
         begin
-          ExportCounters(path, dt, Form1.dist);
+          ExportCounters(path, dt, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -353,7 +353,7 @@ begin
           end;
           if CheckBox6.Checked then
           begin
-            ExportTarif(path, dt, 'cont', Form1.dist);
+            ExportTarif(path, dt, 'cont', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -362,7 +362,7 @@ begin
           end;
           if CheckBox14.Checked then
           begin
-            ExportTarif(path, dt, 'rep', Form1.dist);
+            ExportTarif(path, dt, 'rep', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -371,7 +371,7 @@ begin
           end;
           if CheckBox15.Checked then
           begin
-            ExportTarif(path, dt, 'cold', Form1.dist);
+            ExportTarif(path, dt, 'cold', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -380,7 +380,7 @@ begin
           end;
           if CheckBox16.Checked then
           begin
-            ExportTarif(path, dt, 'hot', Form1.dist);
+            ExportTarif(path, dt, 'hot', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -389,7 +389,7 @@ begin
           end;
           if CheckBox27.Checked then
           begin
-            ExportTarif(path, dt, 'canal', Form1.dist);
+            ExportTarif(path, dt, 'canal', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -398,7 +398,7 @@ begin
           end;
           if CheckBox17.Checked then
           begin
-            ExportTarif(path, dt, 'heat', Form1.dist);
+            ExportTarif(path, dt, 'heat', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -407,7 +407,7 @@ begin
           end;
           if CheckBox18.Checked then
           begin
-            ExportTarif(path, dt, 'gas', Form1.dist);
+            ExportTarif(path, dt, 'gas', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -416,7 +416,7 @@ begin
           end;
           if CheckBox19.Checked then
           begin
-            ExportTarif(path, dt, 'el', Form1.dist);
+            ExportTarif(path, dt, 'el', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -425,7 +425,7 @@ begin
           end;
           if CheckBox20.Checked then
           begin
-            ExportTarif(path, dt, 'wood', Form1.dist);
+            ExportTarif(path, dt, 'wood', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -434,7 +434,7 @@ begin
           end;
           if CheckBox21.Checked then
           begin
-            ExportTarif(path, dt, 'coal', Form1.dist);
+            ExportTarif(path, dt, 'coal', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -591,7 +591,7 @@ begin
           end;
           if CheckBox6.Checked then
           begin
-            ImportTarif(path, 'cont', Form1.dist);
+            ImportTarif(path, 'cont', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -600,7 +600,7 @@ begin
           end;
           if CheckBox14.Checked then
           begin
-            ImportTarif(path, 'rep', Form1.dist);
+            ImportTarif(path, 'rep', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -609,7 +609,7 @@ begin
           end;
           if CheckBox15.Checked then
           begin
-            ImportTarifb(path, 'cold', Form1.dist);
+            ImportTarifb(path, 'cold', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -618,7 +618,7 @@ begin
           end;
           if CheckBox16.Checked then
           begin
-            ImportTarifb(path, 'hot', Form1.dist);
+            ImportTarifb(path, 'hot', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -627,7 +627,7 @@ begin
           end;
           if CheckBox27.Checked then
           begin
-            ImportTarif(path, 'canal', Form1.dist, True);
+            ImportTarif(path, 'canal', MainForm.dist, True);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -636,7 +636,7 @@ begin
           end;
           if CheckBox17.Checked then
           begin
-            ImportTarif(path, 'heat', Form1.dist, True);
+            ImportTarif(path, 'heat', MainForm.dist, True);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -645,7 +645,7 @@ begin
           end;
           if CheckBox18.Checked then
           begin
-            ImportTarif(path, 'gas', Form1.dist, True);
+            ImportTarif(path, 'gas', MainForm.dist, True);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -654,7 +654,7 @@ begin
           end;
           if CheckBox19.Checked then
           begin
-            ImportEl(path, Form1.dist);
+            ImportEl(path, MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -663,7 +663,7 @@ begin
           end;
           if CheckBox20.Checked then
           begin
-            ImportTarif(path, 'wood', Form1.dist);
+            ImportTarif(path, 'wood', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -672,7 +672,7 @@ begin
           end;
           if CheckBox21.Checked then
           begin
-            ImportTarif(path, 'coal', Form1.dist);
+            ImportTarif(path, 'coal', MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -682,7 +682,7 @@ begin
         end;
         if CheckBox13.Checked then
         begin
-          ImportInsp(path, Form1.dist);
+          ImportInsp(path, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -691,7 +691,7 @@ begin
         end;
         if CheckBox11.Checked then
         begin
-          ImportMng(path, Form1.dist);
+          ImportMng(path, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -700,7 +700,7 @@ begin
         end;
         if CheckBox7.Checked then
         begin
-          ImportHouse(path, Form1.dist);
+          ImportHouse(path, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -709,7 +709,7 @@ begin
         end;
         if CheckBox8.Checked then
         begin
-          ImportCl(path, Form1.dist);
+          ImportCl(path, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -718,7 +718,7 @@ begin
         end;
         if CheckBox9.Checked then
         begin
-          ImportFam(path, Form1.dist);
+          ImportFam(path, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -727,7 +727,7 @@ begin
         end;
         if CheckBox10.Checked then
         begin
-          ImportSub(path, Form1.dist);
+          ImportSub(path, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -736,7 +736,7 @@ begin
         end;
         if CheckBox28.Checked then
         begin
-          ImportSluj(path, Form1.dist);
+          ImportSluj(path, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -745,7 +745,7 @@ begin
         end;
         if CheckBox30.Checked then
         begin
-          ImportHist(path, Form1.dist);
+          ImportHist(path, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -754,7 +754,7 @@ begin
         end;
         if CheckBox31.Checked then
         begin
-          ImportFact(path, Form1.dist);
+          ImportFact(path, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -763,7 +763,7 @@ begin
         end;
         if CheckBox33.Checked then
         begin
-          ImportCounters(path, Form1.dist);
+          ImportCounters(path, MainForm.dist);
           Inc(i);
           pr.ProgressBar1.StepIt;
           pr.Label3.Caption := IntToStr(i);
@@ -772,9 +772,9 @@ begin
         end;
         pr.Close;
         DModule.Database1.Commit;
-        FillCurr(Form1.bpath, Form1.rdt, Form1.dist, Form1.codedbf);
+        FillCurr(MainForm.bpath, MainForm.rdt, MainForm.dist, MainForm.codedbf);
         ShowMessage('Импорт найденных файлов успешно завершен!');
-        Form1.Reload;
+        MainForm.Reload;
       except
         DModule.Database1.Rollback;
         if Assigned(pr) then
@@ -800,7 +800,7 @@ begin
   MaskEdit1.Enabled := False;//экспорт/импорт всех данных
   MaskEdit1.Text := '';
   CheckBox29.Checked := False;
-  MaskEdit1.Text := Form1.rdt;
+  MaskEdit1.Text := MainForm.rdt;
   case status of
     mExport:
     begin
@@ -891,7 +891,7 @@ begin
   if CheckBox29.Checked then
   begin
     MaskEdit1.Enabled := True;//экспорт/импорт по указанной дате
-    MaskEdit1.Text := Form1.rdt;
+    MaskEdit1.Text := MainForm.rdt;
   end
   else
   begin
@@ -994,7 +994,7 @@ end;
 procedure TForm35.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 
-  Form1.SetTarifs;
+  MainForm.SetTarifs;
 end;
 
 end.

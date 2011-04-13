@@ -73,7 +73,7 @@ begin
     SQL.Add('from mng');
     SQL.Add('where id_dist = :dist');
     SQL.Add('order by id_mng');
-    ParamByName('dist').AsInteger := Form1.dist;
+    ParamByName('dist').AsInteger := MainForm.dist;
     Open;
     First;
   end;
@@ -121,7 +121,7 @@ begin
       SQL.Add('from mng');
       SQL.Add('where (id_mng=:idm)and(id_dist=:id)');
       ParamByName('idm').AsInteger := StrToInt(Edit2.Text);
-      ParamByName('id').AsInteger  := Form1.dist;
+      ParamByName('id').AsInteger  := MainForm.dist;
       Open;
       if IsEmpty then
       begin
@@ -131,7 +131,7 @@ begin
         SQL.Add('from mng');
         SQL.Add('where (namemng = :name)and(id_dist=:id)');
         ParamByName('name').AsString := Edit1.Text;
-        ParamByName('id').AsInteger  := Form1.dist;
+        ParamByName('id').AsInteger  := MainForm.dist;
         Open;
         if IsEmpty then
           flag := True
@@ -152,7 +152,7 @@ begin
         SQL.Add('values (:id, :dist,:name)');
         ParamByName('id').AsInteger  := StrToInt(Edit2.Text);
         ParamByName('name').AsString := Edit1.Text;
-        ParamByName('dist').AsInteger := Form1.dist;
+        ParamByName('dist').AsInteger := MainForm.dist;
         ExecSQL;
         SetDefault;
         Open;
@@ -185,7 +185,7 @@ begin
       SQL.Add('from mng');
       SQL.Add('where (id_mng=:idm)and(id_dist=:id)');
       ParamByName('idm').AsInteger := StrToInt(Edit2.Text);
-      ParamByName('id').AsInteger  := Form1.dist;
+      ParamByName('id').AsInteger  := MainForm.dist;
       Open;
       if IsEmpty or not IsEmpty and
         (FieldByName('id_mng').AsInteger = oldid) then
@@ -196,7 +196,7 @@ begin
         SQL.Add('from mng');
         SQL.Add('where (namemng = :name)and(id_dist=:id)');
         ParamByName('name').AsString := Edit1.Text;
-        ParamByName('id').AsInteger  := Form1.dist;
+        ParamByName('id').AsInteger  := MainForm.dist;
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_mng').AsInteger = oldid) then
@@ -219,7 +219,7 @@ begin
         SQL.Add('where (id_mng = :id)and(id_dist = :dist)');
         ParamByName('id').AsInteger  := oldid;
         ParamByName('name').AsString := Edit1.Text;
-        ParamByName('dist').AsInteger := Form1.dist;
+        ParamByName('dist').AsInteger := MainForm.dist;
         ExecSQL;
         SetDefault;
         Open;
@@ -249,7 +249,7 @@ begin
       SQL.Add('delete from mng');
       SQL.Add('where (id_mng = :id)and(id_dist = :dist)');
       ParamByName('id').AsInteger := oldid;
-      ParamByName('dist').AsInteger := Form1.dist;
+      ParamByName('dist').AsInteger := MainForm.dist;
       ExecSQL;
       SetDefault;
       Open;
