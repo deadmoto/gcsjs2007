@@ -70,7 +70,7 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from "curmdd.dbf" sbros');
+    SQL.Add('select * from curmdd.dbf sbros');
     SQL.Add('order by sbros.id_mdd');
     Open;
     First;

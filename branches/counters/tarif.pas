@@ -71,7 +71,7 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from "cur' + nam + '.dbf" sbros');
+    SQL.Add('select * from cur' + nam + '.dbf sbros');
     SQL.Add('order by sbros.id_' + nam);
     Open;
     First;

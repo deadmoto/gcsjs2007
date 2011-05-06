@@ -186,6 +186,7 @@ type
     aClArch: TAction;
     aExporDolg: TAction;
     aExportSocProt: TAction;
+    Action22: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SGClDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
@@ -291,6 +292,7 @@ type
     procedure aClArchExecute(Sender: TObject);
     procedure aExporDolgExecute(Sender: TObject);
     procedure aExportSocProtExecute(Sender: TObject);
+    procedure Action22Execute(Sender: TObject);
   private
     FShaderForm: TForm;
     ccl, acl:     integer;//количество всех и активных клиентов в базе
@@ -368,7 +370,8 @@ uses
   datamodule, search, service, service2, fstruct, imexp, SQL, progress, Contnrs, DateUtils,
   rstnd, loop, tarifb, chinsp, curhist, chserv, Client, merge, mdd, statage,
   statlm, codedbf, chtarifs, rrecalc, stat, padegFIO, uSluj, uConnection,
-  uSettings, uReportData, uGenRefBook, uReportEdit, uShade, wincontrols, md5, appregistry, MyTypes;
+  uSettings, uReportData, uGenRefBook, uReportEdit, uShade, wincontrols, md5, appregistry, MyTypes,
+  uOffice;
 
 {$R *.dfm}
 {$I Revision.inc}
@@ -958,6 +961,12 @@ begin
   end;
 
   frxReport1.ShowPreparedReport;
+end;
+
+procedure TMainForm.Action22Execute(Sender: TObject);
+begin
+  OfficeForm.status := sec1;
+  OfficeForm.ShowModal;
 end;
 
 procedure TMainForm.Action2Execute(Sender: TObject);
@@ -1605,7 +1614,7 @@ var
       Close;
       SQL.Clear;
       SQL.Add('select el.plate');
-      SQL.Add('from "curel.dbf" el');
+      SQL.Add('from curel.dbf el');
       SQL.Add('where el.id_el=:id');
       Parameters.ParamByName('id').Value := pl;
       Open;
@@ -1907,7 +1916,7 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('select el.plate');
-        SQL.Add('from "curel.dbf" el');
+        SQL.Add('from curel.dbf el');
         SQL.Add('where el.id_el=:id');
         Parameters.ParamByName('id').Value := pl;
         Open;

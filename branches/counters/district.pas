@@ -19,7 +19,6 @@ uses
 type
   TForm4 = class(TForm)
     FlowPanel1: TFlowPanel;
-    Button4:    TButton;
     Button3:    TButton;
     Button2:    TButton;
     Button1:    TButton;
@@ -36,7 +35,6 @@ type
     Edit4:      TEdit;
     Label5:     TLabel;
     Edit5:      TEdit;
-    procedure Button4Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -97,12 +95,6 @@ begin
     DModule.Query1.Next;
   end;
 
-end;
-
-procedure TForm4.Button4Click(Sender: TObject);
-{ выйти }
-begin
-  Form4.Close;
 end;
 
 procedure TForm4.distGridSelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);

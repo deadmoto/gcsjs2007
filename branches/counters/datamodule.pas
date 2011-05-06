@@ -95,10 +95,6 @@ end;
 
 function TDModule.SetDBFConnectStr(path: string): string;
 begin
-//  Result := format(
-//    'Provider=MSDASQL.1; Persist Security Info=False;'#13#10 +
-//    'Extended Properties="Driver={Microsoft dBASE Driver (*.dbf)};'#13#10 +
-//    'DriverID=277; Dbq=%s\"', [path]);
   Result := format(
     'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=%s;'#13#10 +
     'Extended Properties=dBASE IV;User ID=Admin;Password=;', [path]

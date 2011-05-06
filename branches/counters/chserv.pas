@@ -93,7 +93,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namestnd');
-    SQL.Add('from "currstnd.dbf" sbros');
+    SQL.Add('from currstnd.dbf sbros');
     SQL.Add('where sbros.id_stnd = :id');
     Parameters.ParamByName('id').Value := n;
     Open;
@@ -125,7 +125,7 @@ begin
       SQL.Add('select sbros.name'+nam)
     else
       SQL.Add('select sbros.plate as name'+nam);
-    SQL.Add('from "cur'+nam+'.dbf" sbros');
+    SQL.Add('from cur'+nam+'.dbf sbros');
     SQL.Add('where sbros.id_'+nam+' = :id');
     Parameters.ParamByName('id').Value := t;
     Open;
@@ -229,7 +229,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
-    SQL.Add('from "cur'+n+'.dbf" sbros');
+    SQL.Add('from cur'+n+'.dbf sbros');
     SQL.Add('order by sbros.name'+n);
     Open;
     First;
@@ -257,7 +257,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
-    SQL.Add('from "cur'+n+'.dbf" sbros');
+    SQL.Add('from cur'+n+'.dbf sbros');
     SQL.Add('order by sbros.name'+n);
     Open;
     First;
@@ -356,7 +356,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.id_stnd, sbros.namestnd');
-    SQL.Add('from "currstnd.dbf" sbros');
+    SQL.Add('from currstnd.dbf sbros');
     SQL.Add('order by sbros.namestnd');
     Open;
     First;
@@ -382,7 +382,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
-    SQL.Add('from "curel.dbf" sbros');
+    SQL.Add('from curel.dbf sbros');
     SQL.Add('order by sbros.plate');
     Open;
     First;

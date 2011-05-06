@@ -43,7 +43,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 0
       OnChange = ComboBox2Change
@@ -113,7 +113,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 3
       OnChange = ComboBox7Change
@@ -130,7 +130,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 4
       OnChange = ComboBox8Change
@@ -147,7 +147,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 5
       OnChange = ComboBox9Change
@@ -164,7 +164,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 6
       OnChange = ComboBox10Change
@@ -285,7 +285,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 2
       OnChange = ComboBox1Change
@@ -342,7 +342,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 4
       OnChange = ComboBox6Change
@@ -439,7 +439,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 13
       OnChange = ComboBox15Change
@@ -508,7 +508,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 3
       OnChange = ComboBox3Change
@@ -535,7 +535,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 2
       OnChange = ComboBox5Change
@@ -552,7 +552,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 4
       OnChange = ComboBox4Change
@@ -623,7 +623,7 @@ object Form33: TForm33
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
-      ItemHeight = 0
+      ItemHeight = 13
       ParentFont = False
       TabOrder = 10
       OnChange = ComboBox11Change
@@ -815,6 +815,24 @@ object Form33: TForm33
         TabOrder = 4
         OnExit = Edit1Exit
       end
+    end
+    object CheckBox25: TCheckBox
+      Left = 8
+      Top = 160
+      Width = 73
+      Height = 17
+      Caption = #1059#1095#1072#1089#1090#1086#1082
+      TabOrder = 7
+      OnClick = CheckBox25Click
+    end
+    object ComboBox17: TComboBox
+      Left = 120
+      Top = 160
+      Width = 145
+      Height = 21
+      Color = clBtnFace
+      ItemHeight = 13
+      TabOrder = 8
     end
   end
   object FlowPanel1: TFlowPanel

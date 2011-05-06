@@ -1248,7 +1248,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
-    SQL.Add('from "curmdd.dbf" sbros');
+    SQL.Add('from curmdd.dbf sbros');
     SQL.Add('order by sbros.id_mdd');
     Open;
     First;
@@ -1263,7 +1263,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.id_stnd, sbros.namestnd');
-    SQL.Add('from "currstnd.dbf" sbros');
+    SQL.Add('from currstnd.dbf sbros');
     SQL.Add('order by sbros.namestnd');
     Open;
     First;
@@ -1282,7 +1282,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.id_cont, sbros.namecont');
-    SQL.Add('from "curcont.dbf" sbros');
+    SQL.Add('from curcont.dbf sbros');
     SQL.Add('order by sbros.namecont');
     Open;
     First;
@@ -1300,7 +1300,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.id_rep, sbros.namerep');
-    SQL.Add('from "currep.dbf" sbros');
+    SQL.Add('from currep.dbf sbros');
     SQL.Add('order by sbros.namerep');
     Open;
     First;
@@ -1318,7 +1318,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.id_cold, sbros.namecold');
-    SQL.Add('from "curcold.dbf" sbros');
+    SQL.Add('from curcold.dbf sbros');
     SQL.Add('order by sbros.namecold');
     Open;
     First;
@@ -1338,7 +1338,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
-    SQL.Add('from "curcanal.dbf" sbros');
+    SQL.Add('from curcanal.dbf sbros');
     SQL.Add('order by sbros.namecanal');
     Open;
     First;
@@ -1360,7 +1360,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.id_hot, sbros.namehot');
-    SQL.Add('from "curhot.dbf" sbros');
+    SQL.Add('from curhot.dbf sbros');
     SQL.Add('order by sbros.namehot');
     Open;
     First;
@@ -1380,7 +1380,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.id_heat, sbros.nameheat');
-    SQL.Add('from "curheat.dbf" sbros');
+    SQL.Add('from curheat.dbf sbros');
     SQL.Add('order by sbros.nameheat');
     Open;
     First;
@@ -1400,7 +1400,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
-    SQL.Add('from "curgas.dbf" sbros');
+    SQL.Add('from curgas.dbf sbros');
     SQL.Add('order by sbros.namegas');
     Open;
     First;
@@ -1421,7 +1421,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.id_wood, sbros.namewood');
-    SQL.Add('from "curwood.dbf" sbros');
+    SQL.Add('from curwood.dbf sbros');
     SQL.Add('order by sbros.namewood');
     Open;
     First;
@@ -1440,7 +1440,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.id_coal, sbros.namecoal');
-    SQL.Add('from "curcoal.dbf" sbros');
+    SQL.Add('from curcoal.dbf sbros');
     SQL.Add('order by sbros.namecoal');
     Open;
     First;

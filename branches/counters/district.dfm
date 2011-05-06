@@ -30,20 +30,9 @@ object Form4: TForm4
     BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 0
-    ExplicitWidth = 562
-    object Button4: TButton
-      AlignWithMargins = True
-      Left = 494
-      Top = 3
-      Width = 75
-      Height = 25
-      Caption = #1042#1099#1081#1090#1080
-      TabOrder = 3
-      OnClick = Button4Click
-    end
     object Button3: TButton
       AlignWithMargins = True
-      Left = 413
+      Left = 494
       Top = 3
       Width = 75
       Height = 25
@@ -53,7 +42,7 @@ object Form4: TForm4
     end
     object Button2: TButton
       AlignWithMargins = True
-      Left = 332
+      Left = 413
       Top = 3
       Width = 75
       Height = 25
@@ -63,7 +52,7 @@ object Form4: TForm4
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 251
+      Left = 332
       Top = 3
       Width = 75
       Height = 25
@@ -82,7 +71,6 @@ object Form4: TForm4
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 1
-    ExplicitWidth = 562
     object distGrid: TStringGrid
       Left = 2
       Top = 2
@@ -95,7 +83,6 @@ object Form4: TForm4
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowSelect]
       TabOrder = 0
       OnSelectCell = distGridSelectCell
-      ExplicitWidth = 558
     end
   end
   object Panel2: TPanel
@@ -108,7 +95,6 @@ object Form4: TForm4
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 2
-    ExplicitWidth = 562
     object Label3: TLabel
       Left = 14
       Top = 12

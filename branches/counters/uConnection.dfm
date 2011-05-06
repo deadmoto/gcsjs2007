@@ -83,17 +83,17 @@ object ConnectionFrm: TConnectionFrm
     end
     object Button1: TButton
       AlignWithMargins = True
-      Left = 120
+      Left = 112
       Top = 3
-      Width = 75
+      Width = 83
       Height = 25
-      Caption = 'Ok'
+      Caption = #1055#1086#1076#1082#1083#1102#1095#1080#1090#1100#1089#1103
       TabOrder = 1
       OnClick = Button1Click
     end
     object Button3: TButton
       AlignWithMargins = True
-      Left = 39
+      Left = 31
       Top = 3
       Width = 75
       Height = 25

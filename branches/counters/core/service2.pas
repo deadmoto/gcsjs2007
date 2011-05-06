@@ -193,7 +193,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namestnd');
-    SQL.Add('from "currstnd.dbf" sbros');
+    SQL.Add('from currstnd.dbf sbros');
     SQL.Add('where sbros.id_stnd = :id');
     Parameters.ParamByName('id').Value := integer(n);
     Open;
@@ -209,7 +209,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namecont');
-    SQL.Add('from "curcont.dbf" sbros');
+    SQL.Add('from curcont.dbf sbros');
     SQL.Add('where sbros.id_cont = :id');
     Parameters.ParamByName('id').Value := integer(n);
     Open;
@@ -225,7 +225,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namerep');
-    SQL.Add('from "currep.dbf" sbros');
+    SQL.Add('from currep.dbf sbros');
     SQL.Add('where sbros.id_rep = :id');
     Parameters.ParamByName('id').Value := integer(n);
     Open;
@@ -241,7 +241,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namecold');
-    SQL.Add('from "curcold.dbf" sbros');
+    SQL.Add('from curcold.dbf sbros');
     SQL.Add('where sbros.id_cold = :id');
     Parameters.ParamByName('id').Value := integer(n);
     Open;
@@ -257,7 +257,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namecanal');
-    SQL.Add('from "curcanal.dbf" sbros');
+    SQL.Add('from curcanal.dbf sbros');
     SQL.Add('where sbros.id_canal = :id');
     Parameters.ParamByName('id').Value := integer(n);
     Open;
@@ -273,7 +273,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namehot');
-    SQL.Add('from "curhot.dbf" sbros');
+    SQL.Add('from curhot.dbf sbros');
     SQL.Add('where sbros.id_hot = :id');
     Parameters.ParamByName('id').Value := integer(n);
     Open;
@@ -289,7 +289,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.nameheat');
-    SQL.Add('from "curheat.dbf" sbros');
+    SQL.Add('from curheat.dbf sbros');
     SQL.Add('where sbros.id_heat = :id');
     Parameters.ParamByName('id').Value := integer(n);
     Open;
@@ -322,7 +322,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namegas');
-    SQL.Add('from "curgas.dbf" sbros');
+    SQL.Add('from curgas.dbf sbros');
     SQL.Add('where sbros.id_gas = :id');
     Parameters.ParamByName('id').Value := integer(n);
     Open;
@@ -338,7 +338,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namewood');
-    SQL.Add('from "curwood.dbf" sbros');
+    SQL.Add('from curwood.dbf sbros');
     SQL.Add('where sbros.id_wood = :id');
     Parameters.ParamByName('id').Value := integer(n);
     Open;
@@ -354,7 +354,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.namecoal');
-    SQL.Add('from "curcoal.dbf" sbros');
+    SQL.Add('from curcoal.dbf sbros');
     SQL.Add('where sbros.id_coal = :id');
     Parameters.ParamByName('id').Value := integer(n);
     Open;
@@ -386,7 +386,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.minim');
-    SQL.Add('from "curlmin.dbf" sbros');
+    SQL.Add('from curlmin.dbf sbros');
     SQL.Add('where sbros.id_min = :id');
     Parameters.ParamByName('id').Value := integer(n);
     Open;

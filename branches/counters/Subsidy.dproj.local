@@ -36,5 +36,7 @@
     <Transaction>2011.03.21 09:57:36.373.pas,D:\delphi\work\subsidy\counters\Unit1.pas=D:\delphi\work\subsidy\counters\data\MyTypes.pas</Transaction>
     <Transaction>2011.03.21 10:33:30.661.pas,D:\delphi\work\subsidy\counters\Unit1.pas=D:\delphi\work\subsidy\counters\data\HelpUtils.pas</Transaction>
     <Transaction>2010.02.15 12:19:37.413.pas,D:\delphi\work\subsidy\counters\Unit1.pas=D:\delphi\work\subsidy\counters\core\service2.pas</Transaction>
+    <Transaction>2011.05.06 12:52:12.749.pas,D:\delphi\work\subsidy\counters\Unit1.pas=D:\delphi\work\subsidy\counters\uOffice.pas</Transaction>
+    <Transaction>2011.05.06 12:52:12.759.dfm,D:\delphi\work\subsidy\counters\Unit1.dfm=D:\delphi\work\subsidy\counters\uOffice.dfm</Transaction>
   </Transactions>
 </BorlandProject>

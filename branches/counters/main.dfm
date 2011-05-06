@@ -12,7 +12,7 @@ object MainForm: TMainForm
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = True
-  Position = poDesigned
+  Position = poDesktopCenter
   Visible = True
   OnClose = FormClose
   OnCreate = FormCreate
@@ -2517,6 +2517,9 @@ object MainForm: TMainForm
                 Action = Action2
               end
               item
+                Action = Action22
+              end
+              item
                 Action = Action3
               end
               item
@@ -3160,6 +3163,11 @@ object MainForm: TMainForm
       Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
       Caption = #1054#1082#1088#1091#1075#1072'...'
       OnExecute = Action2Execute
+    end
+    object Action22: TAction
+      Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+      Caption = #1059#1095#1072#1089#1090#1082#1080'...'
+      OnExecute = Action22Execute
     end
     object Action3: TAction
       Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080

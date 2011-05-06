@@ -78,7 +78,7 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from "curel.dbf" sbros');
+    SQL.Add('select * from curel.dbf sbros');
     SQL.Add('order by sbros.id_el');
     Open;
     First;

@@ -78,7 +78,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
-    SQL.Add('from "curmdd.dbf" sbros');
+    SQL.Add('from curmdd.dbf sbros');
     SQL.Add('order by sbros.namegroup');
     Open;
     SetLength(oldmdd, RecordCount);
@@ -94,7 +94,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
-    SQL.Add('from "curlmin.dbf" sbros');
+    SQL.Add('from curlmin.dbf sbros');
     SQL.Add('order by sbros.namemin');
     Open;
     SetLength(oldmin, RecordCount);
@@ -387,7 +387,7 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('select id_norm, countp, snorm, phnorm as "psnorm",hnorm, phnorm from norm');
+    SQL.Add('select id_norm, countp, snorm, phnorm, hnorm, phnorm from norm');
     Open;
   end;
 end;

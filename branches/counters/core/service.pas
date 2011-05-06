@@ -691,7 +691,8 @@ begin
     SQL.add('group by id_mdd) sb inner join');
     SQL.add('mdd on (mdd.id_mdd=sb.id_mdd)and(mdd.sdate=sb.sdate)');
     SQL.add('order by mdd.namegroup');
-    Parameters.ParamByName('d').Value := rdt;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'd', rdt);// ('d').Value := rdt;
     Open;
     FillTable(path, 'curmdd', code);
   end;
