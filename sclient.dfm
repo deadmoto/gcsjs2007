@@ -24,7 +24,7 @@ object EditClForm: TEditClForm
     Top = 3
     Width = 598
     Height = 429
-    ActivePage = TabSheet9
+    ActivePage = TabSheet1
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
@@ -33,10 +33,6 @@ object EditClForm: TEditClForm
     object TabSheet1: TTabSheet
       Caption = #1050#1083#1080#1077#1085#1090
       OnExit = TabSheet1Exit
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label1: TLabel
         Left = 8
         Top = 24
@@ -210,7 +206,7 @@ object EditClForm: TEditClForm
           Top = 17
           Width = 153
           Height = 21
-          ItemHeight = 0
+          ItemHeight = 13
           TabOrder = 0
           OnChange = ComboBox11Change
           OnExit = ComboBox11Change
@@ -344,7 +340,7 @@ object EditClForm: TEditClForm
         Top = 144
         Width = 217
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 1
         OnChange = ComboBox12Change
         OnExit = ComboBox12Change
@@ -406,7 +402,7 @@ object EditClForm: TEditClForm
         Top = 208
         Width = 161
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 7
         OnChange = ComboBox13Change
         OnExit = ComboBox13Change
@@ -416,7 +412,7 @@ object EditClForm: TEditClForm
         Top = 232
         Width = 161
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 8
         OnChange = ComboBox14Change
         OnExit = ComboBox14Change
@@ -452,7 +448,7 @@ object EditClForm: TEditClForm
         Top = 184
         Width = 265
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 6
         OnChange = ComboBox15Change
         OnExit = ComboBox15Change
@@ -503,7 +499,7 @@ object EditClForm: TEditClForm
         Top = 256
         Width = 161
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 9
         OnChange = ComboBox16Change
         OnExit = ComboBox16Change
@@ -1049,7 +1045,7 @@ object EditClForm: TEditClForm
             #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1074#1099#1073#1088#1072#1085#1072' '#1075#1072#1079#1086#1074#1072#1103' '#1087#1083#1080#1090#1072', '#1090#1086' '#1075#1072#1079' '#1076#1086#1083#1078#1077#1085' '#1073#1099#1090#1100' '#1090#1086#1078#1077 +
             ' '#1074#1099#1073#1088#1072#1085
           Align = alTop
-          ItemHeight = 13
+          ItemHeight = 0
           ItemIndex = 0
           ParentShowHint = False
           ShowHint = True
@@ -1076,7 +1072,7 @@ object EditClForm: TEditClForm
           Width = 175
           Height = 21
           Align = alTop
-          ItemHeight = 13
+          ItemHeight = 0
           ItemIndex = 0
           TabOrder = 0
           Text = #1062#1077#1085#1090#1088#1072#1083#1100#1085#1086#1077
@@ -4098,10 +4094,6 @@ object EditClForm: TEditClForm
     object TabSheet9: TTabSheet
       Caption = #1042#1099#1095#1077#1090#1099
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object DebtControl: TTabControl
         Left = 0
         Top = 0
@@ -4133,7 +4125,7 @@ object EditClForm: TEditClForm
             Top = 24
             Width = 145
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 0
             OnChange = ComboBox1Change
             OnKeyPress = ComboBox23KeyPress
@@ -4151,7 +4143,7 @@ object EditClForm: TEditClForm
             Top = 24
             Width = 180
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 0
           end
         end

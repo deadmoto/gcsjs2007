@@ -74,7 +74,7 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from "curlmin.dbf" sbros');
+    SQL.Add('select * from curlmin.dbf sbros');
     SQL.Add('order by sbros.id_min');
     Open;
     First;

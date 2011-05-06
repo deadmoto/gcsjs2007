@@ -34,6 +34,8 @@ type
     Button3:     TButton;
     Button4:     TButton;
     Button5: TButton;
+    Label4: TLabel;
+    ComboBox1: TComboBox;
     procedure Button4Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -49,8 +51,10 @@ type
   private
     { Private declarations }
     oldid: integer;//последний номер, который использовался
+    office: array of integer;
     procedure SetDefault;
     function SetRegn(d, ins, n: integer): integer;
+    function SearchOfficeInd(s: string): integer;
   public
     { Public declarations }
     status: integer;//0 - только для чтения, 1 - запись
@@ -66,35 +70,81 @@ uses
 
 {$R *.dfm}
 
+function TForm3.SearchOfficeInd(s: string): integer;
+var
+  i: integer;
+begin
+  for i := 0 to ComboBox1.Items.Count - 1 do
+  begin
+    if ComboBox1.Items[i] = s then
+      Result := i;
+  end;
+end;
+
 procedure TForm3.SetDefault;
 { процедура создает запрос по умолчанию выборки из таблицы инспекторов }
 var
   i: integer;
 begin
-  with DModule.Query1 do
+  ComboBox1.Clear;
+  with DModule.sqlQuery1 do
   begin
     Close;
+    SQL.Text :=
+      'SELECT id_office, adr'#13#10 +
+      'FROM Office WHERE id_dist=:dist';
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', MainForm.dist);
+    Open;
+    First;
+    i := 0;
+    while not EOF do
+    begin
+      SetLength(office, Length(office) + 1);
+      Combobox1.Items.Add(FieldValues['adr']);
+      office[i] := FieldValues['id_office'];
+      Next;
+      Inc(i);
+    end;        
+
+    Close;
     SQL.Clear;
-    SQL.Add('select *');
+    SQL.Add('select insp.id_insp, insp.nameinsp, insp.status, insp.lastnum,office.adr');
     SQL.Add('from insp inner join dist');
     SQL.Add('on insp.id_dist = dist.id_dist');
+    SQL.Add('inner join office on insp.id_office = office.id_office and office.id_dist=:id');
     SQL.Add('where insp.id_dist=:id');
     SQL.Add('order by insp.id_insp');
-    ParamByName('id').AsInteger := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', MainForm.dist);
     Open;
     First;
   end;
 
-  FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'ФИО', 'Статус', 'Рег.номер'),
-    TIntArray.Create(25, 210, 45, 80), DModule.Query1.RecordCount + 1);
-
-  for i := 0 to DModule.Query1.RecordCount - 1 do
+  if DModule.sqlQuery1.RecordCount > 0 then
   begin
-    StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('id_insp').Value;
-    StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('nameinsp').Value;
-    StringGrid1.Cells[2, i + 1] := DModule.Query1.FieldByName('status').Value;
-    StringGrid1.Cells[3, i + 1] := DModule.Query1.FieldByName('lastnum').Value;
-    DModule.Query1.Next;
+    FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'ФИО', 'Статус', 'Рег.номер', 'Участок'),
+      TIntArray.Create(25, 210, 45, 80, 100), DModule.sqlQuery1.RecordCount + 1);
+
+    for i := 0 to DModule.sqlQuery1.RecordCount - 1 do
+    begin
+      StringGrid1.Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('id_insp').Value;
+      StringGrid1.Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('nameinsp').Value;
+      StringGrid1.Cells[2, i + 1] := DModule.sqlQuery1.FieldByName('status').Value;
+      StringGrid1.Cells[3, i + 1] := DModule.sqlQuery1.FieldByName('lastnum').Value;
+      StringGrid1.Cells[4, i + 1] := DModule.sqlQuery1.FieldByName('adr').Value;
+      DModule.sqlQuery1.Next;
+    end;
+  end
+  else
+  begin
+    FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'ФИО', 'Статус', 'Рег.номер', 'Участок'),
+      TIntArray.Create(25, 210, 45, 80, 100), 2);
+
+    for i := 0 to 4 do
+    begin
+      StringGrid1.Cells[i, 1] := '';
+    end;
   end;
 end;
 
@@ -128,6 +178,7 @@ begin
     Edit1.Text := StringGrid1.Cells[1, ARow];
     Edit2.Text := StringGrid1.Cells[0, ARow];
     Edit3.Text := StringGrid1.Cells[3, ARow];
+    ComboBox1.ItemIndex := SearchOfficeInd(StringGrid1.Cells[4, ARow]);
     if StringGrid1.Cells[2, ARow] <> '' then
       CheckBox1.Checked := variant(StringGrid1.Cells[2, ARow]);
 
@@ -150,7 +201,8 @@ begin
   with DModule.Query1 do
     begin
       Close;
-      SQL.Text := 'UPDATE Insp SET password=:pwd' + #13 +
+      SQL.Text :=
+      'UPDATE Insp SET password=:pwd'#13#10 +
       'WHERE id_insp=:id';
       ParamByName('pwd').Value := GenMD5Password(tmp_pass);
       ParamByName('id').Value := oldid;
@@ -203,11 +255,12 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('insert into insp');
-        SQL.Add('values (:id, :dist,:name, :st, :num,:pas)');
+        SQL.Add('values (:id, :dist,:name, :st, :num,:pas,:office)');
         ParamByName('id').AsInteger  := StrToInt(Edit2.Text);
         ParamByName('name').AsString := Edit1.Text;
         ParamByName('dist').AsInteger := MainForm.dist;
         ParamByName('pas').AsString := GenMD5Password( InputPassword('Введите пароль!', 'Пароль:', '') );
+        ParamByName('office').AsInteger := office[ComboBox1.ItemIndex];
         if CheckBox1.Checked = False then
           st := 0
         else
@@ -274,11 +327,12 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('update insp');
-        SQL.Add('set nameinsp = :name, status = :st, lastnum=:num');
+        SQL.Add('set nameinsp = :name, status = :st, lastnum=:num, id_office=:office');
         SQL.Add('where (id_insp = :id)and(id_dist = :dist)');
         ParamByName('id').AsInteger  := oldid;
         ParamByName('name').AsString := Edit1.Text;
         ParamByName('dist').AsInteger := MainForm.dist;
+        ParamByName('office').AsInteger := office[ComboBox1.ItemIndex];
         if CheckBox1.Checked = False then
           st := 0
         else

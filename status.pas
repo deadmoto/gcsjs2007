@@ -91,7 +91,7 @@ begin
     l := 0;
     Close;
     SQL.Clear;
-    SQL.Add('select * from "curlmin.dbf" sbros');
+    SQL.Add('select * from curlmin.dbf sbros');
     SQL.Add('order by sbros.namemin');
     Open;
     First;

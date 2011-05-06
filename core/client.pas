@@ -603,7 +603,7 @@ begin
       Close;
       SQL.Clear;
       SQL.Add('select sbros.minim');
-      SQL.Add('from "curlmin.dbf" sbros');
+      SQL.Add('from curlmin.dbf sbros');
       SQL.Add('where sbros.id_min = :id');
       ParamByName('id').AsInteger := cdata.min[i];
       Open;
@@ -1618,7 +1618,7 @@ begin
       Close;
       SQL.Clear;
       SQL.Add('select value' + nv);
-      SQL.Add('from "currstnd.dbf" sbros');
+      SQL.Add('from currstnd.dbf sbros');
       SQL.Add('where sbros.id_stnd=:id');
       Parameters.ParamByName('id').Value := integer(cdata.rstnd);
       Open;
@@ -1637,7 +1637,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('select sbros.vmdd');
-    SQL.Add('from "curmdd.dbf" sbros');
+    SQL.Add('from curmdd.dbf sbros');
     SQL.Add('where sbros.id_mdd=:id');
     Parameters.ParamByName('id').Value := integer(cdata.mdd);
     Open;

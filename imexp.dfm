@@ -217,7 +217,6 @@ object Form35: TForm35
       Top = 26
       Width = 281
       Height = 185
-      Caption = #1042#1089#1077'   '
       Enabled = False
       TabOrder = 11
       object CheckBox3: TCheckBox
@@ -436,10 +435,11 @@ object Form35: TForm35
       OnClick = BitBtn2Click
     end
     object CheckBox32: TCheckBox
-      Left = 166
-      Top = 25
-      Width = 17
+      Left = 226
+      Top = 6
+      Width = 78
       Height = 17
+      Caption = #1055#1086#1083#1085#1086#1089#1090#1100#1102
       Enabled = False
       TabOrder = 14
       OnClick = CheckBox32Click

@@ -86,6 +86,8 @@ type
     ComboBox16: TComboBox;
     Edit1: TEdit;
     Edit6: TEdit;
+    CheckBox25: TCheckBox;
+    ComboBox17: TComboBox;
     procedure CheckBox1Click(Sender: TObject);
     procedure CheckBox2Click(Sender: TObject);
     procedure CheckBox3Click(Sender: TObject);
@@ -146,6 +148,7 @@ type
     procedure CheckBox24Click(Sender: TObject);
     procedure ComboBox15Change(Sender: TObject);
     procedure Edit1Exit(Sender: TObject);
+    procedure CheckBox25Click(Sender: TObject);
   private
     { Private declarations }
     procedure Fill;
@@ -175,7 +178,7 @@ type
     //    function FormHouse: string;
   public
     { Public declarations }
-    cntrl, mng, fnd, settl, own, p, str, cert, insp, month, calc, stat: array of integer;
+    cntrl, mng, fnd, settl, own, p, str, cert, insp, month, calc, stat, office: array of integer;
     cur:    array[0..18] of string;//текущие наименования в полях ввода в combobox
     curind: array[0..18] of integer;//индексы, соответствующие текущим наименованиям в полях ввода
     rsel:   boolean;
@@ -210,6 +213,7 @@ begin
   Combobox10.Clear;
   Combobox11.Clear;
   Combobox15.Clear;
+  Combobox17.Clear;
   Edit3.Text := '';
   Edit5.Text := '';
 end;
@@ -414,6 +418,27 @@ begin
     end;
     //Combobox6.ItemIndex := 0;
   end;
+
+  with DModule.sqlQuery1 do
+  begin
+    Close;
+    l := 0;
+    SQL.Text :=
+      'SELECT id_office, adr'#13#10 +
+      'FROM Office WHERE id_dist=:dist';
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', MainForm.dist);
+    Open;
+    First;
+    while not EOF do
+    begin
+      SetLength(office, Length(office) + 1);
+      Combobox17.Items.Add(FieldValues['adr']);
+      office[l] := FieldValues['id_office'];
+      Next;
+      Inc(l);
+    end;
+  end;
 end;
 
 procedure TForm33.CheckBox1Click(Sender: TObject);
@@ -505,6 +530,22 @@ begin
 //    combobox16.ItemIndex := 0;
   end;
 
+end;
+
+procedure TForm33.CheckBox25Click(Sender: TObject);
+begin
+  if not Checkbox25.Checked then
+  begin
+    combobox17.Color := clBtnFace;
+    combobox17.Font.Color := clGrayText;
+    combobox17.Text  := '';
+  end
+  else
+  begin
+    combobox17.Color := clWindow;
+    combobox17.Font.Color := clWindowText;
+    combobox17.ItemIndex := 0;
+  end;
 end;
 
 procedure TForm33.CheckBox2Click(Sender: TObject);
@@ -963,7 +1004,8 @@ begin
   q.SQL := '';
   SetLength(q.parname, 0);
   SetLength(q.parval, 0);
-  if checkbox1.Checked or checkbox2.Checked or
+  if
+    checkbox1.Checked or checkbox2.Checked or
     checkbox3.Checked or checkbox4.Checked or
     checkbox5.Checked or checkbox6.Checked or
     checkbox7.Checked or checkbox8.Checked or
@@ -973,13 +1015,15 @@ begin
     checkbox15.Checked or Checkbox16.Checked or
     Checkbox19.Checked or Checkbox20.Checked or
     Checkbox21.Checked or Checkbox23.Checked or
-    Checkbox24.Checked then
+    Checkbox24.Checked or Checkbox25.Checked
+  then
   begin
     q.SQL := 'select cl.regn,hist.bdate,hist.edate,hist.calc from cl ';
     q.SQL := q.SQL + 'inner join hist on cl.regn=hist.regn ';
     q.SQL := q.SQL + 'inner join (select regn,max(bdate) as bdate from hist ';
     q.SQL := q.SQL + 'where (bdate<=convert(smalldatetime,:d,104))and(id_dist=:idd)';
     q.SQL := q.SQL + 'group by regn) sb on hist.regn=sb.regn and hist.bdate=sb.bdate ';
+    q.SQL := q.SQL + 'INNER JOIN Insp ON Insp.id_insp = Hist.id_insp ';
     SetLength(q.parname, Length(q.parname) + 1);
     SetLength(q.parval, Length(q.parval) + 1);
     q.parname[j] := 'd';
@@ -1259,6 +1303,26 @@ begin
       q.parname[j] := 'stat';
       q.parval[j]  := IntToStr(stat[Combobox15.ItemIndex]);
     end;
+    //Филиал
+    if CheckBox25.Checked then
+    begin
+      Inc(j);
+      q.SQL := q.SQL + 'and(Insp.id_office=:office)';
+      SetLength(q.parname, Length(q.parname) + 1);
+      SetLength(q.parval, Length(q.parval) + 1);
+      q.parname[j] := 'office';
+      q.parval[j]  := IntToStr(office[Combobox17.ItemIndex]);
+    end;
+    //Филиал
+    if CheckBox25.Checked then
+    begin
+      Inc(j);
+      q.SQL := q.SQL + 'and(Insp.id_office=:office)';
+      SetLength(q.parname, Length(q.parname) + 1);
+      SetLength(q.parval, Length(q.parval) + 1);
+      q.parname[j] := 'office';
+      q.parval[j]  := IntToStr(office[Combobox17.ItemIndex]);
+    end;    
     q.SQL := q.SQL + #13+ 'GROUP BY Cl.regn, Hist.bdate, Hist.edate, Hist.calc';
     MainForm.qr := q;
   end

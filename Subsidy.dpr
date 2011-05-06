@@ -68,7 +68,8 @@ uses
   MyTypes in 'data\MyTypes.pas',
   HelpUtils in 'data\HelpUtils.pas',
   VBScript_RegExp_55_TLB in 'data\VBScript_RegExp_55_TLB.pas',
-  service2 in 'core\service2.pas';
+  service2 in 'core\service2.pas',
+  uOffice in 'uOffice.pas' {OfficeForm};
 
 {$R *.res}
 //{$R myRes.RES}
@@ -138,6 +139,7 @@ begin
         Application.CreateForm(TConnectionFrm, ConnectionFrm);
         Application.CreateForm(TSettingsFrm, SettingsFrm);
         Application.CreateForm(TGenRefBookFrm, GenRefBookFrm);
+        Application.CreateForm(TOfficeForm, OfficeForm);
         Application.Run;
       except
         ShowMessage('Произошел сбой при создании одной из форм!');

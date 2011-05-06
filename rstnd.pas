@@ -79,7 +79,7 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('select * from "currstnd.dbf" sbros');
+    SQL.Add('select * from currstnd.dbf sbros');
     SQL.Add('order by sbros.id_stnd');
     Open;
     First;
