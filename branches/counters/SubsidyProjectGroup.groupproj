@@ -1,0 +1,64 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{c5d8c1d9-be86-4964-9fa0-15b0af80a6fa}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="Additional\SubsidyConnManager\SubsidyConnManager.dproj" />
+    <Projects Include="Additional\SubsidySQLManager\SubsidySQLManager.dproj" />
+    <Projects Include="Additional\SubsidyUpdater\SubsidyUpdater.dproj" />
+    <Projects Include="Subsidy.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+<BorlandProject xmlns=""><Default.Personality></Default.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="Subsidy">
+    <MSBuild Projects="Subsidy.dproj" Targets="" />
+  </Target>
+  <Target Name="Subsidy:Clean">
+    <MSBuild Projects="Subsidy.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="Subsidy:Make">
+    <MSBuild Projects="Subsidy.dproj" Targets="Make" />
+  </Target>
+  <Target Name="SubsidyConnManager">
+    <MSBuild Projects="Additional\SubsidyConnManager\SubsidyConnManager.dproj" Targets="" />
+  </Target>
+  <Target Name="SubsidyConnManager:Clean">
+    <MSBuild Projects="Additional\SubsidyConnManager\SubsidyConnManager.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="SubsidyConnManager:Make">
+    <MSBuild Projects="Additional\SubsidyConnManager\SubsidyConnManager.dproj" Targets="Make" />
+  </Target>
+  <Target Name="SubsidySQLManager">
+    <MSBuild Projects="Additional\SubsidySQLManager\SubsidySQLManager.dproj" Targets="" />
+  </Target>
+  <Target Name="SubsidySQLManager:Clean">
+    <MSBuild Projects="Additional\SubsidySQLManager\SubsidySQLManager.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="SubsidySQLManager:Make">
+    <MSBuild Projects="Additional\SubsidySQLManager\SubsidySQLManager.dproj" Targets="Make" />
+  </Target>
+  <Target Name="SubsidyUpdater">
+    <MSBuild Projects="Additional\SubsidyUpdater\SubsidyUpdater.dproj" Targets="" />
+  </Target>
+  <Target Name="SubsidyUpdater:Clean">
+    <MSBuild Projects="Additional\SubsidyUpdater\SubsidyUpdater.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="SubsidyUpdater:Make">
+    <MSBuild Projects="Additional\SubsidyUpdater\SubsidyUpdater.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="Subsidy;SubsidyConnManager;SubsidySQLManager;SubsidyUpdater" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="Subsidy:Clean;SubsidyConnManager:Clean;SubsidySQLManager:Clean;SubsidyUpdater:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="Subsidy:Make;SubsidyConnManager:Make;SubsidySQLManager:Make;SubsidyUpdater:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>

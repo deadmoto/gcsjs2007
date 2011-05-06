@@ -8,13 +8,14 @@ uses
 type
   TDModule = class(TDataModule)
     Query1:      TQuery;
-    Query2:      TQuery;
     Database1:   TDatabase;
-    Query3:      TQuery;
     DataSource1: TDataSource;
     qTarif: TADOQuery;
-    DataSource2: TDataSource;
     dbfConnection: TADOConnection;
+    sqlConnection: TADOConnection;
+    sqlQuery1: TADOQuery;
+    sqlDataSource: TDataSource;
+    sqlQuery2: TADOQuery;
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
@@ -23,7 +24,8 @@ type
     { Public declarations }
     t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, tc: TADOQuery;
     pv, norm1: TQuery;
-    function SetConnectStr(path: string): string;
+    function SetDBFConnectStr(path: string): string;
+    function SetSQLConnectStr(path: string): string;
   end;
 
 var
@@ -65,16 +67,13 @@ begin
       ShowMessage('Ошибка при создании DSN записи SQLSub!');
   end;
 
-  //назначение директории для файлов _QSQL*.dbf
-{  if getConfValue('0.UseTempDir') then
-    Session.PrivateDir := GetTempDir;}
+  sqlConnection.ConnectionString := SetSQLConnectStr(ReadRegProperty('Server'));
 
   //Назначение пути для баз *.dbf
   if getConfValue('0.OtherDatabasePath') then
-    dbfConnection.ConnectionString := SetConnectStr(getConfValue('0.DatabasePath'))
+    dbfConnection.ConnectionString := SetDBFConnectStr(getConfValue('0.DatabasePath'))
   else
-    dbfConnection.ConnectionString := SetConnectStr(ExtractFilePath(ParamStr(0)) + '\database');
-
+    dbfConnection.ConnectionString := SetDBFConnectStr(ExtractFilePath(ParamStr(0)) + '\database');
 
   dbf1 := tdbf.Create(self);//создание парсера dbf-файлов
 
@@ -94,11 +93,24 @@ begin
   norm1 := TQuery.Create(Self);
 end;
 
-function TDModule.SetConnectStr(path: string): string;
+function TDModule.SetDBFConnectStr(path: string): string;
 begin
-  Result := 'Provider=MSDASQL.1; Persist Security Info=False; '+ #13 +
-    'Extended Properties="Driver={Microsoft dBASE Driver (*.dbf)};'+ #13 +
-    'DriverID=277; Dbq='+path+'\"'
+//  Result := format(
+//    'Provider=MSDASQL.1; Persist Security Info=False;'#13#10 +
+//    'Extended Properties="Driver={Microsoft dBASE Driver (*.dbf)};'#13#10 +
+//    'DriverID=277; Dbq=%s\"', [path]);
+  Result := format(
+    'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=%s;'#13#10 +
+    'Extended Properties=dBASE IV;User ID=Admin;Password=;', [path]
+  );
+end;
+
+function TDModule.SetSQLConnectStr(path: string): string;
+begin
+  Result := format(
+    'Provider=SQLOLEDB.1;Persist Security Info=False;User ID=%s;Password=%s;Initial Catalog=Subsidy;Data Source=%s',
+    [ReadRegProperty('User'), GetConnectionPass(ReadRegProperty('Password')), path]
+  );
 end;
 
 end.

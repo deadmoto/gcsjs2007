@@ -46,7 +46,7 @@ type
     prevbegindate: TDate;//дата начала действия субсидии (прошлый период)
     prevenddate: TDate;//дата окончания действия субсидии (прошлый период)
     averageFact: real;//средний размер ф.расходов за прошлый период
-    dolgFact:    real;//долг за прошлый период
+    dolgFact:    real;//долг за прошлый период по фактической оплате
     //curMinus: real;//сумма текущих уменьшений
     //------
     period:      integer;//срок субсидии
@@ -379,7 +379,7 @@ begin
       ParamByName('bdate').AsString := DateToStr(cdata.begindate);
       ParamByName('edate').AsString := DateToStr(cdata.enddate);
       Open;
-      cdata.dolgFact := cdata.dolgFact - FieldByName('sumsub').AsFloat;
+      cdata.dolgFact := rnd(cdata.dolgFact - FieldByName('sumsub').AsFloat);
     end;
     {Close;
     SQL.Clear;
@@ -868,6 +868,209 @@ function GetNormTarif(s, id: integer; bdate: TDate; b, c, se, elevator, mop: int
 var
   nam: string;
 begin
+  Result:=0;
+
+  case s of
+    0: nam := 'cont';
+    1: nam := 'rep';
+    2: nam := 'cold';
+    3: nam := 'hot';
+    4: nam := 'canal';
+    5: nam := 'heat';
+    6: nam := 'gas';
+    7: nam := 'el';
+    12: nam := 'wood';
+    13: nam := 'coal';
+  end;
+
+  with DModule do
+  begin
+    case s of
+      0:
+      begin
+        t1.Locate('id_cont', id, [loCaseInsensitive]); tc := t1;
+      end;
+      1:
+      begin
+        t2.Locate('id_rep', id, [loCaseInsensitive]);  tc := t2;
+      end;
+      2:
+      begin
+        t3.Locate('id_cold', id, [loCaseInsensitive]); tc := t3;
+      end;
+      3:
+      begin
+        t4.Locate('id_hot', id, [loCaseInsensitive]);  tc := t4;
+      end;
+      4:
+      begin
+        t5.Locate('id_canal', id, [loCaseInsensitive]); tc := t5;
+      end;
+      5:
+      begin
+        t6.Locate('id_heat', id, [loCaseInsensitive]); tc := t6;
+      end;
+      6:
+      begin
+        t7.Locate('id_gas', id, [loCaseInsensitive]); tc := t7;
+      end;
+      7:
+      begin
+        t8.Locate('id_el', id, [loCaseInsensitive]); tc := t8;
+      end;
+      12:
+      begin
+        t9.Locate('id_wood', id, [loCaseInsensitive]); tc := t9;
+      end;
+      13:
+      begin
+        t10.Locate('id_coal', id, [loCaseInsensitive]); tc := t10;
+      end;
+    end;
+  end;
+
+  if s<12 then
+  begin
+    with DModule do
+    begin
+      if s in [2..6] then
+      begin
+        if (s = 2) or (s = 3) then
+          Result := tc.Fields[4].AsCurrency
+        else
+          Result := tc.Fields[3].AsCurrency;
+      end;
+
+      if s=7 then
+      begin
+        case id of
+        1:
+        begin
+          case se of
+          1:
+          begin
+            case c of
+              0..1 : Result := 88;
+              2 : Result := 55;
+              3 : Result := 42;
+              4 : Result := 35;
+            else
+              Result := 29;
+            end;
+          end;
+          2:
+          begin
+            case c of
+              0..1 : Result := 113;
+              2 : Result := 70;
+              3 : Result := 55;
+              4 : Result := 44;
+              else
+                Result := 39;
+            end;
+          end;
+          3:
+          begin
+            case c of
+              0..1 : Result := 128;
+              2 : Result := 80;
+              3 : Result := 62;
+              4 : Result := 50;
+              else
+                Result := 44;
+            end;
+          end;
+          4..7:
+          begin
+            case c of
+              0..1 : Result := 139;
+              2 : Result := 86;
+              3 : Result := 66;
+              4 : Result := 55;
+              else
+                Result := 47;
+            end;
+          end;
+          end;
+        end;
+
+        2:
+        begin
+          case se of
+          1:
+          begin
+            case c of
+              0..1 : Result := 141;
+              2 : Result := 87;
+              3 : Result := 67;
+              4 : Result := 55;
+              else
+                Result := 47;
+            end;
+          end;
+          2:
+          begin
+            case c of
+              0..1 : Result := 166;
+              2 : Result := 103;
+              3 : Result := 80;
+              4 : Result := 65;
+              else
+                Result := 57;
+            end;
+          end;
+          3:
+          begin
+            case c of
+              0..1 : Result := 181;
+              2 : Result := 112;
+              3 : Result := 87;
+              4 : Result := 70;
+              else
+                Result := 62;
+            end;
+          end;
+          4..7:
+          begin
+            case c of
+              0..1 : Result := 192;
+              2 : Result := 120;
+              3 : Result := 92;
+              4 : Result := 75;
+              else
+                Result := 65;
+            end;
+          end;
+          end;
+        end;
+
+        3:
+        begin
+          with DModule do
+          begin
+            if c>0 then
+            begin
+              if (c<3) then
+                  Result := tc.Fields[2 + (c - 1)].AsCurrency
+              else
+                  Result := tc.Fields[4].AsCurrency;
+            end
+            else
+              Result := tc.Fields[2].AsCurrency;
+          end;
+        end;
+      end;
+    end;
+    end;
+  end;
+end;
+
+//новые нормативы на электроэнергию
+{***************************************************************************************************
+function GetNormTarif(s, id: integer; bdate: TDate; b, c, se, elevator, mop: integer): real;
+var
+  nam: string;
+begin
   Result := 0;
 
   case s of
@@ -1290,7 +1493,7 @@ begin
     end;
   end;
 end;
-
+***************************************************************************************************}
 function GetNameTafif(s, id: integer): string;
 var
   nam: string;
@@ -1694,17 +1897,17 @@ begin
   end;
 
   //обрезаем по факту (если он больше 0)
-  if getConfValue('0.AverageFactMinus') then
-  begin
-    tmpsubs := 0;
-    for i := 0 to numbtarif - 1 do
-      tmpsubs := tmpsubs + cdata.sub[i];
-    if (cdata.averageFact > 0) and (tmpsubs > cdata.averageFact) and (Data.cert <> 1) then
-    begin
-      for i := 0 to numbtarif - 1 do
-        cdata.sub[i] := (cdata.sub[i] * (cdata.averageFact / tmpsubs));
-    end;
-  end;
+//  if getConfValue('0.AverageFactMinus') then
+//  begin
+//    tmpsubs := 0;
+//    for i := 0 to numbtarif - 1 do
+//      tmpsubs := tmpsubs + cdata.sub[i];
+//    if (cdata.averageFact > 0) and (tmpsubs > cdata.averageFact) and (Data.cert <> 1) then
+//    begin
+//      for i := 0 to numbtarif - 1 do
+//        cdata.sub[i] := (cdata.sub[i] * (cdata.averageFact / tmpsubs));
+//    end;
+//  end;
 
   if (sts = 0) then
   begin //первый месяц

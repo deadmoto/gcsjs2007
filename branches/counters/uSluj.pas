@@ -18,7 +18,7 @@ uses
   Windows;
 
 type
-  TSlujMode = (mSum, mDetail);
+  TSlujMode = (mSum, mDetail, mDebt);
 
 type
   TSlujFrm = class(TForm)
@@ -33,13 +33,15 @@ type
     procedure Button1Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure SlujGridKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
+    debtcl : array of Variant;
   public
     { Public declarations }
     cl_regn: string;
     mode:    TSlujMode;
-    procedure FillSlujGrid;
+    procedure FillSlujFrm;
   end;
 
 var
@@ -52,65 +54,88 @@ uses
 
 {$R *.dfm}
 
-procedure TSlujFrm.FillSlujGrid;
+//id_debt в запросах означает что запись в базе смотриться только по ручному удержанию (занесенному через эту форму)
+
+procedure TSlujFrm.FillSlujFrm;
 var
-  i: integer;
+  i, cols: integer;
 begin
+  cols := 4;
   Button1.Enabled := True;
   with DModule do
   begin
-    Query1.Close;
+    sqlQuery1.Close;
     case mode of
       mDetail:
       begin
-        Query1.SQL.Text := ('SELECT Sluj.sdate, Sluj.regn, Cl.fio, Sluj.sub AS sluj_sum, Sub.sub AS Expr1, Serv.nameserv AS nameserv' + #13 +
-          'FROM Sluj INNER JOIN' + #13 +
-          'Cl ON Sluj.regn = Cl.regn INNER JOIN' + #13 +
-          'Sub ON Sluj.sdate = Sub.sdate AND Sluj.regn = Sub.regn AND Sluj.service = Sub.service INNER JOIN' + #13 +
-          'Serv ON Sub.service = Serv.id_serv' + #13 +
-          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104) AND Cl.id_dist=:dist)' + #13 +
-          'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio, Sub.sub, Serv.nameserv, Sluj.sub' + #13 +
-          'ORDER BY Cl.fio');
+        sqlQuery1.SQL.Text :=
+          'SELECT Sluj.sdate, Sluj.regn, Cl.fio, Sluj.sub AS sluj_sum, Sub.sub AS sub_sum, Serv.nameserv AS nameserv'#13#10 +
+          'FROM Sluj INNER JOIN'#13#10 +
+            'Cl ON Sluj.regn = Cl.regn INNER JOIN'#13#10 +
+            'Sub ON Sluj.sdate = Sub.sdate AND Sluj.regn = Sub.regn AND Sluj.service = Sub.service INNER JOIN'#13#10 +
+            'Serv ON Sub.service = Serv.id_serv'#13#10 +
+          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104) AND Cl.id_dist=:dist) and(id_debt is NULL)'#13#10 +
+          'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio, Sub.sub, Serv.nameserv, Sluj.sub'#13#10 +
+          'ORDER BY Cl.fio';
       end;
+      
       mSum:
       begin
-        Query1.SQL.Text := ('SELECT Sluj.sdate, Sluj.regn, Cl.fio, SUM(Sluj.sub) AS sluj_sum, SUM(Sub.sub) AS Expr1' + #13 +
-          'FROM Sluj INNER JOIN' + #13 +
-          'Cl ON Sluj.regn = Cl.regn INNER JOIN' + #13 +
-          'Sub ON Sluj.sdate = Sub.sdate ' + #13 +
-          'AND Sluj.regn = Sub.regn AND Sluj.service = Sub.service' + #13 +
-          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104) AND Cl.id_dist=:dist)' + #13 +
-          'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio' + #13 +
-          'ORDER BY Cl.fio');
+        sqlQuery1.SQL.Text :=
+          'SELECT Sluj.sdate, Sluj.regn, Cl.fio, SUM(Sluj.sub) AS sluj_sum, SUM(Sub.sub) AS sub_sum'#13#10 +
+          'FROM Sluj INNER JOIN'#13#10 +
+            'Cl ON Sluj.regn = Cl.regn INNER JOIN'#13#10 +
+            'Sub ON Sluj.sdate = Sub.sdate '#13#10 +
+            'AND Sluj.regn = Sub.regn AND Sluj.service = Sub.service'#13#10 +
+          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104) AND Cl.id_dist=:dist) and(id_debt is NULL)'#13#10 +
+          'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio'#13#10 +
+          'ORDER BY Cl.fio';
       end;
+
+      mDebt:
+      begin
+        sqlQuery1.SQL.Text :=
+          'SELECT Sluj.sdate, Sluj.regn, Cl.fio, SUM(Sluj.sub) AS sluj_sum, SUM(Sub.sub) AS sub_sum, SlujType.namesluj, Sluj.id_debt'#13#10+
+          'FROM Sluj INNER JOIN'#13#10+
+            'Cl ON Sluj.regn = Cl.regn INNER JOIN'#13#10+
+            'Sub ON Sluj.sdate = Sub.sdate AND Sluj.regn = Sub.regn'#13#10+
+              'AND Sluj.service = Sub.service INNER JOIN'#13#10+
+            'Debt ON Sluj.id_debt = Debt.id_debt INNER JOIN'#13#10+
+            'SlujType ON SlujType.id_sluj = Debt.id_sluj'#13#10+
+          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104) AND Cl.id_dist=:dist) and(Sluj.id_debt IS NOT NULL)'#13#10+
+          'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio, SlujType.namesluj, Sluj.id_debt'#13#10+
+          'ORDER BY Cl.fio';
+      end;
+
     end;
-    Query1.ParamByName('rdt').Value := MainForm.rdt;
-    Query1.ParamByName('dist').Value := MainForm.dist;
-    Query1.Open;
-    Query1.First;
+    sqlQuery1.Parameters.ParamByName('rdt').Value := MainForm.rdt;
+    sqlQuery1.Parameters.ParamByName('dist').Value := MainForm.dist;
+    sqlQuery1.Open;
+    sqlQuery1.First;
   end;
 
-  if DModule.Query1.RecordCount > 0 then
+  if DModule.sqlQuery1.RecordCount > 0 then
   begin
     case mode of
       mDetail:
       begin
+        inc(cols);
         SlujFrm.Width := 670;
 
         FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
           'ФИО', 'Сумм. служ.', 'Субсидия', 'Услуга'),
-          TIntArray.Create(64, 75, 240, 65, 65, 115), DModule.Query1.RecordCount + 1);
+          TIntArray.Create(64, 75, 240, 65, 65, 115), DModule.sqlQuery1.RecordCount + 1);
 
-        with DModule.Query1 do
+        with DModule.sqlQuery1 do
           for i := 0 to RecordCount do
           begin
             SlujGrid.Cells[0, i + 1] := FieldByName('sdate').Value;
             SlujGrid.Cells[1, i + 1] := FieldByName('regn').Value;
             SlujGrid.Cells[2, i + 1] := FieldByName('fio').Value;
             SlujGrid.Cells[3, i + 1] := FieldByName('sluj_sum').Value;
-            SlujGrid.Cells[4, i + 1] := FieldByName('Expr1').Value;
+            SlujGrid.Cells[4, i + 1] := FieldByName('sub_sum').Value;
             SlujGrid.Cells[5, i + 1] := FieldByName('nameserv').Value;
-            DModule.Query1.Next;
+            DModule.sqlQuery1.Next;
           end;
 
         GroupBox1.Caption := 'Подробно по тарифам:';
@@ -122,20 +147,47 @@ begin
 
         FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
           'ФИО', 'Сумм. служ.', 'Субсидия'),
-          TIntArray.Create(64, 75, 255, 75, 75), DModule.Query1.RecordCount + 1);
+          TIntArray.Create(64, 75, 255, 75, 75), DModule.sqlQuery1.RecordCount + 1);
 
-        with DModule.Query1 do
+        with DModule.sqlQuery1 do
           for i := 0 to RecordCount do
           begin
             SlujGrid.Cells[0, i + 1] := FieldByName('sdate').Value;
             SlujGrid.Cells[1, i + 1] := FieldByName('regn').Value;
             SlujGrid.Cells[2, i + 1] := FieldByName('fio').Value;
             SlujGrid.Cells[3, i + 1] := FieldByName('sluj_sum').Value;
-            SlujGrid.Cells[4, i + 1] := FieldByName('Expr1').Value;
-            DModule.Query1.Next;
+            SlujGrid.Cells[4, i + 1] := FieldByName('sub_sum').Value;
+            DModule.sqlQuery1.Next;
           end;
         GroupBox1.Caption := 'Общая сумма за месяц:';
       end;
+
+      mDebt:
+      begin
+        inc(cols);
+        SlujFrm.Width := 670;
+
+        FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
+          'ФИО', 'Удержание', 'Субсидия', 'Описание'),
+          TIntArray.Create(64, 75, 255, 75, 75, 115), DModule.sqlQuery1.RecordCount + 1);
+
+        SetLength(debtcl, 0);
+        with DModule.sqlQuery1 do
+          for i := 0 to RecordCount do
+          begin
+            SetLength(debtcl, Length(debtcl) + 1);
+            debtcl[i] := FieldValues['id_debt'];
+            SlujGrid.Cells[0, i + 1] := FieldByName('sdate').Value;
+            SlujGrid.Cells[1, i + 1] := FieldByName('regn').Value;
+            SlujGrid.Cells[2, i + 1] := FieldByName('fio').Value;
+            SlujGrid.Cells[3, i + 1] := FieldByName('sluj_sum').Value;
+            SlujGrid.Cells[4, i + 1] := FieldByName('sub_sum').Value;
+            SlujGrid.Cells[5, i + 1] := FieldByName('namesluj').Value;
+            DModule.sqlQuery1.Next;
+          end;
+        GroupBox1.Caption := 'Удержания:';
+      end;
+
     end;
     cl_regn := SlujGrid.Cells[1, SlujGrid.Row];
   end
@@ -155,15 +207,29 @@ begin
         'ФИО', 'Сумм. служ.', 'Субсидия'),
         TIntArray.Create(64, 75, 255, 75, 75), 2);
       end;
+
+      mDebt:
+      begin
+          FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
+            'ФИО', 'Удержание', 'Субсидия', 'Описание'),
+            TIntArray.Create(64, 75, 255, 75, 75, 115), 2);
+      end;
     end;
 
-    for i := 0 to 4 do
+    for i := 0 to cols do
     begin
       SlujGrid.Cells[i, 1] := '';
     end;
     Button1.Enabled := False;
-    ShowMessage('В текушем месяце нет подобных записей.');
   end;
+
+  if not MainForm.CheckP2 then
+    Button1.Enabled := False;
+end;
+
+procedure TSlujFrm.FormShow(Sender: TObject);
+begin
+  FillSlujFrm;
 end;
 
 procedure TSlujFrm.Button2Click(Sender: TObject);
@@ -205,14 +271,38 @@ end;
 
 procedure TSlujFrm.Button1Click(Sender: TObject);
 begin
-  if MessageDlg('Удалить выбранный период?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  if MessageDlg('Удалить выбранное?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
   begin
-    DModule.Query1.Close;
-    DModule.Query1.SQL.Text := 'DELETE FROM Sluj' + #13 +
-      'WHERE (sdate = CONVERT(smalldatetime, :rdt, 104)) AND (regn = ' + cl_regn + ')';
-    DModule.Query1.ParamByName('rdt').Value := MainForm.rdt;
-    DModule.Query1.ExecSQL;
-    FillSlujGrid;
+    DModule.sqlQuery1.Close;
+    case mode of
+      mDebt:
+      begin
+        DModule.sqlQuery1.SQL.Text :=
+          'DELETE FROM Sluj'#13#10 +
+          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104)) AND (Sluj.regn = ' + cl_regn + ')and(Sluj.id_debt=:id0);'#13#10 +
+          'IF (SELECT Debt.closed FROM Debt WHERE Debt.id_debt = :id1) = 1'#13#10 +
+          'BEGIN'#13#10 +
+          ' UPDATE Debt SET Debt.closed = 0, Debt.closed_date = 0 WHERE Debt.id_debt = :id2'#13#10 +
+          'END';
+
+        DModule.sqlQuery1.Parameters.ParamByName('rdt').Value := MainForm.rdt;
+        DModule.sqlQuery1.Parameters.ParamByName('id0').Value := debtcl[SlujGrid.Row - 1];
+        DModule.sqlQuery1.Parameters.ParamByName('id1').Value := debtcl[SlujGrid.Row - 1];
+        DModule.sqlQuery1.Parameters.ParamByName('id2').Value := debtcl[SlujGrid.Row - 1];
+        DModule.sqlQuery1.ExecSQL;
+      end
+    else
+      begin
+        DModule.sqlQuery1.Close;
+        DModule.sqlQuery1.SQL.Text :=
+          'DELETE FROM Sluj'#13#10 +
+          'WHERE (sdate = CONVERT(smalldatetime, :rdt, 104)) AND (regn = ' + cl_regn + ')and(id_debt is NULL);';
+        DModule.sqlQuery1.Parameters.ParamByName('rdt').Value := MainForm.rdt;
+        DModule.sqlQuery1.ExecSQL;
+      end;
+    end;
+
+    FillSlujFrm;
   end;
 end;
 

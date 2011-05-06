@@ -64,12 +64,14 @@ uses
 
 {$R *.dfm}
 
+//id_debt в запросах означает что запись в базе смотриться только по ручному удержанию (занесенному через эту форму)
+
 var
   cl: TCl;
 
 procedure TForm18.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
 end;
 
 procedure TForm18.ModSub(n: integer; s: real);
@@ -113,7 +115,7 @@ var
   sum: real;
 begin
   Clear;
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -121,8 +123,8 @@ begin
     SQL.Add('where (sub.sdate=convert(smalldatetime,:d,104)) and (sub.service=0)');
     SQL.Add('and (cl.id_dist=:idd)and(sub.stop<2)');
     SQL.Add('order by cl.fio');
-    ParamByName('d').AsString := MainForm.rdt;
-    ParamByName('idd').AsInteger := MainForm.dist;
+    Parameters.ParamByName('d').Value := MainForm.rdt;
+    Parameters.ParamByName('idd').Value := MainForm.dist;
     Open;
     i := 0;
     if not EOF then
@@ -140,12 +142,12 @@ begin
       Close;
       SQL.Clear;
       SQL.Add('select sum(sub.sub) as s1,sum(sluj.sub) as s2,sub.regn');
-      SQL.Add('from sub left join sluj on sub.regn=sluj.regn and sub.sdate=sluj.sdate');
+      SQL.Add('from sub left join sluj on sub.regn=sluj.regn and sub.sdate=sluj.sdate and(sluj.id_debt is NULL)');
       SQL.Add('and sub.service=sluj.service inner join cl on cl.regn=sub.regn');
       SQL.Add('where (sub.sdate=convert(smalldatetime,:d,104))and(cl.id_dist=:idd)and(sub.stop<2)');
       SQL.Add('group by sub.regn');
-      ParamByName('d').AsString := MainForm.rdt;
-      ParamByName('idd').AsInteger := MainForm.dist;
+      Parameters.ParamByName('d').Value := MainForm.rdt;
+      Parameters.ParamByName('idd').Value := MainForm.dist;
       Open;
       while not EOF do
       begin

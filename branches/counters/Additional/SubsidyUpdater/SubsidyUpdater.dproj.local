@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2009.08.07 11:12:23.345.pas,C:\usr\Администратор\Мои документы\RAD Studio\Projects\Unit1.pas=D:\tmpproj\Unit1.pas</Transaction>
+    <Transaction>2009.08.07 11:12:23.365.dfm,C:\usr\Администратор\Мои документы\RAD Studio\Projects\Unit1.dfm=D:\tmpproj\Unit1.dfm</Transaction>
+    <Transaction>2009.08.07 11:12:26.920.dproj,C:\usr\Администратор\Мои документы\RAD Studio\Projects\Project1.dproj=D:\tmpproj\Project1.dproj</Transaction>
+    <Transaction>2009.08.07 15:20:34.303.pas,D:\tmpproj\Unit1.pas=D:\tmpproj\uMainFrm.pas</Transaction>
+    <Transaction>2009.08.07 15:20:34.303.dfm,D:\tmpproj\Unit1.dfm=D:\tmpproj\uMainFrm.dfm</Transaction>
+    <Transaction>2009.08.07 15:26:36.584.dproj,D:\subsidy2007\updSubsidy\Project1.dproj=D:\subsidy2007\updSubsidy\sUpdater.dproj</Transaction>
+    <Transaction>2009.08.11 17:42:01.113.pas,D:\subsidy2007\updSubsidy\Unit1.pas=D:\subsidy2007\updSubsidy\uChangeLogFrm.pas</Transaction>
+    <Transaction>2009.08.11 17:42:01.113.dfm,D:\subsidy2007\updSubsidy\Unit1.dfm=D:\subsidy2007\updSubsidy\uChangeLogFrm.dfm</Transaction>
+    <Transaction>2010.02.10 15:24:37.687.pas,D:\.develop\.delphi\work\subsidy.updater\uMainFrm.pas=D:\.develop\.delphi\work\subsidy.updater\uMain.pas</Transaction>
+    <Transaction>2010.02.10 15:24:37.687.dfm,D:\.develop\.delphi\work\subsidy.updater\uMainFrm.dfm=D:\.develop\.delphi\work\subsidy.updater\uMain.dfm</Transaction>
+    <Transaction>2010.02.10 15:24:47.687.pas,D:\.develop\.delphi\work\subsidy.updater\uChangeLogFrm.pas=D:\.develop\.delphi\work\subsidy.updater\uChangeLog.pas</Transaction>
+    <Transaction>2010.02.10 15:24:47.687.dfm,D:\.develop\.delphi\work\subsidy.updater\uChangeLogFrm.dfm=D:\.develop\.delphi\work\subsidy.updater\uChangeLog.dfm</Transaction>
+    <Transaction>2011.05.05 16:42:54.312.dproj,D:\delphi\work\SubsidyUpdater\sUpdater.dproj=D:\delphi\work\SubsidyUpdater\SubsidyUpdater.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

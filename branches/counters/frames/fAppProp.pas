@@ -31,12 +31,16 @@ type
     IniLabeledEdit2: TIniLabeledEdit;
     Button2:         TButton;
     IniCheckBox7: TIniCheckBox;
+    IniLabeledEdit3: TIniLabeledEdit;
     IniCheckBox2: TIniCheckBox;
+    Button3: TButton;
     procedure IniCheckBox3Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure IniCheckBox5Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure IniCheckBox6Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure IniCheckBox2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -67,6 +71,24 @@ begin
   dir := SelectDir;
   if dir <> '' then
     IniLabeledEdit2.Text := dir;
+end;
+
+procedure TfAppProp.Button3Click(Sender: TObject);
+var
+  dir: string;
+begin
+  dir := SelectDir;
+  if dir <> '' then
+    IniLabeledEdit3.Text := dir;
+end;
+
+procedure TfAppProp.IniCheckBox2Click(Sender: TObject);
+begin
+  if IniCheckBox2.Checked then
+    Panel3.Enabled := True
+  else
+    Panel3.Enabled := False;
+  IniCheckBox6Click(self);
 end;
 
 procedure TfAppProp.IniCheckBox3Click(Sender: TObject);

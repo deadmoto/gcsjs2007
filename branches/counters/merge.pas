@@ -45,7 +45,7 @@ begin
   path := 'arc\';//путь по умолчанию
   MaskEdit1.Text := MainForm.rdt;
   ProgressBar1.Position := 0;
-  ProgressBar1.Max := 8;
+  ProgressBar1.Max := 9;
   ProgressBar1.Step := 1;
 end;
 
@@ -101,6 +101,10 @@ begin
     ExportFact(path, MainForm.dist);
     SevenZip.Files.AddString(path + 'factsale' + ext2);
     SevenZip.Files.AddString(path + 'factbalance' + ext2);
+    ProgressBar1.StepIt;
+    ExportDebt(path, MainForm.dist);
+    SevenZip.Files.AddString(path + 'debt' + ext2);
+    SevenZip.Files.AddString(path + 'debtpay' + ext2);
     ProgressBar1.StepIt;
     ExportSub(path, dt, MainForm.dist);
     SevenZip.Files.AddString(path + 'sub' + ext2);

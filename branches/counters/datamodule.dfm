@@ -1,18 +1,13 @@
 object DModule: TDModule
   OldCreateOrder = True
   OnCreate = FormCreate
-  Height = 236
+  Height = 286
   Width = 374
   object Query1: TQuery
     DatabaseName = 'Subsidy'
     SQL.Strings = (
       '')
-    Left = 152
-    Top = 8
-  end
-  object Query2: TQuery
-    DatabaseName = 'Subsidy'
-    Left = 208
+    Left = 176
     Top = 8
   end
   object Database1: TDatabase
@@ -42,31 +37,43 @@ object DModule: TDModule
     Left = 32
     Top = 8
   end
-  object Query3: TQuery
-    DatabaseName = 'Subsidy'
-    Left = 264
-    Top = 8
-  end
   object DataSource1: TDataSource
     DataSet = Query1
-    Left = 96
+    Left = 104
     Top = 8
   end
   object qTarif: TADOQuery
     Connection = dbfConnection
     CursorType = ctStatic
     Parameters = <>
-    Left = 32
-    Top = 128
-  end
-  object DataSource2: TDataSource
-    DataSet = qTarif
-    Left = 32
-    Top = 184
+    Left = 24
+    Top = 144
   end
   object dbfConnection: TADOConnection
     LoginPrompt = False
-    Left = 32
-    Top = 72
+    Left = 24
+    Top = 88
+  end
+  object sqlConnection: TADOConnection
+    LoginPrompt = False
+    Left = 144
+    Top = 88
+  end
+  object sqlQuery1: TADOQuery
+    Connection = sqlConnection
+    Parameters = <>
+    Left = 144
+    Top = 144
+  end
+  object sqlDataSource: TDataSource
+    DataSet = sqlQuery1
+    Left = 216
+    Top = 88
+  end
+  object sqlQuery2: TADOQuery
+    Connection = sqlConnection
+    Parameters = <>
+    Left = 144
+    Top = 200
   end
 end

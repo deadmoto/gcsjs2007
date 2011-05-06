@@ -18,17 +18,22 @@ type
     Button1:    TButton;
     LabeledEdit1: TLabeledEdit;
     LabeledEdit2: TLabeledEdit;
+    Button3: TButton;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ComboBox1KeyPress(Sender: TObject; var Key: char);
     procedure LabeledEdit1KeyPress(Sender: TObject; var Key: Char);
     procedure LabeledEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure Button3Click(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
     mode: TConMode;//string;
+
+    procedure Changed();
   end;
 
 
@@ -47,16 +52,16 @@ procedure TConnectionFrm.Button1Click(Sender: TObject);
 var
   tt: TMyThread;
 begin
-  if trim(LabeledEdit2.Text) = '' then
-  begin
-    MessageDlg('Error! Password can not empty!', mtError, [mbOK], 0);
-    Exit;
-  end;
-  
+//  if trim(LabeledEdit2.Text) = '' then
+//  begin
+//    MessageDlg('Error! Password can not empty!', mtError, [mbOK], 0);
+//    Exit;
+//  end;
+
   WriteRegProperty('User', LabeledEdit1.Text);
   WriteRegProperty('Password', GenMD5Password(LabeledEdit2.Text));
   WriteRegProperty('Server', ComboBox1.Text);
-  
+
   if mode = mBug then
   begin
     tt := TMyThread.Create(True);
@@ -107,6 +112,25 @@ begin
     Close;
 end;
 
+procedure TConnectionFrm.Button3Click(Sender: TObject);
+begin
+  WriteRegProperty('User', LabeledEdit1.Text);
+  WriteRegProperty('Password', GenMD5Password(LabeledEdit2.Text));
+  WriteRegProperty('Server', ComboBox1.Text);
+
+  Button3.Enabled := False;
+end;
+
+procedure TConnectionFrm.Changed();
+begin
+  Button3.Enabled := True;
+end;
+
+procedure TConnectionFrm.ComboBox1Change(Sender: TObject);
+begin
+  Changed();
+end;
+
 procedure TConnectionFrm.ComboBox1KeyPress(Sender: TObject; var Key: char);
 begin
   if key = #13 then
@@ -128,11 +152,13 @@ end;
 procedure TConnectionFrm.LabeledEdit1KeyPress(Sender: TObject; var Key: Char);
 begin
   if key = #13 then LabeledEdit2.SetFocus;
+  Changed();
 end;
 
 procedure TConnectionFrm.LabeledEdit2KeyPress(Sender: TObject; var Key: Char);
 begin
   if key = #13 then Button1Click(Sender);
+  Changed;
 end;
 
 end.
