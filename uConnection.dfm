@@ -33,6 +33,7 @@ object ConnectionFrm: TConnectionFrm
       Height = 21
       ItemHeight = 13
       TabOrder = 0
+      OnChange = ComboBox1Change
       OnKeyPress = ComboBox1KeyPress
     end
     object LabeledEdit1: TLabeledEdit
@@ -89,6 +90,17 @@ object ConnectionFrm: TConnectionFrm
       Caption = 'Ok'
       TabOrder = 1
       OnClick = Button1Click
+    end
+    object Button3: TButton
+      AlignWithMargins = True
+      Left = 39
+      Top = 3
+      Width = 75
+      Height = 25
+      Caption = #1055#1088#1080#1084#1077#1085#1080#1090#1100
+      Enabled = False
+      TabOrder = 2
+      OnClick = Button3Click
     end
   end
 end

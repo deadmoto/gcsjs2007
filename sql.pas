@@ -77,7 +77,7 @@ begin
   if Memo1.Lines.Count <> 0 then
     if TabControl1.TabIndex <> 2 then
     try
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
         Close;
         SQL.Text := Memo1.Text;
@@ -95,7 +95,7 @@ begin
         end;
       end;
     except
-      DModule.Query1.Close;
+      DModule.sqlQuery1.Close;
       ShowMessage('Запрос содержит ошибку!');
     end
     else
@@ -118,7 +118,7 @@ procedure TSQLExecForm.Button2Click(Sender: TObject);
 ********************************************************************************}
 begin
   Memo1.Clear;
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
 end;
 
 procedure TSQLExecForm.Button4Click(Sender: TObject);
@@ -138,29 +138,28 @@ begin
   begin
     if Dbf1.Active then
       Dbf1.Close;
-    if not Query1.IsEmpty then
+    if not sqlQuery1.IsEmpty then
     begin
       //DBGrid1.DataSource := '';
       
       //создание таблицы
-      for i := 0 to Query1.FieldCount - 1 do
-        Dbf1.AddFieldDefs(GetName(Query1.Fields[i]), GetType(Query1.Fields[i]),
-          GetSize(Query1.Fields[i]), GetPrec(Query1.Fields[i]));
+      for i := 0 to sqlQuery1.FieldCount - 1 do
+        Dbf1.AddFieldDefs(GetName(sqlQuery1.Fields[i]), GetType(sqlQuery1.Fields[i]),
+          GetSize(sqlQuery1.Fields[i]), GetPrec(sqlQuery1.Fields[i]));
       Dbf1.TableName := SaveDialog1.FileName;// path + 'untitled1.dbf';
       Dbf1.CreateTable;
       Dbf1.CodePage := MainForm.codedbf;
       //запись в нее данных
-      while not Query1.EOF do
+      while not sqlQuery1.EOF do
       begin
         Dbf1.Append;
-        for i := 1 to Query1.FieldCount do
-          EditField(Query1.Fields[i - 1].AsString, DBF1.CodePage, i);
+        for i := 1 to sqlQuery1.FieldCount do
+          EditField(sqlQuery1.Fields[i - 1].AsString, DBF1.CodePage, i);
         Dbf1.Post;
-        Query1.Next;
+        sqlQuery1.Next;
       end;
       Dbf1.Close;
-      Query1.Close;
-      //DBGrid1.DataSource := DataSource1;
+      sqlQuery1.Close;
     end
     else
       ShowMessage('Для экспорта в dbf необходим ненулевой результат запроса!');
@@ -169,7 +168,7 @@ end;
 
 procedure TSQLExecForm.FormClose(Sender: TObject; var Action: TCloseAction);
 {*******************************************************************************
-  Процедура FormClose закрывает Query1, которые используются при работе
+  Процедура FormClose закрывает sqlQuery1, которые используются при работе
   в этом unit. Также устанавливается русская раскладка для ввода.
 *******************************************************************************}
 var
@@ -188,7 +187,7 @@ begin
   end;
   if rl <> 0 then
     ActivateKeyboardLayout(rl, 0);
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
 
   if not Assigned(MainForm) then
   begin
@@ -226,7 +225,7 @@ begin
     end;
   end;
 
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
   //английская раскладка
   c := GetKeyboardLayoutList(High(Layouts) + 1, Layouts);
   for i := 0 to c - 1 do

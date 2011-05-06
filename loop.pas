@@ -8,9 +8,24 @@ uses
 
 type
   TForm16 = class(TForm)
+    GroupBox1: TGroupBox;
+    Label46: TLabel;
+    Label47: TLabel;
+    Label48: TLabel;
+    Label49: TLabel;
+    Label67: TLabel;
+    Label50: TLabel;
+    Label51: TLabel;
+    Label52: TLabel;
+    Label54: TLabel;
+    Label53: TLabel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
     GroupBox10: TGroupBox;
     Label58: TLabel;
     Label59: TLabel;
+    Label4: TLabel;
     Edit1: TEdit;
     Edit2: TEdit;
     Edit3: TEdit;
@@ -31,24 +46,8 @@ type
     Edit20: TEdit;
     Edit9: TEdit;
     Edit10: TEdit;
-    Label46: TLabel;
-    Label47: TLabel;
-    Label48: TLabel;
-    Label49: TLabel;
-    Label67: TLabel;
-    Label50: TLabel;
-    Label51: TLabel;
-    Label52: TLabel;
-    Label54: TLabel;
-    Label53: TLabel;
-    CheckBox1: TCheckBox;
-    Button1: TButton;
     Edit21: TEdit;
     Edit22: TEdit;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
     Edit23: TEdit;
     Edit24: TEdit;
     Edit25: TEdit;
@@ -60,8 +59,9 @@ type
     Edit31: TEdit;
     Edit32: TEdit;
     Edit33: TEdit;
-    Button2: TButton;
+    CheckBox1: TCheckBox;
     CheckBox2: TCheckBox;
+    Button1: TButton;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -69,7 +69,6 @@ type
     procedure Edit23Exit(Sender: TObject);
     procedure Edit23KeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
     wrt: boolean;//просмотр или изменение
@@ -88,6 +87,8 @@ implementation
 uses service, datamodule, main, curhist, MyTypes;
 
 {$R *.dfm}
+
+//id_debt в запросах означает что запись в базе смотриться только по ручному удержанию (занесенному через эту форму)
 
 procedure TForm16.SumV;
 { Процедура суммирует начисления и субсидию по всем услугам }
@@ -151,17 +152,17 @@ begin
     else
       isFact := 0;
 
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       Close;
       SQL.Clear;
       SQL.Add('select regn from sluj');
       SQL.Add('where (regn=:r)and(sdate=CONVERT(smalldatetime,:s,104))');
-      SQL.Add('and(service=:serv)');
-      ParamByName('r').AsInteger := Form18.client;
-      ParamByName('s').AsString := MainForm.rdt;
-      ParamByName('serv').AsInteger := i;
+      SQL.Add('and(service=:serv)and(id_debt is NULL)');
+      Parameters.ParamByName('r').Value := Form18.client;
+      Parameters.ParamByName('s').Value := MainForm.rdt;
+      Parameters.ParamByName('serv').Value := i;
       Open;
       If IsEmpty or not IsEmpty and
         (FieldByName('regn').AsInteger=Form18.client) then
@@ -171,7 +172,7 @@ begin
           Close;
           SQL.Clear;
           SQL.Add('insert into sluj');
-          SQL.Add('values (CONVERT(smalldatetime,:s,104),:r,:serv,:pm,:snp,:sub,:fact)');
+          SQL.Add('values (CONVERT(smalldatetime,:s,104),:r,:serv,:pm,:snp,:sub,:fact,NULL)');
         end
         else
         begin
@@ -180,81 +181,81 @@ begin
           SQL.Add('update sluj');
           SQL.Add('set pm=:pm,snpm=:snp,sub=:sub, factminus = :fact');
           SQL.Add('where (regn=:r)and(sdate=CONVERT(smalldatetime,:s,104))');
-          SQL.Add('and(service=:serv)');
+          SQL.Add('and(service=:serv)and(id_debt is NULL)');
         end;
-        ParamByName('s').AsString := MainForm.rdt;
-        ParamByName('r').AsInteger := Form18.client;
-        ParamByName('fact').AsInteger := isFact;
-        ParamByName('serv').AsInteger := i;
+        Parameters.ParamByName('s').Value := MainForm.rdt;
+        Parameters.ParamByName('r').Value := Form18.client;
+        Parameters.ParamByName('fact').Value := isFact;
+        Parameters.ParamByName('serv').Value := i;
         case i of
         0://содержание жилья
           begin
-            ParamByName('pm').AsFloat := Rnd(values3[i]-StrToFloat(Edit23.Text));
-            ParamByName('snp').AsFloat := Rnd(values1[i]-StrToFloat(Edit1.Text));
-            ParamByName('sub').AsFloat := Rnd(values2[i]-StrToFloat(Edit2.Text));
+            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit23.Text));
+            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit1.Text));
+            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit2.Text));
             ExecSQL;
           end;
         1://ремонт
           begin
-            ParamByName('pm').AsFloat := Rnd(values3[i]-StrToFloat(Edit24.Text));
-            ParamByName('snp').AsFloat := Rnd(values1[i]-StrToFloat(Edit3.Text));
-            ParamByName('sub').AsFloat := Rnd(values2[i]-StrToFloat(Edit4.Text));
+            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit24.Text));
+            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit3.Text));
+            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit4.Text));
             ExecSQL;
           end;
         2://х.вода
           begin
-            ParamByName('pm').AsFloat := Rnd(values3[i]-StrToFloat(Edit25.Text));
-            ParamByName('snp').AsFloat := Rnd(values1[i]-StrToFloat(Edit5.Text));
-            ParamByName('sub').AsFloat := Rnd(values2[i]-StrToFloat(Edit6.Text));
+            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit25.Text));
+            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit5.Text));
+            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit6.Text));
             ExecSQL;
           end;
         3://г.вода
           begin
-            ParamByName('pm').AsFloat := Rnd(values3[i]-StrToFloat(Edit26.Text));
-            ParamByName('snp').AsFloat := Rnd(values1[i]-StrToFloat(Edit7.Text));
-            ParamByName('sub').AsFloat := Rnd(values2[i]-StrToFloat(Edit8.Text));
+            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit26.Text));
+            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit7.Text));
+            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit8.Text));
             ExecSQL;
           end;
         4://водоотведение
           begin
-            ParamByName('pm').AsFloat := Rnd(values3[i]-StrToFloat(Edit27.Text));
-            ParamByName('snp').AsFloat := Rnd(values1[i]-StrToFloat(Edit9.Text));
-            ParamByName('sub').AsFloat := Rnd(values2[i]-StrToFloat(Edit10.Text));
+            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit27.Text));
+            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit9.Text));
+            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit10.Text));
             ExecSQL;
           end;
         5://отопление
           begin
-            ParamByName('pm').AsFloat := Rnd(values3[i]-StrToFloat(Edit28.Text));
-            ParamByName('snp').AsFloat := Rnd(values1[i]-StrToFloat(Edit11.Text));
-            ParamByName('sub').AsFloat := Rnd(values2[i]-StrToFloat(Edit12.Text));
+            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit28.Text));
+            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit11.Text));
+            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit12.Text));
             ExecSQL;
           end;
         6://газ
           begin
-            ParamByName('pm').AsFloat := Rnd(values3[i]-StrToFloat(Edit29.Text));
-            ParamByName('snp').AsFloat := Rnd(values1[i]-StrToFloat(Edit13.Text));
-            ParamByName('sub').AsFloat := Rnd(values2[i]-StrToFloat(Edit14.Text));
+            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit29.Text));
+            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit13.Text));
+            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit14.Text));
             ExecSQL;
           end;
         7://э/э
           begin
-            ParamByName('pm').AsFloat := Rnd(values3[i]-StrToFloat(Edit30.Text));
-            ParamByName('snp').AsFloat := Rnd(values1[i]-StrToFloat(Edit15.Text));
-            ParamByName('sub').AsFloat := Rnd(values2[i]-StrToFloat(Edit16.Text));
+            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit30.Text));
+            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit15.Text));
+            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit16.Text));
             ExecSQL;
           end;
         12://дрова
           begin
-            ParamByName('pm').AsFloat := Rnd(values3[i]-StrToFloat(Edit31.Text));
-            ParamByName('snp').AsFloat := Rnd(values1[i]-StrToFloat(Edit17.Text));
-            ParamByName('sub').AsFloat := Rnd(values2[i]-StrToFloat(Edit18.Text));
+            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit31.Text));
+            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit17.Text));
+            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit18.Text));
             ExecSQL;
           end;
         13://уголь
           begin
-            ParamByName('pm').AsFloat := Rnd(values3[i]-StrToFloat(Edit32.Text));
-            ParamByName('snp').AsFloat := Rnd(values1[i]-StrToFloat(Edit19.Text));
-            ParamByName('sub').AsFloat := Rnd(values2[i]-StrToFloat(Edit20.Text));
+            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit32.Text));
+            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit19.Text));
+            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit20.Text));
             ExecSQL;
           end;
         end;
@@ -284,23 +285,23 @@ begin
   SetLength(values1,numbtarif);
   SetLength(values2,numbtarif);
   SetLength(values3,numbtarif);
-  with DModule.Query1 do begin
+  with DModule.sqlQuery1 do begin
     Close;
     SQL.Clear;
     SQL.Add('select sub.service,sub.pm as pm1,sub.snpm as sn1,sub.sub as s1,');
     SQL.Add('sluj.pm as pm2,sluj.snpm as sn2,sluj.sub as s2, sluj.factminus as factminus');
-    SQL.Add('from sub left join sluj on sub.regn=sluj.regn');
+    SQL.Add('from sub left join sluj on sub.regn=sluj.regn and(id_debt is NULL)');
     SQL.Add('and sub.service=sluj.service and sub.sdate=sluj.sdate');
     SQL.Add('where (sub.regn=:id)and(sub.sdate=convert(smalldatetime,:d,104))');
-    ParamByName('id').AsInteger := Form18.client;
-    ParamByName('d').AsString := MainForm.rdt;
+    Parameters.ParamByName('id').Value := Form18.client;
+    Parameters.ParamByName('d').Value := MainForm.rdt;
     Open;
     while not eof do
     begin
       serv := FieldByName('service').AsInteger;
-      values1[serv] := FieldByName('sn1').AsFloat;
-      values2[serv] := FieldByName('s1').AsFloat;
-      values3[serv] := FieldByName('pm1').AsFloat;
+      values1[serv] := FieldByName('sn1').Value;
+      values2[serv] := FieldByName('s1').Value;
+      values3[serv] := FieldByName('pm1').Value;
       pm := FieldByName('pm1').AsFloat-FieldByName('pm2').AsFloat;
       snpm := FieldByName('sn1').AsFloat-FieldByName('sn2').AsFloat;
       sub := FieldByName('s1').AsFloat-FieldByName('s2').AsFloat;
@@ -381,7 +382,7 @@ end;
 procedure TForm16.FormClose(Sender: TObject; var Action: TCloseAction);
 { Процедура закрытия формы }
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
   wrt := false;
 end;
 
@@ -483,12 +484,6 @@ begin
     SetPoint(TEdit(Sender));
     SumV;
   end;
-end;
-
-procedure TForm16.Button2Click(Sender: TObject);
-{ Закрытие формы }
-begin
-  Close;
 end;
 
 end.

@@ -55,6 +55,7 @@ type
     BitBtn2: TBitBtn;
     CheckBox32: TCheckBox;
     Button3: TButton;
+    CheckBox34: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -223,6 +224,16 @@ begin
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
+        if CheckBox34.Checked then
+        begin
+          ExportDebt(path, MainForm.dist);
+          Inc(i);
+          pr.ProgressBar1.StepIt;
+          pr.Label3.Caption := IntToStr(i);
+          pr.Update;
+          SendMessage(pr.Handle, wm_paint, 0, 0);
+        end;
+        //Справочники
         if CheckBox24.Checked then
         begin
           if CheckBox1.Checked then
@@ -770,6 +781,15 @@ begin
           pr.Update;
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
+        if CheckBox34.Checked then
+        begin
+          ImportDebt(path, MainForm.dist);
+          Inc(i);
+          pr.ProgressBar1.StepIt;
+          pr.Label3.Caption := IntToStr(i);
+          pr.Update;
+          SendMessage(pr.Handle, wm_paint, 0, 0);
+        end;
         pr.Close;
         DModule.Database1.Commit;
         FillCurr(MainForm.bpath, MainForm.rdt, MainForm.dist, MainForm.codedbf);
@@ -988,6 +1008,8 @@ begin
   if CheckBox31.Checked then
     Inc(Result);
   if CheckBox33.Checked then
+    Inc(Result);
+  if CheckBox34.Checked then
     Inc(Result);
 end;
 

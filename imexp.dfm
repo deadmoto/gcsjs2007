@@ -3,7 +3,7 @@ object Form35: TForm35
   Top = 249
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
-  ClientHeight = 322
+  ClientHeight = 314
   ClientWidth = 430
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,8 +18,8 @@ object Form35: TForm35
   PixelsPerInch = 96
   TextHeight = 13
   object Button1: TButton
-    Left = 216
-    Top = 295
+    Left = 222
+    Top = 287
     Width = 97
     Height = 21
     TabOrder = 0
@@ -35,7 +35,6 @@ object Form35: TForm35
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 1
-    ExplicitWidth = 674
     object Label1: TLabel
       Left = 8
       Top = 8
@@ -100,11 +99,10 @@ object Form35: TForm35
     Left = 3
     Top = 60
     Width = 424
-    Height = 229
+    Height = 221
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 2
-    ExplicitWidth = 674
     object CheckBox7: TCheckBox
       Left = 8
       Top = 75
@@ -166,8 +164,8 @@ object Form35: TForm35
       TabOrder = 5
     end
     object CheckBox24: TCheckBox
-      Left = 8
-      Top = 194
+      Left = 135
+      Top = 6
       Width = 97
       Height = 17
       Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
@@ -219,7 +217,7 @@ object Form35: TForm35
       Top = 26
       Width = 281
       Height = 185
-      Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080'   '
+      Caption = #1042#1089#1077'   '
       Enabled = False
       TabOrder = 11
       object CheckBox3: TCheckBox
@@ -438,18 +436,28 @@ object Form35: TForm35
       OnClick = BitBtn2Click
     end
     object CheckBox32: TCheckBox
-      Left = 213
-      Top = 26
+      Left = 166
+      Top = 25
       Width = 17
       Height = 17
       Enabled = False
       TabOrder = 14
       OnClick = CheckBox32Click
     end
+    object CheckBox34: TCheckBox
+      Left = 8
+      Top = 188
+      Width = 97
+      Height = 17
+      Caption = #1042#1099#1095#1077#1090#1099
+      Checked = True
+      State = cbChecked
+      TabOrder = 15
+    end
   end
   object Button3: TButton
-    Left = 322
-    Top = 295
+    Left = 325
+    Top = 287
     Width = 97
     Height = 21
     Caption = #1054#1090#1084#1077#1085#1072

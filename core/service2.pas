@@ -2,7 +2,10 @@ unit service2;
 
 interface
 uses
-  Client;
+  SysUtils,
+  Client,
+  ADODB,
+  Forms;
   
 function SelStr(n: integer): string;     //выбрать улицу
 function SelMng(n: integer): string;     //выбрать распорядителя
@@ -29,14 +32,14 @@ function SelMin(n: integer): real;
 function SelInsp(n: integer): string;    //выбрать инспектора
 function SelCert(n: integer): string;    //выбрать аттестацию
 function SelDist(n: integer): string;    //выбрать округ
-function SelBoss(n: integer): string;    //
-
+function SelBoss(n: integer): string;    
 function ExistHouse(var n: integer; cl: TClient): boolean;//существует дом?
 implementation
 
 uses
   datamodule,
-  main;
+  main,
+  service;
 
 function SelStr(n: integer): string;//выбрать улицу
 begin
@@ -394,15 +397,15 @@ end;
 
 function SelInsp(n: integer): string;//выбрать инспектора
 begin
-  with DModule.Query1 do
+  with TADOQuery.Create(Application) do
   begin
-    Close;
+    Connection := DModule.sqlConnection;
     SQL.Text :=
       'select nameinsp'#13#10 +
       'from insp'#13#10 +
       'where (id_insp = :id)and(id_dist=:dist)';
-    ParamByName('id').AsInteger := n;
-    ParamByName('dist').AsInteger := MainForm.dist;
+    Parameters.ParamByName('id').Value := n;
+    Parameters.ParamByName('dist').Value := MainForm.dist;
     Open;
     Result := FieldByName('nameinsp').AsString;
     Close;
@@ -426,13 +429,14 @@ end;
 
 function SelDist(n: integer): string;
 begin
-  with DModule.Query1 do
+  with TADOQuery.Create(Application) do
   begin
-    Close;
-    SQL.Text := 'select namedist'#13#10 +
+    Connection := DModule.sqlConnection;
+    SQL.Text :=
+      'select namedist'#13#10 +
       'from dist'#13#10 +
       'where (id_dist = :id)';
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := n;
     Open;
     Result := FieldByName('namedist').AsString;
     Close;
@@ -441,13 +445,14 @@ end;
 
 function SelBoss(n: integer): string;
 begin
-  with DModule.Query3 do
+  with TADOQuery.Create(Application) do
   begin
-    Close;
-    SQL.Text := 'SELECT boss '#13#10 +
+    Connection := DModule.sqlConnection;
+    SQL.Text :=
+      'SELECT boss '#13#10 +
       'FROM Dist '#13#10 +
       'WHERE id_dist = :id';
-    ParamByName('id').AsInteger := n;
+    Parameters.ParamByName('id').Value := n;
     Open;
     Result := FieldByName('boss').AsString;
     Close;
@@ -456,18 +461,18 @@ end;
 
 function ExistHouse(var n: integer; cl: TClient): boolean;//существует дом?
 begin
-  with DModule.Query1 do
+  with TADOQuery.Create(Application) do
   begin
-    Close;
+    Connection := DModule.sqlConnection;
     SQL.Clear;
     SQL.Add('select id_house');
     SQL.Add('from house');
     SQL.Add('where (id_street = :str)and(nhouse = :nh)and(corp=:cp)');
     SQL.Add('and(id_dist=:dist)');
-    ParamByName('str').AsInteger := Cl.Data.str;
-    ParamByName('nh').AsString := Cl.Data.nh;
-    ParamByName('cp').AsString := Cl.Data.corp;
-    ParamByName('dist').AsInteger := MainForm.dist;
+    Parameters.ParamByName('str').Value := Cl.Data.str;
+    Parameters.ParamByName('nh').Value := Cl.Data.nh;
+    Parameters.ParamByName('cp').Value := Cl.Data.corp;
+    Parameters.ParamByName('dist').Value := MainForm.dist;
     Open;
     if IsEmpty then
       Result := False

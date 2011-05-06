@@ -10,7 +10,7 @@ interface
 
 
 uses
-  Controls, DB, DBTables, dbf, Dialogs, Grids, Mask, padegFIO, Registry, dateutils, Math,
+  Controls, ADODB, DB, DBTables, dbf, Dialogs, Grids, Mask, padegFIO, Registry, dateutils, Math,
   StdCtrls, SysUtils, Variants, Windows, ExtCtrls, Graphics, Classes, ComObj, MyTypes;
 
 const
@@ -53,6 +53,8 @@ procedure FillMin(path, rdt: string; code: TCodePage);
 procedure FillStnd(path, rdt: string; code: TCodePage);
 procedure FillMdd(path, rdt: string; code: TCodePage);
 
+procedure SetParam(Params: TParameters; PName: string; PValue: Variant);
+
 function GetName(fld: TField): string;
 function GetType(fld: TField): TFldType;
 function GetSize(fld: TField): byte;
@@ -66,6 +68,7 @@ function NormalizeSpaces(str: string): string;
 function ReplacePoint(str: string): string; //заминить , на .
 function StringDate(date: TDate): string;//возвращает дату в виде "mounth-name yyyy"
 function RegExpString(source,filter: string): string;
+function SplitString(s, c: string): TStringList;
 {******************************************************************************}
 function RefToCell(ARow, ACol: integer): string;
 function ExportGridToExcel(AGrid: TStringGrid; AFileName: string): boolean;
@@ -94,9 +97,9 @@ begin
 end;
 
 function RegExpString(source,filter: string): string;
-var
-  re:  TRegExp;
-  tmp: string;
+//var
+//  re:  TRegExp;
+//  tmp: string;
 begin
 //  re := TRegExp.Create(nil);
 //  try
@@ -498,7 +501,7 @@ end;
 
 procedure FillTable(path, nam: string; code: TCodePage);
 {*******************************************************************************
-  Процедура создает таблицу и заполняет ее данными из Query1 с кодировкой code
+  Процедура создает таблицу и заполняет ее данными из sqlQuery1 с кодировкой code
   (OEM или ANSI)
 *******************************************************************************}
 var
@@ -511,26 +514,28 @@ begin
   begin
     if Dbf1.Active then
       Dbf1.Close;
-    for i := 0 to Query1.FieldCount - 1 do
-      Dbf1.AddFieldDefs(GetName(Query1.Fields[i]), GetType(Query1.Fields[i]),
-        GetSize(Query1.Fields[i]), GetPrec(Query1.Fields[i]));
+    for i := 0 to sqlQuery1.FieldCount - 1 do
+      Dbf1.AddFieldDefs(
+        GetName(sqlQuery1.Fields[i]), GetType(sqlQuery1.Fields[i]),
+        GetSize(sqlQuery1.Fields[i]), GetPrec(sqlQuery1.Fields[i])
+      );
     Dbf1.TableName := path + nam + '.dbf';
     Dbf1.CreateTable;
     Dbf1.CodePage := code;
 //    try
-      while not Query1.EOF do
+      while not sqlQuery1.EOF do
       begin
         dbf1.Append;
-        for i := 1 to Query1.FieldCount do
-          EditField(Query1.Fields[i - 1].AsString, code, i);
+        for i := 1 to sqlQuery1.FieldCount do
+          EditField(sqlQuery1.Fields[i - 1].AsString, code, i);
         Dbf1.Post;
-        Query1.Next;
+        sqlQuery1.Next;
       end;
 //    except
-//      ShowMessage(Query1.Fields[i - 1].AsString);
+//      ShowMessage(sqlQuery1.Fields[i - 1].AsString);
 //    end;
     Dbf1.Close;
-    Query1.Close;
+    sqlQuery1.Close;
   end;
 end;
 
@@ -583,7 +588,7 @@ procedure FillTarif(path, nam, rdt: string; dis: integer; code: TCodePage);
   Процедура FillTarif заполняет таблицу текущих значений тарифов без бойлера
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -592,12 +597,13 @@ begin
     else
       SQL.add('select ' + nam + '.id_' + nam + ',' + nam + '.name' + nam + ',' + nam + '.tarif' + nam + ' from');
     SQL.add('(select max(sdate) as sdate,id_' + nam + ' from ' + nam);
-    SQL.add('where sdate<=convert(smalldatetime,:d,104) and (id_dist=:idd)');
+    SQL.add('where sdate<=convert(smalldatetime,:d,104) and (id_dist=:idd0)');
     SQL.add('group by id_' + nam + ') sb inner join');
-    SQL.add(nam + ' on (' + nam + '.id_' + nam + '=sb.id_' + nam + ')and(' + nam + '.sdate=sb.sdate)and(' + nam + '.id_dist=:idd)');
+    SQL.add(nam + ' on (' + nam + '.id_' + nam + '=sb.id_' + nam + ')and(' + nam + '.sdate=sb.sdate)and(' + nam + '.id_dist=:idd1)');
     SQL.add('order by ' + nam + '.name' + nam);
-    ParamByName('d').AsString := rdt;
-    ParamByName('idd').AsInteger := dis;
+    Parameters.ParamByName('d').Value := rdt;
+    Parameters.ParamByName('idd0').Value := dis;
+    Parameters.ParamByName('idd1').Value := dis;
     Open;
     FillTable(path, 'cur' + nam, code);
   end;
@@ -608,18 +614,19 @@ procedure FillTarifb(path, nam, rdt: string; dis: integer; code: TCodePage);
   Процедура FillTarifb заполняет таблицу текущих значений тарифов с бойлером
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.add('select ' + nam + '.id_' + nam + ',' + nam + '.name' + nam + ',' + nam + '.tarif1,' + nam + '.tarif2,'+ nam+'.norm'+ nam +' from');
     SQL.add('(select max(sdate) as sdate,id_' + nam + ' from ' + nam);
-    SQL.add('where sdate<=convert(smalldatetime,:d,104) and (id_dist=:idd)');
+    SQL.add('where sdate<=convert(smalldatetime,:d,104) and (id_dist=:idd0)');
     SQL.add('group by id_' + nam + ') sb inner join');
-    SQL.add(nam + ' on (' + nam + '.id_' + nam + '=sb.id_' + nam + ')and(' + nam + '.sdate=sb.sdate)and(' + nam + '.id_dist=:idd)');
+    SQL.add(nam + ' on (' + nam + '.id_' + nam + '=sb.id_' + nam + ')and(' + nam + '.sdate=sb.sdate)and(' + nam + '.id_dist=:idd1)');
     SQL.add('order by ' + nam + '.name' + nam);
-    ParamByName('d').AsString := rdt;
-    ParamByName('idd').AsInteger := dis;
+    Parameters.ParamByName('d').Value := rdt;
+    Parameters.ParamByName('idd0').Value := dis;
+    Parameters.ParamByName('idd1').Value := dis;
     Open;
     FillTable(path, 'cur' + nam, code);
   end;
@@ -630,18 +637,19 @@ procedure FillEl(path, rdt: string; dis: integer; code: TCodePage);
   Процедура Fillel заполняет таблицу текущих значений тарифов на э/э
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.add('select el.id_el,el.plate,el.tarifel1,el.tarifel2,el.tarifel3 from');
     SQL.add('(select max(sdate) as sdate,id_el from el');
-    SQL.add('where sdate<=convert(smalldatetime,:d,104) and (id_dist=:idd)');
+    SQL.add('where sdate<=convert(smalldatetime,:d,104) and (id_dist=:idd0)');
     SQL.add('group by id_el) sb inner join');
-    SQL.add('el on (el.id_el=sb.id_el)and(el.sdate=sb.sdate)and(el.id_dist=:idd)');
+    SQL.add('el on (el.id_el=sb.id_el)and(el.sdate=sb.sdate)and(el.id_dist=:idd1)');
     SQL.add('order by el.plate');
-    ParamByName('d').AsString := rdt;
-    ParamByName('idd').AsInteger := dis;
+    Parameters.ParamByName('d').Value := rdt;
+    Parameters.ParamByName('idd0').Value := dis;
+    Parameters.ParamByName('idd1').Value := dis;
     Open;
     FillTable(path, 'curel', code);
   end;
@@ -652,7 +660,7 @@ procedure FillMin(path, rdt: string; code: TCodePage);
   Процедура FillMin заполняет таблицу текущих значений прожиточных минимумов
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -662,7 +670,7 @@ begin
     SQL.add('group by id_min) sb inner join');
     SQL.add('lmin on (lmin.id_min=sb.id_min)and(lmin.sdate=sb.sdate)');
     SQL.add('order by lmin.namemin');
-    ParamByName('d').AsString := rdt;
+    Parameters.ParamByName('d').Value := rdt;
     Open;
     FillTable(path, 'curlmin', code);
   end;
@@ -673,7 +681,7 @@ procedure FillMdd(path, rdt: string; code: TCodePage);
   Процедура FillMdd заполняет таблицу текущих значений мдд
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -683,7 +691,7 @@ begin
     SQL.add('group by id_mdd) sb inner join');
     SQL.add('mdd on (mdd.id_mdd=sb.id_mdd)and(mdd.sdate=sb.sdate)');
     SQL.add('order by mdd.namegroup');
-    ParamByName('d').AsString := rdt;
+    Parameters.ParamByName('d').Value := rdt;
     Open;
     FillTable(path, 'curmdd', code);
   end;
@@ -694,7 +702,7 @@ procedure FillStnd(path, rdt: string; code: TCodePage);
   Процедура FillStnd заполняет таблицу текущих значений региональных стандартов
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -704,7 +712,7 @@ begin
     SQL.add('group by id_stnd) sb inner join');
     SQL.add('rstnd on (rstnd.id_stnd=sb.id_stnd)and(rstnd.sdate=sb.sdate)');
     SQL.add('order by rstnd.namestnd');
-    ParamByName('d').AsString := rdt;
+    Parameters.ParamByName('d').Value := rdt;
     Open;
     FillTable(path, 'currstnd', code);
   end;
@@ -811,11 +819,10 @@ begin
       raise Exception.Create('Ошибка создания объекта Excel: ' + E.Message);
   end;
 
-  try
-    ExcelApp.WorkBooks.Open(aFileName);
-  except
+  if FileExists(aFileName) then
+    ExcelApp.WorkBooks.Open(aFileName)
+  else
     ExcelApp.WorkBooks.Add($FFFFEFB9);
-  end;
 
   // Prepare Data
   Data := VarArrayCreate([1, AGrid.RowCount, 1, AGrid.colcount], varVariant);
@@ -853,8 +860,6 @@ begin
 end;
 
 function NormalizeSpaces(str: string): string;
-var
-  i: integer;
 begin
   str := Trim(str);
   while pos('  ',str) <> 0 do
@@ -961,6 +966,28 @@ begin
       query.open;
       result:=query.fieldbyname('minim').value;
     end;      
+end;
+
+function SplitString(s, c: string): TStringList;
+var
+  t: TStringList;
+  i: integer;
+begin
+  t := TStringList.Create;
+  t.Text := stringReplace(s, c, #13#10, [rfReplaceAll]);//мы заменяем все пробелы на символы конца строки
+  for i := 0 to t.Count - 1 do
+    t[i] := Trim(t[i]);
+  Result := t;
+//  t.Free;
+end;
+
+procedure SetParam(Params: TParameters; PName: string; PValue: Variant);
+var
+  i: integer;
+begin
+  for i := 0 to Params.Count - 1 do
+    if Params[i].Name = PName then
+      Params.Items[i].Value := PValue;
 end;
 
 end.

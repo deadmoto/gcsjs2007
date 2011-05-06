@@ -81,12 +81,19 @@ begin
   Application.CreateForm(TDModule, DModule);
   try//Подключение к SQLSub - ODBC alias for Subsidy (MS SQL)
     DModule.DataBase1.Connected := True;
+    DModule.sqlConnection.Connected := True;
     try//Подключение к DBFSub - BDE alias for DBASE driver (BDE)
       DModule.dbfConnection.Connected := True;
       try
         if (ParamCount = 1) and (ParamStr(1) = '-sql') then
         begin
           Application.CreateForm(TSQLExecForm, SQLExecForm);
+          Application.Run;
+          Exit;
+        end;
+        if (ParamCount = 1) and (ParamStr(1) = '-conmanager') then
+        begin
+          Application.CreateForm(TConnectionFrm, ConnectionFrm);
           Application.Run;
           Exit;
         end;
@@ -128,7 +135,6 @@ begin
         Application.CreateForm(TForm41, Form41);
         Application.CreateForm(TForm42, Form42);
         Application.CreateForm(TForm43, Form43);
-        Application.CreateForm(TSlujFrm, SlujFrm);
         Application.CreateForm(TConnectionFrm, ConnectionFrm);
         Application.CreateForm(TSettingsFrm, SettingsFrm);
         Application.CreateForm(TGenRefBookFrm, GenRefBookFrm);

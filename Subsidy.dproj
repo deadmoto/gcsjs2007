@@ -88,13 +88,8 @@
     </DCCReference>
     <DCCReference Include="data" />
     <DCCReference Include="datamodule.pas">
-      <ModuleName>datАamodule</ModuleName>
       <Form>DModule</Form>
       <DesignClass>TDModule</DesignClass>
-    </DCCReference>
-    <DCCReference Include="datamodule.pas">
-      <DesignClass>TDModule</DesignClass>
-      <Form>DModule</Form>
     </DCCReference>
     <DCCReference Include="data\dbf.pas" />
     <DCCReference Include="data\HelpUtils.pas" />

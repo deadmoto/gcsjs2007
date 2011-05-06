@@ -85,7 +85,6 @@ type
     Label56:         TLabel;
     Label57:         TLabel;
     GroupBox10:      TGroupBox;
-    Button2:         TButton;
     Button3:         TButton;
     Button4:         TButton;
     Button5:         TButton;
@@ -208,7 +207,6 @@ type
     Label69:         TLabel;
     Edit65:          TEdit;
     Edit84:          TEdit;
-    Button1:         TButton;
     Label70:         TLabel;
     Edit107:         TEdit;
     Label71:         TLabel;
@@ -247,12 +245,12 @@ type
     ComboBox22:      TComboBox;
     Bevel1:          TBevel;
     TabSheet6:       TTabSheet;
-    TabControl1:     TTabControl;
+    FactSaleControl: TTabControl;
     Panel1:          TPanel;
     GroupBox4:       TGroupBox;
     ComboBox23:      TComboBox;
     GroupBox5:       TGroupBox;
-    StringGrid1:     TStringGrid;
+    FactGrid:     TStringGrid;
     Panel2:          TPanel;
     Label77:         TLabel;
     Button20:        TButton;
@@ -381,6 +379,25 @@ type
     elevatorCheckBox: TCheckBox;
     Label95:         TLabel;
     npssEdit:        TEdit;
+    Button2: TButton;
+    TabSheet9: TTabSheet;
+    DebtControl: TTabControl;
+    GroupBox13: TGroupBox;
+    ComboBox1: TComboBox;
+    GroupBox14: TGroupBox;
+    comboBoxDebt: TComboBox;
+    Label96: TLabel;
+    GroupBox15: TGroupBox;
+    DebtAddBtn: TButton;
+    Edit151: TEdit;
+    GroupBox16: TGroupBox;
+    DebtGrid: TStringGrid;
+    DebtDelBtn: TButton;
+    DebtEditBtn: TButton;
+    Panel3: TPanel;
+    DebtFormPay: TButton;
+    RadioGroup2: TRadioGroup;
+    Edit152: TEdit;
     procedure Button2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure comboBoxContChange(Sender: TObject);
@@ -419,7 +436,6 @@ type
     procedure ComboBox10Change(Sender: TObject);
     procedure comboBoxCanalChange(Sender: TObject);
     procedure CheckBox2Click(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure Memo1Change(Sender: TObject);
     procedure Button10Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
@@ -444,17 +460,17 @@ type
     procedure Edit111Exit(Sender: TObject);
     procedure ComboBox21Change(Sender: TObject);
     procedure ComboBox22Change(Sender: TObject);
-    procedure TabControl1Change(Sender: TObject);
+    procedure FactSaleControlChange(Sender: TObject);
     procedure ComboBox23KeyPress(Sender: TObject; var Key: char);
     procedure ComboBox23Change(Sender: TObject);
     procedure Button21Click(Sender: TObject);
     procedure Button20Click(Sender: TObject);
-    procedure StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
-    procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
+    procedure FactGridSelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
+    procedure FactGridDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
     procedure PageControl1DrawTab(Control: TCustomTabControl; TabIndex: integer; const Rect: TRect; Active: boolean);
-    procedure StringGrid1MouseLeave(Sender: TObject);
+    procedure FactGridMouseLeave(Sender: TObject);
     procedure Edit117Exit(Sender: TObject);
-    procedure StringGrid1SetEditText(Sender: TObject; ACol, ARow: integer; const Value: string);
+    procedure FactGridSetEditText(Sender: TObject; ACol, ARow: integer; const Value: string);
     procedure CheckBox4Click(Sender: TObject);
     procedure Edit118Exit(Sender: TObject);
     procedure comboBoxColdCounterChange(Sender: TObject);
@@ -465,6 +481,14 @@ type
     procedure btnColdCounterClick(Sender: TObject);
     procedure CheckBox10Click(Sender: TObject);
     procedure Edit9Exit(Sender: TObject);
+    procedure DebtControlChange(Sender: TObject);
+    procedure DebtAddBtnClick(Sender: TObject);
+    procedure DebtGridDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect;
+      State: TGridDrawState);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure DebtDelBtnClick(Sender: TObject);
+    procedure RadioGroup2Click(Sender: TObject);
+    procedure DebtFormPayClick(Sender: TObject);
   private
     { Private declarations }
     load, fam: boolean;
@@ -472,8 +496,9 @@ type
     curmonth:  integer;//текущий месяц
     curprc:    integer;//текущий процент расхода тепла
     curman:    integer;//текущий член семьи
-    str, mng, fnd, cntrl, settl, own, st, p, rel, bank: array of integer;
+    str, mng, fnd, cntrl, settl, own, st, p, rel, bank, debt: array of integer;
     cont, mop, cold, canal, hot, heat, gas, wood, coal, stnd: array of integer;
+    debtcl: array of Variant;
 
     fbegindate, fenddate: TDateTime;
     function AddClient: integer;  //добавить клиента
@@ -527,6 +552,7 @@ type
 
     procedure RecalcOneServ(s: integer; mode: TCalcMode);
 
+    //FactSale
     procedure ClearFactGrids;
     procedure ChangeFactPeriod(BD, ED: TDateTime);
     procedure CheckDifferenceFactSum;
@@ -534,6 +560,8 @@ type
     function AddAnyMonth(BD, ED: TDateTime): TStringList;
     function GetColSum(StrGrid: TStringGrid; Col: integer): string;
     function calcMDiff(sub, fact: string): string;
+    //Debt
+    procedure ClearDebtGrid;
     //procedure ChangePeriod(BD, ED: TDateTime);
   public
     { Public declarations }
@@ -846,6 +874,8 @@ begin
   Edit149.Text := '0';
   Edit139.Text := '0';
   Edit150.Text := '0';
+  Edit152.Text := '0';
+  Edit152.Visible := False;
   //------
   Edit115.Text := '0';
   Edit116.Text := '0';
@@ -880,6 +910,7 @@ begin
   Combobox17.Clear;
   Combobox18.Clear;
   Combobox19.Clear;
+  comboBoxDebt.Clear;
   LVFam.Items.Clear;
   Memo1.Clear;
   curprc := 0;
@@ -893,6 +924,7 @@ begin
   SetLength(settl, 0);
   SetLength(own, 0);
   SetLength(st, 0);
+  SetLength(debt, 0);
   SetLength(p, 0);
   SetLength(rel, 0);
   SetLength(bank, 0);
@@ -913,11 +945,24 @@ begin
   CheckBox10.Checked := False;
 end;
 
+procedure TEditClForm.ClearDebtGrid;
+var
+  i: integer;
+begin
+  with DebtGrid do
+  begin
+    for i := 0 to RowCount - 1 do
+      Rows[i].Clear;
+    RowCount := 2;
+    Repaint;      
+  end;
+end;
+
 procedure TEditClForm.ClearFactGrids;
 var
   i: integer;
 begin
-  with StringGrid1 do
+  with FactGrid do
   begin
     for i := 0 to RowCount - 1 do
       Rows[i].Clear;
@@ -1157,8 +1202,30 @@ begin
       Next;
       Inc(l);
     end;
-    Combobox17.ItemIndex := 0;
+    comboBoxDebt.ItemIndex := 0;
     l := 0;
+    with DModule.sqlQuery1 do
+    begin
+      Close;
+      SQL.Clear;
+      SQL.Add('select id_sluj, namesluj');
+      SQL.Add('from SlujType');
+      SQL.Add('order by id_sluj');
+      Open;
+      First;
+      while not EOF do
+      begin
+        SetLength(debt, Length(debt) + 1);
+        comboBoxDebt.Items.Add(FieldByName('namesluj').AsString);
+        debt[l] := FieldByName('id_sluj').AsInteger;
+        if debt[l] = 0 then
+          comboBoxDebt.ItemIndex := l;
+        Next;
+        Inc(l);
+      end;
+      Combobox17.ItemIndex := 0;
+      l := 0;
+    end;
     Close;
     SQL.Clear;
     SQL.Add('select id_priv, namepriv');
@@ -2184,7 +2251,7 @@ begin
   end;
 end;
 
-procedure TEditClForm.StringGrid1DrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
+procedure TEditClForm.FactGridDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
 {var
   Buf: array[byte] of char;}
 begin
@@ -2200,29 +2267,29 @@ begin
       end;}
 end;
 
-procedure TEditClForm.StringGrid1MouseLeave(Sender: TObject);
+procedure TEditClForm.FactGridMouseLeave(Sender: TObject);
 var
   i: integer;
 begin
-  for i := 0 to StringGrid1.RowCount - 2 do
-    StringGrid1.Cells[3, i + 1] := calcMDiff(StringGrid1.Cells[1, i + 1], StringGrid1.Cells[2, i + 1]);
+  for i := 0 to FactGrid.RowCount - 2 do
+    FactGrid.Cells[3, i + 1] := calcMDiff(FactGrid.Cells[1, i + 1], FactGrid.Cells[2, i + 1]);
   UpdateFactInfo();
 end;
 
-procedure TEditClForm.StringGrid1SelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
+procedure TEditClForm.FactGridSelectCell(Sender: TObject; ACol, ARow: integer; var CanSelect: boolean);
 {var
   i: integer;}
 begin
   if (ACol = 0) then
-    StringGrid1.Options := StringGrid1.Options - [goEditing, goAlwaysShowEditor]
+    FactGrid.Options := FactGrid.Options - [goEditing, goAlwaysShowEditor]
   else
-    StringGrid1.Options := StringGrid1.Options + [goEditing, goAlwaysShowEditor];
+    FactGrid.Options := FactGrid.Options + [goEditing, goAlwaysShowEditor];
 
   if ARow <> 0 then
-    StringGrid1.Cells[3, ARow] := calcMDiff(StringGrid1.Cells[1, ARow], StringGrid1.Cells[2, ARow]);
+    FactGrid.Cells[3, ARow] := calcMDiff(FactGrid.Cells[1, ARow], FactGrid.Cells[2, ARow]);
   UpdateFactInfo();
 
-  if TabControl1.TabIndex = 1 then
+  if FactSaleControl.TabIndex = 1 then
     CheckDifferenceFactSum;
 
 {  if TabControl1.TabIndex=1 then
@@ -2241,12 +2308,12 @@ begin
     StringGrid1.Options := StringGrid1.Options + [goEditing, goAlwaysShowEditor];}
 end;
 
-procedure TEditClForm.StringGrid1SetEditText(Sender: TObject; ACol, ARow: integer; const Value: string);
+procedure TEditClForm.FactGridSetEditText(Sender: TObject; ACol, ARow: integer; const Value: string);
 begin
   if ARow <> 0 then
     if Value <> '' then
     begin
-      StringGrid1.Cells[3, ARow] := calcMDiff(StringGrid1.Cells[1, ARow], StringGrid1.Cells[2, ARow]);
+      FactGrid.Cells[3, ARow] := calcMDiff(FactGrid.Cells[1, ARow], FactGrid.Cells[2, ARow]);
       UpdateFactInfo();
     end;
 end;
@@ -2255,7 +2322,9 @@ procedure TEditClForm.Button20Click(Sender: TObject);
 var
   i: integer;
 begin
-  case TabControl1.TabIndex of
+  try
+  DModule.Database1.StartTransaction;
+  case FactSaleControl.TabIndex of
     0:
     begin
       if (ComboBox23.Items.Count = 0) and (not CheckBox1.Checked) then
@@ -2266,20 +2335,20 @@ begin
       else
         with DModule do
         begin
-          for i := 0 to StringGrid1.RowCount - 2 do
+          for i := 0 to FactGrid.RowCount - 2 do
           begin
             try
               Query1.Close;
               Query1.SQL.Text := 'INSERT INTO FactSale' + #13 +
                 'VALUES (convert(smalldatetime,:sdate,104),:regn,' +
-                'convert(smalldatetime,:bdate,104),convert(smalldatetime,:edate,104),:sub,:factsum,:dis)';
-              Query1.ParamByName('sdate').Value := StringGrid1.Cells[0, i + 1];
+                'convert(smalldatetime,:bdate,104),convert(smalldatetime,:edate,104),:sub,:factsum,:dist)';
+              Query1.ParamByName('sdate').Value := FactGrid.Cells[0, i + 1];
               Query1.ParamByName('regn').Value := cl.Data.regn;
               Query1.ParamByName('bdate').Value := DateToStr(fbegindate);
               Query1.ParamByName('edate').Value := DateToStr(fenddate);
-              Query1.ParamByName('sub').Value := StrToFloat(StringGrid1.Cells[1, i + 1]);
-              Query1.ParamByName('factsum').Value := StrToFloat(StringGrid1.Cells[2, i + 1]);
-              Query1.ParamByName('dis').Value := MainForm.dist;
+              Query1.ParamByName('sub').Value := StrToFloat(FactGrid.Cells[1, i + 1]);
+              Query1.ParamByName('factsum').Value := StrToFloat(FactGrid.Cells[2, i + 1]);
+              Query1.ParamByName('dist').Value := MainForm.dist;
               Query1.ExecSQL;
             except
               ShowMessage('Ошибка при добавлении! Проверьте правильность ввода данных.')
@@ -2310,7 +2379,7 @@ begin
         if comboBoxCont.Text = '' then
           ShowMessage('Не выбран период для изменения')
         else
-          for i := 0 to StringGrid1.RowCount - 2 do
+          for i := 0 to FactGrid.RowCount - 2 do
           begin
             try
               Query1.Close;
@@ -2318,11 +2387,11 @@ begin
                 'SET factsum = :factsum, sub=:sub' + #13 +
                 'WHERE (regn = :regn) AND (bdate = CONVERT(smalldatetime, :bdate, 104)) ' +
                 'AND (sdate = CONVERT(smalldatetime, :sdate, 104))';
-              Query1.ParamByName('factsum').Value := StrToFloat(StringGrid1.Cells[2, i + 1]);
-              Query1.ParamByName('sub').Value := StrToFloat(StringGrid1.Cells[1, i + 1]);
+              Query1.ParamByName('factsum').Value := StrToFloat(FactGrid.Cells[2, i + 1]);
+              Query1.ParamByName('sub').Value := StrToFloat(FactGrid.Cells[1, i + 1]);
               Query1.ParamByName('regn').Value := cl.Data.regn;
               Query1.ParamByName('bdate').Value := DateToStr(fbegindate);
-              Query1.ParamByName('sdate').Value := StringGrid1.Cells[0, i + 1];
+              Query1.ParamByName('sdate').Value := FactGrid.Cells[0, i + 1];
               Query1.ExecSQL;
             except
               ShowMessage('Ошибка при изменении! Проверьте правильность ввода данных.')
@@ -2344,6 +2413,16 @@ begin
       end;
     end;
   end;
+      DModule.Database1.Commit;
+  except
+    on E : Exception do
+    begin
+      ShowMessage('Exception message = '+E.Message);
+      DModule.Database1.Rollback;
+    end;
+
+  end;
+  
   if fbegindate = Cl.cdata.prevbegindate then
   begin
     Cl.cdata.averageFact := StrToFloat(Edit114.Text);
@@ -2370,7 +2449,7 @@ begin
   end;
 
   ClearFactGrids();
-  TabControl1.OnChange(self);
+  FactSaleControl.OnChange(self);
 end;
 
 procedure TEditClForm.Button21Click(Sender: TObject);
@@ -2409,7 +2488,7 @@ begin
     end;
 
     ClearFactGrids();
-    TabControl1.OnChange(self);
+    FactSaleControl.OnChange(self);
   end;
 end;
 
@@ -2434,7 +2513,6 @@ procedure TEditClForm.FormClose(Sender: TObject; var Action: TCloseAction);
 { закрытие формы }
 begin
   DModule.Query1.Close;
-  DModule.Query2.Close;
   DModule.qTarif.Close;
 end;
 
@@ -2443,7 +2521,6 @@ var
   tmpDate: TDateTime;
   StrList: TStringList;
   i: integer;
-  //    tmp: byte;
 begin
   StrList := TStringList.Create;
   tmpDate := BD;
@@ -2653,9 +2730,15 @@ begin
         DModule.Database1.Commit;
         Result := 0;
       except
-        //транзакция не выполнена
-        DModule.Database1.Rollback;
-        Result := -1;
+        on E : Exception do
+        begin
+          ShowMessage('Exception class name = '+E.ClassName);
+          ShowMessage('Exception message = '+E.Message);
+
+          //транзакция не выполнена
+          DModule.Database1.Rollback;
+          Result := -1;
+        end;
       end;
       if Result = 0 then
         MainForm.AddCl(Cl.Data.regn);
@@ -3306,8 +3389,11 @@ end;
 
 procedure TEditClForm.ComboBox23Change(Sender: TObject);
 begin
-  fbegindate := StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex], 1, 10));
-  fenddate := StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex], 14, 23));
+//  fbegindate := StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex], 1, 10));
+//  fenddate := StrToDate(copy(ComboBox23.Items[ComboBox23.ItemIndex], 14, 23));
+
+  fbegindate := StrToDate(SplitString(ComboBox23.Text, '-')[0]);
+  fenddate   := StrToDate(SplitString(ComboBox23.Text, '-')[1]);
 
   ChangeFactPeriod(fbegindate, fenddate);
   UpdateFactInfo();
@@ -3450,6 +3536,241 @@ begin
   end;
 
   RecalcOneServ(12, cServWC);
+end;
+
+procedure TEditClForm.DebtAddBtnClick(Sender: TObject);
+begin
+  case DebtControl.TabIndex of
+    0:
+    begin
+    try
+      DModule.sqlConnection.BeginTrans;
+      with DModule.Query1 do
+      begin
+        Close;
+        SQL.Text :=
+          'SELECT id_debt FROM Debt'#13#10 +
+          'WHERE (regn = :regn) and (id_sluj=:idsluj) and (bdate = convert(smalldatetime, :bd, 104))';
+        ParamByName('regn').Value := Cl.Data.regn;
+        ParamByName('idsluj').Value := debt[comboBoxDebt.ItemIndex];
+        ParamByName('bd').AsString := SplitString(ComboBox1.Text, '-')[0];
+        Open;
+        if RecordCount = 0 then
+        begin
+          Close;
+          SQL.Text :=
+            'INSERT INTO Debt (id_debt,id_sluj,dist,regn,bdate,edate,sumdebt,closed )'#13#10 +
+            'VALUES (newid(),:idsluj,:dist,:regn,convert(smalldatetime,:bd,104),convert(smalldatetime,:ed,104),:sumdebt,0)';
+          ParamByName('idsluj').Value := debt[comboBoxDebt.ItemIndex];
+          ParamByName('dist').Value := MainForm.dist;
+          ParamByName('regn').Value := Cl.Data.regn;
+          ParamByName('bd').AsString := SplitString(ComboBox1.Text, '-')[0];
+          ParamByName('ed').AsString := SplitString(ComboBox1.Text, '-')[1];
+          ParamByName('sumdebt').Value := StrToFloat(Edit151.Text);
+          ExecSQL;
+        end;
+        DModule.sqlConnection.CommitTrans;
+      end;
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Exception message = '+E.Message);
+        DModule.sqlConnection.RollbackTrans;
+      end;
+    end;
+    end;
+
+    1: ;
+  end;
+
+  DebtControl.OnChange(self);
+end;
+
+procedure TEditClForm.DebtDelBtnClick(Sender: TObject);
+begin
+  case DebtControl.TabIndex of
+    0:
+    begin
+    try
+      DModule.sqlConnection.BeginTrans;
+      with DModule.sqlQuery1 do
+      begin
+        Close;
+        SQL.Text :=
+          'SELECT id_debt FROM DebtPay'#13#10 +
+          'WHERE id_debt = :id';
+          Parameters.ParamByName('id').Value := debtcl[DebtGrid.Row - 1];
+        Open;
+        if RecordCount <> 0 then 
+        begin
+          ShowMessage('Вы не можете удалить данную переплату! По ней сформированы удержания');
+          Exit;
+        end;
+
+        Close;
+        SQL.Text :=
+          'DELETE FROM Debt WHERE id_debt = :id';
+        Parameters.ParamByName('id').Value := debtcl[DebtGrid.Row - 1];
+        ExecSQL;
+        DModule.sqlConnection.CommitTrans;
+        DebtControl.OnChange(self);
+      end;
+    except
+      DModule.sqlConnection.RollbackTrans;
+    end;
+    end;
+
+    1:
+    begin
+    try
+      DModule.sqlConnection.BeginTrans;
+      with DModule.sqlQuery1 do
+      begin
+        Close;
+        SQL.Text :=
+          'SELECT Sluj.sdate, Sluj.id_debt FROM Sluj'#13#10 +
+          'WHERE Sluj.id_debt = :id'#13#10 +
+          'GROUP BY Sluj.sdate, Sluj.id_debt';
+        Parameters.ParamByName('id').Value := debtcl[DebtGrid.Row - 1];
+        Open;
+        if RecordCount > 1 then
+        begin
+          ShowMessage('Вы не можете удалить данное удержание! Есть сформированные вычеты за прошлые месяца');
+          Exit;
+        end;
+
+        Close;
+        SQL.Text :=
+          'DELETE FROM Sluj WHERE id_debt = :id;'#13#10 +
+          'DELETE FROM DebtPay WHERE id_debt = :id;'+#13#10+
+          'UPDATE Debt SET closed = 0, closed_date = NULL WHERE id_debt = :id';
+        Parameters.ParamByName('id').Value := debtcl[DebtGrid.Row - 1];
+        ExecSQL;
+
+        DModule.sqlConnection.CommitTrans;
+        DebtControl.OnChange(self);
+      end;
+    except
+      ShowMessage('Ошибка при удалении!');
+      DModule.sqlConnection.RollbackTrans;
+    end;
+    end;
+  end;
+end;
+
+procedure TEditClForm.DebtControlChange(Sender: TObject);
+var
+  i,l: integer;
+begin
+  ComboBox1.Clear;
+  ClearDebtGrid;
+  comboBoxDebt.Enabled := False;
+  Edit151.Text := '0';
+
+  case DebtControl.TabIndex of
+    0:
+    begin
+      comboBoxDebt.Enabled := True;
+
+      with DModule.sqlQuery1 do
+      begin
+        //выбираем доступные периоды
+        Close;
+        SQL.Text :=
+          'SELECT   bdate, edate FROM Hist'#13#10 +
+          'WHERE    (regn = :regn) and (bdate < convert(smalldatetime, :bd, 104))'#13#13 +
+          'ORDER BY bdate';
+        Parameters.ParamByName('regn').Value := Cl.Data.regn;
+        Parameters.ParamByName('bd').Value := DateToStr(cl.cdata.begindate);
+        Open;
+        while not EOF do
+        begin
+          ComboBox1.Items.Add(Format('%s - %s', [FieldByName('bdate').AsString, FieldByName('edate').AsString]));
+          Next;
+        end;
+        //Заполняем таблицу с существующими переплатами
+        Close;
+        SQL.Text :=
+          'SELECT   Debt.id_debt, Debt.bdate, Debt.edate, Debt.sumdebt, Debt.closed, SlujType.namesluj'#13#10 +
+          'FROM     Debt INNER JOIN'#13#10 +
+          '   SlujType ON Debt.id_sluj = SlujType.id_sluj'#13#10 +
+          'WHERE regn = :regn';
+        Parameters.ParamByName('regn').Value := Cl.Data.regn;
+        Open;
+
+        FormerStringGrid(DebtGrid, TStringArray.Create('', '', 'Сумма', 'Погашено', 'Описание'),
+          TIntArray.Create(64, 64, 65, 80, 155), Math.Max(RecordCount + 1, DebtGrid.RowCount));
+
+        SetLength(debtcl, 0);
+        l := 0;
+        while not EOF do
+        begin
+          for i := 0 to RecordCount - 1 do
+          begin
+            SetLength(debtcl, Length(debtcl) + 1);
+            debtcl[l] := FieldValues['id_debt'];// ByName('id_debt').AsString;
+            inc(l);
+
+            DebtGrid.Cells[0, i+1] := FieldByName('bdate').AsString;
+            DebtGrid.Cells[1, i+1] := FieldByName('edate').AsString;
+            DebtGrid.Cells[2, i+1] := FieldByName('sumdebt').AsString;
+            DebtGrid.Cells[3, i+1] := BoolToStr(FieldByName('closed').Value);
+            DebtGrid.Cells[4, i+1] := FieldByName('namesluj').AsString;
+            Next;
+          end;
+        end;
+       //
+      end;
+    end;
+
+    1:
+    begin
+      with DModule.sqlQuery1 do
+      begin
+        //Заполняем таблицу с существующими удержаниями
+        Close;
+        SQL.Text :=
+          'SELECT   DebtPay.id_debt, max(DebtPay.sdate) as sdate, Debt.bdate, Debt.edate, DebtPay.paused, Debt.closed, DebtPay.m_return, SlujType.namesluj'#13#10 +
+          'FROM     Debt INNER JOIN'#13#10 +
+          '   DebtPay ON Debt.id_debt = DebtPay.id_debt INNER JOIN'#13#10 +
+          '   SlujType ON Debt.id_sluj = SlujType.id_sluj'#13#10 +
+          'WHERE regn = :regn'#13#10 +
+          'GROUP BY DebtPay.id_debt, Debt.bdate, Debt.edate, DebtPay.paused, Debt.closed, DebtPay.m_return, SlujType.namesluj';
+        Parameters.ParamByName('regn').Value := Cl.Data.regn;
+        Open;
+
+        FormerStringGrid(DebtGrid, TStringArray.Create('', '', 'Сумма удерж.', 'Пауза', 'Погашено', 'Описание'),
+          TIntArray.Create(64, 64, 80, 64, 64, 155), Math.Max(RecordCount + 1, DebtGrid.RowCount));
+
+        SetLength(debtcl, 0);
+        l := 0;
+        while not EOF do
+        begin
+          for i := 0 to RecordCount - 1 do
+          begin
+            SetLength(debtcl, Length(debtcl) + 1);
+            debtcl[l] := FieldValues['id_debt'];
+            inc(l);
+
+            DebtGrid.Cells[0, i+1] := FieldByName('bdate').AsString;
+            DebtGrid.Cells[1, i+1] := FieldByName('edate').AsString;
+            DebtGrid.Cells[2, i+1] := FieldByName('m_return').AsString;
+            DebtGrid.Cells[3, i+1] := BoolToStr(FieldByName('paused').Value);
+            DebtGrid.Cells[4, i+1] := BoolToStr(FieldByName('closed').Value);
+            DebtGrid.Cells[5, i+1] := FieldByName('namesluj').AsString;
+            Next;
+          end;
+        end;
+       //
+      end;
+    end;
+  end;
+end;
+
+procedure TEditClForm.DebtGridDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect;
+  State: TGridDrawState);
+begin
+  SGDrawCell(Sender, ACol, ARow, Rect, State);
 end;
 
 procedure TEditClForm.comboBoxCoalChange(Sender: TObject);
@@ -4106,17 +4427,24 @@ begin
     Cl.Data.bank := bank[Combobox19.ItemIndex];
 end;
 
+procedure TEditClForm.ComboBox1Change(Sender: TObject);
+begin
+  if DebtControl.TabIndex <> 1 then Exit;
+
+
+end;
+
 procedure TEditClForm.ChangeFactPeriod(BD, ED: TDateTime);
 var
   i, j: integer;
 begin
-  StringGrid1.RowCount := MounthDiff(BD, ED) + 1;
+  FactGrid.RowCount := MounthDiff(BD, ED) + 1;
   for i := 0 to (AddAnyMonth(BD, ED)).Count - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := AddAnyMonth(BD, ED)[i];
-    StringGrid1.Cells[1, i + 1] := '0';
-    StringGrid1.Cells[2, i + 1] := '0';
-    StringGrid1.Cells[3, i + 1] := '0';
+    FactGrid.Cells[0, i + 1] := AddAnyMonth(BD, ED)[i];
+    FactGrid.Cells[1, i + 1] := '0';
+    FactGrid.Cells[2, i + 1] := '0';
+    FactGrid.Cells[3, i + 1] := '0';
   end;
 
   //-------------
@@ -4134,15 +4462,15 @@ begin
   DModule.Query1.First;
   for i := 0 to DModule.Query1.RecordCount - 1 do
   begin
-    for j := 0 to StringGrid1.RowCount - 1 do
-      if StringGrid1.Cells[0, j + 1] = DModule.Query1.FieldByName('sd').AsString then
-        StringGrid1.Cells[1, j + 1] := DModule.Query1.FieldByName('sum_sub').AsString;//.FieldValues['sum_sub'];
+    for j := 0 to FactGrid.RowCount - 1 do
+      if FactGrid.Cells[0, j + 1] = DModule.Query1.FieldByName('sd').AsString then
+        FactGrid.Cells[1, j + 1] := DModule.Query1.FieldByName('sum_sub').AsString;//.FieldValues['sum_sub'];
     DModule.Query1.Next;
   end;
 
   //-------------
 
-  if TabControl1.TabIndex = 1 then
+  if FactSaleControl.TabIndex = 1 then
   begin
     with DModule do
     begin
@@ -4158,9 +4486,9 @@ begin
 
       for i := 0 to Query1.RecordCount - 1 do
       begin
-        StringGrid1.Cells[1, i + 1] := Query1.FieldValues['sub'];
-        StringGrid1.Cells[2, i + 1] := Query1.FieldValues['factsum'];
-        StringGrid1.Cells[3, i + 1] := calcMDiff(StringGrid1.Cells[1, i + 1], StringGrid1.Cells[2, i + 1]);
+        FactGrid.Cells[1, i + 1] := Query1.FieldValues['sub'];
+        FactGrid.Cells[2, i + 1] := Query1.FieldValues['factsum'];
+        FactGrid.Cells[3, i + 1] := calcMDiff(FactGrid.Cells[1, i + 1], FactGrid.Cells[2, i + 1]);
         Query1.Next;
       end;
     end;
@@ -4505,6 +4833,12 @@ begin
   Edit57.SetFocus;
   Cl := TClient.Create(Empty, EmptyC);
   Button2.Enabled := False;
+  Button20.Enabled := False;
+  Button21.Enabled := False;
+  DebtAddBtn.Enabled := False;
+  DebtEditBtn.Enabled := False;
+  DebtDelBtn.Enabled := False;
+  DebtFormPay.Enabled := False;
   case mode of
     vAdd://добавить клиента
     begin
@@ -4603,7 +4937,25 @@ begin
         end;
       end;
       if PageControl1.TabIndex = 5 then
-        TabControl1.OnChange(Self);
+      begin
+        if MainForm.CheckP2 then
+        begin
+          Button20.Enabled := True;
+          Button21.Enabled := True;
+        end;
+        FactSaleControl.OnChange(Self);
+      end;
+      if PageControl1.TabIndex = 6 then
+      begin
+        if MainForm.CheckP2 then
+        begin
+          DebtAddBtn.Enabled := True;
+          DebtEditBtn.Enabled := True;
+          DebtDelBtn.Enabled := True;
+          DebtFormPay.Enabled := True;
+        end;
+        DebtControl.OnChange(Self);
+      end;
 
       //выбор регионального стандарта
       if PageControl1.TabIndex = 2 then
@@ -4628,14 +4980,9 @@ begin
     1: ;
     2: ;
     3: ;
-    4:
-    begin
-      Control.Canvas.Brush.Color := clSkyBlue;
-    end;
-    5:
-    begin
-      Control.Canvas.Brush.Color := clMoneyGreen;
-    end;
+    4: Control.Canvas.Brush.Color := clSkyBlue;
+    5: Control.Canvas.Brush.Color := clMoneyGreen;
+    6: Control.Canvas.Brush.Color := clInfoBk;
   end;
   Control.Canvas.Pen.Color := clBlack;
   Control.Canvas.FillRect(Rect);
@@ -4777,9 +5124,9 @@ procedure TEditClForm.UpdateFactInfo;
 begin
   if ComboBox23.ItemIndex <> -1 then
   begin
-    Edit111.Text := GetColSum(StringGrid1, 1);
-    Edit112.Text := GetColSum(StringGrid1, 2);
-    Edit113.Text := GetColSum(StringGrid1, 3);
+    Edit111.Text := GetColSum(FactGrid, 1);
+    Edit112.Text := GetColSum(FactGrid, 2);
+    Edit113.Text := GetColSum(FactGrid, 3);
     if MounthDiff(fbegindate, fenddate) <> 0 then
       Edit114.Text := FloatToStr(rnd(StrToFloat(Edit112.Text) / MounthDiff(fbegindate, fenddate)))
     else
@@ -4787,12 +5134,12 @@ begin
   end;
 end;
 
-procedure TEditClForm.TabControl1Change(Sender: TObject);
+procedure TEditClForm.FactSaleControlChange(Sender: TObject);
 var
   recCount: integer;
 begin
   ClearFactGrids;
-  case TabControl1.TabIndex of
+  case FactSaleControl.TabIndex of
     0:
     begin
       with DModule do
@@ -4887,6 +5234,17 @@ begin
     RadioGroup1.ItemIndex := Cl.Data.cert - 1;
 end;
 
+procedure TEditClForm.RadioGroup2Click(Sender: TObject);
+begin
+  if RadioGroup2.ItemIndex = 1 then
+    Edit152.Visible := True
+  else
+  begin
+    Edit152.Text := '0';
+    Edit152.Visible := False;
+  end;
+end;
+
 procedure TEditClForm.Edit74Change(Sender: TObject);
 begin
   with Sender as TEdit do
@@ -4937,7 +5295,7 @@ end;
 
 procedure TEditClForm.CheckDifferenceFactSum;
 begin
-  if TabControl1.TabIndex = 1 then
+  if FactSaleControl.TabIndex = 1 then
   begin
     if StrToFloat(Edit111.Text) <= StrToFloat(Edit113.Text) then
       label77.Caption := 'Размер субсидии не превышает фактических расходов'
@@ -4964,11 +5322,6 @@ begin
     comboBoxCold.OnChange(comboBoxCold);
     comboBoxHot.OnChange(comboBoxHot);
   end;
-end;
-
-procedure TEditClForm.Button1Click(Sender: TObject);
-begin
-  Close;
 end;
 
 procedure TEditClForm.Memo1Change(Sender: TObject);
@@ -5133,6 +5486,75 @@ begin
     Edit86.Text  := Form17.nameinsp;
     if (mode = vAdd) then
       SetRegn;
+  end;
+end;
+
+procedure TEditClForm.DebtFormPayClick(Sender: TObject);
+var
+  m_return: double;
+begin
+  m_return := 0;
+  case RadioGroup2.ItemIndex of
+   -1: Exit;
+    //Полностью
+    0:
+    begin
+      m_return := StrToFloat(DebtGrid.Cells[2, DebtGrid.Row]);
+    end;
+    //Фикс. сумма
+    1:
+    begin
+      m_return := StrToFloat(Edit152.Text);
+    end;
+    //%
+    2:
+    begin
+      m_return := rnd(StrToFloat(DebtGrid.Cells[2, DebtGrid.Row]) / MounthDiff(cl.cdata.begindate, cl.cdata.enddate));
+    end;
+  end;
+
+  if MessageDlg(format('Сформировать ежемесячное удержание субсидии в размере %s руб.', [FloatToStr(m_return)]),
+    mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+
+    case DebtControl.TabIndex of
+      0:
+      begin
+      try
+        DModule.sqlConnection.BeginTrans;
+        with DModule.sqlQuery1 do
+        begin
+          Close;
+          SQL.Text :=
+            'SELECT id_debt FROM DebtPay'#13#10 +
+            'WHERE id_debt = :id';
+          Parameters.ParamByName('id').Value := debtcl[DebtGrid.Row - 1];
+          Open;
+          if RecordCount <> 0 then
+          begin
+            ShowMessage('Вы не можете сформировать повторное удержание по данной переплате!');
+            Exit;
+          end;
+
+          Close;
+          SQL.Text :=
+            'INSERT INTO DebtPay'#13#10 +
+            'VALUES (:id,convert(smalldatetime,:sd,104),0,:m_return)';
+          Parameters.ParamByName('id').Value := debtcl[DebtGrid.Row - 1];
+          Parameters.ParamByName('sd').Value := MainForm.rdt;
+          Parameters.ParamByName('m_return').Value := m_return;
+          ExecSQL;
+          DModule.sqlConnection.CommitTrans;
+          DebtControl.OnChange(self);
+        end;
+      except
+        DModule.sqlConnection.RollbackTrans;
+      end;
+      end;
+
+      1: ;
+    end;
+
   end;
 end;
 
