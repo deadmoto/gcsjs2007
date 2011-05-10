@@ -395,9 +395,11 @@ type
     DebtDelBtn: TButton;
     DebtEditBtn: TButton;
     Panel3: TPanel;
+    DebtPanel: TPanel;
     DebtFormPay: TButton;
-    RadioGroup2: TRadioGroup;
     Edit152: TEdit;
+    RadioGroup2: TRadioGroup;
+    DebtPayPauseBtn: TButton;
     procedure Button2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure comboBoxContChange(Sender: TObject);
@@ -489,6 +491,7 @@ type
     procedure DebtDelBtnClick(Sender: TObject);
     procedure RadioGroup2Click(Sender: TObject);
     procedure DebtFormPayClick(Sender: TObject);
+    procedure DebtPayPauseBtnClick(Sender: TObject);
   private
     { Private declarations }
     load, fam: boolean;
@@ -3664,6 +3667,8 @@ var
 begin
   ComboBox1.Clear;
   ClearDebtGrid;
+  DebtPanel.Visible := False;
+  DebtPayPauseBtn.Visible := False;
   comboBoxDebt.Enabled := False;
   Edit151.Text := '0';
 
@@ -3671,7 +3676,8 @@ begin
     0:
     begin
       comboBoxDebt.Enabled := True;
-
+      DebtPanel.Visible := True;
+      
       with DModule.sqlQuery1 do
       begin
         //выбираем доступные периоды
@@ -3725,6 +3731,8 @@ begin
 
     1:
     begin
+      DebtPayPauseBtn.Visible := True;
+      
       with DModule.sqlQuery1 do
       begin
         //«аполн€ем таблицу с существующими удержани€ми
@@ -3771,6 +3779,59 @@ procedure TEditClForm.DebtGridDrawCell(Sender: TObject; ACol, ARow: Integer; Rec
   State: TGridDrawState);
 begin
   SGDrawCell(Sender, ACol, ARow, Rect, State);
+end;
+
+procedure TEditClForm.DebtPayPauseBtnClick(Sender: TObject);
+begin
+  if MessageDlg('ѕодтверждаете действие?', mtConfirmation, [mbYes, mbNo], 0) <> mrYes then
+    Exit;
+    
+ if Length(debtcl) > 0 then
+   
+ case DebtControl.TabIndex of
+    1:
+    begin
+    try
+      DModule.sqlConnection.BeginTrans;
+      with DModule.sqlQuery1 do
+      begin
+        Close;
+        SQL.Text :=
+          'SELECT DebtPay.id_debt,DebtPay.paused,Debt.closed FROM DebtPay'#13#10 +
+            'INNER JOIN Debt ON Debt.id_debt = DebtPay.id_debt'#13#10 +
+          'WHERE DebtPay.id_debt = :id';
+          Parameters.ParamByName('id').Value := debtcl[DebtGrid.Row - 1];
+        Open;
+        if FieldValues['closed'] = True then
+        begin
+          ShowMessage('¬ы не можете приостановить закрытое удержание!');
+          Exit;
+        end;
+        
+        if FieldValues['paused'] = 1 then
+        begin
+          Close;
+          SQL.Text :=
+            'UPDATE DebtPay SET paused = 0 WHERE id_debt = :id';
+        end
+        else
+        begin
+          Close;
+          SQL.Text :=
+            'UPDATE DebtPay SET paused = 1 WHERE id_debt = :id';
+        end;
+
+        Parameters.ParamByName('id').Value := debtcl[DebtGrid.Row - 1];
+        ExecSQL;
+        DModule.sqlConnection.CommitTrans;
+        DebtControl.OnChange(self);
+      end;
+    except
+      DModule.sqlConnection.RollbackTrans;
+    end;
+    end;
+ end;
+
 end;
 
 procedure TEditClForm.comboBoxCoalChange(Sender: TObject);

@@ -24,7 +24,7 @@ object EditClForm: TEditClForm
     Top = 3
     Width = 598
     Height = 429
-    ActivePage = TabSheet1
+    ActivePage = TabSheet9
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
@@ -665,10 +665,6 @@ object EditClForm: TEditClForm
     object TabSheet2: TTabSheet
       Caption = #1057#1077#1084#1100#1103
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label21: TLabel
         Left = 8
         Top = 320
@@ -885,7 +881,7 @@ object EditClForm: TEditClForm
         Hint = 
           #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1089#1086#1094#1080#1072#1083#1100#1085#1099#1081' '#1089#1090#1072#1090#1091#1089' '#1076#1086#1083#1078#1077#1085' '#1089#1086#1086#1090#1074#1077#1090#1089#1090#1074#1086#1074#1072#1090#1100' '#1074#1086#1079#1088#1072#1089#1090#1091' '#1080 +
           ' '#1083#1100#1075#1086#1090#1077
-        ItemHeight = 0
+        ItemHeight = 13
         MaxLength = 30
         ParentShowHint = False
         ShowHint = True
@@ -898,7 +894,7 @@ object EditClForm: TEditClForm
         Top = 256
         Width = 266
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         MaxLength = 40
         TabOrder = 7
         OnChange = ComboBox18Change
@@ -910,7 +906,7 @@ object EditClForm: TEditClForm
         Width = 194
         Height = 21
         Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1082#1083#1080#1077#1085#1090' '#1074' '#1089#1077#1084#1100#1077' '#1084#1086#1078#1077#1090' '#1073#1099#1090#1100' '#1090#1086#1083#1100#1082#1086' '#1086#1076#1080#1085
-        ItemHeight = 0
+        ItemHeight = 13
         ParentShowHint = False
         ShowHint = True
         TabOrder = 6
@@ -980,10 +976,6 @@ object EditClForm: TEditClForm
     object TabSheet3: TTabSheet
       Caption = #1058#1072#1088#1080#1092#1099
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label43: TLabel
         Left = 12
         Top = 64
@@ -1003,7 +995,7 @@ object EditClForm: TEditClForm
         Top = 64
         Width = 334
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 0
         OnChange = ComboBox10Change
       end
@@ -1045,7 +1037,7 @@ object EditClForm: TEditClForm
             #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1074#1099#1073#1088#1072#1085#1072' '#1075#1072#1079#1086#1074#1072#1103' '#1087#1083#1080#1090#1072', '#1090#1086' '#1075#1072#1079' '#1076#1086#1083#1078#1077#1085' '#1073#1099#1090#1100' '#1090#1086#1078#1077 +
             ' '#1074#1099#1073#1088#1072#1085
           Align = alTop
-          ItemHeight = 0
+          ItemHeight = 13
           ItemIndex = 0
           ParentShowHint = False
           ShowHint = True
@@ -1072,7 +1064,7 @@ object EditClForm: TEditClForm
           Width = 175
           Height = 21
           Align = alTop
-          ItemHeight = 0
+          ItemHeight = 13
           ItemIndex = 0
           TabOrder = 0
           Text = #1062#1077#1085#1090#1088#1072#1083#1100#1085#1086#1077
@@ -1095,10 +1087,6 @@ object EditClForm: TEditClForm
         TabPosition = tpBottom
         object TabSheet7: TTabSheet
           Caption = #1054#1073#1099#1095#1085#1099#1077
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label24: TLabel
             Left = 3
             Top = 8
@@ -1167,7 +1155,7 @@ object EditClForm: TEditClForm
             Top = 8
             Width = 334
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 0
             OnChange = comboBoxContChange
           end
@@ -1195,7 +1183,7 @@ object EditClForm: TEditClForm
             Top = 30
             Width = 334
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 3
             OnChange = comboBoxMOPChange
           end
@@ -1223,7 +1211,7 @@ object EditClForm: TEditClForm
             Top = 52
             Width = 334
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 6
             OnChange = comboBoxColdChange
           end
@@ -1251,7 +1239,7 @@ object EditClForm: TEditClForm
             Top = 74
             Width = 334
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 9
             OnChange = comboBoxHotChange
           end
@@ -1279,7 +1267,7 @@ object EditClForm: TEditClForm
             Top = 96
             Width = 334
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 12
             OnChange = comboBoxCanalChange
           end
@@ -1310,7 +1298,7 @@ object EditClForm: TEditClForm
             Hint = 
               #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1086#1090#1086#1087#1083#1077#1085#1080#1077' '#1085#1077' '#1074#1099#1073#1088#1072#1085#1086', '#1079#1085#1072#1095#1080#1090' '#1077#1089#1090#1100' '#1090#1074#1077#1088#1076#1086#1077' '#1090#1086#1087#1083 +
               #1080#1074#1086', '#1080' '#1085#1072#1086#1073#1086#1088#1086#1090
-            ItemHeight = 0
+            ItemHeight = 13
             ParentShowHint = False
             ShowHint = True
             TabOrder = 15
@@ -1341,7 +1329,7 @@ object EditClForm: TEditClForm
             Width = 334
             Height = 21
             Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1075#1072#1079#1072' '#1085#1077#1090', '#1090#1086' '#1087#1083#1080#1090#1072' '#1085#1077' '#1076#1086#1083#1078#1085#1072' '#1073#1099#1090#1100' '#1075#1072#1079#1086#1074#1086#1081
-            ItemHeight = 0
+            ItemHeight = 13
             ParentShowHint = False
             ShowHint = True
             TabOrder = 18
@@ -1371,7 +1359,7 @@ object EditClForm: TEditClForm
             Top = 171
             Width = 334
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 21
             OnChange = comboBoxWoodChange
           end
@@ -1399,7 +1387,7 @@ object EditClForm: TEditClForm
             Top = 193
             Width = 334
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 24
             OnChange = comboBoxCoalChange
           end
@@ -1426,10 +1414,6 @@ object EditClForm: TEditClForm
         object TabSheet8: TTabSheet
           Caption = 'C'#1095#1077#1090#1095#1080#1082#1080
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Bevel6: TBevel
             Left = 110
             Top = 138
@@ -1484,7 +1468,7 @@ object EditClForm: TEditClForm
             Top = 20
             Width = 283
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 0
             OnChange = comboBoxColdCounterChange
           end
@@ -1531,7 +1515,7 @@ object EditClForm: TEditClForm
             Top = 42
             Width = 283
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 5
             OnChange = comboBoxHotCounterChange
           end
@@ -1540,7 +1524,7 @@ object EditClForm: TEditClForm
             Top = 64
             Width = 283
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 6
             OnChange = comboBoxCanalCounterChange
           end
@@ -1590,7 +1574,7 @@ object EditClForm: TEditClForm
             Hint = 
               #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1086#1090#1086#1087#1083#1077#1085#1080#1077' '#1085#1077' '#1074#1099#1073#1088#1072#1085#1086', '#1079#1085#1072#1095#1080#1090' '#1077#1089#1090#1100' '#1090#1074#1077#1088#1076#1086#1077' '#1090#1086#1087#1083 +
               #1080#1074#1086', '#1080' '#1085#1072#1086#1073#1086#1088#1086#1090
-            ItemHeight = 0
+            ItemHeight = 13
             ParentShowHint = False
             ShowHint = True
             TabOrder = 11
@@ -1602,7 +1586,7 @@ object EditClForm: TEditClForm
             Width = 283
             Height = 21
             Hint = #1054#1075#1088#1072#1085#1080#1095#1077#1085#1080#1103': '#1077#1089#1083#1080' '#1075#1072#1079#1072' '#1085#1077#1090', '#1090#1086' '#1087#1083#1080#1090#1072' '#1085#1077' '#1076#1086#1083#1078#1085#1072' '#1073#1099#1090#1100' '#1075#1072#1079#1086#1074#1086#1081
-            ItemHeight = 0
+            ItemHeight = 13
             ParentShowHint = False
             ShowHint = True
             TabOrder = 12
@@ -1759,10 +1743,6 @@ object EditClForm: TEditClForm
       Caption = #1057#1095#1077#1090#1072
       ImageIndex = 3
       OnExit = TabSheet4Exit
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GroupBox7: TGroupBox
         Left = 8
         Top = 24
@@ -2022,7 +2002,7 @@ object EditClForm: TEditClForm
           Top = 32
           Width = 177
           Height = 21
-          ItemHeight = 0
+          ItemHeight = 13
           TabOrder = 0
           OnChange = ComboBox19Change
           OnExit = ComboBox19Change
@@ -2032,10 +2012,6 @@ object EditClForm: TEditClForm
     object TabSheet5: TTabSheet
       Caption = #1057#1091#1073#1089#1080#1076#1080#1103
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label46: TLabel
         Left = 16
         Top = 72
@@ -3890,10 +3866,6 @@ object EditClForm: TEditClForm
     object TabSheet6: TTabSheet
       Caption = #1060#1072#1082#1090#1080#1095#1077#1089#1082#1080#1077' '#1088#1072#1089#1093#1086#1076#1099
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object FactSaleControl: TTabControl
         Left = 0
         Top = 0
@@ -3941,7 +3913,7 @@ object EditClForm: TEditClForm
               Top = 24
               Width = 145
               Height = 21
-              ItemHeight = 0
+              ItemHeight = 13
               TabOrder = 0
               OnChange = ComboBox23Change
               OnKeyPress = ComboBox23KeyPress
@@ -4009,11 +3981,13 @@ object EditClForm: TEditClForm
             object Label77: TLabel
               Left = 0
               Top = 0
-              Width = 4
-              Height = 16
+              Width = 261
+              Height = 35
               Align = alClient
               Alignment = taCenter
               WordWrap = True
+              ExplicitWidth = 4
+              ExplicitHeight = 16
             end
           end
         end
@@ -4203,39 +4177,52 @@ object EditClForm: TEditClForm
             Align = alClient
             BevelOuter = bvNone
             TabOrder = 1
-            object DebtFormPay: TButton
-              Left = 304
-              Top = 30
-              Width = 151
-              Height = 25
-              Caption = #1057#1092#1086#1088#1084#1080#1088#1086#1074#1072#1090#1100' '#1091#1076#1077#1088#1078#1072#1085#1080#1077
-              TabOrder = 0
-              OnClick = DebtFormPayClick
-            end
-            object RadioGroup2: TRadioGroup
+            object DebtPanel: TPanel
               Left = 0
               Top = 0
-              Width = 113
+              Width = 464
               Height = 63
-              Align = alLeft
-              Caption = #1059#1076#1077#1088#1078#1072#1085#1080#1077':'
-              Ctl3D = True
-              Items.Strings = (
-                #1055#1086#1083#1085#1086#1089#1090#1100#1102
-                #1060#1080#1082#1089'. '#1089#1091#1084#1084#1072
-                #1042' % '#1086#1090#1085#1086#1096#1077#1085#1080#1080)
-              ParentCtl3D = False
-              TabOrder = 1
-              OnClick = RadioGroup2Click
-            end
-            object Edit152: TEdit
-              Left = 119
-              Top = 24
-              Width = 66
-              Height = 21
-              TabOrder = 2
-              Text = '0'
-              Visible = False
+              Align = alClient
+              BevelOuter = bvNone
+              TabOrder = 0
+              ExplicitLeft = 72
+              ExplicitTop = 24
+              ExplicitWidth = 185
+              ExplicitHeight = 41
+              object DebtFormPay: TButton
+                Left = 304
+                Top = 30
+                Width = 151
+                Height = 25
+                Caption = #1057#1092#1086#1088#1084#1080#1088#1086#1074#1072#1090#1100' '#1091#1076#1077#1088#1078#1072#1085#1080#1077
+                TabOrder = 0
+                OnClick = DebtFormPayClick
+              end
+              object Edit152: TEdit
+                Left = 119
+                Top = 24
+                Width = 66
+                Height = 21
+                TabOrder = 1
+                Text = '0'
+                Visible = False
+              end
+              object RadioGroup2: TRadioGroup
+                Left = 0
+                Top = 0
+                Width = 113
+                Height = 63
+                Align = alLeft
+                Caption = #1059#1076#1077#1088#1078#1072#1085#1080#1077':'
+                Ctl3D = True
+                Items.Strings = (
+                  #1055#1086#1083#1085#1086#1089#1090#1100#1102
+                  #1060#1080#1082#1089'. '#1089#1091#1084#1084#1072
+                  #1042' % '#1086#1090#1085#1086#1096#1077#1085#1080#1080)
+                ParentCtl3D = False
+                TabOrder = 2
+                OnClick = RadioGroup2Click
+              end
             end
           end
         end
@@ -4256,6 +4243,16 @@ object EditClForm: TEditClForm
           Caption = #1048#1079#1084#1077#1085#1080#1090#1100
           TabOrder = 6
           Visible = False
+        end
+        object DebtPayPauseBtn: TButton
+          Left = 491
+          Top = 160
+          Width = 75
+          Height = 25
+          Caption = #1055#1072#1091#1079#1072
+          TabOrder = 7
+          Visible = False
+          OnClick = DebtPayPauseBtnClick
         end
       end
     end
