@@ -13,6 +13,11 @@ type
     Version: TLabel;
     Copyright: TLabel;
     Comments: TLabel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure Panel1Click(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
