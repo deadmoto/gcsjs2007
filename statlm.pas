@@ -229,9 +229,12 @@ begin
     end;
     DModule.Database1.Commit;
     Result := ncl;
-  except
+  except on E: Exception do
+  begin
     DModule.Database1.Rollback;
+    ShowMessage(E.Message);
     Result := -1;
+  end;
   end;
   pr.Close;
   pr.Release;
@@ -387,7 +390,7 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('select id_norm, countp, snorm, phnorm, hnorm, phnorm from norm');
+    SQL.Add('select id_norm, countp, snorm, phnorm as psnorm, hnorm, phnorm from norm');
     Open;
   end;
 end;

@@ -50,7 +50,7 @@ begin
 
   //if CheckRegProperty('Password', True) then
     _password := ReadRegProperty('Password');
-
+  
   Database1.Params.Values['USER NAME'] := _user;
   Database1.Params.Values['PASSWORD'] := GetConnectionPass(_password);
 

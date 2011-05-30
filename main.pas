@@ -326,6 +326,7 @@ type
     normc, normw: real;//нормативы расхода угля и дров в год
     normsc, normsw: integer;//нормы продажи угля и дров в год
     insp:         integer;//текущий инспектор
+    office:       integer;//текущий участок
     dist:         integer;//текущий округ
     client:       integer;//текущий клиент
     status:       integer;//текущий статус клиента
@@ -1462,7 +1463,7 @@ end;
 begin
   if (Length(cl) > 0) then
   begin
-    if (status = 0) and (GetCert(client) = 2) then
+    if (status = 0) then // and (GetCert(client) = 2) then
     begin
       i := SGCl.Row - 1;
       if MessageBox(MainForm.Handle, PChar('Удаление у клиента "' + SGCL.Cells[0, i + 1] + '" текущего периода.' + #13 +
@@ -1547,7 +1548,7 @@ var
   s1, s2, priv_str: string;
   pl: integer;
   cd: TDateTime;
-  tmpQuery: TADOQuery;
+  tmpQuery: TQuery;
 
   procedure GetPPriv;
   begin
@@ -1560,7 +1561,7 @@ var
       SQL.Add('from priv inner join fam');
       SQL.Add('on priv.id_priv=fam.id_priv');
       SQL.Add('where (fam.regn=:id)');
-      ParamByName('id').AsInteger := client;
+      ParamByName('id').Value := client;
       Open;
       while not EOF do
       begin
@@ -1603,8 +1604,8 @@ var
       SQL.Add('select id_service');
       SQL.Add('from sub');
       SQL.Add('where (regn=:id)and(service=7)and(sdate=convert(smalldatetime,:d,104))');
-      ParamByName('id').AsInteger := client;
-      ParamByName('d').AsString := s1;
+      ParamByName('id').Value := client;
+      ParamByName('d').Value := s1;
       Open;
       pl := FieldByName('id_service').AsInteger;
       Close;
@@ -1672,8 +1673,8 @@ var
   end;
 
 begin
-  tmpQuery := TADOQuery.Create(Application);
-  tmpQuery.Connection := DModule.sqlConnection;
+  tmpQuery := TQuery.Create(DModule.Database1);
+  tmpQuery.DatabaseName := 'Subsidy';
   if (Length(cl) > 0) then
   begin
     s1 := Copy(SGCl.Cells[2, SGCl.row], 1, 10); //begindate
@@ -1705,8 +1706,8 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('execute getcl :id,:d');
-        ParamByName('id').AsInteger := client;
-        ParamByName('d').AsString := s1;
+        ParamByName('id').Value := client;
+        ParamByName('d').Value := s1;
         Open;
       end;
       with tmpQuery do
@@ -1714,8 +1715,8 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('execute getsub :id, :s');
-        Parameters.ParamByName('id').Value := client;
-        Parameters.ParamByName('s').Value := s1;
+        ParamByName('id').Value := client;
+        ParamByName('s').Value := s1;
         Open;
       end;
       i  := 0;
@@ -1742,6 +1743,11 @@ begin
       frxReport1.Variables.Variables['fio'] := Quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 3));
       frxReport1.Variables.Variables['fio_g'] := Quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 2));
       frxReport1.Variables.Variables['fio_s'] := quotedstr(GetShortName(SGCl.Cells[0, SGCl.row]));
+
+//      for i := 0 to frxReport1.Variables.Count - 1 do
+//      if (VarType(frxReport1.Variables.Items[i].Value) = varString) and (VarType(frxReport1.Variables.Items[i].Value) <> varNull) then
+//        frxReport1.Variables.Items[i].Value := NormalizeSpaces(Trim(frxReport1.Variables.Items[i].Value));
+
       frxReport1.PrepareReport;
       if MessageBox(MainForm.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
         PChar('Предварительный просмотр'), MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
@@ -1771,8 +1777,8 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('execute getcl :id,:d');
-        ParamByName('id').AsInteger := client;
-        ParamByName('d').AsString := s1;
+        ParamByName('id').Value := client;
+        ParamByName('d').Value := s1;
         Open;
       end;
 
@@ -1781,8 +1787,8 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('execute getsub :id, :s');
-        Parameters.ParamByName('id').Value := client;
-        Parameters.ParamByName('s').Value := s1;
+        ParamByName('id').Value := client;
+        ParamByName('s').Value := s1;
         Open;
       end;
 
@@ -1790,6 +1796,10 @@ begin
       ReportDataFrm.RepType := rUvedomo;
       ReportsFillAdditionData(DModule.Query1.FieldByName('nameinsp').AsString);
       ReportsFillDistInfo();
+
+//      for i := 0 to frxReport1.Variables.Count - 1 do
+//      if (VarType(frxReport1.Variables.Items[i].Value) = varString) and (VarType(frxReport1.Variables.Items[i].Value) <> varNull) then
+//        frxReport1.Variables.Items[i].Value := NormalizeSpaces(Trim(frxReport1.Variables.Items[i].Value));
 
       frxReport1.PrepareReport;
       if MessageBox(MainForm.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
@@ -1818,7 +1828,7 @@ var
   s1, s2, priv_str: string;
   priv: TStringList;
   pl: integer;
-  tmpQuery, tmpQuery2: TADOQuery;
+  tmpQuery, tmpQuery2: TQuery;
   
 procedure GetStnd;
 var
@@ -1835,10 +1845,10 @@ begin
 end;
 
 begin
-  tmpQuery := TADOQuery.Create(Application);
-  tmpQuery.Connection := DModule.sqlConnection;
-  tmpQuery2 := TADOQuery.Create(Application);
-  tmpQuery2.Connection := DModule.sqlConnection;
+  tmpQuery := TQuery.Create(DModule.Database1);
+  tmpQuery.DatabaseName := 'Subsidy';
+  tmpQuery2 := TQuery.Create(DModule.Database1);
+  tmpQuery2.DatabaseName := 'Subsidy';
   if (Length(cl) > 0) then
   begin
     if (status < 3) then
@@ -1937,8 +1947,8 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('execute getsub :id, :s');
-        Parameters.ParamByName('id').Value := client;
-        Parameters.ParamByName('s').Value := s1;
+        ParamByName('id').Value := client;
+        ParamByName('s').Value := s1;
       end;
       //не удалять, необходимо для формирования отчета!!!!!
 
@@ -1948,8 +1958,8 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('execute getsub :id, :s');
-        Parameters.ParamByName('id').Value := client;
-        Parameters.ParamByName('s').Value := rdt;
+        ParamByName('id').Value := client;
+        ParamByName('s').Value := rdt;
       end;
 
       frxReport1.PrepareReport;
@@ -3056,10 +3066,10 @@ var
   c: TClient;
   i: integer;
   bdate, edate: TDate;
-  tmpQuery: TADOQuery;
+  tmpQuery: TQuery;
 begin
-  tmpQuery := TADOQuery.Create(Application);
-  tmpQuery.Connection := DModule.sqlConnection;
+  tmpQuery := TQuery.Create(DModule.Database1);
+  tmpQuery.DatabaseName := 'Subsidy';
   
   c := TClient.Create(Empty, EmptyC);
   c.SetClient(client, MainForm.rdt);
@@ -3076,13 +3086,14 @@ begin
   with tmpQuery do
   begin
     Close;
-    SQL.Text := 'SELECT  sdate, SUM(sub) as subsum FROM Sub'#13+
-      'WHERE (regn = :rgn) and (sdate >= convert(smalldatetime,:bd,104)) and (sdate < convert(smalldatetime,:ed,104))'#13+
-      'GROUP BY sdate'#13+
+    SQL.Text :=
+      'SELECT  sdate, SUM(sub) as subsum FROM Sub'#13#10+
+      'WHERE (regn = :rgn) and (sdate >= convert(smalldatetime,:bd,104)) and (sdate < convert(smalldatetime,:ed,104))'#13#10+
+      'GROUP BY sdate'#13#10+
       'ORDER BY sdate desc';
-    Parameters.ParamByName('rgn').Value := client;
-    Parameters.ParamByName('bd').Value := DateToStr(bdate);
-    Parameters.ParamByName('ed').Value := DateToStr(edate);
+    ParamByName('rgn').Value := client;
+    ParamByName('bd').Value := DateToStr(bdate);
+    ParamByName('ed').Value := DateToStr(edate);
     Open;
     First;
   end;
@@ -3106,7 +3117,7 @@ begin
   Sheet.Cells.Replace(':bdate:', StringDate(bdate), xlPart, xlByRows, False, False, False);
   Sheet.Cells.Replace(':edate:', StringDate(edate), xlPart, xlByRows, False, False, False);
   Sheet.Cells.Replace(':fio:', GetShortName(SGCl.Cells[0, SGCl.row]), xlPart, xlByRows, False, False, False);
-  Sheet.Cells.Replace(':insp:', SelInsp(c.data.insp), xlPart, xlByRows, False, False, False);
+  Sheet.Cells.Replace(':insp:', SplitString(StatusBar1.Panels[1].Text, ' ')[1], xlPart, xlByRows, False, False, False);
   Sheet.Cells.Replace(':boss:', SelBoss(dist), xlPart, xlByRows, False, False, False);
   if ( c.cdata.prevbegindate = c.cdata.begindate) then
   begin

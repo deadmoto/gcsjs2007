@@ -21,7 +21,7 @@ type
     procedure LabeledEdit1KeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
-    insp: array of integer;
+    insp, office: array of integer;
   public
     { Public declarations }
     ac: boolean;
@@ -46,7 +46,7 @@ begin
   With DModule.Query1 do begin
     Close;
     SQL.Clear;
-    SQL.Add('select id_insp, nameinsp');
+    SQL.Add('select id_insp, nameinsp, id_office');
     SQL.Add('from insp');
     SQL.Add('where (status = :st) and (id_dist = :id)');
     SQL.Add('order by nameinsp');
@@ -54,14 +54,19 @@ begin
     ParamByName('id').AsInteger := MainForm.dist;
     Open;
     First;
-    while not EOF do begin
+    while not EOF do
+    begin
       SetLength(insp, Length(insp)+1);
+      SetLength(office, Length(office)+1);
       ComboBox1.Items.Add(FieldByName('nameinsp').AsString);
       insp[l] := FieldByName('id_insp').AsInteger;
+      office[l] := FieldByName('id_office').AsInteger;
+
       if insp[l]=MainForm.insp then
         ComboBox1.ItemIndex := l
       else
         ComboBox1.ItemIndex := 0;
+
       Next;
       inc(l);
     end;
@@ -98,6 +103,7 @@ begin
   if GenMD5Password(LabeledEdit1.Text) = tmp_pass then
   begin
     MainForm.insp := insp[ComboBox1.ItemIndex];
+    MainForm.office := office[ComboBox1.ItemIndex];
     ac := true;
     nameinsp := ComboBox1.Items[ComboBox1.ItemIndex];
     MainForm.Statusbar1.Panels[1].Text := 'Инспектор: '+ ComboBox1.Items[ComboBox1.ItemIndex];

@@ -3172,7 +3172,7 @@ object MainForm: TMainForm
     object Action3: TAction
       Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
       Caption = #1059#1083#1080#1094#1099'...'
-      OnExecute = Action21Execute
+      OnExecute = Action3Execute
     end
     object Action4: TAction
       Category = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080

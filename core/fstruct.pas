@@ -7,7 +7,8 @@ uses
   DB,
   Classes,
   Controls,
-  service;
+  service,
+  Variants;
 
 type
   T2DString = array of array of string;
@@ -31,6 +32,7 @@ procedure ExportClm(path, dt: string; dis: integer);
 procedure ExportHistm(path, dt: string; dis: integer);
 procedure ExportFamm(path, dt: string; dis: integer);
 procedure ExportDebt(path: string; dis: integer);
+procedure ExportOffice(path: string; dis: integer);
 
 procedure ImportInsp(path: string; dis: integer);
 procedure ImportBank(path: string);
@@ -57,6 +59,7 @@ procedure ImportPriv(path: string);
 procedure ImportRStnd(path: string);
 procedure ImportFact(path: string; dis: integer);
 procedure ImportDebt(path: string; dis: integer);
+procedure ImportOffice(path: string; dis: integer);
 
 procedure FillTable2(path, fname: string);
 
@@ -284,7 +287,7 @@ begin
     end;
     Parameters.ParamByName('dist').Value := dis;
     Open;
-    FillTable(path, 'sluj' + IntToStr(dis), MainForm.codedbf);
+    FillTable2(path, 'sluj' + IntToStr(dis));
   end;
 end;
 
@@ -332,6 +335,21 @@ begin
     Parameters.ParamByName('dist').Value := dis;
     Open;
     FillTable2(path, 'debtpay' + IntToStr(dis));
+  end;
+end;
+
+procedure ExportOffice(path: string; dis: integer);
+{ процедура экспорта участков }
+begin
+  with DModule.sqlQuery1 do
+  begin
+    Close;
+    SQL.Text :=
+      'SELECT Office.* FROM Office'#13#10 +
+      'WHERE Office.id_dist=:dist';
+    Parameters.ParamByName('dist').Value := dis;
+    Open;
+    FillTable2(path, 'office' + IntToStr(dis));
   end;
 end;
 
@@ -647,7 +665,11 @@ begin
         sqlQuery1.Parameters.ParamByName('sub').Value := StrToFloat(f[i][4]);
         sqlQuery1.Parameters.ParamByName('factsum').Value := StrToFloat(f[i][5]);
         sqlQuery1.Parameters.ParamByName('dis').Value := StrToFloat(f[i][6]);
-        sqlQuery1.ExecSQL;
+        try
+          sqlQuery1.ExecSQL;
+        except on E : Exception do
+          ShowMessage(E.Message);
+        end;
       end;
       sqlQuery1.Close;
       sqlQuery2.Close;
@@ -684,11 +706,18 @@ begin
         sqlQuery1.Parameters.ParamByName('edate').Value := f[i][2];
         sqlQuery1.Parameters.ParamByName('balance').Value := StrToFloat(f[i][3]);
         if f[i][4] = '' then
-          sqlQuery1.Parameters.ParamByName('dolg').Value := ''
+          begin
+            sqlQuery1.Parameters.ParamByName('dolg').Value := Null;
+            sqlQuery1.Parameters.ParamByName('dolg').DataType := ftFloat;
+          end
         else
           sqlQuery1.Parameters.ParamByName('dolg').Value := StrToFloat(f[i][4]);
         sqlQuery1.Parameters.ParamByName('dis').Value := StrToFloat(f[i][5]);
-        sqlQuery1.ExecSQL;
+        try
+          sqlQuery1.ExecSQL;
+        except on E : Exception do
+          ShowMessage(E.Message);
+        end;
       end;
       sqlQuery1.Close;
       sqlQuery2.Close;
@@ -1065,48 +1094,67 @@ end;
 procedure ImportSluj(path: string; dis: integer);
 { процедура импорта служебных }
 var
-  f: T2DString;
   i: integer;
+  dbfQuery: TADOQuery;
 begin
+  dbfQuery := TADOQuery.Create(nil);
+  dbfQuery.ConnectionString := DModule.SetDBFConnectStr(path);
+
   with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO sluj');
-    SQL.Add('VALUES (CONVERT(smalldatetime,:d,104),:id,:serv,:pm,:snp,:sub, :fact,:debt)');
+    SQL.Add('VALUES (:d,:id,:serv,:pm,:snp,:sub, :fact,:debt)');
   end;
   if FileExists(path + 'sluj' + IntToStr(dis) + '.dbf') then
   begin
-    GetData(path + 'sluj' + IntToStr(dis) + '.dbf', f);
+    dbfQuery.SQL.Text := 'SELECT * FROM sluj' + IntToStr(dis);
+    dbfQuery.Open;
+
     with DModule do
     begin
-      for i := 0 to high(f) do
+      for i := 0 to dbfQuery.RecordCount - 1 do
       begin
         sqlQuery2.Close;
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM sluj');
-        sqlQuery2.SQL.Add('WHERE (regn =:id)and(sdate=convert(smalldatetime,:d,104))');
-        sqlQuery2.SQL.Add('and(service=:serv)');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][1];
-        sqlQuery2.Parameters.ParamByName('d').Value  := f[i][0];
-        sqlQuery2.Parameters.ParamByName('serv').Value := f[i][2];
+        sqlQuery2.SQL.Add('WHERE (regn =:id)and(sdate=:d)and(service=:serv)and(id_debt=:debt)');
+
+        if VarType(dbfQuery.Fields[7].Value) = varNull then
+          sqlQuery2.SQL.Text := StringReplace(sqlQuery2.SQL.Text, 'id_debt=:debt', 'id_debt is NULL', [rfReplaceAll, rfIgnoreCase]);
+
+        sqlQuery2.Parameters.ParamByName('id').Value := dbfQuery.Fields[1].Value;
+        sqlQuery2.Parameters.ParamByName('d').Value  := dbfQuery.Fields[0].Value;
+        sqlQuery2.Parameters.ParamByName('serv').Value := dbfQuery.Fields[2].Value;
+
+        if VarType(dbfQuery.Fields[7].Value) <> varNull then
+          sqlQuery2.Parameters.ParamByName('debt').Value := dbfQuery.Fields[7].Value;
+        //sqlQuery2.Parameters.ParamByName('debt').DataType := ftGuid;
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('d').Value  := f[i][0];
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('serv').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('pm').Value := StrToFloat(f[i][3]);
-        sqlQuery1.Parameters.ParamByName('snp').Value := StrToFloat(f[i][4]);
-        sqlQuery1.Parameters.ParamByName('sub').Value := StrToFloat(f[i][5]);
-        sqlQuery1.Parameters.ParamByName('fact').Value := StrToInt(f[i][6]);
-        sqlQuery1.Parameters.ParamByName('debt').Value := f[i][7];
+
+        sqlQuery1.Parameters.ParamByName('d').Value  := dbfQuery.Fields[0].Value;
+        sqlQuery1.Parameters.ParamByName('id').Value := dbfQuery.Fields[1].Value;
+        sqlQuery1.Parameters.ParamByName('serv').Value := dbfQuery.Fields[2].Value;
+        sqlQuery1.Parameters.ParamByName('pm').Value := dbfQuery.Fields[3].Value;
+        sqlQuery1.Parameters.ParamByName('snp').Value := dbfQuery.Fields[4].Value;
+        sqlQuery1.Parameters.ParamByName('sub').Value := dbfQuery.Fields[5].Value;
+        sqlQuery1.Parameters.ParamByName('fact').Value := dbfQuery.Fields[6].Value;
+        sqlQuery1.Parameters.ParamByName('debt').Value := dbfQuery.Fields[7].Value;
+        if VarType(dbfQuery.Fields[7].Value) <> varNull then
+          sqlQuery1.Parameters.ParamByName('debt').DataType := ftGuid;
         sqlQuery1.ExecSQL;
+        dbfQuery.Next;
       end;
       sqlQuery1.Close;
       sqlQuery2.Close;
+      dbfQuery.Close;
     end;
   end
   else
     ShowMessage('Файл ' + path + 'sluj' + IntToStr(dis) + '.dbf не найден!');
+
+  dbfQuery.Free;    
 end;
 
 procedure ImportInsp(path: string; dis: integer);
@@ -1263,7 +1311,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('INSERT INTO dist');
-    SQL.Add('VALUES (:id, :name, :b, :adr, :tel)');
+    SQL.Add('VALUES (:id, :name, :b, :nameokr, :adr, :tel)');
   end;
   if FileExists(path + 'dist.dbf') then
   begin
@@ -1281,8 +1329,9 @@ begin
         sqlQuery1.Parameters.ParamByName('id').Value := f[i][0];
         sqlQuery1.Parameters.ParamByName('name').Value := f[i][1];
         sqlQuery1.Parameters.ParamByName('b').Value  := f[i][2];
-        sqlQuery1.Parameters.ParamByName('adr').Value := f[i][3];
-        sqlQuery1.Parameters.ParamByName('tel').Value := f[i][4];
+        sqlQuery1.Parameters.ParamByName('nameokr').Value := f[i][3];
+        sqlQuery1.Parameters.ParamByName('adr').Value := f[i][4];
+        sqlQuery1.Parameters.ParamByName('tel').Value := f[i][5];
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1718,6 +1767,7 @@ begin
         sqlQuery1.Parameters.ParamByName('closed').Value := dbfQuery.Fields[7].Value;
         sqlQuery1.Parameters.ParamByName('closed_date').Value := dbfQuery.Fields[8].Value;
         sqlQuery1.ExecSQL;
+        dbfQuery.Next;
       end;
       sqlQuery1.Close;
       sqlQuery2.Close;
@@ -1753,6 +1803,7 @@ begin
         sqlQuery1.Parameters.ParamByName('paused').Value := dbfQuery.Fields[2].Value;
         sqlQuery1.Parameters.ParamByName('m_return').Value := dbfQuery.Fields[3].Value;
         sqlQuery1.ExecSQL;
+        dbfQuery.Next;
       end;
       sqlQuery1.Close;
       sqlQuery2.Close;
@@ -1761,6 +1812,55 @@ begin
   end
   else
     ShowMessage('Файл ' + path + 'debtpay' + IntToStr(dis) + '.dbf не найден!');
+
+  dbfQuery.Free;
+end;
+
+procedure ImportOffice(path: string; dis: integer);
+{ процедура импорта участков }
+var
+  i: integer;
+  dbfQuery: TADOQuery;
+begin
+  dbfQuery := TADOQuery.Create(nil);
+  dbfQuery.ConnectionString := DModule.SetDBFConnectStr(path);
+
+  with DModule.sqlQuery1 do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('INSERT INTO office');
+    SQL.Add('VALUES (:id_dist, :id_office, :adr, :tel)');
+  end;
+  if FileExists(path + 'office' + IntToStr(dis) + '.dbf') then
+  begin
+    dbfQuery.SQL.Text := 'SELECT * FROM office' + IntToStr(dis);
+    dbfQuery.Open;
+    with DModule do
+    begin
+      for i := 0 to dbfQuery.RecordCount - 1 do
+      begin
+        sqlQuery2.Close;
+        sqlQuery2.SQL.Clear;
+        sqlQuery2.SQL.Add('DELETE FROM office');
+        sqlQuery2.SQL.Add('WHERE id_dist=:id_dist AND id_office=:id_office');
+        sqlQuery2.Parameters.ParamByName('id_dist').Value := dbfQuery.Fields[0].Value;
+        sqlQuery2.Parameters.ParamByName('id_office').Value := dbfQuery.Fields[1].Value;
+        sqlQuery2.ExecSQL;
+        sqlQuery1.Parameters.ParamByName('id_dist').Value := dbfQuery.Fields[0].Value;
+        sqlQuery1.Parameters.ParamByName('id_office').Value := dbfQuery.Fields[1].Value;
+        sqlQuery1.Parameters.ParamByName('adr').Value := dbfQuery.Fields[2].Value;
+        sqlQuery1.Parameters.ParamByName('tel').Value := dbfQuery.Fields[3].Value;
+        sqlQuery1.ExecSQL;
+        dbfQuery.Next;
+      end;
+      sqlQuery1.Close;
+      sqlQuery2.Close;
+      dbfQuery.Close;
+    end;
+  end
+  else
+    ShowMessage('Файл ' + path + 'office' + IntToStr(dis) + '.dbf не найден!');
 
   dbfQuery.Free;
 end;
@@ -1814,7 +1914,7 @@ begin
       begin
         dbfQuery.Parameters.ParamValues[FleldList[i] + 'P'] :=
           sqlQuery1.FieldValues[FleldList[i]];
-          
+
         if TypeList[i] in [ftDate, ftDateTime] then
           dbfQuery.Parameters[i].DataType := ftDate;
       end;
@@ -1879,7 +1979,7 @@ begin
     ftFixedChar:
       ;
     ftWideString:
-      ;
+      Result := 'CHAR';
     ftLargeint:
       ;
     ftADT:

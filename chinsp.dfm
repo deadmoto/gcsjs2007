@@ -31,7 +31,7 @@ object Form17: TForm17
       Top = 25
       Width = 229
       Height = 21
-      ItemHeight = 0
+      ItemHeight = 13
       TabOrder = 0
     end
     object LabeledEdit1: TLabeledEdit

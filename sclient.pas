@@ -400,6 +400,10 @@ type
     Edit152: TEdit;
     RadioGroup2: TRadioGroup;
     DebtPayPauseBtn: TButton;
+    GroupBox17: TGroupBox;
+    officeEdit: TEdit;
+    FactMinusDebtBtn: TButton;
+    Label97: TLabel;
     procedure Button2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure comboBoxContChange(Sender: TObject);
@@ -492,6 +496,7 @@ type
     procedure RadioGroup2Click(Sender: TObject);
     procedure DebtFormPayClick(Sender: TObject);
     procedure DebtPayPauseBtnClick(Sender: TObject);
+    procedure FactMinusDebtBtnClick(Sender: TObject);
   private
     { Private declarations }
     load, fam: boolean;
@@ -883,6 +888,7 @@ begin
   Edit115.Text := '0';
   Edit116.Text := '0';
   npssEdit.Text := '';
+  officeEdit.Text := '';
   MaskEdit5.Text := '';
   MaskEdit6.Text := '';
   MaskEdit4.Text := '';
@@ -1556,6 +1562,7 @@ begin
   Memo1.Text  := Cl.Data.reason;
   Edit73.Text := FormatFloat('0.00', Cl.cdata.income);
   Edit94.Text := FormatFloat('0.00', Cl.cdata.pmin);
+  officeEdit.Text := SelOffice(Cl.data.office);
   if Cl.cdata.family.Count > 0 then
   begin
     Edit69.Text := TMan(Cl.cdata.family[curman]).fio;
@@ -2319,6 +2326,57 @@ begin
       FactGrid.Cells[3, ARow] := calcMDiff(FactGrid.Cells[1, ARow], FactGrid.Cells[2, ARow]);
       UpdateFactInfo();
     end;
+end;
+
+procedure TEditClForm.FactMinusDebtBtnClick(Sender: TObject);
+begin
+  if (StrToFloat(Edit113.Text) > 0) then
+  begin
+    try
+      DModule.sqlConnection.BeginTrans;
+      with DModule.sqlQuery1 do
+      begin
+        Close;
+        SQL.Text :=
+          'SELECT id_debt FROM Debt'#13#10 +
+          'WHERE (regn = :regn) and (id_sluj=:idsluj) and (bdate = convert(smalldatetime, :bd, 104))';
+        Parameters.ParamByName('regn').Value := Cl.Data.regn;
+        Parameters.ParamByName('idsluj').Value := 2;
+        Parameters.ParamByName('bd').Value := SplitString(ComboBox23.Text, '-')[0];
+        Open;
+        if RecordCount = 0 then
+        begin
+          if MessageDlg(format('Сформировать переплату в размере %s руб.', [Edit113.Text]),
+            mtConfirmation, [mbYes, mbNo], 0) <> mrYes then Exit;
+
+          Close;
+          SQL.Text :=
+            'INSERT INTO Debt (id_debt,id_sluj,dist,regn,bdate,edate,sumdebt,closed )'#13#10 +
+            'VALUES (newid(),:idsluj,:dist,:regn,convert(smalldatetime,:bd,104),convert(smalldatetime,:ed,104),:sumdebt,0)';
+          Parameters.ParamByName('idsluj').Value := 2;
+          Parameters.ParamByName('dist').Value := MainForm.dist;
+          Parameters.ParamByName('regn').Value := Cl.Data.regn;
+          Parameters.ParamByName('bd').Value := SplitString(ComboBox23.Text, '-')[0];
+          Parameters.ParamByName('ed').Value := SplitString(ComboBox23.Text, '-')[1];
+          Parameters.ParamByName('sumdebt').Value := StrToFloat(Edit113.Text);
+          ExecSQL;
+          DModule.sqlConnection.CommitTrans;
+        end
+        else
+        begin
+          ShowMessage('В базе уже имеется данная переплата!');
+          DModule.sqlConnection.RollbackTrans;
+        end;
+      end;
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Exception message = '+E.Message);
+        DModule.sqlConnection.RollbackTrans;
+      end;
+    end;
+  end;
+  
 end;
 
 procedure TEditClForm.Button20Click(Sender: TObject);
@@ -3401,6 +3459,24 @@ begin
   ChangeFactPeriod(fbegindate, fenddate);
   UpdateFactInfo();
   CheckDifferenceFactSum;
+
+  Label97.Visible := False;
+  with DModule.sqlQuery1 do
+  begin
+    Close;
+    SQL.Text :=
+      'SELECT id_debt, closed FROM Debt'#13#10 +
+      'WHERE (regn = :regn) and (id_sluj=:idsluj) and (bdate = convert(smalldatetime, :bd, 104))';
+    Parameters.ParamByName('regn').Value := Cl.Data.regn;
+    Parameters.ParamByName('idsluj').Value := 2;
+    Parameters.ParamByName('bd').Value := SplitString(ComboBox23.Text, '-')[0];
+    Open;
+    if RecordCount <> 0 then
+    begin
+      if FieldValues['closed'] = 1 then
+        Label97.Visible := True;
+    end;
+  end;
 end;
 
 procedure TEditClForm.ComboBox23KeyPress(Sender: TObject; var Key: char);
@@ -3548,28 +3624,30 @@ begin
     begin
     try
       DModule.sqlConnection.BeginTrans;
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
         Close;
         SQL.Text :=
           'SELECT id_debt FROM Debt'#13#10 +
           'WHERE (regn = :regn) and (id_sluj=:idsluj) and (bdate = convert(smalldatetime, :bd, 104))';
-        ParamByName('regn').Value := Cl.Data.regn;
-        ParamByName('idsluj').Value := debt[comboBoxDebt.ItemIndex];
-        ParamByName('bd').AsString := SplitString(ComboBox1.Text, '-')[0];
+        Parameters.ParamByName('regn').Value := Cl.Data.regn;
+        Parameters.ParamByName('idsluj').Value := debt[comboBoxDebt.ItemIndex];
+        Parameters.ParamByName('bd').Value := SplitString(ComboBox1.Text, '-')[0];
         Open;
+
         if RecordCount = 0 then
         begin
           Close;
+          SQL.Clear;
           SQL.Text :=
             'INSERT INTO Debt (id_debt,id_sluj,dist,regn,bdate,edate,sumdebt,closed )'#13#10 +
             'VALUES (newid(),:idsluj,:dist,:regn,convert(smalldatetime,:bd,104),convert(smalldatetime,:ed,104),:sumdebt,0)';
-          ParamByName('idsluj').Value := debt[comboBoxDebt.ItemIndex];
-          ParamByName('dist').Value := MainForm.dist;
-          ParamByName('regn').Value := Cl.Data.regn;
-          ParamByName('bd').AsString := SplitString(ComboBox1.Text, '-')[0];
-          ParamByName('ed').AsString := SplitString(ComboBox1.Text, '-')[1];
-          ParamByName('sumdebt').Value := StrToFloat(Edit151.Text);
+          Parameters.ParamByName('idsluj').Value := debt[comboBoxDebt.ItemIndex];
+          Parameters.ParamByName('dist').Value := MainForm.dist;
+          Parameters.ParamByName('regn').Value := Cl.Data.regn;
+          Parameters.ParamByName('bd').Value := SplitString(ComboBox1.Text, '-')[0];
+          Parameters.ParamByName('ed').Value := SplitString(ComboBox1.Text, '-')[1];
+          Parameters.ParamByName('sumdebt').Value := StrToFloat(Edit151.Text);
           ExecSQL;
         end;
         DModule.sqlConnection.CommitTrans;
@@ -3644,12 +3722,20 @@ begin
 
         Close;
         SQL.Text :=
-          'DELETE FROM Sluj WHERE id_debt = :id;'#13#10 +
-          'DELETE FROM DebtPay WHERE id_debt = :id;'+#13#10+
+          'DELETE FROM Sluj WHERE id_debt = :id';
+        Parameters.ParamByName('id').Value := debtcl[DebtGrid.Row - 1];
+        ExecSQL;
+        Close;
+        SQL.Text :=
+          'DELETE FROM DebtPay WHERE id_debt = :id';
+        Parameters.ParamByName('id').Value := debtcl[DebtGrid.Row - 1];
+        ExecSQL;
+        Close;
+        SQL.Text :=
           'UPDATE Debt SET closed = 0, closed_date = NULL WHERE id_debt = :id';
         Parameters.ParamByName('id').Value := debtcl[DebtGrid.Row - 1];
         ExecSQL;
-
+        
         DModule.sqlConnection.CommitTrans;
         DebtControl.OnChange(self);
       end;
@@ -3684,10 +3770,10 @@ begin
         Close;
         SQL.Text :=
           'SELECT   bdate, edate FROM Hist'#13#10 +
-          'WHERE    (regn = :regn) and (bdate < convert(smalldatetime, :bd, 104))'#13#13 +
+          'WHERE    (regn = :regn)'#13#13 +
           'ORDER BY bdate';
         Parameters.ParamByName('regn').Value := Cl.Data.regn;
-        Parameters.ParamByName('bd').Value := DateToStr(cl.cdata.begindate);
+        //Parameters.ParamByName('bd').Value := DateToStr(cl.cdata.begindate);
         Open;
         while not EOF do
         begin
@@ -4491,8 +4577,6 @@ end;
 procedure TEditClForm.ComboBox1Change(Sender: TObject);
 begin
   if DebtControl.TabIndex <> 1 then Exit;
-
-
 end;
 
 procedure TEditClForm.ChangeFactPeriod(BD, ED: TDateTime);
@@ -5249,6 +5333,7 @@ begin
         Query1.Open;
         Query1.First;
       end;
+      FactMinusDebtBtn.Visible := False;
       Button20.Caption := 'Добавить';
       Button21.Visible := False;
     end;
@@ -5267,11 +5352,12 @@ begin
         Query1.Open;
         Query1.First;
       end;
+      FactMinusDebtBtn.Visible := True;
       Button20.Caption := 'Изменить';
       Button21.Visible := True;
     end;
   end;
-
+  Label97.Visible := False;
   Combobox23.Items.Clear;
   with DModule do
   begin
@@ -5544,10 +5630,12 @@ begin
   if Form17.ac and (Cl.Data.insp <> MainForm.insp) then
   begin
     Cl.Data.insp := MainForm.insp;
+    Cl.Data.office := MainForm.office;
     Edit86.Text  := Form17.nameinsp;
     if (mode = vAdd) then
       SetRegn;
   end;
+  officeEdit.Text := SelOffice(Cl.Data.office);
 end;
 
 procedure TEditClForm.DebtFormPayClick(Sender: TObject);
@@ -5573,6 +5661,8 @@ begin
       m_return := rnd(StrToFloat(DebtGrid.Cells[2, DebtGrid.Row]) / MounthDiff(cl.cdata.begindate, cl.cdata.enddate));
     end;
   end;
+  if m_return > StrToFloat(DebtGrid.Cells[2, DebtGrid.Row]) then
+    m_return := StrToFloat(DebtGrid.Cells[2, DebtGrid.Row]);
 
   if MessageDlg(format('Сформировать ежемесячное удержание субсидии в размере %s руб.', [FloatToStr(m_return)]),
     mtConfirmation, [mbYes, mbNo], 0) = mrYes then

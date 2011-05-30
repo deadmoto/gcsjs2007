@@ -62,24 +62,22 @@ begin
   WriteRegProperty('Password', GenMD5Password(LabeledEdit2.Text));
   WriteRegProperty('Server', ComboBox1.Text);
 
-  if mode = mBug then
+  if (mode = mBug) or (not Assigned(MainForm)) then
   begin
+    //DModule.dbfConnection.Connected := False;
+    //DModule.sqlConnection.Connected := False;
+    //DModule.Database1.Connected := False;
+
+    //sleep(100);
+
     tt := TMyThread.Create(True);
     tt.FreeOnTerminate := True;
     tt.Resume;
 
-    sleep(100);
-
-    DModule.dbfConnection.Connected := False;
-    DModule.Database1.Connected := False;
-
-    sleep(1000);
-
-    Application.Terminate;
+    Halt;
   end
   else
   begin
-
     if GetConnectionPass(ReadRegProperty('Password')) <> GetConnectionPass(GenMD5Password(LabeledEdit2.Text)) then
     begin
       MessageDlg('Error! Неверный пароль администратора!', mtError, [mbOK], 0);
@@ -88,11 +86,15 @@ begin
 
     MainForm.curServer := ComboBox1.Text;
     DModule.Database1.Connected := False;
+    DModule.sqlConnection.Connected := False;
 
     if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy', ReadRegProperty('User'), ReadRegProperty('Password'), 'База данных программы Subsidy') then
       ShowMessage('Ошибка при создании DSN записи SQLSub!');
 
+    DModule.sqlConnection.ConnectionString := DModule.SetSQLConnectStr(ReadRegProperty('Server'));
+
     DModule.Database1.Connected := True;
+    DModule.sqlConnection.Connected := True;
 
     MainForm.OnCreate(self);
     MainForm.LoginMode := lNone;
@@ -134,7 +136,7 @@ end;
 procedure TConnectionFrm.ComboBox1KeyPress(Sender: TObject; var Key: char);
 begin
   if key = #13 then
-    Button1.Click;
+    Button1.Click();
 end;
 
 procedure TConnectionFrm.FormShow(Sender: TObject);
@@ -144,7 +146,9 @@ begin
   ComboBox1.Text := ReadRegProperty('Server');
   LabeledEdit1.Text := ReadRegProperty('User');
   ComboBox1.Items.Clear;
+  
   listsqlservers;
+  
   for i := 0 to length(srvlist) - 1 do
     ComboBox1.Items.Add(srvlist[i].srv_name);
 end;
@@ -158,7 +162,7 @@ end;
 procedure TConnectionFrm.LabeledEdit2KeyPress(Sender: TObject; var Key: Char);
 begin
   if key = #13 then Button1Click(Sender);
-  Changed;
+  Changed();
 end;
 
 end.
