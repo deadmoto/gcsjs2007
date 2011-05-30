@@ -31,7 +31,7 @@ object ConnectionFrm: TConnectionFrm
       Top = 22
       Width = 265
       Height = 21
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 0
       OnChange = ComboBox1Change
       OnKeyPress = ComboBox1KeyPress

@@ -3,7 +3,7 @@ object Form35: TForm35
   Top = 249
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
-  ClientHeight = 314
+  ClientHeight = 324
   ClientWidth = 430
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,7 +19,7 @@ object Form35: TForm35
   TextHeight = 13
   object Button1: TButton
     Left = 222
-    Top = 287
+    Top = 295
     Width = 97
     Height = 21
     TabOrder = 0
@@ -99,7 +99,7 @@ object Form35: TForm35
     Left = 3
     Top = 60
     Width = 424
-    Height = 221
+    Height = 229
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 2
@@ -216,7 +216,7 @@ object Form35: TForm35
       Left = 135
       Top = 26
       Width = 281
-      Height = 185
+      Height = 199
       Enabled = False
       TabOrder = 11
       object CheckBox3: TCheckBox
@@ -231,7 +231,7 @@ object Form35: TForm35
       end
       object CheckBox4: TCheckBox
         Left = 11
-        Top = 66
+        Top = 82
         Width = 121
         Height = 17
         Caption = #1055#1088#1086#1078#1080#1090'. '#1084#1080#1085#1080#1084#1091#1084#1099
@@ -251,7 +251,7 @@ object Form35: TForm35
       end
       object CheckBox12: TCheckBox
         Left = 11
-        Top = 50
+        Top = 66
         Width = 121
         Height = 17
         Caption = #1046#1080#1083'.'#1092#1086#1085#1076#1099
@@ -261,7 +261,7 @@ object Form35: TForm35
       end
       object CheckBox2: TCheckBox
         Left = 11
-        Top = 82
+        Top = 98
         Width = 121
         Height = 17
         Caption = #1057#1086#1094'. '#1089#1090#1072#1090#1091#1089#1099
@@ -351,7 +351,7 @@ object Form35: TForm35
       end
       object CheckBox25: TCheckBox
         Left = 11
-        Top = 98
+        Top = 114
         Width = 121
         Height = 17
         Caption = #1057#1086#1094'. '#1085#1086#1088#1084#1099
@@ -361,7 +361,7 @@ object Form35: TForm35
       end
       object CheckBox26: TCheckBox
         Left = 11
-        Top = 114
+        Top = 130
         Width = 121
         Height = 17
         Caption = #1051#1100#1075#1086#1090#1099
@@ -371,7 +371,7 @@ object Form35: TForm35
       end
       object CheckBox22: TCheckBox
         Left = 11
-        Top = 162
+        Top = 178
         Width = 121
         Height = 17
         Caption = #1055#1088#1086#1095#1080#1077
@@ -381,7 +381,7 @@ object Form35: TForm35
       end
       object CheckBox23: TCheckBox
         Left = 11
-        Top = 130
+        Top = 146
         Width = 121
         Height = 17
         Caption = #1056#1077#1075#1080#1086#1085'. '#1089#1090#1072#1085#1076#1072#1088#1090#1099
@@ -409,11 +409,19 @@ object Form35: TForm35
       end
       object CheckBox1: TCheckBox
         Left = 11
-        Top = 146
+        Top = 162
         Width = 97
         Height = 17
         Caption = #1059#1083#1080#1094#1099
         TabOrder = 8
+      end
+      object CheckBox35: TCheckBox
+        Left = 11
+        Top = 50
+        Width = 97
+        Height = 17
+        Caption = #1059#1095#1072#1089#1090#1082#1080
+        TabOrder = 20
       end
     end
     object BitBtn1: TBitBtn
@@ -457,7 +465,7 @@ object Form35: TForm35
   end
   object Button3: TButton
     Left = 325
-    Top = 287
+    Top = 295
     Width = 97
     Height = 21
     Caption = #1054#1090#1084#1077#1085#1072

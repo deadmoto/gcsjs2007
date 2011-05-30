@@ -30,6 +30,7 @@ function SelRel(n: integer): string;
 function SelStnd(n: integer): string;
 function SelMin(n: integer): real;
 function SelInsp(n: integer): string;    //выбрать инспектора
+function SelOffice(n: integer): string;    //выбрать участок
 function SelCert(n: integer): string;    //выбрать аттестацию
 function SelDist(n: integer): string;    //выбрать округ
 function SelBoss(n: integer): string;    
@@ -391,6 +392,23 @@ begin
     Parameters.ParamByName('id').Value := integer(n);
     Open;
     Result := FieldByName('minim').AsFloat;
+    Close;
+  end;
+end;
+
+function SelOffice(n: integer): string;
+begin
+  with TADOQuery.Create(Application) do
+  begin
+    Connection := DModule.sqlConnection;
+    SQL.Text :=
+      'select adr'#13#10 +
+      'from Office'#13#10 +
+      'where (id_office = :id)and(id_dist=:dist)';
+    Parameters.ParamByName('id').Value := n;
+    Parameters.ParamByName('dist').Value := MainForm.dist;
+    Open;
+    Result := FieldByName('adr').AsString;
     Close;
   end;
 end;

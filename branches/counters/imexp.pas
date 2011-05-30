@@ -56,6 +56,7 @@ type
     CheckBox32: TCheckBox;
     Button3: TButton;
     CheckBox34: TCheckBox;
+    CheckBox35: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -257,6 +258,15 @@ begin
           if CheckBox3.Checked then
           begin
             ExportDiff(path, 'dist');
+            Inc(i);
+            pr.ProgressBar1.StepIt;
+            pr.Label3.Caption := IntToStr(i);
+            pr.Update;
+            SendMessage(pr.Handle, wm_paint, 0, 0);
+          end;
+          if CheckBox35.Checked then
+          begin
+            ExportOffice(path, MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);
@@ -495,6 +505,15 @@ begin
           if CheckBox3.Checked then
           begin
             ImportDist(path);
+            Inc(i);
+            pr.ProgressBar1.StepIt;
+            pr.Label3.Caption := IntToStr(i);
+            pr.Update;
+            SendMessage(pr.Handle, wm_paint, 0, 0);
+          end;
+          if CheckBox35.Checked then
+          begin
+            ImportOffice(path, MainForm.dist);
             Inc(i);
             pr.ProgressBar1.StepIt;
             pr.Label3.Caption := IntToStr(i);

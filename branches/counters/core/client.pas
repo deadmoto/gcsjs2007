@@ -104,6 +104,7 @@ type
     fond:    integer;//жилищный фонд
     cert:    integer;//аттестация
     insp:    integer;//инспектор
+    office:  integer;//участок
     dist:    integer;//округ
     bank:    integer;//банк
     acbank:  string; //псс
@@ -267,6 +268,14 @@ begin
     Data.bank := FieldByName('id_bank').AsInteger;
     Data.acbank := FieldByName('acbank').AsString;
     Close;
+    SQL.Clear;
+    SQL.Add('select id_office');
+    SQL.Add('from insp');
+    SQL.Add('where id_insp = :id');
+    ParamByName('id').AsInteger := Data.insp;
+    Open;
+    Data.office := FieldByName('id_office').AsInteger;
+    Close;
   end;
 end;
 
@@ -278,7 +287,7 @@ var
   serv, i: integer;
   man: TMan;
 begin
-  with DModule.query1 do
+  with DModule.Query1 do
   begin
     Close;
     SQL.Clear;
@@ -2371,6 +2380,7 @@ begin
   d.fond := s.fond;
   d.cert := s.cert;
   d.insp := s.insp;
+  d.office := s.office;
   d.dist := s.dist;
   d.bank := s.bank;
   d.acbank := s.acbank;
@@ -2499,6 +2509,7 @@ begin
   Result.fond := 0;
   Result.cert := 0;
   Result.insp := 0;
+  Result.office := 1;
   Result.dist := 0;
   Result.bank := 0;
   Result.acbank := '';

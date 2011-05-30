@@ -3,7 +3,7 @@ object EditClForm: TEditClForm
   Top = 259
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  ClientHeight = 435
+  ClientHeight = 438
   ClientWidth = 604
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -23,8 +23,8 @@ object EditClForm: TEditClForm
     Left = 3
     Top = 3
     Width = 598
-    Height = 429
-    ActivePage = TabSheet9
+    Height = 432
+    ActivePage = TabSheet6
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
@@ -581,7 +581,7 @@ object EditClForm: TEditClForm
       end
       object GroupBox12: TGroupBox
         Left = 8
-        Top = 348
+        Top = 352
         Width = 398
         Height = 49
         Caption = #1055#1088#1086#1096#1083#1099#1081' '#1087#1077#1088#1080#1086#1076':'
@@ -660,6 +660,23 @@ object EditClForm: TEditClForm
         TabOrder = 27
         Text = '0'
         OnExit = Edit117Exit
+      end
+      object GroupBox17: TGroupBox
+        Left = 408
+        Top = 352
+        Width = 170
+        Height = 49
+        Caption = #1059#1095#1072#1089#1090#1086#1082':'
+        TabOrder = 28
+        object officeEdit: TEdit
+          Left = 8
+          Top = 19
+          Width = 154
+          Height = 21
+          Color = clBtnFace
+          Enabled = False
+          TabOrder = 0
+        end
       end
     end
     object TabSheet2: TTabSheet
@@ -3870,7 +3887,7 @@ object EditClForm: TEditClForm
         Left = 0
         Top = 0
         Width = 590
-        Height = 401
+        Height = 404
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
@@ -3892,6 +3909,21 @@ object EditClForm: TEditClForm
           Font.Style = [fsBold]
           ParentFont = False
         end
+        object Label97: TLabel
+          Left = 479
+          Top = 205
+          Width = 51
+          Height = 13
+          Caption = #1055#1086#1075#1072#1096#1077#1085#1086
+          Color = clBtnFace
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+        end
         object Panel1: TPanel
           Left = 4
           Top = 27
@@ -3909,7 +3941,7 @@ object EditClForm: TEditClForm
             Caption = #1044#1086#1089#1090#1091#1087#1085#1099#1077' '#1087#1077#1088#1080#1086#1076#1099':'
             TabOrder = 0
             object ComboBox23: TComboBox
-              Left = 7
+              Left = 3
               Top = 24
               Width = 145
               Height = 21
@@ -3942,7 +3974,7 @@ object EditClForm: TEditClForm
           Left = 4
           Top = 81
           Width = 265
-          Height = 316
+          Height = 319
           Align = alLeft
           Caption = #1044#1072#1085#1085#1099#1077' '#1079#1072' '#1087#1077#1088#1080#1086#1076':'
           TabOrder = 1
@@ -3950,7 +3982,7 @@ object EditClForm: TEditClForm
             Left = 2
             Top = 15
             Width = 261
-            Height = 264
+            Height = 267
             Align = alClient
             BorderStyle = bsNone
             ColCount = 4
@@ -3966,7 +3998,7 @@ object EditClForm: TEditClForm
           end
           object Panel2: TPanel
             Left = 2
-            Top = 279
+            Top = 282
             Width = 261
             Height = 35
             Align = alBottom
@@ -4063,6 +4095,15 @@ object EditClForm: TEditClForm
             Text = '0'
           end
         end
+        object FactMinusDebtBtn: TButton
+          Left = 285
+          Top = 241
+          Width = 150
+          Height = 25
+          Caption = #1057#1092#1086#1088#1084#1080#1088#1086#1074#1072#1090#1100' '#1087#1077#1088#1077#1087#1083#1072#1090#1091
+          TabOrder = 3
+          OnClick = FactMinusDebtBtnClick
+        end
       end
     end
     object TabSheet9: TTabSheet
@@ -4072,7 +4113,7 @@ object EditClForm: TEditClForm
         Left = 0
         Top = 0
         Width = 590
-        Height = 401
+        Height = 404
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
@@ -4185,14 +4226,10 @@ object EditClForm: TEditClForm
               Align = alClient
               BevelOuter = bvNone
               TabOrder = 0
-              ExplicitLeft = 72
-              ExplicitTop = 24
-              ExplicitWidth = 185
-              ExplicitHeight = 41
               object DebtFormPay: TButton
                 Left = 304
                 Top = 30
-                Width = 151
+                Width = 150
                 Height = 25
                 Caption = #1057#1092#1086#1088#1084#1080#1088#1086#1074#1072#1090#1100' '#1091#1076#1077#1088#1078#1072#1085#1080#1077
                 TabOrder = 0

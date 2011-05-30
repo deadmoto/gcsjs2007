@@ -83,7 +83,7 @@ begin
   try//Подключение к SQLSub - ODBC alias for Subsidy (MS SQL)
     DModule.DataBase1.Connected := True;
     DModule.sqlConnection.Connected := True;
-    try//Подключение к DBFSub - BDE alias for DBASE driver (BDE)
+    try
       DModule.dbfConnection.Connected := True;
       try
         if (ParamCount = 1) and (ParamStr(1) = '-sql') then

@@ -95,7 +95,7 @@ begin
       mDebt:
       begin
         sqlQuery1.SQL.Text :=
-          'SELECT Sluj.sdate, Sluj.regn, Cl.fio, SUM(Sluj.sub) AS sluj_sum, SUM(Sub.sub) AS sub_sum, SlujType.namesluj, Sluj.id_debt'#13#10+
+          'SELECT Sluj.sdate, Sluj.regn, Cl.fio, SUM(Sluj.sub) AS sluj_sum, SUM(Sub.sub) AS sub_sum, SlujType.namesluj, Sluj.id_debt, dbo.getcl_address(Sluj.regn) as address'#13#10+
           'FROM Sluj INNER JOIN'#13#10+
             'Cl ON Sluj.regn = Cl.regn INNER JOIN'#13#10+
             'Sub ON Sluj.sdate = Sub.sdate AND Sluj.regn = Sub.regn'#13#10+
@@ -124,7 +124,7 @@ begin
 
         FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
           'ФИО', 'Сумм. служ.', 'Субсидия', 'Услуга'),
-          TIntArray.Create(64, 75, 240, 65, 65, 115), DModule.sqlQuery1.RecordCount + 1);
+          TIntArray.Create(60, 55, 235, 70, 70, 115), DModule.sqlQuery1.RecordCount + 1);
 
         with DModule.sqlQuery1 do
           for i := 0 to RecordCount do
@@ -147,7 +147,7 @@ begin
 
         FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
           'ФИО', 'Сумм. служ.', 'Субсидия'),
-          TIntArray.Create(64, 75, 255, 75, 75), DModule.sqlQuery1.RecordCount + 1);
+          TIntArray.Create(60, 55, 235, 70, 70), DModule.sqlQuery1.RecordCount + 1);
 
         with DModule.sqlQuery1 do
           for i := 0 to RecordCount do
@@ -168,8 +168,8 @@ begin
         SlujFrm.Width := 670;
 
         FormerStringGrid(SlujGrid, TStringArray.Create('Месяц', 'Рег. №',
-          'ФИО', 'Удержание', 'Субсидия', 'Описание'),
-          TIntArray.Create(64, 75, 255, 75, 75, 115), DModule.sqlQuery1.RecordCount + 1);
+          'ФИО', 'Удержание', 'Субсидия', 'Описание', 'Адрес'),
+          TIntArray.Create(60, 55, 235, 70, 70, 130, 130), DModule.sqlQuery1.RecordCount + 1);
 
         SetLength(debtcl, 0);
         with DModule.sqlQuery1 do
@@ -183,6 +183,7 @@ begin
             SlujGrid.Cells[3, i + 1] := FieldByName('sluj_sum').Value;
             SlujGrid.Cells[4, i + 1] := FieldByName('sub_sum').Value;
             SlujGrid.Cells[5, i + 1] := FieldByName('namesluj').Value;
+            SlujGrid.Cells[6, i + 1] := FieldByName('address').Value;
             DModule.sqlQuery1.Next;
           end;
         GroupBox1.Caption := 'Удержания:';
