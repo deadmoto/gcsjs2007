@@ -147,8 +147,8 @@ object Form40: TForm40
     Text = '0'
   end
   object Button1: TButton
-    Left = 366
-    Top = 128
+    Left = 369
+    Top = 126
     Width = 57
     Height = 25
     Caption = #1056#1072#1089#1095#1077#1090
@@ -157,7 +157,7 @@ object Form40: TForm40
   end
   object Button3: TButton
     Left = 432
-    Top = 128
+    Top = 126
     Width = 65
     Height = 25
     Caption = #1042' DBF'

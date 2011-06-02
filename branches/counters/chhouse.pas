@@ -131,7 +131,7 @@ var
   s:  string;
   pl: integer;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     SetLength(h, Length(h) + 1);
     Close;
@@ -140,8 +140,9 @@ begin
     SQL.Add('from house inner join strt on');
     SQL.Add('house.id_street=strt.id_street');
     SQL.Add('where (house.id_house=:h)and(house.id_dist=:idd)');
-    ParamByName('h').AsInteger := id;
-    ParamByName('idd').AsInteger := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'h', id);
+    SetParam(Parameters, 'idd', MainForm.dist);
     Open;
     house := id;
     s := GenAddr(FieldByName('namestreet').AsString, FieldByName('nhouse').AsString,
@@ -160,7 +161,7 @@ var
   i, pl: integer;
   s: string;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -168,8 +169,9 @@ begin
     SQL.Add('from house inner join strt on');
     SQL.Add('house.id_street=strt.id_street');
     SQL.Add('where (house.id_house=:h)and(house.id_dist=:idd)');
-    ParamByName('h').AsInteger := id;
-    ParamByName('idd').AsInteger := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'h', id);
+    SetParam(Parameters, 'idd', MainForm.dist);
     Open;
     house := id;
     s := GenAddr(FieldByName('namestreet').AsString, FieldByName('nhouse').AsString,
@@ -247,7 +249,7 @@ var
   s: string;
 begin
   SetLength(h, 0);
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -256,7 +258,8 @@ begin
     SQL.Add('on house.id_street=strt.id_street');
     SQL.Add('where id_dist=:idd');
     SQL.Add('order by namestreet, nhouse, corp');
-    ParamByName('idd').AsInteger := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'idd', MainForm.dist);
     Open;
     First;
 

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, DB, DBTables, Mask, DateUtils, Buttons, ExtCtrls;
+  Dialogs, StdCtrls, DB, Mask, DateUtils, Buttons, ExtCtrls;
 
 type
   TStatusMode = (mImport, mExport);
@@ -481,7 +481,7 @@ begin
       pr.Update;
       SendMessage(pr.Handle, wm_paint, 0, 0);
       try
-        DModule.Database1.StartTransaction;
+        DModule.sqlConnection.BeginTrans;
         if CheckBox24.Checked then
         begin
           if CheckBox1.Checked then
@@ -810,12 +810,12 @@ begin
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
         pr.Close;
-        DModule.Database1.Commit;
+        DModule.sqlConnection.CommitTrans;
         FillCurr(MainForm.bpath, MainForm.rdt, MainForm.dist, MainForm.codedbf);
         ShowMessage('Импорт найденных файлов успешно завершен!');
         MainForm.Reload;
       except
-        DModule.Database1.Rollback;
+        DModule.sqlConnection.RollbackTrans;
         if Assigned(pr) then
           pr.Free;
         ShowMessage('Ошибка импорта!');

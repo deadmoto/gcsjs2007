@@ -122,7 +122,7 @@ var
   path: string;
   i: integer;
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
   //  lcl.Clear;
   path := ExtractFilePath(Application.ExeName) + 'database\';
   with DModule.DBF1 do
@@ -184,14 +184,15 @@ begin
   val := 0;
   lcl.Clear;
   try
-    DModule.Database1.StartTransaction;
-    with DModule.Query1 do
+    DModule.sqlConnection.BeginTrans;
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('execute getfcl :idd,:nd');
-      ParamByName('idd').AsInteger := MainForm.dist;
-      ParamByName('nd').AsString := MainForm.rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'idd', MainForm.dist);
+      SetParam(Parameters, 'nd', MainForm.rdt);
       Open;
       pr.ProgressBar1.Max := RecordCount;
       if not EOF then
@@ -227,11 +228,11 @@ begin
         Close;
       end;
     end;
-    DModule.Database1.Commit;
+    DModule.sqlConnection.CommitTrans;
     Result := ncl;
   except on E: Exception do
   begin
-    DModule.Database1.Rollback;
+    DModule.sqlConnection.RollbackTrans;
     ShowMessage(E.Message);
     Result := -1;
   end;
@@ -265,25 +266,27 @@ begin
       Dbf1.TableName := path + 'nullsublm.dbf';
       Dbf1.CreateTable;
       Dbf1.CodePage := MainForm.codedbf;
-      DModule.Query1.Close;
-      DModule.Query1.SQL.Clear;
-      DModule.Query1.SQL.Add('select sum(sub) as ex from sub where sdate =:d and regn =:r');
-      DModule.Query1.ParamByName('d').AsDateTime := StrToDate(MainForm.rdt);
+      DModule.sqlQuery1.Close;
+      DModule.sqlQuery1.SQL.Clear;
+      DModule.sqlQuery1.SQL.Add('select sum(sub) as ex from sub where sdate =:d and regn =:r');
+      sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+      SetParam(sqlQuery1.Parameters, 'd', StrToDate(MainForm.rdt));
       if lcl.Count <> 0 then
       begin
         for i := 1 to lcl.Count do
         begin
           dbf1.Append;
-          DModule.Query1.ParamByName('r').AsInteger := (TClient(lcl.Items[i - 1]).Data.regn);
-          DModule.Query1.Open;
+          sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+          SetParam(sqlQuery1.Parameters, 'r', (TClient(lcl.Items[i - 1]).Data.regn));
+          DModule.sqlQuery1.Open;
           EditField(TClient(lcl.Items[i - 1]).Data.fio, DBF1.CodePage, 1);
           EditField(DateToStr(TClient(lcl.Items[i - 1]).cdata.begindate), DBF1.CodePage, 2);
           EditField(DateToStr(TClient(lcl.Items[i - 1]).cdata.enddate), DBF1.CodePage, 3);
           EditField(IntToStr(TClient(lcl.Items[i - 1]).cdata.mcount), DBF1.CodePage, 4);
           EditField(IntToStr(TClient(lcl.Items[i - 1]).cdata.calc), DBF1.CodePage, 5);
-          EditField(DModule.Query1.FieldByName('ex').AsString, DBF1.CodePage, 6);
+          EditField(DModule.sqlQuery1.FieldByName('ex').AsString, DBF1.CodePage, 6);
           Dbf1.Post;
-          DModule.Query1.Close;
+          DModule.sqlQuery1.Close;
         end;
       end;
       dbf1.Close;

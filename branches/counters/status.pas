@@ -136,7 +136,7 @@ procedure TForm14.SetDefault;
 var
   i: integer;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -146,25 +146,26 @@ begin
     SQL.Add('when id_min=3 then :v3 end as namemin');
     SQL.Add('from stat');
     SQL.Add('order by id_status');
-    ParamByName('v1').AsString := namemin[0];
-    ParamByName('v2').AsString := namemin[1];
-    ParamByName('v3').AsString := namemin[2];
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'v1', namemin[0]);
+    SetParam(Parameters, 'v2', namemin[1]);
+    SetParam(Parameters, 'v3', namemin[2]);
     Open;
     First;
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Группа'),
-    TIntArray.Create(25, 190, 190), DModule.Query1.RecordCount + 1);
+    TIntArray.Create(25, 190, 190), DModule.sqlQuery1.RecordCount + 1);
 
-  for i := 0 to DModule.Query1.RecordCount + 1 do
+  for i := 0 to DModule.sqlQuery1.RecordCount + 1 do
   begin
     with StringGrid1 do
     begin
-      Cells[0, i + 1] := DModule.Query1.FieldByName('id_status').AsString;
-      Cells[1, i + 1] := DModule.Query1.FieldByName('namestatus').AsString;
-      Cells[2, i + 1] := DModule.Query1.FieldByName('namemin').AsString;
+      Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('id_status').AsString;
+      Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('namestatus').AsString;
+      Cells[2, i + 1] := DModule.sqlQuery1.FieldByName('namemin').AsString;
     end;
-    DModule.Query1.Next;
+    DModule.sqlQuery1.Next;
   end;
 end;
 
@@ -207,14 +208,15 @@ var
 begin
   if (Edit1.Text <> '') and (Combobox1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_status');
       SQL.Add('from stat');
       SQL.Add('where (id_status=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit2.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit2.Text));
       Open;
       if IsEmpty then
       begin
@@ -223,7 +225,8 @@ begin
         SQL.Add('select id_status');
         SQL.Add('from stat');
         SQL.Add('where (namestatus = :name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty then
           flag := True
@@ -242,9 +245,10 @@ begin
         SQL.Clear;
         SQL.Add('insert into stat');
         SQL.Add('values (:id, :name, :min)');
-        ParamByName('id').AsInteger  := StrToInt(Edit2.Text);
-        ParamByName('name').AsString := Edit1.Text;
-        ParamByName('min').AsInteger := min[Combobox1.ItemIndex];
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit2.Text));
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'min', min[Combobox1.ItemIndex]);
         ExecSQL;
         SetDefault;
       end
@@ -275,14 +279,15 @@ var
 begin
   if (Edit1.Text <> '') and (Combobox1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_status');
       SQL.Add('from stat');
       SQL.Add('where (id_status=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit2.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit2.Text));
       Open;
       if IsEmpty or not IsEmpty and
         (FieldByName('id_status').AsInteger = oldid) then
@@ -292,7 +297,8 @@ begin
         SQL.Add('select id_status');
         SQL.Add('from stat');
         SQL.Add('where (namestatus = :name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_status').AsInteger = oldid) then
@@ -313,9 +319,10 @@ begin
         SQL.Add('update stat');
         SQL.Add('set namestatus = :name, id_min = :min');
         SQL.Add('where (id_status = :st)');
-        ParamByName('st').AsInteger  := oldid;
-        ParamByName('name').AsString := Edit1.Text;
-        ParamByName('min').AsInteger := min[Combobox1.ItemIndex];
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'st', oldid);
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'min', min[Combobox1.ItemIndex]);
         ExecSQL;
         SetDefault;
       end
@@ -336,7 +343,7 @@ procedure TForm14.Button3Click(Sender: TObject);
   удаляется запись, которая соответствует текущему id.
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     if not IsEmpty then
     begin
@@ -344,7 +351,8 @@ begin
       SQL.Clear;
       SQL.Add('delete from stat');
       SQL.Add('where (id_status = :id)');
-      ParamByName('id').AsInteger := oldid;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', oldid);
       ExecSQL;
       SetDefault;
     end;
@@ -406,7 +414,7 @@ procedure TForm14.FormClose(Sender: TObject; var Action: TCloseAction);
   в этом unit.
 *******************************************************************************}
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
   DModule.qTarif.Close;
 end;
 

@@ -177,7 +177,8 @@ uses
   appregistry,
   datamodule,
   main,
-  sclient;
+  sclient,
+  service2;
 
 constructor TClient.Create;
 begin
@@ -217,14 +218,15 @@ end;
 
 procedure TClient.SetClient(cl: integer; s: string);//«абирает данные клиента из SQLSub
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select *');
     SQL.Add('from cl');
     SQL.Add('where regn = :id');
-    ParamByName('id').AsInteger := cl;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', cl);
     Open;
     Data.fio := FieldByName('fio').AsString;
     Data.regn := FieldByName('regn').AsInteger;
@@ -255,8 +257,9 @@ begin
       SQL.Add('where regn=:id and bdate=(select max(bdate) ');
       SQL.Add('from hist where bdate<=convert(smalldatetime,:d,104) and regn=:id)');
     end;
-    ParamByName('id').AsInteger := cl;
-    ParamByName('d').AsString := s;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', cl);
+    SetParam(Parameters, 'd', s);
     Open;
     Data.insp := FieldByName('id_insp').AsInteger;
     Data.control := FieldByName('id_cntrl').AsInteger;
@@ -272,7 +275,8 @@ begin
     SQL.Add('select id_office');
     SQL.Add('from insp');
     SQL.Add('where id_insp = :id');
-    ParamByName('id').AsInteger := Data.insp;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', Data.insp);
     Open;
     Data.office := FieldByName('id_office').AsInteger;
     Close;
@@ -287,14 +291,15 @@ var
   serv, i: integer;
   man: TMan;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.add('select *');
     SQL.add('from cl');
     SQL.add('where regn = :id');
-    parambyname('id').AsInteger := regn;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', regn);
     Open;
     cdata.dist  := MainForm.dist;
     cdata.lsquare := FieldByName('lsquare').AsFloat;
@@ -319,8 +324,9 @@ begin
       SQL.Add('where regn=:id and bdate=(select max(bdate) ');
       SQL.Add('from hist where bdate<=convert(smalldatetime,:d,104) and regn=:id)');
     end;
-    parambyname('id').AsInteger := regn;
-    parambyname('d').AsString := date;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', regn);
+    SetParam(Parameters, 'd', date);
     Open;
     cdata.calc := FieldByName('calc').AsInteger;
     cdata.mdd  := FieldByName('mdd').AsInteger;
@@ -336,12 +342,13 @@ begin
     else
       cdata.period := MonthOf(cdata.enddate) + 12 - MonthOf(cdata.begindate);
     cdata.heating := FieldByName('id_heating').AsInteger;
-    cdata.indrstnd := FieldByName('indrstnd').Value;
-    cdata.indrstndval := FieldByName('indrstndval').Value;
+    cdata.indrstnd := Boolean(FieldByName('indrstnd').AsInteger);
+    cdata.indrstndval := FieldByName('indrstndval').AsFloat;
     //------
     Close;
     SQL.Clear;
-    SQL.Text := 'SELECT *'#13#10 +
+    SQL.Text :=
+      'SELECT *'#13#10 +
       //      'FROM dbo.getcurhist(:bdate)'#13#10 +
       //      'WHERE regn = :regn';
       'FROM hist INNER JOIN' + #13 +
@@ -350,8 +357,9 @@ begin
       'WHERE bdate < convert(smalldatetime,:bdate,104)' + #13 +
       'GROUP BY regn) sb on hist.regn = sb.regn AND hist.bdate = sb.bdate' + #13 +
       'WHERE hist.regn = :regn';
-    ParamByName('regn').AsInteger := Data.regn;
-    ParamByName('bdate').AsString := DateToStr(cdata.begindate);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'regn', Data.regn);
+    SetParam(Parameters, 'bdate', DateToStr(cdata.begindate));
     Open;
     //если запись в базе нет (нет прошлого периода)
     if RecordCount = 0 then
@@ -368,11 +376,13 @@ begin
     //------
     Close;
     SQL.Clear;
-    SQL.Text := 'SELECT *' + #13 +
+    SQL.Text :=
+    'SELECT *' + #13 +
       'FROM FactBalance' + #13 +
       'WHERE (regn = :regn) AND (bdate = convert(smalldatetime,:bdate,104))';
-    ParamByName('regn').AsInteger := Data.regn;
-    ParamByName('bdate').AsString := DateToStr(cdata.prevbegindate);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'regn', Data.regn);
+    SetParam(Parameters, 'bdate', DateToStr(cdata.prevbegindate));
     Open;
     cdata.dolgFact := FieldByName('dolg').AsFloat;
     cdata.averageFact := FieldByName('balance').AsFloat;
@@ -384,9 +394,10 @@ begin
         'FROM Sluj' + #13 +
         'WHERE (regn = :regn) AND (factminus = 1) AND (sdate >= convert(smalldatetime,:bdate,104))' + #13 +
         'AND (sdate < convert(smalldatetime,:edate,104))';
-      ParamByName('regn').AsInteger := Data.regn;
-      ParamByName('bdate').AsString := DateToStr(cdata.begindate);
-      ParamByName('edate').AsString := DateToStr(cdata.enddate);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'regn', Data.regn);
+      SetParam(Parameters, 'bdate', DateToStr(cdata.begindate));
+      SetParam(Parameters, 'edate', DateToStr(cdata.enddate));
       Open;
       cdata.dolgFact := rnd(cdata.dolgFact - FieldByName('sumsub').AsFloat);
     end;
@@ -395,9 +406,9 @@ begin
     SQL.Text := 'SELECT sum(curminus) as curminus' + #13 +
       'FROM FactMinus' + #13 +
       'WHERE (regn = :regn) AND (bdate = convert(smalldatetime,:bdate,104)) AND (sdate = convert(smalldatetime,:sdate,104))';
-    ParamByName('regn').AsInteger := data.regn;
-    ParamByName('bdate').AsString := DateToStr(cdata.begindate);
-    ParamByName('sdate').AsString := MainForm.rdt;
+    Parameters.ParamByName('regn').AsInteger := data.regn;
+    Parameters.ParamByName('bdate').AsString := DateToStr(cdata.begindate);
+    Parameters.ParamByName('sdate').AsString := MainForm.rdt;
     Open;
     cdata.curMinus := FieldByName('curminus').AsFloat;
     }
@@ -409,7 +420,8 @@ begin
     SQL.Add('from fam');
     SQL.Add('where regn = :id');
     SQL.Add('order by fio');
-    ParamByName('id').AsInteger := regn;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', regn);
     Open;
     First;
     cdata.family := TObjectList.Create;
@@ -442,8 +454,9 @@ begin
     //    SQL.Add('where regn=:id and sdate=(select max(sdate) ');
     //    SQL.Add('from sub where sdate<=convert(smalldatetime,:s,104) and regn=:id)');
     SQL.Add('order by regn');
-    ParamByName('id').AsInteger := regn;
-    ParamByName('s').AsString := DateToStr(cdata.begindate);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', regn);
+    SetParam(Parameters, 's', DateToStr(cdata.begindate));
     Open;
     First;
     while not EOF do
@@ -466,8 +479,9 @@ begin
     SQL.Add('from sub');
     SQL.Add('where (regn = :id)and(sdate=convert(smalldatetime,:s,104))');
     SQL.Add('order by regn');
-    ParamByName('id').AsInteger := regn;
-    ParamByName('s').AsString := date;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', regn);
+    SetParam(Parameters, 's', date);
     Open;
     First;
     while not EOF do
@@ -487,8 +501,9 @@ begin
     //------счетчики
     SQL.Text := 'SELECT * FROM Counters' + #13 +
       'WHERE sdate=convert(smalldatetime,:s,104) AND regn=:r';
-    ParamByName('r').AsInteger := regn;
-    ParamByName('s').AsString := DateToStr(cdata.begindate);//date;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'r', regn);
+    SetParam(Parameters, 's', DateToStr(cdata.begindate));//date;
     Open;
     First;
     while not EOF do
@@ -509,10 +524,11 @@ begin
     SQL.Add('fond on house.id_fond=fond.id_fond');
     SQL.Add('where (strt.id_street = :str) and(house.nhouse = :numb)');
     SQL.Add('and(house.corp=:cp)and(house.id_dist=:dist)');
-    ParamByName('str').AsInteger := Data.str;// str[Combobox12.ItemIndex];
-    ParamByName('numb').AsString := Data.nh; // Edit60.Text;
-    ParamByName('cp').AsString := Data.corp;
-    ParamByName('dist').AsInteger := Data.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'str', Data.str);// str[Combobox12.ItemIndex];
+    SetParam(Parameters, 'numb', Data.nh); // Edit60.Text;
+    SetParam(Parameters, 'cp', Data.corp);
+    SetParam(Parameters, 'dist', Data.dist);
     Open;
     if not EOF then
     begin
@@ -603,7 +619,7 @@ var
 begin
   cdata.pmin := 0;
   for i := 0 to cdata.mcount - 1 do
-    cdata.pmin := cdata.pmin + getmin(DModule.query1, cdata.min[i]);
+    cdata.pmin := cdata.pmin + getmin(DModule.sqlQuery1, cdata.min[i]);
   if cdata.mcount <> 0 then
     cdata.pmin := rnd(cdata.pmin / cdata.mcount);
 {  with Datamodule1.Query4 do begin
@@ -614,7 +630,7 @@ begin
       SQL.Add('select sbros.minim');
       SQL.Add('from curlmin.dbf sbros');
       SQL.Add('where sbros.id_min = :id');
-      ParamByName('id').AsInteger := cdata.min[i];
+      Parameters.ParamByName('id').AsInteger := cdata.min[i];
       Open;
       cdata.pmin := cdata.pmin + FieldByName('minim').AsFloat;
       Close;
@@ -631,14 +647,15 @@ procedure TClient.CalcHNorm(m: integer; var sq1, sq2: real);
 var
   pval: real;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select pcharge');
     SQL.Add('from charge');
     SQL.Add('where id_month = :id');
-    ParamByName('id').AsInteger := m;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', m);
     Open;
     pval := FieldByName('pcharge').AsInteger;
     Close;
@@ -687,7 +704,7 @@ begin
       //      SQL.Add('select p'+nam+', f'+nam+', square');
       //      SQL.Add('from priv');
       //      SQL.Add('where (id_priv = :id)');
-      //      ParamByName('id').AsInteger := cdata.priv[i];
+      //      Parameters.ParamByName('id').AsInteger := cdata.priv[i];
       //      Open;
 
       Locate('id_priv', cdata.priv[i], [loCaseInsensitive]);
@@ -853,7 +870,7 @@ begin
   end
   else//wood, coal
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
@@ -862,9 +879,11 @@ begin
       SQL.add('where (id_dist=:idd)and(id_' + nam + '=:id)and ');
       SQL.add('sdate in (select max(sdate) from ' + nam);
       SQL.add('where sdate<=convert(smalldatetime,:d,104)and(id_dist=:idd)and(id_' + nam + '=:id))');
-      ParamByName('d').AsString := MainForm.rdt;
-      ParamByName('idd').AsInteger := MainForm.dist;
-      ParamByName('id').AsInteger := id;
+      Parameters.ParseSQL(SQL.Text, True);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'd', MainForm.rdt);
+      SetParam(Parameters, 'idd', MainForm.dist);
+      SetParam(Parameters, 'id', id);
       Open;
       Result := FieldByName('cost').AsFloat;
       Close;
@@ -1629,7 +1648,8 @@ begin
       SQL.Add('select value' + nv);
       SQL.Add('from currstnd.dbf sbros');
       SQL.Add('where sbros.id_stnd=:id');
-      Parameters.ParamByName('id').Value := integer(cdata.rstnd);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', integer(cdata.rstnd));
       Open;
       Result := FieldByName('value' + nv).AsFloat;
       Close;
@@ -1648,7 +1668,8 @@ begin
     SQL.Add('select sbros.vmdd');
     SQL.Add('from curmdd.dbf sbros');
     SQL.Add('where sbros.id_mdd=:id');
-    Parameters.ParamByName('id').Value := integer(cdata.mdd);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(cdata.mdd));
     Open;
     Result := FieldByName('vmdd').AsInteger;
     Close;
@@ -1657,14 +1678,15 @@ end;
 
 function TClient.GetOwnPriv: string;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Text := 'SELECT Priv.namepriv'#13#13 +
       'FROM Fam INNER JOIN'#13#10 +
       'Priv ON Fam.id_priv = Priv.id_priv'#13#10 +
       'WHERE     (Fam.id_mem = CAST(:rgn AS char(8)) + ' + quotedstr('0') + ')';
-    ParamByName('rgn').Value := data.regn;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'rgn', data.regn);
     Open;
     Result :=  FieldByName('namepriv').AsString;
   end;
@@ -2474,14 +2496,15 @@ end;
 
 function FromSt(s: integer): integer;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select id_min');
     SQL.Add('from stat');
     SQL.Add('where id_status = :id');
-    ParamByName('id').AsInteger := s;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', s);
     Open;
     Result := FieldByName('id_min').AsInteger;
     Close;

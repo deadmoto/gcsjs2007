@@ -48,7 +48,7 @@ procedure TSelectDistFrm.Fill;
 var
   l: integer;
 begin
-  with DModule.Query1 do begin
+  with DModule.sqlQuery1 do begin
     l := 0;
     Close;
     SQL.Clear;
@@ -75,8 +75,9 @@ begin
     SQL.Add('from insp');
     SQL.Add('where (status = :st) and (id_dist = :id)');
     SQL.Add('order by nameinsp');
-    ParamByName('st').AsInteger := 1;//только активные инспекторы
-    ParamByName('id').AsInteger := dist[Combobox2.ItemIndex];
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'st', 1);//только активные инспекторы
+    SetParam(Parameters, 'id', dist[Combobox2.ItemIndex]);
     Open;
     First;
     Combobox1.Text := FieldByName('nameinsp').AsString;
@@ -112,27 +113,29 @@ procedure TSelectDistFrm.Button1Click(Sender: TObject);
 var
   tmp_pass: string;
 begin
-  with DModule.Query1 do begin
+  with DModule.sqlQuery1 do begin
     SQL.Clear;
     SQL.Text := 'SELECT password FROM Insp' + #13 +
       'WHERE (id_insp = :idinsp)';
-    ParamByName('idinsp').AsInteger := insp[ComboBox1.ItemIndex];
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'idinsp', insp[ComboBox1.ItemIndex]);
     Open;
   end;
 
-  tmp_pass :=  DModule.Query1.FieldByName('password').Value;
+  tmp_pass :=  DModule.sqlQuery1.FieldByName('password').Value;
 
   if GenMD5Password(LabeledEdit1.Text) = tmp_pass then
   begin
   if Combobox1.Text <> '' then
-    with DModule.Query1 do begin
+    with DModule.sqlQuery1 do begin
       Close;
       SQL.Clear;
       SQL.Add('select *');
       SQL.Add('from insp');
       SQL.Add('where (id_insp = :id)and(id_dist=:idd)');
-      ParamByName('id').AsInteger := insp[Combobox1.ItemIndex];
-      ParamByName('idd').AsInteger := dist[Combobox2.ItemIndex];
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', insp[Combobox1.ItemIndex]);
+      SetParam(Parameters, 'idd', dist[Combobox2.ItemIndex]);
       Open;
       if not IsEmpty then begin
         MainForm.insp := insp[Combobox1.ItemIndex];
@@ -193,14 +196,15 @@ end;
 
 function TSelectDistFrm.SelInsp(n: integer): string;
 begin
-  with DModule.Query1 do begin
+  with DModule.sqlQuery1 do begin
     Close;
     SQL.Clear;
     SQL.Add('select nameinsp');
     SQL.Add('from insp');
     SQL.Add('where (id_insp = :id)and(id_dist=:dist)');
-    ParamByName('id').AsInteger := n;
-    ParamByName('dist').AsInteger := dist[Combobox2.ItemIndex];
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
+    SetParam(Parameters, 'dist', dist[Combobox2.ItemIndex]);
     Open;
     Result := FieldByName('nameinsp').AsString;
     Close;
@@ -211,7 +215,7 @@ procedure TSelectDistFrm.ComboBox2Change(Sender: TObject);
 var
   l: integer;
 begin
-  with DModule.Query1 do begin
+  with DModule.sqlQuery1 do begin
     l := 0;
     Close;
     SQL.Clear;
@@ -219,8 +223,9 @@ begin
     SQL.Add('from insp');
     SQL.Add('where (status = :st) and (id_dist = :id)');
     SQL.Add('order by nameinsp');
-    ParamByName('st').AsInteger := 1;//только активные инспекторы
-    ParamByName('id').AsInteger := dist[Combobox2.ItemIndex];
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'st', 1);//только активные инспекторы
+    SetParam(Parameters, 'id', dist[Combobox2.ItemIndex]);
     Open;
     First;
     Combobox1.Clear;

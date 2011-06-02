@@ -15,7 +15,8 @@ uses
   StdCtrls,
   SysUtils,
   Variants,
-  Windows;
+  Windows,
+  TypInfo;
 
 type
   TSlujMode = (mSum, mDetail, mDebt);
@@ -65,51 +66,54 @@ begin
   with DModule do
   begin
     sqlQuery1.Close;
-    case mode of
-      mDetail:
-      begin
-        sqlQuery1.SQL.Text :=
-          'SELECT Sluj.sdate, Sluj.regn, Cl.fio, Sluj.sub AS sluj_sum, Sub.sub AS sub_sum, Serv.nameserv AS nameserv'#13#10 +
-          'FROM Sluj INNER JOIN'#13#10 +
-            'Cl ON Sluj.regn = Cl.regn INNER JOIN'#13#10 +
-            'Sub ON Sluj.sdate = Sub.sdate AND Sluj.regn = Sub.regn AND Sluj.service = Sub.service INNER JOIN'#13#10 +
-            'Serv ON Sub.service = Serv.id_serv'#13#10 +
-          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104) AND Cl.id_dist=:dist) and(id_debt is NULL)'#13#10 +
-          'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio, Sub.sub, Serv.nameserv, Sluj.sub'#13#10 +
-          'ORDER BY Cl.fio';
-      end;
-      
-      mSum:
-      begin
-        sqlQuery1.SQL.Text :=
-          'SELECT Sluj.sdate, Sluj.regn, Cl.fio, SUM(Sluj.sub) AS sluj_sum, SUM(Sub.sub) AS sub_sum'#13#10 +
-          'FROM Sluj INNER JOIN'#13#10 +
-            'Cl ON Sluj.regn = Cl.regn INNER JOIN'#13#10 +
-            'Sub ON Sluj.sdate = Sub.sdate '#13#10 +
-            'AND Sluj.regn = Sub.regn AND Sluj.service = Sub.service'#13#10 +
-          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104) AND Cl.id_dist=:dist) and(id_debt is NULL)'#13#10 +
-          'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio'#13#10 +
-          'ORDER BY Cl.fio';
-      end;
+    sqlQuery1.SQL.Text := 'exec getusluj_query ' + quotedstr(MainForm.rdt) + ', ' +
+      IntToStr(MainForm.dist) + ', ' +  quotedstr(GetEnumName(TypeInfo(TSlujMode),Ord(mode)));
+//    case mode of
+//      mDetail:
+//      begin
+//        sqlQuery1.SQL.Text := 'exec getusluj_query ' + quotedstr(MainForm.rdt) + ', ' + IntToStr(MainForm.dist) + ', ' +  mode;
+//          'SELECT Sluj.sdate, Sluj.regn, Cl.fio, Sluj.sub AS sluj_sum, Sub.sub AS sub_sum, Serv.nameserv AS nameserv'#13#10 +
+//          'FROM Sluj INNER JOIN'#13#10 +
+//            'Cl ON Sluj.regn = Cl.regn INNER JOIN'#13#10 +
+//            'Sub ON Sluj.sdate = Sub.sdate AND Sluj.regn = Sub.regn AND Sluj.service = Sub.service INNER JOIN'#13#10 +
+//            'Serv ON Sub.service = Serv.id_serv'#13#10 +
+//          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104) AND Cl.id_dist=:dist) and(id_debt is NULL)'#13#10 +
+//          'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio, Sub.sub, Serv.nameserv, Sluj.sub'#13#10 +
+//          'ORDER BY Cl.fio';
+//      end;
+//
+//      mSum:
+//      begin
+//        sqlQuery1.SQL.Text :=
+//          'SELECT Sluj.sdate, Sluj.regn, Cl.fio, SUM(Sluj.sub) AS sluj_sum, SUM(Sub.sub) AS sub_sum'#13#10 +
+//          'FROM Sluj INNER JOIN'#13#10 +
+//            'Cl ON Sluj.regn = Cl.regn INNER JOIN'#13#10 +
+//            'Sub ON Sluj.sdate = Sub.sdate '#13#10 +
+//            'AND Sluj.regn = Sub.regn AND Sluj.service = Sub.service'#13#10 +
+//          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104) AND Cl.id_dist=:dist) and(id_debt is NULL)'#13#10 +
+//          'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio'#13#10 +
+//          'ORDER BY Cl.fio';
+//      end;
 
-      mDebt:
-      begin
-        sqlQuery1.SQL.Text :=
-          'SELECT Sluj.sdate, Sluj.regn, Cl.fio, SUM(Sluj.sub) AS sluj_sum, SUM(Sub.sub) AS sub_sum, SlujType.namesluj, Sluj.id_debt, dbo.getcl_address(Sluj.regn) as address'#13#10+
-          'FROM Sluj INNER JOIN'#13#10+
-            'Cl ON Sluj.regn = Cl.regn INNER JOIN'#13#10+
-            'Sub ON Sluj.sdate = Sub.sdate AND Sluj.regn = Sub.regn'#13#10+
-              'AND Sluj.service = Sub.service INNER JOIN'#13#10+
-            'Debt ON Sluj.id_debt = Debt.id_debt INNER JOIN'#13#10+
-            'SlujType ON SlujType.id_sluj = Debt.id_sluj'#13#10+
-          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104) AND Cl.id_dist=:dist) and(Sluj.id_debt IS NOT NULL)'#13#10+
-          'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio, SlujType.namesluj, Sluj.id_debt'#13#10+
-          'ORDER BY Cl.fio';
-      end;
+//      mDebt:
+//      begin
+//        sqlQuery1.SQL.Text :=
+//          'SELECT Sluj.sdate, Sluj.regn, Cl.fio, SUM(Sluj.sub) AS sluj_sum, SUM(Sub.sub) AS sub_sum, SlujType.namesluj, Sluj.id_debt, dbo.getcl_address(Sluj.regn) as address'#13#10+
+//          'FROM Sluj INNER JOIN'#13#10+
+//            'Cl ON Sluj.regn = Cl.regn INNER JOIN'#13#10+
+//            'Sub ON Sluj.sdate = Sub.sdate AND Sluj.regn = Sub.regn'#13#10+
+//              'AND Sluj.service = Sub.service INNER JOIN'#13#10+
+//            'Debt ON Sluj.id_debt = Debt.id_debt INNER JOIN'#13#10+
+//            'SlujType ON SlujType.id_sluj = Debt.id_sluj'#13#10+
+//          'WHERE (Sluj.sdate = CONVERT(smalldatetime, :rdt, 104) AND Cl.id_dist=:dist) and(Sluj.id_debt IS NOT NULL)'#13#10+
+//          'GROUP BY Sluj.sdate, Sluj.regn, Cl.fio, SlujType.namesluj, Sluj.id_debt'#13#10+
+//          'ORDER BY Cl.fio';
+//      end;
 
-    end;
-    sqlQuery1.Parameters.ParamByName('rdt').Value := MainForm.rdt;
-    sqlQuery1.Parameters.ParamByName('dist').Value := MainForm.dist;
+//    end;
+//    sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+//    SetParam(sqlQuery1.Parameters, 'rdt', MainForm.rdt);
+//    SetParam(sqlQuery1.Parameters, 'dist', MainForm.dist);
     sqlQuery1.Open;
     sqlQuery1.First;
   end;
@@ -286,10 +290,10 @@ begin
           ' UPDATE Debt SET Debt.closed = 0, Debt.closed_date = 0 WHERE Debt.id_debt = :id2'#13#10 +
           'END';
 
-        DModule.sqlQuery1.Parameters.ParamByName('rdt').Value := MainForm.rdt;
-        DModule.sqlQuery1.Parameters.ParamByName('id0').Value := debtcl[SlujGrid.Row - 1];
-        DModule.sqlQuery1.Parameters.ParamByName('id1').Value := debtcl[SlujGrid.Row - 1];
-        DModule.sqlQuery1.Parameters.ParamByName('id2').Value := debtcl[SlujGrid.Row - 1];
+        SetParam(DModule.sqlQuery1.Parameters, 'rdt', MainForm.rdt);
+        SetParam(DModule.sqlQuery1.Parameters, 'id0', debtcl[SlujGrid.Row - 1]);
+        SetParam(DModule.sqlQuery1.Parameters, 'id1', debtcl[SlujGrid.Row - 1]);
+        SetParam(DModule.sqlQuery1.Parameters, 'id2', debtcl[SlujGrid.Row - 1]);
         DModule.sqlQuery1.ExecSQL;
       end
     else
@@ -298,7 +302,7 @@ begin
         DModule.sqlQuery1.SQL.Text :=
           'DELETE FROM Sluj'#13#10 +
           'WHERE (sdate = CONVERT(smalldatetime, :rdt, 104)) AND (regn = ' + cl_regn + ')and(id_debt is NULL);';
-        DModule.sqlQuery1.Parameters.ParamByName('rdt').Value := MainForm.rdt;
+        SetParam(DModule.sqlQuery1.Parameters, 'rdt', MainForm.rdt);
         DModule.sqlQuery1.ExecSQL;
       end;
     end;

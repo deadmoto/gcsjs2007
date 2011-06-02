@@ -19,7 +19,7 @@ type
   TReportFiles = class
   strict private
   public
-    cRepFiles: array[0..11] of string;
+    cRepFiles: array[0..12] of string;
     constructor Create;
   end;
 
@@ -75,6 +75,7 @@ begin
   cRepFiles[9] := 'factsale.fr3';
   cRepFiles[10] := 'mintrudmount.fr3';
   cRepFiles[11] := 'clarchive.fr3';
+  cRepFiles[12] := 'errorlist.fr3';
 end;
 
 procedure TReportEditFrm.FormShow(Sender: TObject);

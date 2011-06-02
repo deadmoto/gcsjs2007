@@ -50,7 +50,7 @@ uses
 procedure TForm22.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Edit3.Text := '0';
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
 end;
 
 
@@ -59,7 +59,7 @@ procedure TForm22.Button1Click(Sender: TObject);
   Поиск и расчет количества людей с возрастом в указанном диапазоне
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Add('select sb.fio,sb.age,strt.namestreet,cl.nhouse,cl.corp,cl.apart,cl.tel');
@@ -68,9 +68,10 @@ begin
     SQL.Add('from fam) as sb on cl.regn=sb.regn');
     SQL.Add('inner join strt on cl.id_street=strt.id_street');
     SQL.Add('where sb.age>=:f and sb.age<=:s');
-    ParamByName('f').AsInteger := StrToInt(Edit1.Text);
-    ParamByName('s').AsInteger := StrToInt(Edit2.Text);
-    ParamByName('d').AsString  := MainForm.rdt;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'f', StrToInt(Edit1.Text));
+    SetParam(Parameters, 's', StrToInt(Edit2.Text));
+    SetParam(Parameters, 'd', MainForm.rdt);
     Open;
     Edit3.Text := IntToStr(RecordCount);
   end;
@@ -86,7 +87,7 @@ begin
   if StrToInt(Edit3.Text) <> 0 then
   begin
     path := ExtractFilePath(Application.ExeName) + 'out\';
-    DModule.Query1.First;
+    DModule.sqlQuery1.First;
     FillTable(path, 'age' + Edit1.Text + '-' + Edit2.Text, MainForm.codedbf);
   end;
 end;

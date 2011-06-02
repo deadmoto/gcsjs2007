@@ -240,7 +240,7 @@ begin
   Combobox5.Items.Add('последний');
   Combobox11.Items.Add('типовой расчет');
   Combobox11.Items.Add('индивид. расчет');
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     l := 0;
     Close;
@@ -266,7 +266,8 @@ begin
     SQL.Add('from insp');
     SQL.Add('where id_dist=:id');
     SQL.Add('order by nameinsp');
-    ParamByName('id').AsInteger := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', MainForm.dist);
     Open;
     First;
     while not EOF do
@@ -319,8 +320,9 @@ begin
     SQL.Add('select id_mng, namemng');
     SQL.Add('from mng');
     SQL.Add('where id_dist = :dist');
-    ParamByName('dist').AsInteger := MainForm.dist;
     SQL.Add('order by namemng');
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', MainForm.dist);
     Open;
     First;
     while not EOF do
@@ -426,6 +428,7 @@ begin
     SQL.Text :=
       'SELECT id_office, adr'#13#10 +
       'FROM Office WHERE id_dist=:dist';
+    Parameters.ParseSQL(SQL.Text, True);
     Parameters.ParseSQL(SQL.Text, True);
     SetParam(Parameters, 'dist', MainForm.dist);
     Open;
@@ -1576,15 +1579,16 @@ function TForm33.SelInsp(n: integer): string;//выбрать инспектора
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select nameinsp');
     SQL.Add('from insp');
     SQL.Add('where (id_insp = :id)and(id_dist=:dist)');
-    ParamByName('id').AsInteger := n;
-    ParamByName('dist').AsInteger := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
+    SetParam(Parameters, 'dist', MainForm.dist);
     Open;
     Result := FieldByName('nameinsp').AsString;
     Close;
@@ -1595,14 +1599,15 @@ function TForm33.SelCert(n: integer): string;//выбрать аттестацию
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namecert');
     SQL.Add('from cert');
     SQL.Add('where id_cert = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namecert').AsString;
     Close;
@@ -1613,14 +1618,15 @@ function TForm33.SelStreet(n: integer): string;//выбрать улицу
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namestreet');
     SQL.Add('from strt');
     SQL.Add('where id_street = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namestreet').AsString;
     Close;
@@ -1645,15 +1651,16 @@ function TForm33.SelMng(n: integer): string;//выбрать распорядителя
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namemng');
     SQL.Add('from mng');
     SQL.Add('where (id_dist = :dist)and(id_mng = :id)');
-    ParamByName('dist').AsInteger := MainForm.dist;
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', MainForm.dist);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namemng').AsString;
     Close;
@@ -1664,14 +1671,15 @@ function TForm33.SelFnd(n: integer): string;//выбрать фонд
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namefond');
     SQL.Add('from fond');
     SQL.Add('where id_fond = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namefond').AsString;
     Close;
@@ -1682,14 +1690,15 @@ function TForm33.SelSettl(n: integer): string;//выбрать тип заселения
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namesettl');
     SQL.Add('from settl');
     SQL.Add('where id_settl = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namesettl').AsString;
     Close;
@@ -1700,14 +1709,15 @@ function TForm33.SelOwn(n: integer): string;//выбрать тип владения
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select nameown');
     SQL.Add('from own');
     SQL.Add('where id_own = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('nameown').AsString;
     Close;
@@ -1718,14 +1728,15 @@ function TForm33.SelCntrl(n: integer): string;//выбрать тип контроля
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namecntrl');
     SQL.Add('from cntrl');
     SQL.Add('where id_cntrl = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namecntrl').AsString;
     Close;
@@ -1736,14 +1747,15 @@ function TForm33.SelPriv(n: integer): string;//выбрать льготу
 {*******************************************************************************
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namepriv');
     SQL.Add('from priv');
     SQL.Add('where id_priv = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namepriv').AsString;
     Close;
@@ -1869,7 +1881,7 @@ procedure TForm33.FormClose(Sender: TObject; var Action: TCloseAction);
 {*******************************************************************************
 *******************************************************************************}
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
 end;
 
 procedure TForm33.Edit1Exit(Sender: TObject);

@@ -73,13 +73,14 @@ begin
 
   Sheet := ExcelApp.ActiveWorkBook.WorkSheets[1];
 
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('execute getclinfo :id,:d');
-    ParamByName('id').AsInteger := MainForm.dist;
-    ParamByName('d').AsString := MainForm.rdt;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', MainForm.dist);
+    SetParam(Parameters, 'd', MainForm.rdt);
     Open;
     pr.ProgressBar1.Max := RecordCount;
     while not eof do

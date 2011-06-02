@@ -33,7 +33,7 @@ var
 
 implementation
 
-uses datamodule, main, md5, appregistry;
+uses datamodule, main, md5, appregistry, service;
 
 {$R *.dfm}
 
@@ -43,15 +43,16 @@ var
 begin
   ComboBox1.Clear;
   l:=0;
-  With DModule.Query1 do begin
+  With DModule.sqlQuery1 do begin
     Close;
     SQL.Clear;
     SQL.Add('select id_insp, nameinsp, id_office');
     SQL.Add('from insp');
     SQL.Add('where (status = :st) and (id_dist = :id)');
     SQL.Add('order by nameinsp');
-    ParamByName('st').AsInteger := 1;//только активные инспекторы
-    ParamByName('id').AsInteger := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'st', 1);//только активные инспекторы
+    SetParam(Parameters, 'id', MainForm.dist);
     Open;
     First;
     while not EOF do
@@ -83,22 +84,23 @@ end;
 
 procedure TForm17.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
 end;
 
 procedure TForm17.Button1Click(Sender: TObject);
 var
   tmp_pass: string;
 begin
-  with DModule.Query1 do begin
+  with DModule.sqlQuery1 do begin
     SQL.Clear;
     SQL.Text := 'SELECT password FROM Insp' + #13 +
       'WHERE (id_insp = :idinsp)';
-    ParamByName('idinsp').AsInteger := insp[ComboBox1.ItemIndex];
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'idinsp', insp[ComboBox1.ItemIndex]);
     Open;
   end;
 
-  tmp_pass :=  DModule.Query1.FieldByName('password').Value;
+  tmp_pass :=  DModule.sqlQuery1.FieldByName('password').Value;
 
   if GenMD5Password(LabeledEdit1.Text) = tmp_pass then
   begin

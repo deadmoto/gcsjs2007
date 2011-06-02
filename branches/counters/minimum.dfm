@@ -28,7 +28,6 @@ object Form13: TForm13
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 0
-    ExplicitWidth = 339
     object StringGrid1: TStringGrid
       Left = 2
       Top = 2
@@ -42,7 +41,6 @@ object Form13: TForm13
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowSelect]
       TabOrder = 0
       OnSelectCell = StringGrid1SelectCell
-      ExplicitWidth = 335
     end
   end
   object Panel2: TPanel

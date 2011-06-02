@@ -796,7 +796,7 @@ object Form16: TForm16
       TabOrder = 2
     end
     object Button1: TButton
-      Left = 272
+      Left = 267
       Top = 359
       Width = 81
       Height = 25

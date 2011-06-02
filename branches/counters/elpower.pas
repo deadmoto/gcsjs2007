@@ -127,15 +127,16 @@ begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and
     (Edit3.Text <> '') and (Edit4.Text <> '') and (Edit5.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_el');
       SQL.Add('from el');
       SQL.Add('where (id_el=:id)and(id_dist=:idd)');
-      ParamByName('id').AsInteger  := StrToInt(Edit4.Text);
-      ParamByName('idd').AsInteger := MainForm.dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit4.Text));
+      SetParam(Parameters, 'idd', MainForm.dist);
       Open;
       if IsEmpty then
       begin
@@ -144,8 +145,9 @@ begin
         SQL.Add('select id_el');
         SQL.Add('from el');
         SQL.Add('where (plate=:plate)and(id_dist=:idd)');
-        ParamByName('plate').AsString := Edit1.Text;
-        ParamByName('idd').AsInteger  := MainForm.dist;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'plate', Edit1.Text);
+        SetParam(Parameters, 'idd', MainForm.dist);
         Open;
         if IsEmpty then
           flag := True
@@ -164,13 +166,14 @@ begin
         SQL.Clear;
         SQL.Add('insert into el');
         SQL.Add('values (:idd,Convert(smalldatetime,:d,104), :id, :plate, :tarif1,:tarif2,:tarif3)');
-        ParamByName('idd').AsInteger := MainForm.dist;
-        ParamByName('d').AsString := MainForm.rdt;
-        ParamByName('id').AsInteger := StrToInt(Edit4.Text);
-        ParamByName('plate').AsString := Edit1.Text;
-        ParamByName('tarif1').AsFloat := StrToFloat(Edit2.Text);
-        ParamByName('tarif2').AsFloat := StrToFloat(Edit3.Text);
-        ParamByName('tarif3').AsFloat := StrToFloat(Edit5.Text);
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'idd', MainForm.dist);
+        SetParam(Parameters, 'd', MainForm.rdt);
+        SetParam(Parameters, 'id', StrToInt(Edit4.Text));
+        SetParam(Parameters, 'plate', Edit1.Text);
+        SetParam(Parameters, 'tarif1', StrToFloat(Edit2.Text));
+        SetParam(Parameters, 'tarif2', StrToFloat(Edit3.Text));
+        SetParam(Parameters, 'tarif3', StrToFloat(Edit5.Text));
         ExecSQL;
         FillEl(MainForm.bpath, MainForm.rdt, MainForm.dist, MainForm.codedbf);
         SetDefault;
@@ -197,15 +200,16 @@ begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and
     (Edit3.Text <> '') and (Edit4.Text <> '') and (Edit5.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_el');
       SQL.Add('from el');
       SQL.Add('where (id_el=:id)and(id_dist=:idd)');
-      ParamByName('id').AsInteger  := StrToInt(Edit4.Text);
-      ParamByName('idd').AsInteger := MainForm.dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit4.Text));
+      SetParam(Parameters, 'idd', MainForm.dist);
       Open;
       if IsEmpty or not IsEmpty and (FieldByName('id_el').AsInteger = oldid) then
       begin
@@ -218,9 +222,10 @@ begin
           SQL.Add('select id_el');
           SQL.Add('from el');
           SQL.Add('where (id_el=:id)and(id_dist=:idd)and(sdate=Convert(smalldatetime,:d,104))');
-          ParamByName('idd').AsInteger := MainForm.dist;
-          ParamByName('id').AsInteger := StrToInt(Edit4.Text);
-          ParamByName('d').AsString := MainForm.rdt;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'idd', MainForm.dist);
+          SetParam(Parameters, 'id', StrToInt(Edit4.Text));
+          SetParam(Parameters, 'd', MainForm.rdt);
           Open;
           if IsEmpty then
             flag := False
@@ -232,10 +237,11 @@ begin
         SQL.Add('select id_el');
         SQL.Add('from el');
         SQL.Add('where (plate=:plate)and(id_dist=:idd)');
-        ParamByName('plate').AsString := Edit1.Text;
-        ParamByName('idd').AsInteger  := MainForm.dist;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'plate', Edit1.Text);
+        SetParam(Parameters, 'idd', MainForm.dist);
         Open;
-        if IsEmpty or not IsEmpty and (FieldByName('id_el').AsInteger = oldid) then
+        if IsEmpty or not IsEmpty and (FieldByName('id_el').Value = oldid) then
         begin
           if not flag then
           begin
@@ -243,7 +249,8 @@ begin
             SQL.Clear;
             SQL.Add('insert into el');
             SQL.Add('values (:idd,Convert(smalldatetime,:d,104),:id,:name,:tarif1,:tarif2,:tarif3)');
-            ParamByName('id').AsInteger := StrToInt(Edit4.Text);
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', StrToInt(Edit4.Text));
           end
           else
           begin
@@ -252,14 +259,16 @@ begin
             SQL.Add('update el');
             SQL.Add('set plate=:name,tarifel1=:tarif1,tarifel2=:tarif2,tarifel3=:tarif3');
             SQL.Add('where (id_el = :id)and(sdate=Convert(smalldatetime,:d,104))and(id_dist=:idd)');
-            ParamByName('id').AsInteger := oldid;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', oldid);
           end;
-          ParamByName('idd').AsInteger := MainForm.dist;
-          ParamByName('d').AsString := MainForm.rdt;
-          ParamByName('name').AsString := Edit1.Text;
-          ParamByName('tarif1').AsFloat := StrToFloat(Edit2.Text);
-          ParamByName('tarif2').AsFloat := StrToFloat(Edit3.Text);
-          ParamByName('tarif3').AsFloat := StrToFloat(Edit5.Text);
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'idd', MainForm.dist);
+          SetParam(Parameters, 'd', MainForm.rdt);
+          SetParam(Parameters, 'name', Edit1.Text);
+          SetParam(Parameters, 'tarif1', StrToFloat(Edit2.Text));
+          SetParam(Parameters, 'tarif2', StrToFloat(Edit3.Text));
+          SetParam(Parameters, 'tarif3', StrToFloat(Edit5.Text));
           ExecSQL;
           FillEl(MainForm.bpath, MainForm.rdt, MainForm.dist, MainForm.codedbf);
           oldid := StrToInt(Edit4.Text);
@@ -279,15 +288,16 @@ end;
 procedure TForm23.Button3Click(Sender: TObject);
 { удалить тариф }
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('delete from el');
     SQL.Add('where (id_el=:id)and(sdate=Convert(smalldatetime,:d,104))and(id_dist=:idd)');
-    ParamByName('idd').AsInteger := MainForm.dist;
-    ParamByName('d').AsString := MainForm.rdt;
-    ParamByName('id').AsInteger := oldid;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'idd', MainForm.dist);
+    SetParam(Parameters, 'd', MainForm.rdt);
+    SetParam(Parameters, 'id', oldid);
     ExecSQL;
     FillEl(MainForm.bpath, MainForm.rdt, MainForm.dist, MainForm.codedbf);
   end;
@@ -314,7 +324,7 @@ end;
 
 procedure TForm23.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
   DModule.qTarif.Close;
 end;
 

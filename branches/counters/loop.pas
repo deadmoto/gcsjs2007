@@ -160,9 +160,10 @@ begin
       SQL.Add('select regn from sluj');
       SQL.Add('where (regn=:r)and(sdate=CONVERT(smalldatetime,:s,104))');
       SQL.Add('and(service=:serv)and(id_debt is NULL)');
-      Parameters.ParamByName('r').Value := Form18.client;
-      Parameters.ParamByName('s').Value := MainForm.rdt;
-      Parameters.ParamByName('serv').Value := i;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'r', Form18.client);
+      SetParam(Parameters, 's', MainForm.rdt);
+      SetParam(Parameters, 'serv', i);
       Open;
       If IsEmpty or not IsEmpty and
         (FieldByName('regn').AsInteger=Form18.client) then
@@ -183,79 +184,90 @@ begin
           SQL.Add('where (regn=:r)and(sdate=CONVERT(smalldatetime,:s,104))');
           SQL.Add('and(service=:serv)and(id_debt is NULL)');
         end;
-        Parameters.ParamByName('s').Value := MainForm.rdt;
-        Parameters.ParamByName('r').Value := Form18.client;
-        Parameters.ParamByName('fact').Value := isFact;
-        Parameters.ParamByName('serv').Value := i;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 's', MainForm.rdt);
+        SetParam(Parameters, 'r', Form18.client);
+        SetParam(Parameters, 'fact', isFact);
+        SetParam(Parameters, 'serv', i);
         case i of
         0://содержание жилья
           begin
-            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit23.Text));
-            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit1.Text));
-            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit2.Text));
+            //Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'pm', Rnd(values3[i]-StrToFloat(Edit23.Text)));
+            SetParam(Parameters, 'snp', Rnd(values1[i]-StrToFloat(Edit1.Text)));
+            SetParam(Parameters, 'sub', Rnd(values2[i]-StrToFloat(Edit2.Text)));
             ExecSQL;
           end;
         1://ремонт
           begin
-            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit24.Text));
-            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit3.Text));
-            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit4.Text));
+            //Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'pm', Rnd(values3[i]-StrToFloat(Edit24.Text)));
+            SetParam(Parameters, 'snp', Rnd(values1[i]-StrToFloat(Edit3.Text)));
+            SetParam(Parameters, 'sub', Rnd(values2[i]-StrToFloat(Edit4.Text)));
             ExecSQL;
           end;
         2://х.вода
           begin
-            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit25.Text));
-            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit5.Text));
-            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit6.Text));
+            //Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'pm', Rnd(values3[i]-StrToFloat(Edit25.Text)));
+            SetParam(Parameters, 'snp', Rnd(values1[i]-StrToFloat(Edit5.Text)));
+            SetParam(Parameters, 'sub', Rnd(values2[i]-StrToFloat(Edit6.Text)));
             ExecSQL;
           end;
         3://г.вода
           begin
-            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit26.Text));
-            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit7.Text));
-            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit8.Text));
+            //Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'pm', Rnd(values3[i]-StrToFloat(Edit26.Text)));
+            SetParam(Parameters, 'snp', Rnd(values1[i]-StrToFloat(Edit7.Text)));
+            SetParam(Parameters, 'sub', Rnd(values2[i]-StrToFloat(Edit8.Text)));
             ExecSQL;
           end;
         4://водоотведение
           begin
-            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit27.Text));
-            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit9.Text));
-            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit10.Text));
+            //Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'pm', Rnd(values3[i]-StrToFloat(Edit27.Text)));
+            SetParam(Parameters, 'snp', Rnd(values1[i]-StrToFloat(Edit9.Text)));
+            SetParam(Parameters, 'sub', Rnd(values2[i]-StrToFloat(Edit10.Text)));
             ExecSQL;
           end;
         5://отопление
           begin
-            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit28.Text));
-            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit11.Text));
-            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit12.Text));
+            //Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'pm', Rnd(values3[i]-StrToFloat(Edit28.Text)));
+            SetParam(Parameters, 'snp', Rnd(values1[i]-StrToFloat(Edit11.Text)));
+            SetParam(Parameters, 'sub', Rnd(values2[i]-StrToFloat(Edit12.Text)));
             ExecSQL;
           end;
         6://газ
           begin
-            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit29.Text));
-            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit13.Text));
-            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit14.Text));
+            //Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'pm', Rnd(values3[i]-StrToFloat(Edit29.Text)));
+            SetParam(Parameters, 'snp', Rnd(values1[i]-StrToFloat(Edit13.Text)));
+            SetParam(Parameters, 'sub', Rnd(values2[i]-StrToFloat(Edit14.Text)));
             ExecSQL;
           end;
         7://э/э
           begin
-            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit30.Text));
-            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit15.Text));
-            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit16.Text));
+            //Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'pm', Rnd(values3[i]-StrToFloat(Edit30.Text)));
+            SetParam(Parameters, 'snp', Rnd(values1[i]-StrToFloat(Edit15.Text)));
+            SetParam(Parameters, 'sub', Rnd(values2[i]-StrToFloat(Edit16.Text)));
             ExecSQL;
           end;
         12://дрова
           begin
-            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit31.Text));
-            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit17.Text));
-            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit18.Text));
+            //Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'pm', Rnd(values3[i]-StrToFloat(Edit31.Text)));
+            SetParam(Parameters, 'snp', Rnd(values1[i]-StrToFloat(Edit17.Text)));
+            SetParam(Parameters, 'sub', Rnd(values2[i]-StrToFloat(Edit18.Text)));
             ExecSQL;
           end;
         13://уголь
           begin
-            Parameters.ParamByName('pm').Value := Rnd(values3[i]-StrToFloat(Edit32.Text));
-            Parameters.ParamByName('snp').Value := Rnd(values1[i]-StrToFloat(Edit19.Text));
-            Parameters.ParamByName('sub').Value := Rnd(values2[i]-StrToFloat(Edit20.Text));
+            //Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'pm', Rnd(values3[i]-StrToFloat(Edit32.Text)));
+            SetParam(Parameters, 'snp', Rnd(values1[i]-StrToFloat(Edit19.Text)));
+            SetParam(Parameters, 'sub', Rnd(values2[i]-StrToFloat(Edit20.Text)));
             ExecSQL;
           end;
         end;
@@ -293,8 +305,9 @@ begin
     SQL.Add('from sub left join sluj on sub.regn=sluj.regn and(id_debt is NULL)');
     SQL.Add('and sub.service=sluj.service and sub.sdate=sluj.sdate');
     SQL.Add('where (sub.regn=:id)and(sub.sdate=convert(smalldatetime,:d,104))');
-    Parameters.ParamByName('id').Value := Form18.client;
-    Parameters.ParamByName('d').Value := MainForm.rdt;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', Form18.client);
+    SetParam(Parameters, 'd', MainForm.rdt);
     Open;
     while not eof do
     begin

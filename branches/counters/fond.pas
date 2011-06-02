@@ -65,7 +65,7 @@ procedure TForm6.SetDefault;
 var
   i: integer;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -77,13 +77,13 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование'),
-    TIntArray.Create(25, 270), DModule.Query1.RecordCount + 1);
+    TIntArray.Create(25, 270), DModule.sqlQuery1.RecordCount + 1);
 
-  for i := 0 to DModule.Query1.RecordCount - 1 do
+  for i := 0 to DModule.sqlQuery1.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('id_fond').Value;
-    StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('namefond').Value;
-    DModule.Query1.Next;
+    StringGrid1.Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('id_fond').Value;
+    StringGrid1.Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('namefond').Value;
+    DModule.sqlQuery1.Next;
   end;
 
 end;
@@ -112,14 +112,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_fond');
       SQL.Add('from fond');
       SQL.Add('where (id_fond=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit2.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit2.Text));
       Open;
       if IsEmpty then
       begin
@@ -128,7 +129,8 @@ begin
         SQL.Add('select id_fond');
         SQL.Add('from fond');
         SQL.Add('where (namefond = :name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty then
           flag := True
@@ -147,8 +149,9 @@ begin
         SQL.Clear;
         SQL.Add('insert into fond');
         SQL.Add('values (:id, :name)');
-        ParamByName('id').AsInteger  := StrToInt(Edit2.Text);
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit2.Text));
+        SetParam(Parameters, 'name', Edit1.Text);
         ExecSQL;
         SetDefault;
         Open;
@@ -173,14 +176,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_fond');
       SQL.Add('from fond');
       SQL.Add('where (id_fond=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit2.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit2.Text));
       Open;
       if IsEmpty or not IsEmpty and
         (FieldByName('id_fond').AsInteger = oldid) then
@@ -190,7 +194,8 @@ begin
         SQL.Add('select id_fond');
         SQL.Add('from fond');
         SQL.Add('where (namefond = :name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_fond').AsInteger = oldid) then
@@ -211,8 +216,9 @@ begin
         SQL.Add('update fond');
         SQL.Add('set namefond = :name');
         SQL.Add('where id_fond = :id');
-        ParamByName('id').AsInteger  := oldid;
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
+        SetParam(Parameters, 'name', Edit1.Text);
         ExecSQL;
         SetDefault;
         Open;
@@ -233,7 +239,7 @@ end;
 procedure TForm6.Button3Click(Sender: TObject);
 { удалить фонд }
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     if not IsEmpty then
     begin
@@ -241,7 +247,8 @@ begin
       SQL.Clear;
       SQL.Add('delete from fond');
       SQL.Add('where id_fond = :id');
-      ParamByName('id').AsInteger := oldid;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', oldid);
       ExecSQL;
       SetDefault;
       Open;
@@ -273,7 +280,7 @@ end;
 
 procedure TForm6.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
 end;
 
 procedure TForm6.Edit2KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);

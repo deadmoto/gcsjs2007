@@ -68,24 +68,24 @@ procedure TStats.Button1Click(Sender: TObject);
 var
   i: integer;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Text := ('exec statistic :date, :dist, :selmode, :mode');
-    Params.ParamValues['date'] := MainForm.rdt;
-    Params.ParamValues['dist'] := MainForm.dist;
+    Parameters.ParamValues['date'] := MainForm.rdt;
+    Parameters.ParamValues['dist'] := MainForm.dist;
 
     if CheckBox1.Checked then
-      Params.ParamValues['mode'] := 2
+      Parameters.ParamValues['mode'] := 2
     else
-      Params.ParamValues['mode'] := 1;
+      Parameters.ParamValues['mode'] := 1;
 
     case TabControl1.TabIndex of
       0:
-        Params.ParamValues['selmode'] := 1;
+        Parameters.ParamValues['selmode'] := 1;
       1:
-        Params.ParamValues['selmode'] := 2;
+        Parameters.ParamValues['selmode'] := 2;
     end;
 
     Open;
@@ -96,25 +96,25 @@ begin
     0:
     begin
       FormerStringGrid(StringGrid1, TStringArray.Create('Льгота', 'Кол-во'),
-        TIntArray.Create(280, 45), DModule.Query1.RecordCount + 1);
+        TIntArray.Create(280, 45), DModule.sqlQuery1.RecordCount + 1);
 
-      for i := 0 to DModule.Query1.RecordCount - 1 do
+      for i := 0 to DModule.sqlQuery1.RecordCount - 1 do
       begin
-        StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('namepriv').Value;
-        StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('kolvo').Value;
-        DModule.Query1.Next;
+        StringGrid1.Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('namepriv').Value;
+        StringGrid1.Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('kolvo').Value;
+        DModule.sqlQuery1.Next;
       end;
     end;
     1:
     begin
       FormerStringGrid(StringGrid1, TStringArray.Create('Соц. статус', 'Кол-во'),
-        TIntArray.Create(280, 45), DModule.Query1.RecordCount + 1);
+        TIntArray.Create(280, 45), DModule.sqlQuery1.RecordCount + 1);
 
-      for i := 0 to DModule.Query1.RecordCount - 1 do
+      for i := 0 to DModule.sqlQuery1.RecordCount - 1 do
       begin
-        StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('namestatus').Value;
-        StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('kolvo').Value;
-        DModule.Query1.Next;
+        StringGrid1.Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('namestatus').Value;
+        StringGrid1.Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('kolvo').Value;
+        DModule.sqlQuery1.Next;
       end;
     end;
   end;
@@ -137,7 +137,7 @@ var
 begin
   //Субсидия
   summ := 0;
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Text := (
@@ -156,10 +156,11 @@ begin
       ') sb1 ON sb1.regn = cl.regn' + #13 +
       'WHERE Cl.id_dist = :idd AND sb1.summa >= :limsub1 AND sb1.summa <= :limsub2'
       );
-    ParamByName('d').AsString := MainForm.rdt;
-    ParamByName('idd').Value := MainForm.dist;
-    ParamByName('limsub1').Value := Edit3.Text;
-    ParamByName('limsub2').Value := Edit4.Text;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'd', MainForm.rdt);
+    SetParam(Parameters, 'idd', MainForm.dist);
+    SetParam(Parameters, 'limsub1', Edit3.Text);
+    SetParam(Parameters, 'limsub2', Edit4.Text);
     Open;
     First;
     for i := 1 to RecordCount do
@@ -168,14 +169,14 @@ begin
       Next;
     end;
   end;
-  Label11.Caption := IntToStr(DModule.Query1.RecordCount);
-  if DModule.Query1.RecordCount = 0 then
+  Label11.Caption := IntToStr(DModule.sqlQuery1.RecordCount);
+  if DModule.sqlQuery1.RecordCount = 0 then
     Label12.Caption := '0'
   else
     Label12.Caption := FloatToStr(RoundTo(summ / StrToFloat(Label11.Caption), -2));
 
   //Доход
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Text := (
@@ -189,14 +190,15 @@ begin
       'AND Hist.edate > convert(smalldatetime, :d, 104)' + #13 +
       'WHERE Cl.id_dist = :idd AND hist.income >= :inclim1 AND hist.income <= :inclim2'
       );
-    ParamByName('d').AsString := MainForm.rdt;
-    ParamByName('idd').Value := MainForm.dist;
-    ParamByName('inclim1').Value := Edit1.Text;
-    ParamByName('inclim2').Value := Edit2.Text;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'd', MainForm.rdt);
+    SetParam(Parameters, 'idd', MainForm.dist);
+    SetParam(Parameters, 'inclim1', Edit1.Text);
+    SetParam(Parameters, 'inclim2', Edit2.Text);
     Open;
     First;
   end;
-  Label9.Caption := IntToStr(DModule.Query1.RecordCount);
+  Label9.Caption := IntToStr(DModule.sqlQuery1.RecordCount);
 end;
 
 procedure TStats.Edit1Exit(Sender: TObject);

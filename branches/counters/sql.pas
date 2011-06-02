@@ -16,7 +16,6 @@ uses
   Grids,
   DBGrids,
   DB,
-  DBTables,
 //  FileCtrl,
   ComCtrls,
   shellapi, StrUtils ,ExtCtrls;
@@ -192,7 +191,7 @@ begin
   if not Assigned(MainForm) then
   begin
     DModule.dbfConnection.Connected := False;
-    DModule.DataBase1.Connected := False;
+    DModule.sqlConnection.Connected := False;
     Application.Terminate;
   end;
 end;

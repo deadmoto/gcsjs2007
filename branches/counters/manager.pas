@@ -65,7 +65,7 @@ procedure TForm7.SetDefault;
 var
   i: integer;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -73,19 +73,20 @@ begin
     SQL.Add('from mng');
     SQL.Add('where id_dist = :dist');
     SQL.Add('order by id_mng');
-    ParamByName('dist').AsInteger := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', MainForm.dist);
     Open;
     First;
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование'),
-    TIntArray.Create(25, 270), DModule.Query1.RecordCount + 1);
+    TIntArray.Create(25, 270), DModule.sqlQuery1.RecordCount + 1);
 
-  for i := 0 to DModule.Query1.RecordCount - 1 do
+  for i := 0 to DModule.sqlQuery1.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('id_mng').Value;
-    StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('namemng').Value;
-    DModule.Query1.Next;
+    StringGrid1.Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('id_mng').Value;
+    StringGrid1.Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('namemng').Value;
+    DModule.sqlQuery1.Next;
   end;
 end;
 
@@ -113,15 +114,16 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_mng');
       SQL.Add('from mng');
       SQL.Add('where (id_mng=:idm)and(id_dist=:id)');
-      ParamByName('idm').AsInteger := StrToInt(Edit2.Text);
-      ParamByName('id').AsInteger  := MainForm.dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'idm', StrToInt(Edit2.Text));
+      SetParam(Parameters, 'id', MainForm.dist);
       Open;
       if IsEmpty then
       begin
@@ -130,8 +132,9 @@ begin
         SQL.Add('select id_mng');
         SQL.Add('from mng');
         SQL.Add('where (namemng = :name)and(id_dist=:id)');
-        ParamByName('name').AsString := Edit1.Text;
-        ParamByName('id').AsInteger  := MainForm.dist;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'id', MainForm.dist);
         Open;
         if IsEmpty then
           flag := True
@@ -150,9 +153,10 @@ begin
         SQL.Clear;
         SQL.Add('insert into mng');
         SQL.Add('values (:id, :dist,:name)');
-        ParamByName('id').AsInteger  := StrToInt(Edit2.Text);
-        ParamByName('name').AsString := Edit1.Text;
-        ParamByName('dist').AsInteger := MainForm.dist;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit2.Text));
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'dist', MainForm.dist);
         ExecSQL;
         SetDefault;
         Open;
@@ -177,15 +181,16 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_mng');
       SQL.Add('from mng');
       SQL.Add('where (id_mng=:idm)and(id_dist=:id)');
-      ParamByName('idm').AsInteger := StrToInt(Edit2.Text);
-      ParamByName('id').AsInteger  := MainForm.dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'idm', StrToInt(Edit2.Text));
+      SetParam(Parameters, 'id', MainForm.dist);
       Open;
       if IsEmpty or not IsEmpty and
         (FieldByName('id_mng').AsInteger = oldid) then
@@ -195,8 +200,9 @@ begin
         SQL.Add('select id_mng');
         SQL.Add('from mng');
         SQL.Add('where (namemng = :name)and(id_dist=:id)');
-        ParamByName('name').AsString := Edit1.Text;
-        ParamByName('id').AsInteger  := MainForm.dist;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'id', MainForm.dist);
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_mng').AsInteger = oldid) then
@@ -217,9 +223,10 @@ begin
         SQL.Add('update mng');
         SQL.Add('set namemng = :name');
         SQL.Add('where (id_mng = :id)and(id_dist = :dist)');
-        ParamByName('id').AsInteger  := oldid;
-        ParamByName('name').AsString := Edit1.Text;
-        ParamByName('dist').AsInteger := MainForm.dist;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'dist', MainForm.dist);
         ExecSQL;
         SetDefault;
         Open;
@@ -240,7 +247,7 @@ end;
 procedure TForm7.Button3Click(Sender: TObject);
 { удалить распорядителя }
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     if not IsEmpty then
     begin
@@ -248,8 +255,9 @@ begin
       SQL.Clear;
       SQL.Add('delete from mng');
       SQL.Add('where (id_mng = :id)and(id_dist = :dist)');
-      ParamByName('id').AsInteger := oldid;
-      ParamByName('dist').AsInteger := MainForm.dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', oldid);
+      SetParam(Parameters, 'dist', MainForm.dist);
       ExecSQL;
       SetDefault;
       Open;
@@ -281,7 +289,7 @@ end;
 
 procedure TForm7.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
 end;
 
 procedure TForm7.Edit1Enter(Sender: TObject);

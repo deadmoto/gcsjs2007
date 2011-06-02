@@ -57,7 +57,8 @@ begin
     SQL.Text :=
       'SELECT id_insp FROM Insp'#13#10 +
       'WHERE id_office = :id';
-    Parameters.ParamByName('id').Value := oldid;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', oldid);
     Open;
     if IsEmpty then
     begin
@@ -65,8 +66,9 @@ begin
       SQL.Clear;
       SQL.Add('delete from Office');
       SQL.Add('where id_office = :id and (id_dist=:dist)');
-      Parameters.ParamByName('id').Value := oldid;
-      Parameters.ParamByName('dist').Value := dist[ComboBox1.ItemIndex];
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', oldid);
+      SetParam(Parameters, 'dist', dist[ComboBox1.ItemIndex]);
       ExecSQL;
       SetDefault;
     end
@@ -88,8 +90,9 @@ begin
       SQL.Add('select id_office');
       SQL.Add('from Office');
       SQL.Add('where (id_office=:id) and (id_dist=:dist)');
-      Parameters.ParamByName('id').Value := StrToInt(Edit1.Text);
-      Parameters.ParamByName('dist').Value := dist[ComboBox1.ItemIndex];
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit1.Text));
+      SetParam(Parameters, 'dist', dist[ComboBox1.ItemIndex]);
       Open;
       if not IsEmpty then
         flag := True
@@ -102,10 +105,11 @@ begin
         SQL.Add('update Office');
         SQL.Add('set adr=:adr, tel=:tel');
         SQL.Add('where id_office = :id and (id_dist=:dist)');
-        Parameters.ParamByName('id').Value  := oldid;
-        Parameters.ParamByName('dist').Value := dist[ComboBox1.ItemIndex];
-        Parameters.ParamByName('adr').Value  := Edit2.Text;
-        Parameters.ParamByName('tel').Value  := Edit3.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
+        SetParam(Parameters, 'dist', dist[ComboBox1.ItemIndex]);
+        SetParam(Parameters, 'adr', Edit2.Text);
+        SetParam(Parameters, 'tel', Edit3.Text);
 
         ExecSQL;
         SetDefault;
@@ -135,8 +139,9 @@ begin
       SQL.Add('select id_office');
       SQL.Add('from Office');
       SQL.Add('where (id_office=:id) and (id_dist=:dist)');
-      Parameters.ParamByName('id').Value := StrToInt(Edit1.Text);
-      Parameters.ParamByName('dist').Value := dist[ComboBox1.ItemIndex];
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit1.Text));
+      SetParam(Parameters, 'dist', dist[ComboBox1.ItemIndex]);
       Open;
       if IsEmpty then
         flag := True
@@ -150,10 +155,11 @@ begin
         SQL.Clear;
         SQL.Add('insert into Office');
         SQL.Add('values (:dist, :id, :adr, :tel)');
-        Parameters.ParamByName('id').Value  := StrToInt(Edit1.Text);
-        Parameters.ParamByName('dist').Value := dist[ComboBox1.ItemIndex];
-        Parameters.ParamByName('adr').Value  := Edit2.Text;
-        Parameters.ParamByName('tel').Value  := Edit3.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit1.Text));
+        SetParam(Parameters, 'dist', dist[ComboBox1.ItemIndex]);
+        SetParam(Parameters, 'adr', Edit2.Text);
+        SetParam(Parameters, 'tel', Edit3.Text);
         ExecSQL;
         SetDefault;
         oldid := StrToInt(Edit1.Text);

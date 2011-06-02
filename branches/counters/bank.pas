@@ -66,7 +66,7 @@ procedure TForm31.SetDefault;
 var
   i: integer;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -78,14 +78,14 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'BIK'),
-    TIntArray.Create(25, 200, 155), DModule.Query1.RecordCount + 1);
+    TIntArray.Create(25, 200, 155), DModule.sqlQuery1.RecordCount + 1);
 
-  for i := 0 to DModule.Query1.RecordCount - 1 do
+  for i := 0 to DModule.sqlQuery1.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('id_bank').Value;
-    StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('namebank').Value;
-    StringGrid1.Cells[2, i + 1] := DModule.Query1.FieldByName('bik').Value;
-    DModule.Query1.Next;
+    StringGrid1.Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('id_bank').Value;
+    StringGrid1.Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('namebank').Value;
+    StringGrid1.Cells[2, i + 1] := DModule.sqlQuery1.FieldByName('bik').Value;
+    DModule.sqlQuery1.Next;
   end;
 
 end;
@@ -109,14 +109,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_bank');
       SQL.Add('from bank');
       SQL.Add('where (id_bank=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit3.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit3.Text));
       Open;
       if IsEmpty then
       begin
@@ -125,7 +126,8 @@ begin
         SQL.Add('select id_bank');
         SQL.Add('from bank');
         SQL.Add('where (namebank = :name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty then
           flag := True
@@ -144,9 +146,10 @@ begin
         SQL.Clear;
         SQL.Add('insert into bank');
         SQL.Add('values (:id, :name, :bik)');
-        ParamByName('id').AsInteger  := StrToInt(Edit3.Text);
-        ParamByName('name').AsString := Edit1.Text;
-        ParamByName('bik').AsString  := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit3.Text));
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'bik', Edit2.Text);
         ExecSQL;
         SetDefault;
       end
@@ -168,14 +171,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_bank');
       SQL.Add('from bank');
       SQL.Add('where (id_bank=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit3.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit3.Text));
       Open;
       if IsEmpty or not IsEmpty and (FieldByName('id_bank').AsInteger = oldid) then
       begin
@@ -184,7 +188,8 @@ begin
         SQL.Add('select id_bank');
         SQL.Add('from bank');
         SQL.Add('where (namebank = :name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty or not IsEmpty and (FieldByName('id_bank').AsInteger = oldid) then
           flag := True
@@ -204,9 +209,10 @@ begin
         SQL.Add('update bank');
         SQL.Add('set namebank = :name, bik = :bik');
         SQL.Add('where (id_bank = :id)');
-        ParamByName('id').AsInteger  := oldid;
-        ParamByName('name').AsString := Edit1.Text;
-        ParamByName('bik').AsString  := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'bik', Edit2.Text);
         ExecSQL;
         SetDefault;
       end
@@ -224,7 +230,7 @@ end;
 procedure TForm31.Button3Click(Sender: TObject);
 { удалить банк }
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     if not IsEmpty then
     begin
@@ -232,7 +238,8 @@ begin
       SQL.Clear;
       SQL.Add('delete from bank');
       SQL.Add('where (id_bank = :id)');
-      ParamByName('id').AsInteger := oldid;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', oldid);
       ExecSQL;
       SetDefault;
     end;
@@ -264,7 +271,7 @@ end;
 
 procedure TForm31.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
 end;
 
 procedure TForm31.Edit3Exit(Sender: TObject);

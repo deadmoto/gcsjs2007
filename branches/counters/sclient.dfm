@@ -24,7 +24,7 @@ object EditClForm: TEditClForm
     Top = 3
     Width = 598
     Height = 432
-    ActivePage = TabSheet6
+    ActivePage = TabSheet5
     Align = alClient
     OwnerDraw = True
     TabOrder = 0
