@@ -180,14 +180,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_cert');
       SQL.Add('from cert');
       SQL.Add('where (id_cert=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit1.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit1.Text));
       Open;
       if IsEmpty then
       begin
@@ -196,7 +197,8 @@ begin
         SQL.Add('select id_cert');
         SQL.Add('from cert');
         SQL.Add('where (namecert = :name)');
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit2.Text);
         Open;
         if IsEmpty then
           flag := True
@@ -215,8 +217,9 @@ begin
         SQL.Clear;
         SQL.Add('insert into cert');
         SQL.Add('values (:id, :name)');
-        ParamByName('id').AsInteger  := StrToInt(Edit1.Text);
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit1.Text));
+        SetParam(Parameters, 'name', Edit2.Text);
         ExecSQL;
         SetDefault;
       end
@@ -234,7 +237,7 @@ end;
 procedure TGenRefBookFrm.mCertificationDelete(Sender: TObject);
 { удалить тип аттестации}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     if not IsEmpty then
     begin
@@ -242,7 +245,8 @@ begin
       SQL.Clear;
       SQL.Add('delete from cert');
       SQL.Add('where id_cert = :id');
-      ParamByName('id').AsInteger := oldid;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', oldid);
       ExecSQL;
       SetDefault;
     end;
@@ -256,14 +260,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_cert');
       SQL.Add('from cert');
       SQL.Add('where (id_cert=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit1.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit1.Text));
       Open;
       if IsEmpty or not IsEmpty and (FieldByName('id_cert').AsInteger = oldid) then
       begin
@@ -272,7 +277,8 @@ begin
         SQL.Add('select id_cert');
         SQL.Add('from cert');
         SQL.Add('where (namecert = :name)');
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit2.Text);
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_cert').AsInteger = oldid) then
@@ -293,8 +299,9 @@ begin
         SQL.Add('update cert');
         SQL.Add('set namecert = :name');
         SQL.Add('where id_cert = :id');
-        ParamByName('id').AsInteger  := oldid;
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
+        SetParam(Parameters, 'name', Edit2.Text);
         ExecSQL;
         SetDefault;
       end
@@ -316,14 +323,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_cntrl');
       SQL.Add('from cntrl');
       SQL.Add('where (id_cntrl=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit1.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit1.Text));
       Open;
       if IsEmpty then
       begin
@@ -332,7 +340,8 @@ begin
         SQL.Add('select id_cntrl');
         SQL.Add('from cntrl');
         SQL.Add('where (namecntrl = :name)');
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit2.Text);
         Open;
         if IsEmpty then
           flag := True
@@ -351,8 +360,9 @@ begin
         SQL.Clear;
         SQL.Add('insert into cntrl');
         SQL.Add('values (:id, :name)');
-        ParamByName('id').AsInteger  := StrToInt(Edit1.Text);
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit1.Text));
+        SetParam(Parameters, 'name', Edit2.Text);
         ExecSQL;
         SetDefault;
       end
@@ -369,7 +379,7 @@ end;
 
 procedure TGenRefBookFrm.mControlDelete(Sender: TObject);
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     if not IsEmpty then
     begin
@@ -377,7 +387,8 @@ begin
       SQL.Clear;
       SQL.Add('delete from cntrl');
       SQL.Add('where id_cntrl = :id');
-      ParamByName('id').AsInteger := oldid;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', oldid);
       ExecSQL;
       SetDefault;
     end;
@@ -391,14 +402,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_cntrl');
       SQL.Add('from cntrl');
       SQL.Add('where (id_cntrl=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit1.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit1.Text));
       Open;
       if IsEmpty or not IsEmpty and
         (FieldByName('id_cntrl').AsInteger = oldid) then
@@ -408,7 +420,8 @@ begin
         SQL.Add('select id_cntrl');
         SQL.Add('from cntrl');
         SQL.Add('where (namecntrl = :name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_cntrl').AsInteger = oldid) then
@@ -429,8 +442,9 @@ begin
         SQL.Add('update cntrl');
         SQL.Add('set namecntrl = :name');
         SQL.Add('where id_cntrl = :id');
-        ParamByName('id').AsInteger  := oldid;
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
+        SetParam(Parameters, 'name', Edit2.Text);
         ExecSQL;
         SetDefault;
       end
@@ -452,14 +466,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_own');
       SQL.Add('from own');
       SQL.Add('where (id_own=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit1.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit1.Text));
       Open;
       if IsEmpty then
       begin
@@ -468,7 +483,8 @@ begin
         SQL.Add('select id_own');
         SQL.Add('from own');
         SQL.Add('where (nameown = :name)');
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit2.Text);
         Open;
         if IsEmpty then
           flag := True
@@ -487,8 +503,9 @@ begin
         SQL.Clear;
         SQL.Add('insert into own');
         SQL.Add('values (:id, :name)');
-        ParamByName('id').AsInteger  := StrToInt(Edit1.Text);
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit1.Text));
+        SetParam(Parameters, 'name', Edit2.Text);
         ExecSQL;
         SetDefault;
       end
@@ -506,7 +523,7 @@ end;
 procedure TGenRefBookFrm.mOwnTypeDelete(Sender: TObject);
 { удалить тип владения }
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     if not IsEmpty then
     begin
@@ -514,7 +531,8 @@ begin
       SQL.Clear;
       SQL.Add('delete from own');
       SQL.Add('where id_own = :id');
-      ParamByName('id').AsInteger := oldid;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', oldid);
       ExecSQL;
       SetDefault;
     end;
@@ -528,14 +546,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_own');
       SQL.Add('from own');
       SQL.Add('where (id_own=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit1.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit1.Text));
       Open;
       if IsEmpty or not IsEmpty and
         (FieldByName('id_own').AsInteger = oldid) then
@@ -545,7 +564,8 @@ begin
         SQL.Add('select id_own');
         SQL.Add('from own');
         SQL.Add('where (nameown = :name)');
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit2.Text);
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_own').AsInteger = oldid) then
@@ -566,8 +586,9 @@ begin
         SQL.Add('update own');
         SQL.Add('set nameown = :name');
         SQL.Add('where id_own = :id');
-        ParamByName('id').AsInteger  := oldid;
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
+        SetParam(Parameters, 'name', Edit2.Text);
         ExecSQL;
         SetDefault;
       end
@@ -589,14 +610,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_rel');
       SQL.Add('from rel');
       SQL.Add('where (id_rel=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit1.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit1.Text));
       Open;
       if IsEmpty then
       begin
@@ -605,7 +627,8 @@ begin
         SQL.Add('select id_rel');
         SQL.Add('from rel');
         SQL.Add('where (namerel = :name)');
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit2.Text);
         Open;
         if IsEmpty then
           flag := True
@@ -624,8 +647,9 @@ begin
         SQL.Clear;
         SQL.Add('insert into rel');
         SQL.Add('values (:id, :name)');
-        ParamByName('id').AsInteger  := StrToInt(Edit1.Text);
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit1.Text));
+        SetParam(Parameters, 'name', Edit2.Text);
         ExecSQL;
         SetDefault;
       end
@@ -644,7 +668,7 @@ procedure TGenRefBookFrm.mRelationDelete(Sender: TObject);
 { удалить отношение }
 begin
   if Edit2.Text <> 'клиент' then
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       if not IsEmpty then
       begin
@@ -652,7 +676,8 @@ begin
         SQL.Clear;
         SQL.Add('delete from rel');
         SQL.Add('where (id_rel = :id)');
-        ParamByName('id').AsInteger := oldid;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
         ExecSQL;
         SetDefault;
       end;
@@ -668,14 +693,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_rel');
       SQL.Add('from rel');
       SQL.Add('where (id_rel=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit1.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit1.Text));
       Open;
       if IsEmpty or not IsEmpty and
         (FieldByName('id_rel').AsInteger = oldid) then
@@ -685,7 +711,8 @@ begin
         SQL.Add('select id_rel');
         SQL.Add('from rel');
         SQL.Add('where (namerel = :name)');
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit2.Text);
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_rel').AsInteger = oldid) then
@@ -706,8 +733,9 @@ begin
         SQL.Add('update rel');
         SQL.Add('set namerel = :name');
         SQL.Add('where (id_rel = :id)');
-        ParamByName('id').AsInteger  := oldid;
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
+        SetParam(Parameters, 'name', Edit2.Text);
         ExecSQL;
         SetDefault;
       end
@@ -728,14 +756,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_settl');
       SQL.Add('from settl');
       SQL.Add('where (id_settl=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit1.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit1.Text));
       Open;
       if IsEmpty then
       begin
@@ -744,7 +773,8 @@ begin
         SQL.Add('select id_settl');
         SQL.Add('from settl');
         SQL.Add('where (namesettl = :name)');
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit2.Text);
         Open;
         if IsEmpty then
           flag := True
@@ -763,8 +793,9 @@ begin
         SQL.Clear;
         SQL.Add('insert into settl');
         SQL.Add('values (:id, :name)');
-        ParamByName('id').AsInteger  := StrToInt(Edit1.Text);
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit1.Text));
+        SetParam(Parameters, 'name', Edit2.Text);
         ExecSQL;
         SetDefault;
       end
@@ -785,7 +816,7 @@ procedure TGenRefBookFrm.mSettlingTypeDelete(Sender: TObject);
   удаляется запись, которая соответствует текущему id.
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     if not IsEmpty then
     begin
@@ -793,7 +824,8 @@ begin
       SQL.Clear;
       SQL.Add('delete from settl');
       SQL.Add('where id_settl = :id');
-      ParamByName('id').AsInteger := oldid;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', oldid);
       ExecSQL;
       SetDefault;
     end;
@@ -816,14 +848,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_settl');
       SQL.Add('from settl');
       SQL.Add('where (id_settl=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit1.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit1.Text));
       Open;
       if IsEmpty or not IsEmpty and
         (FieldByName('id_settl').AsInteger = oldid) then
@@ -833,7 +866,8 @@ begin
         SQL.Add('select id_settl');
         SQL.Add('from settl');
         SQL.Add('where (namesettl = :name)');
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit2.Text);
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_settl').AsInteger = oldid) then
@@ -854,8 +888,9 @@ begin
         SQL.Add('update settl');
         SQL.Add('set namesettl = :name');
         SQL.Add('where id_settl = :id');
-        ParamByName('id').AsInteger  := oldid;
-        ParamByName('name').AsString := Edit2.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
+        SetParam(Parameters, 'name', Edit2.Text);
         ExecSQL;
         SetDefault;
       end
@@ -877,7 +912,7 @@ begin
   case mode of
     mOwnType:
     begin
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
         Close;
         SQL.Clear;
@@ -889,22 +924,22 @@ begin
       end;
 
       FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование'),
-        TIntArray.Create(25, 225), DModule.Query1.RecordCount + 1);
+        TIntArray.Create(25, 225), DModule.sqlQuery1.RecordCount + 1);
 
-      for i := 0 to DModule.Query1.RecordCount + 1 do
+      for i := 0 to DModule.sqlQuery1.RecordCount + 1 do
       begin
         with StringGrid1 do
         begin
-          Cells[0, i + 1] := DModule.Query1.FieldByName('id_own').AsString;
-          Cells[1, i + 1] := DModule.Query1.FieldByName('nameown').AsString;
+          Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('id_own').AsString;
+          Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('nameown').AsString;
         end;
-        DModule.Query1.Next;
+        DModule.sqlQuery1.Next;
       end;
     end;
     {******************************************************************************}
     mCertification:
     begin
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
         Close;
         SQL.Clear;
@@ -916,22 +951,22 @@ begin
       end;
 
       FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование'),
-        TIntArray.Create(25, 225), DModule.Query1.RecordCount + 1);
+        TIntArray.Create(25, 225), DModule.sqlQuery1.RecordCount + 1);
 
-      for i := 0 to DModule.Query1.RecordCount + 1 do
+      for i := 0 to DModule.sqlQuery1.RecordCount + 1 do
       begin
         with StringGrid1 do
         begin
-          Cells[0, i + 1] := DModule.Query1.FieldByName('id_cert').AsString;
-          Cells[1, i + 1] := DModule.Query1.FieldByName('namecert').AsString;
+          Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('id_cert').AsString;
+          Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('namecert').AsString;
         end;
-        DModule.Query1.Next;
+        DModule.sqlQuery1.Next;
       end;
     end;
     {******************************************************************************}
     mSettlingType:
     begin
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
         Close;
         SQL.Clear;
@@ -943,22 +978,22 @@ begin
       end;
 
       FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование'),
-        TIntArray.Create(25, 225), DModule.Query1.RecordCount + 1);
+        TIntArray.Create(25, 225), DModule.sqlQuery1.RecordCount + 1);
 
-      for i := 0 to DModule.Query1.RecordCount + 1 do
+      for i := 0 to DModule.sqlQuery1.RecordCount + 1 do
       begin
         with StringGrid1 do
         begin
-          Cells[0, i + 1] := DModule.Query1.FieldByName('id_settl').AsString;
-          Cells[1, i + 1] := DModule.Query1.FieldByName('namesettl').AsString;
+          Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('id_settl').AsString;
+          Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('namesettl').AsString;
         end;
-        DModule.Query1.Next;
+        DModule.sqlQuery1.Next;
       end;
     end;
     {******************************************************************************}
     mControl:
     begin
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
         Close;
         SQL.Clear;
@@ -970,22 +1005,22 @@ begin
       end;
 
       FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование'),
-        TIntArray.Create(25, 225), DModule.Query1.RecordCount + 1);
+        TIntArray.Create(25, 225), DModule.sqlQuery1.RecordCount + 1);
 
-      for i := 0 to DModule.Query1.RecordCount + 1 do
+      for i := 0 to DModule.sqlQuery1.RecordCount + 1 do
       begin
         with StringGrid1 do
         begin
-          Cells[0, i + 1] := DModule.Query1.FieldByName('id_cntrl').AsString;
-          Cells[1, i + 1] := DModule.Query1.FieldByName('namecntrl').AsString;
+          Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('id_cntrl').AsString;
+          Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('namecntrl').AsString;
         end;
-        DModule.Query1.Next;
+        DModule.sqlQuery1.Next;
       end;
     end;
     {******************************************************************************}
     mRelation:
     begin
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
         Close;
         SQL.Clear;
@@ -997,16 +1032,16 @@ begin
       end;
 
       FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование'),
-        TIntArray.Create(25, 225), DModule.Query1.RecordCount + 1);
+        TIntArray.Create(25, 225), DModule.sqlQuery1.RecordCount + 1);
 
-      for i := 0 to DModule.Query1.RecordCount + 1 do
+      for i := 0 to DModule.sqlQuery1.RecordCount + 1 do
       begin
         with StringGrid1 do
         begin
-          Cells[0, i + 1] := DModule.Query1.FieldByName('id_rel').AsString;
-          Cells[1, i + 1] := DModule.Query1.FieldByName('namerel').AsString;
+          Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('id_rel').AsString;
+          Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('namerel').AsString;
         end;
-        DModule.Query1.Next;
+        DModule.sqlQuery1.Next;
       end;
     end;
   end;

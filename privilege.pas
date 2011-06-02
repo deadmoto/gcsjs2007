@@ -143,14 +143,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') and (Edit4.Text <> '') and (Edit5.Text <> '') and (Edit6.Text <> '') and (Edit7.Text <> '') and (Edit8.Text <> '') and (Edit9.Text <> '') and (Edit10.Text <> '') and (Edit11.Text <> '') and (Edit12.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_priv');
       SQL.Add('from priv');
       SQL.Add('where (id_priv=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit11.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit11.Text));
       Open;
       if IsEmpty then
       begin
@@ -159,7 +160,8 @@ begin
         SQL.Add('select id_priv');
         SQL.Add('from priv');
         SQL.Add('where (namepriv = :name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty then
           flag := True
@@ -181,66 +183,79 @@ begin
         SQL.Add(':pcont,:fcont,:prep,:frep,:pcold,:fcold,:phot,:fhot,');
         SQL.Add(':pcanal,:fcanal,:pheat,:fheat,:pgas,:fgas,:pel,:fel,');
         SQL.Add(':pwood,:fwood,:pcoal,:fcoal)');
-        ParamByName('id').AsInteger  := StrToInt(Edit11.Text);
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit11.Text));
+        SetParam(Parameters, 'name', Edit1.Text);
         if RadioButton1.Checked = True then
-          ParamByName('sq').AsInteger := 0 //вся
+          SetParam(Parameters, 'sq', 0) //вся)
         else
-          ParamByName('sq').AsInteger := 1;//соцнорма
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'sq', 1);//соцнорма
         if RadioButton4.Checked = True then
-          ParamByName('lev').AsInteger := 0//региональный
+          SetParam(Parameters, 'lev', 0)//региональный)
         else
-          ParamByName('lev').AsInteger := 1;//федеральный
-        ParamByName('pcont').AsInteger := StrToInt(Edit2.Text);
-        ParamByName('prep').AsInteger := StrToInt(Edit3.Text);
-        ParamByName('pcold').AsInteger := StrToInt(Edit4.Text);
-        ParamByName('phot').AsInteger := StrToInt(Edit5.Text);
-        ParamByName('pcanal').AsInteger := StrToInt(Edit12.Text);
-        ParamByName('pheat').AsInteger := StrToInt(Edit6.Text);
-        ParamByName('pgas').AsInteger := StrToInt(Edit7.Text);
-        ParamByName('pel').AsInteger := StrToInt(Edit8.Text);
-        ParamByName('pwood').AsInteger := StrToInt(Edit9.Text);
-        ParamByName('pcoal').AsInteger := StrToInt(Edit10.Text);
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'lev', 1);//федеральный
+        SetParam(Parameters, 'pcont', StrToInt(Edit2.Text));
+        SetParam(Parameters, 'prep', StrToInt(Edit3.Text));
+        SetParam(Parameters, 'pcold', StrToInt(Edit4.Text));
+        SetParam(Parameters, 'phot', StrToInt(Edit5.Text));
+        SetParam(Parameters, 'pcanal', StrToInt(Edit12.Text));
+        SetParam(Parameters, 'pheat', StrToInt(Edit6.Text));
+        SetParam(Parameters, 'pgas', StrToInt(Edit7.Text));
+        SetParam(Parameters, 'pel', StrToInt(Edit8.Text));
+        SetParam(Parameters, 'pwood', StrToInt(Edit9.Text));
+        SetParam(Parameters, 'pcoal', StrToInt(Edit10.Text));
         if Checkbox1.Checked = True then
-          ParamByName('fcont').AsInteger := 1
+          SetParam(Parameters, 'fcont', 1)
         else
-          ParamByName('fcont').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fcont', 0);
         if Checkbox2.Checked = True then
-          ParamByName('frep').AsInteger := 1
+          SetParam(Parameters, 'frep', 1)
         else
-          ParamByName('frep').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'frep', 0);
         if Checkbox3.Checked = True then
-          ParamByName('fcold').AsInteger := 1
+          SetParam(Parameters, 'fcold', 1)
         else
-          ParamByName('fcold').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fcold', 0);
         if Checkbox4.Checked = True then
-          ParamByName('fhot').AsInteger := 1
+          SetParam(Parameters, 'fhot', 1)
         else
-          ParamByName('fhot').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fhot', 0);
         if Checkbox10.Checked = True then
-          ParamByName('fcanal').AsInteger := 1
+          SetParam(Parameters, 'fcanal', 1)
         else
-          ParamByName('fcanal').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fcanal', 0);
         if Checkbox5.Checked = True then
-          ParamByName('fheat').AsInteger := 1
+          SetParam(Parameters, 'fheat', 1)
         else
-          ParamByName('fheat').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fheat', 0);
         if Checkbox6.Checked = True then
-          ParamByName('fgas').AsInteger := 1
+          SetParam(Parameters, 'fgas', 1)
         else
-          ParamByName('fgas').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fgas', 0);
         if Checkbox7.Checked = True then
-          ParamByName('fel').AsInteger := 1
+          SetParam(Parameters, 'fel', 1)
         else
-          ParamByName('fel').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fel', 0);
         if Checkbox8.Checked = True then
-          ParamByName('fwood').AsInteger := 1
+          SetParam(Parameters, 'fwood', 1)
         else
-          ParamByName('fwood').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fwood', 0);
         if Checkbox9.Checked = True then
-          ParamByName('fcoal').AsInteger := 1
+          SetParam(Parameters, 'fcoal', 1)
         else
-          ParamByName('fcoal').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fcoal', 0);
         ExecSQL;
         oldid := StrToInt(Edit11.Text);
         Close;
@@ -260,14 +275,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') and (Edit4.Text <> '') and (Edit5.Text <> '') and (Edit6.Text <> '') and (Edit7.Text <> '') and (Edit8.Text <> '') and (Edit9.Text <> '') and (Edit10.Text <> '') and (Edit11.Text <> '') and (Edit12.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_priv');
       SQL.Add('from priv');
       SQL.Add('where (id_priv=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit11.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit11.Text));
       Open;
       if IsEmpty or not IsEmpty and
         (FieldByName('id_priv').AsInteger = oldid) then
@@ -277,7 +293,8 @@ begin
         SQL.Add('select id_priv');
         SQL.Add('from priv');
         SQL.Add('where (namepriv = :name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_priv').AsInteger = oldid) then
@@ -303,66 +320,79 @@ begin
         SQL.Add('pgas=:pgas,fgas=:fgas,pel=:pel,fel=:fel,');
         SQL.Add('pwood=:pwood,fwood=:fwood,pcoal=:pcoal,fcoal=:fcoal');
         SQL.Add('where id_priv = :id');
-        ParamByName('id').AsInteger  := oldid;
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
+        SetParam(Parameters, 'name', Edit1.Text);
         if RadioButton1.Checked = True then
-          ParamByName('sq').AsInteger := 0//вся
+          SetParam(Parameters, 'sq', 0)//вся)
         else
-          ParamByName('sq').AsInteger := 1;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'sq', 1);
         if RadioButton4.Checked = True then
-          ParamByName('lev').AsInteger := 0//регион
+          SetParam(Parameters, 'lev', 0)//регион)
         else
-          ParamByName('lev').AsInteger := 1;
-        ParamByName('pcont').AsInteger := StrToInt(Edit2.Text);
-        ParamByName('prep').AsInteger := StrToInt(Edit3.Text);
-        ParamByName('pcold').AsInteger := StrToInt(Edit4.Text);
-        ParamByName('phot').AsInteger := StrToInt(Edit5.Text);
-        ParamByName('pcanal').AsInteger := StrToInt(Edit12.Text);
-        ParamByName('pheat').AsInteger := StrToInt(Edit6.Text);
-        ParamByName('pgas').AsInteger := StrToInt(Edit7.Text);
-        ParamByName('pel').AsInteger := StrToInt(Edit8.Text);
-        ParamByName('pwood').AsInteger := StrToInt(Edit9.Text);
-        ParamByName('pcoal').AsInteger := StrToInt(Edit10.Text);
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'lev', 1);
+        SetParam(Parameters, 'pcont', StrToInt(Edit2.Text));
+        SetParam(Parameters, 'prep', StrToInt(Edit3.Text));
+        SetParam(Parameters, 'pcold', StrToInt(Edit4.Text));
+        SetParam(Parameters, 'phot', StrToInt(Edit5.Text));
+        SetParam(Parameters, 'pcanal', StrToInt(Edit12.Text));
+        SetParam(Parameters, 'pheat', StrToInt(Edit6.Text));
+        SetParam(Parameters, 'pgas', StrToInt(Edit7.Text));
+        SetParam(Parameters, 'pel', StrToInt(Edit8.Text));
+        SetParam(Parameters, 'pwood', StrToInt(Edit9.Text));
+        SetParam(Parameters, 'pcoal', StrToInt(Edit10.Text));
         if Checkbox1.Checked = True then
-          ParamByName('fcont').AsInteger := 1
+          SetParam(Parameters, 'fcont', 1)
         else
-          ParamByName('fcont').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fcont', 0);
         if Checkbox2.Checked = True then
-          ParamByName('frep').AsInteger := 1
+          SetParam(Parameters, 'frep', 1)
         else
-          ParamByName('frep').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'frep', 0);
         if Checkbox3.Checked = True then
-          ParamByName('fcold').AsInteger := 1
+          SetParam(Parameters, 'fcold', 1)
         else
-          ParamByName('fcold').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fcold', 0);
         if Checkbox4.Checked = True then
-          ParamByName('fhot').AsInteger := 1
+          SetParam(Parameters, 'fhot', 1)
         else
-          ParamByName('fhot').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fhot', 0);
         if Checkbox10.Checked = True then
-          ParamByName('fcanal').AsInteger := 1
+          SetParam(Parameters, 'fcanal', 1)
         else
-          ParamByName('fcanal').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fcanal', 0);
         if Checkbox5.Checked = True then
-          ParamByName('fheat').AsInteger := 1
+          SetParam(Parameters, 'fheat', 1)
         else
-          ParamByName('fheat').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fheat', 0);
         if Checkbox6.Checked = True then
-          ParamByName('fgas').AsInteger := 1
+          SetParam(Parameters, 'fgas', 1)
         else
-          ParamByName('fgas').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fgas', 0);
         if Checkbox7.Checked = True then
-          ParamByName('fel').AsInteger := 1
+          SetParam(Parameters, 'fel', 1)
         else
-          ParamByName('fel').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fel', 0);
         if Checkbox8.Checked = True then
-          ParamByName('fwood').AsInteger := 1
+          SetParam(Parameters, 'fwood', 1)
         else
-          ParamByName('fwood').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fwood', 0);
         if Checkbox9.Checked = True then
-          ParamByName('fcoal').AsInteger := 1
+          SetParam(Parameters, 'fcoal', 1)
         else
-          ParamByName('fcoal').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'fcoal', 0);
         ExecSQL;
         oldid := StrToInt(Edit11.Text);
         Close;
@@ -378,13 +408,14 @@ end;
 procedure TForm12.Del;
 { удалить льготу }
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('delete from priv');
     SQL.Add('where (id_priv = :id)');
-    ParamByName('id').AsInteger := oldid;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', oldid);
     ExecSQL;
     Close;
   end;
@@ -452,7 +483,7 @@ begin
         Form12.Caption  := 'Удалить льготу';
         Button2.Caption := 'Удалить';
       end;
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
         Close;
         SQL.Clear;
@@ -460,7 +491,8 @@ begin
         SQL.Add('from priv');
         SQL.Add('where id_priv = :id');
         SQL.Add('order by namepriv');
-        ParamByName('id').AsInteger := Form11.priv;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', Form11.priv);
         Open;
         Edit1.Text := FieldByName('namepriv').AsString;
         Edit2.Text := FieldByName('pcont').AsString;

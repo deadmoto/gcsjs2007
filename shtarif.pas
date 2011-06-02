@@ -125,7 +125,7 @@ procedure TForm37.FormClose(Sender: TObject; var Action: TCloseAction);
   в этом unit.
 *******************************************************************************}
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
   DModule.qTarif.Close;
 end;
 

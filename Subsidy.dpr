@@ -78,10 +78,9 @@ uses
 
 begin
   application.Initialize;
-  application.title := 'Субсидии';
+  application.Title := 'Субсидии';
   Application.CreateForm(TDModule, DModule);
-  try//Подключение к SQLSub - ODBC alias for Subsidy (MS SQL)
-    DModule.DataBase1.Connected := True;
+  try
     DModule.sqlConnection.Connected := True;
     try
       DModule.dbfConnection.Connected := True;

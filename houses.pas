@@ -139,7 +139,7 @@ uses
 procedure TForm24.SetHouse(n: integer);
 { установить дом с id=n, заполнить все необходимые компоненты }
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -149,8 +149,9 @@ begin
     SQL.Add('mng on house.id_mng=mng.id_mng and house.id_dist=mng.id_dist inner join');
     SQL.Add('fond on house.id_fond=fond.id_fond');
     SQL.Add('where (house.id_house = :id) and (house.id_dist = :dist)');
-    ParamByName('id').AsInteger := n;
-    ParamByName('dist').AsInteger := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
+    SetParam(Parameters, 'dist', MainForm.dist);
     Open;
     Edit3.Text := FieldByName('nhouse').AsString;
     Edit4.Text := FieldByName('corp').AsString;
@@ -204,7 +205,7 @@ function TForm24.ExistHouse(var n: integer): bool;
   в параметр помещается значение id дома.
 }
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -212,10 +213,11 @@ begin
     SQL.Add('from house');
     SQL.Add('where (id_street = :str)and (nhouse = :nh)and(corp=:cp)');
     SQL.Add('and(id_dist = :dist)');
-    ParamByName('str').AsInteger := str[Combobox1.ItemIndex];
-    ParamByName('nh').AsString := Edit3.Text;
-    ParamByName('cp').AsString := Edit4.Text;
-    ParamByName('dist').AsInteger := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'str', str[Combobox1.ItemIndex]);
+    SetParam(Parameters, 'nh', Edit3.Text);
+    SetParam(Parameters, 'cp', Edit4.Text);
+    SetParam(Parameters, 'dist', MainForm.dist);
     Open;
     if IsEmpty then
       Result := False
@@ -271,7 +273,7 @@ procedure TForm24.Fill;
 var
   l: integer;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     l := 0;
     Close;
@@ -298,7 +300,8 @@ begin
     SQL.Add('select id_mng, namemng');
     SQL.Add('from mng');
     SQL.Add('where id_dist = :dist');
-    ParamByName('dist').AsInteger := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', MainForm.dist);
     SQL.Add('order by namemng');
     Open;
     First;
@@ -547,7 +550,8 @@ begin
       SQL.Add('select sbros.tarifcont');
       SQL.Add('from curcont.dbf sbros');
       SQL.Add('where sbros.id_cont = :id');
-      Parameters.ParamByName('id').Value := integer(cont[Combobox2.ItemIndex]);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', integer(cont[Combobox2.ItemIndex]));
       Open;
       Edit6.Text := FieldByName('tarifcont').AsString;
       Close;
@@ -573,7 +577,8 @@ begin
       SQL.Add('select sbros.tarifrep');
       SQL.Add('from currep.dbf sbros');
       SQL.Add('where sbros.id_rep = :id');
-      Parameters.ParamByName('id').Value := integer(rep[Combobox3.ItemIndex]);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', integer(rep[Combobox3.ItemIndex]));
       Open;
       Edit7.Text := FieldByName('tarifrep').AsString;
       Close;
@@ -599,7 +604,8 @@ begin
       SQL.Add('select sbros.tarif' + IntToStr(boiler + 1));
       SQL.Add('from curcold.dbf sbros');
       SQL.Add('where sbros.id_cold = :id');
-      Parameters.ParamByName('id').Value := integer(cold[Combobox4.ItemIndex]);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', integer(cold[Combobox4.ItemIndex]));
       Open;
       Edit8.Text := FieldByName('tarif' + IntToStr(boiler + 1)).AsString;
       Close;
@@ -625,7 +631,8 @@ begin
       SQL.Add('select sbros.tarif' + IntToStr(boiler + 1));
       SQL.Add('from curhot.dbf sbros');
       SQL.Add('where sbros.id_hot = :id');
-      Parameters.ParamByName('id').Value := integer(hot[Combobox5.ItemIndex]);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', integer(hot[Combobox5.ItemIndex]));
       Open;
       Edit9.Text := FieldByName('tarif' + IntToStr(boiler + 1)).AsString;
       Close;
@@ -651,7 +658,8 @@ begin
       SQL.Add('select sbros.tarifcanal');
       SQL.Add('from curcanal.dbf sbros');
       SQL.Add('where sbros.id_canal = :id');
-      Parameters.ParamByName('id').Value := integer(canal[Combobox14.ItemIndex]);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', integer(canal[Combobox14.ItemIndex]));
       Open;
       Edit2.Text := FieldByName('tarifcanal').AsString;
       Close;
@@ -677,7 +685,8 @@ begin
       SQL.Add('select sbros.tarifheat');
       SQL.Add('from curheat.dbf sbros');
       SQL.Add('where sbros.id_heat = :id');
-      Parameters.ParamByName('id').Value := integer(heat[Combobox6.ItemIndex]);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', integer(heat[Combobox6.ItemIndex]));
       Open;
       Edit10.Text := FieldByName('tarifheat').AsString;
       Close;
@@ -703,7 +712,8 @@ begin
       SQL.Add('select sbros.tarifgas');
       SQL.Add('from curgas.dbf sbros');
       SQL.Add('where sbros.id_gas = :id');
-      Parameters.ParamByName('id').Value := integer(gas[Combobox7.ItemIndex]);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', integer(gas[Combobox7.ItemIndex]));
       Open;
       Edit11.Text := FieldByName('tarifgas').AsString;
       Close;
@@ -747,7 +757,8 @@ begin
       SQL.Add('select sbros.tarifwood');
       SQL.Add('from curwood.dbf sbros');
       SQL.Add('where sbros.id_wood = :id');
-      Parameters.ParamByName('id').Value := integer(wood[Combobox9.ItemIndex]);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', integer(wood[Combobox9.ItemIndex]));
       Open;
       Edit13.Text := FieldByName('tarifwood').AsString;
       Close;
@@ -773,7 +784,8 @@ begin
       SQL.Add('select sbros.tarifcoal');
       SQL.Add('from curcoal.dbf sbros');
       SQL.Add('where sbros.id_coal = :id');
-      Parameters.ParamByName('id').Value := integer(coal[Combobox10.ItemIndex]);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', integer(coal[Combobox10.ItemIndex]));
       Open;
       Edit14.Text := FieldByName('tarifcoal').AsString;
       Close;
@@ -929,14 +941,15 @@ begin
   begin
     if not ExistHouse(n) then
     begin
-      DModule.Database1.StartTransaction;
+      DModule.sqlConnection.BeginTrans;
       try
-        with DModule.Query1 do
+        with DModule.sqlQuery1 do
         begin
           Close;
           SQL.Clear;
           SQL.Add('execute maxhouse :dist');
-          ParamByName('dist').AsInteger := MainForm.dist;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'dist', MainForm.dist);
           Open;
           maxid := FieldByName('mid').AsInteger;
           Inc(maxid);
@@ -946,34 +959,35 @@ begin
           SQL.Add('values (:id, :dist,:str,:nh,:cp,:stnd,');
           SQL.Add(':cont, :rep, :cold, :hot,:canal, :heat, :gas,');
           SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil,:elevator)');
-          ParamByName('id').AsInteger := maxid;
-          ParamByName('dist').AsInteger := MainForm.dist;
-          ParamByName('str').AsInteger := str[Combobox1.ItemIndex];
-          ParamByName('nh').AsString  := Edit3.Text;
-          ParamByName('cp').AsString  := Edit4.Text;
-          ParamByName('stnd').AsInteger := stnd[Combobox13.ItemIndex];
-          ParamByName('cont').AsInteger := cont[Combobox2.ItemIndex];
-          ParamByName('rep').AsInteger := 0;//rep[Combobox3.ItemIndex];
-          ParamByName('cold').AsInteger := cold[Combobox4.ItemIndex];
-          ParamByName('hot').AsInteger := hot[Combobox5.ItemIndex];
-          ParamByName('canal').AsInteger := canal[Combobox14.ItemIndex];
-          ParamByName('heat').AsInteger := heat[Combobox6.ItemIndex];
-          ParamByName('gas').AsInteger := gas[Combobox7.ItemIndex];
-          ParamByName('el').AsInteger := el[Combobox8.ItemIndex];
-          ParamByName('wood').AsInteger := wood[Combobox9.ItemIndex];
-          ParamByName('coal').AsInteger := coal[Combobox10.ItemIndex];
-          ParamByName('mng').AsInteger := mng[Combobox11.ItemIndex];
-          ParamByName('fnd').AsInteger := fnd[Combobox12.ItemIndex];
-          ParamByName('boil').AsInteger := boiler;
-          ParamByName('elevator').AsBoolean := elevatorCheckBox.Checked;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'id', maxid);
+          SetParam(Parameters, 'dist', MainForm.dist);
+          SetParam(Parameters, 'str', str[Combobox1.ItemIndex]);
+          SetParam(Parameters, 'nh', Edit3.Text);
+          SetParam(Parameters, 'cp', Edit4.Text);
+          SetParam(Parameters, 'stnd', stnd[Combobox13.ItemIndex]);
+          SetParam(Parameters, 'cont', cont[Combobox2.ItemIndex]);
+          SetParam(Parameters, 'rep', 0);//rep[Combobox3.ItemIndex];
+          SetParam(Parameters, 'cold', cold[Combobox4.ItemIndex]);
+          SetParam(Parameters, 'hot', hot[Combobox5.ItemIndex]);
+          SetParam(Parameters, 'canal', canal[Combobox14.ItemIndex]);
+          SetParam(Parameters, 'heat', heat[Combobox6.ItemIndex]);
+          SetParam(Parameters, 'gas', gas[Combobox7.ItemIndex]);
+          SetParam(Parameters, 'el', el[Combobox8.ItemIndex]);
+          SetParam(Parameters, 'wood', wood[Combobox9.ItemIndex]);
+          SetParam(Parameters, 'coal', coal[Combobox10.ItemIndex]);
+          SetParam(Parameters, 'mng', mng[Combobox11.ItemIndex]);
+          SetParam(Parameters, 'fnd', fnd[Combobox12.ItemIndex]);
+          SetParam(Parameters, 'boil', boiler);
+          SetParam(Parameters, 'elevator', elevatorCheckBox.Checked);
           ExecSQL;
           Close;
         end;
-        DModule.Database1.Commit;
+        DModule.sqlConnection.CommitTrans;
         Form30.AddH(maxid);
       except
         //транзакция не выполнена
-        DModule.Database1.Rollback;
+        DModule.sqlConnection.RollbackTrans;
       end;
     end
     else
@@ -996,9 +1010,9 @@ begin
     n := 0;
     if not ExistHouse(n) or ExistHouse(n) and (n = Form30.house) then
     begin
-      DModule.Database1.StartTransaction;
+      DModule.sqlConnection.BeginTrans;
       try
-        with DModule.Query1 do
+        with DModule.sqlQuery1 do
         begin
           Close;
           SQL.Clear;
@@ -1009,34 +1023,35 @@ begin
           SQL.Add('id_el=:el, id_wood = :wood, id_coal = :coal,');
           SQL.Add('id_mng = :mng, id_fond = :fnd, boiler = :boil, elevator = :elevator');
           SQL.Add('where (id_house = :id)and(id_dist = :dist)');
-          ParamByName('id').AsInteger := Form30.house;
-          ParamByName('dist').AsInteger := MainForm.dist;
-          ParamByName('str').AsInteger := str[Combobox1.ItemIndex];
-          ParamByName('nh').AsString  := Edit3.Text;
-          ParamByName('cp').AsString  := Edit4.Text;
-          ParamByName('stnd').AsInteger := stnd[Combobox13.ItemIndex];
-          ParamByName('cont').AsInteger := cont[Combobox2.ItemIndex];
-          ParamByName('rep').AsInteger := 0;//rep[Combobox3.ItemIndex];
-          ParamByName('cold').AsInteger := cold[Combobox4.ItemIndex];
-          ParamByName('hot').AsInteger := hot[Combobox5.ItemIndex];
-          ParamByName('canal').AsInteger := canal[Combobox14.ItemIndex];
-          ParamByName('heat').AsInteger := heat[Combobox6.ItemIndex];
-          ParamByName('gas').AsInteger := gas[Combobox7.ItemIndex];
-          ParamByName('el').AsInteger := el[Combobox8.ItemIndex];
-          ParamByName('wood').AsInteger := wood[Combobox9.ItemIndex];
-          ParamByName('coal').AsInteger := coal[Combobox10.ItemIndex];
-          ParamByName('mng').AsInteger := mng[Combobox11.ItemIndex];
-          ParamByName('fnd').AsInteger := fnd[Combobox12.ItemIndex];
-          ParamByName('boil').AsInteger := boiler;
-          ParamByName('elevator').AsBoolean := elevatorCheckBox.Checked;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'id', Form30.house);
+          SetParam(Parameters, 'dist', MainForm.dist);
+          SetParam(Parameters, 'str', str[Combobox1.ItemIndex]);
+          SetParam(Parameters, 'nh', Edit3.Text);
+          SetParam(Parameters, 'cp', Edit4.Text);
+          SetParam(Parameters, 'stnd', stnd[Combobox13.ItemIndex]);
+          SetParam(Parameters, 'cont', cont[Combobox2.ItemIndex]);
+          SetParam(Parameters, 'rep', 0);//rep[Combobox3.ItemIndex];
+          SetParam(Parameters, 'cold', cold[Combobox4.ItemIndex]);
+          SetParam(Parameters, 'hot', hot[Combobox5.ItemIndex]);
+          SetParam(Parameters, 'canal', canal[Combobox14.ItemIndex]);
+          SetParam(Parameters, 'heat', heat[Combobox6.ItemIndex]);
+          SetParam(Parameters, 'gas', gas[Combobox7.ItemIndex]);
+          SetParam(Parameters, 'el', el[Combobox8.ItemIndex]);
+          SetParam(Parameters, 'wood', wood[Combobox9.ItemIndex]);
+          SetParam(Parameters, 'coal', coal[Combobox10.ItemIndex]);
+          SetParam(Parameters, 'mng', mng[Combobox11.ItemIndex]);
+          SetParam(Parameters, 'fnd', fnd[Combobox12.ItemIndex]);
+          SetParam(Parameters, 'boil', boiler);
+          SetParam(Parameters, 'elevator', elevatorCheckBox.Checked);
           ExecSQL;
           Close;
         end;
-        DModule.Database1.Commit;
+        DModule.sqlConnection.CommitTrans;
         Form30.ModH(Form30.house);
       except
         //транзакция не выполнена
-        DModule.Database1.Rollback;
+        DModule.sqlConnection.RollbackTrans;
       end;
     end
     else
@@ -1050,23 +1065,24 @@ procedure TForm24.DelHouse;
 { удалить дом }
 begin
   try
-    DModule.Database1.StartTransaction;
-    with DModule.Query1 do
+    DModule.sqlConnection.BeginTrans;
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('delete from house');
       SQL.Add('where (id_house = :h)and(id_dist = :dist)');
-      ParamByName('h').AsInteger := Form30.house;
-      ParamByName('dist').AsInteger := MainForm.dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'h', Form30.house);
+      SetParam(Parameters, 'dist', MainForm.dist);
       ExecSQL;
       Close;
     end;
-    DModule.Database1.Commit;
+    DModule.sqlConnection.CommitTrans;
     Form30.Delh(Form30.house);
   except
     //не выполнена транзакция
-    DModule.Database1.Rollback;
+    DModule.sqlConnection.RollbackTrans;
   end;
 end;
 
@@ -1079,7 +1095,8 @@ begin
     SQL.Add('select sbros.namestnd');
     SQL.Add('from currstnd.dbf sbros');
     SQL.Add('where sbros.id_stnd = :id');
-    Parameters.ParamByName('id').Value := integer(n);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(n));
     Open;
     Result := FieldByName('namestnd').AsString;
     Close;
@@ -1095,7 +1112,8 @@ begin
     SQL.Add('select sbros.namecont');
     SQL.Add('from curcont.dbf sbros');
     SQL.Add('where sbros.id_cont = :id');
-    Parameters.ParamByName('id').Value := integer(n);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(n));
     Open;
     Result := FieldByName('namecont').AsString;
     Close;
@@ -1111,7 +1129,8 @@ begin
     SQL.Add('select sbros.namerep');
     SQL.Add('from currep.dbf sbros');
     SQL.Add('where sbros.id_rep = :id');
-    Parameters.ParamByName('id').Value := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namerep').AsString;
     Close;
@@ -1127,7 +1146,8 @@ begin
     SQL.Add('select sbros.namecold');
     SQL.Add('from curcold.dbf sbros');
     SQL.Add('where sbros.id_cold = :id');
-    Parameters.ParamByName('id').Value := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namecold').AsString;
     Close;
@@ -1143,7 +1163,8 @@ begin
     SQL.Add('select sbros.namehot');
     SQL.Add('from curhot.dbf sbros');
     SQL.Add('where sbros.id_hot = :id');
-    Parameters.ParamByName('id').Value := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namehot').AsString;
     Close;
@@ -1159,7 +1180,8 @@ begin
     SQL.Add('select sbros.namecanal');
     SQL.Add('from curcanal.dbf sbros');
     SQL.Add('where sbros.id_canal = :id');
-    Parameters.ParamByName('id').Value := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namecanal').AsString;
     Close;
@@ -1175,7 +1197,8 @@ begin
     SQL.Add('select sbros.nameheat');
     SQL.Add('from curheat.dbf sbros');
     SQL.Add('where sbros.id_heat = :id');
-    Parameters.ParamByName('id').Value := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('nameheat').AsString;
     Close;
@@ -1191,7 +1214,8 @@ begin
     SQL.Add('select sbros.namewood');
     SQL.Add('from curwood.dbf sbros');
     SQL.Add('where sbros.id_wood = :id');
-    Parameters.ParamByName('id').Value := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namewood').AsString;
     Close;
@@ -1207,7 +1231,8 @@ begin
     SQL.Add('select sbros.namecoal');
     SQL.Add('from curcoal.dbf sbros');
     SQL.Add('where sbros.id_coal = :id');
-    Parameters.ParamByName('id').Value := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namecoal').AsString;
     Close;
@@ -1224,7 +1249,8 @@ begin
     SQL.Add('select sbros.namegas');
     SQL.Add('from curgas.dbf sbros');
     SQL.Add('where sbros.id_gas = :id');
-    Parameters.ParamByName('id').Value := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namegas').AsString;
     Close;
@@ -1240,7 +1266,8 @@ begin
     SQL.Add('select sbros.plate');
     SQL.Add('from curel.dbf sbros');
     SQL.Add('where sbros.id_el = :id');
-    Parameters.ParamByName('id').Value := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('plate').AsString;
     Close;
@@ -1259,7 +1286,7 @@ end;
 
 procedure TForm24.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
   DModule.qTarif.Close;
 end;
 

@@ -2,8 +2,8 @@ object AboutBox: TAboutBox
   Left = 263
   Top = 226
   BorderStyle = bsNone
-  ClientHeight = 204
-  ClientWidth = 219
+  ClientHeight = 224
+  ClientWidth = 230
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,15 +19,16 @@ object AboutBox: TAboutBox
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 219
-    Height = 204
+    Width = 230
+    Height = 224
     Align = alClient
     BevelInner = bvRaised
     BevelOuter = bvLowered
     ParentColor = True
     TabOrder = 0
     OnClick = Panel1Click
-    ExplicitWidth = 211
+    ExplicitWidth = 219
+    ExplicitHeight = 204
     object ProgramIcon: TImage
       Left = 24
       Top = 16
@@ -68,9 +69,9 @@ object AboutBox: TAboutBox
     object Comments: TLabel
       Left = 8
       Top = 179
-      Width = 199
-      Height = 13
-      Caption = #1054#1088#1075'.: '#1041#1059' '#1054#1054' '#1054#1062#1046#1057#1057#1042#1080#1051' '#1075'.'#1054#1084#1089#1082' (2008)'
+      Width = 211
+      Height = 16
+      Caption = #1054#1088#1075'.: '#1041#1059' '#1054#1054' "'#1054#1062#1046#1057#1057#1042#1080#1051'" '#1075'.'#1054#1084#1089#1082' (2008)'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -117,14 +118,29 @@ object AboutBox: TAboutBox
     object Label5: TLabel
       Left = 8
       Top = 160
-      Width = 161
+      Width = 190
       Height = 16
-      Caption = #1054#1088#1075'.: '#1052#1059' '#1043#1062#1046#1057' '#1075'.'#1054#1084#1089#1082' (2006)'
+      Caption = #1054#1088#1075'.: '#1052#1059' "'#1043#1062#1046#1057'" '#1075'.'#1054#1084#1089#1082' (2006)'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = [fsStrikeOut]
+      ParentFont = False
+      WordWrap = True
+      IsControl = True
+    end
+    object Label6: TLabel
+      Left = 8
+      Top = 198
+      Width = 199
+      Height = 16
+      Caption = #1054#1088#1075'.: '#1050#1059' "'#1062#1057#1042#1080#1052#1058#1054'" '#1075'.'#1054#1084#1089#1082' (2011)'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
       ParentFont = False
       WordWrap = True
       IsControl = True

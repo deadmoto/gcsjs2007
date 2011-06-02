@@ -10,8 +10,26 @@ interface
 
 
 uses
-  Controls, ADODB, DB, DBTables, dbf, Dialogs, Grids, Mask, padegFIO, Registry, dateutils, Math,
-  StdCtrls, SysUtils, Variants, Windows, ExtCtrls, Graphics, Classes, ComObj, MyTypes;
+  ADODB,
+  Classes,
+  ComObj,
+  Controls,
+  dateutils,
+  DB,
+  dbf,
+  Dialogs,
+  ExtCtrls,
+  Graphics,
+  Grids,
+  Mask,
+  Math,
+  MyTypes,
+  padegFIO,
+  Registry,
+  StdCtrls,
+  SysUtils,
+  Variants,
+  Windows;
 
 const
   numbtarif = 14;
@@ -53,12 +71,13 @@ procedure FillMin(path, rdt: string; code: TCodePage);
 procedure FillStnd(path, rdt: string; code: TCodePage);
 procedure FillMdd(path, rdt: string; code: TCodePage);
 
-procedure SetParam(Params: TParameters; PName: string; PValue: Variant);
+procedure SetParam(Params: TParameters; PName: string; PValue: variant);
 
 function GetName(fld: TField): string;
 function GetType(fld: TField): TFldType;
 function GetSize(fld: TField): byte;
 function GetPrec(fld: TField): byte;
+
 procedure FillTable(path, nam: string; code: TCodePage);
 procedure EditField(f: string; code: TCodePage; n: integer);
 
@@ -66,8 +85,8 @@ function DateDiff(BeginDate, EndDate: TDateTime): integer;
 function MounthDiff(BeginDate, EndDate: TDateTime): integer;//разница мес€цов
 function NormalizeSpaces(str: string): string;
 function ReplacePoint(str: string): string; //заминить , на .
-function StringDate(date: TDate): string;//возвращает дату в виде "mounth-name yyyy"
-function RegExpString(source,filter: string): string;
+function StringDate(date: TDate): string;   //возвращает дату в виде "mounth-name yyyy"
+function RegExpString(Source, filter: string): string;
 function SplitString(s, c: string): TStringList;
 {******************************************************************************}
 function RefToCell(ARow, ACol: integer): string;
@@ -77,40 +96,42 @@ function ExportGridToExcel(AGrid: TStringGrid; AFileName: string): boolean;
 procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidths: TIntArray; RecCount: integer);
 
 //ѕроцеду отрисовки TStringGrig, разбивает текст в €чейк на несколько строк
-procedure SGDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
+procedure SGDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
 //–азмещаем содержимое компонента в области пр€моугольника €чейки
 //procedure FixObjPosn(SG:TStringGrid; vCol, vRow: LongInt);
 //ѕроцеду отрисовки TComboBox, разбивает текст в items на несколько строк
-//procedure CBMeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
-//procedure CBDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
-function getmin(query:tquery;id_min:integer):real;
+ //procedure CBMeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
+ //procedure CBDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
+
 implementation
 
 uses
-  datamodule, main, VBScript_RegExp_55_TLB;
-
+  datamodule,
+  main;//,
+  //VBScript_RegExp_55_TLB;
 
 function StringDate(date: TDate): string;
 begin
   Result :=
-    format('%s %d', [LongMonthNames[StrToInt(FormatDateTime('m',date))], YearOf(date)]);
+    format('%s %d', [LongMonthNames[StrToInt(FormatDateTime('m', date))], YearOf(date)]);
 end;
 
-function RegExpString(source,filter: string): string;
-//var
-//  re:  TRegExp;
-//  tmp: string;
+function RegExpString(Source, filter: string): string;
+  //var
+  //  re:  TRegExp;
+  //  tmp: string;
 begin
-//  re := TRegExp.Create(nil);
-//  try
-//    re.Pattern := filter; //записываем регул€рное выражение
-//    re.Global := True;
-//    tmp := re. (pass, '');
-//    Result := tmp;
-//  finally
-//    re.Free;
-//  end;
+  //  re := TRegExp.Create(nil);
+  //  try
+  //    re.Pattern := filter; //записываем регул€рное выражение
+  //    re.Global := True;
+  //    tmp := re. (pass, '');
+  //    Result := tmp;
+  //  finally
+  //    re.Free;
+  //  end;
 end;
+
 procedure SetPoint(edt: TEdit);
 {*******************************************************************************
   ѕроцедура SetPoint установливает зап€тую с учетом копеек
@@ -357,7 +378,7 @@ begin
   if i = Length(buffer) then
     Result := -1;}
   i := 0;
-  while i <>  Length(buffer) - 1 do
+  while i <> Length(buffer) - 1 do
   begin
     if buffer[i] = RegNumber then
     begin
@@ -518,22 +539,22 @@ begin
       Dbf1.AddFieldDefs(
         GetName(sqlQuery1.Fields[i]), GetType(sqlQuery1.Fields[i]),
         GetSize(sqlQuery1.Fields[i]), GetPrec(sqlQuery1.Fields[i])
-      );
+        );
     Dbf1.TableName := path + nam + '.dbf';
     Dbf1.CreateTable;
     Dbf1.CodePage := code;
-//    try
-      while not sqlQuery1.EOF do
-      begin
-        dbf1.Append;
-        for i := 1 to sqlQuery1.FieldCount do
-          EditField(sqlQuery1.Fields[i - 1].AsString, code, i);
-        Dbf1.Post;
-        sqlQuery1.Next;
-      end;
-//    except
-//      ShowMessage(sqlQuery1.Fields[i - 1].AsString);
-//    end;
+    //    try
+    while not sqlQuery1.EOF do
+    begin
+      dbf1.Append;
+      for i := 1 to sqlQuery1.FieldCount do
+        EditField(sqlQuery1.Fields[i - 1].AsString, code, i);
+      Dbf1.Post;
+      sqlQuery1.Next;
+    end;
+    //    except
+    //      ShowMessage(sqlQuery1.Fields[i - 1].AsString);
+    //    end;
     Dbf1.Close;
     sqlQuery1.Close;
   end;
@@ -593,7 +614,7 @@ begin
     Close;
     SQL.Clear;
     if (nam <> 'cont') and (nam <> 'rep') and (nam <> 'wood') and (nam <> 'coal') then
-      SQL.add('select ' + nam + '.id_' + nam + ',' + nam + '.name' + nam + ',' + nam + '.tarif' + nam + ', ' + nam +'.norm' + nam + ' from')
+      SQL.add('select ' + nam + '.id_' + nam + ',' + nam + '.name' + nam + ',' + nam + '.tarif' + nam + ', ' + nam + '.norm' + nam + ' from')
     else
       SQL.add('select ' + nam + '.id_' + nam + ',' + nam + '.name' + nam + ',' + nam + '.tarif' + nam + ' from');
     SQL.add('(select max(sdate) as sdate,id_' + nam + ' from ' + nam);
@@ -601,9 +622,10 @@ begin
     SQL.add('group by id_' + nam + ') sb inner join');
     SQL.add(nam + ' on (' + nam + '.id_' + nam + '=sb.id_' + nam + ')and(' + nam + '.sdate=sb.sdate)and(' + nam + '.id_dist=:idd1)');
     SQL.add('order by ' + nam + '.name' + nam);
-    Parameters.ParamByName('d').Value := rdt;
-    Parameters.ParamByName('idd0').Value := dis;
-    Parameters.ParamByName('idd1').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'd', rdt);
+    SetParam(Parameters, 'idd0', dis);
+    SetParam(Parameters, 'idd1', dis);
     Open;
     FillTable(path, 'cur' + nam, code);
   end;
@@ -618,15 +640,16 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.add('select ' + nam + '.id_' + nam + ',' + nam + '.name' + nam + ',' + nam + '.tarif1,' + nam + '.tarif2,'+ nam+'.norm'+ nam +' from');
+    SQL.add('select ' + nam + '.id_' + nam + ',' + nam + '.name' + nam + ',' + nam + '.tarif1,' + nam + '.tarif2,' + nam + '.norm' + nam + ' from');
     SQL.add('(select max(sdate) as sdate,id_' + nam + ' from ' + nam);
     SQL.add('where sdate<=convert(smalldatetime,:d,104) and (id_dist=:idd0)');
     SQL.add('group by id_' + nam + ') sb inner join');
     SQL.add(nam + ' on (' + nam + '.id_' + nam + '=sb.id_' + nam + ')and(' + nam + '.sdate=sb.sdate)and(' + nam + '.id_dist=:idd1)');
     SQL.add('order by ' + nam + '.name' + nam);
-    Parameters.ParamByName('d').Value := rdt;
-    Parameters.ParamByName('idd0').Value := dis;
-    Parameters.ParamByName('idd1').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'd', rdt);
+    SetParam(Parameters, 'idd0', dis);
+    SetParam(Parameters, 'idd1', dis);
     Open;
     FillTable(path, 'cur' + nam, code);
   end;
@@ -647,9 +670,10 @@ begin
     SQL.add('group by id_el) sb inner join');
     SQL.add('el on (el.id_el=sb.id_el)and(el.sdate=sb.sdate)and(el.id_dist=:idd1)');
     SQL.add('order by el.plate');
-    Parameters.ParamByName('d').Value := rdt;
-    Parameters.ParamByName('idd0').Value := dis;
-    Parameters.ParamByName('idd1').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'd', rdt);
+    SetParam(Parameters, 'idd0', dis);
+    SetParam(Parameters, 'idd1', dis);
     Open;
     FillTable(path, 'curel', code);
   end;
@@ -670,7 +694,8 @@ begin
     SQL.add('group by id_min) sb inner join');
     SQL.add('lmin on (lmin.id_min=sb.id_min)and(lmin.sdate=sb.sdate)');
     SQL.add('order by lmin.namemin');
-    Parameters.ParamByName('d').Value := rdt;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'd', rdt);
     Open;
     FillTable(path, 'curlmin', code);
   end;
@@ -691,6 +716,7 @@ begin
     SQL.add('group by id_mdd) sb inner join');
     SQL.add('mdd on (mdd.id_mdd=sb.id_mdd)and(mdd.sdate=sb.sdate)');
     SQL.add('order by mdd.namegroup');
+    Parameters.ParseSQL(SQL.Text, True);
     Parameters.ParseSQL(SQL.Text, True);
     SetParam(Parameters, 'd', rdt);// ('d').Value := rdt;
     Open;
@@ -713,7 +739,8 @@ begin
     SQL.add('group by id_stnd) sb inner join');
     SQL.add('rstnd on (rstnd.id_stnd=sb.id_stnd)and(rstnd.sdate=sb.sdate)');
     SQL.add('order by rstnd.namestnd');
-    Parameters.ParamByName('d').Value := rdt;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'd', rdt);
     Open;
     FillTable(path, 'currstnd', code);
   end;
@@ -733,7 +760,7 @@ var
   Months1, Months2,         // количество мес€цев начальной и конечной дат
   Years1, Years2: integer;  // количество лет начальной и конечной дат
   BufferDate: TDateTime;    // буфер дл€ обмена значени€ми
-  DaysCount: byte;
+  DaysCount:  byte;
 begin
   if BeginDate > EndDate then  // сравниваем даты, если начальна€ позднее
   begin                        // конечной, то мен€ем даты между собой
@@ -795,10 +822,10 @@ begin
 
   Months1 := StrToInt(FormatDateTime('mm', BeginDate));    // и лет каждой из дат
   Months2 := StrToInt(FormatDateTime('mm', EndDate));      // и заносим в соот-
-  Years1 := StrToInt(FormatDateTime('yyyy', BeginDate));   // ветствующие пере-
-  Years2 := StrToInt(FormatDateTime('yyyy', EndDate));     // менные
+  Years1  := StrToInt(FormatDateTime('yyyy', BeginDate));   // ветствующие пере-
+  Years2  := StrToInt(FormatDateTime('yyyy', EndDate));     // менные
   // ¬ычисл€ем суммарную разницу между датами по разницам в годах*12 и мес€цах
-  Result := (Years2 - Years1) * 12 + (Months2 - Months1);
+  Result  := (Years2 - Years1) * 12 + (Months2 - Months1);
 end;
 
 {******************************************************************************}
@@ -809,12 +836,12 @@ end;
 
 function ExportGridToExcel(AGrid: TStringGrid; AFileName: string): boolean;
 var
-  ExcelApp, Sheet, Data: OleVariant;
+  ExcelApp, Sheet, Data: olevariant;
   i, j: integer;
 begin
   try
-    ExcelApp:=CreateOleObject('Excel.Application');
-    ExcelApp.Visible:=False;
+    ExcelApp := CreateOleObject('Excel.Application');
+    ExcelApp.Visible := False;
   except
     on E: Exception do
       raise Exception.Create('ќшибка создани€ объекта Excel: ' + E.Message);
@@ -833,17 +860,18 @@ begin
 
   try
     //ExcelApp.ActiveWorkBook.WorkSheets.Add;
-    Sheet :=  ExcelApp.ActiveWorkBook.WorkSheets[1];
+    Sheet := ExcelApp.ActiveWorkBook.WorkSheets[1];
     //Sheet.Name := ASheetName;
     // Fill up the sheet
     Sheet.Range[RefToCell(1, 1), RefToCell(AGrid.RowCount, AGrid.colcount)] := Data;
     ExcelApp.Visible := True;
   finally
     Result := True;
-//    ExcelApp.Quit;
-//    ExcelApp:=Unassigned;
+    //    ExcelApp.Quit;
+    //    ExcelApp:=Unassigned;
   end;
 end;
+
 {******************************************************************************}
 
 procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidths: TIntArray; RecCount: integer);
@@ -851,11 +879,11 @@ var
   i: integer;
 begin
   StrGrid.RowCount := RecCount;
-  StrGrid.ColCount := length(SGHead);
+  StrGrid.colcount := length(SGHead);
   for i := 0 to length(SGHead) - 1 do
   begin
-    StrGrid.Cells[i, 0] := SGHead[i];
-//  for i := 0 to length(SGColWidths) - 1 do
+    StrGrid.Cells[i, 0]  := SGHead[i];
+    //  for i := 0 to length(SGColWidths) - 1 do
     StrGrid.ColWidths[i] := SGColWidths[i];
   end;
 end;
@@ -863,8 +891,8 @@ end;
 function NormalizeSpaces(str: string): string;
 begin
   str := Trim(str);
-  while pos('  ',str) <> 0 do
-    str := StringReplace(str,'  ',' ',[rfreplaceall]);
+  while pos('  ', str) <> 0 do
+    str := StringReplace(str, '  ', ' ', [rfreplaceall]);
   Result := str;
 end;
 
@@ -874,25 +902,24 @@ var
   tmpStr: string;
 begin
   tmpStr := str;
-  for i:=0 to Length(tmpStr)-1 do
+  for i := 0 to Length(tmpStr) - 1 do
     if tmpStr[i] = ',' then
       tmpStr[i] := '.';
   str := tmpStr;
 end;
 
-procedure SGDrawCell(Sender: TObject; ACol, ARow: Integer;
-  Rect: TRect; State: TGridDrawState);
+procedure SGDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
 var
   H: integer;
   buffer: string;
 begin
   with (Sender as TStrinGgrid) do
-  if (ARow > 0) and (Canvas.TextWidth(Cells[ACol, ARow]) > ColWidths[ACol]) then
+    if (ARow > 0) and (Canvas.TextWidth(Cells[ACol, ARow]) > ColWidths[ACol]) then
     begin
       (Sender as TStrinGgrid).Canvas.FillRect(Rect);
-      buffer:= (Sender as TStrinGgrid).Cells[ACol, ARow];
-      Inc(Rect.Left,3);
-      Dec(Rect.Right,3);
+      buffer := (Sender as TStrinGgrid).Cells[ACol, ARow];
+      Inc(Rect.Left, 3);
+      Dec(Rect.Right, 3);
       H := DrawText((Sender as TStrinGgrid).Canvas.Handle, PChar(buffer),
         length(buffer), Rect, DT_WORDBREAK);
       if H > (Sender as TStrinGgrid).RowHeights[ARow] then
@@ -900,23 +927,23 @@ begin
     end;
 end;
 
-//procedure FixObjPosn(SG:TStringGrid; vCol, vRow: LongInt);
-//var
-//  R: TRect;
-//begin
-//  R := SG.CellRect(vCol, vRow);
-//  if SG.Objects[vCol, vRow] is TControl then
-//    with TControl(SG.Objects[vCol, vRow]) do
-//      if R.Right = R.Left then {пр€моугольник €чейки невидим}
-//        Visible := False
-//      else
-//      begin
-//        InflateRect(R, 0, 0);//-1
-//        OffsetRect(R, SG.Left + 0, SG.Top + 0);//+1
-//        BoundsRect := R;
-//        Visible := True;
-//      end;
-//end;
+ //procedure FixObjPosn(SG:TStringGrid; vCol, vRow: LongInt);
+ //var
+ //  R: TRect;
+ //begin
+ //  R := SG.CellRect(vCol, vRow);
+ //  if SG.Objects[vCol, vRow] is TControl then
+ //    with TControl(SG.Objects[vCol, vRow]) do
+ //      if R.Right = R.Left then {пр€моугольник €чейки невидим}
+ //        Visible := False
+ //      else
+ //      begin
+ //        InflateRect(R, 0, 0);//-1
+ //        OffsetRect(R, SG.Left + 0, SG.Top + 0);//+1
+ //        BoundsRect := R;
+ //        Visible := True;
+ //      end;
+ //end;
 
 
 {procedure CBMeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
@@ -955,20 +982,6 @@ begin
   DrawText(TComboBox(Control).Canvas.Handle, PChar(ItemString), length(ItemString), Rect, DT_WORDBREAK);
 end;}
 
-function getmin(query:tquery;id_min:integer):real;
-begin
-  result:=0;
-  if id_min<>0 then
-    begin
-      query.sql.text:='SELECT * FROM LMin'+#13+
-                      'WHERE (sdate=(SELECT MAX(sdate) FROM LMin'+#13+
-                      'WHERE id_min=:id_min)) AND (id_min=:id_min)';
-      query.parambyname('id_min').value:=id_min;
-      query.open;
-      result:=query.fieldbyname('minim').value;
-    end;      
-end;
-
 function SplitString(s, c: string): TStringList;
 var
   t: TStringList;
@@ -979,16 +992,20 @@ begin
   for i := 0 to t.Count - 1 do
     t[i] := Trim(t[i]);
   Result := t;
-//  t.Free;
+  //  t.Free;
 end;
 
-procedure SetParam(Params: TParameters; PName: string; PValue: Variant);
+procedure SetParam(Params: TParameters; PName: string; PValue: variant);
 var
   i: integer;
 begin
   for i := 0 to Params.Count - 1 do
     if Params[i].Name = PName then
+    begin
       Params.Items[i].Value := PValue;
+      if Params.Items[i].DataType = ftString then
+        if PValue = '' then Params.Items[i].Size := 1;
+    end;
 end;
 
 end.

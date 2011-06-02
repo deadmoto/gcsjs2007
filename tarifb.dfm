@@ -27,7 +27,6 @@ object Form19: TForm19
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 0
-    ExplicitWidth = 441
     object StringGrid1: TStringGrid
       Left = 2
       Top = 2
@@ -42,7 +41,6 @@ object Form19: TForm19
       TabOrder = 0
       OnDrawCell = StringGrid1DrawCell
       OnSelectCell = StringGrid1SelectCell
-      ExplicitWidth = 437
     end
   end
   object Panel2: TPanel
@@ -55,7 +53,6 @@ object Form19: TForm19
     Align = alTop
     BevelInner = bvLowered
     TabOrder = 1
-    ExplicitWidth = 441
     object Label3: TLabel
       Left = 15
       Top = 50
@@ -159,7 +156,6 @@ object Form19: TForm19
     BevelOuter = bvNone
     FlowStyle = fsRightLeftBottomTop
     TabOrder = 2
-    ExplicitWidth = 441
     object Button4: TButton
       AlignWithMargins = True
       Left = 392

@@ -34,7 +34,11 @@ function SelOffice(n: integer): string;    //выбрать участок
 function SelCert(n: integer): string;    //выбрать аттестацию
 function SelDist(n: integer): string;    //выбрать округ
 function SelBoss(n: integer): string;    
+
 function ExistHouse(var n: integer; cl: TClient): boolean;//существует дом?
+
+function getmin(query: tadoquery; id_min: integer): real;
+
 implementation
 
 uses
@@ -44,14 +48,15 @@ uses
 
 function SelStr(n: integer): string;//выбрать улицу
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namestreet');
     SQL.Add('from strt');
     SQL.Add('where id_street = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namestreet').AsString;
     Close;
@@ -60,15 +65,16 @@ end;
 
 function SelMng(n: integer): string;//выбрать распорядителя
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namemng');
     SQL.Add('from mng');
     SQL.Add('where (id_mng = :id)and(id_dist=:dist)');
-    ParamByName('id').AsInteger := n;
-    ParamByName('dist').AsInteger := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
+    SetParam(Parameters, 'dist', MainForm.dist);
     Open;
     Result := FieldByName('namemng').AsString;
     Close;
@@ -77,14 +83,15 @@ end;
 
 function SelFnd(n: integer): string;//выбрать фонд
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namefond');
     SQL.Add('from fond');
     SQL.Add('where id_fond = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namefond').AsString;
     Close;
@@ -93,14 +100,15 @@ end;
 
 function SelSettl(n: integer): string;//выбрать тип заселения
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namesettl');
     SQL.Add('from settl');
     SQL.Add('where id_settl = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namesettl').AsString;
     Close;
@@ -109,14 +117,15 @@ end;
 
 function SelOwn(n: integer): string;//выбрать тип владения
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select nameown');
     SQL.Add('from own');
     SQL.Add('where id_own = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('nameown').AsString;
     Close;
@@ -125,14 +134,15 @@ end;
 
 function SelCntrl(n: integer): string;//выбрать тип контроля
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namecntrl');
     SQL.Add('from cntrl');
     SQL.Add('where id_cntrl = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namecntrl').AsString;
     Close;
@@ -141,14 +151,15 @@ end;
 
 function SelSt(n: integer): string;//выбрать тип статуса
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namestatus');
     SQL.Add('from stat');
     SQL.Add('where id_status = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namestatus').AsString;
     Close;
@@ -157,14 +168,15 @@ end;
 
 function SelPriv(n: integer): string;//выбрать льготу
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namepriv');
     SQL.Add('from priv');
     SQL.Add('where id_priv = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namepriv').AsString;
     Close;
@@ -173,14 +185,15 @@ end;
 
 function SelRel(n: integer): string;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namerel');
     SQL.Add('from rel');
     SQL.Add('where id_rel = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namerel').AsString;
     Close;
@@ -196,7 +209,8 @@ begin
     SQL.Add('select sbros.namestnd');
     SQL.Add('from currstnd.dbf sbros');
     SQL.Add('where sbros.id_stnd = :id');
-    Parameters.ParamByName('id').Value := integer(n);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(n));
     Open;
     Result := FieldByName('namestnd').AsString;
     Close;
@@ -212,7 +226,8 @@ begin
     SQL.Add('select sbros.namecont');
     SQL.Add('from curcont.dbf sbros');
     SQL.Add('where sbros.id_cont = :id');
-    Parameters.ParamByName('id').Value := integer(n);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(n));
     Open;
     Result := FieldByName('namecont').AsString;
     Close;
@@ -228,7 +243,8 @@ begin
     SQL.Add('select sbros.namerep');
     SQL.Add('from currep.dbf sbros');
     SQL.Add('where sbros.id_rep = :id');
-    Parameters.ParamByName('id').Value := integer(n);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(n));
     Open;
     Result := FieldByName('namerep').AsString;
     Close;
@@ -244,7 +260,8 @@ begin
     SQL.Add('select sbros.namecold');
     SQL.Add('from curcold.dbf sbros');
     SQL.Add('where sbros.id_cold = :id');
-    Parameters.ParamByName('id').Value := integer(n);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(n));
     Open;
     Result := FieldByName('namecold').AsString;
     Close;
@@ -260,7 +277,8 @@ begin
     SQL.Add('select sbros.namecanal');
     SQL.Add('from curcanal.dbf sbros');
     SQL.Add('where sbros.id_canal = :id');
-    Parameters.ParamByName('id').Value := integer(n);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(n));
     Open;
     Result := FieldByName('namecanal').AsString;
     Close;
@@ -276,7 +294,8 @@ begin
     SQL.Add('select sbros.namehot');
     SQL.Add('from curhot.dbf sbros');
     SQL.Add('where sbros.id_hot = :id');
-    Parameters.ParamByName('id').Value := integer(n);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(n));
     Open;
     Result := FieldByName('namehot').AsString;
     Close;
@@ -292,7 +311,8 @@ begin
     SQL.Add('select sbros.nameheat');
     SQL.Add('from curheat.dbf sbros');
     SQL.Add('where sbros.id_heat = :id');
-    Parameters.ParamByName('id').Value := integer(n);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(n));
     Open;
     Result := FieldByName('nameheat').AsString;
     Close;
@@ -301,14 +321,15 @@ end;
 
 function SelHeating(n: integer): string; //выбрать тип отопления
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Text :=
       'select nameheating'#13#10 +
       'from heating'#13#10 +
       'where (id_heating = :id)';
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('nameheating').AsString;
     Close;
@@ -325,7 +346,8 @@ begin
     SQL.Add('select sbros.namegas');
     SQL.Add('from curgas.dbf sbros');
     SQL.Add('where sbros.id_gas = :id');
-    Parameters.ParamByName('id').Value := integer(n);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(n));
     Open;
     Result := FieldByName('namegas').AsString;
     Close;
@@ -341,7 +363,8 @@ begin
     SQL.Add('select sbros.namewood');
     SQL.Add('from curwood.dbf sbros');
     SQL.Add('where sbros.id_wood = :id');
-    Parameters.ParamByName('id').Value := integer(n);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(n));
     Open;
     Result := FieldByName('namewood').AsString;
     Close;
@@ -357,7 +380,8 @@ begin
     SQL.Add('select sbros.namecoal');
     SQL.Add('from curcoal.dbf sbros');
     SQL.Add('where sbros.id_coal = :id');
-    Parameters.ParamByName('id').Value := integer(n);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(n));
     Open;
     Result := FieldByName('namecoal').AsString;
     Close;
@@ -366,14 +390,15 @@ end;
 
 function SelBank(n: integer): string;//выбрать банк
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namebank');
     SQL.Add('from bank');
     SQL.Add('where id_bank = :id');
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namebank').AsString;
     Close;
@@ -389,7 +414,8 @@ begin
     SQL.Add('select sbros.minim');
     SQL.Add('from curlmin.dbf sbros');
     SQL.Add('where sbros.id_min = :id');
-    Parameters.ParamByName('id').Value := integer(n);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', integer(n));
     Open;
     Result := FieldByName('minim').AsFloat;
     Close;
@@ -405,8 +431,9 @@ begin
       'select adr'#13#10 +
       'from Office'#13#10 +
       'where (id_office = :id)and(id_dist=:dist)';
-    Parameters.ParamByName('id').Value := n;
-    Parameters.ParamByName('dist').Value := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
+    SetParam(Parameters, 'dist', MainForm.dist);
     Open;
     Result := FieldByName('adr').AsString;
     Close;
@@ -422,8 +449,9 @@ begin
       'select nameinsp'#13#10 +
       'from insp'#13#10 +
       'where (id_insp = :id)and(id_dist=:dist)';
-    Parameters.ParamByName('id').Value := n;
-    Parameters.ParamByName('dist').Value := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
+    SetParam(Parameters, 'dist', MainForm.dist);
     Open;
     Result := FieldByName('nameinsp').AsString;
     Close;
@@ -432,13 +460,14 @@ end;
 
 function SelCert(n: integer): string;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Text := 'select namecert'#13#10 +
       'from cert'#13#10 +
       'where (id_cert = :id)';
-    ParamByName('id').AsInteger := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namecert').AsString;
     Close;
@@ -454,7 +483,8 @@ begin
       'select namedist'#13#10 +
       'from dist'#13#10 +
       'where (id_dist = :id)';
-    Parameters.ParamByName('id').Value := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namedist').AsString;
     Close;
@@ -470,7 +500,8 @@ begin
       'SELECT boss '#13#10 +
       'FROM Dist '#13#10 +
       'WHERE id_dist = :id';
-    Parameters.ParamByName('id').Value := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('boss').AsString;
     Close;
@@ -487,10 +518,11 @@ begin
     SQL.Add('from house');
     SQL.Add('where (id_street = :str)and(nhouse = :nh)and(corp=:cp)');
     SQL.Add('and(id_dist=:dist)');
-    Parameters.ParamByName('str').Value := Cl.Data.str;
-    Parameters.ParamByName('nh').Value := Cl.Data.nh;
-    Parameters.ParamByName('cp').Value := Cl.Data.corp;
-    Parameters.ParamByName('dist').Value := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'str', Cl.Data.str);
+    SetParam(Parameters, 'nh', Cl.Data.nh);
+    SetParam(Parameters, 'cp', Cl.Data.corp);
+    SetParam(Parameters, 'dist', MainForm.dist);
     Open;
     if IsEmpty then
       Result := False
@@ -500,6 +532,22 @@ begin
       Result := True;
     end;
     Close;
+  end;
+end;
+
+function getmin(query: TADOQuery; id_min: integer): real;
+begin
+  Result := 0;
+  if id_min <> 0 then
+  begin
+    query.SQL.Text :=
+      'SELECT * FROM LMin'#13#10 +
+      'WHERE (sdate=(SELECT MAX(sdate) FROM LMin'#13#10 +
+      'WHERE id_min=:id_min)) AND (id_min=:id_min)';
+    query.Parameters.ParseSQL(query.SQL.Text, True);
+    SetParam(query.Parameters, 'id_min', id_min);
+    query.Open;
+    Result := query.FieldByName('minim').Value;
   end;
 end;
 

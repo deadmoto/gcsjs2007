@@ -72,7 +72,7 @@ procedure TForm27.SetDefault;
 var
   i: integer;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -84,17 +84,17 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Человек в семье', 'Норма пл.', 'Норма пл. для п/и', 'Норма тепла', 'Норма пл. для лгтн.'),
-    TIntArray.Create(25, 96, 60, 105, 75, 105), DModule.Query1.RecordCount + 1);
+    TIntArray.Create(25, 96, 60, 105, 75, 105), DModule.sqlQuery1.RecordCount + 1);
 
-  for i := 0 to DModule.Query1.RecordCount - 1 do
+  for i := 0 to DModule.sqlQuery1.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('id_norm').Value;
-    StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('countp').Value;
-    StringGrid1.Cells[2, i + 1] := DModule.Query1.FieldByName('snorm').Value;
-    StringGrid1.Cells[3, i + 1] := DModule.Query1.FieldByName('psnorm').Value;
-    StringGrid1.Cells[4, i + 1] := DModule.Query1.FieldByName('hnorm').Value;
-    StringGrid1.Cells[5, i + 1] := DModule.Query1.FieldByName('phnorm').Value;
-    DModule.Query1.Next;
+    StringGrid1.Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('id_norm').Value;
+    StringGrid1.Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('countp').Value;
+    StringGrid1.Cells[2, i + 1] := DModule.sqlQuery1.FieldByName('snorm').Value;
+    StringGrid1.Cells[3, i + 1] := DModule.sqlQuery1.FieldByName('psnorm').Value;
+    StringGrid1.Cells[4, i + 1] := DModule.sqlQuery1.FieldByName('hnorm').Value;
+    StringGrid1.Cells[5, i + 1] := DModule.sqlQuery1.FieldByName('phnorm').Value;
+    DModule.sqlQuery1.Next;
   end;
 end;
 
@@ -123,14 +123,15 @@ begin
     (Edit3.Text <> '') and (Edit4.Text <> '') and
     (Edit5.Text <> '') and (Edit6.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_norm');
       SQL.Add('from norm');
       SQL.Add('where (id_norm=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit4.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit4.Text));
       Open;
       if IsEmpty then
       begin
@@ -139,7 +140,8 @@ begin
         SQL.Add('select id_norm');
         SQL.Add('from norm');
         SQL.Add('where (countp = :count)');
-        ParamByName('count').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'count', Edit1.Text);
         Open;
         if IsEmpty then
           flag := True
@@ -158,12 +160,13 @@ begin
         SQL.Clear;
         SQL.Add('insert into norm');
         SQL.Add('values (:id, :count, :sn, :spn, :hn, :hpn)');
-        ParamByName('id').AsInteger := StrToInt(Edit4.Text);
-        ParamByName('count').AsString := Edit1.Text;
-        ParamByName('sn').AsFloat  := StrToFloat(Edit2.Text);
-        ParamByName('hn').AsFloat  := StrToFloat(Edit3.Text);
-        ParamByName('spn').AsFloat := StrToFloat(Edit5.Text);
-        ParamByName('hpn').AsFloat := StrToFloat(Edit6.Text);
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit4.Text));
+        SetParam(Parameters, 'count', Edit1.Text);
+        SetParam(Parameters, 'sn', StrToFloat(Edit2.Text));
+        SetParam(Parameters, 'hn', StrToFloat(Edit3.Text));
+        SetParam(Parameters, 'spn', StrToFloat(Edit5.Text));
+        SetParam(Parameters, 'hpn', StrToFloat(Edit6.Text));
         ExecSQL;
         SetDefault;
       end
@@ -187,14 +190,15 @@ begin
     (Edit3.Text <> '') and (Edit4.Text <> '') and
     (Edit5.Text <> '') and (Edit6.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_norm');
       SQL.Add('from norm');
       SQL.Add('where (id_norm=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit4.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit4.Text));
       Open;
       if IsEmpty or not IsEmpty and
         (FieldByName('id_norm').AsInteger = oldid) then
@@ -204,7 +208,8 @@ begin
         SQL.Add('select id_norm');
         SQL.Add('from norm');
         SQL.Add('where (countp = :count)');
-        ParamByName('count').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'count', Edit1.Text);
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_norm').AsInteger = oldid) then
@@ -225,12 +230,13 @@ begin
         SQL.Add('update norm');
         SQL.Add('set countp = :count, snorm = :sn, psnorm = :spn, hnorm = :hn, phnorm = :hpn');
         SQL.Add('where (id_norm = :id)');
-        ParamByName('id').AsInteger := oldid;
-        ParamByName('count').AsString := Edit1.Text;
-        ParamByName('sn').AsFloat  := StrToFloat(Edit2.Text);
-        ParamByName('hn').AsFloat  := StrToFloat(Edit3.Text);
-        ParamByName('spn').AsFloat := StrToFloat(Edit5.Text);
-        ParamByName('hpn').AsFloat := StrToFloat(Edit6.Text);
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
+        SetParam(Parameters, 'count', Edit1.Text);
+        SetParam(Parameters, 'sn', StrToFloat(Edit2.Text));
+        SetParam(Parameters, 'hn', StrToFloat(Edit3.Text));
+        SetParam(Parameters, 'spn', StrToFloat(Edit5.Text));
+        SetParam(Parameters, 'hpn', StrToFloat(Edit6.Text));
         ExecSQL;
         SetDefault;
       end
@@ -248,7 +254,7 @@ end;
 procedure TForm27.Button3Click(Sender: TObject);
 { удалить норму }
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     if not IsEmpty then
     begin
@@ -256,7 +262,8 @@ begin
       SQL.Clear;
       SQL.Add('delete from norm');
       SQL.Add('where id_norm=:id');
-      ParamByName('id').AsInteger := oldid;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', oldid);
       ExecSQL;
       SetDefault;
     end;
@@ -303,7 +310,7 @@ begin
   DModule.norm1.SQL.Clear;
   DModule.norm1.SQL.Add('select * from norm');
   DModule.norm1.Open;
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
 end;
 
 procedure TForm27.Edit1KeyDown(Sender: TObject; var Key: word; Shift: TShiftState);

@@ -113,7 +113,6 @@ object SQLExecForm: TSQLExecForm
       Height = 223
       Hint = #1056#1077#1079#1091#1083#1100#1090#1072#1090' SQL-'#1079#1072#1087#1088#1086#1089#1072
       Align = alClient
-      DataSource = DModule.sqlDataSource
       ParentShowHint = False
       ReadOnly = True
       ShowHint = True

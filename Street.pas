@@ -68,7 +68,7 @@ procedure TForm5.SetDefault;
 var
   i: integer;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -80,14 +80,14 @@ begin
   end;
 
   FormerStringGrid(StringGrid1, TStringArray.Create('Код', 'Наименование', 'Статус'),
-    TIntArray.Create(25, 275, 40), DModule.Query1.RecordCount + 1);
+    TIntArray.Create(25, 275, 40), DModule.sqlQuery1.RecordCount + 1);
 
-  for i := 0 to DModule.Query1.RecordCount - 1 do
+  for i := 0 to DModule.sqlQuery1.RecordCount - 1 do
   begin
-    StringGrid1.Cells[0, i + 1] := DModule.Query1.FieldByName('id_street').Value;
-    StringGrid1.Cells[1, i + 1] := DModule.Query1.FieldByName('namestreet').Value;
-    StringGrid1.Cells[2, i + 1] := DModule.Query1.FieldByName('status').Value;
-    DModule.Query1.Next;
+    StringGrid1.Cells[0, i + 1] := DModule.sqlQuery1.FieldByName('id_street').Value;
+    StringGrid1.Cells[1, i + 1] := DModule.sqlQuery1.FieldByName('namestreet').Value;
+    StringGrid1.Cells[2, i + 1] := DModule.sqlQuery1.FieldByName('status').Value;
+    DModule.sqlQuery1.Next;
   end;
 end;
 
@@ -126,14 +126,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_street');
       SQL.Add('from strt');
       SQL.Add('where (id_street=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit2.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit2.Text));
       Open;
       if IsEmpty then
       begin
@@ -142,7 +143,8 @@ begin
         SQL.Add('select id_street');
         SQL.Add('from strt');
         SQL.Add('where (namestreet = :name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty then
           flag := True
@@ -161,12 +163,14 @@ begin
         SQL.Clear;
         SQL.Add('insert into strt');
         SQL.Add('values (:id, :name,:st)');
-        ParamByName('id').AsInteger  := StrToInt(Edit2.Text);
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit2.Text));
+        SetParam(Parameters, 'name', Edit1.Text);
         if CheckBox1.Checked then
-          ParamByName('st').AsInteger := 1
+          SetParam(Parameters, 'st', 1)
         else
-          ParamByName('st').AsInteger := 0;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'st', 0);
         ExecSQL;
         SetDefault;
       end
@@ -197,14 +201,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_street');
       SQL.Add('from strt');
       SQL.Add('where (id_street=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit2.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit2.Text));
       Open;
       if IsEmpty or not IsEmpty and
         (FieldByName('id_street').AsInteger = oldid) then
@@ -214,7 +219,8 @@ begin
         SQL.Add('select id_street');
         SQL.Add('from strt');
         SQL.Add('where (namestreet = :name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_street').AsInteger = oldid) then
@@ -235,12 +241,13 @@ begin
         SQL.Add('update strt');
         SQL.Add('set namestreet = :name,status=:st');
         SQL.Add('where id_street = :id');
-        ParamByName('id').AsInteger  := oldid;
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
+        SetParam(Parameters, 'name', Edit1.Text);
         if CheckBox1.Checked then
-          ParamByName('st').AsInteger := 1
+          SetParam(Parameters, 'st', 1)
         else
-          ParamByName('st').AsInteger := 0;
+          SetParam(Parameters, 'st', 0);
         ExecSQL;
         SetDefault;
       end
@@ -261,7 +268,7 @@ procedure TForm5.Button3Click(Sender: TObject);
   удаляется запись, которая соответствует текущему id.
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     if not IsEmpty then
     begin
@@ -269,7 +276,8 @@ begin
       SQL.Clear;
       SQL.Add('delete from strt');
       SQL.Add('where (id_street = :id)');
-      ParamByName('id').AsInteger := oldid;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', oldid);
       ExecSQL;
       SetDefault;
     end;
@@ -306,7 +314,7 @@ procedure TForm5.FormClose(Sender: TObject; var Action: TCloseAction);
   в этом unit.
 *******************************************************************************}
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
 end;
 
 procedure TForm5.Edit2Exit(Sender: TObject);

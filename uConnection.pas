@@ -85,7 +85,7 @@ begin
     end;
 
     MainForm.curServer := ComboBox1.Text;
-    DModule.Database1.Connected := False;
+    //DModule.Database1.Connected := False;
     DModule.sqlConnection.Connected := False;
 
     if not ODBC_DSN.AddDSNMSSQLSource('SQLSub', ComboBox1.Text, 'Subsidy', ReadRegProperty('User'), ReadRegProperty('Password'), 'База данных программы Subsidy') then
@@ -93,7 +93,7 @@ begin
 
     DModule.sqlConnection.ConnectionString := DModule.SetSQLConnectStr(ReadRegProperty('Server'));
 
-    DModule.Database1.Connected := True;
+    //DModule.Database1.Connected := True;
     DModule.sqlConnection.Connected := True;
 
     MainForm.OnCreate(self);

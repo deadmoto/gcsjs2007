@@ -146,7 +146,7 @@ begin
 
     sleep(1000);
     try
-      DModule.Database1.StartTransaction;
+      DModule.sqlConnection.BeginTrans;
       ImportInsp(path, MainForm.dist);
       ProgressBar1.StepIt;
       ImportCl(path, MainForm.dist);
@@ -164,12 +164,12 @@ begin
       ImportFact(path, MainForm.dist);
       ProgressBar1.StepIt;
       ImportCounters(path, MainForm.dist);
-      DModule.Database1.Commit;
+      DModule.sqlConnection.CommitTrans;
       ProgressBar1.StepIt;
       ShowMessage('Импорт найденных файлов успешно завершен!');
       MainForm.Reload;
     except
-      DModule.Database1.Rollback;
+      DModule.sqlConnection.RollbackTrans;
       ShowMessage('Ошибка импорта!');
     end;
   finally

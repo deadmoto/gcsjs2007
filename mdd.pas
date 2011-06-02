@@ -113,14 +113,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_mdd');
       SQL.Add('from mdd');
       SQL.Add('where (id_mdd=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit3.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit3.Text));
       Open;
       if IsEmpty then
       begin
@@ -129,7 +130,8 @@ begin
         SQL.Add('select id_mdd');
         SQL.Add('from mdd');
         SQL.Add('where (namegroup=:name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty then
           flag := True
@@ -148,10 +150,11 @@ begin
         SQL.Clear;
         SQL.Add('insert into mdd');
         SQL.Add('values (convert(smalldatetime,:d,104),:id,:name,:v)');
-        ParamByName('d').AsString  := MainForm.rdt;
-        ParamByName('id').AsInteger := StrToInt(Edit3.Text);
-        ParamByName('name').AsString := Edit1.Text;
-        ParamByName('v').AsInteger := StrToInt(Edit2.Text);
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'd', MainForm.rdt);
+        SetParam(Parameters, 'id', StrToInt(Edit3.Text));
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'v', StrToInt(Edit2.Text));
         ExecSQL;
         FillMdd(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
         oldid := StrToInt(Edit3.Text);
@@ -172,14 +175,15 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_mdd');
       SQL.Add('from mdd');
       SQL.Add('where (id_mdd=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit3.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit3.Text));
       Open;
       if IsEmpty or not IsEmpty and (FieldByName('id_mdd').AsInteger = oldid) then
       begin
@@ -192,8 +196,9 @@ begin
           SQL.Add('select id_mdd');
           SQL.Add('from mdd');
           SQL.Add('where (id_mdd=:id)and(sdate=Convert(smalldatetime,:d,104))');
-          ParamByName('id').AsInteger := StrToInt(Edit3.Text);
-          ParamByName('d').AsString := MainForm.rdt;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'id', StrToInt(Edit3.Text));
+          SetParam(Parameters, 'd', MainForm.rdt);
           Open;
           if IsEmpty then
             flag := False
@@ -205,7 +210,8 @@ begin
         SQL.Add('select id_mdd');
         SQL.Add('from mdd');
         SQL.Add('where (namegroup=:name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty or not IsEmpty and (FieldByName('id_mdd').AsInteger = oldid) then
         begin
@@ -215,7 +221,8 @@ begin
             SQL.Clear;
             SQL.Add('insert into mdd');
             SQL.Add('values (convert(smalldatetime,:d,104),:id,:name,:v)');
-            ParamByName('id').AsInteger := StrToInt(Edit3.Text);
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', StrToInt(Edit3.Text));
           end
           else
           begin
@@ -224,11 +231,13 @@ begin
             SQL.Add('update mdd');
             SQL.Add('set namegroup = :name, vmdd = :v');
             SQL.Add('where (id_mdd = :id)and(sdate=Convert(smalldatetime,:d,104))');
-            ParamByName('id').AsInteger := oldid;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', oldid);
           end;
-          ParamByName('d').AsString  := MainForm.rdt;
-          ParamByName('name').AsString := Edit1.Text;
-          ParamByName('v').AsInteger := StrToInt(Edit2.Text);
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'd', MainForm.rdt);
+          SetParam(Parameters, 'name', Edit1.Text);
+          SetParam(Parameters, 'v', StrToInt(Edit2.Text));
           ExecSQL;
           FillMdd(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
           oldid := StrToInt(Edit3.Text);
@@ -248,14 +257,15 @@ end;
 procedure TForm20.Button3Click(Sender: TObject);
 { удалить минимум }
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('delete from mdd');
     SQL.Add('where (id_mdd=:id)and(sdate=Convert(smalldatetime,:d,104))');
-    ParamByName('d').AsString := MainForm.rdt;
-    ParamByName('id').AsInteger := oldid;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'd', MainForm.rdt);
+    SetParam(Parameters, 'id', oldid);
     ExecSQL;
     FillMdd(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
   end;
@@ -287,7 +297,7 @@ end;
 
 procedure TForm20.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
   DModule.qTarif.Close;
 end;
 

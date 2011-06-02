@@ -72,7 +72,6 @@ implementation
 uses
   datamodule,
   SysUtils,
-  DBTables,
   dateutils,
   Dialogs,
   main,
@@ -92,7 +91,6 @@ begin
     begin
       SQL.Add('(bdate<=CONVERT(smalldatetime, :d, 104))and');
       SQL.Add('(edate>=CONVERT(smalldatetime, :d, 104))and');
-      Parameters.ParamByName('d').Value := dt;
     end;
     SQL.Add('(id_dist = :dist))');
     Parameters.ParseSQL(SQL.Text, True);
@@ -164,12 +162,13 @@ begin
     SQL.Clear;
     SQL.Add('SELECT * FROM cl');
     SQL.Add('WHERE change>=:d1 and change<=:d2 and id_dist = :dist');
-    Parameters.ParamByName('dist').Value := dis;
-    //    Parameters.ParamByName('d2').Value := DateToStr(EncodeDate(YearOf(d),MonthOf(d),16));
-    Parameters.ParamByName('d2').Value := EncodeDate(YearOf(d), MonthOf(d), 19);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', dis);
+    //    SetParam(Parameters, 'd2', DateToStr(EncodeDate(YearOf(d),MonthOf(d),16)));
+    SetParam(Parameters, 'd2', EncodeDate(YearOf(d), MonthOf(d), 19));
     d := IncMonth(d, -1);
-    //    Parameters.ParamByName('d1').Value := DateToStr(EncodeDate(YearOf(d),MonthOf(d),15));
-    Parameters.ParamByName('d1').Value := EncodeDate(YearOf(d), MonthOf(d), 20);
+    //    SetParam(Parameters, 'd1', DateToStr(EncodeDate(YearOf(d),MonthOf(d),15)));
+    SetParam(Parameters, 'd1', EncodeDate(YearOf(d), MonthOf(d), 20));
     Open;
     FillTable(path, 'cl' + IntToStr(dis), MainForm.codedbf);
   end;
@@ -196,12 +195,12 @@ begin
     SetParam(Parameters, 'd2', EncodeDate(YearOf(d), MonthOf(d), 19));
     d := IncMonth(d, -1);
     SetParam(Parameters, 'd1', EncodeDate(YearOf(d), MonthOf(d), 20));
-    //Parameters.ParamByName('dist').Value := dis;
-    //    Parameters.ParamByName('d2').Value := DateToStr(EncodeDate(YearOf(d),MonthOf(d),16));
-    //Parameters.ParamByName('d2').Value := EncodeDate(YearOf(d), MonthOf(d), 19);
+    //SetParam(Parameters, 'dist', dis);
+    //    SetParam(Parameters, 'd2', DateToStr(EncodeDate(YearOf(d),MonthOf(d),16)));
+    //SetParam(Parameters, 'd2', EncodeDate(YearOf(d), MonthOf(d), 19));
     //d := IncMonth(d, -1);
-    //    Parameters.ParamByName('d1').Value := DateToStr(EncodeDate(YearOf(d),MonthOf(d),15));
-    //Parameters.ParamByName('d1').Value := EncodeDate(YearOf(d), MonthOf(d), 20);
+    //    SetParam(Parameters, 'd1', DateToStr(EncodeDate(YearOf(d),MonthOf(d),15)));
+    //SetParam(Parameters, 'd1', EncodeDate(YearOf(d), MonthOf(d), 20));
     Open;
     FillTable(path, 'hist' + IntToStr(dis), MainForm.codedbf);
   end;
@@ -220,12 +219,13 @@ begin
     SQL.Add('SELECT * FROM fam');
     SQL.Add('WHERE regn in (SELECT regn FROM cl');
     SQL.Add('WHERE change>=:d1 and change<=:d2 and id_dist = :dist)');
-    Parameters.ParamByName('dist').Value := dis;
-    //    Parameters.ParamByName('d2').Value := DateToStr(EncodeDate(YearOf(d),MonthOf(d),16));
-    Parameters.ParamByName('d2').Value := EncodeDate(YearOf(d), MonthOf(d), 19);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', dis);
+    //    SetParam(Parameters, 'd2', DateToStr(EncodeDate(YearOf(d),MonthOf(d),16)));
+    SetParam(Parameters, 'd2', EncodeDate(YearOf(d), MonthOf(d), 19));
     d := IncMonth(d, -1);
-    //    Parameters.ParamByName('d1').Value := DateToStr(EncodeDate(YearOf(d),MonthOf(d),15));
-    Parameters.ParamByName('d1').Value := EncodeDate(YearOf(d), MonthOf(d), 20);
+    //    SetParam(Parameters, 'd1', DateToStr(EncodeDate(YearOf(d),MonthOf(d),15)));
+    SetParam(Parameters, 'd1', EncodeDate(YearOf(d), MonthOf(d), 20));
     Open;
     FillTable(path, 'fam' + IntToStr(dis), MainForm.codedbf);
   end;
@@ -243,9 +243,11 @@ begin
     if dt <> '' then
     begin
       SQL.Add('and(sub.sdate = convert(smalldatetime,:d,104))');
-      Parameters.ParamByName('d').Value := dt;
     end;
-    Parameters.ParamByName('dist').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    if dt <> '' then
+      SetParam(Parameters, 'd', dt);
+    SetParam(Parameters, 'dist', dis);
     Open;
     FillTable(path, 'sub' + IntToStr(dis), MainForm.codedbf);
   end;
@@ -263,9 +265,11 @@ begin
     if dt <> '' then
     begin
       SQL.Add('and(counters.sdate = convert(smalldatetime,:d,104))');
-      Parameters.ParamByName('d').Value := dt;
     end;
-    Parameters.ParamByName('dist').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    if dt <> '' then
+      SetParam(Parameters, 'd', dt);
+    SetParam(Parameters, 'dist', dis);
     Open;
     FillTable(path, 'counters' + IntToStr(dis), MainForm.codedbf);
   end;
@@ -283,9 +287,11 @@ begin
     if dt <> '' then
     begin
       SQL.Add('and(sluj.sdate = convert(smalldatetime,:d,104))');
-      Parameters.ParamByName('d').Value := dt;
     end;
-    Parameters.ParamByName('dist').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', dis);
+    if dt <> '' then
+      SetParam(Parameters, 'd', dt);
     Open;
     FillTable2(path, 'sluj' + IntToStr(dis));
   end;
@@ -303,9 +309,11 @@ begin
     if dt <> '' then
     begin
       SQL.Add('and(sdate = convert(smalldatetime,:d,104))');
-      Parameters.ParamByName('d').Value := dt;
     end;
-    Parameters.ParamByName('dist').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    if dt <> '' then
+      SetParam(Parameters, 'd', dt);    
+    SetParam(Parameters, 'dist', dis);
     Open;
     FillTable(path, t + IntToStr(dis), MainForm.codedbf);
   end;
@@ -320,7 +328,8 @@ begin
     SQL.Text :=
       'SELECT Debt.* FROM Debt'#13#10 +
       'WHERE dist=:dist';
-    Parameters.ParamByName('dist').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', dis);
     Open;
     FillTable2(path, 'debt' + IntToStr(dis));
   end;
@@ -332,7 +341,8 @@ begin
       'SELECT DebtPay.* FROM DebtPay INNER JOIN'#13#10 +
         'Debt ON Debt.id_debt = DebtPay.id_debt'#13#10 +
       'WHERE Debt.dist=:dist';
-    Parameters.ParamByName('dist').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', dis);
     Open;
     FillTable2(path, 'debtpay' + IntToStr(dis));
   end;
@@ -347,7 +357,8 @@ begin
     SQL.Text :=
       'SELECT Office.* FROM Office'#13#10 +
       'WHERE Office.id_dist=:dist';
-    Parameters.ParamByName('dist').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', dis);
     Open;
     FillTable2(path, 'office' + IntToStr(dis));
   end;
@@ -364,7 +375,8 @@ begin
     if dt <> '' then
     begin
       SQL.Add('WHERE (sdate = convert(smalldatetime,:d,104))');
-      Parameters.ParamByName('d').Value := dt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'd', dt);
     end;
     Open;
     FillTable(path, 'rstnd', MainForm.codedbf);
@@ -382,7 +394,8 @@ begin
     if dt <> '' then
     begin
       SQL.Add('WHERE (sdate = convert(smalldatetime,:d,104))');
-      Parameters.ParamByName('d').Value := dt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'd', dt);
     end;
     Open;
     FillTable(path, 'lmin', MainForm.codedbf);
@@ -400,7 +413,8 @@ begin
     SQL.Add('WHERE id_dist = :id');
     if not all then
       SQL.Add('and status=1');
-    Parameters.ParamByName('id').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', dis);
     Open;
     FillTable(path, 'insp' + IntToStr(dis), MainForm.codedbf);
   end;
@@ -415,7 +429,8 @@ begin
     SQL.Clear;
     SQL.Add('SELECT * FROM house');
     SQL.Add('WHERE id_dist = :id');
-    Parameters.ParamByName('id').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', dis);
     Open;
     FillTable(path, 'house' + IntToStr(dis), MainForm.codedbf);
   end;
@@ -430,7 +445,8 @@ begin
     SQL.Clear;
     SQL.Add('SELECT * FROM mng');
     SQL.Add('WHERE id_dist = :dist');
-    Parameters.ParamByName('dist').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', dis);
     Open;
     FillTable(path, 'mng' + IntToStr(dis), MainForm.codedbf);
   end;
@@ -474,7 +490,8 @@ begin
     SQL.Clear;
     SQL.Add('SELECT * FROM FactSale');
     SQL.Add('WHERE id_dist=:dist');
-    Parameters.ParamByName('dist').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', dis);
     Open;
     FillTable(path, 'factsale' + IntToStr(dis), MainForm.codedbf);
   end;
@@ -485,7 +502,8 @@ begin
     SQL.Clear;
     SQL.Add('SELECT * FROM FactBalance');
     SQL.Add('WHERE id_dist=:dist');
-    Parameters.ParamByName('dist').Value := dis;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', dis);
     Open;
     FillTable(path, 'factbalance' + IntToStr(dis), MainForm.codedbf);
   end;
@@ -518,17 +536,19 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM ' + t);
         sqlQuery2.SQL.Add('WHERE (id_' + t + '=:id)and(sdate=convert(smalldatetime,:d,104))and(id_dist=:idd)');
-        sqlQuery2.Parameters.ParamByName('idd').Value := f[i][0];
-        sqlQuery2.Parameters.ParamByName('d').Value  := f[i][1];
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][2];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'idd', f[i][0]);
+        SetParam(sqlQuery2.Parameters, 'd', f[i][1]);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][2]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('idd').Value := f[i][0];
-        sqlQuery1.Parameters.ParamByName('d').Value  := f[i][1];
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('name').Value := f[i][3];
-        sqlQuery1.Parameters.ParamByName('tarif').Value := StrToFloat(f[i][4]);
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'idd', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'd', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'name', f[i][3]);
+        SetParam(sqlQuery1.Parameters, 'tarif', StrToFloat(f[i][4]));
         if norm then
-          sqlQuery1.Parameters.ParamByName('norm').Value := StrToFloat(f[i][5]);
+          SetParam(sqlQuery1.Parameters, 'norm', StrToFloat(f[i][5]));
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -563,17 +583,19 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM ' + t);
         sqlQuery2.SQL.Add('WHERE (id_' + t + '=:id)and(sdate=convert(smalldatetime,:d,104))and(id_dist=:idd)');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][2];
-        sqlQuery2.Parameters.ParamByName('d').Value  := f[i][1];
-        sqlQuery2.Parameters.ParamByName('idd').Value := f[i][0];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][2]);
+        SetParam(sqlQuery2.Parameters, 'd', f[i][1]);
+        SetParam(sqlQuery2.Parameters, 'idd', f[i][0]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('idd').Value := f[i][0];
-        sqlQuery1.Parameters.ParamByName('d').Value  := f[i][1];
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('name').Value := f[i][3];
-        sqlQuery1.Parameters.ParamByName('tarif1').Value := StrToFloat(f[i][4]);
-        sqlQuery1.Parameters.ParamByName('tarif2').Value := StrToFloat(f[i][5]);
-        sqlQuery1.Parameters.ParamByName('norm').Value := StrToFloat(f[i][6]);
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'idd', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'd', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'name', f[i][3]);
+        SetParam(sqlQuery1.Parameters, 'tarif1', StrToFloat(f[i][4]));
+        SetParam(sqlQuery1.Parameters, 'tarif2', StrToFloat(f[i][5]));
+        SetParam(sqlQuery1.Parameters, 'norm', StrToFloat(f[i][6]));
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -608,17 +630,19 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM el');
         sqlQuery2.SQL.Add('WHERE (id_el=:id)and(sdate=convert(smalldatetime,:d,104))and(id_dist=:idd)');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][2];
-        sqlQuery2.Parameters.ParamByName('d').Value  := f[i][1];
-        sqlQuery2.Parameters.ParamByName('idd').Value := f[i][0];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][2]);
+        SetParam(sqlQuery2.Parameters, 'd', f[i][1]);
+        SetParam(sqlQuery2.Parameters, 'idd', f[i][0]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('idd').Value := f[i][0];
-        sqlQuery1.Parameters.ParamByName('d').Value  := f[i][1];
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('plate').Value := f[i][3];
-        sqlQuery1.Parameters.ParamByName('tarif1').Value := StrToFloat(f[i][4]);
-        sqlQuery1.Parameters.ParamByName('tarif2').Value := StrToFloat(f[i][5]);
-        sqlQuery1.Parameters.ParamByName('tarif3').Value := StrToFloat(f[i][6]);
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'idd', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'd', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'plate', f[i][3]);
+        SetParam(sqlQuery1.Parameters, 'tarif1', StrToFloat(f[i][4]));
+        SetParam(sqlQuery1.Parameters, 'tarif2', StrToFloat(f[i][5]));
+        SetParam(sqlQuery1.Parameters, 'tarif3', StrToFloat(f[i][6]));
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -654,17 +678,19 @@ begin
         sqlQuery2.SQL.Add('DELETE FROM FactSale');
         sqlQuery2.SQL.Add('WHERE (regn =:id) and (sdate=convert(smalldatetime,:d,104))');
         sqlQuery2.SQL.Add('and(id_dist=:dis)');
-        sqlQuery2.Parameters.ParamByName('d').Value  := f[i][0];
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][1];
-        sqlQuery2.Parameters.ParamByName('dis').Value := f[i][6];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'd', f[i][0]);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][1]);
+        SetParam(sqlQuery2.Parameters, 'dis', f[i][6]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('d').Value  := f[i][0];
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('bdate').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('edate').Value := f[i][3];
-        sqlQuery1.Parameters.ParamByName('sub').Value := StrToFloat(f[i][4]);
-        sqlQuery1.Parameters.ParamByName('factsum').Value := StrToFloat(f[i][5]);
-        sqlQuery1.Parameters.ParamByName('dis').Value := StrToFloat(f[i][6]);
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'd', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'bdate', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'edate', f[i][3]);
+        SetParam(sqlQuery1.Parameters, 'sub', StrToFloat(f[i][4]));
+        SetParam(sqlQuery1.Parameters, 'factsum', StrToFloat(f[i][5]));
+        SetParam(sqlQuery1.Parameters, 'dis', StrToFloat(f[i][6]));
         try
           sqlQuery1.ExecSQL;
         except on E : Exception do
@@ -697,22 +723,26 @@ begin
         sqlQuery2.SQL.Add('DELETE FROM FactBalance');
         sqlQuery2.SQL.Add('WHERE (regn =:id)and(bdate=convert(smalldatetime,:bdate,104))');
         sqlQuery2.SQL.Add('and(id_dist=:dis)');
-        sqlQuery2.Parameters.ParamByName('bdate').Value := f[i][1];
-        sqlQuery2.Parameters.ParamByName('id').Value  := f[i][0];
-        sqlQuery2.Parameters.ParamByName('dis').Value := f[i][5];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'bdate', f[i][1]);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery2.Parameters, 'dis', f[i][5]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][0];
-        sqlQuery1.Parameters.ParamByName('bdate').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('edate').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('balance').Value := StrToFloat(f[i][3]);
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'bdate', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'edate', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'balance', StrToFloat(f[i][3]));
         if f[i][4] = '' then
           begin
-            sqlQuery1.Parameters.ParamByName('dolg').Value := Null;
+            sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+            SetParam(sqlQuery1.Parameters, 'dolg', Null);
             sqlQuery1.Parameters.ParamByName('dolg').DataType := ftFloat;
           end
         else
-          sqlQuery1.Parameters.ParamByName('dolg').Value := StrToFloat(f[i][4]);
-        sqlQuery1.Parameters.ParamByName('dis').Value := StrToFloat(f[i][5]);
+          sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+          SetParam(sqlQuery1.Parameters, 'dolg', StrToFloat(f[i][4]));
+        SetParam(sqlQuery1.Parameters, 'dis', StrToFloat(f[i][5]));
         try
           sqlQuery1.ExecSQL;
         except on E : Exception do
@@ -751,19 +781,21 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM rstnd');
         sqlQuery2.SQL.Add('WHERE (id_stnd=:id)and(sdate=convert(smalldatetime,:d,104))');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][1];
-        sqlQuery2.Parameters.ParamByName('d').Value  := f[i][0];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][1]);
+        SetParam(sqlQuery2.Parameters, 'd', f[i][0]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('d').Value  := f[i][0];
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('name').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('v1').Value := StrToFloat(f[i][3]);
-        sqlQuery1.Parameters.ParamByName('v2').Value := StrToFloat(f[i][4]);
-        sqlQuery1.Parameters.ParamByName('v3').Value := StrToFloat(f[i][5]);
-        sqlQuery1.Parameters.ParamByName('v4').Value := StrToFloat(f[i][6]);
-        sqlQuery1.Parameters.ParamByName('v5').Value := StrToFloat(f[i][7]);
-        sqlQuery1.Parameters.ParamByName('v6').Value := StrToFloat(f[i][8]);
-        sqlQuery1.Parameters.ParamByName('v7').Value := StrToFloat(f[i][9]);
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'd', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'name', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'v1', StrToFloat(f[i][3]));
+        SetParam(sqlQuery1.Parameters, 'v2', StrToFloat(f[i][4]));
+        SetParam(sqlQuery1.Parameters, 'v3', StrToFloat(f[i][5]));
+        SetParam(sqlQuery1.Parameters, 'v4', StrToFloat(f[i][6]));
+        SetParam(sqlQuery1.Parameters, 'v5', StrToFloat(f[i][7]));
+        SetParam(sqlQuery1.Parameters, 'v6', StrToFloat(f[i][8]));
+        SetParam(sqlQuery1.Parameters, 'v7', StrToFloat(f[i][9]));
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -798,13 +830,15 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM lmin');
         sqlQuery2.SQL.Add('WHERE (id_min=:id)and(sdate=convert(smalldatetime,:d,104))');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][1];
-        sqlQuery2.Parameters.ParamByName('d').Value  := f[i][0];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][1]);
+        SetParam(sqlQuery2.Parameters, 'd', f[i][0]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('d').Value  := f[i][0];
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('name').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('minim').Value := StrToFloat(f[i][3]);
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'd', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'name', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'minim', StrToFloat(f[i][3]));
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -841,25 +875,27 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM cl');
         sqlQuery2.SQL.Add('WHERE (regn = :id)');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][0];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value  := f[i][0];
-        sqlQuery1.Parameters.ParamByName('fio').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('rdate').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('change').Value := f[i][3];
-        sqlQuery1.Parameters.ParamByName('dist').Value := f[i][4];
-        sqlQuery1.Parameters.ParamByName('str').Value := f[i][5];
-        sqlQuery1.Parameters.ParamByName('nh').Value  := f[i][6];
-        sqlQuery1.Parameters.ParamByName('cp').Value  := f[i][7];
-        sqlQuery1.Parameters.ParamByName('apart').Value := f[i][8];
-        sqlQuery1.Parameters.ParamByName('tel').Value := f[i][9];
-        sqlQuery1.Parameters.ParamByName('lsquare').Value := StrToFloat(f[i][10]);
-        sqlQuery1.Parameters.ParamByName('square').Value := StrToFloat(f[i][11]);
-        sqlQuery1.Parameters.ParamByName('stnd').Value := f[i][12];
-        sqlQuery1.Parameters.ParamByName('settl').Value := f[i][13];
-        sqlQuery1.Parameters.ParamByName('boil').Value := f[i][14];
-        sqlQuery1.Parameters.ParamByName('declar').Value := StrToDate((f[i][15]));
-        sqlQuery1.Parameters.ParamByName('mail').Value := f[i][16];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'fio', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'rdate', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'change', f[i][3]);
+        SetParam(sqlQuery1.Parameters, 'dist', f[i][4]);
+        SetParam(sqlQuery1.Parameters, 'str', f[i][5]);
+        SetParam(sqlQuery1.Parameters, 'nh', f[i][6]);
+        SetParam(sqlQuery1.Parameters, 'cp', f[i][7]);
+        SetParam(sqlQuery1.Parameters, 'apart', f[i][8]);
+        SetParam(sqlQuery1.Parameters, 'tel', f[i][9]);
+        SetParam(sqlQuery1.Parameters, 'lsquare', StrToFloat(f[i][10]));
+        SetParam(sqlQuery1.Parameters, 'square', StrToFloat(f[i][11]));
+        SetParam(sqlQuery1.Parameters, 'stnd', f[i][12]);
+        SetParam(sqlQuery1.Parameters, 'settl', f[i][13]);
+        SetParam(sqlQuery1.Parameters, 'boil', f[i][14]);
+        SetParam(sqlQuery1.Parameters, 'declar', StrToDate((f[i][15])));
+        SetParam(sqlQuery1.Parameters, 'mail', f[i][16]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -898,32 +934,34 @@ begin
         sqlQuery2.SQL.Add('DELETE FROM hist');
         sqlQuery2.SQL.Add('WHERE (regn = :id)and(bdate>=convert(smalldatetime,:sd,104)');
         sqlQuery2.SQL.Add(' or edate > convert(smalldatetime, :sd, 104))');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][0];
-        sqlQuery2.Parameters.ParamByName('sd').Value := f[i][1];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery2.Parameters, 'sd', f[i][1]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value  := f[i][0];
-        sqlQuery1.Parameters.ParamByName('bdate').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('edate').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('mcount').Value := f[i][3];
-        sqlQuery1.Parameters.ParamByName('quanpriv').Value := f[i][4];
-        sqlQuery1.Parameters.ParamByName('pmin').Value := StrToFloat(f[i][5]);
-        sqlQuery1.Parameters.ParamByName('income').Value := StrToFloat(f[i][6]);
-        sqlQuery1.Parameters.ParamByName('insp').Value := f[i][7];
-        sqlQuery1.Parameters.ParamByName('dist').Value := f[i][8];
-        sqlQuery1.Parameters.ParamByName('control').Value := f[i][9];
-        sqlQuery1.Parameters.ParamByName('reason').Value := f[i][10];
-        sqlQuery1.Parameters.ParamByName('own').Value := f[i][11];
-        sqlQuery1.Parameters.ParamByName('manager').Value := f[i][12];
-        sqlQuery1.Parameters.ParamByName('fond').Value := f[i][13];
-        sqlQuery1.Parameters.ParamByName('cert').Value := f[i][14];
-        sqlQuery1.Parameters.ParamByName('bank').Value := f[i][15];
-        sqlQuery1.Parameters.ParamByName('acbank').Value := f[i][16];
-        sqlQuery1.Parameters.ParamByName('calc').Value := f[i][17];
-        sqlQuery1.Parameters.ParamByName('mdd').Value := f[i][18];
-        sqlQuery1.Parameters.ParamByName('heating').Value := f[i][19];
-        sqlQuery1.Parameters.ParamByName('rmcount').Value := f[i][20];
-        sqlQuery1.Parameters.ParamByName('indrstnd').Value := f[i][21];
-        sqlQuery1.Parameters.ParamByName('indrstndval').Value := StrToFloat(f[i][22]);
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'bdate', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'edate', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'mcount', f[i][3]);
+        SetParam(sqlQuery1.Parameters, 'quanpriv', f[i][4]);
+        SetParam(sqlQuery1.Parameters, 'pmin', StrToFloat(f[i][5]));
+        SetParam(sqlQuery1.Parameters, 'income', StrToFloat(f[i][6]));
+        SetParam(sqlQuery1.Parameters, 'insp', f[i][7]);
+        SetParam(sqlQuery1.Parameters, 'dist', f[i][8]);
+        SetParam(sqlQuery1.Parameters, 'control', f[i][9]);
+        SetParam(sqlQuery1.Parameters, 'reason', f[i][10]);
+        SetParam(sqlQuery1.Parameters, 'own', f[i][11]);
+        SetParam(sqlQuery1.Parameters, 'manager', f[i][12]);
+        SetParam(sqlQuery1.Parameters, 'fond', f[i][13]);
+        SetParam(sqlQuery1.Parameters, 'cert', f[i][14]);
+        SetParam(sqlQuery1.Parameters, 'bank', f[i][15]);
+        SetParam(sqlQuery1.Parameters, 'acbank', f[i][16]);
+        SetParam(sqlQuery1.Parameters, 'calc', f[i][17]);
+        SetParam(sqlQuery1.Parameters, 'mdd', f[i][18]);
+        SetParam(sqlQuery1.Parameters, 'heating', f[i][19]);
+        SetParam(sqlQuery1.Parameters, 'rmcount', f[i][20]);
+        SetParam(sqlQuery1.Parameters, 'indrstnd', f[i][21]);
+        SetParam(sqlQuery1.Parameters, 'indrstndval', StrToFloat(f[i][22]));
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -964,7 +1002,8 @@ begin
           sqlQuery2.SQL.Clear;
           sqlQuery2.SQL.Add('DELETE FROM fam');
           sqlQuery2.SQL.Add('WHERE (regn = :id)');
-          sqlQuery2.Parameters.ParamByName('id').Value := f[i][1];
+          sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+          SetParam(sqlQuery2.Parameters, 'id', f[i][1]);
           sqlQuery2.ExecSQL;
         end;
         if (i > 0) and (f[i][1] <> f[i - 1][1]) then
@@ -973,19 +1012,21 @@ begin
           sqlQuery2.SQL.Clear;
           sqlQuery2.SQL.Add('DELETE FROM fam');
           sqlQuery2.SQL.Add('WHERE (regn = :id)');
-          sqlQuery2.Parameters.ParamByName('id').Value := f[i][1];
+          sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+          SetParam(sqlQuery2.Parameters, 'id', f[i][1]);
           sqlQuery2.ExecSQL;
         end;
-        sqlQuery1.Parameters.ParamByName('id').Value  := f[i][0];
-        sqlQuery1.Parameters.ParamByName('cl').Value  := f[i][1];
-        sqlQuery1.Parameters.ParamByName('fio').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('birth').Value := f[i][3];
-        sqlQuery1.Parameters.ParamByName('pol').Value := f[i][4];
-        sqlQuery1.Parameters.ParamByName('st').Value  := f[i][5];
-        sqlQuery1.Parameters.ParamByName('priv').Value := f[i][6];
-        sqlQuery1.Parameters.ParamByName('mid').Value := StrToFloat(f[i][7]);
-        sqlQuery1.Parameters.ParamByName('rel').Value := f[i][8];
-        sqlQuery1.Parameters.ParamByName('npss').Value := f[i][9];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'cl', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'fio', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'birth', f[i][3]);
+        SetParam(sqlQuery1.Parameters, 'pol', f[i][4]);
+        SetParam(sqlQuery1.Parameters, 'st', f[i][5]);
+        SetParam(sqlQuery1.Parameters, 'priv', f[i][6]);
+        SetParam(sqlQuery1.Parameters, 'mid', StrToFloat(f[i][7]));
+        SetParam(sqlQuery1.Parameters, 'rel', f[i][8]);
+        SetParam(sqlQuery1.Parameters, 'npss', f[i][9]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1021,21 +1062,23 @@ begin
         sqlQuery2.SQL.Add('DELETE FROM sub');
         sqlQuery2.SQL.Add('WHERE (regn =:id)and(sdate=convert(smalldatetime,:d,104))');
         sqlQuery2.SQL.Add('and(service=:serv)');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][1];
-        sqlQuery2.Parameters.ParamByName('d').Value  := f[i][0];
-        sqlQuery2.Parameters.ParamByName('serv').Value := f[i][2];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][1]);
+        SetParam(sqlQuery2.Parameters, 'd', f[i][0]);
+        SetParam(sqlQuery2.Parameters, 'serv', f[i][2]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('d').Value  := f[i][0];
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('serv').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('idserv').Value := f[i][3];
-        sqlQuery1.Parameters.ParamByName('ac').Value := f[i][4];
-        sqlQuery1.Parameters.ParamByName('pm').Value := StrToFloat(f[i][5]);
-        sqlQuery1.Parameters.ParamByName('snp').Value := StrToFloat(f[i][6]);
-        sqlQuery1.Parameters.ParamByName('sub').Value := StrToFloat(f[i][7]);
-        sqlQuery1.Parameters.ParamByName('sp').Value := StrToFloat(f[i][8]);
-        sqlQuery1.Parameters.ParamByName('stp').Value := f[i][9];
-        sqlQuery1.Parameters.ParamByName('stndsub').Value := StrToFloat(f[i][10]);
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'd', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'serv', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'idserv', f[i][3]);
+        SetParam(sqlQuery1.Parameters, 'ac', f[i][4]);
+        SetParam(sqlQuery1.Parameters, 'pm', StrToFloat(f[i][5]));
+        SetParam(sqlQuery1.Parameters, 'snp', StrToFloat(f[i][6]));
+        SetParam(sqlQuery1.Parameters, 'sub', StrToFloat(f[i][7]));
+        SetParam(sqlQuery1.Parameters, 'sp', StrToFloat(f[i][8]));
+        SetParam(sqlQuery1.Parameters, 'stp', f[i][9]);
+        SetParam(sqlQuery1.Parameters, 'stndsub', StrToFloat(f[i][10]));
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1071,16 +1114,18 @@ begin
         sqlQuery2.SQL.Add('DELETE FROM Counters');
         sqlQuery2.SQL.Add('WHERE (regn =:id)and(sdate=convert(smalldatetime,:d,104))');
         sqlQuery2.SQL.Add('and(service=:serv)');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][1];
-        sqlQuery2.Parameters.ParamByName('d').Value  := f[i][0];
-        sqlQuery2.Parameters.ParamByName('serv').Value := f[i][2];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][1]);
+        SetParam(sqlQuery2.Parameters, 'd', f[i][0]);
+        SetParam(sqlQuery2.Parameters, 'serv', f[i][2]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('d').Value  := f[i][0];
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('serv').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('count').Value := f[i][3];
-        sqlQuery1.Parameters.ParamByName('countdata').Value := StrToFloat(f[i][4]);
-        sqlQuery1.Parameters.ParamByName('countserv').Value := f[i][5];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'd', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'serv', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'count', f[i][3]);
+        SetParam(sqlQuery1.Parameters, 'countdata', StrToFloat(f[i][4]));
+        SetParam(sqlQuery1.Parameters, 'countserv', f[i][5]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1124,23 +1169,25 @@ begin
         if VarType(dbfQuery.Fields[7].Value) = varNull then
           sqlQuery2.SQL.Text := StringReplace(sqlQuery2.SQL.Text, 'id_debt=:debt', 'id_debt is NULL', [rfReplaceAll, rfIgnoreCase]);
 
-        sqlQuery2.Parameters.ParamByName('id').Value := dbfQuery.Fields[1].Value;
-        sqlQuery2.Parameters.ParamByName('d').Value  := dbfQuery.Fields[0].Value;
-        sqlQuery2.Parameters.ParamByName('serv').Value := dbfQuery.Fields[2].Value;
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', dbfQuery.Fields[1].Value);
+        SetParam(sqlQuery2.Parameters, 'd', dbfQuery.Fields[0].Value);
+        SetParam(sqlQuery2.Parameters, 'serv', dbfQuery.Fields[2].Value);
 
         if VarType(dbfQuery.Fields[7].Value) <> varNull then
-          sqlQuery2.Parameters.ParamByName('debt').Value := dbfQuery.Fields[7].Value;
+          SetParam(sqlQuery2.Parameters, 'debt', dbfQuery.Fields[7].Value);
         //sqlQuery2.Parameters.ParamByName('debt').DataType := ftGuid;
         sqlQuery2.ExecSQL;
 
-        sqlQuery1.Parameters.ParamByName('d').Value  := dbfQuery.Fields[0].Value;
-        sqlQuery1.Parameters.ParamByName('id').Value := dbfQuery.Fields[1].Value;
-        sqlQuery1.Parameters.ParamByName('serv').Value := dbfQuery.Fields[2].Value;
-        sqlQuery1.Parameters.ParamByName('pm').Value := dbfQuery.Fields[3].Value;
-        sqlQuery1.Parameters.ParamByName('snp').Value := dbfQuery.Fields[4].Value;
-        sqlQuery1.Parameters.ParamByName('sub').Value := dbfQuery.Fields[5].Value;
-        sqlQuery1.Parameters.ParamByName('fact').Value := dbfQuery.Fields[6].Value;
-        sqlQuery1.Parameters.ParamByName('debt').Value := dbfQuery.Fields[7].Value;
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'd', dbfQuery.Fields[0].Value);
+        SetParam(sqlQuery1.Parameters, 'id', dbfQuery.Fields[1].Value);
+        SetParam(sqlQuery1.Parameters, 'serv', dbfQuery.Fields[2].Value);
+        SetParam(sqlQuery1.Parameters, 'pm', dbfQuery.Fields[3].Value);
+        SetParam(sqlQuery1.Parameters, 'snp', dbfQuery.Fields[4].Value);
+        SetParam(sqlQuery1.Parameters, 'sub', dbfQuery.Fields[5].Value);
+        SetParam(sqlQuery1.Parameters, 'fact', dbfQuery.Fields[6].Value);
+        SetParam(sqlQuery1.Parameters, 'debt', dbfQuery.Fields[7].Value);
         if VarType(dbfQuery.Fields[7].Value) <> varNull then
           sqlQuery1.Parameters.ParamByName('debt').DataType := ftGuid;
         sqlQuery1.ExecSQL;
@@ -1181,16 +1228,18 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM insp');
         sqlQuery2.SQL.Add('WHERE (id_insp=:id)and(id_dist=:idd)');
-        sqlQuery2.Parameters.ParamByName('id').Value  := f[i][0];
-        sqlQuery2.Parameters.ParamByName('idd').Value := f[i][1];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery2.Parameters, 'idd', f[i][1]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][0];
-        sqlQuery1.Parameters.ParamByName('idd').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('insp').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('st').Value := f[i][3];
-        sqlQuery1.Parameters.ParamByName('l').Value := f[i][4];
-        sqlQuery1.Parameters.ParamByName('pwd').Value := f[i][5];
-        sqlQuery1.Parameters.ParamByName('office').Value := f[i][6];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'idd', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'insp', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'st', f[i][3]);
+        SetParam(sqlQuery1.Parameters, 'l', f[i][4]);
+        SetParam(sqlQuery1.Parameters, 'pwd', f[i][5]);
+        SetParam(sqlQuery1.Parameters, 'office', f[i][6]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1225,12 +1274,14 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM mng');
         sqlQuery2.SQL.Add('WHERE (id_mng=:id)and(id_dist=:idd)');
-        sqlQuery2.Parameters.ParamByName('id').Value  := f[i][0];
-        sqlQuery2.Parameters.ParamByName('idd').Value := f[i][1];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery2.Parameters, 'idd', f[i][1]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value  := f[i][0];
-        sqlQuery1.Parameters.ParamByName('idd').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('name').Value := f[i][2];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'idd', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'name', f[i][2]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1267,29 +1318,31 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM house');
         sqlQuery2.SQL.Add('WHERE (id_house=:id)and(id_dist=:idd)');
-        sqlQuery2.Parameters.ParamByName('id').Value  := f[i][0];
-        sqlQuery2.Parameters.ParamByName('idd').Value := f[i][1];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery2.Parameters, 'idd', f[i][1]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value  := f[i][0];
-        sqlQuery1.Parameters.ParamByName('idd').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('str').Value := f[i][2];
-        sqlQuery1.Parameters.ParamByName('nh').Value  := f[i][3];
-        sqlQuery1.Parameters.ParamByName('cp').Value  := f[i][4];
-        sqlQuery1.Parameters.ParamByName('stnd').Value := f[i][5];
-        sqlQuery1.Parameters.ParamByName('cont').Value := f[i][6];
-        sqlQuery1.Parameters.ParamByName('rep').Value := f[i][7];
-        sqlQuery1.Parameters.ParamByName('cold').Value := f[i][8];
-        sqlQuery1.Parameters.ParamByName('hot').Value := f[i][9];
-        sqlQuery1.Parameters.ParamByName('canal').Value := f[i][10];
-        sqlQuery1.Parameters.ParamByName('heat').Value := f[i][11];
-        sqlQuery1.Parameters.ParamByName('gas').Value := f[i][12];
-        sqlQuery1.Parameters.ParamByName('el').Value  := f[i][13];
-        sqlQuery1.Parameters.ParamByName('wood').Value := f[i][14];
-        sqlQuery1.Parameters.ParamByName('coal').Value := f[i][15];
-        sqlQuery1.Parameters.ParamByName('mng').Value := f[i][16];
-        sqlQuery1.Parameters.ParamByName('fnd').Value := f[i][17];
-        sqlQuery1.Parameters.ParamByName('boil').Value := f[i][18];
-        sqlQuery1.Parameters.ParamByName('elevator').Value := f[i][19];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'idd', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'str', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'nh', f[i][3]);
+        SetParam(sqlQuery1.Parameters, 'cp', f[i][4]);
+        SetParam(sqlQuery1.Parameters, 'stnd', f[i][5]);
+        SetParam(sqlQuery1.Parameters, 'cont', f[i][6]);
+        SetParam(sqlQuery1.Parameters, 'rep', f[i][7]);
+        SetParam(sqlQuery1.Parameters, 'cold', f[i][8]);
+        SetParam(sqlQuery1.Parameters, 'hot', f[i][9]);
+        SetParam(sqlQuery1.Parameters, 'canal', f[i][10]);
+        SetParam(sqlQuery1.Parameters, 'heat', f[i][11]);
+        SetParam(sqlQuery1.Parameters, 'gas', f[i][12]);
+        SetParam(sqlQuery1.Parameters, 'el', f[i][13]);
+        SetParam(sqlQuery1.Parameters, 'wood', f[i][14]);
+        SetParam(sqlQuery1.Parameters, 'coal', f[i][15]);
+        SetParam(sqlQuery1.Parameters, 'mng', f[i][16]);
+        SetParam(sqlQuery1.Parameters, 'fnd', f[i][17]);
+        SetParam(sqlQuery1.Parameters, 'boil', f[i][18]);
+        SetParam(sqlQuery1.Parameters, 'elevator', f[i][19]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1324,14 +1377,16 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM dist');
         sqlQuery2.SQL.Add('WHERE id_dist=:id');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][0];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][0];
-        sqlQuery1.Parameters.ParamByName('name').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('b').Value  := f[i][2];
-        sqlQuery1.Parameters.ParamByName('nameokr').Value := f[i][3];
-        sqlQuery1.Parameters.ParamByName('adr').Value := f[i][4];
-        sqlQuery1.Parameters.ParamByName('tel').Value := f[i][5];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'name', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'b', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'nameokr', f[i][3]);
+        SetParam(sqlQuery1.Parameters, 'adr', f[i][4]);
+        SetParam(sqlQuery1.Parameters, 'tel', f[i][5]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1366,10 +1421,12 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM ' + t);
         sqlQuery2.SQL.Add('WHERE id_' + t + '=:id');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][0];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][0];
-        sqlQuery1.Parameters.ParamByName('name').Value := f[i][1];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'name', f[i][1]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1404,10 +1461,12 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM charge');
         sqlQuery2.SQL.Add('WHERE id_month=:id');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][0];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][0];
-        sqlQuery1.Parameters.ParamByName('p').Value  := f[i][1];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'p', f[i][1]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1442,14 +1501,16 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM norm');
         sqlQuery2.SQL.Add('WHERE id_norm=:id');
-        sqlQuery2.Parameters.ParamByName('id').Value := IntToStr(StrToInt(f[i][0]));
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', IntToStr(StrToInt(f[i][0])));
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][0];
-        sqlQuery1.Parameters.ParamByName('c').Value  := f[i][1];
-        sqlQuery1.Parameters.ParamByName('s').Value  := StrToFloat(f[i][2]);
-        sqlQuery1.Parameters.ParamByName('ps').Value := StrToFloat(f[i][3]);
-        sqlQuery1.Parameters.ParamByName('h').Value  := StrToFloat(f[i][3]);
-        sqlQuery1.Parameters.ParamByName('ph').Value := StrToFloat(f[i][5]);
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'c', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 's', StrToFloat(f[i][2]));
+        SetParam(sqlQuery1.Parameters, 'ps', StrToFloat(f[i][3]));
+        SetParam(sqlQuery1.Parameters, 'h', StrToFloat(f[i][3]));
+        SetParam(sqlQuery1.Parameters, 'ph', StrToFloat(f[i][5]));
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1486,32 +1547,34 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM priv');
         sqlQuery2.SQL.Add('WHERE (id_priv=:id)');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][0];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value  := f[i][0];
-        sqlQuery1.Parameters.ParamByName('name').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('sq').Value  := f[i][2];
-        sqlQuery1.Parameters.ParamByName('lev').Value := f[i][3];
-        sqlQuery1.Parameters.ParamByName('pcont').Value := f[i][4];
-        sqlQuery1.Parameters.ParamByName('fcont').Value := f[i][5];
-        sqlQuery1.Parameters.ParamByName('prep').Value := f[i][6];
-        sqlQuery1.Parameters.ParamByName('frep').Value := f[i][7];
-        sqlQuery1.Parameters.ParamByName('pcold').Value := f[i][8];
-        sqlQuery1.Parameters.ParamByName('fcold').Value := f[i][9];
-        sqlQuery1.Parameters.ParamByName('phot').Value := f[i][10];
-        sqlQuery1.Parameters.ParamByName('fhot').Value := f[i][11];
-        sqlQuery1.Parameters.ParamByName('pcanal').Value := f[i][12];
-        sqlQuery1.Parameters.ParamByName('fcanal').Value := f[i][13];
-        sqlQuery1.Parameters.ParamByName('pheat').Value := f[i][14];
-        sqlQuery1.Parameters.ParamByName('fheat').Value := f[i][15];
-        sqlQuery1.Parameters.ParamByName('pel').Value := f[i][16];
-        sqlQuery1.Parameters.ParamByName('fel').Value := f[i][17];
-        sqlQuery1.Parameters.ParamByName('pgas').Value := f[i][18];
-        sqlQuery1.Parameters.ParamByName('fgas').Value := f[i][19];
-        sqlQuery1.Parameters.ParamByName('pwood').Value := f[i][20];
-        sqlQuery1.Parameters.ParamByName('fwood').Value := f[i][21];
-        sqlQuery1.Parameters.ParamByName('pcoal').Value := f[i][22];
-        sqlQuery1.Parameters.ParamByName('fcoal').Value := f[i][23];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'name', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'sq', f[i][2]);
+        SetParam(sqlQuery1.Parameters, 'lev', f[i][3]);
+        SetParam(sqlQuery1.Parameters, 'pcont', f[i][4]);
+        SetParam(sqlQuery1.Parameters, 'fcont', f[i][5]);
+        SetParam(sqlQuery1.Parameters, 'prep', f[i][6]);
+        SetParam(sqlQuery1.Parameters, 'frep', f[i][7]);
+        SetParam(sqlQuery1.Parameters, 'pcold', f[i][8]);
+        SetParam(sqlQuery1.Parameters, 'fcold', f[i][9]);
+        SetParam(sqlQuery1.Parameters, 'phot', f[i][10]);
+        SetParam(sqlQuery1.Parameters, 'fhot', f[i][11]);
+        SetParam(sqlQuery1.Parameters, 'pcanal', f[i][12]);
+        SetParam(sqlQuery1.Parameters, 'fcanal', f[i][13]);
+        SetParam(sqlQuery1.Parameters, 'pheat', f[i][14]);
+        SetParam(sqlQuery1.Parameters, 'fheat', f[i][15]);
+        SetParam(sqlQuery1.Parameters, 'pel', f[i][16]);
+        SetParam(sqlQuery1.Parameters, 'fel', f[i][17]);
+        SetParam(sqlQuery1.Parameters, 'pgas', f[i][18]);
+        SetParam(sqlQuery1.Parameters, 'fgas', f[i][19]);
+        SetParam(sqlQuery1.Parameters, 'pwood', f[i][20]);
+        SetParam(sqlQuery1.Parameters, 'fwood', f[i][21]);
+        SetParam(sqlQuery1.Parameters, 'pcoal', f[i][22]);
+        SetParam(sqlQuery1.Parameters, 'fcoal', f[i][23]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1546,10 +1609,12 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM fond');
         sqlQuery2.SQL.Add('WHERE id_fond=:id');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][0];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][0];
-        sqlQuery1.Parameters.ParamByName('name').Value := f[i][1];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'name', f[i][1]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1584,11 +1649,13 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM strt');
         sqlQuery2.SQL.Add('WHERE id_street=:id');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][0];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][0];
-        sqlQuery1.Parameters.ParamByName('name').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('st').Value := f[i][2];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'name', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'st', f[i][2]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1623,11 +1690,13 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM stat');
         sqlQuery2.SQL.Add('WHERE id_status=:id');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][0];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value := f[i][0];
-        sqlQuery1.Parameters.ParamByName('name').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('minim').Value := f[i][2];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'name', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'minim', f[i][2]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1662,11 +1731,13 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM bank');
         sqlQuery2.SQL.Add('WHERE id_bank=:id');
-        sqlQuery2.Parameters.ParamByName('id').Value := f[i][0];
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id').Value  := f[i][0];
-        sqlQuery1.Parameters.ParamByName('name').Value := f[i][1];
-        sqlQuery1.Parameters.ParamByName('bik').Value := f[i][2];
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+        SetParam(sqlQuery1.Parameters, 'name', f[i][1]);
+        SetParam(sqlQuery1.Parameters, 'bik', f[i][2]);
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1754,18 +1825,20 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM Debt');
         sqlQuery2.SQL.Add('WHERE (id_debt=:id_debt) and(dist=:dist)');
-        sqlQuery2.Parameters.ParamByName('id_debt').Value  := dbfQuery.Fields[0].Value;
-        sqlQuery2.Parameters.ParamByName('dist').Value := dbfQuery.Fields[2].Value;
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id_debt', dbfQuery.Fields[0].Value);
+        SetParam(sqlQuery2.Parameters, 'dist', dbfQuery.Fields[2].Value);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id_debt').Value  := dbfQuery.Fields[0].Value;
-        sqlQuery1.Parameters.ParamByName('id_sluj').Value := dbfQuery.Fields[1].Value;
-        sqlQuery1.Parameters.ParamByName('dist').Value := dbfQuery.Fields[2].Value;
-        sqlQuery1.Parameters.ParamByName('regn').Value := dbfQuery.Fields[3].Value;
-        sqlQuery1.Parameters.ParamByName('bdate').Value := dbfQuery.Fields[4].Value;
-        sqlQuery1.Parameters.ParamByName('edate').Value := dbfQuery.Fields[5].Value;
-        sqlQuery1.Parameters.ParamByName('sumdebt').Value := dbfQuery.Fields[6].Value;
-        sqlQuery1.Parameters.ParamByName('closed').Value := dbfQuery.Fields[7].Value;
-        sqlQuery1.Parameters.ParamByName('closed_date').Value := dbfQuery.Fields[8].Value;
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id_debt', dbfQuery.Fields[0].Value);
+        SetParam(sqlQuery1.Parameters, 'id_sluj', dbfQuery.Fields[1].Value);
+        SetParam(sqlQuery1.Parameters, 'dist', dbfQuery.Fields[2].Value);
+        SetParam(sqlQuery1.Parameters, 'regn', dbfQuery.Fields[3].Value);
+        SetParam(sqlQuery1.Parameters, 'bdate', dbfQuery.Fields[4].Value);
+        SetParam(sqlQuery1.Parameters, 'edate', dbfQuery.Fields[5].Value);
+        SetParam(sqlQuery1.Parameters, 'sumdebt', dbfQuery.Fields[6].Value);
+        SetParam(sqlQuery1.Parameters, 'closed', dbfQuery.Fields[7].Value);
+        SetParam(sqlQuery1.Parameters, 'closed_date', dbfQuery.Fields[8].Value);
         sqlQuery1.ExecSQL;
         dbfQuery.Next;
       end;
@@ -1796,12 +1869,14 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM DebtPay');
         sqlQuery2.SQL.Add('WHERE (id_debt=:id_debt) ');
-        sqlQuery2.Parameters.ParamByName('id_debt').Value  := dbfQuery.Fields[0].Value;
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id_debt', dbfQuery.Fields[0].Value);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id_debt').Value  := dbfQuery.Fields[0].Value;
-        sqlQuery1.Parameters.ParamByName('sdate').Value := dbfQuery.Fields[1].Value;
-        sqlQuery1.Parameters.ParamByName('paused').Value := dbfQuery.Fields[2].Value;
-        sqlQuery1.Parameters.ParamByName('m_return').Value := dbfQuery.Fields[3].Value;
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id_debt', dbfQuery.Fields[0].Value);
+        SetParam(sqlQuery1.Parameters, 'sdate', dbfQuery.Fields[1].Value);
+        SetParam(sqlQuery1.Parameters, 'paused', dbfQuery.Fields[2].Value);
+        SetParam(sqlQuery1.Parameters, 'm_return', dbfQuery.Fields[3].Value);
         sqlQuery1.ExecSQL;
         dbfQuery.Next;
       end;
@@ -1844,13 +1919,15 @@ begin
         sqlQuery2.SQL.Clear;
         sqlQuery2.SQL.Add('DELETE FROM office');
         sqlQuery2.SQL.Add('WHERE id_dist=:id_dist AND id_office=:id_office');
-        sqlQuery2.Parameters.ParamByName('id_dist').Value := dbfQuery.Fields[0].Value;
-        sqlQuery2.Parameters.ParamByName('id_office').Value := dbfQuery.Fields[1].Value;
+        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        SetParam(sqlQuery2.Parameters, 'id_dist', dbfQuery.Fields[0].Value);
+        SetParam(sqlQuery2.Parameters, 'id_office', dbfQuery.Fields[1].Value);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParamByName('id_dist').Value := dbfQuery.Fields[0].Value;
-        sqlQuery1.Parameters.ParamByName('id_office').Value := dbfQuery.Fields[1].Value;
-        sqlQuery1.Parameters.ParamByName('adr').Value := dbfQuery.Fields[2].Value;
-        sqlQuery1.Parameters.ParamByName('tel').Value := dbfQuery.Fields[3].Value;
+        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        SetParam(sqlQuery1.Parameters, 'id_dist', dbfQuery.Fields[0].Value);
+        SetParam(sqlQuery1.Parameters, 'id_office', dbfQuery.Fields[1].Value);
+        SetParam(sqlQuery1.Parameters, 'adr', dbfQuery.Fields[2].Value);
+        SetParam(sqlQuery1.Parameters, 'tel', dbfQuery.Fields[3].Value);
         sqlQuery1.ExecSQL;
         dbfQuery.Next;
       end;
@@ -1870,6 +1947,7 @@ var
   i, curRecord: integer;
   FleldList: TStringList;
   TypeList: array of TFieldType;
+  SizeList: array of Integer;
   dbfQuery: TADOQuery;
 begin
   if FileExists(path + fname + '.dbf') then
@@ -1882,19 +1960,30 @@ begin
   DModule.sqlQuery1.GetFieldNames(FleldList);
 
   setlength(TypeList, FleldList.Count);
+  setlength(SizeList, FleldList.Count);
   for i := 0 to FleldList.Count - 1 do
+  begin
     TypeList[i] := DModule.sqlQuery1.FieldByName(FleldList[i]).DataType;
+    SizeList[i] := DModule.sqlQuery1.FieldByName(FleldList[i]).Size;
+  end;
 
   dbfQuery.Close;
   dbfQuery.SQL.Clear;
   dbfQuery.SQL.Add('CREATE TABLE ' + fname + ' (');
 
+//  for i := 0 to FleldList.Count - 1 do
+//    if i <> FleldList.Count - 1 then
+//      dbfQuery.SQL.Add(format(' %s %s NULL, ', [FleldList[i], DbfDataType(TypeList[i])]))
+//    else
+//      dbfQuery.SQL.Add(format(' %s %s NULL)', [FleldList[i], DbfDataType(TypeList[i])]));
+
   for i := 0 to FleldList.Count - 1 do
-    if i <> FleldList.Count - 1 then
-      dbfQuery.SQL.Add(format(' %s %s NULL, ', [FleldList[i], DbfDataType(TypeList[i])]))
+    if SizeList[i] = 0 then
+      dbfQuery.SQL.Add(format('%s %s NULL,', [FleldList[i], DbfDataType(TypeList[i])]))
     else
-      dbfQuery.SQL.Add(format(' %s %s NULL)', [FleldList[i], DbfDataType(TypeList[i])]));
+      dbfQuery.SQL.Add(format('%s %s(%d) NULL,', [FleldList[i], DbfDataType(TypeList[i]), SizeList[i]]));
       
+  dbfQuery.SQL.Text := copy(Trim(dbfQuery.SQL.Text), 0, Length(Trim(dbfQuery.SQL.Text)) - 1) + ')';
   dbfQuery.ExecSQL;
 
   with DModule do

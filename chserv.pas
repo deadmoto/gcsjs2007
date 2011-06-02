@@ -95,7 +95,8 @@ begin
     SQL.Add('select sbros.namestnd');
     SQL.Add('from currstnd.dbf sbros');
     SQL.Add('where sbros.id_stnd = :id');
-    Parameters.ParamByName('id').Value := n;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
     Open;
     Result := FieldByName('namestnd').AsString;
     Close;
@@ -127,7 +128,8 @@ begin
       SQL.Add('select sbros.plate as name'+nam);
     SQL.Add('from cur'+nam+'.dbf sbros');
     SQL.Add('where sbros.id_'+nam+' = :id');
-    Parameters.ParamByName('id').Value := t;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', t);
     Open;
     Result := FieldByName('name'+nam).AsString;
     Close;
@@ -281,7 +283,7 @@ var
   l: integer;
 begin
   checkbox1.Checked := false;
-  with DModule.Query1 do begin
+  with DModule.sqlQuery1 do begin
     l := 0;
     Close;
     SQL.Clear;
@@ -306,7 +308,8 @@ begin
     SQL.Add('from mng');
     SQL.Add('where id_dist = :dist');
     SQL.Add('order by namemng');
-    ParamByName('dist').AsInteger := MainForm.dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', MainForm.dist);
     Open;
     First;
     while not EOF do begin
@@ -434,7 +437,7 @@ end;
 
 procedure TForm29.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
   DModule.qTarif.Close;
 end;
 
@@ -536,9 +539,9 @@ end;
 procedure TForm29.Button1Click(Sender: TObject);
 begin
   if IsRus(Edit2.Text)and IsInt(Edit3.Text)then begin
-    DModule.Database1.StartTransaction;
+    DModule.sqlConnection.BeginTrans;
     try
-      with DModule.Query1 do begin
+      with DModule.sqlQuery1 do begin
         if Checkbox2.Checked then begin
           Close;
           SQL.Clear;
@@ -549,13 +552,14 @@ begin
           SQL.Add('and(id_dist=:idd))');
           SQL.Add('and bdate<=convert(smalldatetime,:d,104)');
           SQL.Add('and edate>convert(smalldatetime,:d,104)');
-          ParamByName('mng').AsInteger := mng[combobox2.ItemIndex];
-          ParamByName('fnd').AsInteger := fnd[combobox3.ItemIndex];
-          ParamByName('str').AsInteger := str[combobox1.ItemIndex];
-          ParamByName('n').AsString := Edit2.Text;
-          ParamByName('cp').AsString := Edit3.Text;
-          ParamByName('d').AsString := MainForm.rdt;
-          ParamByName('idd').AsInteger := MainForm.dist;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'mng', mng[combobox2.ItemIndex]);
+          SetParam(Parameters, 'fnd', fnd[combobox3.ItemIndex]);
+          SetParam(Parameters, 'str', str[combobox1.ItemIndex]);
+          SetParam(Parameters, 'n', Edit2.Text);
+          SetParam(Parameters, 'cp', Edit3.Text);
+          SetParam(Parameters, 'd', MainForm.rdt);
+          SetParam(Parameters, 'idd', MainForm.dist);
           ExecSQL;
           Close;
           SQL.Clear;
@@ -563,33 +567,37 @@ begin
           SQL.Add('set id_stnd=:stnd,boiler=:b, change =:dc');
           SQL.Add('where (id_street=:str)and(nhouse=:n)and(corp=:cp)');
           SQL.Add('and(id_dist=:idd)');
-          ParamByName('stnd').AsInteger := stnd[combobox6.ItemIndex];
-          ParamByName('dc').AsDateTime := Date;
-          ParamByName('str').AsInteger := str[combobox1.ItemIndex];
-          ParamByName('n').AsString := Edit2.Text;
-          ParamByName('cp').AsString := Edit3.Text;
-          ParamByName('idd').AsInteger := MainForm.dist;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'stnd', stnd[combobox6.ItemIndex]);
+          SetParam(Parameters, 'dc', Date);
+          SetParam(Parameters, 'str', str[combobox1.ItemIndex]);
+          SetParam(Parameters, 'n', Edit2.Text);
+          SetParam(Parameters, 'cp', Edit3.Text);
+          SetParam(Parameters, 'idd', MainForm.dist);
           if CheckBox1.Checked then
-            ParamByName('b').AsInteger := 1
+            SetParam(Parameters, 'b', 1)
           else
-            ParamByName('b').AsInteger := 0;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'b', 0);
           ExecSQL;
           Close;
           SQL.Clear;
           SQL.Add('update house');
           SQL.Add('set id_stnd=:stnd,id_mng=:mng,id_fond=:fnd,boiler=:b');
           SQL.Add('where (id_street=:str)and(nhouse=:n)and(corp=:cp)and(id_dist=:idd)');
-          ParamByName('stnd').AsInteger := stnd[combobox6.ItemIndex];
-          ParamByName('str').AsInteger := str[combobox1.ItemIndex];
-          ParamByName('n').AsString := Edit2.Text;
-          ParamByName('cp').AsString := Edit3.Text;
-          ParamByName('idd').AsInteger := MainForm.dist;
-          ParamByName('mng').AsInteger := mng[combobox2.ItemIndex];
-          ParamByName('fnd').AsInteger := fnd[combobox3.ItemIndex];
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'stnd', stnd[combobox6.ItemIndex]);
+          SetParam(Parameters, 'str', str[combobox1.ItemIndex]);
+          SetParam(Parameters, 'n', Edit2.Text);
+          SetParam(Parameters, 'cp', Edit3.Text);
+          SetParam(Parameters, 'idd', MainForm.dist);
+          SetParam(Parameters, 'mng', mng[combobox2.ItemIndex]);
+          SetParam(Parameters, 'fnd', fnd[combobox3.ItemIndex]);
           if CheckBox1.Checked then
-            ParamByName('b').AsInteger := 1
+            SetParam(Parameters, 'b', 1)
           else
-            ParamByName('b').AsInteger := 0;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'b', 0);
           ExecSQL;
           Close;
         end
@@ -600,29 +608,33 @@ begin
           SQL.Add('set boiler=:b, change =:dc');
           SQL.Add('where (id_street=:str)and(nhouse=:n)and(corp=:cp)');
           SQL.Add('and(id_dist=:idd)');
-          ParamByName('dc').AsDateTime := Date;
-          ParamByName('str').AsInteger := str[combobox1.ItemIndex];
-          ParamByName('n').AsString := Edit2.Text;
-          ParamByName('cp').AsString := Edit3.Text;
-          ParamByName('idd').AsInteger := MainForm.dist;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'dc', Date);
+          SetParam(Parameters, 'str', str[combobox1.ItemIndex]);
+          SetParam(Parameters, 'n', Edit2.Text);
+          SetParam(Parameters, 'cp', Edit3.Text);
+          SetParam(Parameters, 'idd', MainForm.dist);
           if CheckBox1.Checked then
-            ParamByName('b').AsInteger := 1
+            SetParam(Parameters, 'b', 1)
           else
-            ParamByName('b').AsInteger := 0;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'b', 0);
           ExecSQL;
           Close;
           SQL.Clear;
           SQL.Add('update house');
           SQL.Add('set boiler=:b');
           SQL.Add('where (id_street=:str)and(nhouse=:n)and(corp=:cp)and(id_dist=:idd)');
-          ParamByName('str').AsInteger := str[combobox1.ItemIndex];
-          ParamByName('n').AsString := Edit2.Text;
-          ParamByName('cp').AsString := Edit3.Text;
-          ParamByName('idd').AsInteger := MainForm.dist;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'str', str[combobox1.ItemIndex]);
+          SetParam(Parameters, 'n', Edit2.Text);
+          SetParam(Parameters, 'cp', Edit3.Text);
+          SetParam(Parameters, 'idd', MainForm.dist);
           if CheckBox1.Checked then
-            ParamByName('b').AsInteger := 1
+            SetParam(Parameters, 'b', 1)
           else
-            ParamByName('b').AsInteger := 0;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'b', 0);
           ExecSQL;
           Close;
         end;
@@ -635,13 +647,14 @@ begin
           SQL.Add('and regn in (select regn from cl');
           SQL.Add('where (id_street=:str)and(nhouse=:n)and(corp=:cp)');
           SQL.Add('and(id_dist=:idd))');
-          ParamByName('id').AsInteger := tarifs[serv[combobox4.ItemIndex]].id[Combobox5.ItemIndex];
-          ParamByName('s').AsString := MainForm.rdt;
-          ParamByName('serv').AsInteger := serv[combobox4.ItemIndex];
-          ParamByName('str').AsInteger := str[combobox1.ItemIndex];
-          ParamByName('n').AsString := Edit2.Text;
-          ParamByName('cp').AsString := Edit3.Text;
-          ParamByName('idd').AsInteger := MainForm.dist;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'id', tarifs[serv[combobox4.ItemIndex]].id[Combobox5.ItemIndex]);
+          SetParam(Parameters, 's', MainForm.rdt);
+          SetParam(Parameters, 'serv', serv[combobox4.ItemIndex]);
+          SetParam(Parameters, 'str', str[combobox1.ItemIndex]);
+          SetParam(Parameters, 'n', Edit2.Text);
+          SetParam(Parameters, 'cp', Edit3.Text);
+          SetParam(Parameters, 'idd', MainForm.dist);
           ExecSQL;
           Close;
         end;
@@ -652,19 +665,21 @@ begin
           SQL.Add('set boiler=:b, change =:dc');
           SQL.Add('where regn in (select regn from hist where id_mng = :mng ');
           SQL.Add('and id_dist=:idd)');
-          ParamByName('dc').AsDateTime := Date;
-          ParamByName('mng').AsInteger := mng[combobox2.ItemIndex];
-          ParamByName('idd').AsInteger := MainForm.dist;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'dc', Date);
+          SetParam(Parameters, 'mng', mng[combobox2.ItemIndex]);
+          SetParam(Parameters, 'idd', MainForm.dist);
           if CheckBox1.Checked then
-            ParamByName('b').AsInteger := 1
+            SetParam(Parameters, 'b', 1)
           else
-            ParamByName('b').AsInteger := 0;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'b', 0);
           ExecSQL;
           Close;
 
         end;
       end;
-      DModule.Database1.Commit;
+      DModule.sqlConnection.CommitTrans;
       ShowMessage('Все в порядке');
       MainForm.qr.SQL := 'select regn from cl where(id_street=:str)and(nhouse=:n)and(corp=:cp)'+
                       'and(id_dist=:idd)';
@@ -686,7 +701,7 @@ begin
       end;
       MainForm.RecalcSelectedRows;
     except
-      DModule.Database1.Rollback;
+      DModule.sqlConnection.RollbackTrans;
       ShowMessage('Операция завершилась неудачей!');
       MainForm.qr.SQL := '';
       SetLength(MainForm.qr.parname,0);
@@ -698,7 +713,7 @@ end;
 
 procedure TForm29.Button2Click(Sender: TObject);
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
   ac := false;
   MainForm.qr.SQL := '';
   SetLength(MainForm.qr.parname,0);
@@ -715,7 +730,7 @@ begin
   if key=vk_return then begin
     if IsRus(Edit2.Text)and IsInt(Edit3.Text)and
       (Combobox1.Text <> '') then
-      with DModule.Query1 do begin
+      with DModule.sqlQuery1 do begin
         Close;
         SQL.Clear;
         SQL.Add('select *');
@@ -725,10 +740,11 @@ begin
         SQL.Add('fond on house.id_fond=fond.id_fond');
         SQL.Add('where (strt.id_street = :str) and(corp=:cp)');
         SQL.Add('and(house.nhouse = :numb) and (house.id_dist=:dist)');
-        ParamByName('str').AsInteger := str[Combobox1.ItemIndex];
-        ParamByName('numb').AsString := Edit2.Text;
-        ParamByName('cp').AsString := Edit3.Text;
-        ParamByName('dist').AsInteger := MainForm.dist;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'str', str[Combobox1.ItemIndex]);
+        SetParam(Parameters, 'numb', Edit2.Text);
+        SetParam(Parameters, 'cp', Edit3.Text);
+        SetParam(Parameters, 'dist', MainForm.dist);
         Open;
         if not eof then begin
           b :=FieldByName('boiler').AsInteger;
@@ -766,7 +782,7 @@ var
   b: integer;
 begin
   if IsRus(Edit2.Text)and IsInt(Edit3.Text)and(Combobox1.Text <> '') then
-      with DModule.Query1 do begin
+      with DModule.sqlQuery1 do begin
         Close;
         SQL.Clear;
         SQL.Add('select *');
@@ -776,10 +792,11 @@ begin
         SQL.Add('fond on house.id_fond=fond.id_fond');
         SQL.Add('where (strt.id_street = :str) and(corp=:cp)');
         SQL.Add('and(house.nhouse = :numb) and (house.id_dist=:dist)');
-        ParamByName('str').AsInteger := str[Combobox1.ItemIndex];
-        ParamByName('numb').AsString := Edit2.Text;
-        ParamByName('cp').AsString := Edit3.Text;
-        ParamByName('dist').AsInteger := MainForm.dist;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'str', str[Combobox1.ItemIndex]);
+        SetParam(Parameters, 'numb', Edit2.Text);
+        SetParam(Parameters, 'cp', Edit3.Text);
+        SetParam(Parameters, 'dist', MainForm.dist);
         Open;
         if not eof then begin
           b :=FieldByName('boiler').AsInteger;

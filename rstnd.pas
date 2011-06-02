@@ -138,14 +138,15 @@ begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and
     (Edit3.Text <> '') and (Edit4.Text <> '') and (Edit5.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_stnd');
       SQL.Add('from rstnd');
       SQL.Add('where (id_stnd=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit4.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit4.Text));
       Open;
       if IsEmpty then
       begin
@@ -154,7 +155,8 @@ begin
         SQL.Add('select id_stnd');
         SQL.Add('from rstnd');
         SQL.Add('where (namestnd=:name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty then
           flag := True
@@ -173,16 +175,17 @@ begin
         SQL.Clear;
         SQL.Add('insert into rstnd');
         SQL.Add('values (Convert(smalldatetime,:d,104),:id,:name,:v1,:v2,:v3,:v4,:v5,:v6,:v7)');
-        ParamByName('d').AsString := MainForm.rdt;
-        ParamByName('id').AsInteger := StrToInt(Edit4.Text);
-        ParamByName('name').AsString := Edit1.Text;
-        ParamByName('v1').AsFloat := StrToFloat(Edit2.Text);
-        ParamByName('v2').AsFloat := StrToFloat(Edit3.Text);
-        ParamByName('v3').AsFloat := StrToFloat(Edit5.Text);
-        ParamByName('v4').AsFloat := StrToFloat(Edit6.Text);
-        ParamByName('v5').AsFloat := StrToFloat(Edit7.Text);
-        ParamByName('v6').AsFloat := StrToFloat(Edit8.Text);
-        ParamByName('v7').AsFloat := StrToFloat(Edit9.Text);
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'd', MainForm.rdt);
+        SetParam(Parameters, 'id', StrToInt(Edit4.Text));
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'v1', StrToFloat(Edit2.Text));
+        SetParam(Parameters, 'v2', StrToFloat(Edit3.Text));
+        SetParam(Parameters, 'v3', StrToFloat(Edit5.Text));
+        SetParam(Parameters, 'v4', StrToFloat(Edit6.Text));
+        SetParam(Parameters, 'v5', StrToFloat(Edit7.Text));
+        SetParam(Parameters, 'v6', StrToFloat(Edit8.Text));
+        SetParam(Parameters, 'v7', StrToFloat(Edit9.Text));
         ExecSQL;
         FillStnd(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
         SetDefault;
@@ -206,14 +209,15 @@ begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and
     (Edit3.Text <> '') and (Edit4.Text <> '') and (Edit5.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_stnd');
       SQL.Add('from rstnd');
       SQL.Add('where (id_stnd=:id)');
-      ParamByName('id').AsInteger := StrToInt(Edit4.Text);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit4.Text));
       Open;
       if IsEmpty or not IsEmpty and (FieldByName('id_stnd').AsInteger = oldid) then
       begin
@@ -226,8 +230,9 @@ begin
           SQL.Add('select id_stnd');
           SQL.Add('from rstnd');
           SQL.Add('where (id_stnd=:id)and(sdate=Convert(smalldatetime,:d,104))');
-          ParamByName('id').AsInteger := StrToInt(Edit4.Text);
-          ParamByName('d').AsString := MainForm.rdt;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'id', StrToInt(Edit4.Text));
+          SetParam(Parameters, 'd', MainForm.rdt);
           Open;
           if IsEmpty then
             flag := False
@@ -239,7 +244,8 @@ begin
         SQL.Add('select id_stnd');
         SQL.Add('from rstnd');
         SQL.Add('where (namestnd=:name)');
-        ParamByName('name').AsString := Edit1.Text;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
         Open;
         if IsEmpty or not IsEmpty and (FieldByName('id_stnd').AsInteger = oldid) then
         begin
@@ -249,7 +255,8 @@ begin
             SQL.Clear;
             SQL.Add('insert into rstnd');
             SQL.Add('values (Convert(smalldatetime,:d,104),:id,:name,:v1,:v2,:v3,:v4,:v5,:v6,:v7)');
-            ParamByName('id').AsInteger := StrToInt(Edit4.Text);
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', StrToInt(Edit4.Text));
           end
           else
           begin
@@ -258,17 +265,18 @@ begin
             SQL.Add('update rstnd');
             SQL.Add('set namestnd=:name,value1=:v1,value2=:v2,value3=:v3,value4=:v4,value5=:v5,value6=:v6,value7=:v7');
             SQL.Add('where (id_stnd = :id)and(sdate=Convert(smalldatetime,:d,104))');
-            ParamByName('id').AsInteger := oldid;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', oldid);
           end;
-          ParamByName('d').AsString := MainForm.rdt;
-          ParamByName('name').AsString := Edit1.Text;
-          ParamByName('v1').AsFloat := StrToFloat(Edit2.Text);
-          ParamByName('v2').AsFloat := StrToFloat(Edit3.Text);
-          ParamByName('v3').AsFloat := StrToFloat(Edit5.Text);
-          ParamByName('v4').AsFloat := StrToFloat(Edit6.Text);
-          ParamByName('v5').AsFloat := StrToFloat(Edit7.Text);
-          ParamByName('v6').AsFloat := StrToFloat(Edit8.Text);
-          ParamByName('v7').AsFloat := StrToFloat(Edit9.Text);
+          SetParam(Parameters, 'd', MainForm.rdt);
+          SetParam(Parameters, 'name', Edit1.Text);
+          SetParam(Parameters, 'v1', StrToFloat(Edit2.Text));
+          SetParam(Parameters, 'v2', StrToFloat(Edit3.Text));
+          SetParam(Parameters, 'v3', StrToFloat(Edit5.Text));
+          SetParam(Parameters, 'v4', StrToFloat(Edit6.Text));
+          SetParam(Parameters, 'v5', StrToFloat(Edit7.Text));
+          SetParam(Parameters, 'v6', StrToFloat(Edit8.Text));
+          SetParam(Parameters, 'v7', StrToFloat(Edit9.Text));
           ExecSQL;
           FillStnd(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
           oldid := StrToInt(Edit4.Text);
@@ -288,14 +296,15 @@ end;
 procedure TForm38.Button3Click(Sender: TObject);
 { удалить стандарт }
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('delete from rstnd');
     SQL.Add('where (id_stnd=:id)and(sdate=Convert(smalldatetime,:d,104))');
-    ParamByName('d').AsString := MainForm.rdt;
-    ParamByName('id').AsInteger := oldid;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'd', MainForm.rdt);
+    SetParam(Parameters, 'id', oldid);
     ExecSQL;
     FillStnd(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
   end;
@@ -321,7 +330,7 @@ end;
 
 procedure TForm38.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
   DModule.qTarif.Close;
 end;
 

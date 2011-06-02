@@ -94,6 +94,7 @@ begin
       'SELECT id_office, adr'#13#10 +
       'FROM Office WHERE id_dist=:dist';
     Parameters.ParseSQL(SQL.Text, True);
+    Parameters.ParseSQL(SQL.Text, True);
     SetParam(Parameters, 'dist', MainForm.dist);
     Open;
     First;
@@ -115,6 +116,7 @@ begin
     SQL.Add('inner join office on insp.id_office = office.id_office and office.id_dist=:id');
     SQL.Add('where insp.id_dist=:id');
     SQL.Add('order by insp.id_insp');
+    Parameters.ParseSQL(SQL.Text, True);
     Parameters.ParseSQL(SQL.Text, True);
     SetParam(Parameters, 'id', MainForm.dist);
     Open;
@@ -198,14 +200,15 @@ var
   tmp_pass: string;
 begin
   tmp_pass := InputPassword('Введите пароль!', 'Пароль:', '');
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Text :=
       'UPDATE Insp SET password=:pwd'#13#10 +
       'WHERE id_insp=:id';
-      ParamByName('pwd').Value := GenMD5Password(tmp_pass);
-      ParamByName('id').Value := oldid;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'pwd', GenMD5Password(tmp_pass));
+      SetParam(Parameters, 'id', oldid);
       ExecSQL;
     end;
 end;
@@ -219,15 +222,16 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_insp');
       SQL.Add('from insp');
       SQL.Add('where (id_insp=:id)and(id_dist = :dist)');
-      ParamByName('id').AsInteger := StrToInt(Edit2.Text);
-      ParamByName('dist').AsInteger := MainForm.dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit2.Text));
+      SetParam(Parameters, 'dist', MainForm.dist);
       Open;
       if IsEmpty then
       begin
@@ -236,8 +240,9 @@ begin
         SQL.Add('select id_insp');
         SQL.Add('from insp');
         SQL.Add('where (nameinsp = :name)and(id_dist = :dist)');
-        ParamByName('name').AsString  := Edit1.Text;
-        ParamByName('dist').AsInteger := MainForm.dist;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'dist', MainForm.dist);
         Open;
         if IsEmpty then
           flag := True
@@ -256,17 +261,18 @@ begin
         SQL.Clear;
         SQL.Add('insert into insp');
         SQL.Add('values (:id, :dist,:name, :st, :num,:pas,:office)');
-        ParamByName('id').AsInteger  := StrToInt(Edit2.Text);
-        ParamByName('name').AsString := Edit1.Text;
-        ParamByName('dist').AsInteger := MainForm.dist;
-        ParamByName('pas').AsString := GenMD5Password( InputPassword('Введите пароль!', 'Пароль:', '') );
-        ParamByName('office').AsInteger := office[ComboBox1.ItemIndex];
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', StrToInt(Edit2.Text));
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'dist', MainForm.dist);
+        SetParam(Parameters, 'pas', GenMD5Password( InputPassword('Введите пароль!', 'Пароль:', '') ));
+        SetParam(Parameters, 'office', office[ComboBox1.ItemIndex]);
         if CheckBox1.Checked = False then
           st := 0
         else
           st := 1;
-        ParamByName('st').AsInteger := st;
-        ParamByName('num').AsInteger := SetRegn(MainForm.dist, StrToInt(Edit2.Text), 0);
+        SetParam(Parameters, 'st', st);
+        SetParam(Parameters, 'num', SetRegn(MainForm.dist, StrToInt(Edit2.Text), 0));
         ExecSQL;
         SetDefault;
       end
@@ -289,15 +295,16 @@ var
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_insp');
       SQL.Add('from insp');
       SQL.Add('where (id_insp=:id)and(id_dist = :dist)');
-      ParamByName('id').AsInteger := StrToInt(Edit2.Text);
-      ParamByName('dist').AsInteger := MainForm.dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', StrToInt(Edit2.Text));
+      SetParam(Parameters, 'dist', MainForm.dist);
       Open;
       if IsEmpty or not IsEmpty and
         (FieldByName('id_insp').AsInteger = oldid) then
@@ -307,8 +314,9 @@ begin
         SQL.Add('select id_insp');
         SQL.Add('from insp');
         SQL.Add('where (nameinsp = :name)and(id_dist = :dist)');
-        ParamByName('name').AsString  := Edit1.Text;
-        ParamByName('dist').AsInteger := MainForm.dist;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'dist', MainForm.dist);
         Open;
         if IsEmpty or not IsEmpty and
           (FieldByName('id_insp').AsInteger = oldid) then
@@ -329,16 +337,17 @@ begin
         SQL.Add('update insp');
         SQL.Add('set nameinsp = :name, status = :st, lastnum=:num, id_office=:office');
         SQL.Add('where (id_insp = :id)and(id_dist = :dist)');
-        ParamByName('id').AsInteger  := oldid;
-        ParamByName('name').AsString := Edit1.Text;
-        ParamByName('dist').AsInteger := MainForm.dist;
-        ParamByName('office').AsInteger := office[ComboBox1.ItemIndex];
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', oldid);
+        SetParam(Parameters, 'name', Edit1.Text);
+        SetParam(Parameters, 'dist', MainForm.dist);
+        SetParam(Parameters, 'office', office[ComboBox1.ItemIndex]);
         if CheckBox1.Checked = False then
           st := 0
         else
           st := 1;
-        ParamByName('st').AsInteger := st;
-        ParamByName('num').AsInteger := StrToInt(Edit3.Text);
+        SetParam(Parameters, 'st', st);
+        SetParam(Parameters, 'num', StrToInt(Edit3.Text));
         ExecSQL;
         SetDefault;
 
@@ -357,7 +366,7 @@ end;
 procedure TForm3.Button3Click(Sender: TObject);
 { удалить инспектора }
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     if not IsEmpty then
     begin
@@ -365,8 +374,9 @@ begin
       SQL.Clear;
       SQL.Add('delete from insp');
       SQL.Add('where (id_insp = :id)and(id_dist = :dist)');
-      ParamByName('id').AsInteger := oldid;
-      ParamByName('dist').AsInteger := MainForm.dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', oldid);
+      SetParam(Parameters, 'dist', MainForm.dist);
       ExecSQL;
       SetDefault;
     end;
@@ -408,7 +418,7 @@ end;
 procedure TForm3.FormClose(Sender: TObject; var Action: TCloseAction);
 { Обработка события закрытие формы }
 begin
-  DModule.Query1.Close;
+  DModule.sqlQuery1.Close;
 end;
 
 procedure TForm3.Edit1Exit(Sender: TObject);

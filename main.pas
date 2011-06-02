@@ -3,7 +3,7 @@ unit main;
 interface
 
 uses
-  Buttons, Classes, ComCtrls, comobj, Controls, DB, DBTables, Dialogs, Windows,
+  Buttons, Classes, ComCtrls, comobj, Controls, DB, Dialogs, Windows,
   ExtCtrls, Forms, frxClass, frxDBSet, Graphics, Grids, ImgList, Menus, ADODB,
   Messages, Registry, StdCtrls, SysUtils, Variants, dbf, ActnList, XPStyleActnCtrls,
   ActnMan, ActnCtrls, ActnMenus, ToolWin, SevenZipVCL, Math, StrUtils, frxExportXLS,
@@ -187,6 +187,7 @@ type
     aExporDolg: TAction;
     aExportSocProt: TAction;
     Action22: TAction;
+    aErrorList: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SGClDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
@@ -293,6 +294,7 @@ type
     procedure aExporDolgExecute(Sender: TObject);
     procedure aExportSocProtExecute(Sender: TObject);
     procedure Action22Execute(Sender: TObject);
+    procedure aErrorListExecute(Sender: TObject);
   private
     FShaderForm: TForm;
     ccl, acl:     integer;//количество всех и активных клиентов в базе
@@ -390,8 +392,8 @@ procedure TMainForm.SetTarifs;
 begin
   with DModule do
   begin
-    pv.DatabaseName  := 'Subsidy';
-    norm1.DatabaseName := 'Subsidy';
+    pv.Connection := DModule.sqlConnection;
+    norm1.Connection := DModule.sqlConnection;
 
     t1.Connection := DModule.dbfConnection;
     t2.Connection := DModule.dbfConnection;
@@ -494,12 +496,12 @@ begin
   new_passwd := InputPassword('Введите новый пароль администратора!', 'Пароль:', '');
   try
     new_passwd := GenMD5Password(new_passwd);
-    with Dmodule.Query1 do begin
+    with Dmodule.sqlQuery1 do begin
       Close;
       SQL.Text := 'ALTER LOGIN subuser WITH PASSWORD = ' + QuotedStr(GetConnectionPass(new_passwd)) + ' OLD_PASSWORD = ' + QuotedStr(old_passwd);//:oldpass;';
     end;
 
-    Dmodule.Query1.ExecSQL;
+    Dmodule.sqlQuery1.ExecSQL;
     
     WriteRegProperty('Password', new_passwd);
     MessageDlg('Сейчас произойдет автоматический перезапуск программы', mtConfirmation, [mbOk], 0);
@@ -545,14 +547,15 @@ begin
 
       cnt := 0;
       try
-        DModule.Database1.StartTransaction;
-        with DModule.Query1 do
+        DModule.sqlConnection.BeginTrans;
+        with DModule.sqlQuery1 do
         begin
           Close;
           SQL.Clear;
           SQL.Add('execute getncl :idd,:nd');
-          ParamByName('idd').AsInteger := dist;
-          ParamByName('nd').AsString := rdt;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'idd', dist);
+          SetParam(Parameters, 'nd', rdt);
           Open;
           if not EOF then
           begin
@@ -595,7 +598,8 @@ begin
                   Close;
                   SQL.Clear;
                   SQL.Add('execute maxhouse :dist');
-                  ParamByName('dist').AsInteger := C.Data.dist;
+                  Parameters.ParseSQL(SQL.Text, True);
+                  SetParam(Parameters, 'dist', C.Data.dist);
                   Open;
                   maxid := FieldByName('mid').AsInteger;
                   Inc(maxid);
@@ -612,26 +616,27 @@ begin
                   SQL.Add('values (:id,:dist,:str,:nh,:cp,:stnd,');
                   SQL.Add(':cont,:rep,:cold,:hot,:canal,:heat,:gas,');
                   SQL.Add(':el, :wood, :coal, :mng, :fnd,:boil, :elevator)');
-                  ParamByName('id').AsInteger := maxid;
-                  ParamByName('dist').AsInteger := C.Data.dist;
-                  ParamByName('str').AsInteger := C.Data.str;
-                  ParamByName('nh').AsString  := C.Data.nh;
-                  ParamByName('cp').AsString  := C.Data.corp;
-                  ParamByName('stnd').AsInteger := C.cdata.rstnd;
-                  ParamByName('cont').AsInteger := C.cdata.tarifs[0];
-                  ParamByName('rep').AsInteger := C.cdata.tarifs[1];
-                  ParamByName('cold').AsInteger := C.cdata.tarifs[2];
-                  ParamByName('hot').AsInteger := C.cdata.tarifs[3];
-                  ParamByName('canal').AsInteger := C.cdata.tarifs[4];
-                  ParamByName('heat').AsInteger := C.cdata.tarifs[5];
-                  ParamByName('gas').AsInteger := C.cdata.tarifs[6];
-                  ParamByName('el').AsInteger := C.cdata.tarifs[7];
-                  ParamByName('wood').AsInteger := C.cdata.tarifs[12];
-                  ParamByName('coal').AsInteger := C.cdata.tarifs[13];
-                  ParamByName('mng').AsInteger := C.Data.manager;
-                  ParamByName('fnd').AsInteger := C.Data.fond;
-                  ParamByName('boil').AsInteger := C.cdata.boiler;
-                  ParamByName('elevator').Value := C.cdata.elevator;
+                  Parameters.ParseSQL(SQL.Text, True);
+                  SetParam(Parameters, 'id', maxid);
+                  SetParam(Parameters, 'dist', C.Data.dist);
+                  SetParam(Parameters, 'str', C.Data.str);
+                  SetParam(Parameters, 'nh', C.Data.nh);
+                  SetParam(Parameters, 'cp', C.Data.corp);
+                  SetParam(Parameters, 'stnd', C.cdata.rstnd);
+                  SetParam(Parameters, 'cont', C.cdata.tarifs[0]);
+                  SetParam(Parameters, 'rep', C.cdata.tarifs[1]);
+                  SetParam(Parameters, 'cold', C.cdata.tarifs[2]);
+                  SetParam(Parameters, 'hot', C.cdata.tarifs[3]);
+                  SetParam(Parameters, 'canal', C.cdata.tarifs[4]);
+                  SetParam(Parameters, 'heat', C.cdata.tarifs[5]);
+                  SetParam(Parameters, 'gas', C.cdata.tarifs[6]);
+                  SetParam(Parameters, 'el', C.cdata.tarifs[7]);
+                  SetParam(Parameters, 'wood', C.cdata.tarifs[12]);
+                  SetParam(Parameters, 'coal', C.cdata.tarifs[13]);
+                  SetParam(Parameters, 'mng', C.Data.manager);
+                  SetParam(Parameters, 'fnd', C.Data.fond);
+                  SetParam(Parameters, 'boil', C.cdata.boiler);
+                  SetParam(Parameters, 'elevator', C.cdata.elevator);
                   ExecSQL;
                 end;
               end;
@@ -643,9 +648,9 @@ begin
             end;
           end;
         end;
-        DModule.Database1.Commit;
+        DModule.sqlConnection.CommitTrans;
       except
-        DModule.Database1.Rollback
+        DModule.sqlConnection.RollbackTrans
       end;
       pr.Free;
     end;
@@ -697,66 +702,74 @@ begin
         'Подтверждаете?'), PChar('Удаление клиента'),
         MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
       begin
-        DModule.Database1.StartTransaction;
+        DModule.sqlConnection.BeginTrans;
         try
-          with DModule.Query1 do
+          with DModule.sqlQuery1 do
           begin
             Close;
             SQL.Clear;
             SQL.Add('delete from cl');
             SQL.Add('where regn = :id');
-            ParamByName('id').AsInteger := client;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', client);
             ExecSQL;
             Close;
             SQL.Clear;
             SQL.Add('delete from hist');
             SQL.Add('where regn = :id and bdate=convert(smalldatetime,:d,104)');
-            ParamByName('id').AsInteger := client;
-            ParamByName('d').AsString := MainForm.rdt;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', client);
+            SetParam(Parameters, 'd', MainForm.rdt);
             ExecSQL;
             Close;
             SQL.Clear;
             SQL.Add('delete from fam');
             SQL.Add('where regn = :id');
-            ParamByName('id').AsInteger := client;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', client);
             ExecSQL;
             Close;
             SQL.Clear;
             SQL.Add('delete from sub');
             SQL.Add('where regn = :id');
-            ParamByName('id').AsInteger := client;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', client);
             ExecSQL;
             Close;
             SQL.Clear;
             SQL.Add('delete from sluj');
             SQL.Add('where regn = :id');
-            ParamByName('id').AsInteger := client;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', client);
             ExecSQL;
             Close;
             SQL.Clear;
             SQL.Add('delete from FactSale');
             SQL.Add('where regn = :id');
-            ParamByName('id').AsInteger := client;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', client);
             ExecSQL;
             Close;
             SQL.Clear;
             SQL.Add('delete from FactBalance');
             SQL.Add('where regn = :id');
-            ParamByName('id').AsInteger := client;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', client);
             ExecSQL;
             Close;
             SQL.Clear;
             SQL.Add('delete from Counters');
             SQL.Add('where regn = :id');
-            ParamByName('id').AsInteger := client;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', client);
             ExecSQL;
             Close;
           end;
-          DModule.Database1.Commit;
+          DModule.sqlConnection.CommitTrans;
           Res := 0;
         except
           //не выполнена транзакция
-          DModule.Database1.Rollback;
+          DModule.sqlConnection.RollbackTrans;
           Res := -1;
         end;
         if Res = 0 then
@@ -912,15 +925,16 @@ procedure TMainForm.Action1Execute(Sender: TObject);
 begin
   Form3.status := sec1;
   Form3.ShowModal;
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select nameinsp');
     SQL.Add('from insp');
     SQL.Add('where (id_insp = :id)and(id_dist=:idd)');
-    ParamByName('id').AsInteger  := insp;
-    ParamByName('idd').AsInteger := dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', insp);
+    SetParam(Parameters, 'idd', dist);
     Open;
     Statusbar1.Panels[1].Text := 'Инспектор: ' + FieldByName('nameinsp').AsString;
     Close;
@@ -941,9 +955,9 @@ var
 begin
   with DModule do
   begin
-    Query1.Close;
-    Query1.SQL.Text := 'EXEC mintrudmounth ' + quotedstr(rdt);
-    Query1.Open;
+    sqlQuery1.Close;
+    sqlQuery1.SQL.Text := 'EXEC mintrudmounth ' + quotedstr(rdt);
+    sqlQuery1.Open;
   end;
 
   frxData.DataSource := DModule.DataSource1;
@@ -978,14 +992,15 @@ procedure TMainForm.Action2Execute(Sender: TObject);
 begin
   Form4.status := sec1;
   Form4.ShowModal;
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namedist,nameinsp');
     SQL.Add('from dist inner join insp on dist.id_dist=insp.id_dist');
     SQL.Add('where dist.id_dist = :id');
-    ParamByName('id').AsInteger := dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', dist);
     Open;
     Statusbar1.Panels[2].Text := 'Округ: ' + FieldByName('namedist').AsString;
     Statusbar1.Panels[1].Text := 'Инспектор: ' + FieldByName('nameinsp').AsString;
@@ -1072,7 +1087,7 @@ begin
       subr := sub[i];
       fdate := StrToDate(Copy(SGCl.Cells[2, i + 1], 1, 10));
       ldate := StrToDate(Copy(SGCl.Cells[2, i + 1], 14, 10));
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
         Close;
         SQL.Text :=
@@ -1080,25 +1095,28 @@ begin
           'set edate=CONVERT(smalldatetime, :d, 104)' + #13 +
           'where regn = :id and bdate<=convert(smalldatetime,:d,104)' + #13 +
           'and edate>convert(smalldatetime,:d,104)';
-        ParamByName('id').AsInteger := client;
-        ParamByName('d').AsString := rdt;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', client);
+        SetParam(Parameters, 'd', rdt);
         ExecSQL;
 
         Close;
         SQL.Text :=
-          'update cl' + #13 +
+          'update cl'#13#10 +
           'set change=CONVERT(smalldatetime, :change, 104)' + #13 +
           'where regn = :id';
-        ParamByName('id').AsInteger := client;
-        ParamByName('change').AsString := DateToStr(Date);
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', client);
+        SetParam(Parameters, 'change', DateToStr(Date));
         ExecSQL;
 
         Close;
         SQL.Text :=
-          'delete from sub' + #13 +
+          'delete from sub'#13#10 +
           'where (regn=:id)and(sdate>=convert(smalldatetime,:d,104))';
-        ParamByName('id').AsInteger := client;
-        ParamByName('d').AsString := rdt;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', client);
+        SetParam(Parameters, 'd', rdt);
         ExecSQL;
         Close;
 
@@ -1125,16 +1143,17 @@ var
 begin
   if reg <> 0 then
   begin//существует отказ
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('update hist');
       SQL.Add('set edate=CONVERT(smalldatetime, :edate, 104)');
       SQL.Add('where regn = :id and edate=convert(smalldatetime,:d,104)');
-      ParamByName('id').AsInteger := reg;
-      ParamByName('edate').AsString := DateToStr(ldate);
-      ParamByName('d').AsString := rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', reg);
+      SetParam(Parameters, 'edate', DateToStr(ldate));
+      SetParam(Parameters, 'd', rdt);
       ExecSQL;
       Close;
       c := TClient.Create(Empty, EmptyC);
@@ -1146,17 +1165,19 @@ begin
       SQL.Add('set pm=:pm,snpm=:snp,sub=:sub,spfree=:sp,stop=1');
       SQL.Add('where sdate=CONVERT(smalldatetime,:s,104) and regn=:r');
       SQL.Add('and service=:serv');
-      ParamByName('s').AsString  := rdt;
-      ParamByName('r').AsInteger := client;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 's', rdt);
+      SetParam(Parameters, 'r', client);
       for i := 0 to numbtarif - 1 do
       begin
         if (i < 8) or (i > 11) then
         begin
-          ParamByName('serv').AsInteger := i;
-          ParamByName('pm').AsFloat  := c.cdata.pm[i];
-          ParamByName('snp').AsFloat := c.cdata.snpm[i];
-          ParamByName('sub').AsFloat := c.cdata.sub[i];
-          ParamByName('sp').AsFloat  := c.cdata.fpm[i];
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'serv', i);
+          SetParam(Parameters, 'pm', c.cdata.pm[i]);
+          SetParam(Parameters, 'snp', c.cdata.snpm[i]);
+          SetParam(Parameters, 'sub', c.cdata.sub[i]);
+          SetParam(Parameters, 'sp', c.cdata.fpm[i]);
           ExecSQL;
         end;
       end;
@@ -1188,15 +1209,16 @@ procedure TMainForm.aClPauseExecute(Sender: TObject);
 begin
   if (stop[SGCl.Row - 1] = 0) and (status <> 3) then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('update sub');
       SQL.Add('set sub=0.00,stop=2');
       SQL.Add('where regn=:id and sdate=convert(smalldatetime,:d,104)');
-      ParamByName('id').AsInteger := client;
-      ParamByName('d').AsString := rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', client);
+      SetParam(Parameters, 'd', rdt);
       ExecSQL;
       Close;
       Close;
@@ -1204,8 +1226,9 @@ begin
       SQL.Add('update sluj');
       SQL.Add('set sub=0.00');
       SQL.Add('where regn=:id and sdate=convert(smalldatetime,:d,104)');
-      ParamByName('id').AsInteger := client;
-      ParamByName('d').AsString := rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', client);
+      SetParam(Parameters, 'd', rdt);
       ExecSQL;
       Close;
     end;
@@ -1235,15 +1258,16 @@ begin
     cmp := MonthOf(StrToDate(rdt)) + 12 - MonthOf(StrToDate(Copy(SGCl.Cells[2, SGCl.row], 1, 10)));
   if (stop[SGCl.Row - 1] = 2) and (status <> 3) and (cmp = 1) then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('update sub');
       SQL.Add('set sub=0.00,stop=3');
       SQL.Add('where regn=:id and sdate=convert(smalldatetime,:d,104)');
-      ParamByName('id').AsInteger := client;
-      ParamByName('d').AsString := rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', client);
+      SetParam(Parameters, 'd', rdt);
       ExecSQL;
       Close;
       Close;
@@ -1251,8 +1275,9 @@ begin
       SQL.Add('update sluj');
       SQL.Add('set sub=0.00');
       SQL.Add('where regn=:id and sdate=convert(smalldatetime,:d,104)');
-      ParamByName('id').AsInteger := client;
-      ParamByName('d').AsString := rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', client);
+      SetParam(Parameters, 'd', rdt);
       ExecSQL;
       Close;
     end;
@@ -1285,7 +1310,7 @@ begin
     cmp := MonthOf(StrToDate(rdt)) + 12 - MonthOf(StrToDate(Copy(SGCl.Cells[2, SGCl.row], 1, 10)));
   if (stop[SGCl.Row - 1] = 3) and (status <> 3) and (cmp >= 1) then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       c := TClient.Create(Empty, EmptyC);
@@ -1297,18 +1322,20 @@ begin
       SQL.Add('set pm=:pm,snpm=:snp,sub=:sub,spfree=:sp,stop=1');
       SQL.Add('where sdate=CONVERT(smalldatetime,:s,104) and regn=:r');
       SQL.Add('and service=:serv');
-      ParamByName('s').AsString := rdt;
-      ParamByName('r').AsInteger := client;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 's', rdt);
+      SetParam(Parameters, 'r', client);
       s := 0;
       for i := 0 to numbtarif - 1 do
       begin
         if (i < 8) or (i > 11) then
         begin
-          ParamByName('serv').AsInteger := i;
-          ParamByName('pm').AsFloat  := c.cdata.pm[i];
-          ParamByName('snp').AsFloat := c.cdata.snpm[i];
-          ParamByName('sub').AsFloat := c.cdata.sub[i];
-          ParamByName('sp').AsFloat  := c.cdata.fpm[i];
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'serv', i);
+          SetParam(Parameters, 'pm', c.cdata.pm[i]);
+          SetParam(Parameters, 'snp', c.cdata.snpm[i]);
+          SetParam(Parameters, 'sub', c.cdata.sub[i]);
+          SetParam(Parameters, 'sp', c.cdata.fpm[i]);
           ExecSQL;
           s := s + c.cdata.sub[i];
         end;
@@ -1340,7 +1367,7 @@ var
 begin
   if stop[SGCl.Row - 1] = 2 then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       c := TClient.Create(Empty, EmptyC);
@@ -1352,18 +1379,20 @@ begin
       SQL.Add('set pm=:pm,snpm=:snp,sub=:sub,spfree=:sp,stop=0');
       SQL.Add('where sdate=CONVERT(smalldatetime,:s,104) and regn=:r');
       SQL.Add('and service=:serv');
-      ParamByName('s').AsString := rdt;
-      ParamByName('r').AsInteger := client;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 's', rdt);
+      SetParam(Parameters, 'r', client);
       s := 0;
       for i := 0 to numbtarif - 1 do
       begin
         if (i < 8) or (i > 11) then
         begin
-          ParamByName('serv').AsInteger := i;
-          ParamByName('pm').AsFloat  := c.cdata.pm[i];
-          ParamByName('snp').AsFloat := c.cdata.snpm[i];
-          ParamByName('sub').AsFloat := c.cdata.sub[i];
-          ParamByName('sp').AsFloat  := c.cdata.fpm[i];
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'serv', i);
+          SetParam(Parameters, 'pm', c.cdata.pm[i]);
+          SetParam(Parameters, 'snp', c.cdata.snpm[i]);
+          SetParam(Parameters, 'sub', c.cdata.sub[i]);
+          SetParam(Parameters, 'sp', c.cdata.fpm[i]);
           ExecSQL;
           s := s + c.cdata.sub[i];
         end;
@@ -1383,7 +1412,7 @@ var
   i: integer;
 begin
   i := SGCl.Row - 1;
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     if MessageBox(MainForm.Handle, PChar('Добавить месяц клиенту ' + SGCL.Cells[0, i + 1] + ' со сроком ' + SGCL.Cells[2, i + 1] + '.' + #13 + 'Подтверждаете?'), PChar('Отказ от субсидии'),
       MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
@@ -1391,18 +1420,20 @@ begin
       Close;
       SQL.Clear;
       SQL.Add('select * from hist where regn = :idd and edate >=:d');
-      ParamByName('idd').AsInteger := client;
-      ParamByName('d').AsDateTime  := StrToDateTime(rdt);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'idd', client);
+      SetParam(Parameters, 'd', StrToDateTime(rdt));
       Open;
-      if IncMonth(FieldByName('bdate').AsDateTime, 6) = FieldByName('edate').AsDateTime then
+      if IncMonth(FieldByName('bdate').Value, 6) = FieldByName('edate').Value then
         ShowMessage('Этому клиенту добавлять уже некуда...')
       else
       begin
         Close;
         SQL.Clear;
         SQL.Add('update hist set edate = dateadd(month, 1, edate) where hist.regn = :r and edate >= :d');
-        ParamByName('r').AsInteger  := client;
-        ParamByName('d').AsDateTime := StrToDateTime(rdt);
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'r', client);
+        SetParam(Parameters, 'd', StrToDateTime(rdt));
         ExecSQL;
         Close;
       end;
@@ -1422,19 +1453,21 @@ begin
         'Mng ON Mng.id_mng=hist.id_mng'#13#10 +
       'WHERE cl.id_dist=:dist and mng.id_dist=cl.id_dist and hist.bdate=convert(smalldatetime,:date, 104)'#13#10 +
       'ORDER BY fio,address';
-    Parameters.ParamByName('dist').Value := MainForm.dist;
-    Parameters.ParamByName('date').Value := MainForm.rdt;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', MainForm.dist);
+    SetParam(Parameters, 'date', MainForm.rdt);
     Open;
   end;
 
 
-  frxData.DataSource := DModule.sqlDataSource;
+  frxData.DataSource := DModule.DataSource1;
   frxReport1.LoadFromFile(PChar(reports_path + 'clarchive.fr3'));
 
   frxReport1.Variables.Variables['month'] := quotedstr(LongMonthNames[StrToInt(FormatDateTime('m', StrToDate(rdt)))]);
   frxReport1.Variables.Variables['year']  := FormatDateTime('YYYY', StrToDate(rdt));
   frxReport1.Variables.Variables['recCount']  := DModule.sqlQuery1.RecordCount;
   frxReport1.Variables.Variables['dist'] := quotedstr(SelDist(MainForm.dist));
+  frxReport1.Variables.Variables['boss'] := quotedstr(SelBoss(dist));
   frxReport1.PrepareReport;
 
   frxReport1.ShowPreparedReport;
@@ -1446,18 +1479,19 @@ var
 
 function GetCert(regn: integer): integer;
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Text := ('SELECT id_cert FROM hist');
     SQL.Add('WHERE regn = :id and bdate=convert(smalldatetime,:d,104)');
-    ParamByName('id').AsInteger := client;
-    ParamByName('d').AsString := MainForm.rdt;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', client);
+    SetParam(Parameters, 'd', MainForm.rdt);
     Open;
     First;
   end;
-  Result := DModule.Query1.FieldByName('id_cert').Value;
+  Result := DModule.sqlQuery1.FieldByName('id_cert').Value;
 end;
 
 begin
@@ -1470,38 +1504,41 @@ begin
         'Подтверждаете?'), PChar('Удаление у клиента текущего периода'),
         MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
       begin
-        DModule.Database1.StartTransaction;
+        DModule.sqlConnection.BeginTrans;
         try
-          with DModule.Query1 do
+          with DModule.sqlQuery1 do
           begin
             Close;
             SQL.Clear;
             SQL.Add('delete from hist');
             SQL.Add('where regn = :id and bdate=convert(smalldatetime,:d,104)');
-            ParamByName('id').AsInteger := client;
-            ParamByName('d').AsString := MainForm.rdt;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', client);
+            SetParam(Parameters, 'd', MainForm.rdt);
             ExecSQL;
             Close;
             SQL.Clear;
             SQL.Add('delete from sub');
             SQL.Add('where regn = :id and sdate=convert(smalldatetime,:d,104)');
-            ParamByName('id').AsInteger := client;
-            ParamByName('d').AsString := MainForm.rdt;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', client);
+            SetParam(Parameters, 'd', MainForm.rdt);
             ExecSQL;
             Close;
             SQL.Clear;
             SQL.Add('delete from sluj');
             SQL.Add('where regn = :id and sdate=convert(smalldatetime,:d,104)');
-            ParamByName('id').AsInteger := client;
-            ParamByName('d').AsString := MainForm.rdt;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'id', client);
+            SetParam(Parameters, 'd', MainForm.rdt);
             ExecSQL;
             Close;
           end;
-          DModule.Database1.Commit;
+          DModule.sqlConnection.CommitTrans;
           Reload;
         except
           //не выполнена транзакция
-          DModule.Database1.Rollback;
+          DModule.sqlConnection.RollbackTrans;
         end;
       end;
     end
@@ -1517,7 +1554,7 @@ var
   i: integer;
 begin
   i := SGCl.Row - 1;
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     if MessageBox(MainForm.Handle, PChar('Удалить последнюю запись в истории клиента? ' + SGCL.Cells[0, i + 1] + '.' + #13 + 'Подтверждаете?'), PChar('Отказ от субсидии'),
       MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
@@ -1525,8 +1562,9 @@ begin
       Close;
       SQL.Clear;
       SQL.Add('delete from hist where hist.regn = :r and bdate =:d');
-      ParamByName('r').AsInteger  := client;
-      ParamByName('d').AsDateTime := StrToDateTime(rdt);
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'r', client);
+      SetParam(Parameters, 'd', StrToDateTime(rdt));
       ExecSQL;
       Close;
     end;
@@ -1548,12 +1586,12 @@ var
   s1, s2, priv_str: string;
   pl: integer;
   cd: TDateTime;
-  tmpQuery: TQuery;
+  tmpQuery: TADOQuery;
 
   procedure GetPPriv;
   begin
     priv := TStringList.Create;
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
@@ -1561,7 +1599,8 @@ var
       SQL.Add('from priv inner join fam');
       SQL.Add('on priv.id_priv=fam.id_priv');
       SQL.Add('where (fam.regn=:id)');
-      ParamByName('id').Value := client;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', client);
       Open;
       while not EOF do
       begin
@@ -1597,15 +1636,16 @@ var
 
   procedure GetPlate;
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select id_service');
       SQL.Add('from sub');
       SQL.Add('where (regn=:id)and(service=7)and(sdate=convert(smalldatetime,:d,104))');
-      ParamByName('id').Value := client;
-      ParamByName('d').Value := s1;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', client);
+      SetParam(Parameters, 'd', s1);
       Open;
       pl := FieldByName('id_service').AsInteger;
       Close;
@@ -1617,7 +1657,8 @@ var
       SQL.Add('select el.plate');
       SQL.Add('from curel.dbf el');
       SQL.Add('where el.id_el=:id');
-      Parameters.ParamByName('id').Value := pl;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', pl);
       Open;
       frxReport1.Variables.Variables['plate'] := quotedstr(FieldByName('plate').AsString);
       Close;
@@ -1673,8 +1714,8 @@ var
   end;
 
 begin
-  tmpQuery := TQuery.Create(DModule.Database1);
-  tmpQuery.DatabaseName := 'Subsidy';
+  tmpQuery := TADOQuery.Create(DModule.sqlConnection);
+  tmpQuery.Connection := DModule.sqlConnection;// .DatabaseName := 'Subsidy';
   if (Length(cl) > 0) then
   begin
     s1 := Copy(SGCl.Cells[2, SGCl.row], 1, 10); //begindate
@@ -1684,7 +1725,7 @@ begin
     begin
       frxReport1.LoadFromFile(PChar(reports_path + 'uvedom.fr3'));
       frxData.DataSet := tmpQuery;
-      frxData1.DataSet := DModule.Query1;
+      frxData1.DataSet := DModule.sqlQuery1;
 
       DecodeDate(StrToDate(s2), y, m, d);
       p2 := EncodeDate(y, m, 15);
@@ -1701,13 +1742,14 @@ begin
       GetPlate();
       GetStnd();
 
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
-        Close;
+        Close;                      
         SQL.Clear;
         SQL.Add('execute getcl :id,:d');
-        ParamByName('id').Value := client;
-        ParamByName('d').Value := s1;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', client);
+        SetParam(Parameters, 'd', s1);
         Open;
       end;
       with tmpQuery do
@@ -1715,13 +1757,14 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('execute getsub :id, :s');
-        ParamByName('id').Value := client;
-        ParamByName('s').Value := s1;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', client);
+        SetParam(Parameters, 's', s1);
         Open;
       end;
       i  := 0;
-      cd := DModule.Query1.FieldByName('bdate').AsDateTime;
-      while DModule.Query1.FieldByName('edate').AsDateTime <> cd do
+      cd := DModule.sqlQuery1.FieldByName('bdate').AsDateTime;
+      while DModule.sqlQuery1.FieldByName('edate').AsDateTime <> cd do
       begin
         cd := IncMonth(cd);
         Inc(i);
@@ -1744,10 +1787,6 @@ begin
       frxReport1.Variables.Variables['fio_g'] := Quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 2));
       frxReport1.Variables.Variables['fio_s'] := quotedstr(GetShortName(SGCl.Cells[0, SGCl.row]));
 
-//      for i := 0 to frxReport1.Variables.Count - 1 do
-//      if (VarType(frxReport1.Variables.Items[i].Value) = varString) and (VarType(frxReport1.Variables.Items[i].Value) <> varNull) then
-//        frxReport1.Variables.Items[i].Value := NormalizeSpaces(Trim(frxReport1.Variables.Items[i].Value));
-
       frxReport1.PrepareReport;
       if MessageBox(MainForm.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
         PChar('Предварительный просмотр'), MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1 or MB_APPLMODAL) = idYes then
@@ -1760,7 +1799,7 @@ begin
     begin
       frxReport1.LoadFromFile(PChar(reports_path + 'uvedomo.fr3'));
       frxData.DataSet := tmpQuery;
-      frxData1.DataSet := DModule.Query1;
+      frxData1.DataSet := DModule.sqlQuery1;
 
       frxReport1.Variables.Variables['fio']  := quotedstr(GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 3));
       frxReport1.Variables.Variables['fio_n'] := quotedstr(SGCl.Cells[0, SGCl.row]);
@@ -1772,13 +1811,14 @@ begin
       GetPlate();
       GetStnd();
 
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
         Close;
         SQL.Clear;
         SQL.Add('execute getcl :id,:d');
-        ParamByName('id').Value := client;
-        ParamByName('d').Value := s1;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', client);
+        SetParam(Parameters, 'd', s1);
         Open;
       end;
 
@@ -1787,19 +1827,16 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('execute getsub :id, :s');
-        ParamByName('id').Value := client;
-        ParamByName('s').Value := s1;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', client);
+        SetParam(Parameters, 's', s1);
         Open;
       end;
 
       ReportDataFrm := TReportDataFrm.Create(Application);
       ReportDataFrm.RepType := rUvedomo;
-      ReportsFillAdditionData(DModule.Query1.FieldByName('nameinsp').AsString);
+      ReportsFillAdditionData(DModule.sqlQuery1.FieldByName('nameinsp').AsString);
       ReportsFillDistInfo();
-
-//      for i := 0 to frxReport1.Variables.Count - 1 do
-//      if (VarType(frxReport1.Variables.Items[i].Value) = varString) and (VarType(frxReport1.Variables.Items[i].Value) <> varNull) then
-//        frxReport1.Variables.Items[i].Value := NormalizeSpaces(Trim(frxReport1.Variables.Items[i].Value));
 
       frxReport1.PrepareReport;
       if MessageBox(MainForm.Handle, PChar('Нужен предварительный просмотр уведомления ' + SGCL.Cells[0, SGCl.Row] + '?'),
@@ -1828,7 +1865,7 @@ var
   s1, s2, priv_str: string;
   priv: TStringList;
   pl: integer;
-  tmpQuery, tmpQuery2: TQuery;
+  tmpQuery, tmpQuery2: TADOQuery;
   
 procedure GetStnd;
 var
@@ -1845,16 +1882,16 @@ begin
 end;
 
 begin
-  tmpQuery := TQuery.Create(DModule.Database1);
-  tmpQuery.DatabaseName := 'Subsidy';
-  tmpQuery2 := TQuery.Create(DModule.Database1);
-  tmpQuery2.DatabaseName := 'Subsidy';
+  tmpQuery := TADOQuery.Create(DModule);
+  tmpQuery.Connection := DModule.sqlConnection;// .DatabaseName := 'Subsidy';
+  tmpQuery2 := TADOQuery.Create(DModule);
+  tmpQuery2.Connection := DModule.sqlConnection;//
   if (Length(cl) > 0) then
   begin
     if (status < 3) then
     begin
       frxReport1.LoadFromFile(PChar(reports_path + 'karta.fr3'));
-      frxData.DataSet := DModule.Query1;
+      frxData.DataSet := DModule.sqlQuery1;
       frxData1.DataSet := tmpQuery2;
       frxData2.DataSet := tmpQuery;
       priv := TStringList.Create;
@@ -1864,7 +1901,7 @@ begin
       s1 := Copy(SGCl.Cells[2, SGCl.row], 1, 10);//begindate
       s2 := Copy(SGCl.Cells[2, SGCl.row], 14, 10);//enddate
       //льготы семьи
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
         Close;
         SQL.Clear;
@@ -1872,7 +1909,8 @@ begin
         SQL.Add('from priv inner join fam');
         SQL.Add('on priv.id_priv=fam.id_priv');
         SQL.Add('where (fam.regn=:id)');
-        ParamByName('id').AsInteger := client;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', client);
         Open;
         while not EOF do
         begin
@@ -1908,15 +1946,16 @@ begin
       frxReport1.Variables.Variables['priv'] := quotedstr(priv_str);
 
       //плита, которая зарегистрирована
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
         Close;
         SQL.Clear;
         SQL.Add('select id_service');
         SQL.Add('from sub');
         SQL.Add('where (regn=:id)and(service=7)and(sdate=convert(smalldatetime,:d,104))');
-        ParamByName('id').AsInteger := client;
-        ParamByName('d').AsString := s1;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', client);
+        SetParam(Parameters, 'd', s1);
         Open;
         pl := FieldByName('id_service').AsInteger;
         Close;
@@ -1928,18 +1967,20 @@ begin
         SQL.Add('select el.plate');
         SQL.Add('from curel.dbf el');
         SQL.Add('where el.id_el=:id');
-        Parameters.ParamByName('id').Value := pl;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', pl);
         Open;
         frxReport1.Variables.Variables['plate'] := quotedstr(FieldByName('plate').AsString);
         Close;
       end;
-      with DModule.Query1 do
+      with DModule.sqlQuery1 do
       begin
         Close;
         SQL.Clear;
         SQL.Add('execute getcl :id,:d');
-        ParamByName('id').AsInteger := client;
-        ParamByName('d').AsString := rdt;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', client);
+        SetParam(Parameters, 'd', rdt);
       end;
       //не удалять, необходимо для формирования отчета !!!!
       with tmpQuery2 do
@@ -1947,8 +1988,9 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('execute getsub :id, :s');
-        ParamByName('id').Value := client;
-        ParamByName('s').Value := s1;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', client);
+        SetParam(Parameters, 's', s1);
       end;
       //не удалять, необходимо для формирования отчета!!!!!
 
@@ -1958,8 +2000,9 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('execute getsub :id, :s');
-        ParamByName('id').Value := client;
-        ParamByName('s').Value := rdt;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'id', client);
+        SetParam(Parameters, 's', rdt);
       end;
 
       frxReport1.PrepareReport;
@@ -1997,7 +2040,7 @@ begin
   if status = 3 then
   begin
     rd := DateToStr(c.Data.regdate);
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
@@ -2005,8 +2048,9 @@ begin
       SQL.Add('from cl inner join hist on cl.regn=hist.regn');
       SQL.Add('inner join mng on hist.id_mng=mng.id_mng and hist.id_dist=mng.id_dist');
       SQL.Add('where (hist.id_dist=:idd)and(cl.regn=:id)');
-      ParamByName('id').AsInteger  := client;
-      ParamByName('idd').AsInteger := dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', client);
+      SetParam(Parameters, 'idd', dist);
       Open;
       Last;
       mng := FieldByName('namemng').AsString;
@@ -2014,7 +2058,7 @@ begin
   end
   else
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
@@ -2026,9 +2070,10 @@ begin
       SQL.Add('and(hist.edate>convert(smalldatetime,:cd,104))');
       SQL.Add('or(hist.bdate>=convert(smalldatetime,:cd,104))');
       SQL.Add('and(hist.bdate<=convert(smalldatetime,:cd,104)))');
-      ParamByName('id').AsInteger := client;
-      ParamByName('idd').AsInteger := dist;
-      ParamByName('cd').AsString := rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', client);
+      SetParam(Parameters, 'idd', dist);
+      SetParam(Parameters, 'cd', rdt);
       Open;
       Last;
       rd  := FieldByName('rdate').AsString;
@@ -2051,13 +2096,14 @@ begin
   s1 := Copy(SGCl.Cells[2, SGCl.row], 1, 10); //begindate
   s2 := Copy(SGCl.Cells[2, SGCl.row], 14, 10);//enddate
 
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('execute getcl :id,:d');
-    ParamByName('id').AsInteger := client;
-    ParamByName('d').AsString := s1;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', client);
+    SetParam(Parameters, 'd', s1);
     Open;
   end;
 
@@ -2079,12 +2125,12 @@ begin
 
   frxReport1.Variables.Variables['address'] := quotedstr(SGCl.Cells[1, SGCl.row]);
   frxReport1.Variables.Variables['sub'] := quotedstr(SGCl.Cells[4, SGCl.row]);
-  frxReport1.Variables.Variables['boss'] := quotedstr(DModule.Query1.FieldByName('boss').AsString);
-  frxReport1.Script.Variables['id_dist'] := (DModule.Query1.FieldByName('id_dist').AsInteger);
+  frxReport1.Variables.Variables['boss'] := quotedstr(DModule.sqlQuery1.FieldByName('boss').AsString);
+  frxReport1.Script.Variables['id_dist'] := (DModule.sqlQuery1.FieldByName('id_dist').AsInteger);
 
   ReportDataFrm := TReportDataFrm.Create(Application);
   ReportDataFrm.RepType := rSolut;
-  ReportsFillAdditionData(DModule.Query1.FieldByName('nameinsp').AsString);
+  ReportsFillAdditionData(DModule.sqlQuery1.FieldByName('nameinsp').AsString);
   ReportsFillDistInfo();
 
   frxReport1.PrepareReport;
@@ -2103,13 +2149,14 @@ begin
   frxReport1.LoadFromFile(reports_path + 'solutb.fr3');
   s1 := Copy(SGCl.Cells[2, SGCl.row], 1, 10); //begindate
   s2 := Copy(SGCl.Cells[2, SGCl.row], 14, 10);//enddate
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('execute getcl :id,:d');
-    ParamByName('id').AsInteger := client;
-    ParamByName('d').AsString := s1;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', client);
+    SetParam(Parameters, 'd', s1);
     Open;
   end;
   frxReport1.Variables.Variables['cd']  := quotedstr(rdt);
@@ -2122,13 +2169,13 @@ begin
   frxReport1.Variables.Variables['fio_n'] := quotedstr(SGCl.Cells[0, SGCl.row]);
   frxReport1.Variables.Variables['address'] := quotedstr(SGCl.Cells[1, SGCl.row]);
 //  frxReport1.Variables.Variables['sub']  := quotedstr(SGCl.Cells[4, SGCl.row]);
-  frxReport1.Variables.Variables['boss'] := quotedstr(DModule.Query1.FieldValues['boss']);
-  frxReport1.Variables.Variables['id_dist'] := DModule.Query1.FieldByName('id_dist').AsInteger;
+  frxReport1.Variables.Variables['boss'] := quotedstr(DModule.sqlQuery1.FieldValues['boss']);
+  frxReport1.Variables.Variables['id_dist'] := DModule.sqlQuery1.FieldByName('id_dist').AsInteger;
 
   ReportDataFrm := TReportDataFrm.Create(Application);
   ReportDataFrm.RepType := rSolutb;
-  ReportsFillAdditionData(DModule.Query1.FieldValues['nameinsp']);
-  frxReport1.Variables.Variables['spec'] := quotedstr(DModule.Query1.FieldByName('nameinsp').AsString);
+  ReportsFillAdditionData(DModule.sqlQuery1.FieldValues['nameinsp']);
+  frxReport1.Variables.Variables['spec'] := quotedstr(DModule.sqlQuery1.FieldByName('nameinsp').AsString);
   ReportsFillDistInfo();
 
   frxReport1.PrepareReport;
@@ -2151,13 +2198,14 @@ begin
   s1 := Copy(SGCl.Cells[2, SGCl.row], 1, 10); //begindate
   s2 := Copy(SGCl.Cells[2, SGCl.row], 14, 10);//enddate
 
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('execute getcl :id,:d');
-    ParamByName('id').AsInteger := client;
-    ParamByName('d').AsString := s1;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', client);
+    SetParam(Parameters, 'd', s1);
     Open;
   end;
   frxReport1.Variables.Variables['cd']  := quotedstr(rdt);
@@ -2169,8 +2217,8 @@ begin
   frxReport1.Variables.Variables['fio_s'] := quotedstr(GetShortName(SGCl.Cells[0, SGCl.row]));
   frxReport1.Variables.Variables['address'] := quotedstr(SGCl.Cells[1, SGCl.row]);
   frxReport1.Variables.Variables['sub'] := quotedstr(SGCl.Cells[4, SGCl.row]);
-  frxReport1.Variables.Variables['boss'] := quotedstr(DModule.Query1.FieldValues['boss']);
-  frxReport1.Variables.Variables['edate'] := quotedstr(DModule.Query1.FieldValues['edate']);
+  frxReport1.Variables.Variables['boss'] := quotedstr(DModule.sqlQuery1.FieldValues['boss']);
+  frxReport1.Variables.Variables['edate'] := quotedstr(DModule.sqlQuery1.FieldValues['edate']);
 
   s4 := GetFIOPadegFSAS(SGCl.Cells[0, SGCl.row], 3);
   i  := posex(' ', s4, 1);
@@ -2182,7 +2230,7 @@ begin
 
   ReportDataFrm := TReportDataFrm.Create(Application);
   ReportDataFrm.RepType := rSolute;
-  ReportsFillAdditionData(DModule.Query1.FieldValues['nameinsp']);
+  ReportsFillAdditionData(DModule.sqlQuery1.FieldValues['nameinsp']);
   ReportsFillDistInfo();
 
   frxReport1.PrepareReport;
@@ -2200,10 +2248,10 @@ procedure TMainForm.aRepNachExecute(Sender: TObject);
 begin
   with DModule do
   begin
-    Query1.Close;
-    Query1.SQL.Clear;
-    Query1.SQL.Add('exec nachnew ' + quotedstr(rdt) + ',' + IntToStr(dist));
-    Query1.Open;
+    sqlQuery1.Close;
+    sqlQuery1.SQL.Clear;
+    sqlQuery1.SQL.Add('exec nachnew ' + quotedstr(rdt) + ',' + IntToStr(dist));
+    sqlQuery1.Open;
   end;
 
   frxData.DataSource := DModule.DataSource1;
@@ -2242,13 +2290,14 @@ begin
   end;
 
   Sheet := ExcelApp.ActiveWorkBook.WorkSheets[1];
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('select namedist, boss from dist');
     SQL.Add('where id_dist=:id');
-    ParamByName('id').AsInteger := dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', dist);
     Open;
     nd := FieldByName('namedist').AsString;
     boss := FieldByName('boss').AsString;
@@ -2284,13 +2333,14 @@ begin
   SetLength(s, 3);
   sum := 0;
   gen := 0;
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('execute realize :s, :d');
-    ParamByName('s').AsString  := rdt;
-    ParamByName('d').AsInteger := dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 's', rdt);
+    SetParam(Parameters, 'd', dist);
     Open;
     while not EOF do
     begin
@@ -2368,9 +2418,9 @@ var
 begin
   with DModule do
   begin
-    Query1.Close;
-    Query1.SQL.Text := 'EXEC getclfactsum ' + quotedstr(rdt) + ', ' + IntToStr(dist);
-    Query1.Open;
+    sqlQuery1.Close;
+    sqlQuery1.SQL.Text := 'EXEC getclfactsum ' + quotedstr(rdt) + ', ' + IntToStr(dist);
+    sqlQuery1.Open;
   end;
 
   frxData.DataSource := DModule.DataSource1;
@@ -2419,9 +2469,9 @@ procedure TMainForm.aSvodNachExecute(Sender: TObject);
 var
   y1: string;
 begin
-  DModule.Query1.SQL.Clear;
-  DModule.Query1.SQL.Add('EXEC svodsub ' + quotedstr(rdt));
-  DModule.Query1.Open;
+  DModule.sqlQuery1.SQL.Clear;
+  DModule.sqlQuery1.SQL.Add('EXEC svodsub ' + quotedstr(rdt));
+  DModule.sqlQuery1.Open;
 
   frxData.DataSource := DModule.DataSource1;
   frxReport1.LoadFromFile(PChar(reports_path + 'svodsub.fr3'));
@@ -2477,13 +2527,14 @@ procedure TMainForm.aEditClCertExecute(Sender: TObject);
     которых стоит на контроле по переаттестаци или по внеплановой аттестации.
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('execute chatt :idd,:d');
-    ParamByName('idd').AsInteger := dist;
-    ParamByName('d').AsString := rdt;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'idd', dist);
+    SetParam(Parameters, 'd', rdt);
     ExecSQL;
   end;
 end;
@@ -2495,19 +2546,45 @@ begin
   Form29.ShowModal;
 end;
 
+procedure TMainForm.aErrorListExecute(Sender: TObject);
+begin
+  with DModule.sqlQuery1 do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('execute errorList :date,:dist');
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', dist);
+    SetParam(Parameters, 'date', rdt);
+    Open;
+  end;
+  frxData.DataSource := DModule.DataSource1;
+  frxReport1.LoadFromFile(PChar(reports_path + 'errorlist.fr3'));
+
+  frxReport1.Variables.Variables['namedist'] := quotedstr(SelDist(dist));
+  frxReport1.Variables.Variables['mont'] := quotedstr(LongMonthNames[StrToInt(FormatDateTime('m', StrToDate(rdt)))]);
+  frxReport1.Variables.Variables['year'] := IntToStr(yearof(strtodate(rdt)));  
+  frxReport1.Variables.Variables['boss'] := quotedstr(SelBoss(dist));
+  frxReport1.PrepareReport;
+  
+  frxReport1.ShowPreparedReport;
+
+end;
+
 procedure TMainForm.aSetActiveAllInspExecute(Sender: TObject);
 {*******************************************************************************
   Процедура делает активными всех инспекторов текущего округа
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('update insp');
     SQL.Add('set status=1');
     SQL.Add('where id_dist=:idd');
-    ParamByName('idd').AsInteger := dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'idd', dist);
     ExecSQL;
     Close;
   end;
@@ -2518,7 +2595,7 @@ procedure TMainForm.aSetActiveAllStrtExecute(Sender: TObject);
   Процедура делает активными все улицы.
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -2534,7 +2611,7 @@ procedure TMainForm.aSetActiveUseStrtExecute(Sender: TObject);
   Процедура делает активными используемые улицы
 *******************************************************************************}
 begin
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
@@ -2543,7 +2620,8 @@ begin
     SQL.Add('where id_street not in');
     SQL.Add('(select distinct(id_street)');
     SQL.Add('from cl where id_dist=:idd)');
-    ParamByName('idd').AsInteger := dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'idd', dist);
     ExecSQL;
     Close;
     SQL.Clear;
@@ -2552,7 +2630,8 @@ begin
     SQL.Add('where id_street in');
     SQL.Add('(select distinct(id_street)');
     SQL.Add('from cl where id_dist=:idd)');
-    ParamByName('idd').AsInteger := dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'idd', dist);
     ExecSQL;
     Close;
   end;
@@ -2761,7 +2840,7 @@ begin
 
   name := format('Subsidy_%s',[FormatDateTime('YYYYMMDD', Date)]);
 
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Text := 'exec backupdatabase '+ quotedstr(path);
@@ -3014,8 +3093,9 @@ begin
       Close;
       SQL.Clear;
       SQL.Add('execute gensocprotect :idd,:d');
-      Parameters.ParamByName('idd').Value := dist;
-      Parameters.ParamByName('d').Value := rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'idd', dist);
+      SetParam(Parameters, 'd', rdt);
       Open;
       if not IsEmpty then
       begin
@@ -3066,10 +3146,10 @@ var
   c: TClient;
   i: integer;
   bdate, edate: TDate;
-  tmpQuery: TQuery;
+  tmpQuery: TADOQuery;
 begin
-  tmpQuery := TQuery.Create(DModule.Database1);
-  tmpQuery.DatabaseName := 'Subsidy';
+  tmpQuery := TADOQuery.Create(DModule);
+  tmpQuery.Connection := DModule.sqlConnection;
   
   c := TClient.Create(Empty, EmptyC);
   c.SetClient(client, MainForm.rdt);
@@ -3091,9 +3171,10 @@ begin
       'WHERE (regn = :rgn) and (sdate >= convert(smalldatetime,:bd,104)) and (sdate < convert(smalldatetime,:ed,104))'#13#10+
       'GROUP BY sdate'#13#10+
       'ORDER BY sdate desc';
-    ParamByName('rgn').Value := client;
-    ParamByName('bd').Value := DateToStr(bdate);
-    ParamByName('ed').Value := DateToStr(edate);
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'rgn', client);
+    SetParam(Parameters, 'bd', DateToStr(bdate));
+    SetParam(Parameters, 'ed', DateToStr(edate));
     Open;
     First;
   end;
@@ -3160,7 +3241,7 @@ procedure TMainForm.aFormDebtExecute(Sender: TObject);
 begin
   if not CheckP1 then Exit;
   
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Text := 'exec formdebtpay '+ quotedstr(rdt) + ',' + IntToStr(dist);
@@ -3196,22 +3277,23 @@ begin
       pr.Update;
       SendMessage(pr.Handle, wm_paint, 0, 0);
       try
-        DModule.Database1.StartTransaction;
-        with DModule.Query1 do
+        DModule.sqlConnection.BeginTrans;
+        with DModule.sqlQuery1 do
         begin
           //делаем расчет активных
           Close;
           SQL.Clear;
           SQL.Add('execute formnewpm :od,:nd,:idd');
-          ParamByName('idd').AsInteger := dist;
-          ParamByName('od').AsString := odt;
-          ParamByName('nd').AsString := rdt;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'idd', dist);
+          SetParam(Parameters, 'od', odt);
+          SetParam(Parameters, 'nd', rdt);
           ExecSQL;
           Close;
         end;
-        DModule.Database1.Commit;
+        DModule.sqlConnection.CommitTrans;
       except
-        DModule.Database1.Rollback;
+        DModule.sqlConnection.RollbackTrans;
       end;
       pr.Close;
       pr.Release;
@@ -3248,9 +3330,9 @@ begin
 //      'WHERE (regn = :rgn) and (sdate >= convert(smalldatetime,:bd,104)) and (sdate < convert(smalldatetime,:ed,104))'#13+
 //      'GROUP BY sdate'#13+
 //      'ORDER BY sdate desc';
-//    ParamByName('rgn').Value := client;
-//    ParamByName('bd').Value := DateToStr(c.cdata.prevbegindate);
-//    ParamByName('ed').Value := DateToStr(c.cdata.prevenddate);
+//    SetParam(Parameters, 'rgn', client);
+//    SetParam(Parameters, 'bd', DateToStr(c.cdata.prevbegindate));
+//    SetParam(Parameters, 'ed', DateToStr(c.cdata.prevenddate));
 //    Open;
 //    First;
 //  end;
@@ -3347,7 +3429,7 @@ var
 begin
   ey := StrToInt(Copy(rdt, 7, 4));
   em := StrToInt(Copy(rdt, 4, 2));
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SetLength(cl, Length(cl) + 1);
@@ -3357,8 +3439,9 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('execute getinfocl :id,:d');
-    ParamByName('id').AsInteger := id;
-    ParamByName('d').AsString := MainForm.rdt;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', id);
+    SetParam(Parameters, 'd', MainForm.rdt);
     Open;
     client := id;
     f := FieldByName('fio').AsString;
@@ -3417,8 +3500,9 @@ begin
       Close;
       SQL.Clear;
       SQL.Add('execute gendolg :idd,:d');
-      Parameters.ParamByName('idd').Value := dist;
-      Parameters.ParamByName('d').Value := rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'idd', dist);
+      SetParam(Parameters, 'd', rdt);
       Open;
       if not IsEmpty then
       begin
@@ -3448,8 +3532,9 @@ begin
       Close;
       SQL.Clear;
       SQL.Add('execute gendbf :idd,:d');
-      Parameters.ParamByName('idd').Value := dist;
-      Parameters.ParamByName('d').Value := rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'idd', dist);
+      SetParam(Parameters, 'd', rdt);
       Open;
       if not IsEmpty then
       begin
@@ -3507,21 +3592,23 @@ begin
 
       cnt := 0;
       try
-        DModule.Database1.StartTransaction;
-        with DModule.Query1 do
+        DModule.sqlConnection.BeginTrans;
+        with DModule.sqlQuery1 do
         begin
           Close;
           SQL.Clear;
           SQL.Add('execute maxsdate :idd');
-          ParamByName('idd').AsInteger := dist;
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'idd', dist);
           Open;
           {if DateToStr(FieldByName('mdt').AsDateTime)>=rdt then}
           begin
             Close;
             SQL.Clear;
             SQL.Add('execute getncl :idd,:nd');
-            ParamByName('idd').AsInteger := dist;
-            ParamByName('nd').AsString := rdt;
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'idd', dist);
+            SetParam(Parameters, 'nd', rdt);
             Open;
             if not EOF then
             begin
@@ -3554,9 +3641,10 @@ begin
                 SQL.Add('set pmin=:pm');
                 SQL.Add('where bdate<=CONVERT(smalldatetime,:s,104)and ');
                 SQL.Add('edate>CONVERT(smalldatetime,:s,104) and regn=:r');
-                ParamByName('s').AsString  := rdt;
-                ParamByName('r').AsInteger := curregn;
-                ParamByName('pm').AsFloat  := c.cdata.pmin;
+                Parameters.ParseSQL(SQL.Text, True);
+                SetParam(Parameters, 's', rdt);
+                SetParam(Parameters, 'r', curregn);
+                SetParam(Parameters, 'pm', c.cdata.pmin);
                 ExecSQL;
 
                 Close;
@@ -3565,19 +3653,21 @@ begin
                 SQL.Add('set pm=:pm,snpm=:snp,sub=:sub,spfree=:sp,stop=:st, stndsub=:stndsub');
                 SQL.Add('where sdate=CONVERT(smalldatetime,:s,104) and regn=:r');
                 SQL.Add('and service=:serv');
-                ParamByName('s').AsString  := rdt;
-                ParamByName('r').AsInteger := curregn;
+                Parameters.ParseSQL(SQL.Text, True);
+                SetParam(Parameters, 's', rdt);
+                SetParam(Parameters, 'r', curregn);
                 for i := 0 to numbtarif - 1 do
                 begin
                   if (i < 8) or (i > 11) then
                   begin
-                    ParamByName('serv').AsInteger := i;
-                    ParamByName('pm').AsFloat  := c.cdata.pm[i];
-                    ParamByName('snp').AsFloat := c.cdata.snpm[i];
-                    ParamByName('sub').AsFloat := c.cdata.sub[i];
-                    ParamByName('sp').AsFloat  := c.cdata.fpm[i];
-                    ParamByName('stndsub').AsFloat  := c.cdata.stndsub[i];
-                    ParamByName('st').AsInteger := c.cdata.stop;
+                    Parameters.ParseSQL(SQL.Text, True);
+                    SetParam(Parameters, 'serv', i);
+                    SetParam(Parameters, 'pm', c.cdata.pm[i]);
+                    SetParam(Parameters, 'snp', c.cdata.snpm[i]);
+                    SetParam(Parameters, 'sub', c.cdata.sub[i]);
+                    SetParam(Parameters, 'sp', c.cdata.fpm[i]);
+                    SetParam(Parameters, 'stndsub', c.cdata.stndsub[i]);
+                    SetParam(Parameters, 'st', c.cdata.stop);
                     ExecSQL;
                   end;
                 end;
@@ -3591,9 +3681,9 @@ begin
             end;
           end;
         end;
-        DModule.Database1.Commit;
+        DModule.sqlConnection.CommitTrans;
       except
-        DModule.Database1.Rollback;
+        DModule.sqlConnection.RollbackTrans;
       end;
       pr.Free;
       Reload;
@@ -3628,7 +3718,7 @@ begin
   SelectDistFrm.ShowModal;
   if (dist1 <> dist) then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
@@ -3636,8 +3726,9 @@ begin
       SQL.Add('from insp inner join dist on insp.id_dist = dist.id_dist');
       SQL.Add('where (insp.id_insp = :idi) and (dist.id_dist = :idd)');
       SQL.Add('order by insp.nameinsp');
-      ParamByName('idi').AsInteger := insp;
-      ParamByName('idd').AsInteger := dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'idi', insp);
+      SetParam(Parameters, 'idd', dist);
       Open;
       ins := FieldByName('nameinsp').AsString;
       dis := FieldByName('namedist').AsString;
@@ -3655,15 +3746,16 @@ begin
   end
   else
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('select nameinsp');
       SQL.Add('from insp ');
       SQL.Add('where (id_insp = :idi) and (id_dist = :idd)');
-      ParamByName('idi').AsInteger := insp;
-      ParamByName('idd').AsInteger := dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'idi', insp);
+      SetParam(Parameters, 'idd', dist);
       Open;
       ins := FieldByName('nameinsp').AsString;
       Close;
@@ -3692,7 +3784,7 @@ begin
   Form17.ShowModal;
   if (insp1 <> insp) then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
@@ -3700,8 +3792,9 @@ begin
       SQL.Add('from insp');
       SQL.Add('where (id_insp = :idi) and (id_dist = :idd)');
       SQL.Add('order by nameinsp');
-      ParamByName('idi').AsInteger := insp;
-      ParamByName('idd').AsInteger := dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'idi', insp);
+      SetParam(Parameters, 'idd', dist);
       Open;
       Statusbar1.Panels[1].Text := 'Инспектор: ' + FieldByName('nameinsp').AsString;
       Close;
@@ -3735,13 +3828,14 @@ var
   s: real;
 begin
   sts := status;
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('execute getinfocl :id, :d');
-    ParamByName('id').AsInteger := id;
-    ParamByName('d').AsString := MainForm.rdt;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', id);
+    SetParam(Parameters, 'd', MainForm.rdt);
     Open;
     client := id;
     f := FieldByName('fio').AsString;
@@ -3861,14 +3955,14 @@ var
 begin
 
   //делаем перерасчет выбранных
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     cnt := 0;
     Close;
     SQL.Clear;
     SQL.Add(qr.SQL);
     for i := 0 to Length(qr.parname) - 1 do
-      ParamByName(qr.parname[i]).AsString := qr.parval[i];
+      Parameters.ParamByName(qr.parname[i]).Value := qr.parval[i];
     Open;
     if not EOF then
     begin
@@ -3898,17 +3992,19 @@ begin
         SQL.Add('set pm=:pm,snpm=:snp,sub=:sub,spfree=:sp');
         SQL.Add('where sdate=CONVERT(smalldatetime,:s,104) and regn=:r');
         SQL.Add('and service=:serv');
-        ParamByName('s').AsString  := rdt;
-        ParamByName('r').AsInteger := client;
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 's', rdt);
+        SetParam(Parameters, 'r', client);
         for i := 0 to numbtarif - 1 do
         begin
           if (i < 8) or (i > 11) then
           begin
-            ParamByName('serv').AsInteger := i;
-            ParamByName('pm').AsFloat  := c.cdata.pm[i];
-            ParamByName('snp').AsFloat := c.cdata.snpm[i];
-            ParamByName('sub').AsFloat := c.cdata.sub[i];
-            ParamByName('sp').AsFloat  := c.cdata.fpm[i];
+            Parameters.ParseSQL(SQL.Text, True);
+            SetParam(Parameters, 'serv', i);
+            SetParam(Parameters, 'pm', c.cdata.pm[i]);
+            SetParam(Parameters, 'snp', c.cdata.snpm[i]);
+            SetParam(Parameters, 'sub', c.cdata.sub[i]);
+            SetParam(Parameters, 'sp', c.cdata.fpm[i]);
             ExecSQL;
           end;
         end;
@@ -4142,13 +4238,14 @@ begin
   pdt := DateToStr(ed);
 
   try
-    DModule.Database1.Connected := True;
-    with DModule.Query1 do
+    DModule.sqlConnection.Connected := True;
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('execute getedate :idd');
-      ParamByName('idd').AsInteger := dist;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'idd', dist);
       Open;
       ed := FieldByName('edate').AsDateTime;
       Close;
@@ -4193,8 +4290,8 @@ begin
   SaveSubsidyCfg;
 
   try
-    DModule.Database1.Connected := True;
-    if (pdt > rdt) and DModule.Database1.Connected then
+    DModule.sqlConnection.Connected := True;
+    if (pdt > rdt) and DModule.sqlConnection.Connected then
       FillCurr(bpath, pdt, dist, MainForm.codedbf);
   except
     ShowMessage('Произошел сбой при попытке соединения с сервером! Обратитесь к ' +
@@ -4243,9 +4340,8 @@ var
   pr: TAboutBox1;
 begin
   ClearSG;
-{  for i := 0 to MainMenu1.Items.Count - 1 do
-    MainMenu1.Items.Items[i].Enabled := False;}
-  MainForm{.ActionToolBar1}.Enabled := False;
+
+  MainForm.Enabled := False;
   pr := TAboutBox1.Create(Application);
   pr.Label1.Caption := 'Загрузка базы данных';
   pr.Label2.Caption := 'Загружено записей:';
@@ -4253,20 +4349,21 @@ begin
   pr.Show;
   pr.Update;
   SendMessage(pr.Handle, wm_paint, 0, 0);
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
     SQL.Add('execute getinfoscr :idd,:d');
-    ParamByName('idd').AsInteger := dist;
-    ParamByName('d').AsString := rdt;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'idd', dist);
+    SetParam(Parameters, 'd', rdt);
     try
       Open;
     except
       ShowMessage('Connect failed trying reconnect...');
-      DModule.Database1.Close;
+      DModule.sqlConnection.Close;
       try
-        DModule.Database1.Open;
+        DModule.sqlConnection.Open;
         ShowMessage('Connection restore...');
         Open;
       except
@@ -4382,17 +4479,18 @@ end;
 procedure TMainForm.ReportsFillDistInfo;
 { процедура назначает значение переменных в отчетах для формирования шапки }
 var
-  tmp_query: TQuery;
+  tmp_query: TADOQuery;
 begin
-  tmp_query := TQuery.Create(DModule);
-  tmp_query.DatabaseName := 'Subsidy';
+  tmp_query := TADOQuery.Create(DModule);
+  tmp_query.Connection := DModule.sqlConnection;// .DatabaseName := 'Subsidy';
   with tmp_query do
   begin
     Close;
     SQL.Clear;
     SQL.Text := 'SELECT * FROM Dist' + #13 +
       'WHERE id_dist=:dist';
-    ParamByName('dist').AsInteger := dist;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'dist', dist);
     Open;
     frxReport1.Variables.Variables['distName'] := Quotedstr(GetFIOPadeg(FieldByName('namedist').AsString, '', '', True, 2));
     frxReport1.Variables.Variables['distAdr']  := Quotedstr(FieldByName('adr').AsString);
@@ -4423,43 +4521,43 @@ begin
   pr.Show;
   pr.Update;
   SendMessage(pr.Handle, wm_paint, 0, 0);
-  with DModule.Query1 do
+  with DModule.sqlQuery1 do
   begin
     Close;
     SQL.Clear;
 
     SQL.Text := (
-      'select cl.regn,cl.fio,strt.namestreet,cl.nhouse,cl.corp,cl.apart,' + #13 +
-      'sb1.calc,sb1.bdate,sb1.edate,sb.summa,sb.stop' + #13 +
-      'from cl inner join strt on cl.id_street=strt.id_street' + #13 +
-      'left join' + #13 +
-      '(' + #13 +
-      'SELECT    sub.regn,' + #13 +
-      '(case when' + #13 +
-        'sub.regn not in' + #13 +
-          '(select sluj.regn' + #13 +
-          'from sluj' + #13 +
-          'where sluj.sdate = CONVERT(smalldatetime, :d, 104)' + #13 +
-            'and sluj.regn=sub.regn)' + #13 +
-      'then SUM(sub.sub)' + #13 +
-      'else (SUM(sub.sub) - (select sum(sluj.sub)' + #13 +
-                'from sluj' + #13 +
-                'where sluj.sdate = CONVERT(smalldatetime, :d, 104)' + #13 +
-                  'and sluj.regn=sub.regn))' + #13 +
-      'end) as summa, stop' + #13 +
-      'FROM          Sub' + #13 +
+      'select cl.regn,cl.fio,strt.namestreet,cl.nhouse,cl.corp,cl.apart,'#13#10 +
+      'sb1.calc,sb1.bdate,sb1.edate,sb.summa,sb.stop'#13#10 +
+      'from cl inner join strt on cl.id_street=strt.id_street'#13#10 +
+      'left join'#13#10 +
+      '('#13#10 +
+      'SELECT    sub.regn,'#13#10 +
+      '(case when'#13#10 +
+        'sub.regn not in'#13#10 +
+          '(select sluj.regn'#13#10 +
+          'from sluj'#13#10 +
+          'where sluj.sdate = CONVERT(smalldatetime, :d, 104)'#13#10 +
+            'and sluj.regn=sub.regn)'#13#10 +
+      'then SUM(sub.sub)'#13#10 +
+      'else (SUM(sub.sub) - (select sum(sluj.sub)'#13#10 +
+                'from sluj'#13#10 +
+                'where sluj.sdate = CONVERT(smalldatetime, :d, 104)'#13#10 +
+                  'and sluj.regn=sub.regn))'#13#10 +
+      'end) as summa, stop'#13#10 +
+      'FROM          Sub'#13#10 +
 
-      'WHERE      (sub.sdate = CONVERT(smalldatetime, :d, 104))' + #13 +
-      'GROUP BY sub.regn, sub.stop' + #13 +
-      ')' + #13 +
-       'sb on sb.regn=cl.regn' + #13 +
-          'inner join (' + q.SQL + ') sb1 on cl.regn=sb1.regn' + #13 +
+      'WHERE      (sub.sdate = CONVERT(smalldatetime, :d, 104))'#13#10 +
+      'GROUP BY sub.regn, sub.stop'#13#10 +
+      ')'#13#10 +
+       'sb on sb.regn=cl.regn'#13#10 +
+          'inner join (' + q.SQL + ') sb1 on cl.regn=sb1.regn'#13#10 +
       'order by cl.fio');
-
-    ParamByName('idd').AsInteger := dist;
-    ParamByName('d').AsString := rdt;
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'idd', dist);
+    SetParam(Parameters, 'd', rdt);
     for i := 0 to Length(q.parname) - 1 do
-      ParamByName(q.parname[i]).AsString := q.parval[i];
+      SetParam(Parameters, q.parname[i], q.parval[i]);
     Open;
     c := RecordCount;
     if c > 0 then
@@ -4506,9 +4604,7 @@ begin
   end;
   pr.Close;
   pr.Release;
-{  for i := 0 to MainMenu1.Items.Count - 1 do
-    MainMenu1.Items.Items[i].Enabled := True;}
-  MainForm.{ActionToolBar1.}Enabled := True;
+  MainForm.Enabled := True;
   Edit3.Text := IntToStr(c);
   if c > 0 then
   begin
@@ -4726,9 +4822,9 @@ procedure TMainForm.PrintVedCr(f, ad, rd, mng: string);
 var
   y1, dt: string;
 begin
-  DModule.Query1.SQL.Clear;
-  DModule.Query1.SQL.Add('EXEC vedomost "' + rdt + '", "' + IntToStr(client) + '"');
-  DModule.Query1.Open;
+  DModule.sqlQuery1.SQL.Clear;
+  DModule.sqlQuery1.SQL.Add('EXEC vedomost "' + rdt + '", "' + IntToStr(client) + '"');
+  DModule.sqlQuery1.Open;
 
   frxData.DataSource := DModule.DataSource1;
   frxReport1.LoadFromFile(PChar(reports_path + 'vedomost.fr3'));
@@ -4881,15 +4977,16 @@ procedure TMainForm.N73Click(Sender: TObject);
 begin
   if (stop[SGCl.Row - 1] = 0) and (status <> 3) then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('update sub');
       SQL.Add('set sub=0.00,stop=2');
       SQL.Add('where regn=:id and sdate=convert(smalldatetime,:d,104)');
-      ParamByName('id').AsInteger := client;
-      ParamByName('d').AsString := rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', client);
+      SetParam(Parameters, 'd', rdt);
       ExecSQL;
       Close;
       Close;
@@ -4897,8 +4994,9 @@ begin
       SQL.Add('update sluj');
       SQL.Add('set sub=0.00');
       SQL.Add('where regn=:id and sdate=convert(smalldatetime,:d,104)');
-      ParamByName('id').AsInteger := client;
-      ParamByName('d').AsString := rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', client);
+      SetParam(Parameters, 'd', rdt);
       ExecSQL;
       Close;
     end;
@@ -4928,15 +5026,16 @@ begin
     cmp := MonthOf(StrToDate(rdt)) + 12 - MonthOf(StrToDate(Copy(SGCl.Cells[2, SGCl.row], 1, 10)));
   if (stop[SGCl.Row - 1] = 2) and (status <> 3) and (cmp = 1) then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       SQL.Clear;
       SQL.Add('update sub');
       SQL.Add('set sub=0.00,stop=3');
       SQL.Add('where regn=:id and sdate=convert(smalldatetime,:d,104)');
-      ParamByName('id').AsInteger := client;
-      ParamByName('d').AsString := rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', client);
+      SetParam(Parameters, 'd', rdt);
       ExecSQL;
       Close;
       Close;
@@ -4944,8 +5043,9 @@ begin
       SQL.Add('update sluj');
       SQL.Add('set sub=0.00');
       SQL.Add('where regn=:id and sdate=convert(smalldatetime,:d,104)');
-      ParamByName('id').AsInteger := client;
-      ParamByName('d').AsString := rdt;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', client);
+      SetParam(Parameters, 'd', rdt);
       ExecSQL;
       Close;
     end;
@@ -4978,7 +5078,7 @@ begin
     cmp := MonthOf(StrToDate(rdt)) + 12 - MonthOf(StrToDate(Copy(SGCl.Cells[2, SGCl.row], 1, 10)));
   if (stop[SGCl.Row - 1] = 3) and (status <> 3) and (cmp >= 1) then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       c := TClient.Create(Empty, EmptyC);
@@ -4990,18 +5090,20 @@ begin
       SQL.Add('set pm=:pm,snpm=:snp,sub=:sub,spfree=:sp,stop=1');
       SQL.Add('where sdate=CONVERT(smalldatetime,:s,104) and regn=:r');
       SQL.Add('and service=:serv');
-      ParamByName('s').AsString := rdt;
-      ParamByName('r').AsInteger := client;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 's', rdt);
+      SetParam(Parameters, 'r', client);
       s := 0;
       for i := 0 to numbtarif - 1 do
       begin
         if (i < 8) or (i > 11) then
         begin
-          ParamByName('serv').AsInteger := i;
-          ParamByName('pm').AsFloat  := c.cdata.pm[i];
-          ParamByName('snp').AsFloat := c.cdata.snpm[i];
-          ParamByName('sub').AsFloat := c.cdata.sub[i];
-          ParamByName('sp').AsFloat  := c.cdata.fpm[i];
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'serv', i);
+          SetParam(Parameters, 'pm', c.cdata.pm[i]);
+          SetParam(Parameters, 'snp', c.cdata.snpm[i]);
+          SetParam(Parameters, 'sub', c.cdata.sub[i]);
+          SetParam(Parameters, 'sp', c.cdata.fpm[i]);
           ExecSQL;
           s := s + c.cdata.sub[i];
         end;
@@ -5033,7 +5135,7 @@ var
 begin
   if stop[SGCl.Row - 1] = 2 then
   begin
-    with DModule.Query1 do
+    with DModule.sqlQuery1 do
     begin
       Close;
       c := TClient.Create(Empty, EmptyC);
@@ -5045,18 +5147,20 @@ begin
       SQL.Add('set pm=:pm,snpm=:snp,sub=:sub,spfree=:sp,stop=0');
       SQL.Add('where sdate=CONVERT(smalldatetime,:s,104) and regn=:r');
       SQL.Add('and service=:serv');
-      ParamByName('s').AsString := rdt;
-      ParamByName('r').AsInteger := client;
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 's', rdt);
+      SetParam(Parameters, 'r', client);
       s := 0;
       for i := 0 to numbtarif - 1 do
       begin
         if (i < 8) or (i > 11) then
         begin
-          ParamByName('serv').AsInteger := i;
-          ParamByName('pm').AsFloat  := c.cdata.pm[i];
-          ParamByName('snp').AsFloat := c.cdata.snpm[i];
-          ParamByName('sub').AsFloat := c.cdata.sub[i];
-          ParamByName('sp').AsFloat  := c.cdata.fpm[i];
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'serv', i);
+          SetParam(Parameters, 'pm', c.cdata.pm[i]);
+          SetParam(Parameters, 'snp', c.cdata.snpm[i]);
+          SetParam(Parameters, 'sub', c.cdata.sub[i]);
+          SetParam(Parameters, 'sp', c.cdata.fpm[i]);
           ExecSQL;
           s := s + c.cdata.sub[i];
         end;

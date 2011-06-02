@@ -19,7 +19,7 @@ uses
   Windows;
 
 type
-  TCl = record
+  TCl = packed record
     reg: array of integer;
     sub: array of real;
     fio: array of string;
@@ -118,13 +118,8 @@ begin
   with DModule.sqlQuery1 do
   begin
     Close;
-    SQL.Clear;
-    SQL.Add('select cl.fio,cl.regn from cl inner join sub on cl.regn=sub.regn');
-    SQL.Add('where (sub.sdate=convert(smalldatetime,:d,104)) and (sub.service=0)');
-    SQL.Add('and (cl.id_dist=:idd)and(sub.stop<2)');
-    SQL.Add('order by cl.fio');
-    Parameters.ParamByName('d').Value := MainForm.rdt;
-    Parameters.ParamByName('idd').Value := MainForm.dist;
+    SQL.Text :=
+      'exec getcurhist_query ' +  quotedstr(MainForm.rdt) + ',' + IntToStr(MainForm.dist);
     Open;
     i := 0;
     if not EOF then
@@ -136,27 +131,8 @@ begin
         SetLength(cl.sub, i + 1);
         cl.fio[i] := FieldByName('fio').AsString;
         cl.reg[i] := FieldByName('regn').AsInteger;
+        cl.sub[i] := FieldByName('s1').AsFloat - FieldByName('s2').AsFloat;
         Inc(i);
-        Next;
-      end;
-      Close;
-      SQL.Clear;
-      SQL.Add('select sum(sub.sub) as s1,sum(sluj.sub) as s2,sub.regn');
-      SQL.Add('from sub left join sluj on sub.regn=sluj.regn and sub.sdate=sluj.sdate and(sluj.id_debt is NULL)');
-      SQL.Add('and sub.service=sluj.service inner join cl on cl.regn=sub.regn');
-      SQL.Add('where (sub.sdate=convert(smalldatetime,:d,104))and(cl.id_dist=:idd)and(sub.stop<2)');
-      SQL.Add('group by sub.regn');
-      Parameters.ParamByName('d').Value := MainForm.rdt;
-      Parameters.ParamByName('idd').Value := MainForm.dist;
-      Open;
-      while not EOF do
-      begin
-        for i := 0 to Length(cl.reg) - 1 do
-          if (FieldByName('regn').AsInteger = cl.reg[i]) then
-          begin
-            cl.sub[i] := FieldByName('s1').AsFloat - FieldByName('s2').AsFloat;
-            break;
-          end;
         Next;
       end;
       Close;
