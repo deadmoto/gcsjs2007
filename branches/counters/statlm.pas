@@ -276,7 +276,6 @@ begin
         for i := 1 to lcl.Count do
         begin
           dbf1.Append;
-          sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
           SetParam(sqlQuery1.Parameters, 'r', (TClient(lcl.Items[i - 1]).Data.regn));
           DModule.sqlQuery1.Open;
           EditField(TClient(lcl.Items[i - 1]).Data.fio, DBF1.CodePage, 1);

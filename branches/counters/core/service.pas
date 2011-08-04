@@ -513,8 +513,10 @@ function GetPrec(fld: TField): byte;
 *******************************************************************************}
 begin
   case fld.DataType of
-    ftFloat, ftCurrency:
+    ftCurrency, ftFloat:
       Result := 4;
+    ftBCD:
+      Result := 2;
     else
       Result := 0;
   end;
@@ -535,11 +537,12 @@ begin
   begin
     if Dbf1.Active then
       Dbf1.Close;
-    for i := 0 to sqlQuery1.FieldCount - 1 do
+    for i := 0 to sqlQuery1.FieldCount - 1 do begin
       Dbf1.AddFieldDefs(
         GetName(sqlQuery1.Fields[i]), GetType(sqlQuery1.Fields[i]),
         GetSize(sqlQuery1.Fields[i]), GetPrec(sqlQuery1.Fields[i])
         );
+    end;
     Dbf1.TableName := path + nam + '.dbf';
     Dbf1.CreateTable;
     Dbf1.CodePage := code;

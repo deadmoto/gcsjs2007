@@ -827,12 +827,13 @@ object Form33: TForm33
     end
     object ComboBox17: TComboBox
       Left = 120
-      Top = 160
+      Top = 159
       Width = 145
       Height = 21
       Color = clBtnFace
       ItemHeight = 13
       TabOrder = 8
+      OnChange = ComboBox17Change
     end
   end
   object FlowPanel1: TFlowPanel

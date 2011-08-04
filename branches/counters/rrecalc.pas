@@ -77,16 +77,17 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('execute getclinfo :id,:d');
+    SQL.Add('execute getclinfo_office :id,:d,:office');
     Parameters.ParseSQL(SQL.Text, True);
     SetParam(Parameters, 'id', MainForm.dist);
     SetParam(Parameters, 'd', MainForm.rdt);
+    SetParam(Parameters, 'office', MainForm.office);
     Open;
     pr.ProgressBar1.Max := RecordCount;
     while not eof do
     begin
       n := IntToStr(k);
-      Sheet.Range['b'+n,'b'+n] := 'БУ ОБЛАСТНОЙ ЦЕНТР ЖИЛИЩНЫХ СУБСИДИЙ СОЦИАЛЬНЫХ ВЫПЛАТ И ЛЬГОТ';
+      Sheet.Range['b'+n,'b'+n] := 'КУ ЦЕНТР СОЦИАЛЬНЫХ ВЫПЛАТ И МАТЕРИАЛЬНО-ТЕХНИЧЕСКОГО ОБЕСПЕЧЕНИЯ ПО г.Омску';
       Sheet.Range['b'+n,'b'+n].HorizontalAlignment := -4108;//center
       inc(k);
       n := IntToStr(k);
@@ -120,7 +121,7 @@ begin
       if CheckBox4.Checked then
         Sheet.Range['a'+n,'a'+n] := String(Sheet.Range['a'+n,'a'+n]) + ', '+Memo1.Text;
       inc(k,2);n := IntToStr(k);
-      Sheet.Range['a'+n,'a'+n] := 'Заведующий филиалом';
+      Sheet.Range['a'+n,'a'+n] := 'Начальник филиала';
       Sheet.Range['c'+n,'c'+n] := FieldByName('boss').AsString;
       inc(k,2);n := IntToStr(k);
       Sheet.Range['a'+n,'a'+n] := 'Уведомление получил "   " ____________ '+Copy(MainForm.rdt,7,4)+'г.';

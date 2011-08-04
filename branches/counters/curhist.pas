@@ -118,8 +118,13 @@ begin
   with DModule.sqlQuery1 do
   begin
     Close;
-    SQL.Text :=
-      'exec getcurhist_query ' +  quotedstr(MainForm.rdt) + ',' + IntToStr(MainForm.dist);
+    if MainForm.office = -1 then   
+      SQL.Text :=
+        'exec getcurhist_query ' +  quotedstr(MainForm.rdt) + ',' + IntToStr(MainForm.dist)
+    else
+      SQL.Text :=
+        'exec getcurhist_query_office ' +  quotedstr(MainForm.rdt) + ',' + IntToStr(MainForm.dist) + ',' + IntToStr(MainForm.office);
+
     Open;
     i := 0;
     if not EOF then

@@ -5386,7 +5386,7 @@ begin
         if cl.cdata.heating = 1 then
           SetParam(sqlQuery1.Parameters, 'factdate', FactDateBase)
         else
-          sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+          //sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
           SetParam(sqlQuery1.Parameters, 'factdate', FactDateWC);
         SetParam(sqlQuery1.Parameters, 'bdate', DateToStr(cl.cdata.begindate));
         SetParam(sqlQuery1.Parameters, 'factdateYear', FactDateYear);
