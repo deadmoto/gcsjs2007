@@ -149,11 +149,13 @@ type
     procedure ComboBox15Change(Sender: TObject);
     procedure Edit1Exit(Sender: TObject);
     procedure CheckBox25Click(Sender: TObject);
+    procedure ComboBox17Change(Sender: TObject);
   private
     { Private declarations }
     procedure Fill;
     procedure Clear;
     function SearchStreet(s: string): integer;
+    function SearchOffice(o: integer): integer;
     function SearchMng(s: string): integer;
     function SearchFnd(s: string): integer;
     function SearchSettl(s: string): integer;
@@ -542,12 +544,14 @@ begin
     combobox17.Color := clBtnFace;
     combobox17.Font.Color := clGrayText;
     combobox17.Text  := '';
+    MainForm.office := -1;
   end
   else
   begin
     combobox17.Color := clWindow;
     combobox17.Font.Color := clWindowText;
     combobox17.ItemIndex := 0;
+    combobox17.OnChange(self);
   end;
 end;
 
@@ -1314,18 +1318,18 @@ begin
       SetLength(q.parname, Length(q.parname) + 1);
       SetLength(q.parval, Length(q.parval) + 1);
       q.parname[j] := 'office';
-      q.parval[j]  := IntToStr(office[Combobox17.ItemIndex]);
+      q.parval[j]  := IntToStr(MainForm.office);
     end;
     //Филиал
-    if CheckBox25.Checked then
-    begin
-      Inc(j);
-      q.SQL := q.SQL + 'and(Insp.id_office=:office)';
-      SetLength(q.parname, Length(q.parname) + 1);
-      SetLength(q.parval, Length(q.parval) + 1);
-      q.parname[j] := 'office';
-      q.parval[j]  := IntToStr(office[Combobox17.ItemIndex]);
-    end;    
+//    if CheckBox25.Checked then
+//    begin
+//      Inc(j);
+//      q.SQL := q.SQL + 'and(Insp.id_office=:office)';
+//      SetLength(q.parname, Length(q.parname) + 1);
+//      SetLength(q.parval, Length(q.parval) + 1);
+//      q.parname[j] := 'office';
+//      q.parval[j]  := IntToStr(office[Combobox17.ItemIndex]);
+//    end;
     q.SQL := q.SQL + #13+ 'GROUP BY Cl.regn, Hist.bdate, Hist.edate, Hist.calc';
     MainForm.qr := q;
   end
@@ -1443,6 +1447,18 @@ begin
     Result := i
   else
     Result := -1;
+end;
+
+function TForm33.SearchOffice(o: integer): integer;
+var
+  i, res: integer;
+begin
+  for i := 0 to length(office) - 1 do
+  begin
+    if office[i] = MainForm.office then
+      break;
+  end;
+  Result := i;
 end;
 
 function TForm33.SearchOwn(s: string): integer;
@@ -1858,6 +1874,7 @@ begin
   Combobox10.ItemIndex := curind[16];
   Combobox11.ItemIndex := curind[17];
   Combobox15.ItemIndex := curind[18];
+  Combobox17.ItemIndex := SearchOffice(MainForm.office);
 end;
 
 procedure TForm33.JvArrowButton1Click(Sender: TObject);
@@ -2085,6 +2102,11 @@ begin
   end;
   cur[18] := ComboBox15.Text;
   curind[18] := ComboBox15.ItemIndex;
+end;
+
+procedure TForm33.ComboBox17Change(Sender: TObject);
+begin
+  MainForm.office := office[Combobox17.ItemIndex];
 end;
 
 procedure TForm33.CheckBox16Click(Sender: TObject);

@@ -1443,22 +1443,44 @@ end;
 
 procedure TMainForm.aClArchExecute(Sender: TObject);
 begin
-  with DModule.sqlQuery1 do
+  if office <> -1 then
   begin
-    Close;
-    SQL.Text :=
-      'SELECT cl.fio, dbo.getcl_address(cl.regn) as address, mng.namemng'#13#10 +
-      'FROM cl INNER JOIN'#13#10 +
-        'Hist ON cl.regn=hist.regn INNER join'#13#10 +
-        'Mng ON Mng.id_mng=hist.id_mng'#13#10 +
-      'WHERE cl.id_dist=:dist and mng.id_dist=cl.id_dist and hist.bdate=convert(smalldatetime,:date, 104)'#13#10 +
-      'ORDER BY fio,address';
-    Parameters.ParseSQL(SQL.Text, True);
-    SetParam(Parameters, 'dist', MainForm.dist);
-    SetParam(Parameters, 'date', MainForm.rdt);
-    Open;
+    with DModule.sqlQuery1 do
+    begin
+      Close;
+      SQL.Text :=
+        'SELECT cl.fio, dbo.getcl_address(cl.regn) as address, mng.namemng'#13#10 +
+        'FROM cl INNER JOIN'#13#10 +
+          'Hist ON cl.regn=hist.regn INNER JOIN'#13#10 +
+          'Mng ON Mng.id_mng=hist.id_mng INNER JOIN'#13#10 +
+          'Insp ON Insp.id_insp = Hist.id_insp'#13#10 +
+        'WHERE cl.id_dist=:dist and mng.id_dist=cl.id_dist and hist.bdate=convert(smalldatetime,:date, 104) and Insp.id_office = :office'#13#10 +
+        'ORDER BY fio,address';
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'dist', MainForm.dist);
+      SetParam(Parameters, 'date', MainForm.rdt);
+      SetParam(Parameters, 'office', MainForm.office);
+      Open;
+    end;
+  end
+  else
+  begin
+    with DModule.sqlQuery1 do
+    begin
+      Close;
+      SQL.Text :=
+        'SELECT cl.fio, dbo.getcl_address(cl.regn) as address, mng.namemng'#13#10 +
+        'FROM cl INNER JOIN'#13#10 +
+          'Hist ON cl.regn=hist.regn INNER JOIN'#13#10 +
+          'Mng ON Mng.id_mng=hist.id_mng'#13#10 +
+        'WHERE cl.id_dist=:dist and mng.id_dist=cl.id_dist and hist.bdate=convert(smalldatetime,:date, 104)'#13#10 +
+        'ORDER BY fio,address';
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'dist', MainForm.dist);
+      SetParam(Parameters, 'date', MainForm.rdt);
+      Open;
+    end;
   end;
-
 
   frxData.DataSource := DModule.DataSource1;
   frxReport1.LoadFromFile(PChar(reports_path + 'clarchive.fr3'));
@@ -2250,7 +2272,10 @@ begin
   begin
     sqlQuery1.Close;
     sqlQuery1.SQL.Clear;
-    sqlQuery1.SQL.Add('exec nachnew ' + quotedstr(rdt) + ',' + IntToStr(dist));
+    if office = -1 then
+      sqlQuery1.SQL.Add('exec nachnew ' + quotedstr(rdt) + ',' + IntToStr(dist))
+    else
+      sqlQuery1.SQL.Add('exec nachnew_office ' + quotedstr(rdt) + ',' + IntToStr(dist) + ',' + IntToStr(office));
     sqlQuery1.Open;
   end;
 
@@ -2337,10 +2362,21 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('execute realize :s, :d');
-    Parameters.ParseSQL(SQL.Text, True);
-    SetParam(Parameters, 's', rdt);
-    SetParam(Parameters, 'd', dist);
+    if office = -1 then
+    begin
+      SQL.Add('execute realize :s, :d');
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 's', rdt);
+      SetParam(Parameters, 'd', dist);
+    end
+    else
+    begin
+      SQL.Add('execute realize_office :s, :d, :office');
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 's', rdt);
+      SetParam(Parameters, 'd', dist);
+      SetParam(Parameters, 'office', office);
+    end;
     Open;
     while not EOF do
     begin
@@ -2419,7 +2455,10 @@ begin
   with DModule do
   begin
     sqlQuery1.Close;
-    sqlQuery1.SQL.Text := 'EXEC getclfactsum ' + quotedstr(rdt) + ', ' + IntToStr(dist);
+    if office = -1 then
+      sqlQuery1.SQL.Text := 'EXEC getclfactsum ' + quotedstr(rdt) + ', ' + IntToStr(dist)
+    else
+      sqlQuery1.SQL.Text := 'EXEC getclfactsum_office ' + quotedstr(rdt) + ', ' + IntToStr(dist) + ', ' + IntToStr(office);
     sqlQuery1.Open;
   end;
 
@@ -3145,12 +3184,13 @@ var
   ExcelApp, Sheet: OleVariant;
   c: TClient;
   i: integer;
+  insp: string;
   bdate, edate: TDate;
   tmpQuery: TADOQuery;
 begin
   tmpQuery := TADOQuery.Create(DModule);
   tmpQuery.Connection := DModule.sqlConnection;
-  
+
   c := TClient.Create(Empty, EmptyC);
   c.SetClient(client, MainForm.rdt);
   c.setcalc(client, MainForm.rdt);
@@ -3198,7 +3238,9 @@ begin
   Sheet.Cells.Replace(':bdate:', StringDate(bdate), xlPart, xlByRows, False, False, False);
   Sheet.Cells.Replace(':edate:', StringDate(edate), xlPart, xlByRows, False, False, False);
   Sheet.Cells.Replace(':fio:', GetShortName(SGCl.Cells[0, SGCl.row]), xlPart, xlByRows, False, False, False);
-  Sheet.Cells.Replace(':insp:', SplitString(StatusBar1.Panels[1].Text, ' ')[1], xlPart, xlByRows, False, False, False);
+//  Sheet.Cells.Replace(':insp:', SplitString(StatusBar1.Panels[1].Text, ' ')[1], xlPart, xlByRows, False, False, False);
+  insp := StringReplace(StatusBar1.Panels[1].Text, 'Инспектор: ', '', [rfReplaceAll]);
+  Sheet.Cells.Replace(':insp:', StringReplace(insp, '(ф)', '', [rfReplaceAll]), xlPart, xlByRows, False, False, False);
   Sheet.Cells.Replace(':boss:', SelBoss(dist), xlPart, xlByRows, False, False, False);
   if ( c.cdata.prevbegindate = c.cdata.begindate) then
   begin
@@ -3235,6 +3277,7 @@ begin
   Form33.ShowModal;
   if qr.SQL <> '' then
     Load(qr, Form33.rsel);
+
 end;
 
 procedure TMainForm.aFormDebtExecute(Sender: TObject);
@@ -3660,7 +3703,6 @@ begin
                 begin
                   if (i < 8) or (i > 11) then
                   begin
-                    Parameters.ParseSQL(SQL.Text, True);
                     SetParam(Parameters, 'serv', i);
                     SetParam(Parameters, 'pm', c.cdata.pm[i]);
                     SetParam(Parameters, 'snp', c.cdata.snpm[i]);
@@ -4038,6 +4080,7 @@ var
   Layouts: array[0..7] of THandle;
   y, m, d: word;
 begin
+  office := -1;
   LoginMode := lNone;
   IDate := EncodeDate(2006, 6, 1);//дата запуска программы в использование
 

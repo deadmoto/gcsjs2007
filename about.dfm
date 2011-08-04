@@ -27,8 +27,6 @@ object AboutBox: TAboutBox
     ParentColor = True
     TabOrder = 0
     OnClick = Panel1Click
-    ExplicitWidth = 219
-    ExplicitHeight = 204
     object ProgramIcon: TImage
       Left = 24
       Top = 16
@@ -69,14 +67,14 @@ object AboutBox: TAboutBox
     object Comments: TLabel
       Left = 8
       Top = 179
-      Width = 211
-      Height = 16
+      Width = 209
+      Height = 13
       Caption = #1054#1088#1075'.: '#1041#1059' '#1054#1054' "'#1054#1062#1046#1057#1057#1042#1080#1051'" '#1075'.'#1054#1084#1089#1082' (2008)'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
-      Font.Style = []
+      Font.Style = [fsStrikeOut]
       ParentFont = False
       WordWrap = True
       IsControl = True
@@ -118,8 +116,8 @@ object AboutBox: TAboutBox
     object Label5: TLabel
       Left = 8
       Top = 160
-      Width = 190
-      Height = 16
+      Width = 162
+      Height = 13
       Caption = #1054#1088#1075'.: '#1052#1059' "'#1043#1062#1046#1057'" '#1075'.'#1054#1084#1089#1082' (2006)'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -133,9 +131,9 @@ object AboutBox: TAboutBox
     object Label6: TLabel
       Left = 8
       Top = 198
-      Width = 199
-      Height = 16
-      Caption = #1054#1088#1075'.: '#1050#1059' "'#1062#1057#1042#1080#1052#1058#1054'" '#1075'.'#1054#1084#1089#1082' (2011)'
+      Width = 209
+      Height = 26
+      Caption = #1054#1088#1075'.: '#1050#1059' "'#1062#1057#1042#1080#1052#1058#1054'" '#1075'.'#1054#1084#1089#1082' (2011)   :('
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11

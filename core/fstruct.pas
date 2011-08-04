@@ -735,13 +735,12 @@ begin
         SetParam(sqlQuery1.Parameters, 'balance', StrToFloat(f[i][3]));
         if f[i][4] = '' then
           begin
-            sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
             SetParam(sqlQuery1.Parameters, 'dolg', Null);
             sqlQuery1.Parameters.ParamByName('dolg').DataType := ftFloat;
           end
         else
-          sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
           SetParam(sqlQuery1.Parameters, 'dolg', StrToFloat(f[i][4]));
+
         SetParam(sqlQuery1.Parameters, 'dis', StrToFloat(f[i][5]));
         try
           sqlQuery1.ExecSQL;
@@ -887,8 +886,11 @@ begin
         SetParam(sqlQuery1.Parameters, 'str', f[i][5]);
         SetParam(sqlQuery1.Parameters, 'nh', f[i][6]);
         SetParam(sqlQuery1.Parameters, 'cp', f[i][7]);
+        sqlQuery1.Parameters.ParamByName('cp').DataType := ftString;
         SetParam(sqlQuery1.Parameters, 'apart', f[i][8]);
+        sqlQuery1.Parameters.ParamByName('apart').DataType := ftString;
         SetParam(sqlQuery1.Parameters, 'tel', f[i][9]);
+        sqlQuery1.Parameters.ParamByName('tel').DataType := ftString;
         SetParam(sqlQuery1.Parameters, 'lsquare', StrToFloat(f[i][10]));
         SetParam(sqlQuery1.Parameters, 'square', StrToFloat(f[i][11]));
         SetParam(sqlQuery1.Parameters, 'stnd', f[i][12]);
@@ -1027,6 +1029,7 @@ begin
         SetParam(sqlQuery1.Parameters, 'mid', StrToFloat(f[i][7]));
         SetParam(sqlQuery1.Parameters, 'rel', f[i][8]);
         SetParam(sqlQuery1.Parameters, 'npss', f[i][9]);
+        sqlQuery1.Parameters.ParamByName('npss').DataType := ftString;
         sqlQuery1.ExecSQL;
       end;
       sqlQuery1.Close;
@@ -1073,6 +1076,7 @@ begin
         SetParam(sqlQuery1.Parameters, 'serv', f[i][2]);
         SetParam(sqlQuery1.Parameters, 'idserv', f[i][3]);
         SetParam(sqlQuery1.Parameters, 'ac', f[i][4]);
+        sqlQuery1.Parameters.ParamByName('ac').DataType := ftString;
         SetParam(sqlQuery1.Parameters, 'pm', StrToFloat(f[i][5]));
         SetParam(sqlQuery1.Parameters, 'snp', StrToFloat(f[i][6]));
         SetParam(sqlQuery1.Parameters, 'sub', StrToFloat(f[i][7]));
@@ -1188,8 +1192,8 @@ begin
         SetParam(sqlQuery1.Parameters, 'sub', dbfQuery.Fields[5].Value);
         SetParam(sqlQuery1.Parameters, 'fact', dbfQuery.Fields[6].Value);
         SetParam(sqlQuery1.Parameters, 'debt', dbfQuery.Fields[7].Value);
-        if VarType(dbfQuery.Fields[7].Value) <> varNull then
-          sqlQuery1.Parameters.ParamByName('debt').DataType := ftGuid;
+//        if VarType(dbfQuery.Fields[7].Value) <> varNull then
+        sqlQuery1.Parameters.ParamByName('debt').DataType := ftGuid;
         sqlQuery1.ExecSQL;
         dbfQuery.Next;
       end;
@@ -1839,6 +1843,7 @@ begin
         SetParam(sqlQuery1.Parameters, 'sumdebt', dbfQuery.Fields[6].Value);
         SetParam(sqlQuery1.Parameters, 'closed', dbfQuery.Fields[7].Value);
         SetParam(sqlQuery1.Parameters, 'closed_date', dbfQuery.Fields[8].Value);
+        sqlQuery1.Parameters.ParamByName('closed_date').DataType := ftDateTime;
         sqlQuery1.ExecSQL;
         dbfQuery.Next;
       end;
