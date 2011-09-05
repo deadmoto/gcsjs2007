@@ -188,6 +188,8 @@ type
     aExportSocProt: TAction;
     Action22: TAction;
     aErrorList: TAction;
+    Button7: TButton;
+    aClRecalc: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SGClDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
@@ -295,6 +297,7 @@ type
     procedure aExportSocProtExecute(Sender: TObject);
     procedure Action22Execute(Sender: TObject);
     procedure aErrorListExecute(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
   private
     FShaderForm: TForm;
     ccl, acl:     integer;//количество всех и активных клиентов в базе
@@ -342,6 +345,7 @@ type
     curServer : string;//текущей сервер с базой
     ARepData:     PAdditionRepData; //данные для отчета(№ решения, № исходящего)
     LoginMode: TLoginMode;//текущие права пользователя
+    idOffice:     integer;//текущий id инспектора
     procedure AddCl(id: integer);
     procedure ModCl(id: integer);
     procedure DelCl(id: integer);
@@ -1387,7 +1391,6 @@ begin
       begin
         if (i < 8) or (i > 11) then
         begin
-          Parameters.ParseSQL(SQL.Text, True);
           SetParam(Parameters, 'serv', i);
           SetParam(Parameters, 'pm', c.cdata.pm[i]);
           SetParam(Parameters, 'snp', c.cdata.snpm[i]);
@@ -1442,7 +1445,20 @@ begin
 end;
 
 procedure TMainForm.aClArchExecute(Sender: TObject);
+var add_sql:      string;
+    report_title: string;
 begin
+  if (Sender as TAction).Name = 'aClArch' then
+  begin
+    add_sql := 'hist.bdate=convert(smalldatetime,:date, 104)';
+    report_title := 'Список на архив';
+  end
+  else
+  begin
+    add_sql := 'hist.edate=CONVERT(smalldatetime, :date, 104)';
+    report_title := 'Список на переаттестацию';
+  end;
+
   if office <> -1 then
   begin
     with DModule.sqlQuery1 do
@@ -1454,7 +1470,7 @@ begin
           'Hist ON cl.regn=hist.regn INNER JOIN'#13#10 +
           'Mng ON Mng.id_mng=hist.id_mng INNER JOIN'#13#10 +
           'Insp ON Insp.id_insp = Hist.id_insp'#13#10 +
-        'WHERE cl.id_dist=:dist and mng.id_dist=cl.id_dist and hist.bdate=convert(smalldatetime,:date, 104) and Insp.id_office = :office'#13#10 +
+        'WHERE cl.id_dist=:dist and insp.id_dist = cl.id_dist and mng.id_dist=cl.id_dist and '+add_sql+' and Insp.id_office = :office'#13#10 +
         'ORDER BY fio,address';
       Parameters.ParseSQL(SQL.Text, True);
       SetParam(Parameters, 'dist', MainForm.dist);
@@ -1473,7 +1489,7 @@ begin
         'FROM cl INNER JOIN'#13#10 +
           'Hist ON cl.regn=hist.regn INNER JOIN'#13#10 +
           'Mng ON Mng.id_mng=hist.id_mng'#13#10 +
-        'WHERE cl.id_dist=:dist and mng.id_dist=cl.id_dist and hist.bdate=convert(smalldatetime,:date, 104)'#13#10 +
+        'WHERE cl.id_dist=:dist and mng.id_dist=cl.id_dist and '+add_sql+''#13#10 +
         'ORDER BY fio,address';
       Parameters.ParseSQL(SQL.Text, True);
       SetParam(Parameters, 'dist', MainForm.dist);
@@ -1490,6 +1506,7 @@ begin
   frxReport1.Variables.Variables['recCount']  := DModule.sqlQuery1.RecordCount;
   frxReport1.Variables.Variables['dist'] := quotedstr(SelDist(MainForm.dist));
   frxReport1.Variables.Variables['boss'] := quotedstr(SelBoss(dist));
+  frxReport1.Variables.Variables['report_title'] := quotedstr(report_title);
   frxReport1.PrepareReport;
 
   frxReport1.ShowPreparedReport;
@@ -1719,7 +1736,7 @@ var
     if (pm <> 0) and (ppm <> 0) then
       frxReport1.Variables.Variables['lkoef'] := quotedstr(FormatFloat('0.00', rnd(ppm / pm)))
     else
-      frxReport1.Variables.Variables['lkoef'] := '';
+      frxReport1.Variables.Variables['lkoef'] := '1';//*123
 
     //полные начисления
     setlength(tmpfpm,length(c.cdata.fpm));
@@ -2714,6 +2731,207 @@ begin
   winExec('sUpdater.exe', SW_NORMAL);
 end;
 
+procedure TMainForm.Button7Click(Sender: TObject);
+//Заявление
+var
+  WordApp,doc:OleVariant;
+  c: TClient;
+  i,j: integer;
+  yb,sch,trc:byte;
+  _birth:TDateTime;
+  rBank:packed record
+    otd,filial,bank:string;
+  end;
+  _okrug:string;
+  lst:TStringList;
+
+  procedure GetBankParam(n:integer);
+  var
+    sl:string;
+
+begin
+  FillChar(rBank,sizeof(rBank),#0);
+  with DModule.sqlQuery1,rBank do begin
+    Close;
+    SQL.Clear;
+    SQL.Text:='select * from bank where id_bank=:id';
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'id', n);
+    Open;
+    if not isEmpty then begin
+      sl:=FieldByName('namebank').AsString;
+      case n of
+      1..77,80..82,84..97: begin
+          otd:=RightStr(sl,4);
+          filial:=MidStr(sl,10,4);
+          bank:='Сбербанк';
+        end;
+      78..79: begin
+          otd:=sl;
+          bank:='ОТП банк';
+        end;
+      end;
+    end;
+    Close;
+  end;
+end;
+
+  function GetLet (b:byte): String;
+  var
+    i:integer;
+    f:real;
+begin
+ result:='';
+ f:=b/10;
+ i:=trunc(frac(f)*10+0.1);
+ case i of
+ 1: result:='год';
+ 2..4: result:='года';
+ else  result:='лет';
+ end;
+end;
+
+function StrToArrays(str, r: string; temp: TStringList): Boolean;
+var
+  j: Integer;
+begin
+  result:=false;
+  if temp <> nil then begin
+    temp.Clear;
+    while str <> '' do begin
+      j := Pos(r, str);
+      if j = 0 then j := Length(str) + 1;
+      temp.Add(Copy(Str, 1, j - 1));
+      Delete(Str, 1, j + Length(r) - 1);
+    end;
+    Result := True;
+  end;
+end;
+
+const
+  sSpace='   ';
+  cntRPC=3; //Row per client
+
+begin
+  lst:=TStringList.Create;
+  c := TClient.Create(Empty, EmptyC);
+  c.SetClient(client, MainForm.rdt);
+  c.setcalc(client, MainForm.rdt);
+  try
+{
+    try
+      WordApp:=GetActiveOleObject('Word.Application')
+    except end;
+}
+    WordApp:= CreateOleObject('Word.Application');
+    try
+    doc:=WordApp.documents.Open(MainForm.reports_path + 'Заявление_шаблон.dot');
+    WordApp.ActiveDocument.SaveAs('c:\124.doc');
+    _okrug:=SelDist(c.Data.dist);_okrug:=_okrug[1]+'АО';
+    WordApp.Selection.Goto(-1, unAssigned, unAssigned,'okrug');
+    WordApp.Selection.TypeText(sSpace+_okrug);
+    WordApp.Selection.Goto(-1, unAssigned, unAssigned,'fio');
+//    WordApp.Selection.font.bold:=true;
+    WordApp.Selection.TypeText(sSpace+c.Data.fio);
+    if trim(c.Data.tel)<>'' then begin
+      WordApp.Selection.Goto(-1, unAssigned, unAssigned,'tel');
+      WordApp.Selection.TypeText(sSpace+c.Data.tel);
+    end;
+
+    sch:=2;trc:=doc.tables.item(1).rows.count;
+    for i := 0 to C.cdata.family.Count - 1 do begin
+      _birth:=TMan(C.cdata.family.Items[i]).birth;
+      yb:=YearsBetween(_birth,date);
+      for j:=1 to cntRPC do begin
+        if sch>trc then
+          doc.tables.item(1).rows.add(EmptyParam);
+        case j of
+        1:  begin
+              doc.tables.item(1).cell(sch,1).range.text:=IntToStr(i+1);
+              StrToArrays(trim(TMan(C.cdata.family.Items[i]).fio),' ',lst);
+              doc.tables.item(1).cell(sch,2).range.text:=lst[0];
+              doc.tables.item(1).cell(sch,3).range.text:=SelRel(TMan(C.cdata.family.Items[i]).rel);
+              doc.tables.item(1).cell(sch,5).range.text:=DateToStr(_birth);
+            end;
+        2:  begin
+              doc.tables.item(1).cell(sch,2).range.text:=lst[1];
+            end;
+        3:  begin
+              if lst.count>2 then
+                doc.tables.item(1).cell(sch,2).range.text:=lst[2];
+                doc.tables.item(1).cell(sch,5).range.text:=IntToStr(yb)+' '+GetLet(yb);
+            end;
+        end;
+        inc(sch);
+      end;
+    end;
+    lst.Free;
+    if i>5 then begin
+      WordApp.Selection.Goto(-1, unAssigned, unAssigned,'break');
+      WordApp.Selection.InsertBreak;
+    end;
+      WordApp.Selection.Goto(-1, unAssigned, unAssigned,'adr');
+      with c.Data do begin
+        WordApp.Selection.Text:=sSpace+SelStr(str)+' '+nh+' '+corp+' '+apart+sSpace;
+      end;
+
+      GetBankParam(c.Data.bank);//Получить и разобрать данные банка
+      if rBank.bank='' then begin
+        WordApp.Selection.Goto(-1, unAssigned, unAssigned,'pochta');
+        WordApp.Selection.Text:=sSpace+c.Data.acbank+sSpace;
+      end else begin
+        WordApp.Selection.Goto(-1, unAssigned, unAssigned,'schet');
+        WordApp.Selection.Text:=sSpace+c.Data.acbank+sSpace;
+        WordApp.Selection.Goto(-1, unAssigned, unAssigned,'otd');
+        WordApp.Selection.Text:=sSpace+rBank.otd+sSpace;
+        WordApp.Selection.Goto(-1, unAssigned, unAssigned,'filial');
+        WordApp.Selection.Text:=sSpace+rBank.filial+sSpace;
+        WordApp.Selection.Goto(-1, unAssigned, unAssigned,'bank');
+        WordApp.Selection.Text:=sSpace+rBank.bank+sSpace;
+      end;
+{
+      WordApp.Selection.Goto(-1, unAssigned, unAssigned,'fio_1');
+      WordApp.Selection.TypeText(sSpace+c.Data.fio+',');
+
+      WordApp.Selection.Goto(-1, unAssigned, unAssigned,'adr_1');
+      with c.Data do begin
+        WordApp.Selection.TypeText(sSpace+SelStr(str)+' '+nh+' '+corp+' '+apart+sSpace);
+      end;
+}
+      WordApp.Selection.Goto(-1, unAssigned, unAssigned,'okrug_1');
+      WordApp.Selection.TypeText(sSpace+_okrug);
+
+      WordApp.Selection.Goto(-1, unAssigned, unAssigned,'adroffice');
+      WordApp.Selection.TypeText(sSpace+SelOffice(c.Data.office));
+
+      WordApp.Selection.Goto(-1, unAssigned, unAssigned,'fioinsp');
+      WordApp.Selection.TypeText(' '+SelInsp(insp)+' /');
+
+      WordApp.Selection.Goto(-1, unAssigned, unAssigned,'cd_day');
+      WordApp.Selection.TypeText('"  '+IntToStr(dayof(date))+'  "');
+
+      WordApp.Selection.Goto(-1, unAssigned, unAssigned,'cd_month');
+      WordApp.Selection.TypeText(FormatDateTime('mmmm',date));
+
+      WordApp.Selection.Goto(-1, unAssigned, unAssigned,'cd_year');
+      WordApp.Selection.TypeText(FormatDateTime(' yy',date));
+    finally
+//      WordApp.Selection.Collapse(EmptyParam);
+      doc.range(0,0).select;
+      Wordapp.Visible:=true;
+    end;
+  except
+    on E: Exception do
+      raise Exception.Create('Ошибка создания объекта Word: ' + E.Message);
+  end;
+  c.Free;
+{
+  WordApp.ActiveDocument.Close(0);
+  WordApp.Quit;
+  WordApp := Unassigned;
+}
+end;
+
 function TMainForm.GetStatus(b, e: TDate): integer;
 {*******************************************************************************
     Функция GetStatus возвращает порядковый № статуса клиента(первый месяц,активный,
@@ -3425,6 +3643,11 @@ begin
   Sheet.Range['C32','C32'] := c.cdata.countercost[5];
   Sheet.Range['C35','C35'] := c.cdata.countercost[6];
 
+  Sheet.Range['B37','B37'] := c.cdata.tarifnorm[7];
+
+  if c.cdata.mdd=0 then Sheet.Range['B50','B50'] := 20
+  else Sheet.Range['B50','B50'] := 18;
+
   Sheet :=  ExcelApp.ActiveWorkBook.WorkSheets[2];
   Data := VarArrayCreate([1, C.cdata.family.Count, 1, 7], varVariant);
 
@@ -3443,7 +3666,6 @@ begin
   Sheet.Range[RefToCell(6,2), RefToCell(6 + C.cdata.family.Count - 1, 8)] := Data;
 
   Sheet.Range['B24','B24'] := SelInsp(c.data.insp);
-
   ExcelApp.Visible := True;
   c.Free;
 end;
@@ -3764,7 +3986,7 @@ begin
     begin
       Close;
       SQL.Clear;
-      SQL.Add('select nameinsp, namedist');
+      SQL.Add('select nameinsp, namedist,id_office');
       SQL.Add('from insp inner join dist on insp.id_dist = dist.id_dist');
       SQL.Add('where (insp.id_insp = :idi) and (dist.id_dist = :idd)');
       SQL.Add('order by insp.nameinsp');
@@ -3774,6 +3996,7 @@ begin
       Open;
       ins := FieldByName('nameinsp').AsString;
       dis := FieldByName('namedist').AsString;
+      MainForm.idOffice:=FieldByName('id_office').AsInteger;
       Close;
     end;
     if CheckP2 then
@@ -3792,7 +4015,7 @@ begin
     begin
       Close;
       SQL.Clear;
-      SQL.Add('select nameinsp');
+      SQL.Add('select nameinsp,id_office');
       SQL.Add('from insp ');
       SQL.Add('where (id_insp = :idi) and (id_dist = :idd)');
       Parameters.ParseSQL(SQL.Text, True);
@@ -3800,6 +4023,7 @@ begin
       SetParam(Parameters, 'idd', dist);
       Open;
       ins := FieldByName('nameinsp').AsString;
+      MainForm.idOffice:=FieldByName('id_office').AsInteger;
       Close;
     end;
     if CheckP2 then
@@ -3830,7 +4054,7 @@ begin
     begin
       Close;
       SQL.Clear;
-      SQL.Add('select nameinsp');
+      SQL.Add('select nameinsp,id_office');
       SQL.Add('from insp');
       SQL.Add('where (id_insp = :idi) and (id_dist = :idd)');
       SQL.Add('order by nameinsp');
@@ -3839,6 +4063,7 @@ begin
       SetParam(Parameters, 'idd', dist);
       Open;
       Statusbar1.Panels[1].Text := 'Инспектор: ' + FieldByName('nameinsp').AsString;
+      MainForm.idOffice:=FieldByName('id_office').AsInteger;
       Close;
     end;
     if CheckP2 then
@@ -4538,6 +4763,17 @@ begin
     frxReport1.Variables.Variables['distName'] := Quotedstr(GetFIOPadeg(FieldByName('namedist').AsString, '', '', True, 2));
     frxReport1.Variables.Variables['distAdr']  := Quotedstr(FieldByName('adr').AsString);
     frxReport1.Variables.Variables['distTel']  := Quotedstr(FieldByName('tel').AsString);
+    if office <> -1 then
+    begin
+      //11.08.2011
+      Close;SQL.Clear;
+      SQL.Text := 'SELECT * FROM Office WHERE id_dist=:dist and id_office=:office';
+      Parameters[0].Value:=dist;
+      Parameters[1].Value:=MainForm.idOffice;
+      Open;
+      frxReport1.Variables.Variables['distAdr']  := Quotedstr(FieldByName('adr').AsString);
+      frxReport1.Variables.Variables['distTel']  := Quotedstr(FieldByName('tel').AsString);
+    end;
     Free;
   end;
 end;

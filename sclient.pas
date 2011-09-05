@@ -1921,7 +1921,7 @@ begin
     if (pm <> 0) and (ppm <> 0) then
       Edit108.Text := FormatFloat('0.00', rnd(ppm / pm))
     else
-      Edit108.Text := '';
+      Edit108.Text := '';//*123 Надо ставить 1 ???
   end
   else
     Edit108.Text := '';
