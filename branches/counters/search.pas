@@ -1314,7 +1314,7 @@ begin
     if CheckBox25.Checked then
     begin
       Inc(j);
-      q.SQL := q.SQL + 'and(Insp.id_office=:office)';
+      q.SQL := q.SQL + 'and(Insp.id_office=:office) and insp.id_dist=hist.id_dist';
       SetLength(q.parname, Length(q.parname) + 1);
       SetLength(q.parval, Length(q.parval) + 1);
       q.parname[j] := 'office';
