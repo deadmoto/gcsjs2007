@@ -694,7 +694,6 @@ var
   i, j: integer;
 begin
   //  if (main.curregn=30305704) and (serv=0) then
-  //    sleep(5);
   with DModule.pv do
   begin
     for i := 0 to cdata.mcount - 1 do
