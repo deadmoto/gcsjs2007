@@ -190,6 +190,7 @@ type
     aErrorList: TAction;
     Button7: TButton;
     aClRecalc: TAction;
+    aClNoNpss: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SGClDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
@@ -1448,21 +1449,17 @@ procedure TMainForm.aClArchExecute(Sender: TObject);
 var add_sql:      string;
     report_title: string;
 begin
-  if (Sender as TAction).Name = 'aClArch' then
-  begin
+  if (Sender as TAction).Name = 'aClArch' then  begin
     add_sql := 'hist.bdate=convert(smalldatetime,:date, 104)';
     report_title := 'Список на архив';
-  end
-  else
-  begin
+  end else if (Sender as TAction).Name = 'aClRecalc' then begin
     add_sql := 'hist.edate=CONVERT(smalldatetime, :date, 104)';
     report_title := 'Список на переаттестацию';
+  end else if TAction(Sender).Name = 'aClNoNpss' then begin
+    report_title:='Список клиентов с незаполненным снилсом';
   end;
-
-  if office <> -1 then
-  begin
-    with DModule.sqlQuery1 do
-    begin
+  if office <> -1 then begin
+    with DModule.sqlQuery1 do begin
       Close;
       SQL.Text :=
         'SELECT cl.fio, dbo.getcl_address(cl.regn) as address, mng.namemng'#13#10 +
@@ -1478,11 +1475,8 @@ begin
       SetParam(Parameters, 'office', MainForm.office);
       Open;
     end;
-  end
-  else
-  begin
-    with DModule.sqlQuery1 do
-    begin
+  end else begin
+    with DModule.sqlQuery1 do begin
       Close;
       SQL.Text :=
         'SELECT cl.fio, dbo.getcl_address(cl.regn) as address, mng.namemng'#13#10 +
