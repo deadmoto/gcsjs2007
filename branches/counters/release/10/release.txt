@@ -1,0 +1,2 @@
+* исправлена ошибка при создании dsn записи:
+	-Удалить в ключе реестра [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSSQLServer\Client\ConnectTo] все записи.

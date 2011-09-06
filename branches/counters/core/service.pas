@@ -44,6 +44,8 @@ const
     '<='
     );
 
+  cBr = chr(13)+chr(10);//#13#10
+  
 procedure SetPoint(edt: TEdit);//установить запятую с учетом копеек
 
 function CheckNumb(edt: TEdit): boolean;

@@ -63,7 +63,6 @@ type
     Button2:      TButton;
     Button3:      TButton;
     Button8:      TButton;
-    Panel3:       TPanel;
     Panel5:       TPanel;
     Panel6:       TPanel;
     Label3:       TLabel;
@@ -188,9 +187,10 @@ type
     aExportSocProt: TAction;
     Action22: TAction;
     aErrorList: TAction;
-    Button7: TButton;
     aClRecalc: TAction;
     aClNoNpss: TAction;
+    Panel3: TPanel;
+    Button7: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure SGClDrawCell(Sender: TObject; ACol, ARow: integer; Rect: TRect; State: TGridDrawState);
@@ -293,7 +293,7 @@ type
     procedure aDebtShowExecute(Sender: TObject);
     procedure aFormDebtExecute(Sender: TObject);
     procedure aBackupDataExecute(Sender: TObject);
-    procedure aClArchExecute(Sender: TObject);
+    procedure aClListExecute(Sender: TObject);
     procedure aExporDolgExecute(Sender: TObject);
     procedure aExportSocProtExecute(Sender: TObject);
     procedure Action22Execute(Sender: TObject);
@@ -1445,55 +1445,60 @@ begin
   end;
 end;
 
-procedure TMainForm.aClArchExecute(Sender: TObject);
-var add_sql:      string;
-    report_title: string;
+procedure TMainForm.aClListExecute(Sender: TObject);
+var main_query
+   ,filter_sql
+   ,additional_sql
+   ,report_title : string;
 begin
-  if (Sender as TAction).Name = 'aClArch' then  begin
-    add_sql := 'hist.bdate=convert(smalldatetime,:date, 104)';
-    report_title := 'Список на архив';
-  end else if (Sender as TAction).Name = 'aClRecalc' then begin
-    add_sql := 'hist.edate=CONVERT(smalldatetime, :date, 104)';
-    report_title := 'Список на переаттестацию';
-  end else if TAction(Sender).Name = 'aClNoNpss' then begin
-    report_title:='Список клиентов с незаполненным снилсом';
+  main_query :=
+    'SELECT cl.regn, cl.fio, dbo.getcl_address(cl.regn) as address'+cBr+
+    'FROM cl INNER JOIN'+cBr+
+      'Hist ON cl.regn=hist.regn'+cBr+
+      '%ADDITIONAL%'+cBr+
+    'WHERE (cl.id_dist=:dist)%FILTER%'+cBr+
+    'ORDER BY fio, address';
+
+  //отфильтровано по участку
+  if office <> -1 then
+  begin
+    additional_sql := 'INNER JOIN Insp ON Insp.id_insp = Hist.id_insp';
+    filter_sql     := 'and(insp.id_dist = cl.id_dist)and(Insp.id_office = :office)';
   end;
-  if office <> -1 then begin
+
+  if (Sender as TAction) = aClArch then
+  begin
+    filter_sql   := filter_sql + 'and(hist.bdate=convert(smalldatetime,:date, 104))';
+    report_title := 'Список на архив';
+  end
+  else if (Sender as TAction) = aClRecalc then
+  begin
+    filter_sql   := filter_sql + 'and(hist.edate=CONVERT(smalldatetime, :de, 104))';
+    report_title := 'Список на переаттестацию';
+  end
+  else if TAction(Sender) = aClNoNpss then
+  begin
+    additional_sql := additional_sql + ' INNER JOIN (SELECT regn, npss FROM Fam WHERE id_mem=cast(regn as VARCHAR)+''0'' and(ISNULL(npss,'''')='''')) tFam' +
+      ' ON cl.regn=tFam.regn ';
+    filter_sql   := filter_sql + 'and(hist.bdate<=CONVERT(smalldatetime,:date,104))'+
+                                 'and(hist.edate>CONVERT(smalldatetime,:date,104))';
+    report_title := 'Список клиентов с незаполненным СНИЛСом';
+  end;
+
     with DModule.sqlQuery1 do begin
       Close;
-      SQL.Text :=
-        'SELECT cl.fio, dbo.getcl_address(cl.regn) as address, mng.namemng'#13#10 +
-        'FROM cl INNER JOIN'#13#10 +
-          'Hist ON cl.regn=hist.regn INNER JOIN'#13#10 +
-          'Mng ON Mng.id_mng=hist.id_mng INNER JOIN'#13#10 +
-          'Insp ON Insp.id_insp = Hist.id_insp'#13#10 +
-        'WHERE cl.id_dist=:dist and insp.id_dist = cl.id_dist and mng.id_dist=cl.id_dist and '+add_sql+' and Insp.id_office = :office'#13#10 +
-        'ORDER BY fio,address';
+      SQL.Text := StringReplace(
+                  StringReplace(main_query, '%ADDITIONAL%', additional_sql, [rfreplaceall]), '%FILTER%', filter_sql, [rfreplaceall]);
       Parameters.ParseSQL(SQL.Text, True);
       SetParam(Parameters, 'dist', MainForm.dist);
       SetParam(Parameters, 'date', MainForm.rdt);
       SetParam(Parameters, 'office', MainForm.office);
+      SetParam(Parameters, 'de', DateToStr(IncMonth(StrToDate(MainForm.rdt), 1)));
       Open;
     end;
-  end else begin
-    with DModule.sqlQuery1 do begin
-      Close;
-      SQL.Text :=
-        'SELECT cl.fio, dbo.getcl_address(cl.regn) as address, mng.namemng'#13#10 +
-        'FROM cl INNER JOIN'#13#10 +
-          'Hist ON cl.regn=hist.regn INNER JOIN'#13#10 +
-          'Mng ON Mng.id_mng=hist.id_mng'#13#10 +
-        'WHERE cl.id_dist=:dist and mng.id_dist=cl.id_dist and '+add_sql+''#13#10 +
-        'ORDER BY fio,address';
-      Parameters.ParseSQL(SQL.Text, True);
-      SetParam(Parameters, 'dist', MainForm.dist);
-      SetParam(Parameters, 'date', MainForm.rdt);
-      Open;
-    end;
-  end;
 
   frxData.DataSource := DModule.DataSource1;
-  frxReport1.LoadFromFile(PChar(reports_path + 'clarchive.fr3'));
+  frxReport1.LoadFromFile(PChar(reports_path + 'cllist.fr3'));
 
   frxReport1.Variables.Variables['month'] := quotedstr(LongMonthNames[StrToInt(FormatDateTime('m', StrToDate(rdt)))]);
   frxReport1.Variables.Variables['year']  := FormatDateTime('YYYY', StrToDate(rdt));
