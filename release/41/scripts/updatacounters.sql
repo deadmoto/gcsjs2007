@@ -1,0 +1,1 @@
+ALTER TABLE Counters ALTER COLUMN counterdata float NOT NULL
