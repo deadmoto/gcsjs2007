@@ -6199,7 +6199,7 @@ begin
   if ((CheckBox4.Checked) and (CheckBox5.Checked)) then
   begin
     CheckBox6.Checked := True;
-    Edit120.Text := FloatToStr(StrToFloat(Edit118.Text) + StrToFloat(Edit119.Text));
+    //Edit120.Text := FloatToStr(StrToFloat(Edit118.Text) + StrToFloat(Edit119.Text));
     Cl.cdata.counter[4] := True;
   end;
 
@@ -6243,44 +6243,26 @@ end;
 
 procedure TEditClForm.Edit118Exit(Sender: TObject);
 begin
-  if Sender = Edit118 then
-  begin
+  if Sender = Edit118 then  begin
     if (CheckBox4.Checked) and (Edit118.Text <> '') then
       Cl.cdata.counterdata[2] := StrToFloat(Edit118.Text);
-  end;
-
-  if Sender = Edit119 then
-  begin
+  end else if Sender = Edit119 then  begin
     if (CheckBox5.Checked) and (Edit119.Text <> '') then
       Cl.cdata.counterdata[3] := StrToFloat(Edit119.Text);
-  end;
-
-  if ((CheckBox4.Checked) and (CheckBox5.Checked)) then
-  begin
-    Edit120.Text := FloatToStr(StrToFloat(Edit118.Text) + StrToFloat(Edit119.Text));
-    Cl.cdata.counterdata[4] := StrToFloat(Edit120.Text);
-  end;
-
-  if Sender = Edit120 then
-  begin
+    if ((CheckBox4.Checked) and (CheckBox5.Checked) and ((Edit120.Text ='0') or (trim(Edit120.Text) ='')))  then begin
+      Edit120.Text := FloatToStr(StrToFloat(Edit118.Text) + StrToFloat(Edit119.Text));
+      Cl.cdata.counterdata[4] := StrToFloat(Edit120.Text);
+    end;
+  end else if Sender = Edit120 then  begin
     if (CheckBox6.Checked) and (Edit120.Text <> '') then
       Cl.cdata.counterdata[4] := StrToFloat(Edit120.Text);
-  end;
-
-  if Sender = Edit121 then
-  begin
+  end else if Sender = Edit121 then  begin
     if (CheckBox7.Checked) and (Edit121.Text <> '') then
       Cl.cdata.counterdata[5] := StrToFloat(Edit121.Text);
-  end;
-
-  if Sender = Edit122 then
-  begin
+  end else if Sender = Edit122 then begin
     if (CheckBox8.Checked) and (Edit122.Text <> '') then
       Cl.cdata.counterdata[6] := StrToFloat(Edit122.Text);
-  end;
-
-  if Sender = Edit123 then
-  begin
+  end else if Sender = Edit123 then begin
     if (CheckBox9.Checked) and (Edit123.Text <> '') then
       Cl.cdata.counterdata[7] := StrToFloat(Edit123.Text);
   end;
