@@ -3,12 +3,12 @@ object MainForm: TMainForm
   Top = 166
   BorderStyle = bsSingle
   Caption = #1059#1095#1077#1090' '#1087#1088#1077#1076#1086#1089#1090#1072#1074#1083#1077#1085#1080#1103' '#1089#1091#1073#1089#1080#1076#1080#1081' '#1085#1072' '#1086#1087#1083#1072#1090#1091' '#1046#1050#1059' '#1085#1072#1089#1077#1083#1077#1085#1080#1102' '#1075'.'#1054#1084#1089#1082#1072
-  ClientHeight = 548
-  ClientWidth = 706
+  ClientHeight = 674
+  ClientWidth = 869
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
+  Font.Height = -14
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = True
@@ -18,12 +18,12 @@ object MainForm: TMainForm
   OnCreate = FormCreate
   OnResize = FormResize
   OnShow = FormShow
-  PixelsPerInch = 96
-  TextHeight = 13
+  PixelsPerInch = 120
+  TextHeight = 16
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 527
-    Width = 706
+    Top = 653
+    Width = 869
     Height = 21
     Panels = <
       item
@@ -41,9 +41,9 @@ object MainForm: TMainForm
   object Panel1: TPanel
     AlignWithMargins = True
     Left = 3
-    Top = 138
-    Width = 700
-    Height = 339
+    Top = 160
+    Width = 863
+    Height = 434
     Align = alClient
     BevelInner = bvLowered
     Caption = 'Panel1'
@@ -51,8 +51,8 @@ object MainForm: TMainForm
     object SGCl: TStringGrid
       Left = 2
       Top = 2
-      Width = 618
-      Height = 335
+      Width = 763
+      Height = 430
       Hint = #1057#1087#1080#1089#1086#1082' '#1074#1089#1077#1093' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1074' '#1073#1072#1079#1077
       Align = alClient
       BorderStyle = bsNone
@@ -72,12 +72,14 @@ object MainForm: TMainForm
       OnKeyPress = SGClKeyPress
       OnMouseDown = SGClMouseDown
       OnSelectCell = SGClSelectCell
+      ExplicitLeft = 10
+      ExplicitTop = 1
     end
     object GridPanel1: TGridPanel
-      Left = 620
+      Left = 765
       Top = 2
-      Width = 78
-      Height = 335
+      Width = 96
+      Height = 430
       Align = alRight
       BevelOuter = bvNone
       ColumnCollection = <
@@ -186,13 +188,13 @@ object MainForm: TMainForm
         end>
       TabOrder = 1
       DesignSize = (
-        78
-        335)
+        96
+        430)
       object Image1: TImage
-        Left = 23
+        Left = 28
         Top = 0
-        Width = 32
-        Height = 32
+        Width = 40
+        Height = 40
         Anchors = []
         AutoSize = True
         Center = True
@@ -222,12 +224,12 @@ object MainForm: TMainForm
           8FFC3FF18FFC3FF18FFC3FF18FFC3FF18FF03FF1CFF03FF3C7F83FE3C7FC3FE3
           E3FE3FC7E1FFFF87F0FFFF0FF87FFE1FFC1FF83FFE00007FFF0000FFFFC003FF
           FFFFFFFF}
-        ExplicitLeft = 26
+        ExplicitLeft = 23
       end
       object Memo1: TMemo
         Left = 0
         Top = 32
-        Width = 78
+        Width = 96
         Height = 30
         Align = alClient
         Alignment = taCenter
@@ -240,10 +242,10 @@ object MainForm: TMainForm
         TabOrder = 0
       end
       object Image2: TImage
-        Left = 23
+        Left = 28
         Top = 62
-        Width = 32
-        Height = 32
+        Width = 40
+        Height = 40
         Anchors = []
         AutoSize = True
         Center = True
@@ -274,13 +276,13 @@ object MainForm: TMainForm
           9FFC3FF99FFC3FF99FFC3FF99FFC3FF99FFC3FF99FFC3FF9CFFC3FF3CFFC3FF3
           E7FC3FE7E3FC3FC7F1FC3F8FF8FC3F1FFC3FFC3FFE1FF87FFF8001FFFFC007FF
           FFFFFFFF}
-        ExplicitLeft = 26
-        ExplicitTop = 50
+        ExplicitLeft = 23
+        ExplicitTop = 76
       end
       object Memo2: TMemo
         Left = 0
         Top = 94
-        Width = 78
+        Width = 96
         Height = 30
         Align = alClient
         Alignment = taCenter
@@ -293,10 +295,10 @@ object MainForm: TMainForm
         TabOrder = 1
       end
       object Image3: TImage
-        Left = 23
+        Left = 28
         Top = 124
-        Width = 32
-        Height = 32
+        Width = 40
+        Height = 40
         Anchors = []
         AutoSize = True
         Center = True
@@ -326,13 +328,13 @@ object MainForm: TMainForm
           9FFE3FF99FFC7FF99FF8FFF99FF1FFF99FE3FFF99FC7FFF9CF8FFFF3CF1FFFF3
           E63FFFE7E07FFFC7F0FFFF8FF8FFFF1FFC3FFC3FFE1FF87FFF8001FFFFC007FF
           FFFFFFFF}
-        ExplicitLeft = 26
-        ExplicitTop = 101
+        ExplicitLeft = 23
+        ExplicitTop = 153
       end
       object Memo3: TMemo
         Left = 0
         Top = 156
-        Width = 78
+        Width = 96
         Height = 30
         Align = alClient
         Alignment = taCenter
@@ -347,27 +349,27 @@ object MainForm: TMainForm
       object Panel4: TPanel
         Left = 0
         Top = 186
-        Width = 78
-        Height = 63
+        Width = 96
+        Height = 158
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 3
       end
       object Label1: TLabel
-        Left = 22
-        Top = 252
-        Width = 33
-        Height = 13
+        Left = 27
+        Top = 346
+        Width = 41
+        Height = 16
         Anchors = []
         Caption = #1042#1089#1077#1075#1086':'
-        ExplicitLeft = 25
-        ExplicitTop = 260
+        ExplicitLeft = 22
+        ExplicitTop = 327
       end
       object Edit1: TEdit
-        Left = 12
-        Top = 270
-        Width = 54
-        Height = 21
+        Left = 15
+        Top = 364
+        Width = 66
+        Height = 23
         Hint = #1054#1073#1097#1077#1077' '#1082#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1095#1077#1083#1086#1074#1077#1082' '#1074' '#1073#1072#1079#1077
         TabStop = False
         Anchors = []
@@ -381,20 +383,20 @@ object MainForm: TMainForm
         TabOrder = 4
       end
       object Label2: TLabel
-        Left = 12
-        Top = 295
-        Width = 53
-        Height = 13
+        Left = 14
+        Top = 389
+        Width = 67
+        Height = 16
         Anchors = []
         Caption = #1040#1082#1090#1080#1074#1085#1099#1077':'
-        ExplicitLeft = 17
-        ExplicitTop = 303
+        ExplicitLeft = 6
+        ExplicitTop = 377
       end
       object Edit2: TEdit
-        Left = 12
-        Top = 313
-        Width = 54
-        Height = 21
+        Left = 15
+        Top = 407
+        Width = 66
+        Height = 23
         Hint = #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1072#1082#1090#1080#1074#1085#1099#1093' '#1082#1083#1080#1077#1085#1090#1086#1074' '#1074' '#1073#1072#1079#1077
         TabStop = False
         Anchors = []
@@ -409,9 +411,9 @@ object MainForm: TMainForm
   end
   object Panel2: TPanel
     Left = 0
-    Top = 480
-    Width = 706
-    Height = 47
+    Top = 597
+    Width = 869
+    Height = 56
     Align = alBottom
     AutoSize = True
     BevelOuter = bvNone
@@ -420,8 +422,8 @@ object MainForm: TMainForm
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 700
-      Height = 41
+      Width = 863
+      Height = 50
       Align = alTop
       BevelOuter = bvNone
       ColumnCollection = <
@@ -541,13 +543,13 @@ object MainForm: TMainForm
         end>
       TabOrder = 0
       DesignSize = (
-        700
-        41)
+        863
+        50)
       object Button1: TButton
-        Left = 2
+        Left = 0
         Top = 0
-        Width = 75
-        Height = 20
+        Width = 80
+        Height = 25
         Action = aClAdd
         Anchors = []
         ParentShowHint = False
@@ -555,10 +557,10 @@ object MainForm: TMainForm
         TabOrder = 0
       end
       object Button2: TButton
-        Left = 82
+        Left = 80
         Top = 0
-        Width = 75
-        Height = 20
+        Width = 80
+        Height = 25
         Action = aClEdit
         Anchors = []
         ParentShowHint = False
@@ -566,10 +568,10 @@ object MainForm: TMainForm
         TabOrder = 1
       end
       object Button3: TButton
-        Left = 162
+        Left = 160
         Top = 0
-        Width = 75
-        Height = 20
+        Width = 80
+        Height = 25
         Action = aFactSumRpt
         Anchors = []
         Caption = #1060#1072#1082#1090'. '#1086#1087#1083#1072#1090#1072
@@ -578,10 +580,10 @@ object MainForm: TMainForm
         TabOrder = 2
       end
       object Button8: TButton
-        Left = 245
+        Left = 240
         Top = 0
-        Width = 75
-        Height = 20
+        Width = 85
+        Height = 25
         Action = aOpenExcel
         Anchors = []
         Caption = #1054#1090#1082#1088'. '#1074' Excel'
@@ -592,34 +594,34 @@ object MainForm: TMainForm
       object Panel5: TPanel
         Left = 405
         Top = 0
-        Width = 138
-        Height = 20
+        Width = 301
+        Height = 25
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 4
       end
       object Panel6: TPanel
-        Left = 543
+        Left = 706
         Top = 0
         Width = 80
-        Height = 20
+        Height = 25
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 5
         object Label3: TLabel
-          Left = 15
-          Top = 3
-          Width = 59
-          Height = 13
+          Left = 18
+          Top = 4
+          Width = 75
+          Height = 16
           Caption = #1042' '#1092#1080#1083#1100#1090#1088#1077': '
           Transparent = True
         end
       end
       object Edit3: TEdit
-        Left = 630
+        Left = 786
         Top = 0
-        Width = 62
-        Height = 20
+        Width = 77
+        Height = 24
         Hint = #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1095#1077#1083#1086#1074#1077#1082', '#1091#1076#1086#1074#1083#1077#1090#1074#1086#1088#1103#1102#1097#1080#1093' '#1091#1089#1083#1086#1074#1080#1103#1084' '#1087#1086#1080#1089#1082#1072
         Margins.Top = 8
         TabStop = False
@@ -632,10 +634,10 @@ object MainForm: TMainForm
         TabOrder = 6
       end
       object Button4: TButton
-        Left = 2
-        Top = 20
-        Width = 75
-        Height = 20
+        Left = 0
+        Top = 25
+        Width = 80
+        Height = 24
         Action = aRepUvedom
         Anchors = []
         Caption = #1059#1074#1077#1076#1086#1084#1083'.'
@@ -644,10 +646,10 @@ object MainForm: TMainForm
         TabOrder = 7
       end
       object Button5: TButton
-        Left = 82
-        Top = 20
-        Width = 75
-        Height = 20
+        Left = 80
+        Top = 25
+        Width = 80
+        Height = 24
         Action = aRepKarta
         Anchors = []
         Caption = #1050#1072#1088#1090#1072
@@ -656,10 +658,10 @@ object MainForm: TMainForm
         TabOrder = 8
       end
       object Button6: TButton
-        Left = 162
-        Top = 20
-        Width = 75
-        Height = 20
+        Left = 160
+        Top = 25
+        Width = 80
+        Height = 24
         Action = aRepVedomost
         Anchors = []
         Caption = #1057#1091#1073#1089#1080#1076#1080#1080
@@ -668,10 +670,10 @@ object MainForm: TMainForm
         TabOrder = 9
       end
       object Button9: TButton
-        Left = 245
-        Top = 20
-        Width = 75
-        Height = 20
+        Left = 240
+        Top = 25
+        Width = 85
+        Height = 24
         Action = aFilter
         Anchors = []
         Caption = #1060#1080#1083#1100#1090#1088
@@ -679,35 +681,35 @@ object MainForm: TMainForm
       end
       object Panel7: TPanel
         Left = 405
-        Top = 20
-        Width = 138
-        Height = 21
+        Top = 25
+        Width = 301
+        Height = 25
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 11
       end
       object Panel8: TPanel
-        Left = 543
-        Top = 20
+        Left = 706
+        Top = 25
         Width = 80
-        Height = 21
+        Height = 25
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 12
         object Label4: TLabel
-          Left = 16
-          Top = 3
-          Width = 55
-          Height = 13
+          Left = 20
+          Top = 4
+          Width = 68
+          Height = 16
           Caption = #1053#1072' '#1089#1091#1084#1084#1091': '
           Transparent = False
         end
       end
       object Edit4: TEdit
-        Left = 630
-        Top = 20
-        Width = 62
-        Height = 21
+        Left = 786
+        Top = 25
+        Width = 77
+        Height = 24
         Hint = #1057#1091#1084#1084#1072' '#1089#1091#1073#1089#1080#1076#1080#1081' '#1082#1083#1080#1077#1085#1090#1086#1074', '#1091#1076#1086#1074#1083#1077#1090#1074#1086#1088#1103#1102#1097#1080#1093' '#1091#1089#1083#1086#1074#1080#1103#1084' '#1087#1086#1080#1089#1082#1072
         Margins.Top = 8
         TabStop = False
@@ -723,15 +725,15 @@ object MainForm: TMainForm
         Left = 325
         Top = 0
         Width = 80
-        Height = 20
+        Height = 25
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 14
         object Button7: TButton
-          Left = 3
+          Left = 4
           Top = 0
-          Width = 75
-          Height = 20
+          Width = 92
+          Height = 25
           Caption = #1047#1072#1103#1074#1083#1077#1085#1080#1077
           TabOrder = 0
           OnClick = Button7Click
@@ -742,61 +744,61 @@ object MainForm: TMainForm
   object GroupBox1: TGroupBox
     AlignWithMargins = True
     Left = 3
-    Top = 55
-    Width = 700
-    Height = 80
+    Top = 59
+    Width = 863
+    Height = 98
     Margins.Bottom = 0
     Align = alTop
     Caption = #1051#1077#1075#1077#1085#1076#1072':'
     TabOrder = 3
     Visible = False
     object Label5: TLabel
-      Left = 55
-      Top = 19
-      Width = 57
-      Height = 13
+      Left = 68
+      Top = 23
+      Width = 74
+      Height = 16
       Caption = #1053#1077#1090' '#1076#1086#1083#1075#1086#1074
     end
     object Label6: TLabel
-      Left = 55
-      Top = 32
-      Width = 79
-      Height = 13
+      Left = 68
+      Top = 39
+      Width = 105
+      Height = 16
       Caption = #1042#1086#1079#1086#1073#1085#1086#1074#1083#1077#1085#1080#1077
     end
     object Label7: TLabel
-      Left = 55
-      Top = 45
-      Width = 73
-      Height = 13
+      Left = 68
+      Top = 55
+      Width = 95
+      Height = 16
       Caption = #1055#1088#1080#1086#1089#1090#1072#1085#1086#1074#1082#1072
     end
     object Label8: TLabel
-      Left = 55
-      Top = 58
-      Width = 71
-      Height = 13
+      Left = 68
+      Top = 71
+      Width = 90
+      Height = 16
       Caption = #1055#1088#1077#1082#1088#1072#1097#1077#1085#1080#1077
     end
     object Label9: TLabel
-      Left = 213
-      Top = 19
-      Width = 66
-      Height = 13
+      Left = 262
+      Top = 23
+      Width = 83
+      Height = 16
       Caption = 'C'#1091#1073#1089#1080#1076#1080#1103' < 0'
     end
     object Bevel1: TBevel
-      Left = 150
-      Top = 19
-      Width = 50
-      Height = 50
+      Left = 185
+      Top = 23
+      Width = 61
+      Height = 62
       Shape = bsLeftLine
     end
     object Edit5: TEdit
-      Left = 10
-      Top = 17
-      Width = 20
-      Height = 14
+      Left = 12
+      Top = 21
+      Width = 25
+      Height = 17
       TabStop = False
       AutoSize = False
       Ctl3D = False
@@ -805,10 +807,10 @@ object MainForm: TMainForm
       TabOrder = 0
     end
     object Edit9: TEdit
-      Left = 29
-      Top = 17
-      Width = 20
-      Height = 14
+      Left = 36
+      Top = 21
+      Width = 24
+      Height = 17
       TabStop = False
       AutoSize = False
       Color = clSkyBlue
@@ -818,10 +820,10 @@ object MainForm: TMainForm
       TabOrder = 1
     end
     object Edit10: TEdit
-      Left = 29
-      Top = 30
-      Width = 20
-      Height = 14
+      Left = 36
+      Top = 37
+      Width = 24
+      Height = 17
       TabStop = False
       AutoSize = False
       Color = clTeal
@@ -831,10 +833,10 @@ object MainForm: TMainForm
       TabOrder = 2
     end
     object Edit6: TEdit
-      Left = 10
-      Top = 30
-      Width = 20
-      Height = 14
+      Left = 12
+      Top = 37
+      Width = 25
+      Height = 17
       TabStop = False
       AutoSize = False
       Color = clMoneyGreen
@@ -844,10 +846,10 @@ object MainForm: TMainForm
       TabOrder = 3
     end
     object Edit7: TEdit
-      Left = 10
-      Top = 43
-      Width = 20
-      Height = 14
+      Left = 12
+      Top = 53
+      Width = 25
+      Height = 17
       TabStop = False
       AutoSize = False
       Color = clInfoBk
@@ -857,10 +859,10 @@ object MainForm: TMainForm
       TabOrder = 4
     end
     object Edit11: TEdit
-      Left = 29
-      Top = 43
-      Width = 20
-      Height = 14
+      Left = 36
+      Top = 53
+      Width = 24
+      Height = 17
       TabStop = False
       AutoSize = False
       Color = clOlive
@@ -870,10 +872,10 @@ object MainForm: TMainForm
       TabOrder = 5
     end
     object Edit12: TEdit
-      Left = 29
-      Top = 56
-      Width = 20
-      Height = 14
+      Left = 36
+      Top = 69
+      Width = 24
+      Height = 17
       TabStop = False
       AutoSize = False
       Color = clGray
@@ -883,10 +885,10 @@ object MainForm: TMainForm
       TabOrder = 6
     end
     object Edit8: TEdit
-      Left = 10
-      Top = 56
-      Width = 20
-      Height = 14
+      Left = 12
+      Top = 69
+      Width = 25
+      Height = 17
       TabStop = False
       AutoSize = False
       Color = clSilver
@@ -896,10 +898,10 @@ object MainForm: TMainForm
       TabOrder = 7
     end
     object Edit13: TEdit
-      Left = 169
-      Top = 17
-      Width = 20
-      Height = 14
+      Left = 208
+      Top = 21
+      Width = 25
+      Height = 17
       TabStop = False
       AutoSize = False
       Color = clMaroon
@@ -909,10 +911,10 @@ object MainForm: TMainForm
       TabOrder = 8
     end
     object Edit14: TEdit
-      Left = 187
-      Top = 17
-      Width = 20
-      Height = 14
+      Left = 230
+      Top = 21
+      Width = 25
+      Height = 17
       TabStop = False
       AutoSize = False
       Color = clSilver
@@ -925,17 +927,17 @@ object MainForm: TMainForm
   object ActionMainMenuBar1: TActionMainMenuBar
     Left = 0
     Top = 0
-    Width = 706
-    Height = 25
+    Width = 869
+    Height = 29
     UseSystemFont = False
     ActionManager = ActionManager1
     Caption = 'ActionMainMenuBar1'
-    ColorMap.HighlightColor = 15921906
+    ColorMap.HighlightColor = clWhite
     ColorMap.BtnSelectedColor = clBtnFace
-    ColorMap.UnusedColor = 15921906
+    ColorMap.UnusedColor = clWhite
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -12
+    Font.Height = -15
     Font.Name = 'Tahoma'
     Font.Style = []
     PersistentHotKeys = True
@@ -943,14 +945,14 @@ object MainForm: TMainForm
   end
   object ActionToolBar1: TActionToolBar
     Left = 0
-    Top = 25
-    Width = 706
+    Top = 29
+    Width = 869
     Height = 27
     ActionManager = ActionManager1
     Caption = 'ActionToolBar1'
-    ColorMap.HighlightColor = 15921906
+    ColorMap.HighlightColor = clWhite
     ColorMap.BtnSelectedColor = clBtnFace
-    ColorMap.UnusedColor = 15921906
+    ColorMap.UnusedColor = clWhite
     EdgeBorders = [ebTop]
     ParentShowHint = False
     ShowHint = True
@@ -960,7 +962,7 @@ object MainForm: TMainForm
     Left = 184
     Top = 392
     Bitmap = {
-      494C010104000900640010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101040009006C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1235,7 +1237,7 @@ object MainForm: TMainForm
     Left = 215
     Top = 392
     Bitmap = {
-      494C010115001800640010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101150018006C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000006000000001002000000000000060
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
