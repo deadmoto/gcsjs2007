@@ -23,6 +23,10 @@ type
     pv, norm1: TADOQuery;
     function SetDBFConnectStr(path: string): string;
     function SetSQLConnectStr(path: string): string;
+
+    procedure StartSQLTransaction;
+    procedure CommitSQLTransaction;
+    procedure RollBackSQLTransaction;
   end;
 
 var
@@ -104,6 +108,24 @@ begin
     'Provider=SQLOLEDB.1;Persist Security Info=False;User ID=%s;Password=%s;Initial Catalog=Subsidy;Data Source=%s',
     [ReadRegProperty('User'), GetConnectionPass(ReadRegProperty('Password')), path]
   );
+end;
+
+procedure TDModule.StartSQLTransaction;
+begin
+  if not sqlConnection.InTransaction then
+    sqlConnection.BeginTrans;
+end;
+
+procedure TDModule.CommitSQLTransaction;
+begin
+  if sqlConnection.InTransaction then
+    sqlConnection.CommitTrans;
+end;
+
+procedure TDModule.RollBackSQLTransaction;
+begin
+  if sqlConnection.InTransaction then
+    sqlConnection.RollbackTrans;
 end;
 
 end.

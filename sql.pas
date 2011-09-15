@@ -212,15 +212,19 @@ var
 begin
   if not Assigned(MainForm) then
   begin
-    adm_pass := InputPassword('Введите пароль администратора!', 'Пароль:', '');
+    if not InputPassword('Введите пароль администратора!', 'Пароль:', adm_pass) then
+      Application.Terminate;
+
     adm_pass := GenMD5Password(adm_pass);
     adm_pass := GetConnectionPass(adm_pass);
     if GetConnectionPass(ReadRegProperty('Password')) <> adm_pass then
     begin
-      for i := 0 to GroupBox1.ControlCount - 1 do
-        if (GroupBox1.Controls[i] is TButton) then
-            TButton(GroupBox1.Controls[i] as TButton).Enabled := False;
       MessageDlg('Error! Неверный пароль администратора!', mtError, [mbOK], 0);
+      Application.Terminate;
+//      for i := 0 to GroupBox1.ControlCount - 1 do
+//        if (GroupBox1.Controls[i] is TButton) then
+//            TButton(GroupBox1.Controls[i] as TButton).Enabled := False;
+//      MessageDlg('Error! Неверный пароль администратора!', mtError, [mbOK], 0);
     end;
   end;
 

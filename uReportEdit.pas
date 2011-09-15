@@ -13,30 +13,31 @@ uses
   StdCtrls,
   SysUtils,
   Variants,
-  Windows;
+  Windows,
+  ComCtrls,
+  Menus;
 
 type
-  TReportFiles = class
-  strict private
-  public
-    cRepFiles: array[0..12] of string;
-    constructor Create;
-  end;
-
   TReportEditFrm = class(TForm)
-    GroupBox1:  TGroupBox;
-    ComboBox1:  TComboBox;
+    PopupMenu1: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    ReportListView: TListView;
     FlowPanel1: TFlowPanel;
-    Button1:    TButton;
-    Button2:    TButton;
+    Button2: TButton;
+    Button1: TButton;
     procedure Button2Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure N1Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
+    ReportsArr: array of string;
   public
     { Public declarations }
-    RepFiles: TReportFiles;
+    procedure Reload;
   end;
 
 var
@@ -45,13 +46,14 @@ var
 implementation
 
 uses
-  main;
+  main, DataModule, service;
 
 {$R *.dfm}
 
 procedure TReportEditFrm.Button1Click(Sender: TObject);
 begin
-  winExec(PChar('frxdesigner.exe ' + MainForm.reports_path + RepFiles.cRepFiles[ComboBox1.ItemIndex]), SW_NORMAL);
+  DModule.CommitSQLTransaction;
+  Close;
 end;
 
 procedure TReportEditFrm.Button2Click(Sender: TObject);
@@ -61,26 +63,86 @@ end;
 
 { TReportFiles }
 
-constructor TReportFiles.Create;
+procedure TReportEditFrm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  cRepFiles[0] := 'uvedom.fr3';
-  cRepFiles[1] := 'uvedomo.fr3';
-  cRepFiles[2] := 'karta.fr3';
-  cRepFiles[3] := 'vedomost.fr3';
-  cRepFiles[4] := 'solut.fr3';
-  cRepFiles[5] := 'solutb.fr3';
-  cRepFiles[6] := 'solute.fr3';
-  cRepFiles[7] := 'nach.fr3';
-  cRepFiles[8] := 'svodsub.fr3';
-  cRepFiles[9] := 'factsale.fr3';
-  cRepFiles[10] := 'mintrudmount.fr3';
-  cRepFiles[11] := 'clarchive.fr3';
-  cRepFiles[12] := 'errorlist.fr3';
+  DModule.RollBackSQLTransaction;
 end;
 
 procedure TReportEditFrm.FormShow(Sender: TObject);
 begin
-  RepFiles := TReportFiles.Create;
+  DModule.StartSQLTransaction;
+
+  Reload;
+end;
+
+procedure TReportEditFrm.N1Click(Sender: TObject);
+var rep: string;
+begin
+  rep := MainForm.reports_path + ReportListView.Items[ReportListView.ItemIndex].SubItems[0];
+  
+  if not FileExists(rep) then
+  begin
+    ShowMessage('Не удалось найтти файл шаблона!');
+    Exit;
+  end;
+
+  with MainForm do
+  begin
+    MainForm.frxReport1.LoadFromFile(rep);
+    MainForm.frxReport1.DesignReport();
+  end;
+end;
+
+procedure TReportEditFrm.N2Click(Sender: TObject);
+var oDlg:    TOpenDialog;
+begin
+  oDlg := tOpenDialog.Create(nil);
+  oDlg.Filter := 'FastReport Templates|*.fr3';
+  if oDlg.Execute then
+  begin
+    try
+      with DModule.sqlQuery1 do
+      begin
+        SQL.Text := 'update report set filename = :name where lower(name) = lower(:oldname)';
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'name', ChangeFileExt(ExtractFileName(oDlg.FileName),''));
+        SetParam(Parameters, 'oldname',
+          ReportsArr[ReportListView.ItemIndex]
+          );
+        ExecSQL;
+      end;
+    except
+      MessageDlg('Error! Неудалось назначить имя шаблона, возможно новое имя уже используется!', mtError, [mbOK], 0);
+    end;
+    Reload;
+  end;
+end;
+
+procedure TReportEditFrm.Reload;
+var
+  item : TListItem;
+begin
+  ReportListView.Items.Clear;
+  SetLength(ReportsArr,0);
+  with DModule.sqlQuery1 do
+  begin
+    SQL.Text := 'select * from report order by title';
+    Open;
+
+    while not EOF do
+    begin
+      SetLength(ReportsArr, Length(ReportsArr) + 1);
+      ReportsArr[Length(ReportsArr) - 1] := FieldByName('name').Value;
+
+      item := ReportListView.Items.Add;
+      item.Caption := FieldByName('title').Value;
+      item.SubItems.Add(FieldByName('filename').Value + '.' + FieldByName('type').Value);
+      if FieldByName('type').Value = 'fr3' then
+        item.ImageIndex := 17;
+      Next;
+    end;
+
+  end;
 end;
 
 end.

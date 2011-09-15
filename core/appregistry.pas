@@ -52,7 +52,8 @@ function CheckRegProperty(_property: string; autoadd: boolean = False): boolean;
   begin
     if _property = 'Password' then
     begin
-      _value := InputPassword('Input Proporty Value', _property, '');
+      _value := '';
+      InputPassword('Input Proporty Value', _property, _value);
       _value := GenMD5Password(_value);
     end
     else

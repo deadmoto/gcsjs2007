@@ -379,7 +379,6 @@ type
     elevatorCheckBox: TCheckBox;
     Label95:         TLabel;
     npssEdit:        TEdit;
-    Button2: TButton;
     TabSheet9: TTabSheet;
     DebtControl: TTabControl;
     GroupBox13: TGroupBox;
@@ -393,7 +392,7 @@ type
     GroupBox16: TGroupBox;
     DebtGrid: TStringGrid;
     DebtDelBtn: TButton;
-    DebtEditBtn: TButton;
+    DebtPayEditBtn: TButton;
     Panel3: TPanel;
     DebtPanel: TPanel;
     DebtFormPay: TButton;
@@ -404,6 +403,9 @@ type
     officeEdit: TEdit;
     FactMinusDebtBtn: TButton;
     Label97: TLabel;
+    FlowPanel1: TFlowPanel;
+    Button2: TButton;
+    Button1: TButton;
     procedure Button2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure comboBoxContChange(Sender: TObject);
@@ -497,6 +499,8 @@ type
     procedure DebtFormPayClick(Sender: TObject);
     procedure DebtPayPauseBtnClick(Sender: TObject);
     procedure FactMinusDebtBtnClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure DebtPayEditBtnClick(Sender: TObject);
   private
     { Private declarations }
     load, fam: boolean;
@@ -2358,7 +2362,6 @@ begin
           if MessageDlg(format('Сформировать переплату в размере %s руб.', [Edit113.Text]),
             mtConfirmation, [mbYes, mbNo], 0) <> mrYes then Exit;
 
-          DModule.sqlConnection.BeginTrans;
           SQL.Text :=
             'INSERT INTO Debt'#13#10 +// (id_debt,id_sluj,dist,regn,bdate,edate,sumdebt,closed)' + #13#10 +
             'VALUES (newid(),:idsluj,:dist,:regn,convert(smalldatetime,:bd,104),convert(smalldatetime,:ed,104),:sumdebt,0,NULL)';
@@ -2370,19 +2373,16 @@ begin
           SetParam(Parameters, 'ed', SplitString(ComboBox23.Text, '-')[1]);
           SetParam(Parameters, 'sumdebt', StrToFloat(Edit113.Text));
           ExecSQL;
-          DModule.sqlConnection.CommitTrans;
         end
         else
         begin
           ShowMessage('В базе уже имеется данная переплата!');
-          DModule.sqlConnection.RollbackTrans;
         end;
       end;
     except
       on E: Exception do
       begin
         ShowMessage('Exception message = '+E.Message);
-        DModule.sqlConnection.RollbackTrans;
       end;
     end;
   end;
@@ -2394,7 +2394,6 @@ var
   i: integer;
 begin
   try
-  DModule.sqlConnection.BeginTrans;
   case FactSaleControl.TabIndex of
     0:
     begin
@@ -2488,12 +2487,11 @@ begin
       end;
     end;
   end;
-      DModule.sqlConnection.CommitTrans;
+
   except
     on E : Exception do
     begin
       ShowMessage('Exception message = '+E.Message);
-      DModule.sqlConnection.RollbackTrans;
     end;
 
   end;
@@ -2577,12 +2575,18 @@ begin
     vAdd:
     begin
       if AddClient = 0 then
+      begin
+        DModule.CommitSQLTransaction;
         Close;
+      end;
     end;
     vEdit:
     begin
       if ModifyClient = 0 then
+      begin
+        DModule.CommitSQLTransaction;
         Close;
+      end;
     end;
   end;
 end;
@@ -2590,6 +2594,8 @@ end;
 procedure TEditClForm.FormClose(Sender: TObject; var Action: TCloseAction);
 { закрытие формы }
 begin
+  DModule.RollBackSQLTransaction;
+  
   DModule.sqlQuery1.Close;
   DModule.qTarif.Close;
 end;
@@ -2622,7 +2628,7 @@ begin
     n := 0;
     if not ExistClient(n) then
     begin
-      DModule.sqlConnection.BeginTrans;
+      //DModule.sqlConnection.BeginTrans;
       try
         with DModule.sqlQuery1 do
         begin
@@ -2813,7 +2819,7 @@ begin
             end;
           end;
         end;
-        DModule.sqlConnection.CommitTrans;
+        //DModule.sqlConnection.CommitTrans;
         Result := 0;
       except
         on E : Exception do
@@ -2822,7 +2828,7 @@ begin
           ShowMessage('Exception message = '+E.Message);
 
           //транзакция не выполнена
-          DModule.sqlConnection.RollbackTrans;
+          //DModule.sqlConnection.RollbackTrans;
           Result := -1;
         end;
       end;
@@ -2848,7 +2854,7 @@ begin
       n := 0;
       if (not ExistClient(n) or ExistClient(n) and (n = MainForm.client)) then
       begin
-        DModule.sqlConnection.BeginTrans;
+        //DModule.sqlConnection.BeginTrans;
         try
           with DModule.sqlQuery1 do
           begin
@@ -3092,11 +3098,11 @@ begin
             //------
             Close;
           end;
-          DModule.sqlConnection.CommitTrans;
+          //DModule.sqlConnection.CommitTrans;
           Result := 0;
         except
           //транзакция не выполнена
-          DModule.sqlConnection.RollbackTrans;
+          //DModule.sqlConnection.RollbackTrans;
           Result := -1;
         end;
         if Result = 0 then
@@ -3664,7 +3670,7 @@ begin
     0:
     begin
     try
-      DModule.sqlConnection.BeginTrans;
+      //DModule.sqlConnection.BeginTrans;
       with DModule.sqlQuery1 do
       begin
         Close;
@@ -3693,13 +3699,13 @@ begin
           SetParam(Parameters, 'sumdebt', StrToFloat(Edit151.Text));
           ExecSQL;
         end;
-        DModule.sqlConnection.CommitTrans;
+        //DModule.sqlConnection.CommitTrans;
       end;
     except
       on E: Exception do
       begin
         ShowMessage('Exception message = '+E.Message);
-        DModule.sqlConnection.RollbackTrans;
+        //DModule.sqlConnection.RollbackTrans;
       end;
     end;
     end;
@@ -3716,7 +3722,7 @@ begin
     0:
     begin
     try
-      DModule.sqlConnection.BeginTrans;
+      //DModule.sqlConnection.BeginTrans;
       with DModule.sqlQuery1 do
       begin
         Close;
@@ -3738,18 +3744,18 @@ begin
         Parameters.ParseSQL(SQL.Text, True);
         SetParam(Parameters, 'id', debtcl[DebtGrid.Row - 1]);
         ExecSQL;
-        DModule.sqlConnection.CommitTrans;
+        //DModule.sqlConnection.CommitTrans;
         DebtControl.OnChange(self);
       end;
     except
-      DModule.sqlConnection.RollbackTrans;
+      //DModule.sqlConnection.RollbackTrans;
     end;
     end;
 
     1:
     begin
     try
-      DModule.sqlConnection.BeginTrans;
+      //DModule.sqlConnection.BeginTrans;
       with DModule.sqlQuery1 do
       begin
         Close;
@@ -3785,15 +3791,69 @@ begin
         SetParam(Parameters, 'id', debtcl[DebtGrid.Row - 1]);
         ExecSQL;
         
-        DModule.sqlConnection.CommitTrans;
+        //DModule.sqlConnection.CommitTrans;
         DebtControl.OnChange(self);
       end;
     except
       ShowMessage('Ошибка при удалении!');
-      DModule.sqlConnection.RollbackTrans;
+      //DModule.sqlConnection.RollbackTrans;
     end;
     end;
   end;
+end;
+
+procedure TEditClForm.DebtPayEditBtnClick(Sender: TObject);
+var newReturnSum :string;
+begin
+ if not InputQuery('','Введите новую сумму удержания:',newReturnSum) then
+   Exit;
+
+ case DebtControl.TabIndex of
+    1:
+    begin
+    try
+      //DModule.sqlConnection.BeginTrans;
+      with DModule.sqlQuery1 do
+      begin
+        Close;
+        SQL.Text :=
+          'select * from debtpay where id_debt = :id and sdate = dbo.smalldate(:d)';
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'id', debtcl[DebtGrid.Row - 1]);
+          SetParam(Parameters, 'd', MainForm.rdt);
+        Open;
+        if RecordCount = 1 then
+        begin
+          Close;
+          SQL.Text :=
+            'UPDATE DebtPay SET m_return = :m_return WHERE id_debt = :id and sdate = dbo.smalldate(:d)';
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'id', debtcl[DebtGrid.Row - 1]);
+          SetParam(Parameters, 'd', MainForm.rdt);
+          SetParam(Parameters, 'm_return', StrToFloat(newReturnSum));
+          ExecSQL;
+        end
+        else
+        begin
+          Close;
+          SQL.Text :=
+            'INSERT INTO DebtPay'#13#10 +
+            'VALUES (:id,convert(smalldatetime,:sd,104),0,:m_return)';
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'id', debtcl[DebtGrid.Row - 1]);
+          SetParam(Parameters, 'sd', MainForm.rdt);
+          SetParam(Parameters, 'm_return', StrToFloat(newReturnSum));
+          ExecSQL;
+        end;
+
+        //DModule.sqlConnection.CommitTrans;
+        DebtControl.OnChange(self);
+      end;
+    except
+      //DModule.sqlConnection.RollbackTrans;
+    end;
+    end;
+ end;
 end;
 
 procedure TEditClForm.DebtControlChange(Sender: TObject);
@@ -3803,6 +3863,7 @@ begin
   ComboBox1.Clear;
   ClearDebtGrid;
   DebtPanel.Visible := False;
+  DebtPayEditBtn.Visible := False;
   DebtPayPauseBtn.Visible := False;
   comboBoxDebt.Enabled := False;
   Edit151.Text := '0';
@@ -3841,8 +3902,8 @@ begin
         SetParam(Parameters, 'regn', Cl.Data.regn);
         Open;
 
-        FormerStringGrid(DebtGrid, TStringArray.Create('', '', 'Сумма', 'Погашено', 'Описание'),
-          TIntArray.Create(64, 64, 65, 80, 155), Math.Max(RecordCount + 1, DebtGrid.RowCount));
+        FormerStringGrid(DebtGrid, TStringArray.Create('', '', 'Сумма переп.', 'Погашено', 'Описание'),
+          TIntArray.Create(60, 60, 78, 80, 155), Math.Max(RecordCount + 1, DebtGrid.RowCount));
 
         SetLength(debtcl, 0);
         l := 0;
@@ -3868,25 +3929,28 @@ begin
 
     1:
     begin
+      DebtPayEditBtn.Visible  := True;
       DebtPayPauseBtn.Visible := True;
-      
+
       with DModule.sqlQuery1 do
       begin
         //Заполняем таблицу с существующими удержаниями
         Close;
         SQL.Text :=
-          'SELECT   DebtPay.id_debt, max(DebtPay.sdate) as sdate, Debt.bdate, Debt.edate, DebtPay.paused, Debt.closed, DebtPay.m_return, SlujType.namesluj'#13#10 +
-          'FROM     Debt INNER JOIN'#13#10 +
-          '   DebtPay ON Debt.id_debt = DebtPay.id_debt INNER JOIN'#13#10 +
-          '   SlujType ON Debt.id_sluj = SlujType.id_sluj'#13#10 +
-          'WHERE regn = :regn'#13#10 +
-          'GROUP BY DebtPay.id_debt, Debt.bdate, Debt.edate, DebtPay.paused, Debt.closed, DebtPay.m_return, SlujType.namesluj';
+          'select dp.id_debt, dp.sdate, Debt.bdate, Debt.edate, dp.paused, Debt.closed, dp.m_return, SlujType.namesluj, Debt.sumdebt'+cBr+
+            'from Debt'+cBr+
+           'inner join (select *,row_number() over (partition by id_debt order by sdate desc) as ''rn'' from debtpay where sdate <= dbo.smalldate(:d)) dp'+cBr+
+              'on Debt.id_debt = dp.id_debt and dp.rn = 1'+cBr+
+           'inner join SlujType'+cBr+
+              'on Debt.id_sluj = SlujType.id_sluj'+cBr+
+           'where regn = :regn';
         Parameters.ParseSQL(SQL.Text, True);
         SetParam(Parameters, 'regn', Cl.Data.regn);
+        SetParam(Parameters, 'd', MainForm.rdt);
         Open;
 
-        FormerStringGrid(DebtGrid, TStringArray.Create('', '', 'Сумма удерж.', 'Пауза', 'Погашено', 'Описание'),
-          TIntArray.Create(64, 64, 80, 64, 64, 155), Math.Max(RecordCount + 1, DebtGrid.RowCount));
+        FormerStringGrid(DebtGrid, TStringArray.Create('', '', 'Сумма удерж.', 'Пауза', 'Погашено', 'Описание', 'Cумма переп'),
+          TIntArray.Create(60, 60, 78, 40, 44, 155, 78), Math.Max(RecordCount + 1, DebtGrid.RowCount));
 
         SetLength(debtcl, 0);
         l := 0;
@@ -3904,6 +3968,7 @@ begin
             DebtGrid.Cells[3, i+1] := BoolToStr(FieldByName('paused').Value);
             DebtGrid.Cells[4, i+1] := BoolToStr(FieldByName('closed').Value);
             DebtGrid.Cells[5, i+1] := FieldByName('namesluj').AsString;
+            DebtGrid.Cells[6, i+1] := FieldByName('sumdebt').AsString;
             Next;
           end;
         end;
@@ -3925,12 +3990,12 @@ begin
     Exit;
     
  if Length(debtcl) > 0 then
-   
+
  case DebtControl.TabIndex of
     1:
     begin
     try
-      DModule.sqlConnection.BeginTrans;
+      //DModule.sqlConnection.BeginTrans;
       with DModule.sqlQuery1 do
       begin
         Close;
@@ -3946,7 +4011,7 @@ begin
           ShowMessage('Вы не можете приостановить закрытое удержание!');
           Exit;
         end;
-        
+
         if FieldValues['paused'] = 1 then
         begin
           Close;
@@ -3963,11 +4028,11 @@ begin
         Parameters.ParseSQL(SQL.Text, True);
         SetParam(Parameters, 'id', debtcl[DebtGrid.Row - 1]);
         ExecSQL;
-        DModule.sqlConnection.CommitTrans;
+        //DModule.sqlConnection.CommitTrans;
         DebtControl.OnChange(self);
       end;
     except
-      DModule.sqlConnection.RollbackTrans;
+      //DModule.sqlConnection.RollbackTrans;
     end;
     end;
  end;
@@ -5026,6 +5091,8 @@ end;
 
 procedure TEditClForm.FormShow(Sender: TObject);
 begin
+  DModule.StartSQLTransaction;
+
   curmonth := StrToInt(Copy(MainForm.rdt, 4, 2));
   PageControl1.TabIndex := 0;
   load := False;
@@ -5038,7 +5105,7 @@ begin
   Button20.Enabled := False;
   Button21.Enabled := False;
   DebtAddBtn.Enabled := False;
-  DebtEditBtn.Enabled := False;
+  DebtPayEditBtn.Enabled := False;
   DebtDelBtn.Enabled := False;
   DebtFormPay.Enabled := False;
   case mode of
@@ -5065,6 +5132,8 @@ begin
         ShowMessage('Семья загрузилась некорректно! Указанное число членов семьи на совпадает с фактическим! Производить расчеты невозможно!');
     end;
   end;
+  if (MainForm.CheckP2) or (MainForm.Debug) then
+    Button2.Enabled := True;
 end;
 
 function TEditClForm.GetColSum(StrGrid: TStringGrid; Col: integer): string;
@@ -5114,14 +5183,14 @@ begin
     PageControl1.TabIndex := 0
   else
   begin
-    if PageControl1.TabIndex = 4 then
+//    if PageControl1.TabIndex = 4 then
+//    begin
+//      if MainForm.CheckP2 then
+//        Button2.Enabled := True;
+//    end
+//    else
     begin
-      if MainForm.CheckP2 then
-        Button2.Enabled := True;
-    end
-    else
-    begin
-      Button2.Enabled := False;
+      //Button2.Enabled := False;
       if PageControl1.TabIndex = 1 then
       begin
         if Cl.cdata.family.Count = 0 then
@@ -5152,7 +5221,7 @@ begin
         if MainForm.CheckP2 then
         begin
           DebtAddBtn.Enabled := True;
-          DebtEditBtn.Enabled := True;
+          DebtPayEditBtn.Enabled := True;
           DebtDelBtn.Enabled := True;
           DebtFormPay.Enabled := True;
         end;
@@ -5699,6 +5768,11 @@ begin
   officeEdit.Text := SelOffice(Cl.Data.office);
 end;
 
+procedure TEditClForm.Button1Click(Sender: TObject);
+begin
+  Close;
+end;
+
 procedure TEditClForm.DebtFormPayClick(Sender: TObject);
 var
   m_return: double;
@@ -5733,7 +5807,7 @@ begin
       0:
       begin
       try
-        DModule.sqlConnection.BeginTrans;
+        //DModule.sqlConnection.BeginTrans;
         with DModule.sqlQuery1 do
         begin
           Close;
@@ -5758,11 +5832,11 @@ begin
           SetParam(Parameters, 'sd', MainForm.rdt);
           SetParam(Parameters, 'm_return', m_return);
           ExecSQL;
-          DModule.sqlConnection.CommitTrans;
+          //DModule.sqlConnection.CommitTrans;
           DebtControl.OnChange(self);
         end;
       except
-        DModule.sqlConnection.RollbackTrans;
+        //DModule.sqlConnection.RollbackTrans;
       end;
       end;
 

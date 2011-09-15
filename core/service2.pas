@@ -37,7 +37,8 @@ function SelBoss(n: integer): string;
 
 function ExistHouse(var n: integer; cl: TClient): boolean;//существует дом?
 
-function getmin(query: tadoquery; id_min: integer): real;
+function GetMin(query: tadoquery; id_min: integer): real;
+function GetReportFileName(ReportName: string): string;
 
 implementation
 
@@ -427,13 +428,13 @@ begin
   with TADOQuery.Create(Application) do
   begin
     Connection := DModule.sqlConnection;
+
     SQL.Text :=
-      'select adr'#13#10 +
-      'from Office'#13#10 +
-      'where (id_office = :id)and(id_dist=:dist)';
+      'select dbo.getoffice_address(:dist,:office,0,default) adr';
+
     Parameters.ParseSQL(SQL.Text, True);
-    SetParam(Parameters, 'id', n);
-    SetParam(Parameters, 'dist', MainForm.dist);
+    Parameters[0].Value := MainForm.dist;
+    Parameters[1].Value := n;
     Open;
     Result := FieldByName('adr').AsString;
     Close;
@@ -535,7 +536,7 @@ begin
   end;
 end;
 
-function getmin(query: TADOQuery; id_min: integer): real;
+function GetMin(query: TADOQuery; id_min: integer): real;
 begin
   Result := 0;
   if id_min <> 0 then
@@ -548,6 +549,23 @@ begin
     SetParam(query.Parameters, 'id_min', id_min);
     query.Open;
     Result := query.FieldByName('minim').Value;
+  end;
+end;
+
+function GetReportFileName(ReportName: string): string;
+begin
+  with TADOQuery.Create(Application) do
+  begin
+    Connection := DModule.sqlConnection;
+    SQL.Text :=
+      'SELECT filename+''.''+type ReportFile' + cBr +
+      'FROM Report ' + cBr +
+      'WHERE lower(name)= lower(:rn)';
+    Parameters.ParseSQL(SQL.Text, True);
+    SetParam(Parameters, 'rn', ReportName);
+    Open;
+    Result := FieldByName('ReportFile').AsString;
+    Close;
   end;
 end;
 

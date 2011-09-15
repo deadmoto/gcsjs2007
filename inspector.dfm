@@ -135,7 +135,7 @@ object Form3: TForm3
       Top = 71
       Width = 264
       Height = 21
-      ItemHeight = 13
+      ItemHeight = 0
       TabOrder = 4
     end
   end

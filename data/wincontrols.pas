@@ -4,7 +4,7 @@ interface
 uses Windows, Messages, SysUtils, CommDlg, FileCtrl,
   Printers, Classes, Graphics, Controls, Forms, StdCtrls, ShlObj, CommCtrl, Consts;
 
-function InputPassword(const ACaption, APrompt, ADefault: string): string;
+function InputPassword(const ACaption, APrompt:string;var Value: string): boolean;
 function InputQuery2(const ACaption, APrompt: string;
   var Value: string): Boolean;
 function SelectDir: string;
@@ -24,10 +24,11 @@ begin
   Result.X := Result.X div 52;
 end;
 
-function InputPassword(const ACaption, APrompt, ADefault: string): string;
+function InputPassword(const ACaption, APrompt:string; var Value: string): boolean;
 begin
-  Result := ADefault;
-  InputQuery2(ACaption, APrompt, Result);
+  Result := False;
+  if InputQuery2(ACaption, APrompt, Value) then
+    Result := True;
 end;
 
 function InputQuery2(const ACaption, APrompt: string;
