@@ -1911,7 +1911,18 @@ begin
     SQL.Clear;
     SQL.Add('INSERT INTO office');
     SQL.Add('VALUES (:id_dist, :id_office, :adr, :tel)');
+    Parameters.ParseSQL(SQL.Text, True);
   end;
+
+  with DModule.sqlQuery2 do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('DELETE FROM office');
+    SQL.Add('WHERE id_dist=:id_dist AND id_office=:id_office');
+    Parameters.ParseSQL(SQL.Text, True);
+  end;
+
   if FileExists(path + 'office' + IntToStr(dis) + '.dbf') then
   begin
     dbfQuery.SQL.Text := 'SELECT * FROM office' + IntToStr(dis);
@@ -1920,15 +1931,11 @@ begin
     begin
       for i := 0 to dbfQuery.RecordCount - 1 do
       begin
-        sqlQuery2.Close;
-        sqlQuery2.SQL.Clear;
-        sqlQuery2.SQL.Add('DELETE FROM office');
-        sqlQuery2.SQL.Add('WHERE id_dist=:id_dist AND id_office=:id_office');
-        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+        //DELETE
         SetParam(sqlQuery2.Parameters, 'id_dist', dbfQuery.Fields[0].Value);
         SetParam(sqlQuery2.Parameters, 'id_office', dbfQuery.Fields[1].Value);
         sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+        //INSERT
         SetParam(sqlQuery1.Parameters, 'id_dist', dbfQuery.Fields[0].Value);
         SetParam(sqlQuery1.Parameters, 'id_office', dbfQuery.Fields[1].Value);
         SetParam(sqlQuery1.Parameters, 'adr', dbfQuery.Fields[2].Value);

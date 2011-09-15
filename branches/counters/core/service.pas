@@ -1008,6 +1008,13 @@ begin
     if Params[i].Name = PName then
     begin
       Params.Items[i].Value := PValue;
+//нужно добавить присвоение типа и длины для Null-данных из Field      
+//      if PValue = Null then
+//      begin
+//        //Params.Items[i].DataType := VarType(PValue) and VarTypeMask;;
+//        //Params.Items[i].Size := 0;
+//      end;
+
       if Params.Items[i].DataType = ftString then
         if PValue = '' then Params.Items[i].Size := 1;
     end;

@@ -4,7 +4,7 @@ interface
 
 uses
   Classes, Controls, Dialogs, ExtCtrls, Forms, Graphics, Messages, StdCtrls,
-  SysUtils, Variants, Windows, Grids;
+  SysUtils, Variants, Windows, Grids, ComCtrls;
 
 const
   cSolut : array[0..2] of WideString = (
@@ -55,7 +55,6 @@ type
     Edit3:     TEdit;
     Edit4:     TEdit;
     Label3:    TLabel;
-    Button1:   TButton;
     GroupBox4: TGroupBox;
     Edit6:     TEdit;
     Panel1:    TPanel;
@@ -69,12 +68,18 @@ type
     Panel2: TPanel;
     StringGrid1: TStringGrid;
     ScrollBox1: TScrollBox;
+    FlowPanel1: TFlowPanel;
+    Button1: TButton;
+    GroupBox7: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    CheckBox2: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
     procedure StringGrid1DrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
     procedure StringGrid1Click(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
   private
     function ReturnCheckedRow: integer;
   public
@@ -118,6 +123,8 @@ begin
     MainForm.ARepData.basetext := StringGrid1.Cells[1,ReturnCheckedRow];
   
   MainForm.ARepData.insp := CheckBox1.Checked;
+  if CheckBox2.Checked then
+    MainForm.ARepData.repDate := DateToStr(DateTimePicker1.Date);
   Close;
 end;
 
@@ -132,6 +139,20 @@ begin
     GroupBox3.Enabled := True;
 end;
 
+procedure TReportDataFrm.CheckBox2Click(Sender: TObject);
+begin
+  if CheckBox2.Checked then
+  begin
+    GroupBox7.Enabled := True;
+    GroupBox7.Color := clActiveBorder;
+  end
+  else
+  begin
+    GroupBox7.Enabled := False;
+    GroupBox7.Color := clBtnFace;
+  end;
+end;
+
 procedure TReportDataFrm.FormShow(Sender: TObject);
 
   procedure EnableAll;
@@ -141,6 +162,7 @@ procedure TReportDataFrm.FormShow(Sender: TObject);
     GroupBox4.Enabled := True;
     GroupBox5.Enabled := True;
     GroupBox6.Enabled := True;
+    GroupBox7.Enabled := True;
     Panel1.Enabled := True;
 
     GroupBox1.Color := clActiveBorder;
@@ -148,6 +170,7 @@ procedure TReportDataFrm.FormShow(Sender: TObject);
     GroupBox4.Color := clActiveBorder;
     GroupBox5.Color := clActiveBorder;
     GroupBox6.Color := clActiveBorder;
+    GroupBox7.Color := clActiveBorder;
     Panel1.Color := clActiveBorder;
     ScrollBox1.Visible := False;
   end;
@@ -231,6 +254,9 @@ begin
       GroupBox6.Color := clBtnFace;
     end;
   end;
+  
+  GroupBox7.Enabled := False;
+  GroupBox7.Color := clBtnFace;
 end;
 
 function TReportDataFrm.ReturnCheckedRow: integer;

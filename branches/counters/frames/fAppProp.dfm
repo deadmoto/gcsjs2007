@@ -119,8 +119,9 @@ object fAppProp: TfAppProp
       Top = 144
       Width = 177
       Height = 21
-      EditLabel.Width = 3
+      EditLabel.Width = 73
       EditLabel.Height = 13
+      EditLabel.Caption = 'IniLabeledEdit3'
       TabOrder = 4
       SectionName = 'Config'
       KeyName = '0.BackupPath'

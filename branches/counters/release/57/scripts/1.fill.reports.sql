@@ -1,0 +1,17 @@
+USE [Subsidy]
+delete from report
+insert into report values ('RepUvedom','Решение о предоставлении','uvedom','fr3')
+insert into report values ('RepUvedomo','Решение об отказе','uvedomo','fr3')
+insert into report values ('RepKarta','Учетная карта','karta','fr3')
+insert into report values ('RepVedomost','Ведомость субсидий','vedomost','fr3')
+insert into report values ('RepPause','Решение о приостановлении','solut','fr3')
+insert into report values ('RepPlay','Решение о возобновлении','solutb','fr3')
+insert into report values ('RepStop','Решение о прекращении','solute','fr3')
+insert into report values ('RepNach','Отчет о начислении','nach','fr3')
+insert into report values ('RepSvodSub','Сводка начисления субсидий','svodsub','fr3')
+insert into report values ('RepFact','Фактические расходы','factsale','fr3')
+insert into report values ('RepMintrudMount','Отчет в минтруд','mintrudmount','fr3')
+insert into report values ('RepClListArch','Списоки на архив','cllist','fr3')
+insert into report values ('RepClListRecalc','Списоки на переаттестацию','cllist','fr3')
+insert into report values ('RepClListNoNpss','Списоки без СНИЛСов','cllist','fr3')
+insert into report values ('RepErrorList','Отчет о наличии ошибок','errorlist','fr3')

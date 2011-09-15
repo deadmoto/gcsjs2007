@@ -199,7 +199,7 @@ procedure TForm3.Button5Click(Sender: TObject);
 var
   tmp_pass: string;
 begin
-  tmp_pass := InputPassword('¬ведите пароль!', 'ѕароль:', '');
+  if InputPassword('¬ведите пароль!', 'ѕароль:', tmp_pass) then 
   with DModule.sqlQuery1 do
     begin
       Close;
@@ -217,8 +217,8 @@ procedure TForm3.Button1Click(Sender: TObject);
 { добавить инспектора }
 var
   flag: bool;
-var
   st: integer;
+  tmpPasswd: string;
 begin
   if (Edit1.Text <> '') and (Edit2.Text <> '') and (Edit3.Text <> '') then
   begin
@@ -265,7 +265,9 @@ begin
         SetParam(Parameters, 'id', StrToInt(Edit2.Text));
         SetParam(Parameters, 'name', Edit1.Text);
         SetParam(Parameters, 'dist', MainForm.dist);
-        SetParam(Parameters, 'pas', GenMD5Password( InputPassword('¬ведите пароль!', 'ѕароль:', '') ));
+
+        InputPassword('¬ведите пароль!', 'ѕароль:', tmpPasswd);
+        SetParam(Parameters, 'pas', GenMD5Password( tmpPasswd ));
         SetParam(Parameters, 'office', office[ComboBox1.ItemIndex]);
         if CheckBox1.Checked = False then
           st := 0

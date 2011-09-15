@@ -4,7 +4,7 @@ object ReportDataFrm: TReportDataFrm
   AutoSize = True
   BorderStyle = bsToolWindow
   Caption = #1044#1072#1085#1085#1099#1077' '#1076#1083#1103' '#1086#1090#1095#1077#1090#1072
-  ClientHeight = 396
+  ClientHeight = 434
   ClientWidth = 457
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -22,7 +22,7 @@ object ReportDataFrm: TReportDataFrm
     Left = 3
     Top = 3
     Width = 451
-    Height = 200
+    Height = 206
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
@@ -195,20 +195,36 @@ object ReportDataFrm: TReportDataFrm
         end
       end
     end
-    object Button1: TButton
-      Left = 348
-      Top = 175
-      Width = 97
-      Height = 25
-      Caption = 'Ok'
+    object GroupBox7: TGroupBox
+      Left = 340
+      Top = 158
+      Width = 105
+      Height = 43
       TabOrder = 6
-      OnClick = Button1Click
+      object DateTimePicker1: TDateTimePicker
+        Left = 6
+        Top = 14
+        Width = 92
+        Height = 21
+        Date = 40799.499653738430000000
+        Time = 40799.499653738430000000
+        TabOrder = 0
+      end
+    end
+    object CheckBox2: TCheckBox
+      Left = 340
+      Top = 142
+      Width = 97
+      Height = 17
+      Caption = #1044#1072#1090#1072
+      TabOrder = 7
+      OnClick = CheckBox2Click
     end
   end
   object ScrollBox1: TScrollBox
     AlignWithMargins = True
     Left = 3
-    Top = 206
+    Top = 212
     Width = 451
     Height = 187
     Margins.Top = 0
@@ -216,12 +232,13 @@ object ReportDataFrm: TReportDataFrm
     Align = alTop
     AutoSize = True
     TabOrder = 1
+    ExplicitTop = 206
     object StringGrid1: TStringGrid
       Left = 0
       Top = 0
       Width = 447
       Height = 183
-      Align = alClient
+      Align = alTop
       BorderStyle = bsNone
       ColCount = 2
       DefaultRowHeight = 20
@@ -232,6 +249,28 @@ object ReportDataFrm: TReportDataFrm
       TabOrder = 0
       OnClick = StringGrid1Click
       OnDrawCell = StringGrid1DrawCell
+    end
+  end
+  object FlowPanel1: TFlowPanel
+    AlignWithMargins = True
+    Left = 3
+    Top = 405
+    Width = 451
+    Height = 26
+    Align = alTop
+    BevelOuter = bvNone
+    BiDiMode = bdLeftToRight
+    FlowStyle = fsRightLeftBottomTop
+    ParentBiDiMode = False
+    TabOrder = 2
+    object Button1: TButton
+      Left = 354
+      Top = 1
+      Width = 97
+      Height = 25
+      Caption = 'Ok'
+      TabOrder = 0
+      OnClick = Button1Click
     end
   end
 end
