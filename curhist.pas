@@ -29,6 +29,8 @@ type
     GroupBox1:  TGroupBox;
     SGH:        TStringGrid;
     StatusBar1: TStatusBar;
+    Panel1: TPanel;
+    Button1: TButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -36,6 +38,7 @@ type
     procedure SGHDblClick(Sender: TObject);
     procedure SGHKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure SGHKeyPress(Sender: TObject; var Key: char);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
     procedure Clear;
@@ -85,6 +88,11 @@ begin
   for i := 0 to Length(cl.reg) - 1 do
     sum := sum + cl.sub[i];
   StatusBar1.Panels[1].Text := 'Сумма субсидий: ' + FormatFloat('0.00', (sum));
+end;
+
+procedure TForm18.Button1Click(Sender: TObject);
+begin
+  ExportGridToExcel(SGH, MainForm.reports_path + 'tmp.xls');
 end;
 
 procedure TForm18.Clear;
