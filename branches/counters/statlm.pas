@@ -59,6 +59,7 @@ var
 implementation
 
 uses
+  appregistry,
   datamodule,
   service,
   main,
@@ -302,7 +303,10 @@ var
   i, n: integer;
   path: string;
 begin
-  path := ExtractFilePath(Application.ExeName) + 'database\';
+  if getConfValue('0.OtherDatabasePath') then
+    path := getConfValue('0.DatabasePath')
+  else
+    path := ExtractFilePath(Application.ExeName) + 'database\';
   with DModule.DBF1 do
   begin
     if Active then
