@@ -2810,13 +2810,13 @@ begin
           try
             ExecSQL;
           except
-            DModule.sqlConnection.Close;
-            try
-              DModule.sqlConnection.Open;
-              ExecSQL;
-            except
-              ShowMessage('Нет соединения с сервером! Обратитесь к специалисту');
-            end;
+            ShowMessage('Нет соединения с сервером! Обратитесь к специалисту');
+//            try
+//              DModule.sqlConnection.Open;
+//              ExecSQL;
+//            except
+//              ShowMessage('Нет соединения с сервером! Обратитесь к специалисту');
+//            end;
           end;
         end;
         //DModule.sqlConnection.CommitTrans;
@@ -3013,6 +3013,7 @@ begin
             SetParam(Parameters, 's', MainForm.rdt);
             SetParam(Parameters, 'r', MainForm.client);
             SetParam(Parameters, 'stp', Cl.cdata.stop);
+            try
             for i := 0 to numbtarif - 1 do
             begin
               if (i < 8) or (i > 11) then
@@ -3026,20 +3027,12 @@ begin
                 SetParam(Parameters, 'sub', Cl.cdata.sub[i]);
                 SetParam(Parameters, 'sp', Cl.cdata.fpm[i]);
                 SetParam(Parameters, 'stndsub', Cl.cdata.stndsub[i]);
-
-                try
-                  ExecSQL;
-                except
-                  DModule.sqlConnection.Close;
-                  try
-                    DModule.sqlConnection.Open;
-                    ExecSQL;
-                  except
-                    ShowMessage('Нет соединения с сервером! Обратитесь к специалисту');
-                  end;
-                end;
-
+                ExecSQL;
               end;
+            end;
+            except
+              ShowMessage('Нет соединения с сервером! Обратитесь к специалисту');
+              Exit;
             end;
             Close;
             SQL.Clear;

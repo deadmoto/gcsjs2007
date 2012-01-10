@@ -481,7 +481,7 @@ begin
       pr.Update;
       SendMessage(pr.Handle, wm_paint, 0, 0);
       try
-        DModule.sqlConnection.BeginTrans;
+        //DModule.sqlConnection.BeginTrans;
         if CheckBox24.Checked then
         begin
           if CheckBox1.Checked then
@@ -810,12 +810,12 @@ begin
           SendMessage(pr.Handle, wm_paint, 0, 0);
         end;
         pr.Close;
-        DModule.sqlConnection.CommitTrans;
+        //DModule.sqlConnection.CommitTrans;
         FillCurr(MainForm.bpath, MainForm.rdt, MainForm.dist, MainForm.codedbf);
         ShowMessage('Импорт найденных файлов успешно завершен!');
         MainForm.Reload;
       except
-        DModule.sqlConnection.RollbackTrans;
+        //DModule.sqlConnection.RollbackTrans;
         if Assigned(pr) then
           pr.Free;
         ShowMessage('Ошибка импорта!');

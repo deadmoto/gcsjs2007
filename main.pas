@@ -1774,6 +1774,7 @@ begin
         SetParam(Parameters, 'd', s1);
         Open;
       end;
+
       with tmpQuery do
       begin
         Close;
@@ -1801,6 +1802,11 @@ begin
       end;
 
       ReportsFillDistInfo();
+
+      ReportDataFrm := TReportDataFrm.Create(Application);
+      ReportDataFrm.RepType := rUvedom;
+      ReportsFillAdditionData(DModule.sqlQuery1.FieldByName('nameinsp').AsString);
+
 
       frxReport1.Variables.Variables['cd']  := Quotedstr(rdt);
       frxReport1.Variables.Variables['sd']  := IncMonth(StrToDateTime(rdt));
@@ -4735,8 +4741,10 @@ begin
   New(MainForm.ARepData);
   ARepData.Clear;
   if getConfValue('0.ShowAddReportData') = True then
+  begin
     ReportDataFrm.ShowModal;
     ReportDataFrm.Free;
+  end;
 
   with frxReport1 do
   begin
