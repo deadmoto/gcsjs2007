@@ -232,7 +232,6 @@ object ReportDataFrm: TReportDataFrm
     Align = alTop
     AutoSize = True
     TabOrder = 1
-    ExplicitTop = 206
     object StringGrid1: TStringGrid
       Left = 0
       Top = 0

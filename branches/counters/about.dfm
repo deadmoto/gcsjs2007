@@ -131,9 +131,9 @@ object AboutBox: TAboutBox
     object Label6: TLabel
       Left = 8
       Top = 198
-      Width = 209
-      Height = 26
-      Caption = #1054#1088#1075'.: '#1050#1059' "'#1062#1057#1042#1080#1052#1058#1054'" '#1075'.'#1054#1084#1089#1082' (2011)   :('
+      Width = 183
+      Height = 13
+      Caption = #1054#1088#1075'.: '#1050#1059' "'#1062#1057#1042#1080#1052#1058#1054'" '#1075'.'#1054#1084#1089#1082' (2011) '
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11

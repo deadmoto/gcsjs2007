@@ -37,7 +37,6 @@ object MainForm: TMainForm
       end>
     ParentShowHint = False
     ShowHint = True
-    ExplicitWidth = 706
   end
   object Panel1: TPanel
     AlignWithMargins = True
@@ -49,8 +48,6 @@ object MainForm: TMainForm
     BevelInner = bvLowered
     Caption = 'Panel1'
     TabOrder = 1
-    ExplicitWidth = 700
-    ExplicitHeight = 340
     object SGCl: TStringGrid
       Left = 2
       Top = 2
@@ -75,8 +72,6 @@ object MainForm: TMainForm
       OnKeyPress = SGClKeyPress
       OnMouseDown = SGClMouseDown
       OnSelectCell = SGClSelectCell
-      ExplicitWidth = 618
-      ExplicitHeight = 336
     end
     object GridPanel1: TGridPanel
       Left = 618
@@ -190,8 +185,6 @@ object MainForm: TMainForm
           Value = 23.000000000000000000
         end>
       TabOrder = 1
-      ExplicitLeft = 620
-      ExplicitHeight = 336
       DesignSize = (
         78
         335)
@@ -359,7 +352,6 @@ object MainForm: TMainForm
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 3
-        ExplicitHeight = 64
       end
       object Label1: TLabel
         Left = 22
@@ -424,8 +416,6 @@ object MainForm: TMainForm
     AutoSize = True
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 481
-    ExplicitWidth = 706
     object GridPanel2: TGridPanel
       AlignWithMargins = True
       Left = 3
@@ -550,7 +540,6 @@ object MainForm: TMainForm
           Value = 50.000000000000000000
         end>
       TabOrder = 0
-      ExplicitWidth = 700
       DesignSize = (
         698
         41)
@@ -608,7 +597,6 @@ object MainForm: TMainForm
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 4
-        ExplicitWidth = 138
       end
       object Panel6: TPanel
         Left = 541
@@ -618,7 +606,6 @@ object MainForm: TMainForm
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 5
-        ExplicitLeft = 543
         object Label3: TLabel
           Left = 15
           Top = 3
@@ -643,7 +630,6 @@ object MainForm: TMainForm
         ReadOnly = True
         ShowHint = True
         TabOrder = 6
-        ExplicitLeft = 630
       end
       object Button4: TButton
         Left = 7
@@ -699,7 +685,6 @@ object MainForm: TMainForm
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 11
-        ExplicitWidth = 138
       end
       object Panel8: TPanel
         Left = 541
@@ -709,7 +694,6 @@ object MainForm: TMainForm
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 12
-        ExplicitLeft = 543
         object Label4: TLabel
           Left = 16
           Top = 3
@@ -734,7 +718,6 @@ object MainForm: TMainForm
         ReadOnly = True
         ShowHint = True
         TabOrder = 13
-        ExplicitLeft = 630
       end
       object Panel3: TPanel
         Left = 325
@@ -767,7 +750,6 @@ object MainForm: TMainForm
     Caption = #1051#1077#1075#1077#1085#1076#1072':'
     TabOrder = 3
     Visible = False
-    ExplicitWidth = 700
     object Label5: TLabel
       Left = 55
       Top = 19
@@ -958,7 +940,6 @@ object MainForm: TMainForm
     Font.Style = []
     PersistentHotKeys = True
     Spacing = 0
-    ExplicitWidth = 706
   end
   object ActionToolBar1: TActionToolBar
     Left = 0
@@ -974,7 +955,6 @@ object MainForm: TMainForm
     ParentShowHint = False
     ShowHint = True
     Spacing = 0
-    ExplicitWidth = 706
   end
   object ImageList1: TImageList
     Left = 184

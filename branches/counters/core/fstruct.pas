@@ -659,101 +659,140 @@ var
   f: T2DString;
   i: integer;
 begin
-  with DModule.sqlQuery1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('INSERT INTO FactSale');
-    SQL.Add('VALUES (convert(smalldatetime,:d,104),:id,convert(smalldatetime,:bdate,104), convert(smalldatetime,:edate,104),:sub,:factsum,:dis)');
-  end;
-  if FileExists(path + 'factsale' + IntToStr(dis) + '.dbf') then
-  begin
-    GetData(path + 'factsale' + IntToStr(dis) + '.dbf', f);
-    with DModule do
+  DModule.StartSQLTransaction;
+  try
+    with DModule.sqlQuery1 do
     begin
-      for i := 0 to high(f) do
-      begin
-        sqlQuery2.Close;
-        sqlQuery2.SQL.Clear;
-        sqlQuery2.SQL.Add('DELETE FROM FactSale');
-        sqlQuery2.SQL.Add('WHERE (regn =:id) and (sdate=convert(smalldatetime,:d,104))');
-        sqlQuery2.SQL.Add('and(id_dist=:dis)');
-        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
-        SetParam(sqlQuery2.Parameters, 'd', f[i][0]);
-        SetParam(sqlQuery2.Parameters, 'id', f[i][1]);
-        SetParam(sqlQuery2.Parameters, 'dis', f[i][6]);
-        sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
-        SetParam(sqlQuery1.Parameters, 'd', f[i][0]);
-        SetParam(sqlQuery1.Parameters, 'id', f[i][1]);
-        SetParam(sqlQuery1.Parameters, 'bdate', f[i][2]);
-        SetParam(sqlQuery1.Parameters, 'edate', f[i][3]);
-        SetParam(sqlQuery1.Parameters, 'sub', StrToFloat(f[i][4]));
-        SetParam(sqlQuery1.Parameters, 'factsum', StrToFloat(f[i][5]));
-        SetParam(sqlQuery1.Parameters, 'dis', StrToFloat(f[i][6]));
-        try
-          sqlQuery1.ExecSQL;
-        except on E : Exception do
-          ShowMessage(E.Message);
-        end;
-      end;
-      sqlQuery1.Close;
-      sqlQuery2.Close;
+      Close;
+      SQL.Clear;
+      SQL.Add('DELETE FROM FactSale');
+      SQL.Add('WHERE id_dist=:dis');
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'dis', dis);
+      ExecSQL;
     end;
-  end
-  else
-    ShowMessage('Файл ' + path + 'factsale' + IntToStr(dis) + '.dbf не найден!');
-  //------
-  with DModule.sqlQuery1 do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('INSERT INTO FactBalance');
-    SQL.Add('VALUES (:id,convert(smalldatetime,:bdate,104), convert(smalldatetime,:edate,104),:balance,:dolg,:dis)');
-  end;
-  if FileExists(path + 'factbalance' + IntToStr(dis) + '.dbf') then
-  begin
-    GetData(path + 'factbalance' + IntToStr(dis) + '.dbf', f);
-    with DModule do
-    begin
-      for i := 0 to high(f) do
-      begin
-        sqlQuery2.Close;
-        sqlQuery2.SQL.Clear;
-        sqlQuery2.SQL.Add('DELETE FROM FactBalance');
-        sqlQuery2.SQL.Add('WHERE (regn =:id)and(bdate=convert(smalldatetime,:bdate,104))');
-        sqlQuery2.SQL.Add('and(id_dist=:dis)');
-        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
-        SetParam(sqlQuery2.Parameters, 'bdate', f[i][1]);
-        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
-        SetParam(sqlQuery2.Parameters, 'dis', f[i][5]);
-        sqlQuery2.ExecSQL;
-        sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
-        SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
-        SetParam(sqlQuery1.Parameters, 'bdate', f[i][1]);
-        SetParam(sqlQuery1.Parameters, 'edate', f[i][2]);
-        SetParam(sqlQuery1.Parameters, 'balance', StrToFloat(f[i][3]));
-        if f[i][4] = '' then
-          begin
-            SetParam(sqlQuery1.Parameters, 'dolg', Null);
-            sqlQuery1.Parameters.ParamByName('dolg').DataType := ftFloat;
-          end
-        else
-          SetParam(sqlQuery1.Parameters, 'dolg', StrToFloat(f[i][4]));
 
-        SetParam(sqlQuery1.Parameters, 'dis', StrToFloat(f[i][5]));
-        try
-          sqlQuery1.ExecSQL;
-        except on E : Exception do
-          ShowMessage(E.Message);
-        end;
-      end;
-      sqlQuery1.Close;
-      sqlQuery2.Close;
+    with DModule.sqlQuery1 do
+    begin
+      Close;
+      SQL.Clear;
+      SQL.Add('INSERT INTO FactSale');
+      SQL.Add('VALUES (convert(smalldatetime,:d,104),:id,convert(smalldatetime,:bdate,104), convert(smalldatetime,:edate,104),:sub,:factsum,:dis)');
     end;
-  end
-  else
-    ShowMessage('Файл ' + path + 'factbalance' + IntToStr(dis) + '.dbf не найден!');
+
+    if FileExists(path + 'factsale' + IntToStr(dis) + '.dbf') then
+    begin
+      GetData(path + 'factsale' + IntToStr(dis) + '.dbf', f);
+      with DModule do
+      begin
+        for i := 0 to high(f) do
+        begin
+  //        sqlQuery2.Close;
+  //        sqlQuery2.SQL.Clear;
+  //        sqlQuery2.SQL.Add('DELETE FROM FactSale');
+  //        sqlQuery2.SQL.Add('WHERE (regn =:id) and (sdate=convert(smalldatetime,:d,104))');
+  //        sqlQuery2.SQL.Add('and(id_dist=:dis)');
+  //        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+  //        SetParam(sqlQuery2.Parameters, 'd', f[i][0]);
+  //        SetParam(sqlQuery2.Parameters, 'id', f[i][1]);
+  //        SetParam(sqlQuery2.Parameters, 'dis', f[i][6]);
+  //        sqlQuery2.ExecSQL;
+          sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+          SetParam(sqlQuery1.Parameters, 'd', f[i][0]);
+          SetParam(sqlQuery1.Parameters, 'id', f[i][1]);
+          SetParam(sqlQuery1.Parameters, 'bdate', f[i][2]);
+          SetParam(sqlQuery1.Parameters, 'edate', f[i][3]);
+          SetParam(sqlQuery1.Parameters, 'sub', StrToFloat(f[i][4]));
+          SetParam(sqlQuery1.Parameters, 'factsum', StrToFloat(f[i][5]));
+          SetParam(sqlQuery1.Parameters, 'dis', StrToFloat(f[i][6]));
+          try
+            sqlQuery1.ExecSQL;
+          except on E : Exception do
+            ShowMessage(E.Message);
+          end;
+        end;
+        sqlQuery1.Close;
+        sqlQuery2.Close;
+      end;
+    end
+    else
+      ShowMessage('Файл ' + path + 'factsale' + IntToStr(dis) + '.dbf не найден!');
+
+    DModule.CommitSQLTransaction;
+  except
+    ShowMessage('FactSale');
+    DModule.RollBackSQLTransaction;
+  end;
+  //------
+  DModule.StartSQLTransaction;
+  try
+    with DModule.sqlQuery1 do
+    begin
+      Close;
+      SQL.Clear;
+      SQL.Add('DELETE FROM FactBalance');
+      SQL.Add('WHERE id_dist=:dis');
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'dis', dis);
+      ExecSQL;
+    end;
+
+    with DModule.sqlQuery1 do
+    begin
+      Close;
+      SQL.Clear;
+      SQL.Add('INSERT INTO FactBalance');
+      SQL.Add('VALUES (:id,convert(smalldatetime,:bdate,104), convert(smalldatetime,:edate,104),:balance,:dolg,:dis)');
+    end;
+    if FileExists(path + 'factbalance' + IntToStr(dis) + '.dbf') then
+    begin
+      GetData(path + 'factbalance' + IntToStr(dis) + '.dbf', f);
+      with DModule do
+      begin
+        for i := 0 to high(f) do
+        begin
+  //        sqlQuery2.Close;
+  //        sqlQuery2.SQL.Clear;
+  //        sqlQuery2.SQL.Add('DELETE FROM FactBalance');
+  //        sqlQuery2.SQL.Add('WHERE (regn =:id)and(bdate=convert(smalldatetime,:bdate,104))');
+  //        sqlQuery2.SQL.Add('and(id_dist=:dis)');
+  //        sqlQuery2.Parameters.ParseSQL(sqlQuery2.SQL.Text, True);
+  //        SetParam(sqlQuery2.Parameters, 'bdate', f[i][1]);
+  //        SetParam(sqlQuery2.Parameters, 'id', f[i][0]);
+  //        SetParam(sqlQuery2.Parameters, 'dis', f[i][5]);
+  //        sqlQuery2.ExecSQL;
+          sqlQuery1.Parameters.ParseSQL(sqlQuery1.SQL.Text, True);
+          SetParam(sqlQuery1.Parameters, 'id', f[i][0]);
+          SetParam(sqlQuery1.Parameters, 'bdate', f[i][1]);
+          SetParam(sqlQuery1.Parameters, 'edate', f[i][2]);
+          SetParam(sqlQuery1.Parameters, 'balance', StrToFloat(f[i][3]));
+          if f[i][4] = '' then
+            begin
+              SetParam(sqlQuery1.Parameters, 'dolg', Null);
+              sqlQuery1.Parameters.ParamByName('dolg').DataType := ftFloat;
+            end
+          else
+            SetParam(sqlQuery1.Parameters, 'dolg', StrToFloat(f[i][4]));
+
+          SetParam(sqlQuery1.Parameters, 'dis', StrToFloat(f[i][5]));
+          try
+            sqlQuery1.ExecSQL;
+          except on E : Exception do
+            ShowMessage(E.Message);
+          end;
+        end;
+        sqlQuery1.Close;
+        //sqlQuery2.Close;
+      end;
+    end
+    else
+      ShowMessage('Файл ' + path + 'factbalance' + IntToStr(dis) + '.dbf не найден!');
+
+    DModule.CommitSQLTransaction;
+  except
+    ShowMessage('FactSale');
+    DModule.RollBackSQLTransaction;
+  end;
 end;
 
 procedure ImportRStnd(path: string);

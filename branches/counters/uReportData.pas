@@ -253,6 +253,20 @@ begin
       GroupBox5.Color := clBtnFace;
       GroupBox6.Color := clBtnFace;
     end;
+
+    rUvedom:
+    begin
+      EnableAll();
+      GroupBox1.Enabled := False;
+      GroupBox4.Enabled := False;
+      GroupBox5.Enabled := False;
+      GroupBox6.Enabled := False;
+
+      GroupBox1.Color := clBtnFace;
+      GroupBox4.Color := clBtnFace;
+      GroupBox5.Color := clBtnFace;
+      GroupBox6.Color := clBtnFace;
+    end;
   end;
   
   GroupBox7.Enabled := False;
