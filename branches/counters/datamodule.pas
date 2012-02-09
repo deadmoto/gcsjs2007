@@ -103,10 +103,16 @@ begin
 end;
 
 function TDModule.SetSQLConnectStr(path: string): string;
+var catalog: string;
+    i: integer;
 begin
+  catalog := 'Subsidy';
+  for i := 0 to ParamCount do
+    if Copy(ParamStr(i),1,3) = '-ic' then
+      catalog := Copy(ParamStr(i),4,Length(ParamStr(i)));
   Result := format(
-    'Provider=SQLOLEDB.1;Persist Security Info=False;User ID=%s;Password=%s;Initial Catalog=Subsidy;Data Source=%s',
-    [ReadRegProperty('User'), GetConnectionPass(ReadRegProperty('Password')), path]
+    'Provider=SQLOLEDB.1;Persist Security Info=False;User ID=%s;Password=%s;Initial Catalog=%s;Data Source=%s',
+    [ReadRegProperty('User'), GetConnectionPass(ReadRegProperty('Password')), catalog, path]
   );
 end;
 

@@ -4321,8 +4321,7 @@ var
   Layouts: array[0..7] of THandle;
   y, m, d: word;
 begin
-  for i := 0 to ParamCount - 1 do
-    if ParamStr(i) = '-debug' then
+  if CheckParam('-debug') then
       Debug := True;
 
   office := -1;

@@ -95,6 +95,8 @@ function RefToCell(ARow, ACol: integer): string;
 function ExportGridToExcel(AGrid: TStringGrid; AFileName: string): boolean;
 {******************************************************************************}
 
+function CheckParam(param: string): Boolean;
+
 procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidths: TIntArray; RecCount: integer);
 
 //Процеду отрисовки TStringGrig, разбивает текст в ячейк на несколько строк
@@ -878,6 +880,18 @@ begin
 end;
 
 {******************************************************************************}
+
+function CheckParam(param: string): Boolean;
+var i: integer;
+begin
+  Result := False;
+  for i := 0 to ParamCount do
+    if ParamStr(i) = param then
+    begin
+      Result := True;
+      break;
+    end;
+end;
 
 procedure FormerStringGrid(StrGrid: TStringGrid; SGHead: TStringArray; SGColWidths: TIntArray; RecCount: integer);
 var

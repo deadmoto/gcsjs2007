@@ -85,13 +85,13 @@ begin
     try
       DModule.dbfConnection.Connected := True;
       try
-        if (ParamCount = 1) and (ParamStr(1) = '-sql') then
+        if CheckParam('-sql') then
         begin
           Application.CreateForm(TSQLExecForm, SQLExecForm);
           Application.Run;
           Exit;
         end;
-        if (ParamCount = 1) and (ParamStr(1) = '-conmanager') then
+        if CheckParam('-conmanager') then
         begin
           Application.CreateForm(TConnectionFrm, ConnectionFrm);
           Application.Run;
