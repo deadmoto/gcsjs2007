@@ -4,6 +4,6 @@
     <Transaction>2011.05.05 15:45:07.512.groupproj,C:\usr\Администратор\Мои документы\RAD Studio\Projects\ProjectGroup1.groupproj=D:\delphi\work\subsidy\counters\SubsidyProjectGroup.groupproj</Transaction>
   </Transactions>
 	<Default.Personality>
-		<Projects ActiveProject="Subsidy.exe"/>
+		<Projects ActiveProject="SubsidyUpdater.exe"/>
 	</Default.Personality>
 </BorlandProject>
