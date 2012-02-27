@@ -4413,7 +4413,6 @@ object MainForm: TMainForm
               end
               item
                 Action = aDebtShow
-                Caption = #1059#1076#1077#1088#1078#1072#1085#1080#1103
               end
               item
                 Caption = '-'
@@ -4712,7 +4711,7 @@ object MainForm: TMainForm
     end
     object aFormDebt: TAction
       Category = #1057#1091#1073#1089#1080#1076#1080#1080
-      Caption = #1060#1086#1088#1084#1080#1088#1086#1074#1072#1085#1080#1077' '#1091#1076#1077#1088#1078#1072#1085#1080#1081
+      Caption = #1060#1086#1088#1084#1080#1088#1086#1074#1072#1085#1080#1077' '#1082#1086#1088#1088#1077#1082#1090#1080#1088#1086#1074#1086#1082
       OnExecute = aFormDebtExecute
     end
     object aRecalcSubsidy: TAction
@@ -5107,7 +5106,7 @@ object MainForm: TMainForm
     end
     object aDebtShow: TAction
       Category = #1054#1082#1088#1091#1075
-      Caption = #1055#1088#1086#1089#1084#1086#1090#1088' '#1091#1076#1077#1088#1078#1072#1085#1080#1081
+      Caption = #1050#1086#1088#1088#1077#1082#1090#1080#1088#1086#1074#1082#1080
       OnExecute = aDebtShowExecute
     end
     object aBackupData: TAction

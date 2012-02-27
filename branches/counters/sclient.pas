@@ -406,6 +406,7 @@ type
     FlowPanel1: TFlowPanel;
     Button2: TButton;
     Button1: TButton;
+    FactPlusDebtBtn: TButton;
     procedure Button2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure comboBoxContChange(Sender: TObject);
@@ -501,6 +502,7 @@ type
     procedure FactMinusDebtBtnClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure DebtPayEditBtnClick(Sender: TObject);
+    procedure FactPlusDebtBtnClick(Sender: TObject);
   private
     { Private declarations }
     load, fam: boolean;
@@ -571,7 +573,7 @@ type
     procedure UpdateFactInfo();
     function AddAnyMonth(BD, ED: TDateTime): TStringList;
     function GetColSum(StrGrid: TStringGrid; Col: integer): string;
-    function calcMDiff(sub, fact: string): string;
+    function calcMDiff(sub, fact: string; zero: boolean): string;
     //Debt
     procedure ClearDebtGrid;
     //procedure ChangePeriod(BD, ED: TDateTime);
@@ -738,12 +740,12 @@ begin
     Result := False;
 end;
 
-function TEditClForm.calcMDiff(sub, fact: string): string;
+function TEditClForm.calcMDiff(sub, fact: string; zero: boolean): string;
 var
   mountDiff: double;
 begin
   mountDiff := StrToFloat(sub) - StrToFloat(fact);
-  if mountDiff < 0 then
+  if ((zero) and (mountDiff < 0)) then
     mountDiff := 0;
   Result := FloatToStr(mountDiff);
 end;
@@ -2290,7 +2292,7 @@ var
   i: integer;
 begin
   for i := 0 to FactGrid.RowCount - 2 do
-    FactGrid.Cells[3, i + 1] := calcMDiff(FactGrid.Cells[1, i + 1], FactGrid.Cells[2, i + 1]);
+    FactGrid.Cells[3, i + 1] := calcMDiff(FactGrid.Cells[1, i + 1], FactGrid.Cells[2, i + 1], true);
   UpdateFactInfo();
 end;
 
@@ -2304,7 +2306,7 @@ begin
     FactGrid.Options := FactGrid.Options + [goEditing, goAlwaysShowEditor];
 
   if ARow <> 0 then
-    FactGrid.Cells[3, ARow] := calcMDiff(FactGrid.Cells[1, ARow], FactGrid.Cells[2, ARow]);
+    FactGrid.Cells[3, ARow] := calcMDiff(FactGrid.Cells[1, ARow], FactGrid.Cells[2, ARow], true);
   UpdateFactInfo();
 
   if FactSaleControl.TabIndex = 1 then
@@ -2331,7 +2333,7 @@ begin
   if ARow <> 0 then
     if Value <> '' then
     begin
-      FactGrid.Cells[3, ARow] := calcMDiff(FactGrid.Cells[1, ARow], FactGrid.Cells[2, ARow]);
+      FactGrid.Cells[3, ARow] := calcMDiff(FactGrid.Cells[1, ARow], FactGrid.Cells[2, ARow], true);
       UpdateFactInfo();
     end;
 end;
@@ -2387,6 +2389,67 @@ begin
     end;
   end;
   
+end;
+
+procedure TEditClForm.FactPlusDebtBtnClick(Sender: TObject);
+var debtPlusSumma : double;
+    i, rec: integer;
+begin
+  debtPlusSumma := 0;
+  for i := 0 to FactGrid.RowCount - 2 do
+    debtPlusSumma := debtPlusSumma + StrToFloat(calcMDiff(FactGrid.Cells[1, i + 1], FactGrid.Cells[2, i + 1], false));
+    
+  if debtPlusSumma < 0 then
+    debtPlusSumma := debtPlusSumma * -1
+  else
+    exit;
+  
+  if (debtPlusSumma) > 0 then
+  begin
+    try
+      with DModule.sqlQuery1 do
+      begin
+        Close;
+        SQL.Text :=
+          'SELECT id_debt FROM Debt'#13#10 +
+          'WHERE (regn = :regn) and (id_sluj=:idsluj) and (bdate = convert(smalldatetime, :bd, 104))';
+        Parameters.ParseSQL(SQL.Text, True);
+        SetParam(Parameters, 'regn', Cl.Data.regn);
+        SetParam(Parameters, 'idsluj', 4);
+        SetParam(Parameters, 'bd', SplitString(ComboBox23.Text, '-')[0]);
+        Open;
+        rec := RecordCount;
+        Close;
+
+        if rec = 0 then
+        begin
+          if MessageDlg(format('Сформировать доплату в размере %s руб.', [FloatToStr(debtPlusSumma)]),
+            mtConfirmation, [mbYes, mbNo], 0) <> mrYes then Exit;
+
+          SQL.Text :=
+            'INSERT INTO Debt'#13#10 +// (id_debt,id_sluj,dist,regn,bdate,edate,sumdebt,closed)' + #13#10 +
+            'VALUES (newid(),:idsluj,:dist,:regn,convert(smalldatetime,:bd,104),convert(smalldatetime,:ed,104),:sumdebt,0,NULL)';
+          Parameters.ParseSQL(SQL.Text, True);
+          SetParam(Parameters, 'idsluj', 4);
+          SetParam(Parameters, 'dist', MainForm.dist);
+          SetParam(Parameters, 'regn', Cl.Data.regn);
+          SetParam(Parameters, 'bd', SplitString(ComboBox23.Text, '-')[0]);
+          SetParam(Parameters, 'ed', SplitString(ComboBox23.Text, '-')[1]);
+          SetParam(Parameters, 'sumdebt', debtPlusSumma);
+          ExecSQL;
+        end
+        else
+        begin
+          ShowMessage('В базе уже имеется данная переплата!');
+        end;
+      end;
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Exception message = '+E.Message);
+      end;
+    end;
+  end;
 end;
 
 procedure TEditClForm.Button20Click(Sender: TObject);
@@ -4748,7 +4811,7 @@ begin
       begin
         FactGrid.Cells[1, i + 1] := sqlQuery1.FieldValues['sub'];
         FactGrid.Cells[2, i + 1] := sqlQuery1.FieldValues['factsum'];
-        FactGrid.Cells[3, i + 1] := calcMDiff(FactGrid.Cells[1, i + 1], FactGrid.Cells[2, i + 1]);
+        FactGrid.Cells[3, i + 1] := calcMDiff(FactGrid.Cells[1, i + 1], FactGrid.Cells[2, i + 1], true);
         sqlQuery1.Next;
       end;
     end;
