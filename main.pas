@@ -458,6 +458,9 @@ function TMainForm.CheckP1: bool;
 var
   e: TDate;
 begin
+  if Debug then
+    Result := True;
+
   e := EncodeDate(ey, em, 1);
   if StrToDate(rdt) >= e then
     Result := True
@@ -476,6 +479,9 @@ function TMainForm.CheckP2: bool;
 var
   c, e: TDate;
 begin
+  if Debug then
+    Result := True;
+    
   c := StrToDate(rdt);
   e := EncodeDate(ey, em, 1);
   if (c = e) or (c = IncMonth(e)) then

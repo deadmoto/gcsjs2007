@@ -24,7 +24,7 @@ object EditClForm: TEditClForm
     Top = 38
     Width = 598
     Height = 432
-    ActivePage = TabSheet3
+    ActivePage = TabSheet6
     Align = alBottom
     OwnerDraw = True
     TabOrder = 0
@@ -4094,10 +4094,19 @@ object EditClForm: TEditClForm
           TabOrder = 3
           OnClick = FactMinusDebtBtnClick
         end
+        object FactPlusDebtBtn: TButton
+          Left = 285
+          Top = 268
+          Width = 150
+          Height = 25
+          Caption = #1057#1092#1086#1088#1084#1080#1088#1086#1074#1072#1090#1100' '#1076#1086#1087#1083#1072#1090#1091
+          TabOrder = 4
+          OnClick = FactPlusDebtBtnClick
+        end
       end
     end
     object TabSheet9: TTabSheet
-      Caption = #1042#1099#1095#1077#1090#1099
+      Caption = #1050#1086#1088#1088#1077#1082#1090#1080#1088#1086#1074#1082#1080
       ImageIndex = 6
       object DebtControl: TTabControl
         Left = 0
