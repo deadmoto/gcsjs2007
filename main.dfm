@@ -544,9 +544,9 @@ object MainForm: TMainForm
         698
         41)
       object Button1: TButton
-        Left = 7
+        Left = 0
         Top = 0
-        Width = 65
+        Width = 80
         Height = 20
         Action = aClAdd
         Anchors = []
@@ -555,9 +555,9 @@ object MainForm: TMainForm
         TabOrder = 0
       end
       object Button2: TButton
-        Left = 87
+        Left = 80
         Top = 0
-        Width = 65
+        Width = 80
         Height = 20
         Action = aClEdit
         Anchors = []
@@ -566,9 +566,9 @@ object MainForm: TMainForm
         TabOrder = 1
       end
       object Button3: TButton
-        Left = 167
+        Left = 160
         Top = 0
-        Width = 65
+        Width = 80
         Height = 20
         Action = aFactSumRpt
         Anchors = []
@@ -578,9 +578,9 @@ object MainForm: TMainForm
         TabOrder = 2
       end
       object Button8: TButton
-        Left = 248
+        Left = 242
         Top = 0
-        Width = 69
+        Width = 80
         Height = 20
         Action = aOpenExcel
         Anchors = []
@@ -632,9 +632,9 @@ object MainForm: TMainForm
         TabOrder = 6
       end
       object Button4: TButton
-        Left = 7
+        Left = 0
         Top = 20
-        Width = 65
+        Width = 80
         Height = 20
         Action = aRepUvedom
         Anchors = []
@@ -644,9 +644,9 @@ object MainForm: TMainForm
         TabOrder = 7
       end
       object Button5: TButton
-        Left = 87
+        Left = 80
         Top = 20
-        Width = 65
+        Width = 80
         Height = 20
         Action = aRepKarta
         Anchors = []
@@ -656,9 +656,9 @@ object MainForm: TMainForm
         TabOrder = 8
       end
       object Button6: TButton
-        Left = 167
+        Left = 160
         Top = 20
-        Width = 65
+        Width = 80
         Height = 20
         Action = aRepVedomost
         Anchors = []
@@ -668,9 +668,9 @@ object MainForm: TMainForm
         TabOrder = 9
       end
       object Button9: TButton
-        Left = 248
+        Left = 242
         Top = 20
-        Width = 69
+        Width = 80
         Height = 20
         Action = aFilter
         Anchors = []
@@ -730,7 +730,7 @@ object MainForm: TMainForm
         object Button7: TButton
           Left = 3
           Top = 0
-          Width = 75
+          Width = 80
           Height = 20
           Caption = #1047#1072#1103#1074#1083#1077#1085#1080#1077
           TabOrder = 0
@@ -4211,11 +4211,11 @@ object MainForm: TMainForm
               end
               item
                 Action = aClEdit
-                ImageIndex = 5
+                ImageIndex = 4
               end
               item
                 Action = aClDel
-                ImageIndex = 4
+                ImageIndex = 5
               end
               item
                 Action = aClAddMount
@@ -4916,6 +4916,12 @@ object MainForm: TMainForm
       ImageIndex = 7
       OnExecute = aRepKartaExecute
     end
+    object aInformKarta: TAction
+      Category = #1050#1083#1080#1077#1085#1090
+      Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1086#1085#1085#1072#1103' '#1082#1072#1088#1090#1072
+      ImageIndex = 20
+      OnExecute = aInformKartaExecute
+    end
     object aRepVedomost: TAction
       Category = #1050#1083#1080#1077#1085#1090
       Caption = #1042#1077#1076#1086#1084#1086#1089#1090#1100' '#1089#1091#1073#1089#1080#1076#1080#1081'...'
@@ -4935,6 +4941,11 @@ object MainForm: TMainForm
       Category = #1050#1083#1080#1077#1085#1090
       Caption = #1056#1077#1096#1077#1085#1080#1077' '#1086' '#1087#1088#1077#1082#1088#1072#1097#1077#1085#1080#1080
       OnExecute = aRepStopExecute
+    end
+    object aFactSumRpt: TAction
+      Category = #1050#1083#1080#1077#1085#1090
+      Caption = #1057#1087#1088#1072#1074#1082#1072' '#1087#1086' '#1092#1072#1082#1090#1080#1095'. '#1086#1087#1083#1072#1090#1077
+      OnExecute = aFactSumRptExecute
     end
     object aClStopSubsidy: TAction
       Category = #1050#1083#1080#1077#1085#1090
@@ -5082,22 +5093,11 @@ object MainForm: TMainForm
       ImageIndex = 19
       OnExecute = aAdminModeExecute
     end
-    object aFactSumRpt: TAction
-      Category = #1050#1083#1080#1077#1085#1090
-      Caption = #1057#1087#1088#1072#1074#1082#1072' '#1087#1086' '#1092#1072#1082#1090#1080#1095'. '#1086#1087#1083#1072#1090#1077
-      OnExecute = aFactSumRptExecute
-    end
     object aChangeAdminPasswd: TAction
       Category = #1059#1090#1080#1083#1080#1090#1099
       Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1087#1072#1088#1086#1083#1100' '#1072#1076#1084#1080#1085#1080#1089#1090#1088#1072#1090#1086#1088#1072' '#1041#1044
       Visible = False
       OnExecute = aChangeAdminPasswdExecute
-    end
-    object aInformKarta: TAction
-      Category = #1050#1083#1080#1077#1085#1090
-      Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1086#1085#1085#1072#1103' '#1082#1072#1088#1090#1072
-      ImageIndex = 20
-      OnExecute = aInformKartaExecute
     end
     object aCheckHouse: TAction
       Category = '!'#1053#1077#1080#1089#1087#1086#1083#1100#1079#1091#1077#1084#1086#1077

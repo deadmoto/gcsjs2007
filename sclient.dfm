@@ -24,7 +24,7 @@ object EditClForm: TEditClForm
     Top = 38
     Width = 598
     Height = 432
-    ActivePage = TabSheet6
+    ActivePage = TabSheet9
     Align = alBottom
     OwnerDraw = True
     TabOrder = 0
@@ -4208,6 +4208,8 @@ object EditClForm: TEditClForm
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goRowSelect]
             TabOrder = 0
             OnDrawCell = DebtGridDrawCell
+            ExplicitLeft = 1
+            ExplicitTop = 16
           end
           object Panel3: TPanel
             Left = 2
