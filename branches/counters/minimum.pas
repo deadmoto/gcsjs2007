@@ -161,7 +161,7 @@ begin
         SetParam(Parameters, 'name', Edit1.Text);
         SetParam(Parameters, 'minim', StrToFloat(Edit2.Text));
         ExecSQL;
-        //!FillMin(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
+        FillMin(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
         oldid := StrToInt(Edit3.Text);
       end
       else
@@ -243,7 +243,7 @@ begin
           SetParam(Parameters, 'name', Edit1.Text);
           SetParam(Parameters, 'minim', StrToFloat(Edit2.Text));
           ExecSQL;
-          //!FillMin(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
+          FillMin(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
           oldid := StrToInt(Edit3.Text);
         end
         else
@@ -271,7 +271,7 @@ begin
     SetParam(Parameters, 'd', MainForm.rdt);
     SetParam(Parameters, 'id', oldid);
     ExecSQL;
-    //!FillMin(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
+    FillMin(MainForm.bpath, MainForm.rdt, MainForm.codedbf);
   end;
   SetDefault;
 end;

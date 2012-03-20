@@ -3447,7 +3447,7 @@ begin
   begin
     Close;
     SQL.Text :=
-      'SELECT  sdate, SUM(sub) as subsum FROM Sub'#13#10+
+      'SELECT  sdate, sum(snpm) as snpmsum, sum(stndsub) as stndsum, SUM(sub) as subsum FROM Sub'#13#10+
       'WHERE (regn = :rgn) and (sdate >= convert(smalldatetime,:bd,104)) and (sdate < convert(smalldatetime,:ed,104))'#13#10+
       'GROUP BY sdate'#13#10+
       'ORDER BY sdate desc';
@@ -3478,7 +3478,6 @@ begin
   Sheet.Cells.Replace(':bdate:', StringDate(bdate), xlPart, xlByRows, False, False, False);
   Sheet.Cells.Replace(':edate:', StringDate(edate), xlPart, xlByRows, False, False, False);
   Sheet.Cells.Replace(':fio:', GetShortName(SGCl.Cells[0, SGCl.row]), xlPart, xlByRows, False, False, False);
-//  Sheet.Cells.Replace(':insp:', SplitString(StatusBar1.Panels[1].Text, ' ')[1], xlPart, xlByRows, False, False, False);
   insp := StringReplace(StatusBar1.Panels[1].Text, 'Инспектор: ', '', [rfReplaceAll]);
   Sheet.Cells.Replace(':insp:', StringReplace(insp, '(ф)', '', [rfReplaceAll]), xlPart, xlByRows, False, False, False);
   Sheet.Cells.Replace(':boss:', SelBoss(dist), xlPart, xlByRows, False, False, False);
@@ -3486,16 +3485,15 @@ begin
   begin
     ShowMessage('У клиента не хватает сроков для автоматического заполнения таблицы. Введите суммы вручную.');
     ExcelApp.Visible := True;
-//    ExcelApp.DisplayAlerts := False;
-//    ExcelApp.Quit;
-//    ExcelApp:=Unassigned;
     Exit;
   end;
 
   try
     for i := 1 to MounthDiff(bdate, edate) do
     begin
-      Sheet.Range[val[i]+'26', val[i]+'26'] := tmpQuery.FieldByName('subsum').Value;
+      Sheet.Range[val[i]+'26', val[i]+'26'] := tmpQuery.FieldByName('stndsum').Value;
+      Sheet.Range[val[i]+'27', val[i]+'27'] := tmpQuery.FieldByName('snpmsum').Value;
+      Sheet.Range[val[i]+'28', val[i]+'28'] := tmpQuery.FieldByName('subsum').Value;
       Sheet.Range[val[i]+'10', val[i]+'10'] := StringDate(tmpQuery.FieldByName('sdate').Value);
       tmpQuery.Next;
     end;

@@ -2174,22 +2174,34 @@ begin
     SQL.Clear;
     SQL.Add('select regn');
     SQL.Add('from cl ');
-    SQL.Add('where (id_street=:id)and(nhouse=:n)and(corp=:cp)and(apart=:apart)and(fio=:fio)');
+    SQL.Add('where regn=:r');
     Parameters.ParseSQL(SQL.Text, True);
-    SetParam(Parameters, 'id', Cl.Data.str);
-    SetParam(Parameters, 'n', Cl.Data.nh);
-    SetParam(Parameters, 'cp', Cl.Data.corp);
-    SetParam(Parameters, 'apart', Cl.Data.apart);
-    SetParam(Parameters, 'fio', Cl.Data.fio);
+    SetParam(Parameters, 'r', Cl.Data.regn);
     Open;
     if IsEmpty then
-      Result := False
-    else
     begin
-      n := FieldByName('regn').AsInteger;
+      Close;
+      SQL.Clear;
+      SQL.Add('select regn');
+      SQL.Add('from cl ');
+      SQL.Add('where (id_street=:id)and(nhouse=:n)and(corp=:cp)and(apart=:apart)and(fio=:fio)');
+      Parameters.ParseSQL(SQL.Text, True);
+      SetParam(Parameters, 'id', Cl.Data.str);
+      SetParam(Parameters, 'n', Cl.Data.nh);
+      SetParam(Parameters, 'cp', Cl.Data.corp);
+      SetParam(Parameters, 'apart', Cl.Data.apart);
+      SetParam(Parameters, 'fio', Cl.Data.fio);
+      Open;
+      if IsEmpty then
+        Result := False
+      else
+      begin
+        n := FieldByName('regn').AsInteger;
+        Result := True;
+      end;
+      Close;
+    end else
       Result := True;
-    end;
-    Close;
   end;
 end;
 
@@ -2638,18 +2650,18 @@ begin
     vAdd:
     begin
       if AddClient = 0 then
-      begin
-        DModule.CommitSQLTransaction;
-        Close;
-      end;
+        DModule.CommitSQLTransaction
+      else
+        DModule.RollBackSQLTransaction;
+      Close;
     end;
     vEdit:
     begin
       if ModifyClient = 0 then
-      begin
-        DModule.CommitSQLTransaction;
-        Close;
-      end;
+        DModule.CommitSQLTransaction
+      else
+        DModule.RollBackSQLTransaction;
+      Close;
     end;
   end;
 end;
@@ -2899,7 +2911,10 @@ begin
         MainForm.AddCl(Cl.Data.regn);
     end
     else
+    begin
+      Result := -1;
       ShowMessage('Клиент с указанными данными уже существует!');
+    end;
   end;
 end;
 
